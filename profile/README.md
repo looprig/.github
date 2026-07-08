@@ -8,73 +8,43 @@ I build looprig as a set of small, independently versioned, stdlib-first Go modu
 
 <div align="center">
 
-**harness is the heart**
+```mermaid
+flowchart TD
+    HARNESS["<b>harness — the heart</b><br/>agent loop · session · gates · journal<br/>tools · transcript<br/>pkg/serve: HTTP/SSE session API"]
 
-```
-┌──────────────────────────────────────────────────┐
-│   agent loop · session · gates · journal         │
-│   tools · transcript                             │
-│   pkg/serve: HTTP/SSE session API                │
-│   (the backend stability point)                  │
-└───────────────┬───────────────────┬──────────────┘
-                │ /v1 wire contract  │ in-process SDK
-                ▼                    ▼
-       (client, planned)      (swe, embeds, ...)
-```
+    HARNESS -->|"/v1 wire contract"| CLIENT["<b>client</b> (planned)<br/>BFF + embedded SPA<br/>+ framework-neutral TS SDK"]
+    HARNESS -->|"in-process SDK"| CONSUMERS["in-process consumers<br/>swe, embeds, ..."]
 
-**user-facing surfaces**
+    CLIENT --> SURFACES["<b>user-facing surfaces</b>"]
+    SURFACES --> CLI["<b>cli</b> (TUI)<br/>Bubble Tea v2 (today)"]
+    SURFACES --> SDK["<b>@looprig/client</b> core (TS SDK)<br/>dto/zod · transports · state machine<br/>exact history→live join<br/>consumed by thin framework adapters:<br/>svelte (ref) · react · vue · angular · solid<br/>plain TS · Tauri v2 (desktop + mobile)"]
 
-```
-┌────────────┐   ┌─────────────────────────────────────────┐
-│  cli (TUI) │   │  @looprig/client core (TS SDK)         │
-│  Bubble    │   │  dto/zod · transports · state machine   │
-│  Tea v2    │   │  exact history->live join               │
-│  (today)   │   │  consumed by thin framework adapters:   │
-│            │   │  svelte (ref) · react · vue · angular   │
-│            │   │  solid · plain TS · Tauri v2 (desktop   │
-│            │   │  + mobile)                              │
-└────────────┘   └─────────────────────────────────────────┘
-```
+    HARNESS --> SERVE["<b>serve projects over HTTP/SSE — invents none</b><br/>submit · gate-response · interrupt<br/>live events (enduring + ephemeral)<br/>cold journal · status · session listing<br/>idempotent create"]
 
-**what serve projects over HTTP/SSE (invents none)**
+    HARNESS --> INFERENCE["<b>inference</b><br/>the neutral contract"]
+    HARNESS --> LLM["<b>llm</b> provider policy"]
+    HARNESS --> STORAGE["<b>storage</b> contract hub<br/>ledger/lease/kv/blobs + tests"]
 
-```
-submit · gate-response · interrupt
-live events (enduring + ephemeral)
-cold journal · status · session listing
-idempotent create
-```
+    LLM --> INFERENCE
+    INFERENCE --> CORE["<b>core</b><br/>content / uuid / logging"]
 
-**harness depends only on these**
+    STORAGE --> FSSTORE["<b>fsstore</b><br/>disk"]
+    STORAGE --> NATSSTORE["<b>natsstore</b><br/>JetStream"]
+    STORAGE --> RCLONESTORE["<b>rclonestore</b><br/>rclone"]
 
-```
-┌──────────────┐     ┌────────────────┐     ┌────────────────────┐
-│  inference   │◄────│      llm       │     │     storage       │
-│  (neutral    │     │ (provider      │     │  (contract hub:   │
-│   contract)  │     │  policy)       │     │  ledger/lease/kv/  │
-└──────┬───────┘     └────────────────┘     │  blobs + tests)   │
-       │                                    └─────────┬──────────┘
-       ▼                                              │
-┌──────────────┐                                      ▼
-│    core      │     ┌──────────┐  ┌──────────┐  ┌────────────┐
-│ content/uuid │     │ fsstore  │  │natsstore │  │rclonestore │
-│   logging    │     │  (disk)  │  │(JetStream)│  │  (rclone)  │
-└──────────────┘     └──────────┘  └──────────┘  └────────────┘
-```
+    HARNESS -.->|"structurally coupled<br/>(no import; never imports sandbox)"| SANDBOX["<b>sandbox</b><br/>OS confinement<br/>Seatbelt · Landlock · seccomp<br/>nft · cgroups"]
+    HARNESS -.->|"sibling engine"| FLOW["<b>flow</b><br/>Pregel-style durable workflows"]
+    HARNESS -.->|"external proof"| TESTS["<b>tests</b><br/>cross-repo e2e<br/>fsstore process-death/resume"]
 
-**siblings and proof**
+    classDef heart fill:#f4f4f4,stroke:#333,stroke-width:2px
+    classDef foundation fill:#eef6ff,stroke:#3366cc,stroke-width:1.5px
+    classDef consumer fill:#e8f5e9,stroke:#2e7d32,stroke-width:1.5px
+    classDef sibling fill:#fff8e1,stroke:#f57f17,stroke-width:1.5px,stroke-dasharray:4 2
 
-```
-┌──────────────────────────────────────────────────────────┐
-│ sandbox: OS confinement (Seatbelt · namespaces · Landlock │
-│ · seccomp · nft · cgroups). Structurally coupled, no      │
-│ import; harness never imports sandbox.                    │
-├──────────────────────────────────────────────────────────┤
-│ flow: sibling durable-workflow engine (Pregel-style).    │
-├──────────────────────────────────────────────────────────┤
-│ tests: cross-repo e2e - harness durability proven against │
-│ a real fsstore backend (process death / resume).          │
-└──────────────────────────────────────────────────────────┘
+    class HARNESS heart
+    class CORE,INFERENCE,LLM,STORAGE,FSSTORE,NATSSTORE,RCLONESTORE foundation
+    class CLIENT,CONSUMERS,CLI,SDK,SURFACES,SERVE consumer
+    class SANDBOX,FLOW,TESTS sibling
 ```
 
 </div>
