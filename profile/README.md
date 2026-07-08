@@ -8,63 +8,73 @@ I build looprig as a set of small, independently versioned, stdlib-first Go modu
 
 <div align="center">
 
+**harness is the heart**
+
 ```
-        ┌────────────────────────────────────────────────────────────────────────┐
-        │                          harness is the heart                          │
-        │     agent loop · session · gates · journal · tools · transcript        │
-        │ pkg/serve HTTP/SSE session API (the backend stability point)           │
-        └───────────────┬───────────────────────────────────────┬────────────────┘
-                        │ versioned /v1 HTTP/SSE wire contract  │ in-process SDK
-                        ▼                                       ▼
-        ┌─────────────────────────────────┐    ┌─────────────────────────────────────────────┐
-        │ client (planned module)         │    │ in-process consumers (swe, embeds, ...)     │
-        │ one Go binary: BFF + embedded   │    │ compose harness + storage + sandbox         │
-        │ SPA + framework-neutral SDK     │    │ directly into a single binary               │
-        │ · read:  serve.NewReader        │    └─────────────────────────────────────────────┘
-        │ · live:  SSE reverse-proxy      │
-        │ · ctrl:  POST reverse-proxy     │
-        └───────┬─────────────────┬───────┘
-        ┌────────────────────────────────────────────────────────────────────────┐
-        │   user-facing surfaces the rig, as the human sees it                   │
-        ├───────────────┬────────────────────────────────────────────────────────┤
-        │ cli (TUI)     │ @looprig/client core: DTO/zod + transports +           │
-        │ Bubble Tea    │ state machine + exact history→live join;               │
-        │ v2 (today)    │ consumed by thin framework adapters:                   │
-        │               │ svelte (ref) · react · vue · angular · solid           │
-        │               │ · plain TS · Tauri v2 (desktop + mobile)               │
-        └───────────────┴────────────────────────────────────────────────────────┘
-        ┌────────────────────────────────────────────────────────────────────────┐
-        │ serve projects these primitives over HTTP/SSE invents none:            │
-        │ submit · gate-response · interrupt · live events (enduring+ephem)      │
-        │ · cold journal · status · session listing · idempotent create          │
-        └────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────┐
+│   agent loop · session · gates · journal         │
+│   tools · transcript                             │
+│   pkg/serve: HTTP/SSE session API                │
+│   (the backend stability point)                  │
+└───────────────┬───────────────────┬──────────────┘
+                │ /v1 wire contract  │ in-process SDK
+                ▼                    ▼
+       (client, planned)      (swe, embeds, ...)
+```
 
+**user-facing surfaces**
 
-        ─── harness depends only on these ─────────────────────────────────────
-        ┌──────────────┐        ┌──────────────────┐          ┌───────────────────────┐
-        │  inference   │        │       llm        │          │        storage        │
-        │  the neutral │◄───────│  provider policy │          │   the contract hub    │
-        │   contract   │        │  & batteries     │          │   (ledger/lease/kv/   │
-        └──────┬───────┘        └──────────────────┘          │    blobs + tests)     │
-               │                                              └───────────┬───────────┘
-               ▼                                                          │ implemented by
-        ┌──────────────┐                                                  ▼
-        │    core      │                                    ┌──────────┬────────────┬──────────────┐
-        │ content/uuid/│                                    │ fsstore  │ natsstore  │ rclonestore  │
-        │   logging    │                                    │  (disk)  │ (JetStream)│   (rclone)   │
-        └──────────────┘                                    └──────────┴────────────┴──────────────┘
-                                                                durable    scalable     cloud
-                                                                single-host  hybrid       blobs
+```
+┌────────────┐   ┌─────────────────────────────────────────┐
+│  cli (TUI) │   │  @looprig/client core (TS SDK)         │
+│  Bubble    │   │  dto/zod · transports · state machine   │
+│  Tea v2    │   │  exact history->live join               │
+│  (today)   │   │  consumed by thin framework adapters:   │
+│            │   │  svelte (ref) · react · vue · angular   │
+│            │   │  solid · plain TS · Tauri v2 (desktop   │
+│            │   │  + mobile)                              │
+└────────────┘   └─────────────────────────────────────────┘
+```
 
-        ┌──────────────┐  OS confinement: Seatbelt · namespaces · Landlock · seccomp · nft · cgroups
-        │    sandbox   │  (structurally coupled no import; harness never imports sandbox)
-        └──────────────┘
-        ┌──────────────┐
-        │    flow      │  sibling durable-workflow engine (Pregel-style): agent tasks as flow kinds
-        └──────────────┘
-        ┌──────────────┐
-        │     tests    │  cross-repo e2e: harness durability proven against a real fsstore backend
-        └──────────────┘
+**what serve projects over HTTP/SSE (invents none)**
+
+```
+submit · gate-response · interrupt
+live events (enduring + ephemeral)
+cold journal · status · session listing
+idempotent create
+```
+
+**harness depends only on these**
+
+```
+┌──────────────┐     ┌────────────────┐     ┌────────────────────┐
+│  inference   │◄────│      llm       │     │     storage       │
+│  (neutral    │     │ (provider      │     │  (contract hub:   │
+│   contract)  │     │  policy)       │     │  ledger/lease/kv/  │
+└──────┬───────┘     └────────────────┘     │  blobs + tests)   │
+       │                                    └─────────┬──────────┘
+       ▼                                              │
+┌──────────────┐                                      ▼
+│    core      │     ┌──────────┐  ┌──────────┐  ┌────────────┐
+│ content/uuid │     │ fsstore  │  │natsstore │  │rclonestore │
+│   logging    │     │  (disk)  │  │(JetStream)│  │  (rclone)  │
+└──────────────┘     └──────────┘  └──────────┘  └────────────┘
+```
+
+**siblings and proof**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│ sandbox: OS confinement (Seatbelt · namespaces · Landlock │
+│ · seccomp · nft · cgroups). Structurally coupled, no      │
+│ import; harness never imports sandbox.                    │
+├──────────────────────────────────────────────────────────┤
+│ flow: sibling durable-workflow engine (Pregel-style).    │
+├──────────────────────────────────────────────────────────┤
+│ tests: cross-repo e2e - harness durability proven against │
+│ a real fsstore backend (process death / resume).          │
+└──────────────────────────────────────────────────────────┘
 ```
 
 </div>
