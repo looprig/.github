@@ -8,43 +8,63 @@ I build looprig as a set of small, independently versioned, stdlib-first Go modu
 
 <div align="center">
 
-```mermaid
-flowchart TD
-    HARNESS["<b>harness — the heart</b><br/>agent loop · session · gates · journal<br/>tools · transcript<br/>pkg/serve: HTTP/SSE session API"]
+```
+        ┌────────────────────────────────────────────────────────────────────────┐
+        │                          harness is the heart                          │
+        │     agent loop · session · gates · journal · tools · transcript        │
+        │ pkg/serve HTTP/SSE session API (the backend stability point)           │
+        └───────────────┬───────────────────────────────────────┬────────────────┘
+                        │ versioned /v1 HTTP/SSE wire contract  │ in-process SDK
+                        ▼                                       ▼
+        ┌─────────────────────────────────┐    ┌─────────────────────────────────────────────┐
+        │ client (planned module)         │    │ in-process consumers (swe, embeds, ...)     │
+        │ one Go binary: BFF + embedded   │    │ compose harness + storage + sandbox         │
+        │ SPA + framework-neutral SDK     │    │ directly into a single binary               │
+        │ · read:  serve.NewReader        │    └─────────────────────────────────────────────┘
+        │ · live:  SSE reverse-proxy      │
+        │ · ctrl:  POST reverse-proxy     │
+        └───────┬─────────────────┬───────┘
+        ┌────────────────────────────────────────────────────────────────────────┐
+        │   user-facing surfaces the rig, as the human sees it                   │
+        ├───────────────┬────────────────────────────────────────────────────────┤
+        │ cli (TUI)     │ @looprig/client core: DTO/zod + transports +           │
+        │ Bubble Tea    │ state machine + exact history→live join;               │
+        │ v2 (today)    │ consumed by thin framework adapters:                   │
+        │               │ svelte (ref) · react · vue · angular · solid           │
+        │               │ · plain TS · Tauri v2 (desktop + mobile)               │
+        └───────────────┴────────────────────────────────────────────────────────┘
+        ┌────────────────────────────────────────────────────────────────────────┐
+        │ serve projects these primitives over HTTP/SSE invents none:            │
+        │ submit · gate-response · interrupt · live events (enduring+ephem)      │
+        │ · cold journal · status · session listing · idempotent create          │
+        └────────────────────────────────────────────────────────────────────────┘
 
-    HARNESS -->|"/v1 wire contract"| CLIENT["<b>client</b> (planned)<br/>BFF + embedded SPA<br/>+ framework-neutral TS SDK"]
-    HARNESS -->|"in-process SDK"| CONSUMERS["in-process consumers<br/>swe, embeds, ..."]
 
-    CLIENT --> SURFACES["<b>user-facing surfaces</b>"]
-    SURFACES --> CLI["<b>cli</b> (TUI)<br/>Bubble Tea v2 (today)"]
-    SURFACES --> SDK["<b>@looprig/client</b> core (TS SDK)<br/>dto/zod · transports · state machine<br/>exact history→live join<br/>consumed by thin framework adapters:<br/>svelte (ref) · react · vue · angular · solid<br/>plain TS · Tauri v2 (desktop + mobile)"]
+        ─── harness depends only on these ─────────────────────────────────────
+        ┌──────────────┐        ┌──────────────────┐          ┌───────────────────────┐
+        │  inference   │        │       llm        │          │        storage        │
+        │  the neutral │◄───────│  provider policy │          │   the contract hub    │
+        │   contract   │        │  & batteries     │          │   (ledger/lease/kv/   │
+        └──────┬───────┘        └──────────────────┘          │    blobs + tests)     │
+               │                                              └───────────┬───────────┘
+               ▼                                                          │ implemented by
+        ┌──────────────┐                                                  ▼
+        │    core      │                                    ┌──────────┬────────────┬──────────────┐
+        │ content/uuid/│                                    │ fsstore  │ natsstore  │ rclonestore  │
+        │   logging    │                                    │  (disk)  │ (JetStream)│   (rclone)   │
+        └──────────────┘                                    └──────────┴────────────┴──────────────┘
+                                                                durable    scalable     cloud
+                                                                single-host  hybrid       blobs
 
-    HARNESS --> SERVE["<b>serve projects over HTTP/SSE — invents none</b><br/>submit · gate-response · interrupt<br/>live events (enduring + ephemeral)<br/>cold journal · status · session listing<br/>idempotent create"]
-
-    HARNESS --> INFERENCE["<b>inference</b><br/>the neutral contract"]
-    HARNESS --> LLM["<b>llm</b> provider policy"]
-    HARNESS --> STORAGE["<b>storage</b> contract hub<br/>ledger/lease/kv/blobs + tests"]
-
-    LLM --> INFERENCE
-    INFERENCE --> CORE["<b>core</b><br/>content / uuid / logging"]
-
-    STORAGE --> FSSTORE["<b>fsstore</b><br/>disk"]
-    STORAGE --> NATSSTORE["<b>natsstore</b><br/>JetStream"]
-    STORAGE --> RCLONESTORE["<b>rclonestore</b><br/>rclone"]
-
-    HARNESS -.->|"structurally coupled<br/>(no import; never imports sandbox)"| SANDBOX["<b>sandbox</b><br/>OS confinement<br/>Seatbelt · Landlock · seccomp<br/>nft · cgroups"]
-    HARNESS -.->|"sibling engine"| FLOW["<b>flow</b><br/>Pregel-style durable workflows"]
-    HARNESS -.->|"external proof"| TESTS["<b>tests</b><br/>cross-repo e2e<br/>fsstore process-death/resume"]
-
-    classDef heart fill:#f4f4f4,stroke:#333,stroke-width:2px
-    classDef foundation fill:#eef6ff,stroke:#3366cc,stroke-width:1.5px
-    classDef consumer fill:#e8f5e9,stroke:#2e7d32,stroke-width:1.5px
-    classDef sibling fill:#fff8e1,stroke:#f57f17,stroke-width:1.5px,stroke-dasharray:4 2
-
-    class HARNESS heart
-    class CORE,INFERENCE,LLM,STORAGE,FSSTORE,NATSSTORE,RCLONESTORE foundation
-    class CLIENT,CONSUMERS,CLI,SDK,SURFACES,SERVE consumer
-    class SANDBOX,FLOW,TESTS sibling
+        ┌──────────────┐  OS confinement: Seatbelt · namespaces · Landlock · seccomp · nft · cgroups
+        │    sandbox   │  (structurally coupled no import; harness never imports sandbox)
+        └──────────────┘
+        ┌──────────────┐
+        │    flow      │  sibling durable-workflow engine (Pregel-style): agent tasks as flow kinds
+        └──────────────┘
+        ┌──────────────┐
+        │     tests    │  cross-repo e2e: harness durability proven against a real fsstore backend
+        └──────────────┘
 ```
 
 </div>
