@@ -181,14 +181,6 @@ tests           ← harness, inference, core, fsstore, storage (no swe)
 
 <br/>
 
-## Getting around
-
-This directory is the **meta-checkout**: a folder of sibling Go modules, each its own git repository. There is intentionally no top-level `go.mod`; modules are pinned locally via `replace ... => ../sibling` directives and built hermetically with `GOWORK=off`. Each repo carries its own `CLAUDE.md`/`AGENTS.md` with the design discipline and security rules that govern it.
-
-Start in [harness](https://github.com/looprig/harness) to understand the runtime, then read the [swe](https://github.com/looprig/swe) composition root to see the rig fully assembled.
-
-<br/>
-
 ---
 
 <p align="center"><sub>looprig: the rig that runs the loop.</sub></p>
