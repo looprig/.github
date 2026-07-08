@@ -6,8 +6,6 @@ The name is a dual pun. A **rig** is the harness-and-tackle that makes a thing o
 
 I build looprig as a set of small, independently versioned, stdlib-first Go modules. Each module is the embodiment of a design **spec**; collectively they form the rig.
 
-<div align="center">
-
 ```
  ┌────────────────────────────────────────────────────────────────────────┐
  │                          harness is the heart                          │
@@ -64,9 +62,8 @@ I build looprig as a set of small, independently versioned, stdlib-first Go modu
  └──────────────┘
  ┌──────────────┐
  │     tests    │  cross-repo e2e: harness durability proven against a real fsstore backend
- └──────────────┘```
-
-</div>
+└──────────────┘
+```
 
 <br/>
 
