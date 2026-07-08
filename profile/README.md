@@ -7,6 +7,7 @@ The name is a dual pun. A **rig** is the harness-and-tackle that makes a thing o
 I build looprig as a set of small, independently versioned, stdlib-first Go modules. Each module is the embodiment of a design **spec**; collectively they form the rig.
 
 ```
+─── the rig ───────────────────────────────────────────────────────────────────
     ┌────────────────────────────────────────────────────────────────────────┐
     │                          harness is the heart                          │
     │     agent loop · session · gates · journal · tools · transcript        │
@@ -38,14 +39,14 @@ I build looprig as a set of small, independently versioned, stdlib-first Go modu
     └────────────────────────────────────────────────────────────────────────┘
 
 
-    ─── harness depends only on these ─────────────────────────────────────
+─── harness rig partners ───────────────────────────────────────────────────────────────────
     ┌──────────────┐        ┌──────────────────┐          ┌───────────────────────┐
     │  inference   │        │       llm        │          │        storage        │
     │  the neutral │◄───────│  provider policy │          │   the contract hub    │
     │   contract   │        │  & batteries     │          │   (ledger/lease/kv/   │
     └──────┬───────┘        └──────────────────┘          │    blobs + tests)     │
-        │                                              └───────────┬───────────┘
-        ▼                                                          │ implemented by
+           │                                              └───────────┬───────────┘
+           ▼                                                          │ implemented by
     ┌──────────────┐                                                  ▼
     │    core      │                                    ┌──────────┬────────────┬──────────────┐
     │ content/uuid/│                                    │ fsstore  │ natsstore  │ rclonestore  │
@@ -53,6 +54,9 @@ I build looprig as a set of small, independently versioned, stdlib-first Go modu
     └──────────────┘                                    └──────────┴────────────┴──────────────┘
                                                          durable    scalable     cloud
                                                          single-host  hybrid       blobs
+
+
+─── more rig components ───────────────────────────────────────────────────────────────────
 
     ┌──────────────┐  OS confinement: Seatbelt · namespaces · Landlock · seccomp · nft · cgroups
     │    sandbox   │  (structurally coupled no import; harness never imports sandbox)
