@@ -83,19 +83,6 @@ Every other repo in the tree is either a foundation the harness stands on (`core
 
 <br/>
 
-## Design principles
-
-The specs that gave rise to each repo are united by the same discipline:
-
-1. **Contracts before implementations.** Every capability is a small, typed interface first (`storage`, `inference.Client`, `sandbox.CommandRunner`, the harness's `loop.Session`). Backends are assembled at the composition root.
-2. **Zero-default-deny / fail-closed.** A zero-valued config is the most restrictive; unknown providers, lost acks, and unenforcing sandboxes never silently escalate.
-3. **Stdlib-first, hermetic, no-cgo.** Modules ship with `CGO_ENABLED=0` builds and vendored or zero runtime dependencies. No third-party transitive surprise.
-4. **SOLID + import hygiene.** Dependency direction is documented and enforced (`inference never imports llm`; `harness never imports sandbox`; coupling is structural, over stdlib types).
-5. **Durable by construction.** Suspend → durable record → resume on a *new* process/host is a first-class path, not an afterthought. Replayable command/event journals; workspace snapshots; last-checkpoint-wins.
-6. **Security is honesty, not promise.** Sandbox reports what it *actually enforced* (`GuaranteeBits()`); the auto-approve gate requires specific guarantee bits, never a coarse level. Auto-approve on an unenforcing platform fails closed to *Ask*.
-
-<br/>
-
 ## The rig: capability pillars and the repos that deliver them
 
 | Pillar | What it gives you | Repos |
