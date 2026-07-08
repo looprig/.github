@@ -7,62 +7,62 @@ The name is a dual pun. A **rig** is the harness-and-tackle that makes a thing o
 I build looprig as a set of small, independently versioned, stdlib-first Go modules. Each module is the embodiment of a design **spec**; collectively they form the rig.
 
 ```
- ┌────────────────────────────────────────────────────────────────────────┐
- │                          harness is the heart                          │
- │     agent loop · session · gates · journal · tools · transcript        │
- │ pkg/serve HTTP/SSE session API (the backend stability point)           │
- └───────────────┬───────────────────────────────────────┬────────────────┘
+    ┌────────────────────────────────────────────────────────────────────────┐
+    │                          harness is the heart                          │
+    │     agent loop · session · gates · journal · tools · transcript        │
+    │ pkg/serve HTTP/SSE session API (the backend stability point)           │
+    └───────────────┬───────────────────────────────────────┬────────────────┘
                  │ versioned /v1 HTTP/SSE wire contract  │ in-process SDK
                  ▼                                       ▼
- ┌─────────────────────────────────┐    ┌─────────────────────────────────────────────┐
- │ client (planned module)         │    │ in-process consumers (swe, embeds, ...)     │
- │ one Go binary: BFF + embedded   │    │ compose harness + storage + sandbox         │
- │ SPA + framework-neutral SDK     │    │ directly into a single binary               │
- │ · read:  serve.NewReader        │    └─────────────────────────────────────────────┘
- │ · live:  SSE reverse-proxy      │
- │ · ctrl:  POST reverse-proxy     │
- └───────┬─────────────────┬───────┘
- ┌────────────────────────────────────────────────────────────────────────┐
- │   user-facing surfaces the rig, as the human sees it                   │
- ├───────────────┬────────────────────────────────────────────────────────┤
- │ cli (TUI)     │ @looprig/client core: DTO/zod + transports +           │
- │ Bubble Tea    │ state machine + exact history→live join;               │
- │ v2 (today)    │ consumed by thin framework adapters:                   │
- │               │ svelte (ref) · react · vue · angular · solid           │
- │               │ · plain TS · Tauri v2 (desktop + mobile)               │
- └───────────────┴────────────────────────────────────────────────────────┘
- ┌────────────────────────────────────────────────────────────────────────┐
- │ serve projects these primitives over HTTP/SSE invents none:            │
- │ submit · gate-response · interrupt · live events (enduring+ephem)      │
- │ · cold journal · status · session listing · idempotent create          │
- └────────────────────────────────────────────────────────────────────────┘
+    ┌─────────────────────────────────┐    ┌─────────────────────────────────────────────┐
+    │ client (planned module)         │    │ in-process consumers (swe, embeds, ...)     │
+    │ one Go binary: BFF + embedded   │    │ compose harness + storage + sandbox         │
+    │ SPA + framework-neutral SDK     │    │ directly into a single binary               │
+    │ · read:  serve.NewReader        │    └─────────────────────────────────────────────┘
+    │ · live:  SSE reverse-proxy      │
+    │ · ctrl:  POST reverse-proxy     │
+    └───────┬─────────────────┬───────┘
+    ┌────────────────────────────────────────────────────────────────────────┐
+    │   user-facing surfaces the rig, as the human sees it                   │
+    ├───────────────┬────────────────────────────────────────────────────────┤
+    │ cli (TUI)     │ @looprig/client core: DTO/zod + transports +           │
+    │ Bubble Tea    │ state machine + exact history→live join;               │
+    │ v2 (today)    │ consumed by thin framework adapters:                   │
+    │               │ svelte (ref) · react · vue · angular · solid           │
+    │               │ · plain TS · Tauri v2 (desktop + mobile)               │
+    └───────────────┴────────────────────────────────────────────────────────┘
+    ┌────────────────────────────────────────────────────────────────────────┐
+    │ serve projects these primitives over HTTP/SSE invents none:            │
+    │ submit · gate-response · interrupt · live events (enduring+ephem)      │
+    │ · cold journal · status · session listing · idempotent create          │
+    └────────────────────────────────────────────────────────────────────────┘
 
 
- ─── harness depends only on these ─────────────────────────────────────
- ┌──────────────┐        ┌──────────────────┐          ┌───────────────────────┐
- │  inference   │        │       llm        │          │        storage        │
- │  the neutral │◄───────│  provider policy │          │   the contract hub    │
- │   contract   │        │  & batteries     │          │   (ledger/lease/kv/   │
- └──────┬───────┘        └──────────────────┘          │    blobs + tests)     │
+    ─── harness depends only on these ─────────────────────────────────────
+    ┌──────────────┐        ┌──────────────────┐          ┌───────────────────────┐
+    │  inference   │        │       llm        │          │        storage        │
+    │  the neutral │◄───────│  provider policy │          │   the contract hub    │
+    │   contract   │        │  & batteries     │          │   (ledger/lease/kv/   │
+    └──────┬───────┘        └──────────────────┘          │    blobs + tests)     │
         │                                              └───────────┬───────────┘
         ▼                                                          │ implemented by
- ┌──────────────┐                                                  ▼
- │    core      │                                    ┌──────────┬────────────┬──────────────┐
- │ content/uuid/│                                    │ fsstore  │ natsstore  │ rclonestore  │
- │   logging    │                                    │  (disk)  │ (JetStream)│   (rclone)   │
- └──────────────┘                                    └──────────┴────────────┴──────────────┘
+    ┌──────────────┐                                                  ▼
+    │    core      │                                    ┌──────────┬────────────┬──────────────┐
+    │ content/uuid/│                                    │ fsstore  │ natsstore  │ rclonestore  │
+    │   logging    │                                    │  (disk)  │ (JetStream)│   (rclone)   │
+    └──────────────┘                                    └──────────┴────────────┴──────────────┘
                                                          durable    scalable     cloud
                                                          single-host  hybrid       blobs
 
- ┌──────────────┐  OS confinement: Seatbelt · namespaces · Landlock · seccomp · nft · cgroups
- │    sandbox   │  (structurally coupled no import; harness never imports sandbox)
- └──────────────┘
- ┌──────────────┐
- │    flow      │  sibling durable-workflow engine (Pregel-style): agent tasks as flow kinds
- └──────────────┘
- ┌──────────────┐
- │     tests    │  cross-repo e2e: harness durability proven against a real fsstore backend
-└──────────────┘
+    ┌──────────────┐  OS confinement: Seatbelt · namespaces · Landlock · seccomp · nft · cgroups
+    │    sandbox   │  (structurally coupled no import; harness never imports sandbox)
+    └──────────────┘
+    ┌──────────────┐
+    │    flow      │  sibling durable-workflow engine (Pregel-style): agent tasks as flow kinds
+    └──────────────┘
+    ┌──────────────┐
+    │     tests    │  cross-repo e2e: harness durability proven against a real fsstore backend
+    └──────────────┘
 ```
 
 <br/>
