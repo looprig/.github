@@ -9,6 +9,10 @@ You can use looprig to build a personal agent for your own work, a specialized
 agent shaped around a workflow, or a production system for a team or an
 organization. The same harness supports all three.
 
+Start with the [consumer guide](../docs/consumers/README.md) to build one agent,
+then add the models, tools, storage, interfaces, and deployment choices your
+system needs.
+
 The name carries two ideas. A **rig** is the structure and equipment assembled to
 harness power and make it useful. A sailing rig harnesses wind, a drilling rig
 puts mechanical power to work, and a test rig makes complex systems controlled
