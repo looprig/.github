@@ -1,10 +1,44 @@
 ## What is looprig?
 
-looprig is an agent harness ecosystem, a set of Go modules for building production-grade autonomous agents that are durable across crashes, confined by the OS, gated by humans, and transparent to operators.
+looprig is an agent harness ecosystem for anyone who wants to build useful agents
+they can truly call their own. It is a set of Go modules for creating agents that
+are durable across crashes, confined by the OS, gated by humans, and transparent
+to the people who run them.
 
-The name is a dual pun. A **rig** is the harness-and-tackle that makes a thing operational (an oil rig, a sailing rig, a test rig). A **loop** is the agent loop. So a *looprig* is **the rig that runs the loop**: the harness, plumbing, confinement, storage, and presentation layer around the model-inference-turn that turns an LLM into a deployable agent.
+You can use looprig to build a personal agent for your own work, a specialized
+agent shaped around a workflow, or a production system for a team or an
+organization. The same harness supports all three.
 
-I build looprig as a set of small, independently versioned, stdlib-first Go modules. Each module is the embodiment of a design **spec**; collectively they form the rig.
+The name carries two ideas. A **rig** is the structure and equipment assembled to
+harness power and make it useful. A sailing rig harnesses wind, a drilling rig
+puts mechanical power to work, and a test rig makes complex systems controlled
+and repeatable. A **loop** is the agent loop. So a *looprig* is **the rig that
+runs the loop**: the harness, plumbing, confinement, storage, and presentation
+layer that turns model intelligence into a useful agent.
+
+We build looprig as a set of small, independently versioned, stdlib-first Go
+modules. Each module is the embodiment of a design **spec**; collectively they
+form the rig.
+
+## Build an agent that is yours
+
+looprig is not a finished agent that asks you to adapt to it. It gives you the
+rig to build an agent around the way you work and the things you want to create.
+
+You choose its purpose, models, tools, instructions, permissions, memory,
+storage, interface, and where it runs. You can inspect every layer, customize its
+behavior, and change the parts that do not work the way you want. The agent, its
+history, and the work it produces remain under your control.
+
+Start with one useful task on your own machine. Add tools and knowledge as your
+needs grow. Turn it into a product, share it with a team, or keep it entirely for
+yourself. looprig provides the parts without deciding what your agent must become.
+
+Production-grade does not mean enterprise-only. It means an agent you rely on
+should not forget its work after a crash, touch things outside its boundaries,
+act without approval when consequences matter, or hide what it did. Those
+properties matter whether one person runs one agent on a laptop or an
+organization runs thousands.
 
 ```
 ─── the rig ───────────────────────────────────────────────────────────────────

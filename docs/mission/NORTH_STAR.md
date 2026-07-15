@@ -1,6 +1,8 @@
-# The Lathe of the Intelligence Age
+# The Lathe of the Intellectual Revolution
 
 > “History does not repeat itself, but it often rhymes.”
+
+## The Industrial Revolution
 
 Before the Industrial Revolution, nearly every useful act in the physical world
 began with muscle. Human beings and animals moved the plow, turned the wheel,
@@ -25,14 +27,15 @@ itself.
 
 The steam engine supplied the power. The lathe made the power useful.
 
-## History Rhymes
+## The Intellectual Revolution
 
 We are standing at the beginning of a similar transformation.
 
 GPUs and TPUs are the new steam engines: they supply immense computational power.
-Neural networks and large language models convert that power into something the
-world has never had in abundance before: general intellectual capability that can
-read, reason, write, plan, and use tools.
+Neural networks, including large language models, convert that power into
+something the world has never had in abundance before: the ability to federate
+vast knowledge and many forms of reasoning into intelligence that anyone can
+access.
 
 Until now, useful knowledge has been situated in people. It has lived in the
 minds of a small number of experts, inside particular institutions, in specific
@@ -47,14 +50,16 @@ unreachable.
 
 Yet a powerful model is not an industrial system.
 
-A model can generate an answer, but useful work must survive failures, operate
-within boundaries, ask for judgment when consequences matter, leave an auditable
-record, and continue across machines and over time. Intelligence without such
-machinery is potential without precision. It is steam without a lathe.
+We now have the steam engine of this era in GPUs and TPUs. We have its new form
+of power in neural networks: knowledge, reasoning, and intelligence available at
+scale. What we are still missing is the lathe, the machinery that turns this
+power into useful work that can survive failures, operate within boundaries,
+pause for human judgment, leave an auditable record, and continue across machines
+and over time.
 
-## looprig Is the Lathe
+## looprig is the Lathe
 
-**looprig is the lathe of the intelligence age.**
+**looprig is the lathe of the intellectual revolution.**
 
 It is the harness that turns model capability into dependable action. It gives
 agents durable state, controlled tools, human gates, observable execution, and a
@@ -105,11 +110,22 @@ centuries of engines, tools, standards, factories, infrastructure, and hard-won
 operational knowledge. Together they automated much of the physical world and
 made possible the machines that now move people, goods, and civilization itself.
 
-The intellectual revolution will unfold the same way. Models are only the
-beginning. A new automation layer must now be built on top of the physical world:
-one that can reason about machines, coordinate them, operate them, and help
-people create what comes next.
+The source of power kept evolving through water turbines, internal combustion
+engines, and electricity. The lathe remained. It adapted to each advancement and
+kept producing the parts for more capable machines and greater automation. The
+source of power changed, but the role of the lathe endured.
 
-We have the engines of this era.
+The intellectual revolution will unfold the same way. Neural networks came
+first. They have advanced into large language models, multimodal models, and
+predictive architectures such as JEPA. More capable forms of machine intelligence
+will follow.
 
-Now we build the lathe.
+Each advancement will bring a new source of intellectual power. Each will still
+need machinery that can turn its capability into dependable work. A new
+automation layer must be built on top of the physical world, one that can reason
+about machines, coordinate them, operate them, and help people create what comes
+next.
+
+Our commitment is not to one model or one generation of technology. As the
+sources of power evolve, looprig will evolve with them. The engines will change.
+We will continue to be the lathe.
