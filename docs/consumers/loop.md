@@ -103,12 +103,14 @@ the agent in durable topology.
 Tools are declared as `tool.Definition` values. A definition is immutable, but
 it builds fresh tool instances when a Loop is bound into a Session.
 
-The harness includes definitions for common workspace and delegation tools:
+The optional `github.com/looprig/tools` module provides standard definitions. Add each capability explicitly:
 
 ```go
 loop.WithTools(
-	tools.Files(readGuard), // ReadFile, WriteFile, EditFile
-	tools.Bash(),           // shell commands rooted in the workspace
+	tools.ReadFileDefinition(readGuard),
+	tools.WriteFileDefinition(),
+	tools.EditFileDefinition(),
+	tools.Bash(),
 )
 ```
 
@@ -133,7 +135,12 @@ agent, err := loop.Define(
 	loop.WithName("workspace-assistant"),
 	loop.WithInference(client, model),
 	loop.WithSystem(systemPrompt),
-	loop.WithTools(tools.Files(readGuard), tools.Bash()),
+	loop.WithTools(
+		tools.ReadFileDefinition(readGuard),
+		tools.WriteFileDefinition(),
+		tools.EditFileDefinition(),
+		tools.Bash(),
+	),
 	loop.WithPermissionFactory(permissionFactory),
 	loop.WithPolicyRevision("workspace-policy-v1"),
 )

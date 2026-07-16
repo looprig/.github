@@ -10,20 +10,24 @@ The core mental model is small:
 - A **Rig** assembles one or more Loops with storage and lifecycle policy.
 - A **Session** is one running instance of that Rig.
 
+The shared [glossary](../GLOSSARY.md) defines these and the other terms used
+across the project.
+
 ## Start here
 
 1. [Quickstart](quickstart.md) builds and runs one useful agent from an empty Go
    module.
 2. [Loop](loop.md) explains how to define an agent's model, instructions, tools,
    permissions, modes, and delegates.
-3. [Rig](rig.md) explains how to assemble Loops with storage, workspaces,
+3. [Tools](tools.md) explains how to select standard tools or create your own.
+4. [Rig](rig.md) explains how to assemble Loops with storage, workspaces,
    snapshots, gates, and execution policy.
-4. [Session](session.md) explains how to submit work, observe events, answer
+5. [Session](session.md) explains how to submit work, observe events, answer
    gates, interrupt work, compact context, and restore prior sessions.
-5. [Build larger systems](larger-systems.md) adds durable storage, files and
+6. [Build larger systems](larger-systems.md) adds durable storage, files and
    commands, OS confinement, multiple agents, HTTP serving, and durable
    workflows.
-6. [Package overview](packages.md) maps the looprig modules and helps you choose
+7. [Package overview](packages.md) maps the looprig modules and helps you choose
    what to import.
 
 ## Choose your path

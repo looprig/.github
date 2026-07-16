@@ -279,13 +279,13 @@ err := session.RestoreWorkspace(ctx, ref)
 Both operations require a configured workspace placement. Workspace restoration
 is a control-plane action and should be exposed only to trusted callers.
 
-## Change the security ceiling
+## Change the security limit
 
 ```go
-err := session.SetSecurityCeiling(ctx, ceiling.Level(2))
+err := session.SetSecurityLimit(ctx, security.Level(2))
 ```
 
-The value is clamped by the Session's ceiling state. The harness journals the
+The value is clamped by the Session's security limit. The Harness journals the
 effective change. Your application owns the mapping from ordinal levels to
 permission and sandbox postures.
 
@@ -315,7 +315,7 @@ type SessionController interface {
 	Session
 	SetActiveLoop(context.Context, uuid.UUID) error
 	LoopController(uuid.UUID) (loop.Controller, bool)
-	SetSecurityCeiling(context.Context, ceiling.Level) error
+	SetSecurityLimit(context.Context, security.Level) error
 	CheckpointWorkspace(context.Context) (workspacestore.Ref, error)
 	RestoreWorkspace(context.Context, workspacestore.Ref) error
 	Shutdown(context.Context) error

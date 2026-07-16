@@ -9,7 +9,7 @@ them.
         /             /          |          \             \
        v             v           v           v             v
  provider clients   harness    storage     sandbox    presentation
-    llm module                  backends                 cli / serve
+    llm module                  backends                 tui / serve
                        |
                        v
                core + inference + storage contracts
@@ -28,18 +28,20 @@ application chooses and wires both.
 | `core` | shared content blocks, identifiers, logging contracts | exchanging content or IDs across looprig modules |
 | `inference` | provider-neutral models, requests, responses, streams, capabilities, auth value types | declaring models or implementing an inference client |
 | `llm` | provider clients and wire codecs | calling OpenRouter, LM Studio, Bedrock, Google, Phala, Chutes, or another supported provider |
-| `harness` | Loops, Rigs, Sessions, tools, gates, journals, workspaces, delegation, serving | building and running an agent system |
+| `harness` | Loops, Rigs, Sessions, tool contracts, gates, journals, workspaces, delegation, serving | building and running an agent system |
+| `tools` | optional standard file, command, web, interaction, skill, and permission implementations | adding selected standard capabilities to a Loop |
 | `storage` | neutral ledger, lease, KV, and blob contracts plus in-memory implementations | implementing a backend or running in memory |
 | `fsstore` | filesystem implementations of all four storage contracts | persisting one-host systems on local disk |
 | `natsstore` | JetStream implementations of all four storage contracts | sharing durable state across processes or hosts |
 | `rclonestore` | blob storage through rclone | keeping snapshots or offloads on an rclone-supported remote |
 | `sandbox` | OS-level command confinement and enforcement reports | giving agents command execution with an operating-system boundary |
+| `confinement` | shared binding between harness ceilings, standard tool posture, and sandbox executors | keeping command enforcement and permission decisions aligned |
 | `flow` | durable graph execution, messages, checkpoints, ingress, and control plane | coordinating explicit resumable workflows |
-| `cli` | reusable terminal presentation | building a terminal interface over an agent adapter |
-| `swe` | a complete software-engineering agent product | studying a production composition or running that product |
+| `tui` | reusable interactive terminal presentation | building a terminal interface over a Session adapter |
+| `coderig` | a complete coding Rig | studying a production composition or running CodeRig |
 | `tests` | cross-module integration and compatibility tests | validating development across the repository set |
 
-`swe` and `tests` are useful references, but consumer applications do not need
+`coderig` and `tests` are useful references, but consumer applications do not need
 to import them.
 
 ## Start with these imports
@@ -66,8 +68,9 @@ or:
 github.com/looprig/natsstore
 ```
 
-Add `github.com/looprig/sandbox` when a Loop can spawn commands. Add
-`github.com/looprig/cli` or the harness `serve` package only when you want those
+Add `github.com/looprig/tools` for standard tools. Add `github.com/looprig/confinement`
+with `github.com/looprig/sandbox` when a Loop can spawn confined commands. Add
+`github.com/looprig/tui` or the Harness `serve` package only when you want those
 presentation surfaces.
 
 ## Harness package map
@@ -81,13 +84,12 @@ Most consumer code uses a small part of the harness module:
 | `pkg/session` | submit work, observe events, answer gates, interrupt, compact, checkpoint, and control one live execution |
 | `pkg/event` | consume typed ephemeral and enduring runtime events |
 | `pkg/tool` | define tool contracts, bindings, requirements, approval scopes, and command runners |
-| `pkg/tools` | use built-in file, command, search, interaction, skill, and delegation tools |
 | `pkg/gate` | answer durable permission gates |
 | `pkg/sessionstore` | open durable Session journals, offloads, leases, and catalog state over `storage.Composite` |
 | `pkg/workspacestore` | capture and materialize content-addressed workspace snapshots over `storage.Blobs` |
 | `pkg/serve` | expose live and durable Session operations over HTTP and server-sent events |
 | `pkg/serve/catalogreader` | connect the durable session catalog to the HTTP read plane |
-| `pkg/ceiling` | represent a Session-scoped ordinal security ceiling |
+| `pkg/security` | represent a Session-scoped ordinal security limit |
 | `pkg/hustle` | define bounded inference jobs outside the normal turn lane, including compaction work |
 | `pkg/foreignloop` | integrate supported foreign Claude or Codex execution engines |
 
@@ -175,7 +177,7 @@ interface. You can drive it from:
 - a workflow task;
 - another Go library.
 
-Use the `cli` module when its terminal adapter fits. Use `pkg/serve` when its HTTP
+Use the `tui` module when its terminal adapter fits. Use `pkg/serve` when its HTTP
 surface fits. Otherwise keep the Session interface and build the interaction
 model your product needs.
 

@@ -129,7 +129,9 @@ assistant, err := loop.Define(
 	loop.WithInference(client, model),
 	loop.WithSystem("Help with files in the assigned workspace."),
 	loop.WithTools(
-		tools.Files(readGuard),
+		tools.ReadFileDefinition(readGuard),
+		tools.WriteFileDefinition(),
+		tools.EditFileDefinition(),
 		tools.Bash(),
 	),
 	loop.WithPermissionFactory(permissionFactory),
@@ -137,8 +139,8 @@ assistant, err := loop.Define(
 )
 ```
 
-`tools.Files` supplies `ReadFile`, `WriteFile`, and `EditFile`. `tools.Bash`
-supplies command execution. The model declaration must include
+The Loop receives only the definitions listed above. `tools.Bash` supplies
+command execution. The model declaration must include
 `inference.WithTools()` so the provider codec knows tool calls are supported.
 
 The read guard is enforced inside the file tools. The permission factory creates
@@ -202,7 +204,9 @@ assistant, err := loop.Define(
 	loop.WithName("workspace-assistant"),
 	loop.WithInference(client, model),
 	loop.WithTools(
-		tools.Files(readGuard),
+		tools.ReadFileDefinition(readGuard),
+		tools.WriteFileDefinition(),
+		tools.EditFileDefinition(),
 		tools.Bash(tools.WithRunner(executor)),
 	),
 	loop.WithPermissionFactory(permissionFactory),
@@ -223,7 +227,8 @@ The preset ladder is:
 Construction reports the enforcement level available on the current platform.
 Applications that change posture at runtime can use `NewExecutorDynamic` and
 wire the same ceiling source into both the executor and permission checker. The
-SWE reference application demonstrates that advanced composition.
+CodeRig demonstrates dynamic confinement through the
+`github.com/looprig/confinement` module.
 
 ## Add more agents
 
@@ -320,7 +325,7 @@ The harness does not choose how people interact with a Session. A consumer can
 use the Session interface directly from a CLI, desktop application, service,
 chat integration, scheduled job, or another Go package.
 
-The `cli` module supplies a terminal UI and accepts an adapter through its
+The `tui` module supplies an interactive terminal UI and accepts an adapter through its
 `tui.Agent` interface. The `serve` package supplies HTTP for remote or
 multi-process interfaces. Both are optional presentation layers over the same
 Session behavior.

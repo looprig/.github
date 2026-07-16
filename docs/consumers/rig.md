@@ -24,7 +24,7 @@ loop.Definition values + stores + policy
 ```
 
 Define the Rig once and reuse it across concurrent Sessions. Each Session gets
-its own live Loops, journal, security ceiling, and resolved workspace.
+its own live Loops, journal, security limit, and resolved workspace.
 
 ## The smallest Rig
 
@@ -230,7 +230,7 @@ rig.WithDelegationLimits(rig.DelegationLimits{
 
 These are backstops, not a replacement for a narrow delegate list on each Loop.
 
-## Gate limits and the security ceiling
+## Gate limits and the security limit
 
 Bound the permission gates a Session may hold open:
 
@@ -241,18 +241,18 @@ rig.WithGateCaps(rig.GateCaps{
 })
 ```
 
-Provide a fresh security ceiling for every Session when your permission system
+Provide a fresh security limit for every Session when your permission system
 supports runtime posture changes:
 
 ```go
-rig.WithCeilingFactory(func() *ceiling.State {
-	return ceiling.NewClamped(maxLevel)
+rig.WithSecurityLimitFactory(func() *security.Limit {
+	return security.NewBounded(maxLevel)
 })
 ```
 
-The harness treats the ceiling as an ordinal. Your application defines what each
+The Harness treats the limit as an ordinal. Your application defines what each
 level means and wires the same state into its permission checker. A trusted
-caller can change the effective level with `SetSecurityCeiling`, subject to the
+caller can change the effective level with `SetSecurityLimit`, subject to the
 clamp.
 
 ## Configuration fingerprints
@@ -331,7 +331,7 @@ Claude or Codex engine. Both builders are required together.
 | `WithSnapshots` | Required with placement | Configure automatic workspace snapshots. |
 | `WithDelegationLimits` | Optional, once | Bound child depth and total child count. |
 | `WithGateCaps` | Optional, once | Bound open gates and gate timeouts. |
-| `WithCeilingFactory` | Optional, once | Create fresh security-ceiling state per Session. |
+| `WithSecurityLimitFactory` | Optional, once | Create a fresh security-limit state for each Session. |
 | `WithFingerprintFields` | Optional, once | Add stable application behavior to restore compatibility. |
 | `WithHustles` | Optional | Register immutable Hustle definitions. Accumulates across calls. |
 | `WithHustleLimits` | Required with Hustles | Bound execution lanes, queues, audit, finalization, and drain. |
