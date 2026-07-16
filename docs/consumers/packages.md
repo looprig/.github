@@ -26,7 +26,7 @@ application chooses and wires both.
 | Module | What it owns | Import it when |
 | --- | --- | --- |
 | `core` | shared content blocks, identifiers, logging contracts | exchanging content or IDs across looprig modules |
-| `inference` | provider-neutral models, requests, responses, streams, capabilities, auth value types | declaring models or implementing an inference client |
+| `inference` | provider-neutral invocation contracts, with focused model, stream, codec, context-counting, auth, routing, transport, and failure packages | declaring models or implementing an inference client |
 | `llm` | provider clients and wire codecs | calling OpenRouter, LM Studio, Bedrock, Google, Phala, Chutes, or another supported provider |
 | `harness` | Loops, Rigs, Sessions, tool contracts, gates, journals, workspaces, delegation, serving | building and running an agent system |
 | `tools` | optional standard file, command, web, interaction, skill, and permission implementations | adding selected standard capabilities to a Loop |
@@ -115,9 +115,10 @@ you need to understand those boundaries in detail.
 
 ## Inference packages
 
-`inference.Model` describes a model without secrets. `inference.Client` performs
-provider calls. Keeping them separate lets a model declaration participate in
-validation and fingerprints without putting credentials into durable state.
+`model.Model` from `github.com/looprig/inference/model` describes a model without
+secrets. `inference.Client` performs provider calls. Keeping them separate lets a
+model declaration participate in validation and fingerprints without putting
+credentials into durable state.
 
 The `llm` module contains concrete clients and an `auto` package for providers
 that can be constructed from a model plus API key. Providers with extra security

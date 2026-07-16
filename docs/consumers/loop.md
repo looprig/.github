@@ -34,7 +34,8 @@ that can remain stable across versions of your agent.
 
 ## Models and clients are separate
 
-An `inference.Model` is a secret-free description of a model:
+A `model.Model` from `github.com/looprig/inference/model` is a secret-free
+description of a model:
 
 - provider name;
 - API format;
@@ -48,12 +49,12 @@ keys belong on the client, never on the model or Loop.
 For an OpenAI-compatible model through OpenRouter:
 
 ```go
-model := inference.CustomModel(
-	inference.ProviderName(llm.ProviderOpenRouter),
-	inference.APIFormatOpenAI,
+model := model.CustomModel(
+	model.ProviderName(llm.ProviderOpenRouter),
+	model.APIFormatOpenAI,
 	"https://openrouter.ai/api/v1",
 	modelName,
-	inference.WithTools(),
+	model.WithTools(),
 )
 client, err := auto.New(model, auth.APIKey(apiKey))
 ```
@@ -61,12 +62,12 @@ client, err := auto.New(model, auth.APIKey(apiKey))
 For a local model served by LM Studio:
 
 ```go
-model := inference.CustomModel(
-	inference.ProviderName(llm.ProviderLMStudio),
-	inference.APIFormatOpenAI,
+model := model.CustomModel(
+	model.ProviderName(llm.ProviderLMStudio),
+	model.APIFormatOpenAI,
 	"http://localhost:1234/v1",
 	modelName,
-	inference.WithTools(),
+	model.WithTools(),
 )
 client, err := auto.New(model, "")
 ```
@@ -191,7 +192,7 @@ agent, err := loop.Define(
 		loop.Mode{
 			Name:         "deep-review",
 			Model:        reasoningModel,
-			Effort:       inference.EffortHigh,
+			Effort:       model.EffortHigh,
 			Instructions: "Review assumptions and identify hidden risks.",
 		},
 	),

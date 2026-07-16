@@ -141,7 +141,7 @@ assistant, err := loop.Define(
 
 The Loop receives only the definitions listed above. `tools.Bash` supplies
 command execution. The model declaration must include
-`inference.WithTools()` so the provider codec knows tool calls are supported.
+`model.WithTools()` so the provider codec knows tool calls are supported.
 
 The read guard is enforced inside the file tools. The permission factory creates
 the gate that decides whether each proposed tool call is automatically approved,
@@ -276,7 +276,7 @@ The harness injects one scoped Subagent tool into `planner`. Do not add that too
 yourself. The frozen delegate list controls which Loop definitions the parent can
 reach, while Rig limits bound total depth and child count.
 
-The parent model must declare `inference.WithTools()` because the injected
+The parent model must declare `model.WithTools()` because the injected
 Subagent definition is model-facing. The Subagent tool still passes through the
 parent's permission gate. The example asks a person for every call. Your policy
 can instead automatically approve known delegate calls or deny delegation.

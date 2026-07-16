@@ -238,7 +238,7 @@ Or change its model and effort atomically:
 err := controller.Change(
 	ctx,
 	loop.ChangeModel(newModel),
-	loop.ChangeEffort(inference.EffortHigh),
+	loop.ChangeEffort(model.EffortHigh),
 )
 ```
 

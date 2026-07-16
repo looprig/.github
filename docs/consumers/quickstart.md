@@ -68,8 +68,8 @@ import (
 	"github.com/looprig/harness/pkg/loop"
 	"github.com/looprig/harness/pkg/rig"
 	"github.com/looprig/harness/pkg/sessionstore"
-	"github.com/looprig/inference"
 	"github.com/looprig/inference/auth"
+	"github.com/looprig/inference/model"
 	"github.com/looprig/llm"
 	"github.com/looprig/llm/auto"
 	"github.com/looprig/storage/memstore"
@@ -96,9 +96,9 @@ func run() error {
 	}
 
 	// Model is a secret-free description of what to call and how to speak to it.
-	model := inference.CustomModel(
-		inference.ProviderName(llm.ProviderOpenRouter),
-		inference.APIFormatOpenAI,
+	model := model.CustomModel(
+		model.ProviderName(llm.ProviderOpenRouter),
+		model.APIFormatOpenAI,
 		"https://openrouter.ai/api/v1",
 		modelName,
 	)
@@ -203,7 +203,7 @@ go run .
 
 The program assembled the system in the same order looprig uses at every scale:
 
-1. `inference.Model` described the provider, wire format, endpoint, and model
+1. `model.Model` described the provider, wire format, endpoint, and model
    without carrying a secret.
 2. `auto.New` validated that model and bound the API key to an
    `inference.Client`.
