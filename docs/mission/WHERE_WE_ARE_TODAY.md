@@ -102,7 +102,7 @@ restore. Web, desktop, and mobile clients remain part of the work ahead.
 | Native harness construction | Very strong | Explicit and replaceable Loops, Sessions, Rigs, gates, journals, tools, storage, and inference boundaries |
 | Durability and workspace recovery | Leading | Durable typed history, restoration checks, pluggable storage, and content-addressed workspace snapshots |
 | Durable workflows | Strong | `flow` is implemented; first-class agent task integration and unified clients remain |
-| Confinement and human control | Strong | OS enforcement, honest guarantee reporting, security limits, and durable gates |
+| Confinement and human control | Strong | Explicit access profiles, OS enforcement, honest guarantee reporting, and durable gates |
 | Provider abstraction | Strong foundation | Native provider formats and a neutral inference contract, with a smaller integration ecosystem than established SDKs |
 | Foreign agents | Promising but incomplete | Claude Code and Codex adapters exist; bidirectional ACP remains to be implemented |
 | Evaluations | Foundation exists | Core evaluation types and judges exist; integrated datasets, runs, reports, and trace-linked scoring remain |
@@ -136,7 +136,7 @@ for.
 
 ### Safety Is Structural
 
-Confinement, gates, permissions, and security limits are part of the runtime
+Confinement, gates, permissions, and access profiles are part of the runtime
 contract. They are not instructions asking a model to behave safely.
 
 ### Agents and Workflows Are Separate but Composable

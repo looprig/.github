@@ -28,7 +28,7 @@ around them. It may include Loops, deterministic tasks, workflows, people,
 storage, external services, and user interfaces.
 
 **looprig.** The overall open source project and ecosystem. It includes the
-harness, workflow engine, inference stack, storage backends, confinement,
+harness, workflow engine, inference stack, storage backends, the sandbox,
 standard tools, interfaces, and complete Rigs built from those parts.
 
 **harness.** The runtime module that provides Loops, Rigs, Sessions, tools,
@@ -40,12 +40,12 @@ identity, model, instructions, tools, permissions, modes, context policy, and
 delegation behavior.
 
 **Rig.** The agent system a user configures, owns, and runs. A Rig assembles one
-or more Loops with storage, workspace, security, lifecycle, and delegation
+or more Loops with storage, workspace, access, lifecycle, and delegation
 policy. looprig is the project. A Rig is what someone builds with it.
 
 **Session.** One running or restorable instance of a Rig. A Session owns the
-live execution state, event history, active Loop, security limit, workspace,
-and pending gates for a body of work.
+live execution state, event history, active Loop, selected access profile,
+workspace, and pending gates for a body of work.
 
 **Turn.** One unit of interaction submitted to a Loop, including the model and
 tool activity required to complete it.
@@ -55,7 +55,7 @@ request tools, or end the Turn.
 
 **Tool.** A named capability a Loop can ask to use, such as reading a file,
 running a command, searching, or calling an application API. Tools are selected
-individually and remain under runtime permission and confinement policy.
+individually and remain under the runtime access gate and OS confinement.
 
 **Workflow.** Durable coordination across tasks, agents, people, and external
 systems. In looprig, workflows are built with the `flow` module and are separate
@@ -320,8 +320,20 @@ about to perform so the runtime can record and evaluate it.
 **Classifier.** A component that labels input for policy use. Planned
 classifiers include detection of prompt injection and other untrusted content.
 
-**Confinement.** The adapter layer that connects harness tool bindings and the
-live Session security limit to a sandbox executor.
+**Access profile.** The complete, immutable set of access states a Session's
+commands run under: a `Deny`/`Gated`/`Allow` value for each capability
+(workspace read/write, host read/write, network, command execution) plus HOME
+and isolation choices. A profile is the sandbox's `AccessSource` for the gate and
+the source of truth for OS enforcement, so a decision and its enforcement cannot
+drift. It is selected before a Session opens and fixed for that Session.
+
+**Access state.** One of the three per-capability decisions in an access profile:
+`Deny` (reject without asking; no saved rule overrides it), `Gated` (use a
+matching saved rule or ask once), or `Allow` (proceed).
+
+**Confinement.** Whether a command runs inside an OS sandbox (`Sandboxed`) or
+directly with the invoking user's authority (`Unconfined`). It is a property of
+the executor, independent of the per-capability access states.
 
 **Effect.** What resolving a Gate does to execution. A response may resume
 parked work, initiate follow-up work, or apply a control-plane action.
@@ -355,8 +367,10 @@ or workflow execution. Broader integrated guardrails are planned.
 **Permission.** Runtime authority for a proposed tool or system action. A model
 requesting an action does not itself grant permission to perform it.
 
-**Permission prompter.** The boundary a tool uses to request a permission
-decision when an operation is not already allowed.
+**Call preparer.** The preparation boundary a tool owns. It decodes and validates
+untrusted arguments once, normalizes and canonicalizes the resources involved,
+and emits one typed request listing the capability requirements the call needs.
+Tools classify capabilities; the access gate decides `Deny`, `Gated`, or `Allow`.
 
 **Prompt injection.** Untrusted content that attempts to redirect an agent,
 override its instructions, obtain secrets, or cause unsafe actions.
@@ -371,11 +385,14 @@ can restrict filesystem, process, network, environment, and resource access.
 The sandbox reports achieved guarantees, not only the policy that was
 requested.
 
-**Security limit.** The maximum authority a live Session permits. Individual
-Loops and tools may operate below it, but cannot raise themselves above it.
+**Restrict.** The operation that intersects a base access profile with a ceiling,
+component-wise, without ever widening the base. It is how a role such as a
+reviewer is held below the Session's selected profile.
 
-**Security mode.** A standard sandbox posture. From narrowest to broadest, the
-current modes are ZeroTrust, ReadOnly, Write, Trusted, and Unconfined.
+**Grant.** A short-lived, single-spawn capability token the sandbox executor
+mints only after the gate approves a `Gated` requirement. It binds the exact
+command, working directory, profile fingerprint, and expiry, and is never a
+durable permission record.
 
 **Secret brokerage.** **Planned.** Resolving secret references only inside an
 authorized tool or transport so raw secret values do not enter model context.
@@ -659,9 +676,6 @@ and framework-specific interfaces over the harness HTTP and SSE contract.
 how an application owns model policy, Loop definitions, tools, prompts,
 delegation, storage, and its composition root.
 
-**`confinement`.** The module that binds harness tools and live security
-ceilings to `sandbox` executors.
-
 **`core`.** The smallest shared vocabulary, including typed content, UUIDs,
 stream accumulation, and structured logging helpers.
 
@@ -691,8 +705,10 @@ primitives over NATS JetStream. It can use an embedded or remote server.
 `rclone` program to reach local or cloud remotes without linking its dependency
 tree into looprig.
 
-**`sandbox`.** The standalone OS-confinement module for commands. It enforces
-policy and reports the guarantees achieved by the current platform.
+**`sandbox`.** The standalone module that owns the access profile and its OS
+enforcement for commands. It compiles a profile into the strongest available OS
+boundary, mints post-approval grant tokens, and reports the guarantees achieved
+by the current platform.
 
 **`storage`.** The dependency-light persistence contract module. It defines
 Ledger, Leaser, KV, and Blobs plus reference and conformance utilities.
@@ -749,7 +765,7 @@ as `harness`, `flow`, or `storage`.
 related types and behavior.
 
 **Public seam.** An intentional interface between replaceable parts of the
-system, such as inference, storage, confinement, or foreign agent execution.
+system, such as inference, storage, the sandbox, or foreign agent execution.
 
 **Reference backend.** A small implementation used to demonstrate and test the
 expected behavior of a contract.

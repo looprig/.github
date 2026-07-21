@@ -34,8 +34,7 @@ application chooses and wires both.
 | `fsstore` | filesystem implementations of all four storage contracts | persisting one-host systems on local disk |
 | `natsstore` | JetStream implementations of all four storage contracts | sharing durable state across processes or hosts |
 | `rclonestore` | blob storage through rclone | keeping snapshots or offloads on an rclone-supported remote |
-| `sandbox` | OS-level command confinement and enforcement reports | giving agents command execution with an operating-system boundary |
-| `confinement` | shared binding between harness ceilings, standard tool posture, and sandbox executors | keeping command enforcement and permission decisions aligned |
+| `sandbox` | access profiles, OS-level command enforcement, and honest guarantee reports | giving agents command execution with an operating-system boundary |
 | `flow` | durable graph execution, messages, checkpoints, ingress, and control plane | coordinating explicit resumable workflows |
 | `tui` | reusable interactive terminal presentation | building a terminal interface over a Session adapter |
 | `coderig` | a complete coding Rig | studying a production composition or running CodeRig |
@@ -68,8 +67,9 @@ or:
 github.com/looprig/natsstore
 ```
 
-Add `github.com/looprig/tools` for standard tools. Add `github.com/looprig/confinement`
-with `github.com/looprig/sandbox` when a Loop can spawn confined commands. Add
+Add `github.com/looprig/tools` for standard tools. Add
+`github.com/looprig/sandbox` when a Loop can spawn confined commands: its
+`Profile` drives both the access gate and OS enforcement. Add
 `github.com/looprig/tui` or the Harness `serve` package only when you want those
 presentation surfaces.
 
@@ -83,13 +83,12 @@ Most consumer code uses a small part of the harness module:
 | `pkg/rig` | validate and assemble Loops with storage, workspaces, snapshots, limits, and lifecycle policy |
 | `pkg/session` | submit work, observe events, answer gates, interrupt, compact, checkpoint, and control one live execution |
 | `pkg/event` | consume typed ephemeral and enduring runtime events |
-| `pkg/tool` | define tool contracts, bindings, requirements, approval scopes, and command runners |
-| `pkg/gate` | answer durable permission gates |
+| `pkg/tool` | define tool contracts, bindings, prepared requests, capability requirements, and command runners |
+| `pkg/gate` | evaluate the three access states and answer durable permission gates |
 | `pkg/sessionstore` | open durable Session journals, offloads, leases, and catalog state over `storage.Composite` |
 | `pkg/workspacestore` | capture and materialize content-addressed workspace snapshots over `storage.Blobs` |
 | `pkg/serve` | expose live and durable Session operations over HTTP and server-sent events |
 | `pkg/serve/catalogreader` | connect the durable session catalog to the HTTP read plane |
-| `pkg/security` | represent a Session-scoped ordinal security limit |
 | `pkg/hustle` | define bounded inference jobs outside the normal turn lane, including compaction work |
 | `pkg/foreignloop` | integrate supported foreign Claude or Codex execution engines |
 
@@ -190,7 +189,7 @@ Across every module, your application remains the composition root. It owns:
 - prompts, tools, permissions, and policy revisions;
 - Loop topology and delegation limits;
 - storage placement and retention;
-- workspace placement and sandbox posture;
+- workspace placement and the access profile command tools run under;
 - interfaces, authentication, and deployment;
 - restore compatibility and configuration migrations.
 

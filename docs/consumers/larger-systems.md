@@ -94,34 +94,85 @@ Session using it has shut down.
 
 ## Give an agent a workspace
 
-Workspace-bound tools need three pieces:
+Workspace-bound tools need four pieces:
 
 1. tool definitions on the Loop;
-2. a permission gate on the Loop;
-3. a workspace placement and snapshot policy on the Rig.
+2. an access profile and its OS executor;
+3. an access gate on the Loop;
+4. a workspace placement and snapshot policy on the Rig.
 
-For one known workspace root, create an immutable read guard and a fresh
-permission gate for every bound Loop:
+Call `sandbox.Init()` as the first statement in `main` (see below), then build a
+read guard, an access profile, its executor, and one gate for the Loop:
 
 ```go
-hardDeny := tools.DefaultHardDeny()
+// A read guard is the narrow read-side policy the file tools enforce
+// themselves: loop.ReadGuard is DeniedRead(absPath) bool and MaxReadBytes() int64.
+type readGuard struct{}
 
-readGuard, err := tools.NewPermissionChecker(tools.PermissionPolicy{
-	WorkspaceRoot: workspaceRoot,
-	HardDeny:      hardDeny,
+func (readGuard) DeniedRead(absPath string) bool { return false }
+func (readGuard) MaxReadBytes() int64            { return 10 << 20 }
+
+guard := readGuard{}
+
+// A sandbox profile chooses each capability's access state directly. There are
+// no named modes or presets: the consumer sets every field.
+profile, err := sandbox.NewProfile(sandbox.ProfileConfig{
+	WorkspaceRoot:  workspaceRoot,
+	WorkspaceRead:  sandbox.Allow,
+	WorkspaceWrite: sandbox.Allow,
+	HostRead:       sandbox.Deny,
+	HostWrite:      sandbox.Deny,
+	Network:        sandbox.Deny,
+	Command:        sandbox.Gated,
+	Home:           sandbox.IsolatedHome,
+	Isolation:      sandbox.Sandboxed,
 })
 if err != nil {
 	return err
 }
 
-permissionFactory := func(
-	_ context.Context,
-	bindings tool.Bindings,
-) (loop.PermissionGate, error) {
-	return tools.NewPermissionChecker(tools.PermissionPolicy{
-		WorkspaceRoot: bindings.Workspace.Root,
-		HardDeny:      hardDeny,
-	})
+// An ExecutorSet memoizes one OS-enforcing executor per opaque key, each with
+// its own isolated HOME and grant identity beneath the scratch root.
+executors, err := sandbox.NewExecutorSet(
+	profile,
+	sandbox.WithScratchRoot(scratchRoot),
+	sandbox.WithMaxExecutors(8),
+)
+if err != nil {
+	return err
+}
+defer func() { _ = executors.Close() }()
+
+executor, err := executors.For("workspace-assistant")
+if err != nil {
+	return err
+}
+
+// The single hardened workspace permission file is the gate's rule store.
+ruleStore, diagnostics, err := permission.NewWorkspaceStore(permission.Config{
+	Path: permissionFilePath, // one explicit absolute path; never discovered
+})
+if err != nil {
+	return err
+}
+_ = diagnostics // surface manual-rule diagnostics to the operator
+
+// The gate applies Deny/Gated/Allow per capability. *sandbox.Profile is the
+// AccessSource; the *sandbox.Executor mints post-approval grants.
+evaluator, err := gate.NewInteractiveEvaluator(
+	[]gate.AccessBinding{
+		{Kind: "command.execute", Source: profile},
+		{Kind: "filesystem.read", Source: profile},
+		{Kind: "filesystem.write", Source: profile},
+		{Kind: "network", Source: profile},
+	},
+	ruleStore,
+	loop.GateApprover(),
+	ruleStore,
+	executor,
+)
+if err != nil {
+	return err
 }
 
 assistant, err := loop.Define(
@@ -129,24 +180,23 @@ assistant, err := loop.Define(
 	loop.WithInference(client, model),
 	loop.WithSystem("Help with files in the assigned workspace."),
 	loop.WithTools(
-		tools.ReadFileDefinition(readGuard),
+		tools.ReadFileDefinition(guard),
 		tools.WriteFileDefinition(),
 		tools.EditFileDefinition(),
-		tools.Bash(),
+		tools.Bash(bash.WithRunner(executor)),
 	),
-	loop.WithPermissionFactory(permissionFactory),
+	loop.WithAccessGate(evaluator),
 	loop.WithPolicyRevision("workspace-policy-v1"),
 )
 ```
 
 The Loop receives only the definitions listed above. `tools.Bash` supplies
-command execution. The model declaration must include
+command execution behind the sandbox executor. The model declaration must include
 `model.WithTools()` so the provider codec knows tool calls are supported.
 
-The read guard is enforced inside the file tools. The permission factory creates
-the gate that decides whether each proposed tool call is automatically approved,
-shown to a person, or denied. Without a permission gate, tool execution is
-denied.
+The read guard is enforced inside the file tools. The access gate decides
+whether each proposed tool call is automatically allowed, shown to a person, or
+denied. Without an access gate, tool execution fails closed.
 
 Now place the workspace on the Rig:
 
@@ -174,12 +224,15 @@ touch the same tree. [Rig](rig.md#workspace-placement) describes the tradeoffs.
 
 ## Confine commands with the OS
 
-A permission gate answers whether a command may run. The `sandbox` module limits
+The access gate answers whether a command may run. The `sandbox` module limits
 what the resulting process can read, write, execute, and reach over the network.
-Use both layers for command-capable agents.
+The two layers share one `sandbox.Profile`: it is the gate's `AccessSource` and
+the source of truth for OS enforcement, so a decision and its enforcement cannot
+drift.
 
 Call `sandbox.Init()` as the first statement in `main`. This lets the module
-perform platform setup before the application starts goroutines:
+perform platform setup (a re-executed Linux confinement helper) before the
+application starts goroutines. On other platforms it is a no-op:
 
 ```go
 func main() {
@@ -191,58 +244,42 @@ func main() {
 }
 ```
 
-Build a policy and give its executor to the Bash definition:
+A profile chooses an access state — `Deny`, `Gated`, or `Allow` — for each
+capability directly. There are no reusable named modes or presets; the consumer
+sets every field. The workspace example above builds one such profile. A product
+typically defines a small set of named profiles from these fields. CodeRig, for
+instance, exposes three:
 
-```go
-policy := sandbox.PolicyFor(sandbox.Write, workspaceRoot)
-executor, err := sandbox.NewExecutor(policy)
-if err != nil {
-	return err
-}
+| Capability | ReadOnly | Trusted | Unconfined |
+| --- | --- | --- | --- |
+| Workspace read | `Allow` | `Allow` | `Allow` |
+| Workspace write | `Deny` | `Allow` | `Allow` |
+| Host read | `Deny` | `Allow` | `Allow` |
+| Host write | `Deny` | `Gated` | `Allow` |
+| Network | `Deny` | `Allow` | `Allow` |
+| Command execution | `Gated` | `Allow` | `Allow` |
+| Command HOME | `IsolatedHome` | `IsolatedHome` | `RealHome` |
+| Isolation | `Sandboxed` | `Sandboxed` | `Unconfined` |
 
-assistant, err := loop.Define(
-	loop.WithName("workspace-assistant"),
-	loop.WithInference(client, model),
-	loop.WithTools(
-		tools.ReadFileDefinition(readGuard),
-		tools.WriteFileDefinition(),
-		tools.EditFileDefinition(),
-		tools.Bash(tools.WithRunner(executor)),
-	),
-	loop.WithPermissionFactory(permissionFactory),
-	loop.WithPolicyRevision("workspace-policy-v2"),
-)
-```
+`Sandboxed` execution compiles the profile into the strongest available OS
+boundary — Seatbelt on macOS, namespaces/Landlock/seccomp/nftables/cgroups on
+Linux — and construction reports the guarantees actually achieved, failing
+closed when a required one is unavailable. A `Gated` capability stays OS-blocked
+until a per-spawn grant opens the exact approved delta. `Unconfined` runs with
+the invoking user's authority, requires every filesystem and network field to be
+`Allow`, and requires `AckUnconfined`.
 
-The preset ladder is:
-
-| Mode | Intended boundary |
-| --- | --- |
-| `ZeroTrust` | workspace reads, minimal system reads, no writes or network |
-| `ReadOnly` | broad reads, gated writes and network |
-| `Write` | workspace and temporary-file writes, gated network |
-| `Trusted` | confined writes with broader default network access |
-| `Unconfined` | full user-level authority with explicit acknowledgement |
-
-Construction reports the enforcement level available on the current platform.
-Applications that change posture at runtime can use `NewExecutorDynamic` and
-wire the same ceiling source into both the executor and permission checker. The
-CodeRig demonstrates dynamic confinement through the
-`github.com/looprig/confinement` module.
+Restrict a role below the selected profile with
+`sandbox.Restrict(base, ceiling)`, which returns the component-wise, immutable
+intersection and never widens `base`. Target-scoped Bash network access is
+enforced by a loopback egress proxy the sandbox owns; the child reaches only that
+listener and direct remote egress is denied.
 
 ## Add more agents
 
 Define each role as an ordinary Loop. Give only the parent a delegate list:
 
 ```go
-delegatePermissions := func(
-	_ context.Context,
-	_ tool.Bindings,
-) (loop.PermissionGate, error) {
-	// With no automatic approval rule, each Subagent call asks for approval.
-	return tools.NewPermissionChecker(tools.PermissionPolicy{})
-}
-
 planner, err := loop.Define(
 	loop.WithName("planner"),
 	loop.WithInference(client, model),
@@ -251,7 +288,7 @@ planner, err := loop.Define(
 	loop.WithDelegation(loop.Delegation{
 		Style: loop.DelegationManaged,
 	}),
-	loop.WithPermissionFactory(delegatePermissions),
+	loop.WithAccessGate(plannerGate),
 	loop.WithPolicyRevision("planner-delegation-v1"),
 )
 
@@ -278,8 +315,9 @@ reach, while Rig limits bound total depth and child count.
 
 The parent model must declare `model.WithTools()` because the injected
 Subagent definition is model-facing. The Subagent tool still passes through the
-parent's permission gate. The example asks a person for every call. Your policy
-can instead automatically approve known delegate calls or deny delegation.
+parent's access gate (`plannerGate`), constructed as shown earlier. With no
+matching saved rule, each delegate call produces one approval; a saved allow rule
+can approve known delegate calls, and a deny rule refuses delegation outright.
 
 ## Expose Sessions over HTTP
 
@@ -348,7 +386,7 @@ Before exposing a system to other users or machines, decide explicitly:
 - which model catalog and credentials the application owns;
 - which Loops are primers and which may be delegated to;
 - which tools exist and how every tool call is permitted or denied;
-- which OS sandbox posture command tools receive;
+- which access profile each Loop's command tools run under;
 - where journals, leases, KV state, blobs, and workspaces live;
 - whether snapshots are best effort or required;
 - how Sessions are restored after process failure;

@@ -6,7 +6,7 @@ A Loop is the immutable definition of one agent. It answers six questions:
 2. Which model and provider client does it use?
 3. What instructions does it follow?
 4. Which tools can it call?
-5. Which permission policy controls those tools?
+5. Which access gate controls those tools?
 6. Which other agents may it delegate to?
 
 You define a Loop once and hand it to a [Rig](rig.md). The Rig binds fresh
@@ -111,25 +111,34 @@ loop.WithTools(
 	tools.ReadFileDefinition(readGuard),
 	tools.WriteFileDefinition(),
 	tools.EditFileDefinition(),
-	tools.Bash(),
+	tools.Bash(bash.WithRunner(executor)),
 )
 ```
 
-Both definitions require a workspace. A Rig containing them must configure one
+The file tools require a workspace. A Rig containing them must configure one
 of its workspace placements or `rig.Define` will fail.
 
-Tool execution fails secure when no permission gate is wired. To let tools run,
-provide a permission factory that creates a fresh gate for each bound Loop:
+Tool execution fails secure when no access gate is wired. To let tools run,
+install one with `loop.WithAccessGate`. The gate applies the three access states
+— `Deny`, `Gated`, `Allow` — to the capabilities each prepared call needs,
+routing them to an `AccessSource`. A `*sandbox.Profile` satisfies that seam
+directly:
 
 ```go
-permissionFactory := func(
-	_ context.Context,
-	bindings tool.Bindings,
-) (loop.PermissionGate, error) {
-	return tools.NewPermissionChecker(tools.PermissionPolicy{
-		WorkspaceRoot: bindings.Workspace.Root,
-		HardDeny:      tools.DefaultHardDeny(),
-	})
+evaluator, err := gate.NewInteractiveEvaluator(
+	[]gate.AccessBinding{
+		{Kind: "command.execute", Source: profile},
+		{Kind: "filesystem.read", Source: profile},
+		{Kind: "filesystem.write", Source: profile},
+		{Kind: "network", Source: profile},
+	},
+	ruleStore,           // durable workspace rules (permission.NewWorkspaceStore)
+	loop.GateApprover(), // resolves one combined prompt in the live loop
+	ruleStore,
+	executor,            // *sandbox.Executor mints post-approval grants
+)
+if err != nil {
+	return err
 }
 
 agent, err := loop.Define(
@@ -140,25 +149,27 @@ agent, err := loop.Define(
 		tools.ReadFileDefinition(readGuard),
 		tools.WriteFileDefinition(),
 		tools.EditFileDefinition(),
-		tools.Bash(),
+		tools.Bash(bash.WithRunner(executor)),
 	),
-	loop.WithPermissionFactory(permissionFactory),
+	loop.WithAccessGate(evaluator),
 	loop.WithPolicyRevision("workspace-policy-v1"),
 )
 ```
 
-`EffectAsk` is the safe default. A permission checker can automatically approve
-known-safe calls, ask a person, or deny the call. Hard-deny rules are evaluated
-as a non-bypassable safety floor.
+A `Gated` capability uses a matching saved rule or produces one combined
+approval offering exactly `Approve`, `Approve always for this workspace`, and
+`Deny`. `Allow` proceeds without asking; `Deny` rejects and no saved rule can
+override it. Use `gate.NewHeadlessEvaluator` for a non-interactive run.
 
 `WithPolicyRevision` is required when a Loop captures behavior that cannot be
-fingerprinted automatically, including a permission factory, runtime context
+fingerprinted automatically, including an access gate, runtime context
 provider, or middleware. Change the revision whenever that behavior changes so
 a restored Session cannot silently adopt different policy.
 
-For commands, pair the permission layer with the `sandbox` module. A gate
+For commands, pair the access gate with the `sandbox` module. The gate
 answers whether a call may run. The sandbox controls what the resulting process
-can touch. See [Build larger systems](larger-systems.md#confine-commands-with-the-os).
+can touch, and the same `*sandbox.Executor` is the gate's grant issuer. See
+[Build larger systems](larger-systems.md#confine-commands-with-the-os).
 
 ## Tool limits
 
@@ -266,7 +277,7 @@ policy.
 | `WithDescription` | Human-facing role description. |
 | `WithSystem` | Base system instructions. |
 | `WithTools` | Immutable tool definitions. May accumulate across calls. |
-| `WithPermissionFactory` | Fresh permission gate for each runtime binding. |
+| `WithAccessGate` | Combined three-state access decision gate for every tool call. Requires `WithPolicyRevision`. |
 | `WithToolMiddlewares` | Tool execution wrappers. |
 | `WithToolLimits` | Per-turn iteration, call, and parallelism limits. |
 | `WithEngine` | Native, Claude, or Codex execution engine. |

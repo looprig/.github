@@ -7,7 +7,6 @@ state that should not be shared between executions:
 - active turns and tool calls;
 - durable event history;
 - permission gates;
-- security-ceiling state;
 - the resolved workspace and its checkpoints.
 
 The Rig is reusable. The Session is the running thing.
@@ -147,25 +146,28 @@ Use concrete event types rather than parsing event names or error strings.
 
 ## Answer permission gates
 
-A permission checker may decide that a tool call needs human approval. The
-Session emits `event.GateOpened` and pauses the affected work without blocking
-the rest of the process.
+The access gate may decide that a tool call needs human approval. The Session
+emits `event.GateOpened` and pauses the affected work without blocking the rest
+of the process. A permission gate carries one combined request listing the
+command and every capability that still needs approval.
 
-Approve a permission request at an explicit scope:
+A permission gate is answered with exactly one of three actions. Approve the call
+once:
 
 ```go
-scopeValue, ok := tool.ApprovalScopeValue(tool.ScopeOnce)
-if !ok {
-	return errors.New("unsupported approval scope")
-}
-rawScope, err := json.Marshal(scopeValue)
-if err != nil {
-	return err
-}
-err = session.RespondGate(ctx, gate.GateResponse{
+err := session.RespondGate(ctx, gate.GateResponse{
 	GateID: opened.Gate.ID,
-	Action: "approve",
-	Values: map[string]json.RawMessage{"scope": rawScope},
+	Action: string(gate.ApprovalApprove),
+	Source: gate.ResponseSource{Kind: gate.ResponseFromUser},
+})
+```
+
+Approve it and persist the displayed reusable allow rules for this workspace:
+
+```go
+err := session.RespondGate(ctx, gate.GateResponse{
+	GateID: opened.Gate.ID,
+	Action: string(gate.ApprovalApproveAlwaysWorkspace),
 	Source: gate.ResponseSource{Kind: gate.ResponseFromUser},
 })
 ```
@@ -175,15 +177,16 @@ Deny it:
 ```go
 err := session.RespondGate(ctx, gate.GateResponse{
 	GateID: opened.Gate.ID,
-	Action: "deny",
+	Action: string(gate.ApprovalDeny),
 	Source: gate.ResponseSource{Kind: gate.ResponseFromUser},
 })
 ```
 
-The scope vocabulary is `tool.ScopeOnce`, `tool.ScopeSession`, and
-`tool.ScopeWorkspace`, but each gate advertises the scopes valid for that
-request. Use `tool.ApprovalScopeValue` as shown instead of hardcoding response
-strings in application logic.
+The three exact actions are `gate.ApprovalApprove`,
+`gate.ApprovalApproveAlwaysWorkspace`, and `gate.ApprovalDeny`. There is no
+session or user-global approval scope: `Approve` writes nothing, and
+`Approve always for this workspace` atomically appends the reusable rules to the
+single workspace permission file. A saved deny always beats a saved allow.
 
 Gates are durable. A restorable gate can remain open across process restart and
 be answered after `RestoreSession` reconstructs it.
@@ -279,16 +282,6 @@ err := session.RestoreWorkspace(ctx, ref)
 Both operations require a configured workspace placement. Workspace restoration
 is a control-plane action and should be exposed only to trusted callers.
 
-## Change the security limit
-
-```go
-err := session.SetSecurityLimit(ctx, security.Level(2))
-```
-
-The value is clamped by the Session's security limit. The Harness journals the
-effective change. Your application owns the mapping from ordinal levels to
-permission and sandbox postures.
-
 ## Public interfaces
 
 The ordinary data plane is:
@@ -315,7 +308,6 @@ type SessionController interface {
 	Session
 	SetActiveLoop(context.Context, uuid.UUID) error
 	LoopController(uuid.UUID) (loop.Controller, bool)
-	SetSecurityLimit(context.Context, security.Level) error
 	CheckpointWorkspace(context.Context) (workspacestore.Ref, error)
 	RestoreWorkspace(context.Context, workspacestore.Ref) error
 	Shutdown(context.Context) error

@@ -24,7 +24,7 @@ loop.Definition values + stores + policy
 ```
 
 Define the Rig once and reuse it across concurrent Sessions. Each Session gets
-its own live Loops, journal, security limit, and resolved workspace.
+its own live Loops, journal, selected access profile, and resolved workspace.
 
 ## The smallest Rig
 
@@ -230,7 +230,7 @@ rig.WithDelegationLimits(rig.DelegationLimits{
 
 These are backstops, not a replacement for a narrow delegate list on each Loop.
 
-## Gate limits and the security limit
+## Gate limits
 
 Bound the permission gates a Session may hold open:
 
@@ -241,19 +241,11 @@ rig.WithGateCaps(rig.GateCaps{
 })
 ```
 
-Provide a fresh security limit for every Session when your permission system
-supports runtime posture changes:
-
-```go
-rig.WithSecurityLimitFactory(func() *security.Limit {
-	return security.NewBounded(maxLevel)
-})
-```
-
-The Harness treats the limit as an ordinal. Your application defines what each
-level means and wires the same state into its permission checker. A trusted
-caller can change the effective level with `SetSecurityLimit`, subject to the
-clamp.
+Command authority itself is fixed for a Session by the access profile its Loops
+run under, not by a runtime ordinal. A Session is opened with one profile; a
+different profile requires opening a new Session. See
+[Build larger systems](larger-systems.md#confine-commands-with-the-os) for how a
+profile drives both the access gate and OS enforcement.
 
 ## Configuration fingerprints
 
@@ -331,7 +323,6 @@ Claude or Codex engine. Both builders are required together.
 | `WithSnapshots` | Required with placement | Configure automatic workspace snapshots. |
 | `WithDelegationLimits` | Optional, once | Bound child depth and total child count. |
 | `WithGateCaps` | Optional, once | Bound open gates and gate timeouts. |
-| `WithSecurityLimitFactory` | Optional, once | Create a fresh security-limit state for each Session. |
 | `WithFingerprintFields` | Optional, once | Add stable application behavior to restore compatibility. |
 | `WithHustles` | Optional | Register immutable Hustle definitions. Accumulates across calls. |
 | `WithHustleLimits` | Required with Hustles | Bound execution lanes, queues, audit, finalization, and drain. |
