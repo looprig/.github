@@ -44,12 +44,21 @@ loop.WithTools(
     tools.GlobDefinition(guard),
     tools.GrepDefinition(guard),
     tools.Bash(bash.WithRunner(executor)),
-    tools.TodoDefinition(),
+    tools.TaskDefinitions(),
     tools.AskUserDefinition(),
 )
 ```
 
 File definitions share observations and mutation coordination through the Loop's workspace binding. ReadFile can authorize a safe compare-and-swap edit, and Bash can invalidate those observations after an opaque workspace mutation.
+
+`tools.TaskDefinitions()` is one selected definition for the related task
+capability family. Its build exposes four model-facing names — `TaskCreate`,
+`TaskUpdate`, `TaskGet`, and `TaskList` — and gives the bound Loop one task
+graph. Every bound Loop, including each Subagent Loop, gets an independent
+graph; modes within one Loop reuse that Loop's graph. The Harness injects the
+model-facing `Subagent` control tool automatically when delegation is enabled,
+so do not add it to `WithTools`. Agents coordinate across their separate task
+graphs through Subagent messages rather than shared task memory.
 
 ## Permissions are separate from tool selection
 

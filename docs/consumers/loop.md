@@ -171,6 +171,29 @@ answers whether a call may run. The sandbox controls what the resulting process
 can touch, and the same `*sandbox.Executor` is the gate's grant issuer. See
 [Build larger systems](larger-systems.md#confine-commands-with-the-os).
 
+### Loop-scoped task tracking
+
+The optional `github.com/looprig/tools` module provides related task operations
+as one selected definition:
+
+```go
+tasks := tools.TaskDefinitions()
+
+agent, err := loop.Define(
+	loop.WithName("workspace-assistant"),
+	loop.WithInference(client, model),
+	loop.WithTools(tasks),
+)
+```
+
+That one definition exposes the four model-facing names `TaskCreate`,
+`TaskUpdate`, `TaskGet`, and `TaskList`. Every bound Loop, including each
+Subagent Loop, receives an independent task graph. Modes within one Loop share
+that graph because they reuse the same bound tools. The Harness injects the
+`Subagent` control tool automatically when delegation is enabled; do not add it
+manually. Agents coordinate across Loop boundaries through Subagent messages,
+not through shared task memory.
+
 ## Tool limits
 
 Limit tool activity per turn when an agent can call tools:

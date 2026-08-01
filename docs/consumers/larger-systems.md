@@ -313,6 +313,14 @@ The harness injects one scoped Subagent tool into `planner`. Do not add that too
 yourself. The frozen delegate list controls which Loop definitions the parent can
 reach, while Rig limits bound total depth and child count.
 
+If these Loops select `tools.TaskDefinitions()`, that one definition supplies
+the four model-facing task names — `TaskCreate`, `TaskUpdate`, `TaskGet`, and
+`TaskList` — to each bound Loop. The parent and every Subagent receive
+independent task graphs, while modes within one Loop share that Loop's graph.
+The Subagent tool is automatically injected by the Harness and is not another
+tool to add manually. Use Subagent messages to coordinate between agents; task
+graphs are not shared memory.
+
 The parent model must declare `model.WithTools()` because the injected
 Subagent definition is model-facing. The Subagent tool still passes through the
 parent's access gate (`plannerGate`), constructed as shown earlier. With no
