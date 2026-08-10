@@ -187,7 +187,7 @@ Every other repo in the tree is either a foundation the Harness stands on (`core
 
 ### Reference product
 
-- **[carbon](https://github.com/looprig/carbon)** - Carbon is the reference coding Rig. A primary operator can delegate to a non-delegating operator or reviewer. Each role receives an explicit tool list, confinement policy, Loop modes, and model effort. The reviewer has no file mutation tools. Session persistence, workspace snapshots, configuration fingerprints, and the TUI come from their owning modules.
+- **[carbon](https://github.com/looprig/carbon)** - Carbon is the reference coding Rig and its sole agent. Carbon can delegate to another Carbon instance for focused work while retaining one product identity, one explicit tool/access policy, and one durable session model. Session persistence, workspace snapshots, configuration fingerprints, and the TUI come from their owning modules.
 
 ### External proof
 

@@ -38,10 +38,10 @@ application chooses and wires both.
 | `confinement` | shared binding between harness ceilings, standard tool posture, and sandbox executors | keeping command enforcement and permission decisions aligned |
 | `flow` | durable graph execution, messages, checkpoints, ingress, and control plane | coordinating explicit resumable workflows |
 | `tui` | reusable interactive terminal presentation | building a terminal interface over a Session adapter |
-| `coderig` | a complete coding Rig | studying a production composition or running CodeRig |
+| `carbon` | a complete coding Rig | studying a production composition or running Carbon |
 | `tests` | cross-module integration and compatibility tests | validating development across the repository set |
 
-`coderig` and `tests` are useful references, but consumer applications do not need
+`carbon` and `tests` are useful references, but consumer applications do not need
 to import them.
 
 ## Start with these imports

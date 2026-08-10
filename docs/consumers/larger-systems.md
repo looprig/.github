@@ -227,7 +227,7 @@ The preset ladder is:
 Construction reports the enforcement level available on the current platform.
 Applications that change posture at runtime can use `NewExecutorDynamic` and
 wire the same ceiling source into both the executor and permission checker. The
-CodeRig demonstrates dynamic confinement through the
+Carbon demonstrates dynamic confinement through the
 `github.com/looprig/confinement` module.
 
 ## Add more agents

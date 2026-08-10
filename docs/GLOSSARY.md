@@ -655,7 +655,7 @@ without making the harness depend on terminal libraries.
 **`client`.** **Planned.** The shared client module for web, desktop, mobile,
 and framework-specific interfaces over the harness HTTP and SSE contract.
 
-**`coderig`.** A complete coding Rig built from looprig modules. It demonstrates
+**`carbon`.** A complete coding Rig built from looprig modules. It demonstrates
 how an application owns model policy, Loop definitions, tools, prompts,
 delegation, storage, and its composition root.
 
