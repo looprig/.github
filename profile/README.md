@@ -102,8 +102,8 @@ organization runs thousands.
     ┌──────────────┐  Optional standard tools, selected one definition at a time
     │    tools     │
     └──────────────┘
-    ┌──────────────┐  Shared bridge between tool bindings and OS sandbox enforcement
-    │ confinement  │
+    ┌──────────────┐  Carbon's explicit access policy over tools and OS sandboxing
+    │ access policy│
     └──────────────┘
     ┌──────────────┐
     │    flow      │  sibling durable-workflow engine (Pregel-style): agent tasks as flow kinds
@@ -123,7 +123,7 @@ At the center sits [harness](https://github.com/looprig/harness), the multi-agen
 - It drives the model-inference loop, dispatches tool calls, enforces human-in-the-loop approval, persists everything, and exposes hooks/events for embedders.
 - It depends only on `core` + `inference` + `storage`, **never** on `llm`. It is the contract consumer; concrete providers are wired at the composition root.
 
-Every other repo in the tree is either a foundation the Harness stands on (`core`, `inference`, `storage`, `fsstore`, `natsstore`, `rclonestore`), a sibling engine with which it composes (`flow`), an optional capability (`llm`, `tools`, `sandbox`, `confinement`), a presentation layer over it (`tui`), or a product built from it (`carbon`). Cross-repo durability is proven externally by `tests`.
+Every other repo in the tree is either a foundation the Harness stands on (`core`, `inference`, `storage`, `fsstore`, `natsstore`, `rclonestore`), a sibling engine with which it composes (`flow`), an optional capability (`llm`, `tools`, `sandbox`), a presentation layer over it (`tui`), or a product built from it (`carbon`). Cross-repo durability is proven externally by `tests`.
 
 <br/>
 
@@ -137,12 +137,11 @@ Every other repo in the tree is either a foundation the Harness stands on (`core
 | **Model inference contract** | Provider-neutral `Client`/`Request`/`Response`/`Tool`/`Usage`, streaming, codecs, sampling knobs. No provider policy. | [inference](https://github.com/looprig/inference) |
 | **Provider batteries** | Known-provider registry, truth tables, SigV4 + API key + attestation auth, `auto.New` composition root, fail-closed model validation. | [llm](https://github.com/looprig/llm) |
 | **OS confinement** | Seatbelt (macOS) + namespaces/Landlock/seccomp/nftables/cgroups (Linux). Unforgeable HMAC grant tokens; honest per-property guarantees. | [sandbox](https://github.com/looprig/sandbox) |
-| **Confinement wiring** | Per-Loop executor ownership, live security-limit clamping, command runner views, and permission posture wiring shared by any sandboxed Rig. | [confinement](https://github.com/looprig/confinement) |
 | **Durable storage contracts** | `Ledger`/`Leaser`/`KV`/`Blobs` interfaces, typed errors, name grammar, `AppendDefinite` ambiguity resolver, in-memory oracle + conformance suites. | [storage](https://github.com/looprig/storage) |
 | **Storage backends** | Concrete implementations of the storage contracts: single-host disk, NATS JetStream (embedded or remote), and a cloud-agnostic rclone-driven blobs adapter. | [fsstore](https://github.com/looprig/fsstore), [natsstore](https://github.com/looprig/natsstore), [rclonestore](https://github.com/looprig/rclonestore) |
 | **User-facing surfaces** | One `pkg/serve` `/v1` contract, many UI runtimes. Terminal TUI today (`tui`/Bubble Tea v2); a planned `client` module brings a BFF + embedded SPA + framework-neutral TS SDK (`@looprig/client`) to the browser, desktop (Tauri v2), and mobile, with thin adapters for Svelte (reference)/React/Vue/Angular/Solid. | [tui](https://github.com/looprig/tui), [bubbletea-fork](https://github.com/looprig/bubbletea-fork), `client` *(planned)* |
 | **Durable workflows** | Pregel-style resumable workflow engine. Events, approvals, external systems: agents become first-class task kinds. | [flow](https://github.com/looprig/flow) |
-| **Reference product** | Carbon: a depth-1 coding system assembled from Loops, standard tools, confinement, storage, inference, and the TUI. | [carbon](https://github.com/looprig/carbon) |
+| **Reference product** | Carbon: a depth-1 coding system assembled from Loops, standard tools, sandbox access policy, storage, inference, and the TUI. | [carbon](https://github.com/looprig/carbon) |
 | **External proof** | Cross-repo integration suite that drives the harness's public durability APIs against a *new* fsstore instance, proving a genuine process-death/resume. | [tests](https://github.com/looprig/tests) |
 
 <br/>
@@ -173,7 +172,6 @@ Every other repo in the tree is either a foundation the Harness stands on (`core
 ### OS confinement
 
 - **[sandbox](https://github.com/looprig/sandbox)** - Real OS enforcement of what a spawned command can touch: Seatbelt on macOS, namespaces + Landlock + seccomp + nftables + cgroups on Linux. Security-mode ladder (`ZeroTrust < ReadOnly < Write < Trusted < Unconfined`), zero-value-most-restrictive, rung-1 vs rung-2 Linux probe, re-exec stage-2 helper, unforgeable HMAC grant tokens (`lrsx1.<payload>.<sig>`) for capability escalation, metadata-endpoint hard-deny. Coupling to the harness is **structural only**: the seams use stdlib types, so sandbox satisfies them without an import; `harness` must never import `sandbox`.
-- **[confinement](https://github.com/looprig/confinement)** - The reusable bridge between Harness bindings, standard tools, and Sandbox. It clamps a role maximum to the live Session security limit, owns one executor per bound Loop, and derives Bash, Grep, and permission views from that same executor.
 
 ### Presentation & clients
 
@@ -208,11 +206,10 @@ fsstore         ← storage
 natsstore       ← storage, nats-io/*
 rclonestore     ← storage                  (blobs only)
 sandbox         ← stdlib + x/sys + vetted  (no looprig imports)
-confinement     ← harness, tools, sandbox
 tui             ← harness, core, inference, bubbletea-fork
 client (planned) ← harness (serve, sessionstore), one storage backend, stdlib net/http (no carbon)
 flow            ← core                     (bundled nats in nested module)
-carbon          ← harness, tui, tools, confinement, inference, llm, fsstore, sandbox, core
+carbon          ← harness, tui, tools, inference, llm, fsstore, sandbox, core
 tests           ← harness, inference, core, fsstore, storage (no carbon)
 ```
 
