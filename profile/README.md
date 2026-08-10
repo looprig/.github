@@ -54,7 +54,7 @@ organization runs thousands.
                  │ versioned /v1 HTTP/SSE wire contract  │ in-process SDK
                  ▼                                       ▼
     ┌─────────────────────────────────┐    ┌─────────────────────────────────────────────┐
-    │ client (planned module)         │    │ in-process consumers (CodeRig, embeds, ...) │
+    │ client (planned module)         │    │ in-process consumers (Carbon, embeds, ...)  │
     │ one Go binary: BFF + embedded   │    │ compose harness + storage + sandbox         │
     │ SPA + framework-neutral SDK     │    │ directly into a single binary               │
     │ · read:  serve.NewReader        │    └─────────────────────────────────────────────┘
@@ -123,7 +123,7 @@ At the center sits [harness](https://github.com/looprig/harness), the multi-agen
 - It drives the model-inference loop, dispatches tool calls, enforces human-in-the-loop approval, persists everything, and exposes hooks/events for embedders.
 - It depends only on `core` + `inference` + `storage`, **never** on `llm`. It is the contract consumer; concrete providers are wired at the composition root.
 
-Every other repo in the tree is either a foundation the Harness stands on (`core`, `inference`, `storage`, `fsstore`, `natsstore`, `rclonestore`), a sibling engine with which it composes (`flow`), an optional capability (`llm`, `tools`, `sandbox`, `confinement`), a presentation layer over it (`tui`), or a product built from it (`coderig`). Cross-repo durability is proven externally by `tests`.
+Every other repo in the tree is either a foundation the Harness stands on (`core`, `inference`, `storage`, `fsstore`, `natsstore`, `rclonestore`), a sibling engine with which it composes (`flow`), an optional capability (`llm`, `tools`, `sandbox`, `confinement`), a presentation layer over it (`tui`), or a product built from it (`carbon`). Cross-repo durability is proven externally by `tests`.
 
 <br/>
 
@@ -142,7 +142,7 @@ Every other repo in the tree is either a foundation the Harness stands on (`core
 | **Storage backends** | Concrete implementations of the storage contracts: single-host disk, NATS JetStream (embedded or remote), and a cloud-agnostic rclone-driven blobs adapter. | [fsstore](https://github.com/looprig/fsstore), [natsstore](https://github.com/looprig/natsstore), [rclonestore](https://github.com/looprig/rclonestore) |
 | **User-facing surfaces** | One `pkg/serve` `/v1` contract, many UI runtimes. Terminal TUI today (`tui`/Bubble Tea v2); a planned `client` module brings a BFF + embedded SPA + framework-neutral TS SDK (`@looprig/client`) to the browser, desktop (Tauri v2), and mobile, with thin adapters for Svelte (reference)/React/Vue/Angular/Solid. | [tui](https://github.com/looprig/tui), [bubbletea-fork](https://github.com/looprig/bubbletea-fork), `client` *(planned)* |
 | **Durable workflows** | Pregel-style resumable workflow engine. Events, approvals, external systems: agents become first-class task kinds. | [flow](https://github.com/looprig/flow) |
-| **Reference product** | CodeRig: a depth-1 coding system assembled from Loops, standard tools, confinement, storage, inference, and the TUI. | [coderig](https://github.com/looprig/coderig) |
+| **Reference product** | Carbon: a depth-1 coding system assembled from Loops, standard tools, confinement, storage, inference, and the TUI. | [carbon](https://github.com/looprig/carbon) |
 | **External proof** | Cross-repo integration suite that drives the harness's public durability APIs against a *new* fsstore instance, proving a genuine process-death/resume. | [tests](https://github.com/looprig/tests) |
 
 <br/>
@@ -178,7 +178,7 @@ Every other repo in the tree is either a foundation the Harness stands on (`core
 ### Presentation & clients
 
 - **[tui](https://github.com/looprig/tui)** - The reusable interactive terminal surface. The root package owns Bubble Tea presentation, `runtime` owns process and terminal lifecycle, and `sessionadapter` adapts a Harness Session to the TUI contract. `components` and `styles` remain reusable leaf packages. Dependencies stay one-directional: TUI imports Harness, never the reverse.
-- **`client` *(planned)*** - A future standalone module that brings the same session experience to the browser, desktop, and mobile. One Go binary = a backend-for-frontend (BFF) + embedded static SPA + a framework-neutral TypeScript SDK (`@looprig/client`). Three planes over the same `pkg/serve` `/v1` contract: a **read plane** (mounts `serve.NewReader` over `sessionstore`: list sessions, cold journal, transcript; works with no host), a **live plane** (SSE reverse-proxy of the host's `.../events` for token-by-token streaming), and a **control plane** (POST reverse-proxy for input/gate-response/interrupt/create/restore). The TS core parses the generated `serve` wire schema (JSON Schema to zod), folds cold history + live `enduring`/`ephemeral` frames into one session state machine, and performs the exact sequence join for lossless resume. Thin framework adapters wrap one core: `@looprig/svelte` (the first-party reference app), then `@looprig/react`, vue, angular, solid, plain TS; desktop + iOS/Android via Tauri v2 wrapping the same SPA. The client hosts **no agent**: it never imports `coderig`; it browses history from the store and drives running sessions by proxying to a host. Same-origin by design: the SPA never holds the remote token or hits the host directly; no CORS surface. (`tui` and `client` are sibling consumers of `harness`; `coderig` may embed the client's BFF + SPA for an all-in-one local dev binary.)
+- **`client` *(planned)*** - A future standalone module that brings the same session experience to the browser, desktop, and mobile. One Go binary = a backend-for-frontend (BFF) + embedded static SPA + a framework-neutral TypeScript SDK (`@looprig/client`). Three planes over the same `pkg/serve` `/v1` contract: a **read plane** (mounts `serve.NewReader` over `sessionstore`: list sessions, cold journal, transcript; works with no host), a **live plane** (SSE reverse-proxy of the host's `.../events` for token-by-token streaming), and a **control plane** (POST reverse-proxy for input/gate-response/interrupt/create/restore). The TS core parses the generated `serve` wire schema (JSON Schema to zod), folds cold history + live `enduring`/`ephemeral` frames into one session state machine, and performs the exact sequence join for lossless resume. Thin framework adapters wrap one core: `@looprig/svelte` (the first-party reference app), then `@looprig/react`, vue, angular, solid, plain TS; desktop + iOS/Android via Tauri v2 wrapping the same SPA. The client hosts **no agent**: it never imports `carbon`; it browses history from the store and drives running sessions by proxying to a host. Same-origin by design: the SPA never holds the remote token or hits the host directly; no CORS surface. (`tui` and `client` are sibling consumers of `harness`; `carbon` may embed the client's BFF + SPA for an all-in-one local dev binary.)
 - **[bubbletea-fork](https://github.com/looprig/bubbletea-fork)** - A narrow, load-bearing fork of `charm.land/bubbletea/v2` (v2.0.7 baseline) for one fix: paging `insertAbove` so that streaming log/progress lines printed *above* the live TUI never corrupt output when a chunk is taller than the screen. Drops in via `replace` directive. Only four commits beyond the vendored baseline.
 
 ### Sibling engines
@@ -187,7 +187,7 @@ Every other repo in the tree is either a foundation the Harness stands on (`core
 
 ### Reference product
 
-- **[coderig](https://github.com/looprig/coderig)** - CodeRig is the reference coding Rig. A primary operator can delegate to a non-delegating operator or reviewer. Each role receives an explicit tool list, confinement policy, Loop modes, and model effort. The reviewer has no file mutation tools. Session persistence, workspace snapshots, configuration fingerprints, and the TUI come from their owning modules.
+- **[carbon](https://github.com/looprig/carbon)** - Carbon is the reference coding Rig. A primary operator can delegate to a non-delegating operator or reviewer. Each role receives an explicit tool list, confinement policy, Loop modes, and model effort. The reviewer has no file mutation tools. Session persistence, workspace snapshots, configuration fingerprints, and the TUI come from their owning modules.
 
 ### External proof
 
@@ -210,10 +210,10 @@ rclonestore     ← storage                  (blobs only)
 sandbox         ← stdlib + x/sys + vetted  (no looprig imports)
 confinement     ← harness, tools, sandbox
 tui             ← harness, core, inference, bubbletea-fork
-client (planned) ← harness (serve, sessionstore), one storage backend, stdlib net/http (no coderig)
+client (planned) ← harness (serve, sessionstore), one storage backend, stdlib net/http (no carbon)
 flow            ← core                     (bundled nats in nested module)
-coderig         ← harness, tui, tools, confinement, inference, llm, fsstore, sandbox, core
-tests           ← harness, inference, core, fsstore, storage (no coderig)
+carbon          ← harness, tui, tools, confinement, inference, llm, fsstore, sandbox, core
+tests           ← harness, inference, core, fsstore, storage (no carbon)
 ```
 
 <br/>
