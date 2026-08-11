@@ -32,7 +32,7 @@ Begin at the `inference` boundary when the application needs one request and one
 
 ## Boundary {#boundary}
 
-`inference.Model`, `inference.Request`, and `inference.Response` describe the provider-neutral call. A `Model` supplies an ID, capabilities, and limits; a `Request` carries messages, optional tools, and call options; a `Response` carries the assistant message, usage, finish information, and provider metadata. `Client.Invoke` is the one-shot operation and `Client.Stream` returns a reader for incremental chunks.
+`model.Model`, `inference.Request`, and `inference.Response` describe the provider-neutral call. A `model.Model` supplies an ID, capabilities, and limits; a `Request` carries messages, optional tools, and call options; a `Response` carries the assistant message, usage, finish information, and provider metadata. `Client.Invoke` is the one-shot operation and `Client.Stream` returns a reader for incremental chunks.
 
 `llm` is a policy and construction layer. Its `AuthPolicy` controls whether a provider may use an explicit credential, a named credential source, or no credential. `auto.New` chooses a provider from the configured model and `auto.NewWithAuth` makes that credential decision explicit. The resulting client still exposes the `inference.Client` contract, so the rest of the loop does not need provider-specific request types.
 

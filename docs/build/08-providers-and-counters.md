@@ -34,7 +34,7 @@ proofs:
 
 # Build 08: providers and counters
 
-Use `llm` as the provider assembly layer when a process needs a common model policy, credential boundary, and optional usage counters. Provider packages remain independently testable; the returned clients satisfy the same Inference contract used by the rest of the application.
+Use `llm` as the provider assembly layer when a process needs a common model policy, credential boundary, and optional preflight context counting. Provider packages remain independently testable; the returned clients satisfy the same Inference contract used by the rest of the application.
 
 ## Provider policy {#provider-policy}
 
@@ -46,7 +46,7 @@ Use `llm` as the provider assembly layer when a process needs a common model pol
 
 ## Counters {#counters}
 
-`auto.NewCounter` and provider-level counter constructors wrap a client with usage accounting. Counters observe normalized Core usage, so they can aggregate provider calls without parsing provider-specific response fields. Decide whether retries count attempts or completed calls in the surrounding metric policy; the counter cannot make an external request idempotent.
+`auto.NewCounter` and provider-level counter constructors return a `contextcount.ContextCounter`. A counter estimates or obtains the number of input-context tokens before a model call; it does not wrap an inference client or aggregate response usage. Automatic selection returns only exact counters for supported provider and API-format pairs. Unsupported pairs fail closed with a typed support error rather than silently substituting an estimator. Call `CountContext` with the intended `inference.Request`, inspect the returned capability when policy depends on exactness, and keep response usage accounting separate.
 
 ## Subscription and credential boundaries {#subscription-and-credential-boundaries}
 
