@@ -23,7 +23,7 @@ output or requests a tool, receives the tool result, and continues until the
 Turn ends. A looprig **Loop** is the owned definition and runtime boundary around
 that cycle.
 
-**Agentic system.** The complete system built from agents and the machinery
+**Agent system.** The complete system built from agents and the machinery
 around them. It may include Loops, deterministic tasks, workflows, people,
 storage, external services, and user interfaces.
 

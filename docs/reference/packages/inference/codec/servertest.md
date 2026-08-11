@@ -22,7 +22,7 @@ proofs:
 
 # servertest package · codec/servertest
 
-Import path: `github.com/looprig/inference/codec/servertest`. Package servertest provides a reusable contract suite for codec.ServerCodec implementations. The same suite is meant to run, unmodified beyond its Config, against every dialect's real server codec (anthropicapi, openairesponses, openaiapi, geminiapi) as well a
+Import path: `github.com/looprig/inference/codec/servertest`. Package servertest provides a reusable contract suite for `codec.ServerCodec` implementations. The same suite runs, unchanged beyond its `Config`, against every dialect's real server codec and against hand-written test fakes.
 
 ## Package role {#package-role}
 

@@ -20,7 +20,7 @@ proofs:
 
 # eval package · eval
 
-Import path: `github.com/looprig/eval`. Package eval is an application-neutral evaluation framework for agentic systems. It runs as ordinary Go code under `go test`, reusing the testing package for execution, comparison, failure reporting, parallelism, and CI, while adding the domain vocabulary the
+Import path: `github.com/looprig/eval`. Package eval is an application-neutral framework for evaluating model-backed systems. It runs as ordinary Go code under `go test`, reusing the testing package for execution, comparison, failure reporting, parallelism, and CI while adding types for scenarios, targets, observations, evaluators, and reports.
 
 ## Package role {#package-role}
 
