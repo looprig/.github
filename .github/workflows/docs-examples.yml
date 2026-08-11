@@ -1,0 +1,31 @@
+name: Documentation examples
+
+on:
+  pull_request:
+    paths:
+      - 'examples/go/progressive/**'
+      - 'scripts/docs/run-examples.mjs'
+      - 'scripts/docs/run-examples.test.mjs'
+      - 'docs/_data/examples.json'
+      - '.github/workflows/docs-examples.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'examples/go/progressive/**'
+      - 'scripts/docs/run-examples.mjs'
+      - 'scripts/docs/run-examples.test.mjs'
+      - 'docs/_data/examples.json'
+      - '.github/workflows/docs-examples.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  docs-examples-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+      - run: node --test scripts/docs/run-examples.test.mjs
