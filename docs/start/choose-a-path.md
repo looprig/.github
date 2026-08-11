@@ -28,7 +28,7 @@ For durable graph execution, start with released Flow. Its nested `flow/store` m
 
 ## Availability {#availability}
 
-The module guides label each boundary `released` or `source-workspace`. A released module has an immutable tag recorded in the current snapshot. Source-workspace code may be useful in the coordinated checkout but must not be named as a public `go get` path. Kosa is unavailable and Policy53 is outside this foundation set.
+The module guides label each boundary `released` or `source-workspace`. A released module has an immutable tag recorded in the current snapshot. Source-workspace code may be useful in the coordinated checkout but must not be named as a public `go get` path. Kosa is currently unavailable as a remote release.
 
 ## First run {#first-run}
 

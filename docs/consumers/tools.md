@@ -52,8 +52,8 @@ loop.WithTools(
 File definitions share observations and mutation coordination through the Loop's workspace binding. ReadFile can authorize a safe compare-and-swap edit, and Bash can invalidate those observations after an opaque workspace mutation.
 
 `tools.TaskDefinitions()` is one selected definition for the related task
-capability family. Its build exposes four model-facing names — `TaskCreate`,
-`TaskUpdate`, `TaskGet`, and `TaskList` — and gives the bound Loop one task
+capability family. Its build exposes four model-facing names: `TaskCreate`,
+`TaskUpdate`, `TaskGet`, and `TaskList`. It gives the bound Loop one task
 graph. Every bound Loop, including each Subagent Loop, gets an independent
 graph; modes within one Loop reuse that Loop's graph. The Harness injects the
 model-facing `Subagent` control tool automatically when delegation is enabled,
@@ -67,7 +67,7 @@ prepared tool call, whether each required capability runs automatically, asks a
 person, or is denied. Install one with `loop.WithAccessGate`; without it every
 tool call fails closed.
 
-The gate evaluates the three access states — `Deny`, `Gated`, `Allow` — for the
+The gate evaluates the three access states, `Deny`, `Gated`, and `Allow`, for the
 capabilities a call needs (`command.execute`, `filesystem.read`,
 `filesystem.write`, `network`). Each capability is routed to an `AccessSource`; a
 `*sandbox.Profile` satisfies that structural seam directly, so the same profile
@@ -160,7 +160,7 @@ Use `tool.RequiresWorkspace` when the factory reads `bindings.Workspace`. Use `t
 
 ## Effectful tools
 
-Implement `tool.CallPreparer` when a tool can mutate state, execute code, reach a network, spend money, or otherwise needs judgment. Its `PrepareCall` decodes and validates the arguments once, normalizes and canonicalizes the resources involved, and emits one typed `tool.Request` listing the capability requirements the call needs. The tool classifies capabilities; it never decides `Deny`, `Gated`, or `Allow` — that belongs to the access gate. Each requirement's display text should contain the minimum information a person needs to decide, without leaking secrets.
+Implement `tool.CallPreparer` when a tool can mutate state, execute code, reach a network, spend money, or otherwise needs judgment. Its `PrepareCall` decodes and validates the arguments once, normalizes and canonicalizes the resources involved, and emits one typed `tool.Request` listing the capability requirements the call needs. The tool classifies capabilities; it never decides `Deny`, `Gated`, or `Allow`. That belongs to the access gate. Each requirement's display text should contain the minimum information a person needs to decide, without leaking secrets.
 
 Implement `tool.Auditable` for a stable, redacted summary. Never place credentials, file contents, or untrusted response bodies in an audit summary.
 

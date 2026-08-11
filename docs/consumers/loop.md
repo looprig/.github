@@ -119,8 +119,8 @@ The file tools require a workspace. A Rig containing them must configure one
 of its workspace placements or `rig.Define` will fail.
 
 Tool execution fails secure when no access gate is wired. To let tools run,
-install one with `loop.WithAccessGate`. The gate applies the three access states
-— `Deny`, `Gated`, `Allow` — to the capabilities each prepared call needs,
+install one with `loop.WithAccessGate`. The gate applies the three access states,
+`Deny`, `Gated`, and `Allow`, to the capabilities each prepared call needs,
 routing them to an `AccessSource`. A `*sandbox.Profile` satisfies that seam
 directly:
 

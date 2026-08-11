@@ -244,7 +244,7 @@ func main() {
 }
 ```
 
-A profile chooses an access state — `Deny`, `Gated`, or `Allow` — for each
+A profile chooses an access state, `Deny`, `Gated`, or `Allow`, for each
 capability directly. There are no reusable named modes or presets; the consumer
 sets every field. The workspace example above builds one such profile. A product
 typically defines a small set of named profiles from these fields. Carbon, for
@@ -262,8 +262,8 @@ instance, exposes three:
 | Isolation | `Sandboxed` | `Sandboxed` | `Unconfined` |
 
 `Sandboxed` execution compiles the profile into the strongest available OS
-boundary — Seatbelt on macOS, namespaces/Landlock/seccomp/nftables/cgroups on
-Linux — and construction reports the guarantees actually achieved, failing
+boundary. This means Seatbelt on macOS and namespaces, Landlock, seccomp,
+nftables, and cgroups on Linux. Construction reports the guarantees actually achieved, failing
 closed when a required one is unavailable. A `Gated` capability stays OS-blocked
 until a per-spawn grant opens the exact approved delta. `Unconfined` runs with
 the invoking user's authority, requires every filesystem and network field to be
@@ -314,8 +314,8 @@ yourself. The frozen delegate list controls which Loop definitions the parent ca
 reach, while Rig limits bound total depth and child count.
 
 If these Loops select `tools.TaskDefinitions()`, that one definition supplies
-the four model-facing task names — `TaskCreate`, `TaskUpdate`, `TaskGet`, and
-`TaskList` — to each bound Loop. The parent and every Subagent receive
+the four model-facing task names: `TaskCreate`, `TaskUpdate`, `TaskGet`, and
+`TaskList`. The parent and every Subagent receive
 independent task graphs, while modes within one Loop share that Loop's graph.
 The Subagent tool is automatically injected by the Harness and is not another
 tool to add manually. Use Subagent messages to coordinate between agents; task
