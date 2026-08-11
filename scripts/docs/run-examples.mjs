@@ -148,7 +148,7 @@ export function buildGoMod(example) {
     .map(([module, version]) => `\t${module} ${version}`)
     .join('\n');
   const goMod = `module ${MODULE_PATH}\n\ngo 1.26.4\n\nrequire (\n${requirements}\n)\n`;
-  if (/^replace\b/m.test(goMod)) throw new Error('generated go.mod contains a forbidden replace directive');
+  if (/^\s*replace\b/m.test(goMod)) throw new Error('generated go.mod contains a forbidden replace directive');
   return goMod;
 }
 
@@ -200,6 +200,33 @@ export function withTemporaryDirectory(prefix, body, {
   return result;
 }
 
+export function executeReleasedGoModule(temporaryModule, {
+  executeCommand = run,
+  baseEnvironment = process.env,
+} = {}) {
+  const goModPath = join(temporaryModule, 'go.mod');
+  const expectedGoMod = readFileSync(goModPath, 'utf8');
+  assertImmutableGoMod(expectedGoMod, expectedGoMod);
+  const environment = {
+    ...baseEnvironment,
+    GOWORK: 'off',
+    GOMODCACHE: join(temporaryModule, '.gomodcache'),
+    GOCACHE: join(temporaryModule, '.gocache'),
+    GOTOOLCHAIN: 'local',
+    GOENV: 'off',
+    GOFLAGS: '',
+  };
+  const commands = [
+    ['go', ['mod', 'download', 'all']],
+    ['go', ['mod', 'verify']],
+    ['go', ['run', '-mod=readonly', '.']],
+  ];
+  for (const [command, args] of commands) {
+    executeCommand(command, args, temporaryModule, environment);
+    assertImmutableGoMod(readFileSync(goModPath, 'utf8'), expectedGoMod);
+  }
+}
+
 export function runReleasedExample(plan, { repositoryRoot }) {
   if (plan.kind !== 'released-go') throw new Error('clean-module runner accepts released Go stages only');
   return withTemporaryDirectory(`looprig-docs-stage-${String(plan.example.stage).padStart(2, '0')}-`, (temporaryModule) => {
@@ -209,15 +236,13 @@ export function runReleasedExample(plan, { repositoryRoot }) {
     cpSync(shared, join(temporaryModule, 'internal'), { recursive: true });
     const goMod = buildGoMod(plan.example);
     writeFileSync(join(temporaryModule, 'go.mod'), goMod);
-    const environment = {
-      ...process.env,
-      GOWORK: 'off',
-      GOMODCACHE: join(temporaryModule, '.gomodcache'),
-      GOCACHE: join(temporaryModule, '.gocache'),
-    };
-    run('go', ['mod', 'download'], temporaryModule, environment);
-    run('go', ['run', '.'], temporaryModule, environment);
+    executeReleasedGoModule(temporaryModule);
   });
+}
+
+function assertImmutableGoMod(actual, expected) {
+  if (/^\s*replace\b/m.test(actual)) throw new Error('generated go.mod contains a forbidden replace directive');
+  if (actual !== expected) throw new Error('generated go.mod changed during released example execution');
 }
 
 function safeRelativePath(path) {

@@ -6,6 +6,7 @@ import test from 'node:test';
 
 import {
   buildGoMod,
+  executeReleasedGoModule,
   loadManifest,
   planExample,
   validateAgainstSchema,
@@ -214,4 +215,66 @@ test('temporary lifecycle removes a real non-empty temporary directory', () => {
     assert.equal(existsSync(directory), true);
   });
   assert.equal(existsSync(created), false);
+});
+
+test('released Go execution downloads all, verifies, then runs readonly with a neutral environment', () => {
+  withTemporaryDirectory('looprig-go-command-plan-', (directory) => {
+    const goMod = buildGoMod(fixture());
+    writeFileSync(join(directory, 'go.mod'), goMod);
+    const calls = [];
+    executeReleasedGoModule(directory, {
+      baseEnvironment: {
+        PATH: '/bin',
+        GOPROXY: 'https://proxy.example.test,direct',
+        GOSUMDB: 'sum.example.test',
+        GOPRIVATE: 'private.example.test',
+        GONOSUMDB: 'nosum.example.test',
+        GOWORK: '/untrusted/go.work',
+        GOENV: '/untrusted/goenv',
+        GOFLAGS: '-mod=vendor',
+        GOTOOLCHAIN: 'auto',
+      },
+      executeCommand: (command, args, cwd, environment) => calls.push({ command, args, cwd, environment }),
+    });
+
+    assert.deepEqual(calls.map(({ command, args }) => [command, args]), [
+      ['go', ['mod', 'download', 'all']],
+      ['go', ['mod', 'verify']],
+      ['go', ['run', '-mod=readonly', '.']],
+    ]);
+    assert.equal(calls.length, 3);
+    for (const { cwd, environment } of calls) {
+      assert.equal(cwd, directory);
+      assert.equal(environment.GOWORK, 'off');
+      assert.equal(environment.GOMODCACHE, join(directory, '.gomodcache'));
+      assert.equal(environment.GOCACHE, join(directory, '.gocache'));
+      assert.equal(environment.GOTOOLCHAIN, 'local');
+      assert.equal(environment.GOENV, 'off');
+      assert.equal(environment.GOFLAGS, '');
+      assert.equal(environment.GOPROXY, 'https://proxy.example.test,direct');
+      assert.equal(environment.GOSUMDB, 'sum.example.test');
+      assert.equal(environment.GOPRIVATE, 'private.example.test');
+      assert.equal(environment.GONOSUMDB, 'nosum.example.test');
+    }
+    assert.equal(readFileSync(join(directory, 'go.mod'), 'utf8'), goMod);
+    assert.doesNotMatch(goMod, /^replace\b/m);
+  });
+});
+
+test('released Go execution rejects command mutation of go.mod before continuing', () => {
+  withTemporaryDirectory('looprig-go-mod-immutability-', (directory) => {
+    const goModPath = join(directory, 'go.mod');
+    writeFileSync(goModPath, buildGoMod(fixture()));
+    let calls = 0;
+    assert.throws(
+      () => executeReleasedGoModule(directory, {
+        executeCommand: () => {
+          calls += 1;
+          writeFileSync(goModPath, `${readFileSync(goModPath, 'utf8')}\nreplace example.com/changed => ../changed\n`);
+        },
+      }),
+      /go\.mod.*changed|replace directive/i,
+    );
+    assert.equal(calls, 1);
+  });
 });
