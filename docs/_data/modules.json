@@ -8,9 +8,9 @@
         "status": "released",
         "tag": "v0.2.2"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/acp/agent",
         "github.com/looprig/acp/client",
@@ -197,6 +197,12 @@
           "from": "github.com/looprig/acp",
           "to": "github.com/looprig/core",
           "kind": "test-import",
+          "path": "agent/examples/host/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/acp",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
           "path": "agent/gates_internal_test.go"
         },
         {
@@ -311,6 +317,12 @@
           "from": "github.com/looprig/acp",
           "to": "github.com/looprig/harness",
           "kind": "test-import",
+          "path": "agent/examples/host/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/acp",
+          "to": "github.com/looprig/harness",
+          "kind": "test-import",
           "path": "agent/gates_internal_test.go"
         },
         {
@@ -407,9 +419,9 @@
         "status": "released",
         "tag": "v0.19.0"
       },
-      "availability": "released",
       "disposition": "product-only",
       "nested": false,
+      "availability": "released",
       "packages": [],
       "edges": [
         {
@@ -2228,9 +2240,9 @@
         "status": "released",
         "tag": "v0.1.4"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/classifiers/pkg/catalog",
         "github.com/looprig/classifiers/pkg/commandsafety"
@@ -2366,6 +2378,12 @@
           "from": "github.com/looprig/classifiers",
           "to": "github.com/looprig/core",
           "kind": "test-import",
+          "path": "examples/commandsafety/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/classifiers",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
           "path": "internal/evidence/catalog_test.go"
         },
         {
@@ -2403,6 +2421,12 @@
           "to": "github.com/looprig/core",
           "kind": "test-import",
           "path": "pkg/commandsafety/evaluation_test.go"
+        },
+        {
+          "from": "github.com/looprig/classifiers",
+          "to": "github.com/looprig/harness",
+          "kind": "test-import",
+          "path": "examples/commandsafety/example_test.go"
         },
         {
           "from": "github.com/looprig/classifiers",
@@ -2486,6 +2510,12 @@
           "from": "github.com/looprig/classifiers",
           "to": "github.com/looprig/inference",
           "kind": "test-import",
+          "path": "examples/commandsafety/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/classifiers",
+          "to": "github.com/looprig/inference",
+          "kind": "test-import",
           "path": "pkg/commandsafety/commandsafety_test.go"
         },
         {
@@ -2516,9 +2546,9 @@
         "status": "released",
         "tag": "v0.1.0"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/client/pkg/webui"
       ],
@@ -2707,9 +2737,9 @@
         "status": "released",
         "tag": "v0.5.1"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/core/content",
         "github.com/looprig/core/content/streamaccumulator",
@@ -2745,9 +2775,9 @@
         "status": "released",
         "tag": "v0.1.0"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/credentials",
         "github.com/looprig/credentials/catalog",
@@ -2844,6 +2874,24 @@
           "from": "github.com/looprig/credentials",
           "to": "github.com/looprig/secrets",
           "kind": "test-import",
+          "path": "examples/catalog-selection/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/credentials",
+          "to": "github.com/looprig/secrets",
+          "kind": "test-import",
+          "path": "examples/references/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/credentials",
+          "to": "github.com/looprig/secrets",
+          "kind": "test-import",
+          "path": "examples/refresh/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/credentials",
+          "to": "github.com/looprig/secrets",
+          "kind": "test-import",
           "path": "httpauth/httpauth_internal_test.go"
         },
         {
@@ -2886,9 +2934,9 @@
         "status": "released",
         "tag": "v0.1.2"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/eval",
         "github.com/looprig/eval/compare",
@@ -3067,6 +3115,24 @@
           "from": "github.com/looprig/eval",
           "to": "github.com/looprig/core",
           "kind": "test-import",
+          "path": "examples/exact/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/eval",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/judge/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/eval",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/report/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/eval",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
           "path": "judge/judge_test.go"
         },
         {
@@ -3115,6 +3181,12 @@
           "from": "github.com/looprig/eval",
           "to": "github.com/looprig/inference",
           "kind": "test-import",
+          "path": "examples/judge/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/eval",
+          "to": "github.com/looprig/inference",
+          "kind": "test-import",
           "path": "judge/judge_test.go"
         },
         {
@@ -3157,9 +3229,9 @@
         "status": "released",
         "tag": "v0.3.0"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/flow/pkg/controlplane",
         "github.com/looprig/flow/pkg/flow",
@@ -3196,6 +3268,30 @@
           "to": "github.com/looprig/core",
           "kind": "release-order",
           "path": "go.mod"
+        },
+        {
+          "from": "github.com/looprig/flow",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/branch/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/flow",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/graph/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/flow",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/interrupt/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/flow",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/resume/example_test.go"
         },
         {
           "from": "github.com/looprig/flow",
@@ -3261,9 +3357,9 @@
         "status": "source-only",
         "tag": null
       },
-      "availability": "source-workspace",
       "disposition": "reusable",
       "nested": true,
+      "availability": "source-workspace",
       "packages": [
         "github.com/looprig/flow/store"
       ],
@@ -3392,9 +3488,9 @@
         "status": "released",
         "tag": "v0.2.3"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/foreignloops/backend",
         "github.com/looprig/foreignloops/driver",
@@ -3743,6 +3839,12 @@
           "from": "github.com/looprig/foreignloops",
           "to": "github.com/looprig/acp",
           "kind": "test-import",
+          "path": "examples/acp-backend/acp_backend_test.go"
+        },
+        {
+          "from": "github.com/looprig/foreignloops",
+          "to": "github.com/looprig/acp",
+          "kind": "test-import",
           "path": "internal/steertest/process_test.go"
         },
         {
@@ -3927,6 +4029,24 @@
         },
         {
           "from": "github.com/looprig/foreignloops",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/acp-backend/acp_backend_test.go"
+        },
+        {
+          "from": "github.com/looprig/foreignloops",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/backend-lifecycle/backend_lifecycle_test.go"
+        },
+        {
+          "from": "github.com/looprig/foreignloops",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/scripted-driver/scripted_driver_test.go"
+        },
+        {
+          "from": "github.com/looprig/foreignloops",
           "to": "github.com/looprig/harness",
           "kind": "test-import",
           "path": "backend/builder_test.go"
@@ -4061,6 +4181,18 @@
           "from": "github.com/looprig/foreignloops",
           "to": "github.com/looprig/harness",
           "kind": "test-import",
+          "path": "examples/acp-backend/acp_backend_test.go"
+        },
+        {
+          "from": "github.com/looprig/foreignloops",
+          "to": "github.com/looprig/harness",
+          "kind": "test-import",
+          "path": "examples/backend-lifecycle/backend_lifecycle_test.go"
+        },
+        {
+          "from": "github.com/looprig/foreignloops",
+          "to": "github.com/looprig/harness",
+          "kind": "test-import",
           "path": "internal/boundary/deps_test.go"
         },
         {
@@ -4086,6 +4218,18 @@
           "to": "github.com/looprig/inference",
           "kind": "test-import",
           "path": "driver/acp/builder_test.go"
+        },
+        {
+          "from": "github.com/looprig/foreignloops",
+          "to": "github.com/looprig/inference",
+          "kind": "test-import",
+          "path": "examples/acp-backend/acp_backend_test.go"
+        },
+        {
+          "from": "github.com/looprig/foreignloops",
+          "to": "github.com/looprig/inference",
+          "kind": "test-import",
+          "path": "examples/backend-lifecycle/backend_lifecycle_test.go"
         },
         {
           "from": "github.com/looprig/foreignloops",
@@ -4115,9 +4259,9 @@
         "status": "released",
         "tag": "v0.3.2"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/fsstore"
       ],
@@ -4180,6 +4324,12 @@
           "from": "github.com/looprig/fsstore",
           "to": "github.com/looprig/storage",
           "kind": "test-import",
+          "path": "examples/durable/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/fsstore",
+          "to": "github.com/looprig/storage",
+          "kind": "test-import",
           "path": "fsstore_test.go"
         },
         {
@@ -4210,9 +4360,9 @@
         "status": "released",
         "tag": "v0.24.2"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/harness/pkg/command",
         "github.com/looprig/harness/pkg/event",
@@ -5366,6 +5516,30 @@
           "to": "github.com/looprig/storage",
           "kind": "release-order",
           "path": "go.mod"
+        },
+        {
+          "from": "github.com/looprig/harness",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/composition/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/harness",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/lifecycle/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/harness",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/persistence/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/harness",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/serving/example_test.go"
         },
         {
           "from": "github.com/looprig/harness",
@@ -6943,6 +7117,18 @@
           "from": "github.com/looprig/harness",
           "to": "github.com/looprig/inference",
           "kind": "test-import",
+          "path": "examples/composition/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/harness",
+          "to": "github.com/looprig/inference",
+          "kind": "test-import",
+          "path": "examples/lifecycle/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/harness",
+          "to": "github.com/looprig/inference",
+          "kind": "test-import",
           "path": "internal/delegationtool/description_test.go"
         },
         {
@@ -7645,6 +7831,24 @@
           "from": "github.com/looprig/harness",
           "to": "github.com/looprig/storage",
           "kind": "test-import",
+          "path": "examples/composition/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/harness",
+          "to": "github.com/looprig/storage",
+          "kind": "test-import",
+          "path": "examples/lifecycle/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/harness",
+          "to": "github.com/looprig/storage",
+          "kind": "test-import",
+          "path": "examples/persistence/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/harness",
+          "to": "github.com/looprig/storage",
+          "kind": "test-import",
           "path": "internal/sessionruntime/checkpoint_controller_test.go"
         },
         {
@@ -7939,9 +8143,9 @@
         "status": "released",
         "tag": "v0.9.2"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/inference",
         "github.com/looprig/inference/auth",
@@ -8194,6 +8398,30 @@
           "to": "github.com/looprig/core",
           "kind": "production-import",
           "path": "contextcount/estimator.go"
+        },
+        {
+          "from": "github.com/looprig/inference",
+          "to": "github.com/looprig/core",
+          "kind": "production-import",
+          "path": "examples/gateway/main.go"
+        },
+        {
+          "from": "github.com/looprig/inference",
+          "to": "github.com/looprig/core",
+          "kind": "production-import",
+          "path": "examples/invoke/main.go"
+        },
+        {
+          "from": "github.com/looprig/inference",
+          "to": "github.com/looprig/core",
+          "kind": "production-import",
+          "path": "examples/retry/main.go"
+        },
+        {
+          "from": "github.com/looprig/inference",
+          "to": "github.com/looprig/core",
+          "kind": "production-import",
+          "path": "examples/stream/main.go"
         },
         {
           "from": "github.com/looprig/inference",
@@ -8733,9 +8961,9 @@
         "status": "source-only",
         "tag": null
       },
-      "availability": "unavailable",
       "disposition": "product-only",
       "nested": false,
+      "availability": "unavailable",
       "packages": [
         "github.com/looprig/kosa/api"
       ],
@@ -8870,9 +9098,9 @@
         "status": "released",
         "tag": "v0.13.3"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/llm",
         "github.com/looprig/llm/aci",
@@ -8965,6 +9193,12 @@
           "to": "github.com/looprig/core",
           "kind": "production-import",
           "path": "aci/client.go"
+        },
+        {
+          "from": "github.com/looprig/llm",
+          "to": "github.com/looprig/core",
+          "kind": "production-import",
+          "path": "examples/credentials/main.go"
         },
         {
           "from": "github.com/looprig/llm",
@@ -9114,6 +9348,12 @@
           "from": "github.com/looprig/llm",
           "to": "github.com/looprig/credentials",
           "kind": "production-import",
+          "path": "examples/credentials/main.go"
+        },
+        {
+          "from": "github.com/looprig/llm",
+          "to": "github.com/looprig/credentials",
+          "kind": "production-import",
           "path": "internal/credentialclient/client.go"
         },
         {
@@ -9163,6 +9403,18 @@
           "to": "github.com/looprig/inference",
           "kind": "production-import",
           "path": "errors.go"
+        },
+        {
+          "from": "github.com/looprig/llm",
+          "to": "github.com/looprig/inference",
+          "kind": "production-import",
+          "path": "examples/auto/main.go"
+        },
+        {
+          "from": "github.com/looprig/llm",
+          "to": "github.com/looprig/inference",
+          "kind": "production-import",
+          "path": "examples/credentials/main.go"
         },
         {
           "from": "github.com/looprig/llm",
@@ -10854,9 +11106,9 @@
         "status": "released",
         "tag": "v0.6.2"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/mcp/pkg/auth",
         "github.com/looprig/mcp/pkg/client",
@@ -10885,6 +11137,12 @@
           "to": "github.com/looprig/inference",
           "kind": "direct-require",
           "path": "go.mod"
+        },
+        {
+          "from": "github.com/looprig/mcp",
+          "to": "github.com/looprig/core",
+          "kind": "production-import",
+          "path": "examples/harness-adoption/main.go"
         },
         {
           "from": "github.com/looprig/mcp",
@@ -10950,6 +11208,12 @@
           "from": "github.com/looprig/mcp",
           "to": "github.com/looprig/harness",
           "kind": "production-import",
+          "path": "examples/harness-adoption/main.go"
+        },
+        {
+          "from": "github.com/looprig/mcp",
+          "to": "github.com/looprig/harness",
+          "kind": "production-import",
           "path": "pkg/harness/adoption.go"
         },
         {
@@ -10975,6 +11239,12 @@
           "to": "github.com/looprig/harness",
           "kind": "production-import",
           "path": "pkg/harness/tools.go"
+        },
+        {
+          "from": "github.com/looprig/mcp",
+          "to": "github.com/looprig/inference",
+          "kind": "production-import",
+          "path": "examples/harness-adoption/main.go"
         },
         {
           "from": "github.com/looprig/mcp",
@@ -11112,9 +11382,9 @@
         "status": "released",
         "tag": "v0.3.1"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/natsstore"
       ],
@@ -11183,6 +11453,12 @@
           "from": "github.com/looprig/natsstore",
           "to": "github.com/looprig/storage",
           "kind": "test-import",
+          "path": "examples/embedded/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/natsstore",
+          "to": "github.com/looprig/storage",
+          "kind": "test-import",
           "path": "kv_test.go"
         },
         {
@@ -11238,14 +11514,14 @@
     {
       "repository": "pluto",
       "module": "github.com/looprig/pluto",
-      "commit": "8ffaa725ece6b937e4852b23bbb3fa57a1e5dd03",
+      "commit": "a558d9006ba74559668d9929fb6d872cea0599b4",
       "publication": {
         "status": "released",
         "tag": "v0.1.2"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/pluto/pkg/cli",
         "github.com/looprig/pluto/pkg/codepacks/capability",
@@ -11834,9 +12110,9 @@
         "status": "released",
         "tag": "cmd/pluto/v0.1.2"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": true,
+      "availability": "released",
       "packages": [],
       "edges": [
         {
@@ -11957,9 +12233,9 @@
         "status": "released",
         "tag": "v0.3.2"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/rclonestore"
       ],
@@ -12004,6 +12280,12 @@
           "from": "github.com/looprig/rclonestore",
           "to": "github.com/looprig/storage",
           "kind": "test-import",
+          "path": "examples/blob-remote/blob_remote_test.go"
+        },
+        {
+          "from": "github.com/looprig/rclonestore",
+          "to": "github.com/looprig/storage",
+          "kind": "test-import",
           "path": "rclonestore_test.go"
         }
       ]
@@ -12016,9 +12298,9 @@
         "status": "released",
         "tag": "v0.8.1"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/sandbox",
         "github.com/looprig/sandbox/pkg/network",
@@ -12054,9 +12336,9 @@
         "status": "released",
         "tag": "v0.1.0"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/secrets",
         "github.com/looprig/secrets/contracttest",
@@ -12072,9 +12354,9 @@
         "status": "released",
         "tag": "v0.3.1"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/storage",
         "github.com/looprig/storage/memstore",
@@ -12090,9 +12372,9 @@
         "status": "pending",
         "tag": "v0.7.0"
       },
-      "availability": "source-workspace",
       "disposition": "reusable",
       "nested": false,
+      "availability": "source-workspace",
       "packages": [],
       "edges": [
         {
@@ -12525,9 +12807,9 @@
         "status": "released",
         "tag": "v0.10.0"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/tools",
         "github.com/looprig/tools/askuser",
@@ -12999,6 +13281,36 @@
           "from": "github.com/looprig/tools",
           "to": "github.com/looprig/core",
           "kind": "test-import",
+          "path": "examples/definitions/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tools",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/preparation/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tools",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/processes/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tools",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/skills/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tools",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "examples/tasks/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tools",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
           "path": "fetch/fetch_test.go"
         },
         {
@@ -13294,6 +13606,42 @@
           "to": "github.com/looprig/harness",
           "kind": "test-import",
           "path": "example_readme_test.go"
+        },
+        {
+          "from": "github.com/looprig/tools",
+          "to": "github.com/looprig/harness",
+          "kind": "test-import",
+          "path": "examples/definitions/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tools",
+          "to": "github.com/looprig/harness",
+          "kind": "test-import",
+          "path": "examples/permissions/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tools",
+          "to": "github.com/looprig/harness",
+          "kind": "test-import",
+          "path": "examples/preparation/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tools",
+          "to": "github.com/looprig/harness",
+          "kind": "test-import",
+          "path": "examples/processes/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tools",
+          "to": "github.com/looprig/harness",
+          "kind": "test-import",
+          "path": "examples/skills/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tools",
+          "to": "github.com/looprig/harness",
+          "kind": "test-import",
+          "path": "examples/tasks/example_test.go"
         },
         {
           "from": "github.com/looprig/tools",
@@ -13671,9 +14019,9 @@
         "status": "released",
         "tag": "v0.15.1"
       },
-      "availability": "released",
       "disposition": "reusable",
       "nested": false,
+      "availability": "released",
       "packages": [
         "github.com/looprig/tui",
         "github.com/looprig/tui/components",
@@ -13993,6 +14341,12 @@
           "from": "github.com/looprig/tui",
           "to": "github.com/looprig/core",
           "kind": "test-import",
+          "path": "examples/sessionadapter/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tui",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
           "path": "internal/input/blocks_test.go"
         },
         {
@@ -14126,6 +14480,18 @@
           "to": "github.com/looprig/core",
           "kind": "test-import",
           "path": "sessionadapter/replaying_subscription_test.go"
+        },
+        {
+          "from": "github.com/looprig/tui",
+          "to": "github.com/looprig/harness",
+          "kind": "test-import",
+          "path": "examples/restore/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tui",
+          "to": "github.com/looprig/harness",
+          "kind": "test-import",
+          "path": "examples/sessionadapter/example_test.go"
         },
         {
           "from": "github.com/looprig/tui",
@@ -14281,6 +14647,12 @@
           "from": "github.com/looprig/tui",
           "to": "github.com/looprig/inference",
           "kind": "test-import",
+          "path": "examples/sessionadapter/example_test.go"
+        },
+        {
+          "from": "github.com/looprig/tui",
+          "to": "github.com/looprig/inference",
+          "kind": "test-import",
           "path": "internal/presentation/fixtures_test.go"
         },
         {
@@ -14324,14 +14696,14 @@
     {
       "repository": "workflows",
       "module": "github.com/looprig/workflows",
-      "commit": "89059af7dded45b8f57678e17c66e528549ce78a",
+      "commit": "852dd8dd80305f57a7224570c906f73f2646820d",
       "publication": {
         "status": "pending",
         "tag": "v0.1.0"
       },
-      "availability": "source-workspace",
       "disposition": "reusable",
       "nested": false,
+      "availability": "source-workspace",
       "packages": [
         "github.com/looprig/workflows",
         "github.com/looprig/workflows/tools"
@@ -14462,6 +14834,12 @@
           "to": "github.com/looprig/flow",
           "kind": "production-import",
           "path": "definition.go"
+        },
+        {
+          "from": "github.com/looprig/workflows",
+          "to": "github.com/looprig/flow",
+          "kind": "production-import",
+          "path": "examples/docs/stage18_workflows/main.go"
         },
         {
           "from": "github.com/looprig/workflows",

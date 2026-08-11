@@ -1,6 +1,111 @@
 {
   "proofs": [
     {
+      "id": "module-flow-store",
+      "type": "module-file",
+      "repository": "flow/store",
+      "path": "go.mod",
+      "commit": "c89d0eb101158996bd278578c0b93d55d67a8d8a"
+    },
+    {
+      "id": "module-kosa",
+      "type": "module-file",
+      "repository": "kosa",
+      "path": "go.mod",
+      "commit": "867bb33686fa2b3f4325b503d033c6a0d1ada08b"
+    },
+    {
+      "id": "module-workflows",
+      "type": "module-file",
+      "repository": "workflows",
+      "path": "go.mod",
+      "commit": "89059af7dded45b8f57678e17c66e528549ce78a"
+    },
+    {
+      "id": "source-client-sdk-core-package",
+      "type": "source",
+      "repository": "client",
+      "path": "sdk/core/package.json",
+      "commit": "9941c8da1308d0a01562f17bdbbec963ce2a26ca"
+    },
+    {
+      "id": "source-client-sdk-svelte-package",
+      "type": "source",
+      "repository": "client",
+      "path": "sdk/svelte/package.json",
+      "commit": "9941c8da1308d0a01562f17bdbbec963ce2a26ca"
+    },
+    {
+      "id": "central-workflows-stage18-lifecycle-fixture",
+      "type": "executable-fixture",
+      "repository": "workflows",
+      "path": "examples/docs/stage18_workflows/main.go",
+      "commit": "f241ecbd6299a00d52fc6755b5be946a41b3a73f"
+    },
+    {
+      "id": "central-workflows-stage18-output-test",
+      "type": "test",
+      "repository": "workflows",
+      "path": "examples/docs/stage18_workflows/main_test.go",
+      "commit": "f241ecbd6299a00d52fc6755b5be946a41b3a73f"
+    },
+    {
+      "id": "central-workflows-artifacts-contract-test",
+      "type": "test",
+      "repository": "workflows",
+      "path": "examples/docs_contract_test.go",
+      "commit": "f241ecbd6299a00d52fc6755b5be946a41b3a73f"
+    },
+    {
+      "id": "central-workflows-typed-definition-source",
+      "type": "source",
+      "repository": "workflows",
+      "path": "typed_definition.go",
+      "commit": "f241ecbd6299a00d52fc6755b5be946a41b3a73f"
+    },
+    {
+      "id": "central-workflows-catalog-source",
+      "type": "source",
+      "repository": "workflows",
+      "path": "catalog.go",
+      "commit": "f241ecbd6299a00d52fc6755b5be946a41b3a73f"
+    },
+    {
+      "id": "central-workflows-recovery-test",
+      "type": "test",
+      "repository": "workflows",
+      "path": "recovery_integration_test.go",
+      "commit": "f241ecbd6299a00d52fc6755b5be946a41b3a73f"
+    },
+    {
+      "id": "central-client-stage20-session-client-source",
+      "type": "source",
+      "repository": "client",
+      "path": "examples/docs/stage20_web_client/session-client.ts",
+      "commit": "93c0381580e059e14b9f313d664ad90e886c3b4a"
+    },
+    {
+      "id": "central-client-stage20-session-client-proof",
+      "type": "test",
+      "repository": "client",
+      "path": "examples/docs/stage20_web_client/session-client.test.ts",
+      "commit": "93c0381580e059e14b9f313d664ad90e886c3b4a"
+    },
+    {
+      "id": "central-client-stage20-vanilla-session-source",
+      "type": "source",
+      "repository": "client",
+      "path": "examples/docs/stage20_web_client/vanilla-session.ts",
+      "commit": "93c0381580e059e14b9f313d664ad90e886c3b4a"
+    },
+    {
+      "id": "central-client-stage20-svelte-page-source",
+      "type": "source",
+      "repository": "client",
+      "path": "examples/docs/stage20_web_client/SessionPage.svelte",
+      "commit": "93c0381580e059e14b9f313d664ad90e886c3b4a"
+    },
+    {
       "id": "release-github-com-looprig-acp",
       "type": "release-record",
       "repository": "acp",
@@ -125,7 +230,7 @@
       "type": "release-record",
       "repository": "pluto",
       "path": "go.mod",
-      "commit": "8ffaa725ece6b937e4852b23bbb3fa57a1e5dd03",
+      "commit": "a558d9006ba74559668d9929fb6d872cea0599b4",
       "tag": "v0.1.2"
     },
     {
@@ -183,111 +288,6 @@
       "path": "go.mod",
       "commit": "6b362dda04b086c8a94146320e9faad38dac9b6c",
       "tag": "v0.15.1"
-    },
-    {
-      "id": "module-flow-store",
-      "type": "module-file",
-      "repository": "flow/store",
-      "path": "go.mod",
-      "commit": "c89d0eb101158996bd278578c0b93d55d67a8d8a"
-    },
-    {
-      "id": "module-kosa",
-      "type": "module-file",
-      "repository": "kosa",
-      "path": "go.mod",
-      "commit": "867bb33686fa2b3f4325b503d033c6a0d1ada08b"
-    },
-    {
-      "id": "module-workflows",
-      "type": "module-file",
-      "repository": "workflows",
-      "path": "go.mod",
-      "commit": "89059af7dded45b8f57678e17c66e528549ce78a"
-    },
-    {
-      "id": "source-client-sdk-core-package",
-      "type": "source",
-      "repository": "client",
-      "path": "sdk/core/package.json",
-      "commit": "9941c8da1308d0a01562f17bdbbec963ce2a26ca"
-    },
-    {
-      "id": "source-client-sdk-svelte-package",
-      "type": "source",
-      "repository": "client",
-      "path": "sdk/svelte/package.json",
-      "commit": "9941c8da1308d0a01562f17bdbbec963ce2a26ca"
-    },
-    {
-      "id": "central-workflows-stage18-lifecycle-fixture",
-      "type": "executable-fixture",
-      "repository": "workflows",
-      "path": "examples/docs/stage18_workflows/main.go",
-      "commit": "f241ecbd6299a00d52fc6755b5be946a41b3a73f"
-    },
-    {
-      "id": "central-workflows-stage18-output-test",
-      "type": "test",
-      "repository": "workflows",
-      "path": "examples/docs/stage18_workflows/main_test.go",
-      "commit": "f241ecbd6299a00d52fc6755b5be946a41b3a73f"
-    },
-    {
-      "id": "central-workflows-artifacts-contract-test",
-      "type": "test",
-      "repository": "workflows",
-      "path": "examples/docs_contract_test.go",
-      "commit": "f241ecbd6299a00d52fc6755b5be946a41b3a73f"
-    },
-    {
-      "id": "central-workflows-typed-definition-source",
-      "type": "source",
-      "repository": "workflows",
-      "path": "typed_definition.go",
-      "commit": "f241ecbd6299a00d52fc6755b5be946a41b3a73f"
-    },
-    {
-      "id": "central-workflows-catalog-source",
-      "type": "source",
-      "repository": "workflows",
-      "path": "catalog.go",
-      "commit": "f241ecbd6299a00d52fc6755b5be946a41b3a73f"
-    },
-    {
-      "id": "central-workflows-recovery-test",
-      "type": "test",
-      "repository": "workflows",
-      "path": "recovery_integration_test.go",
-      "commit": "f241ecbd6299a00d52fc6755b5be946a41b3a73f"
-    },
-    {
-      "id": "central-client-stage20-session-client-source",
-      "type": "source",
-      "repository": "client",
-      "path": "examples/docs/stage20_web_client/session-client.ts",
-      "commit": "93c0381580e059e14b9f313d664ad90e886c3b4a"
-    },
-    {
-      "id": "central-client-stage20-session-client-proof",
-      "type": "test",
-      "repository": "client",
-      "path": "examples/docs/stage20_web_client/session-client.test.ts",
-      "commit": "93c0381580e059e14b9f313d664ad90e886c3b4a"
-    },
-    {
-      "id": "central-client-stage20-vanilla-session-source",
-      "type": "source",
-      "repository": "client",
-      "path": "examples/docs/stage20_web_client/vanilla-session.ts",
-      "commit": "93c0381580e059e14b9f313d664ad90e886c3b4a"
-    },
-    {
-      "id": "central-client-stage20-svelte-page-source",
-      "type": "source",
-      "repository": "client",
-      "path": "examples/docs/stage20_web_client/SessionPage.svelte",
-      "commit": "93c0381580e059e14b9f313d664ad90e886c3b4a"
     }
   ]
 }
