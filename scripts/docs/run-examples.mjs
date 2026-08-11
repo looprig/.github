@@ -167,51 +167,66 @@ export function planExample(example, { repositoryRoot }) {
   return { kind: 'released-go', example, sourceDirectory };
 }
 
-export function withTemporaryDirectory(prefix, body, {
+export function withTemporaryRoots(prefix, body, {
   makeTemporaryDirectory = mkdtempSync,
-  removeTemporaryDirectory = rmSync,
+  removeTemporaryPath = rmSync,
   temporaryRoot = tmpdir(),
 } = {}) {
-  const directory = makeTemporaryDirectory(join(temporaryRoot, prefix));
+  let moduleRoot;
+  let cacheRoot;
   let bodyFailed = false;
   let primaryError;
   let result;
   try {
-    result = body(directory);
+    moduleRoot = makeTemporaryDirectory(join(temporaryRoot, `${prefix}module-`));
+    cacheRoot = makeTemporaryDirectory(join(temporaryRoot, `${prefix}cache-`));
+    result = body(moduleRoot, cacheRoot);
   } catch (error) {
     bodyFailed = true;
     primaryError = error;
   }
-  try {
-    removeTemporaryDirectory(directory, {
-      recursive: true,
-      force: true,
-      maxRetries: 5,
-      retryDelay: 100,
-    });
-  } catch (cleanupError) {
-    if (!bodyFailed) throw cleanupError;
-    Object.defineProperty(primaryError, 'cleanupError', {
-      value: cleanupError,
-      configurable: true,
-    });
+  const cleanupErrors = [];
+  const cleanupPaths = [];
+  if (moduleRoot) cleanupPaths.push(moduleRoot);
+  if (cacheRoot) cleanupPaths.push(join(cacheRoot, 'gobuild'), join(cacheRoot, 'gomod'), cacheRoot);
+  for (const path of cleanupPaths) {
+    try {
+      removeTemporaryPath(path, {
+        recursive: true,
+        force: true,
+        maxRetries: 5,
+        retryDelay: 100,
+      });
+    } catch (error) {
+      cleanupErrors.push(error);
+    }
   }
-  if (bodyFailed) throw primaryError;
+  const cleanupError = combinedCleanupError(cleanupErrors);
+  if (bodyFailed) {
+    if (cleanupError) {
+      Object.defineProperty(primaryError, 'cleanupError', {
+        value: cleanupError,
+        configurable: true,
+      });
+    }
+    throw primaryError;
+  }
+  if (cleanupError) throw cleanupError;
   return result;
 }
 
-export function executeReleasedGoModule(temporaryModule, {
+export function executeReleasedGoModule(moduleRoot, cacheRoot, {
   executeCommand = run,
   baseEnvironment = process.env,
 } = {}) {
-  const goModPath = join(temporaryModule, 'go.mod');
+  const goModPath = join(moduleRoot, 'go.mod');
   const expectedGoMod = readFileSync(goModPath, 'utf8');
   assertImmutableGoMod(expectedGoMod, expectedGoMod);
   const environment = {
     ...baseEnvironment,
     GOWORK: 'off',
-    GOMODCACHE: join(temporaryModule, '.gomodcache'),
-    GOCACHE: join(temporaryModule, '.gocache'),
+    GOMODCACHE: join(cacheRoot, 'gomod'),
+    GOCACHE: join(cacheRoot, 'gobuild'),
     GOTOOLCHAIN: 'local',
     GOENV: 'off',
     GOFLAGS: '',
@@ -222,22 +237,39 @@ export function executeReleasedGoModule(temporaryModule, {
     ['go', ['run', '-mod=readonly', '.']],
   ];
   for (const [command, args] of commands) {
-    executeCommand(command, args, temporaryModule, environment);
+    executeCommand(command, args, moduleRoot, environment);
     assertImmutableGoMod(readFileSync(goModPath, 'utf8'), expectedGoMod);
   }
 }
 
 export function runReleasedExample(plan, { repositoryRoot }) {
   if (plan.kind !== 'released-go') throw new Error('clean-module runner accepts released Go stages only');
-  return withTemporaryDirectory(`looprig-docs-stage-${String(plan.example.stage).padStart(2, '0')}-`, (temporaryModule) => {
-    copyStageSources(plan.sourceDirectory, temporaryModule);
+  return withTemporaryRoots(`looprig-docs-stage-${String(plan.example.stage).padStart(2, '0')}-`, (moduleRoot, cacheRoot) => {
+    copyStageSources(plan.sourceDirectory, moduleRoot);
     const shared = join(repositoryRoot, 'examples/go/progressive/internal');
     if (!existsSync(shared)) throw new Error('shared progressive helpers not found');
-    cpSync(shared, join(temporaryModule, 'internal'), { recursive: true });
+    cpSync(shared, join(moduleRoot, 'internal'), { recursive: true });
     const goMod = buildGoMod(plan.example);
-    writeFileSync(join(temporaryModule, 'go.mod'), goMod);
-    executeReleasedGoModule(temporaryModule);
+    writeFileSync(join(moduleRoot, 'go.mod'), goMod);
+    executeReleasedGoModule(moduleRoot, cacheRoot);
   });
+}
+
+function combinedCleanupError(errors) {
+  if (errors.length === 0) return null;
+  if (errors.length === 1) return errors[0];
+  return new AggregateError(errors, 'temporary cleanup failed');
+}
+
+export function formatRunnerFailure(error) {
+  const lines = [`docs examples: ${error.message}`];
+  const cleanup = error.cleanupError ?? (error instanceof AggregateError ? error : null);
+  if (cleanup instanceof AggregateError) {
+    for (const failure of cleanup.errors) lines.push(`docs examples cleanup: ${failure.message}`);
+  } else if (cleanup) {
+    lines.push(`docs examples cleanup: ${cleanup.message}`);
+  }
+  return lines;
 }
 
 function assertImmutableGoMod(actual, expected) {
@@ -312,8 +344,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   try {
     main();
   } catch (error) {
-    process.stderr.write(`docs examples: ${error.message}\n`);
-    if (error.cleanupError) process.stderr.write(`docs examples cleanup: ${error.cleanupError.message}\n`);
+    for (const line of formatRunnerFailure(error)) process.stderr.write(`${line}\n`);
     process.exitCode = 1;
   }
 }

@@ -1,17 +1,18 @@
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { isAbsolute, join } from 'node:path';
 import test from 'node:test';
 
 import {
   buildGoMod,
   executeReleasedGoModule,
+  formatRunnerFailure,
   loadManifest,
   planExample,
   validateAgainstSchema,
   validateProgressiveManifest,
-  withTemporaryDirectory,
+  withTemporaryRoots,
 } from './run-examples.mjs';
 
 const repositoryRoot = join(import.meta.dirname, '../..');
@@ -144,33 +145,40 @@ test('source-workspace hooks stay bound to their owning repository and ecosystem
   assert.match(validateProgressiveManifest({ progressive: true, examples: [wrongEcosystem] }, { requireAll: false }).join('\n'), /stage 20.*npm/i);
 });
 
-test('temporary lifecycle creates and cleans up once with bounded retry options', () => {
+test('temporary lifecycle creates distinct module and cache roots and cleans in fixed order', () => {
   const creations = [];
   const removals = [];
-  const result = withTemporaryDirectory('stage-', () => 'finished', {
+  const roots = ['/virtual/stage-module', '/virtual/stage-cache'];
+  const result = withTemporaryRoots('stage-', (moduleRoot, cacheRoot) => ({ moduleRoot, cacheRoot }), {
     temporaryRoot: '/virtual-root',
     makeTemporaryDirectory: (prefix) => {
       creations.push(prefix);
-      return '/virtual/stage-one';
+      return roots[creations.length - 1];
     },
-    removeTemporaryDirectory: (path, options) => removals.push({ path, options }),
+    removeTemporaryPath: (path, options) => removals.push({ path, options }),
   });
 
-  assert.equal(result, 'finished');
-  assert.deepEqual(creations, ['/virtual-root/stage-']);
-  assert.deepEqual(removals, [{
-    path: '/virtual/stage-one',
-    options: { recursive: true, force: true, maxRetries: 5, retryDelay: 100 },
-  }]);
+  assert.deepEqual(result, { moduleRoot: roots[0], cacheRoot: roots[1] });
+  assert.deepEqual(creations, ['/virtual-root/stage-module-', '/virtual-root/stage-cache-']);
+  assert.deepEqual(removals.map(({ path }) => path), [
+    roots[0],
+    join(roots[1], 'gobuild'),
+    join(roots[1], 'gomod'),
+    roots[1],
+  ]);
+  for (const { options } of removals) {
+    assert.deepEqual(options, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+  }
 });
 
-test('temporary lifecycle rethrows the same primary error after successful cleanup', () => {
+test('temporary lifecycle rethrows the same primary error after all cleanup succeeds', () => {
   const primary = new Error('stage failed');
   let caught;
   try {
-    withTemporaryDirectory('stage-', () => { throw primary; }, {
-      makeTemporaryDirectory: () => '/virtual/stage-two',
-      removeTemporaryDirectory: () => {},
+    let creation = 0;
+    withTemporaryRoots('stage-', () => { throw primary; }, {
+      makeTemporaryDirectory: () => `/virtual/stage-${creation++}`,
+      removeTemporaryPath: () => {},
     });
   } catch (error) {
     caught = error;
@@ -179,50 +187,101 @@ test('temporary lifecycle rethrows the same primary error after successful clean
   assert.equal(Object.hasOwn(caught, 'cleanupError'), false);
 });
 
-test('temporary lifecycle retains the primary error and attaches cleanup diagnostics', () => {
+test('temporary lifecycle retains the primary and aggregates cleanup failures in call order', () => {
   const primary = new Error('stage failed');
-  const cleanup = new Error('cleanup failed');
+  const moduleCleanup = new Error('module cleanup failed');
+  const gomodCleanup = new Error('gomod cleanup failed');
+  const removals = [];
   let caught;
   try {
-    withTemporaryDirectory('stage-', () => { throw primary; }, {
-      makeTemporaryDirectory: () => '/virtual/stage-three',
-      removeTemporaryDirectory: () => { throw cleanup; },
+    const roots = ['/virtual/stage-module', '/virtual/stage-cache'];
+    let creation = 0;
+    withTemporaryRoots('stage-', () => { throw primary; }, {
+      makeTemporaryDirectory: () => roots[creation++],
+      removeTemporaryPath: (path) => {
+        removals.push(path);
+        if (path === roots[0]) throw moduleCleanup;
+        if (path === join(roots[1], 'gomod')) throw gomodCleanup;
+      },
     });
   } catch (error) {
     caught = error;
   }
   assert.strictEqual(caught, primary);
-  assert.strictEqual(caught.cleanupError, cleanup);
+  assert.ok(caught.cleanupError instanceof AggregateError);
+  assert.deepEqual(caught.cleanupError.errors, [moduleCleanup, gomodCleanup]);
+  assert.deepEqual(removals, [
+    '/virtual/stage-module',
+    '/virtual/stage-cache/gobuild',
+    '/virtual/stage-cache/gomod',
+    '/virtual/stage-cache',
+  ]);
   assert.equal(caught.message, 'stage failed');
+  assert.deepEqual(formatRunnerFailure(caught), [
+    'docs examples: stage failed',
+    'docs examples cleanup: module cleanup failed',
+    'docs examples cleanup: gomod cleanup failed',
+  ]);
 });
 
-test('temporary lifecycle surfaces cleanup failure when the body succeeds', () => {
+test('temporary lifecycle surfaces a cleanup failure when the body succeeds', () => {
   const cleanup = new Error('cleanup only');
+  let creation = 0;
   assert.throws(
-    () => withTemporaryDirectory('stage-', () => 'finished', {
-      makeTemporaryDirectory: () => '/virtual/stage-four',
-      removeTemporaryDirectory: () => { throw cleanup; },
+    () => withTemporaryRoots('stage-', () => 'finished', {
+      makeTemporaryDirectory: () => `/virtual/stage-${creation++}`,
+      removeTemporaryPath: (path) => {
+        if (path.endsWith('/gobuild')) throw cleanup;
+      },
     }),
     (error) => error === cleanup,
   );
 });
 
-test('temporary lifecycle removes a real non-empty temporary directory', () => {
-  let created;
-  withTemporaryDirectory('looprig-runner-lifecycle-', (directory) => {
-    created = directory;
-    writeFileSync(join(directory, 'proof.txt'), 'temporary');
-    assert.equal(existsSync(directory), true);
+test('temporary lifecycle removes real non-empty module and cache roots', () => {
+  let moduleRoot;
+  let cacheRoot;
+  withTemporaryRoots('looprig-runner-lifecycle-', (module, cache) => {
+    moduleRoot = module;
+    cacheRoot = cache;
+    writeFileSync(join(module, 'proof.txt'), 'temporary module');
+    mkdirSync(join(cache, 'gomod'), { recursive: true });
+    mkdirSync(join(cache, 'gobuild'), { recursive: true });
+    writeFileSync(join(cache, 'gomod/module.zip'), 'temporary module cache');
+    writeFileSync(join(cache, 'gobuild/object.a'), 'temporary build cache');
+    assert.notEqual(module, cache);
   });
-  assert.equal(existsSync(created), false);
+  assert.equal(existsSync(moduleRoot), false);
+  assert.equal(existsSync(cacheRoot), false);
+});
+
+test('cache recreation during gomod cleanup cannot recreate the removed module root', () => {
+  let moduleRoot;
+  let cacheRoot;
+  withTemporaryRoots('looprig-runner-recreation-', (module, cache) => {
+    moduleRoot = module;
+    cacheRoot = cache;
+    mkdirSync(join(cache, 'gomod'), { recursive: true });
+    writeFileSync(join(module, 'main.go'), 'package main\n');
+  }, {
+    removeTemporaryPath: (path, options) => {
+      rmSync(path, options);
+      if (path === join(cacheRoot, 'gomod')) {
+        mkdirSync(join(cacheRoot, 'gomod'), { recursive: true });
+        writeFileSync(join(cacheRoot, 'gomod/recreated'), 'late cache write');
+      }
+    },
+  });
+  assert.equal(existsSync(moduleRoot), false);
+  assert.equal(existsSync(cacheRoot), false);
 });
 
 test('released Go execution downloads all, verifies, then runs readonly with a neutral environment', () => {
-  withTemporaryDirectory('looprig-go-command-plan-', (directory) => {
+  withTemporaryRoots('looprig-go-command-plan-', (moduleRoot, cacheRoot) => {
     const goMod = buildGoMod(fixture());
-    writeFileSync(join(directory, 'go.mod'), goMod);
+    writeFileSync(join(moduleRoot, 'go.mod'), goMod);
     const calls = [];
-    executeReleasedGoModule(directory, {
+    executeReleasedGoModule(moduleRoot, cacheRoot, {
       baseEnvironment: {
         PATH: '/bin',
         GOPROXY: 'https://proxy.example.test,direct',
@@ -244,10 +303,14 @@ test('released Go execution downloads all, verifies, then runs readonly with a n
     ]);
     assert.equal(calls.length, 3);
     for (const { cwd, environment } of calls) {
-      assert.equal(cwd, directory);
+      assert.equal(cwd, moduleRoot);
       assert.equal(environment.GOWORK, 'off');
-      assert.equal(environment.GOMODCACHE, join(directory, '.gomodcache'));
-      assert.equal(environment.GOCACHE, join(directory, '.gocache'));
+      assert.equal(environment.GOMODCACHE, join(cacheRoot, 'gomod'));
+      assert.equal(environment.GOCACHE, join(cacheRoot, 'gobuild'));
+      assert.equal(isAbsolute(environment.GOMODCACHE), true);
+      assert.equal(isAbsolute(environment.GOCACHE), true);
+      assert.equal(environment.GOMODCACHE.startsWith(moduleRoot), false);
+      assert.equal(environment.GOCACHE.startsWith(moduleRoot), false);
       assert.equal(environment.GOTOOLCHAIN, 'local');
       assert.equal(environment.GOENV, 'off');
       assert.equal(environment.GOFLAGS, '');
@@ -256,18 +319,18 @@ test('released Go execution downloads all, verifies, then runs readonly with a n
       assert.equal(environment.GOPRIVATE, 'private.example.test');
       assert.equal(environment.GONOSUMDB, 'nosum.example.test');
     }
-    assert.equal(readFileSync(join(directory, 'go.mod'), 'utf8'), goMod);
+    assert.equal(readFileSync(join(moduleRoot, 'go.mod'), 'utf8'), goMod);
     assert.doesNotMatch(goMod, /^replace\b/m);
   });
 });
 
 test('released Go execution rejects command mutation of go.mod before continuing', () => {
-  withTemporaryDirectory('looprig-go-mod-immutability-', (directory) => {
-    const goModPath = join(directory, 'go.mod');
+  withTemporaryRoots('looprig-go-mod-immutability-', (moduleRoot, cacheRoot) => {
+    const goModPath = join(moduleRoot, 'go.mod');
     writeFileSync(goModPath, buildGoMod(fixture()));
     let calls = 0;
     assert.throws(
-      () => executeReleasedGoModule(directory, {
+      () => executeReleasedGoModule(moduleRoot, cacheRoot, {
         executeCommand: () => {
           calls += 1;
           writeFileSync(goModPath, `${readFileSync(goModPath, 'utf8')}\nreplace example.com/changed => ../changed\n`);
