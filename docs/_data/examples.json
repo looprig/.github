@@ -390,7 +390,7 @@
       "assertion": "deterministic output proves typed validation, interruption, checkpoint recovery, typed resume, and cancellation",
       "workflowPath": ".github/workflows/docs-examples.yml",
       "jobId": "docs-examples",
-      "cleanup": "both runs use process-local checkpoint state and fixed identifiers, leaving no persistent resources",
+      "cleanup": "the example creates no application state; the documented command may populate the caller-owned Go build cache at /tmp/looprig-workflows-docs-gocache",
       "proofIds": [
         "central-workflows-stage18-lifecycle-fixture",
         "central-workflows-stage18-output-test",

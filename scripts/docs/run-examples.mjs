@@ -230,10 +230,17 @@ export function executeReleasedGoModule(moduleRoot, cacheRoot, {
     GOTOOLCHAIN: 'local',
     GOENV: 'off',
     GOFLAGS: '',
+    GOPROXY: 'https://proxy.golang.org',
+    GOSUMDB: 'sum.golang.org',
+    GOPRIVATE: '',
+    GONOPROXY: '',
+    GONOSUMDB: '',
+    GOINSECURE: '',
   };
   const commands = [
     ['go', ['mod', 'download', 'all']],
     ['go', ['mod', 'verify']],
+    ['go', ['test', '-mod=readonly', '-race', './...']],
     ['go', ['run', '-mod=readonly', '.']],
   ];
   for (const [command, args] of commands) {

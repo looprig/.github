@@ -280,7 +280,7 @@ test('cache recreation during gomod cleanup cannot recreate the removed module r
   assert.equal(existsSync(cacheRoot), false);
 });
 
-test('released Go execution downloads all, verifies, then runs readonly with a neutral environment', () => {
+test('released Go execution verifies dependencies, tests, then runs with a public checksum policy', () => {
   withTemporaryRoots('looprig-go-command-plan-', (moduleRoot, cacheRoot) => {
     const goMod = buildGoMod(fixture());
     writeFileSync(join(moduleRoot, 'go.mod'), goMod);
@@ -303,9 +303,10 @@ test('released Go execution downloads all, verifies, then runs readonly with a n
     assert.deepEqual(calls.map(({ command, args }) => [command, args]), [
       ['go', ['mod', 'download', 'all']],
       ['go', ['mod', 'verify']],
+      ['go', ['test', '-mod=readonly', '-race', './...']],
       ['go', ['run', '-mod=readonly', '.']],
     ]);
-    assert.equal(calls.length, 3);
+    assert.equal(calls.length, 4);
     for (const { cwd, environment } of calls) {
       assert.equal(cwd, moduleRoot);
       assert.equal(environment.GOWORK, 'off');
@@ -318,10 +319,12 @@ test('released Go execution downloads all, verifies, then runs readonly with a n
       assert.equal(environment.GOTOOLCHAIN, 'local');
       assert.equal(environment.GOENV, 'off');
       assert.equal(environment.GOFLAGS, '');
-      assert.equal(environment.GOPROXY, 'https://proxy.example.test,direct');
-      assert.equal(environment.GOSUMDB, 'sum.example.test');
-      assert.equal(environment.GOPRIVATE, 'private.example.test');
-      assert.equal(environment.GONOSUMDB, 'nosum.example.test');
+      assert.equal(environment.GOPROXY, 'https://proxy.golang.org');
+      assert.equal(environment.GOSUMDB, 'sum.golang.org');
+      assert.equal(environment.GOPRIVATE, '');
+      assert.equal(environment.GONOPROXY, '');
+      assert.equal(environment.GONOSUMDB, '');
+      assert.equal(environment.GOINSECURE, '');
     }
     assert.equal(readFileSync(join(moduleRoot, 'go.mod'), 'utf8'), goMod);
     assert.doesNotMatch(goMod, /^replace\b/m);
