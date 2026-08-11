@@ -1,0 +1,1006 @@
+{
+  "packages": [
+    {
+      "repository": "acp",
+      "module": "github.com/looprig/acp",
+      "path": "github.com/looprig/acp/agent"
+    },
+    {
+      "repository": "acp",
+      "module": "github.com/looprig/acp",
+      "path": "github.com/looprig/acp/client"
+    },
+    {
+      "repository": "acp",
+      "module": "github.com/looprig/acp",
+      "path": "github.com/looprig/acp/launch"
+    },
+    {
+      "repository": "acp",
+      "module": "github.com/looprig/acp",
+      "path": "github.com/looprig/acp/protocol"
+    },
+    {
+      "repository": "acp",
+      "module": "github.com/looprig/acp",
+      "path": "github.com/looprig/acp/transport/stdio"
+    },
+    {
+      "repository": "classifiers",
+      "module": "github.com/looprig/classifiers",
+      "path": "github.com/looprig/classifiers/pkg/catalog"
+    },
+    {
+      "repository": "classifiers",
+      "module": "github.com/looprig/classifiers",
+      "path": "github.com/looprig/classifiers/pkg/commandsafety"
+    },
+    {
+      "repository": "client",
+      "module": "github.com/looprig/client",
+      "path": "github.com/looprig/client/pkg/webui"
+    },
+    {
+      "repository": "core",
+      "module": "github.com/looprig/core",
+      "path": "github.com/looprig/core/content"
+    },
+    {
+      "repository": "core",
+      "module": "github.com/looprig/core",
+      "path": "github.com/looprig/core/content/streamaccumulator"
+    },
+    {
+      "repository": "core",
+      "module": "github.com/looprig/core",
+      "path": "github.com/looprig/core/logging"
+    },
+    {
+      "repository": "core",
+      "module": "github.com/looprig/core",
+      "path": "github.com/looprig/core/uuid"
+    },
+    {
+      "repository": "credentials",
+      "module": "github.com/looprig/credentials",
+      "path": "github.com/looprig/credentials"
+    },
+    {
+      "repository": "credentials",
+      "module": "github.com/looprig/credentials",
+      "path": "github.com/looprig/credentials/catalog"
+    },
+    {
+      "repository": "credentials",
+      "module": "github.com/looprig/credentials",
+      "path": "github.com/looprig/credentials/httpauth"
+    },
+    {
+      "repository": "credentials",
+      "module": "github.com/looprig/credentials",
+      "path": "github.com/looprig/credentials/oauth"
+    },
+    {
+      "repository": "credentials",
+      "module": "github.com/looprig/credentials",
+      "path": "github.com/looprig/credentials/refresh"
+    },
+    {
+      "repository": "eval",
+      "module": "github.com/looprig/eval",
+      "path": "github.com/looprig/eval"
+    },
+    {
+      "repository": "eval",
+      "module": "github.com/looprig/eval",
+      "path": "github.com/looprig/eval/compare"
+    },
+    {
+      "repository": "eval",
+      "module": "github.com/looprig/eval",
+      "path": "github.com/looprig/eval/dataset"
+    },
+    {
+      "repository": "eval",
+      "module": "github.com/looprig/eval",
+      "path": "github.com/looprig/eval/evaltest"
+    },
+    {
+      "repository": "eval",
+      "module": "github.com/looprig/eval",
+      "path": "github.com/looprig/eval/exact"
+    },
+    {
+      "repository": "eval",
+      "module": "github.com/looprig/eval",
+      "path": "github.com/looprig/eval/judge"
+    },
+    {
+      "repository": "eval",
+      "module": "github.com/looprig/eval",
+      "path": "github.com/looprig/eval/reportjson"
+    },
+    {
+      "repository": "eval",
+      "module": "github.com/looprig/eval",
+      "path": "github.com/looprig/eval/rubric"
+    },
+    {
+      "repository": "eval",
+      "module": "github.com/looprig/eval",
+      "path": "github.com/looprig/eval/target/inference"
+    },
+    {
+      "repository": "flow",
+      "module": "github.com/looprig/flow",
+      "path": "github.com/looprig/flow/pkg/controlplane"
+    },
+    {
+      "repository": "flow",
+      "module": "github.com/looprig/flow",
+      "path": "github.com/looprig/flow/pkg/flow"
+    },
+    {
+      "repository": "flow",
+      "module": "github.com/looprig/flow",
+      "path": "github.com/looprig/flow/pkg/ingress"
+    },
+    {
+      "repository": "flow",
+      "module": "github.com/looprig/flow",
+      "path": "github.com/looprig/flow/pkg/registry"
+    },
+    {
+      "repository": "flow/store",
+      "module": "github.com/looprig/flow/store",
+      "path": "github.com/looprig/flow/store"
+    },
+    {
+      "repository": "foreignloops",
+      "module": "github.com/looprig/foreignloops",
+      "path": "github.com/looprig/foreignloops/backend"
+    },
+    {
+      "repository": "foreignloops",
+      "module": "github.com/looprig/foreignloops",
+      "path": "github.com/looprig/foreignloops/driver"
+    },
+    {
+      "repository": "foreignloops",
+      "module": "github.com/looprig/foreignloops",
+      "path": "github.com/looprig/foreignloops/driver/acp"
+    },
+    {
+      "repository": "foreignloops",
+      "module": "github.com/looprig/foreignloops",
+      "path": "github.com/looprig/foreignloops/driver/claude"
+    },
+    {
+      "repository": "foreignloops",
+      "module": "github.com/looprig/foreignloops",
+      "path": "github.com/looprig/foreignloops/driver/codex"
+    },
+    {
+      "repository": "fsstore",
+      "module": "github.com/looprig/fsstore",
+      "path": "github.com/looprig/fsstore"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/command"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/event"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/foreign"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/gate"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/hook"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/hub"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/hustle"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/identity"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/journal"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/loop"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/rig"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/serve"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/serve/catalogreader"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/session"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/sessionstore"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/tool"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/workspacestore"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/auth"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/codec"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/codec/anthropicapi"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/codec/bedrockconverse"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/codec/geminiapi"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/codec/openaiapi"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/codec/openairesponses"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/codec/servertest"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/contextcount"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/failure"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/gateway"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/model"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/retry"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/route"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/stream"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/transport"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/usage"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/wire/eventstream"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/wire/jsonbody"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/wire/ndjson"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/wire/sse"
+    },
+    {
+      "repository": "kosa",
+      "module": "github.com/looprig/kosa",
+      "path": "github.com/looprig/kosa/api"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/aci"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/auth"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/auto"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/e2e"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/anthropic"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/anthropic/subscription"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/atomic-chat"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/azure"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/azure-cognitive-services"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/baseten"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/bedrock"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/cerebras"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/chutes"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/cloudflare-ai-gateway"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/cloudflare-workers-ai"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/cortecs"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/deepinfra"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/deepseek"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/digitalocean"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/fireworks"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/frogbot"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/gemini"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/github-copilot"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/gitlab"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/gmicloud"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/google-vertex"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/groq"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/helicone"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/huggingface"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/ionet"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/llama"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/llamacpp"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/llmgateway"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/minimax"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/moonshot"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/nebius"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/nvidia"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/ollama"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/ollamacloud"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/openai"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/openai/subscription"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/opencode"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/opencode-go"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/openrouter"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/ovhcloud"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/p302ai"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/phala"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/sap-ai-core"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/scaleway"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/snowflake-cortex"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/stackit"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/synthetic"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/together"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/venice"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/vercel"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/xai"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/zai"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/zenmux"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/tee"
+    },
+    {
+      "repository": "mcp",
+      "module": "github.com/looprig/mcp",
+      "path": "github.com/looprig/mcp/pkg/auth"
+    },
+    {
+      "repository": "mcp",
+      "module": "github.com/looprig/mcp",
+      "path": "github.com/looprig/mcp/pkg/client"
+    },
+    {
+      "repository": "mcp",
+      "module": "github.com/looprig/mcp",
+      "path": "github.com/looprig/mcp/pkg/collab"
+    },
+    {
+      "repository": "mcp",
+      "module": "github.com/looprig/mcp",
+      "path": "github.com/looprig/mcp/pkg/harness"
+    },
+    {
+      "repository": "mcp",
+      "module": "github.com/looprig/mcp",
+      "path": "github.com/looprig/mcp/pkg/server"
+    },
+    {
+      "repository": "mcp",
+      "module": "github.com/looprig/mcp",
+      "path": "github.com/looprig/mcp/pkg/transport/sse"
+    },
+    {
+      "repository": "mcp",
+      "module": "github.com/looprig/mcp",
+      "path": "github.com/looprig/mcp/pkg/transport/stdio"
+    },
+    {
+      "repository": "mcp",
+      "module": "github.com/looprig/mcp",
+      "path": "github.com/looprig/mcp/pkg/transport/streamablehttp"
+    },
+    {
+      "repository": "natsstore",
+      "module": "github.com/looprig/natsstore",
+      "path": "github.com/looprig/natsstore"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/cli"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/codepacks/capability"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/codepacks/operational"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/codepacks/safety"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/codepacks/structuredoutput"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/codepacks/tooluse"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/compare"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/gen"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/packfile"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/plutotest"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/pricing"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/profile"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/qual"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/qual/target"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/ratelimit"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/reportjson"
+    },
+    {
+      "repository": "pluto",
+      "module": "github.com/looprig/pluto",
+      "path": "github.com/looprig/pluto/pkg/run"
+    },
+    {
+      "repository": "rclonestore",
+      "module": "github.com/looprig/rclonestore",
+      "path": "github.com/looprig/rclonestore"
+    },
+    {
+      "repository": "sandbox",
+      "module": "github.com/looprig/sandbox",
+      "path": "github.com/looprig/sandbox"
+    },
+    {
+      "repository": "sandbox",
+      "module": "github.com/looprig/sandbox",
+      "path": "github.com/looprig/sandbox/pkg/network"
+    },
+    {
+      "repository": "sandbox",
+      "module": "github.com/looprig/sandbox",
+      "path": "github.com/looprig/sandbox/pkg/profile"
+    },
+    {
+      "repository": "sandbox",
+      "module": "github.com/looprig/sandbox",
+      "path": "github.com/looprig/sandbox/pkg/sandboxtest"
+    },
+    {
+      "repository": "secrets",
+      "module": "github.com/looprig/secrets",
+      "path": "github.com/looprig/secrets"
+    },
+    {
+      "repository": "secrets",
+      "module": "github.com/looprig/secrets",
+      "path": "github.com/looprig/secrets/contracttest"
+    },
+    {
+      "repository": "secrets",
+      "module": "github.com/looprig/secrets",
+      "path": "github.com/looprig/secrets/local"
+    },
+    {
+      "repository": "storage",
+      "module": "github.com/looprig/storage",
+      "path": "github.com/looprig/storage"
+    },
+    {
+      "repository": "storage",
+      "module": "github.com/looprig/storage",
+      "path": "github.com/looprig/storage/memstore"
+    },
+    {
+      "repository": "storage",
+      "module": "github.com/looprig/storage",
+      "path": "github.com/looprig/storage/storetest"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/askuser"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/bash"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/editfile"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/fetch"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/glob"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/grep"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/permission"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/process"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/readfile"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/skill"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/task"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/websearch"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/writefile"
+    },
+    {
+      "repository": "tui",
+      "module": "github.com/looprig/tui",
+      "path": "github.com/looprig/tui"
+    },
+    {
+      "repository": "tui",
+      "module": "github.com/looprig/tui",
+      "path": "github.com/looprig/tui/components"
+    },
+    {
+      "repository": "tui",
+      "module": "github.com/looprig/tui",
+      "path": "github.com/looprig/tui/restore"
+    },
+    {
+      "repository": "tui",
+      "module": "github.com/looprig/tui",
+      "path": "github.com/looprig/tui/runtime"
+    },
+    {
+      "repository": "tui",
+      "module": "github.com/looprig/tui",
+      "path": "github.com/looprig/tui/sessionadapter"
+    },
+    {
+      "repository": "tui",
+      "module": "github.com/looprig/tui",
+      "path": "github.com/looprig/tui/styles"
+    },
+    {
+      "repository": "workflows",
+      "module": "github.com/looprig/workflows",
+      "path": "github.com/looprig/workflows"
+    },
+    {
+      "repository": "workflows",
+      "module": "github.com/looprig/workflows",
+      "path": "github.com/looprig/workflows/tools"
+    },
+    {
+      "repository": "client",
+      "ecosystem": "npm",
+      "name": "@looprig/client",
+      "path": "sdk/core",
+      "version": "0.0.0",
+      "private": true,
+      "availability": "source-workspace",
+      "role": "framework-neutral TypeScript client",
+      "installCommand": null
+    },
+    {
+      "repository": "client",
+      "ecosystem": "npm",
+      "name": "@looprig/svelte",
+      "path": "sdk/svelte",
+      "version": "0.0.0",
+      "private": true,
+      "availability": "source-workspace",
+      "role": "optional Svelte adapter",
+      "installCommand": null
+    }
+  ]
+}

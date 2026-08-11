@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://looprig.dev/schemas/modules.schema.json",
+  "title": "Looprig module inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["modules"],
+  "properties": {
+    "modules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/module"
+      }
+    }
+  },
+  "$defs": {
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "tag"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["released", "pending", "source-only"]
+        },
+        "tag": {
+          "type": ["string", "null"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": { "const": "released" }
+            }
+          },
+          "then": {
+            "properties": {
+              "tag": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": { "const": "source-only" }
+            }
+          },
+          "then": {
+            "properties": {
+              "tag": { "type": "null" }
+            }
+          }
+        }
+      ]
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "kind", "path"],
+      "properties": {
+        "from": { "type": "string", "minLength": 1 },
+        "to": { "type": "string", "minLength": 1 },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "production-import",
+            "test-import",
+            "direct-require",
+            "indirect-require",
+            "tool-dependency",
+            "release-order"
+          ]
+        },
+        "path": { "type": "string", "minLength": 1 }
+      }
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "module",
+        "commit",
+        "publication",
+        "availability",
+        "disposition",
+        "nested",
+        "packages",
+        "edges"
+      ],
+      "properties": {
+        "repository": { "type": "string", "minLength": 1 },
+        "module": { "type": "string", "pattern": "^github\\.com/looprig/" },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "publication": { "$ref": "#/$defs/publication" },
+        "availability": {
+          "type": "string",
+          "enum": ["released", "source-workspace", "unavailable"]
+        },
+        "disposition": {
+          "type": "string",
+          "enum": ["reusable", "product-only"]
+        },
+        "nested": { "type": "boolean" },
+        "packages": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "edges": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/edge" }
+        }
+      }
+    }
+  }
+}

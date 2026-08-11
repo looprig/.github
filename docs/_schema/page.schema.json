@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://looprig.dev/schemas/page.schema.json",
+  "title": "Looprig documentation page frontmatter",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "id",
+    "title",
+    "description",
+    "audience",
+    "section",
+    "order",
+    "publication",
+    "proofs"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[/-][a-z0-9]+)*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "audience": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["human", "agent", "developer", "operator"]
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["human", "agent", "developer", "operator"]
+          }
+        }
+      ]
+    },
+    "section": {
+      "type": "string",
+      "minLength": 1
+    },
+    "order": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "publication": {
+      "type": "string",
+      "enum": ["released", "pending", "source-workspace", "unavailable", "deferred"]
+    },
+    "examples": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "proofs": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "navigationPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "audience", "order"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+\\.mdx?$"
+        },
+        "audience": {
+          "type": "string",
+          "enum": ["human", "agent"]
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "legacyPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "disposition"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+\\.mdx?$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "disposition": {
+          "const": "replace-in-task-15"
+        }
+      }
+    },
+    "navigation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "pages", "legacyPages"],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/navigationPage"
+          }
+        },
+        "legacyPages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/legacyPage"
+          }
+        }
+      }
+    }
+  }
+}

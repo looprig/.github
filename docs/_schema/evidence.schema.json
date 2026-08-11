@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://looprig.dev/schemas/evidence.schema.json",
+  "title": "Looprig documentation evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["proofs"],
+  "properties": {
+    "proofs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "type", "repository", "path", "commit"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "source",
+              "exported-declaration",
+              "test",
+              "executable-fixture",
+              "module-file",
+              "release-record"
+            ]
+          },
+          "repository": { "type": "string", "minLength": 1 },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "not": { "pattern": "(^|/)docs/plans(/|$)" }
+          },
+          "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+          "tag": { "type": "string", "minLength": 1 }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "type": { "const": "release-record" }
+              }
+            },
+            "then": {
+              "required": ["tag"],
+              "properties": {
+                "tag": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
