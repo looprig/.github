@@ -1,4 +1,517 @@
 {
-  "progressive": false,
-  "examples": []
+  "progressive": true,
+  "examples": [
+    {
+      "id": "stage-01-inference",
+      "stage": 1,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage01_inference",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/inference": "v0.9.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints a deterministic assistant response from the fake inference transport",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-inference"
+      ]
+    },
+    {
+      "id": "stage-02-streaming",
+      "stage": 2,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage02_streaming",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/inference": "v0.9.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints deterministic streamed content and its stop reason",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-inference"
+      ]
+    },
+    {
+      "id": "stage-03-pure-tool",
+      "stage": 3,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage03_pure_tool",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/harness": "v0.24.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints a deterministic pure tool result without granting external effects",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-harness"
+      ]
+    },
+    {
+      "id": "stage-04-prepared-tool",
+      "stage": 4,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage04_prepared_tool",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/harness": "v0.24.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints approval for a prepared tool call after deterministic gate evaluation",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-harness"
+      ]
+    },
+    {
+      "id": "stage-05-loop",
+      "stage": 5,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage05_loop",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/harness": "v0.24.2",
+        "github.com/looprig/inference": "v0.9.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints a loop turn driven by the deterministic inference fixture",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-harness",
+        "release-github-com-looprig-inference"
+      ]
+    },
+    {
+      "id": "stage-06-rig",
+      "stage": 6,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage06_rig",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/harness": "v0.24.2",
+        "github.com/looprig/inference": "v0.9.2",
+        "github.com/looprig/storage": "v0.3.1"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints an assembled Rig with durable session behavior",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-harness",
+        "release-github-com-looprig-inference",
+        "release-github-com-looprig-storage"
+      ]
+    },
+    {
+      "id": "stage-07-session-events",
+      "stage": 7,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage07_session_events",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/harness": "v0.24.2",
+        "github.com/looprig/inference": "v0.9.2",
+        "github.com/looprig/storage": "v0.3.1"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints a completed turn event with the session ready state",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-harness",
+        "release-github-com-looprig-inference",
+        "release-github-com-looprig-storage"
+      ]
+    },
+    {
+      "id": "stage-08-session-store",
+      "stage": 8,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage08_session_store",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/fsstore": "v0.3.2",
+        "github.com/looprig/harness": "v0.24.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints a configured durable session-store path",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-fsstore",
+        "release-github-com-looprig-harness"
+      ]
+    },
+    {
+      "id": "stage-09-restore",
+      "stage": 9,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage09_restore",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/fsstore": "v0.3.2",
+        "github.com/looprig/harness": "v0.24.2",
+        "github.com/looprig/inference": "v0.9.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints that the same session resumed after restore",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-fsstore",
+        "release-github-com-looprig-harness",
+        "release-github-com-looprig-inference"
+      ]
+    },
+    {
+      "id": "stage-10-workspace",
+      "stage": 10,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage10_workspace",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/harness": "v0.24.2",
+        "github.com/looprig/storage": "v0.3.1"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints that a workspace snapshot restores exactly",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-harness",
+        "release-github-com-looprig-storage"
+      ]
+    },
+    {
+      "id": "stage-11-sandbox-process",
+      "stage": 11,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage11_sandbox_process",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/sandbox": "v0.8.1"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints a confined process exit status of zero",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-sandbox"
+      ]
+    },
+    {
+      "id": "stage-12-gate-rules",
+      "stage": 12,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage12_gate_rules",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/harness": "v0.24.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints that a deny rule wins before an allow rule",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-harness"
+      ]
+    },
+    {
+      "id": "stage-13-classifier",
+      "stage": 13,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage13_classifier",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/classifiers": "v0.1.4",
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/harness": "v0.24.2",
+        "github.com/looprig/inference": "v0.9.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints that a classifier recommendation cannot expand authority",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-classifiers",
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-harness",
+        "release-github-com-looprig-inference"
+      ]
+    },
+    {
+      "id": "stage-14-delegation",
+      "stage": 14,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage14_delegation",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/harness": "v0.24.2",
+        "github.com/looprig/inference": "v0.9.2",
+        "github.com/looprig/storage": "v0.3.1"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints worker admission with quota enforcement",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-harness",
+        "release-github-com-looprig-inference",
+        "release-github-com-looprig-storage"
+      ]
+    },
+    {
+      "id": "stage-15-acp-foreign",
+      "stage": 15,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage15_acp_foreign",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/acp": "v0.2.2",
+        "github.com/looprig/foreignloops": "v0.2.3",
+        "github.com/looprig/harness": "v0.24.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints the ACP profile, restored state, scoped services, and MCP server count",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-acp",
+        "release-github-com-looprig-foreignloops",
+        "release-github-com-looprig-harness"
+      ]
+    },
+    {
+      "id": "stage-16-mcp-adoption",
+      "stage": 16,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage16_mcp_adoption",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/harness": "v0.24.2",
+        "github.com/looprig/mcp": "v0.6.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints the MCP source, discovered definition, model tool name, and disabled state",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-harness",
+        "release-github-com-looprig-mcp"
+      ]
+    },
+    {
+      "id": "stage-17-flow",
+      "stage": 17,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage17_flow",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/flow": "v0.3.0"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints interrupted and resumed Flow runs with growing checkpoint history",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-flow"
+      ]
+    },
+    {
+      "id": "stage-18-workflows",
+      "stage": 18,
+      "ecosystem": "go",
+      "owner": "workflows",
+      "sourcePath": "examples/docs/stage18_workflows/main.go",
+      "availability": "source-workspace",
+      "versions": {
+        "github.com/looprig/workflows": "source-workspace",
+        "github.com/looprig/flow": "source-workspace",
+        "github.com/looprig/storage": "source-workspace"
+      },
+      "offlineCommand": "GOWORK=off GOCACHE=/tmp/looprig-workflows-docs-gocache go run ./examples/docs/stage18_workflows",
+      "assertion": "deterministic output proves typed validation, interruption, checkpoint recovery, typed resume, and cancellation",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "both runs use process-local checkpoint state and fixed identifiers, leaving no persistent resources",
+      "proofIds": [
+        "central-workflows-stage18-lifecycle-fixture",
+        "central-workflows-stage18-output-test",
+        "central-workflows-artifacts-contract-test",
+        "central-workflows-typed-definition-source",
+        "central-workflows-catalog-source",
+        "central-workflows-recovery-test"
+      ]
+    },
+    {
+      "id": "stage-19-http-serve",
+      "stage": 19,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage19_http_serve",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/harness": "v0.24.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints capabilities, one session, and a protected control-route response",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-harness"
+      ]
+    },
+    {
+      "id": "stage-20-web-client",
+      "stage": 20,
+      "ecosystem": "npm",
+      "owner": "client",
+      "sourcePath": "examples/docs/stage20_web_client/SessionPage.svelte",
+      "availability": "source-workspace",
+      "versions": {
+        "@looprig/client": "source-workspace",
+        "@looprig/svelte": "source-workspace"
+      },
+      "offlineCommand": "npm run docs:examples",
+      "assertion": "The stage 20 command typechecks both framework-neutral TypeScript files, runs svelte-check on the optional SessionPage component, and executes its deterministic SessionClient cleanup proof.",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "The stage 20 proof closes its in-memory live iterator; the typechecks and proof create no persistent resources.",
+      "proofIds": [
+        "central-client-stage20-session-client-source",
+        "central-client-stage20-session-client-proof",
+        "central-client-stage20-vanilla-session-source",
+        "central-client-stage20-svelte-page-source"
+      ]
+    },
+    {
+      "id": "stage-21-tui",
+      "stage": 21,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage21_tui",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/harness": "v0.24.2",
+        "github.com/looprig/inference": "v0.9.2",
+        "github.com/looprig/tui": "v0.15.1"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints the session adapter state, image capability, event, and one shutdown",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-harness",
+        "release-github-com-looprig-inference",
+        "release-github-com-looprig-tui"
+      ]
+    },
+    {
+      "id": "stage-22-model-gateway",
+      "stage": 22,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage22_model_gateway",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/inference": "v0.9.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints a gateway alias response, upstream model, and strict unknown-field behavior",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-inference"
+      ]
+    },
+    {
+      "id": "stage-23-eval",
+      "stage": 23,
+      "ecosystem": "go",
+      "owner": ".github",
+      "sourcePath": "examples/go/progressive/stage23_eval",
+      "availability": "released",
+      "versions": {
+        "github.com/looprig/core": "v0.5.1",
+        "github.com/looprig/eval": "v0.1.2",
+        "github.com/looprig/pluto": "v0.1.2"
+      },
+      "offlineCommand": "node scripts/docs/run-examples.mjs",
+      "assertion": "prints a passing exact evaluation report and qualified Pluto capability report",
+      "workflowPath": ".github/workflows/docs-examples.yml",
+      "jobId": "docs-examples",
+      "cleanup": "the clean runner removes its temporary module and isolated Go caches",
+      "proofIds": [
+        "release-github-com-looprig-core",
+        "release-github-com-looprig-eval",
+        "release-github-com-looprig-pluto"
+      ]
+    }
+  ]
 }

@@ -91,7 +91,11 @@ test('stage range, ecosystem, availability, and source marker consistency are ex
 test('central source paths are safe and released source paths resolve', () => {
   const unsafe = fixture({ sourcePath: '../inference/main.go' });
   assert.match(validateProgressiveManifest({ progressive: true, examples: [unsafe] }, { requireAll: false }).join('\n'), /safe repository-relative path/i);
-  assert.throws(() => planExample(fixture(), { repositoryRoot }), /source directory.*not found/i);
+  assert.throws(
+    () => planExample(fixture({ sourcePath: 'examples/go/progressive/missing-stage' }), { repositoryRoot }),
+    /source directory.*not found/i,
+  );
+  assert.equal(planExample(fixture(), { repositoryRoot }).kind, 'released-go');
 });
 
 test('buildGoMod contains only immutable requirements and no replace directive', () => {

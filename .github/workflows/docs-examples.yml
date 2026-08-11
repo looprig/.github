@@ -7,6 +7,8 @@ on:
       - 'scripts/docs/run-examples.mjs'
       - 'scripts/docs/run-examples.test.mjs'
       - 'docs/_data/examples.json'
+      - 'docs/_data/evidence.json'
+      - 'docs/_schema/examples.schema.json'
       - '.github/workflows/docs-examples.yml'
   push:
     branches: [main]
@@ -15,12 +17,26 @@ on:
       - 'scripts/docs/run-examples.mjs'
       - 'scripts/docs/run-examples.test.mjs'
       - 'docs/_data/examples.json'
+      - 'docs/_data/evidence.json'
+      - 'docs/_schema/examples.schema.json'
       - '.github/workflows/docs-examples.yml'
 
 permissions:
   contents: read
 
 jobs:
+  docs-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.4'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+      - run: node scripts/docs/run-examples.mjs
+
   docs-examples-unit:
     runs-on: ubuntu-latest
     steps:
