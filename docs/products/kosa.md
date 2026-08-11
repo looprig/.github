@@ -188,16 +188,15 @@ using it beyond an experiment.
 
 ## Evidence
 
-The source-only module and local replacement posture are recorded in
-[`go.mod` at the Kosa source commit](https://github.com/looprig/kosa/blob/867bb33686fa2b3f4325b503d033c6a0d1ada08b/go.mod).
-The CLI path and exact initialization fixture are in
-[`internal/cli/run.go`](https://github.com/looprig/kosa/blob/867bb33686fa2b3f4325b503d033c6a0d1ada08b/internal/cli/run.go)
-and [`internal/cli/init.go`](https://github.com/looprig/kosa/blob/867bb33686fa2b3f4325b503d033c6a0d1ada08b/internal/cli/init.go).
-Strict configuration is implemented in
-[`internal/config/config.go`](https://github.com/looprig/kosa/blob/867bb33686fa2b3f4325b503d033c6a0d1ada08b/internal/config/config.go).
-Service lifecycle, indexing, API, and MCP proof points are
-[`internal/cli/serve.go`](https://github.com/looprig/kosa/blob/867bb33686fa2b3f4325b503d033c6a0d1ada08b/internal/cli/serve.go),
-[`internal/app/indexing.go`](https://github.com/looprig/kosa/blob/867bb33686fa2b3f4325b503d033c6a0d1ada08b/internal/app/indexing.go),
-[`internal/transport/httpapi/server.go`](https://github.com/looprig/kosa/blob/867bb33686fa2b3f4325b503d033c6a0d1ada08b/internal/transport/httpapi/server.go),
-and [`internal/transport/mcpserver/server.go`](https://github.com/looprig/kosa/blob/867bb33686fa2b3f4325b503d033c6a0d1ada08b/internal/transport/mcpserver/server.go).
+Kosa has no configured public origin, so these proof locations are local
+source-workspace paths at commit
+`867bb33686fa2b3f4325b503d033c6a0d1ada08b`. The module and replacement
+posture are in `kosa/go.mod`. The CLI entry and initialization fixture are in
+`kosa/internal/cli/run.go` and `kosa/internal/cli/init.go`. Strict
+configuration is implemented in `kosa/internal/config/config.go`. Service
+lifecycle, indexing, API, and MCP proof points are in
+`kosa/internal/cli/serve.go`, `kosa/internal/app/indexing.go`,
+`kosa/internal/transport/httpapi/server.go`, and
+`kosa/internal/transport/mcpserver/server.go`. These paths become remote links
+only after Kosa has a verified public origin and release.
 The module proof marker in this page's frontmatter is `module-kosa`.
