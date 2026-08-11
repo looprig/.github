@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
@@ -10,6 +10,7 @@ import {
   planExample,
   validateAgainstSchema,
   validateProgressiveManifest,
+  withTemporaryDirectory,
 } from './run-examples.mjs';
 
 const repositoryRoot = join(import.meta.dirname, '../..');
@@ -140,4 +141,77 @@ test('source-workspace hooks stay bound to their owning repository and ecosystem
   });
   assert.match(validateProgressiveManifest({ progressive: true, examples: [wrongOwner] }, { requireAll: false }).join('\n'), /stage 18.*workflows/i);
   assert.match(validateProgressiveManifest({ progressive: true, examples: [wrongEcosystem] }, { requireAll: false }).join('\n'), /stage 20.*npm/i);
+});
+
+test('temporary lifecycle creates and cleans up once with bounded retry options', () => {
+  const creations = [];
+  const removals = [];
+  const result = withTemporaryDirectory('stage-', () => 'finished', {
+    temporaryRoot: '/virtual-root',
+    makeTemporaryDirectory: (prefix) => {
+      creations.push(prefix);
+      return '/virtual/stage-one';
+    },
+    removeTemporaryDirectory: (path, options) => removals.push({ path, options }),
+  });
+
+  assert.equal(result, 'finished');
+  assert.deepEqual(creations, ['/virtual-root/stage-']);
+  assert.deepEqual(removals, [{
+    path: '/virtual/stage-one',
+    options: { recursive: true, force: true, maxRetries: 5, retryDelay: 100 },
+  }]);
+});
+
+test('temporary lifecycle rethrows the same primary error after successful cleanup', () => {
+  const primary = new Error('stage failed');
+  let caught;
+  try {
+    withTemporaryDirectory('stage-', () => { throw primary; }, {
+      makeTemporaryDirectory: () => '/virtual/stage-two',
+      removeTemporaryDirectory: () => {},
+    });
+  } catch (error) {
+    caught = error;
+  }
+  assert.strictEqual(caught, primary);
+  assert.equal(Object.hasOwn(caught, 'cleanupError'), false);
+});
+
+test('temporary lifecycle retains the primary error and attaches cleanup diagnostics', () => {
+  const primary = new Error('stage failed');
+  const cleanup = new Error('cleanup failed');
+  let caught;
+  try {
+    withTemporaryDirectory('stage-', () => { throw primary; }, {
+      makeTemporaryDirectory: () => '/virtual/stage-three',
+      removeTemporaryDirectory: () => { throw cleanup; },
+    });
+  } catch (error) {
+    caught = error;
+  }
+  assert.strictEqual(caught, primary);
+  assert.strictEqual(caught.cleanupError, cleanup);
+  assert.equal(caught.message, 'stage failed');
+});
+
+test('temporary lifecycle surfaces cleanup failure when the body succeeds', () => {
+  const cleanup = new Error('cleanup only');
+  assert.throws(
+    () => withTemporaryDirectory('stage-', () => 'finished', {
+      makeTemporaryDirectory: () => '/virtual/stage-four',
+      removeTemporaryDirectory: () => { throw cleanup; },
+    }),
+    (error) => error === cleanup,
+  );
+});
+
+test('temporary lifecycle removes a real non-empty temporary directory', () => {
+  let created;
+  withTemporaryDirectory('looprig-runner-lifecycle-', (directory) => {
+    created = directory;
+    writeFileSync(join(directory, 'proof.txt'), 'temporary');
+    assert.equal(existsSync(directory), true);
+  });
+  assert.equal(existsSync(created), false);
 });

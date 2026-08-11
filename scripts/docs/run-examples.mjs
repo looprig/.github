@@ -167,10 +167,42 @@ export function planExample(example, { repositoryRoot }) {
   return { kind: 'released-go', example, sourceDirectory };
 }
 
+export function withTemporaryDirectory(prefix, body, {
+  makeTemporaryDirectory = mkdtempSync,
+  removeTemporaryDirectory = rmSync,
+  temporaryRoot = tmpdir(),
+} = {}) {
+  const directory = makeTemporaryDirectory(join(temporaryRoot, prefix));
+  let bodyFailed = false;
+  let primaryError;
+  let result;
+  try {
+    result = body(directory);
+  } catch (error) {
+    bodyFailed = true;
+    primaryError = error;
+  }
+  try {
+    removeTemporaryDirectory(directory, {
+      recursive: true,
+      force: true,
+      maxRetries: 5,
+      retryDelay: 100,
+    });
+  } catch (cleanupError) {
+    if (!bodyFailed) throw cleanupError;
+    Object.defineProperty(primaryError, 'cleanupError', {
+      value: cleanupError,
+      configurable: true,
+    });
+  }
+  if (bodyFailed) throw primaryError;
+  return result;
+}
+
 export function runReleasedExample(plan, { repositoryRoot }) {
   if (plan.kind !== 'released-go') throw new Error('clean-module runner accepts released Go stages only');
-  const temporaryModule = mkdtempSync(join(tmpdir(), `looprig-docs-stage-${String(plan.example.stage).padStart(2, '0')}-`));
-  try {
+  return withTemporaryDirectory(`looprig-docs-stage-${String(plan.example.stage).padStart(2, '0')}-`, (temporaryModule) => {
     copyStageSources(plan.sourceDirectory, temporaryModule);
     const shared = join(repositoryRoot, 'examples/go/progressive/internal');
     if (!existsSync(shared)) throw new Error('shared progressive helpers not found');
@@ -185,9 +217,7 @@ export function runReleasedExample(plan, { repositoryRoot }) {
     };
     run('go', ['mod', 'download'], temporaryModule, environment);
     run('go', ['run', '.'], temporaryModule, environment);
-  } finally {
-    rmSync(temporaryModule, { recursive: true, force: true });
-  }
+  });
 }
 
 function safeRelativePath(path) {
@@ -258,6 +288,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     main();
   } catch (error) {
     process.stderr.write(`docs examples: ${error.message}\n`);
+    if (error.cleanupError) process.stderr.write(`docs examples cleanup: ${error.cleanupError.message}\n`);
     process.exitCode = 1;
   }
 }
