@@ -132,11 +132,11 @@ Every other repo in the tree is either a foundation the Harness stands on (`core
 | Pillar | What it gives you | Repos |
 | --- | --- | --- |
 | **Foundational vocabulary** | Shared typed content blocks, UUIDs, structured logging: one canonical definition, zero dependencies. | [core](https://github.com/looprig/core) |
-| **Agent runtime (the heart)** | Loop, Session, tool contracts, gate, journal, transcript, security limit, optional HTTP API. | [harness](https://github.com/looprig/harness) |
-| **Standard tools** | Optional file, shell, search, web, planning, permission, and skill implementations. Consumers select each definition independently. | [tools](https://github.com/looprig/tools) |
+| **Agent runtime (the heart)** | Loop, Session, tool contracts, three-state access gate, journal, transcript, optional HTTP API. | [harness](https://github.com/looprig/harness) |
+| **Standard tools** | Optional file, shell, search, web, loop-scoped task tracking, planning, permission, and skill implementations are exported independently. Consumers select each definition independently; the related Tasks capability is selected once through `tools.TaskDefinitions()`. | [tools](https://github.com/looprig/tools) |
 | **Model inference contract** | Provider-neutral `Client`/`Request`/`Response`/`Tool`/`Usage`, streaming, codecs, sampling knobs. No provider policy. | [inference](https://github.com/looprig/inference) |
 | **Provider batteries** | Known-provider registry, truth tables, SigV4 + API key + attestation auth, `auto.New` composition root, fail-closed model validation. | [llm](https://github.com/looprig/llm) |
-| **OS confinement** | Seatbelt (macOS) + namespaces/Landlock/seccomp/nftables/cgroups (Linux). Unforgeable HMAC grant tokens; honest per-property guarantees. | [sandbox](https://github.com/looprig/sandbox) |
+| **Access profiles & OS enforcement** | Explicit `Deny`/`Gated`/`Allow` access profiles compiled to Seatbelt (macOS) + namespaces/Landlock/seccomp/nftables/cgroups (Linux). Unforgeable HMAC grant tokens; a loopback egress proxy; honest per-property guarantees. The same `Profile` is the gate's access source. | [sandbox](https://github.com/looprig/sandbox) |
 | **Durable storage contracts** | `Ledger`/`Leaser`/`KV`/`Blobs` interfaces, typed errors, name grammar, `AppendDefinite` ambiguity resolver, in-memory oracle + conformance suites. | [storage](https://github.com/looprig/storage) |
 | **Storage backends** | Concrete implementations of the storage contracts: single-host disk, NATS JetStream (embedded or remote), and a cloud-agnostic rclone-driven blobs adapter. | [fsstore](https://github.com/looprig/fsstore), [natsstore](https://github.com/looprig/natsstore), [rclonestore](https://github.com/looprig/rclonestore) |
 | **User-facing surfaces** | One `pkg/serve` `/v1` contract, many UI runtimes. Terminal TUI today (`tui`/Bubble Tea v2); a planned `client` module brings a BFF + embedded SPA + framework-neutral TS SDK (`@looprig/client`) to the browser, desktop (Tauri v2), and mobile, with thin adapters for Svelte (reference)/React/Vue/Angular/Solid. | [tui](https://github.com/looprig/tui), [bubbletea-fork](https://github.com/looprig/bubbletea-fork), `client` *(planned)* |
@@ -154,8 +154,8 @@ Every other repo in the tree is either a foundation the Harness stands on (`core
 
 ### The heart
 
-- **[harness](https://github.com/looprig/harness)** - The runtime SDK. Key packages: `loop` (the single-flight actor: `StartTurn`/`Interrupt`/`Shutdown`), `session` (multi-loop orchestration with depth/quota caps and restore), `hub` (session pub/sub with federated quiescence / headless `WaitIdle`), `command`/`event` (the typed command protocol and event stream), `identity` (attribution), `gate` (durable human/policy approval gates surviving restore), `tool` (tool definitions, bindings, permissions, and audit contracts), `journal`/`sessionstore`/`workspacestore` (persistence facades over `storage` contracts), `foreignloop` adapters, `eval`, `security`, and an optional HTTP session API.
-- **[tools](https://github.com/looprig/tools)** - Optional standard tool implementations. File, search, shell, web, planning, permission, and skill capabilities are exported independently. A consumer can select only the tools a Loop needs or replace any of them with its own implementation.
+- **[harness](https://github.com/looprig/harness)** - The runtime SDK. Key packages: `loop` (the single-flight actor: `StartTurn`/`Interrupt`/`Shutdown`), `session` (multi-loop orchestration with depth/quota caps and restore), `hub` (session pub/sub with federated quiescence / headless `WaitIdle`), `command`/`event` (the typed command protocol and event stream), `identity` (attribution), `gate` (the generic three-state access evaluator and durable human/policy approval gates surviving restore), `tool` (tool definitions, bindings, prepared requests, capability requirements, and audit contracts), `journal`/`sessionstore`/`workspacestore` (persistence facades over `storage` contracts), `foreignloop` adapters, `eval`, and an optional HTTP session API.
+- **[tools](https://github.com/looprig/tools)** - Optional standard tool implementations. File, search, shell, web, loop-scoped task tracking, planning, permission, and skill capabilities are exported independently. `tools.TaskDefinitions()` is one selected definition that exposes the four model-facing names `TaskCreate`, `TaskUpdate`, `TaskGet`, and `TaskList`. Each bound Loop, including each Subagent, receives an independent task graph; modes within one Loop share it. Subagent is a Harness-injected control tool, not a tool consumers add manually, and agents coordinate through Subagent messages rather than shared task memory. A consumer can select only the tools a Loop needs or replace any of them with its own implementation.
 
 ### Inference
 
@@ -171,7 +171,7 @@ Every other repo in the tree is either a foundation the Harness stands on (`core
 
 ### OS confinement
 
-- **[sandbox](https://github.com/looprig/sandbox)** - Real OS enforcement of what a spawned command can touch: Seatbelt on macOS, namespaces + Landlock + seccomp + nftables + cgroups on Linux. Security-mode ladder (`ZeroTrust < ReadOnly < Write < Trusted < Unconfined`), zero-value-most-restrictive, rung-1 vs rung-2 Linux probe, re-exec stage-2 helper, unforgeable HMAC grant tokens (`lrsx1.<payload>.<sig>`) for capability escalation, metadata-endpoint hard-deny. Coupling to the harness is **structural only**: the seams use stdlib types, so sandbox satisfies them without an import; `harness` must never import `sandbox`.
+- **[sandbox](https://github.com/looprig/sandbox)** - Real OS enforcement of what a spawned command can touch: Seatbelt on macOS, namespaces + Landlock + seccomp + nftables + cgroups on Linux. Consumers build explicit `Profile` values from per-capability `Deny`/`Gated`/`Allow` states (no reusable named modes or presets), with zero-value-most-restrictive defaults, `Restrict` for role ceilings, `ExecutorSet` for per-key isolated executors, rung-1 vs rung-2 Linux probe, re-exec stage-2 helper, unforgeable HMAC grant tokens (`lrsx1.<payload>.<sig>`) minted only after approval, a loopback egress proxy for target-scoped network, and metadata-endpoint hard-deny. Coupling to the harness is **structural only**: `*sandbox.Profile` satisfies the gate's `AccessSource` and `*sandbox.Executor` its `GrantIssuer` without any import; `harness` must never import `sandbox`.
 
 ### Presentation & clients
 
@@ -185,7 +185,7 @@ Every other repo in the tree is either a foundation the Harness stands on (`core
 
 ### Reference product
 
-- **[carbon](https://github.com/looprig/carbon)** - Carbon is the reference coding Rig and its sole agent. Carbon can delegate to another Carbon instance for focused work while retaining one product identity, one explicit tool/access policy, and one durable session model. Session persistence, workspace snapshots, configuration fingerprints, and the TUI come from their owning modules.
+- **[carbon](https://github.com/looprig/carbon)** - Carbon is the reference coding Rig and its sole agent. It exposes three product access profiles (`ReadOnly` default, `Trusted`, `Unconfined`) selected with `--access-profile` and built directly from the `sandbox` API. Carbon can delegate to another Carbon instance for focused work while retaining one product identity, one explicit tool/access policy, and one durable session model. Session persistence, workspace snapshots, configuration fingerprints, and the TUI come from their owning modules.
 
 ### External proof
 
