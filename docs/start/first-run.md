@@ -103,14 +103,14 @@ func runTurn(ctx context.Context, runtime *rig.Rig, question string) error {
 sequenceDiagram
   participant CLI
   participant Session
-  participant Loop
+  participant L as Loop
   participant Model
   CLI->>Session: SubscribeEvents
   CLI->>Session: Submit(text blocks)
-  Session->>Loop: start Turn
-  Loop->>Model: inference.Request
-  Model-->>Loop: streamed assistant blocks
-  Loop-->>Session: TurnDone
+  Session->>L: start Turn
+  L->>Model: inference.Request
+  Model-->>L: streamed assistant blocks
+  L-->>Session: TurnDone
   Session-->>CLI: enduring event delivery
   CLI->>Session: Shutdown
 ```

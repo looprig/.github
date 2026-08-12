@@ -84,3 +84,11 @@ test("Getting Started uses consumer commands and canonical deep-guide links", ()
     "/docs/guides/evals/",
   ]) assert.match(corpus, new RegExp(destination.replaceAll("/", "\\/")), `tutorial omits ${destination}`);
 });
+
+test("the Harness runtime sequence uses a Mermaid-safe Loop alias", () => {
+  const page = read("first-run.md");
+  assert.match(page, /participant L as Loop/);
+  assert.doesNotMatch(page, /participant Loop\b/);
+  assert.match(page, /Session->>L: start Turn/);
+  assert.match(page, /L-->>Session: TurnDone/);
+});
