@@ -4391,12 +4391,6 @@
         },
         {
           "from": "github.com/looprig/harness",
-          "to": "github.com/looprig/eval",
-          "kind": "direct-require",
-          "path": "go.mod"
-        },
-        {
-          "from": "github.com/looprig/harness",
           "to": "github.com/looprig/fsstore",
           "kind": "direct-require",
           "path": "go.mod"
@@ -5495,12 +5489,6 @@
         },
         {
           "from": "github.com/looprig/harness",
-          "to": "github.com/looprig/eval",
-          "kind": "release-order",
-          "path": "go.mod"
-        },
-        {
-          "from": "github.com/looprig/harness",
           "to": "github.com/looprig/fsstore",
           "kind": "release-order",
           "path": "go.mod"
@@ -6547,12 +6535,6 @@
           "from": "github.com/looprig/harness",
           "to": "github.com/looprig/core",
           "kind": "test-import",
-          "path": "pkg/evalmigration/eval_integration_test.go"
-        },
-        {
-          "from": "github.com/looprig/harness",
-          "to": "github.com/looprig/core",
-          "kind": "test-import",
           "path": "pkg/event/compaction_test.go"
         },
         {
@@ -7103,12 +7085,6 @@
         },
         {
           "from": "github.com/looprig/harness",
-          "to": "github.com/looprig/eval",
-          "kind": "test-import",
-          "path": "pkg/evalmigration/eval_integration_test.go"
-        },
-        {
-          "from": "github.com/looprig/harness",
           "to": "github.com/looprig/fsstore",
           "kind": "test-import",
           "path": "internal/sessionruntime/process_services_integration_test.go"
@@ -7586,12 +7562,6 @@
           "to": "github.com/looprig/inference",
           "kind": "test-import",
           "path": "pkg/command/loop_change_test.go"
-        },
-        {
-          "from": "github.com/looprig/harness",
-          "to": "github.com/looprig/inference",
-          "kind": "test-import",
-          "path": "pkg/evalmigration/eval_integration_test.go"
         },
         {
           "from": "github.com/looprig/harness",
@@ -12367,7 +12337,7 @@
     {
       "repository": "tests",
       "module": "github.com/looprig/tests",
-      "commit": "db8982cc36f15c5da6285b2a160b6c772b1f82d8",
+      "commit": "979332eabf490dd09da0d61f95704f9bf8f18448",
       "publication": {
         "status": "pending",
         "tag": "v0.7.0"
@@ -12392,6 +12362,12 @@
         {
           "from": "github.com/looprig/tests",
           "to": "github.com/looprig/credentials",
+          "kind": "direct-require",
+          "path": "go.mod"
+        },
+        {
+          "from": "github.com/looprig/tests",
+          "to": "github.com/looprig/eval",
           "kind": "direct-require",
           "path": "go.mod"
         },
@@ -12464,6 +12440,12 @@
         {
           "from": "github.com/looprig/tests",
           "to": "github.com/looprig/credentials",
+          "kind": "release-order",
+          "path": "go.mod"
+        },
+        {
+          "from": "github.com/looprig/tests",
+          "to": "github.com/looprig/eval",
           "kind": "release-order",
           "path": "go.mod"
         },
@@ -12532,6 +12514,12 @@
           "to": "github.com/looprig/core",
           "kind": "test-import",
           "path": "credential_gateway_test.go"
+        },
+        {
+          "from": "github.com/looprig/tests",
+          "to": "github.com/looprig/core",
+          "kind": "test-import",
+          "path": "eval_migration_test.go"
         },
         {
           "from": "github.com/looprig/tests",
@@ -12586,6 +12574,12 @@
           "to": "github.com/looprig/credentials",
           "kind": "test-import",
           "path": "credential_gateway_test.go"
+        },
+        {
+          "from": "github.com/looprig/tests",
+          "to": "github.com/looprig/eval",
+          "kind": "test-import",
+          "path": "eval_migration_test.go"
         },
         {
           "from": "github.com/looprig/tests",
@@ -12658,6 +12652,12 @@
           "to": "github.com/looprig/inference",
           "kind": "test-import",
           "path": "credential_gateway_test.go"
+        },
+        {
+          "from": "github.com/looprig/tests",
+          "to": "github.com/looprig/inference",
+          "kind": "test-import",
+          "path": "eval_migration_test.go"
         },
         {
           "from": "github.com/looprig/tests",

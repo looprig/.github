@@ -35,7 +35,6 @@ Harness is useful on its own when an application needs to turn model calls and t
 ## Dependencies
 
 - [Core](/docs/modules/core)
-- [Eval](/docs/modules/eval)
 - [FSStore](/docs/modules/fsstore)
 - [Inference](/docs/modules/inference)
 - [Storage](/docs/modules/storage)
