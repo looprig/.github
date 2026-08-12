@@ -58,6 +58,7 @@ const sandboxing = [
   "runtime/processes",
   "runtime/errors",
   "integration/index",
+  "deployment-environments",
 ].map((page) => `guides/sandboxing/${page}.md`);
 
 const evals = [

@@ -22,6 +22,7 @@ const pages = [
   ["guides/sandboxing/runtime/processes", "Prepared Processes and Lifetime"],
   ["guides/sandboxing/runtime/errors", "Typed Errors and Recovery"],
   ["guides/sandboxing/integration/index", "Harness Gates and Prepared Tools"],
+  ["guides/sandboxing/deployment-environments", "Docker, MicroVMs, and VMs"],
 ];
 
 const sourceProof = {
@@ -39,6 +40,7 @@ const sourceProof = {
   "guides/sandboxing/runtime/processes": ["internal/exec/process.go", "internal/exec/process_lifecycle_test.go"],
   "guides/sandboxing/runtime/errors": ["sandbox.go", "facade_test.go"],
   "guides/sandboxing/integration/index": ["examples/policy-enforcement/example_test.go", "examples/contract_test.go"],
+  "guides/sandboxing/deployment-environments": ["init_linux.go", "internal/exec/executor.go"],
 };
 
 function pageMarkdown(id) {
@@ -137,4 +139,24 @@ test("Sandboxing pages explain platform truth, gates, and lifecycle distinctions
   for (const phrase of ["Harness", "Tools", "requirement", "PreparedArtifact", "Gated", "pre-spawn", "OS enforcement"]) {
     assert.match(integration, new RegExp(phrase, "i"), `integration omits ${phrase}`);
   }
+});
+
+test("deployment environments compose an outer boundary with truthful native guarantees", () => {
+  const deployment = pageMarkdown("guides/sandboxing/deployment-environments");
+  for (const phrase of [
+    "Docker",
+    "container",
+    "microVM",
+    "virtual machine",
+    "sandbox.Init",
+    "application binary",
+    "CompileReport",
+    "Guarantees",
+    "Executor.Report",
+    "Executor.Guarantees",
+    "defense in depth",
+  ]) assert.match(deployment, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), `deployment page omits ${phrase}`);
+  assert.match(deployment, /```dockerfile[\s\S]+go build[\s\S]+ENTRYPOINT[\s\S]+```/i);
+  assert.match(deployment, /\| Environment \| Outer boundary \| Native Sandbox considerations \|/);
+  assert.doesNotMatch(deployment, /sandbox (?:generates|builds|emits) (?:a |the )?binary/i);
 });
