@@ -11,6 +11,10 @@ proofs:
     - release-github-com-looprig-carbon
   decoder-and-tests:
     - release-github-com-looprig-carbon
+  create-a-file-safely:
+    - release-github-com-looprig-carbon
+  three-transport-shapes:
+    - release-github-com-looprig-carbon
   start-and-adopt-tools:
     - release-github-com-looprig-carbon
   elicitation-and-headless-behavior:

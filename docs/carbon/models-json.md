@@ -11,15 +11,27 @@ proofs:
     - release-github-com-looprig-carbon
   decoder-and-tests:
     - release-github-com-looprig-carbon
+  create-a-file-safely:
+    - release-github-com-looprig-carbon
   local-and-provider-models:
     - release-github-com-looprig-carbon
   required-shape:
     - release-github-com-looprig-carbon
   version-2-and-version-3-authentication:
     - release-github-com-looprig-carbon
+  version-3-with-a-credential-reference:
+    - release-github-com-looprig-carbon
   uses-primers-and-delegates:
     - release-github-com-looprig-carbon
   native-acp-and-review-extensions:
+    - release-github-com-looprig-carbon
+  native-acp-with-harness-managed-model-selection:
+    - release-github-com-looprig-carbon
+  native-acp-with-a-structured-allowlist:
+    - release-github-com-looprig-carbon
+  pin-acp-launcher-executables:
+    - release-github-com-looprig-carbon
+  enable-permission-review-with-a-structured-output-model:
     - release-github-com-looprig-carbon
   migration:
     - release-github-com-looprig-carbon
