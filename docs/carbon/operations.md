@@ -11,6 +11,18 @@ proofs:
     - release-github-com-looprig-carbon
   ci:
     - release-github-com-looprig-carbon
+  a-repeatable-startup-check:
+    - release-github-com-looprig-carbon
+  credentials-and-logs:
+    - release-github-com-looprig-carbon
+  network-route:
+    - release-github-com-looprig-carbon
+  shutdown-and-restart:
+    - release-github-com-looprig-carbon
+  platform-posture:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Operate Carbon in a working environment

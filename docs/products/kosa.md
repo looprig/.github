@@ -11,6 +11,24 @@ proofs:
     - module-kosa
   source-and-tests:
     - module-kosa
+  the-product-in-one-view:
+    - module-kosa
+  create-a-workspace:
+    - module-kosa
+  edit-validate-and-commit:
+    - module-kosa
+  index-consumers-and-revision-truth:
+    - module-kosa
+  configure-optional-inference:
+    - module-kosa
+  serve-the-local-api:
+    - module-kosa
+  use-the-read-only-mcp-bridge:
+    - module-kosa
+  when-to-choose-kosa:
+    - module-kosa
+  evidence:
+    - module-kosa
 ---
 
 # Kosa, a local knowledge workspace product

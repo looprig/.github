@@ -11,6 +11,16 @@ proofs:
     - release-github-com-looprig-carbon
   persistence:
     - release-github-com-looprig-carbon
+  workspace-identity:
+    - release-github-com-looprig-carbon
+  current-checkout-versus-resources:
+    - release-github-com-looprig-carbon
+  snapshots:
+    - release-github-com-looprig-carbon
+  operator-checklist:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon workspaces and checkout ownership

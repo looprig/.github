@@ -11,6 +11,14 @@ proofs:
     - release-github-com-looprig-carbon
   composition:
     - release-github-com-looprig-carbon
+  what-a-carbon-session-owns:
+    - release-github-com-looprig-carbon
+  a-safe-first-path:
+    - release-github-com-looprig-carbon
+  product-boundary:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon, the Looprig harness product

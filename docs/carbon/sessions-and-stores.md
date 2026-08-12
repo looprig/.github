@@ -11,6 +11,16 @@ proofs:
     - release-github-com-looprig-carbon
   restore:
     - release-github-com-looprig-carbon
+  list-without-replaying:
+    - release-github-com-looprig-carbon
+  resume-deliberately:
+    - release-github-com-looprig-carbon
+  durable-scope:
+    - release-github-com-looprig-carbon
+  store-maintenance:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon sessions, listing, restore, and stores

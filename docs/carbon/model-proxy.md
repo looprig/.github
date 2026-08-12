@@ -11,6 +11,14 @@ proofs:
     - release-github-com-looprig-carbon
   gateway:
     - release-github-com-looprig-carbon
+  what-crosses-the-boundary:
+    - release-github-com-looprig-carbon
+  what-the-proxy-does-not-do:
+    - release-github-com-looprig-carbon
+  debugging-the-proxy:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon's model proxy boundary

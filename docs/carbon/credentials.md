@@ -11,6 +11,16 @@ proofs:
     - release-github-com-looprig-carbon
   lifecycle:
     - release-github-com-looprig-carbon
+  list-what-is-configured:
+    - release-github-com-looprig-carbon
+  login-posture:
+    - release-github-com-looprig-carbon
+  logout-is-two-local-operations:
+    - release-github-com-looprig-carbon
+  credentials-and-sessions:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon credentials and credential references

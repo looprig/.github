@@ -11,6 +11,14 @@ proofs:
     - release-github-com-looprig-carbon
   configuration:
     - release-github-com-looprig-carbon
+  file-boundaries:
+    - release-github-com-looprig-carbon
+  normalization-and-identity:
+    - release-github-com-looprig-carbon
+  client-construction:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon configuration architecture

@@ -11,6 +11,14 @@ proofs:
     - release-github-com-looprig-carbon
   source:
     - release-github-com-looprig-carbon
+  process-root:
+    - release-github-com-looprig-carbon
+  composition-layers:
+    - release-github-com-looprig-carbon
+  reusable-components-versus-carbon:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon architecture overview

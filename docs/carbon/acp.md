@@ -11,6 +11,16 @@ proofs:
     - release-github-com-looprig-carbon
   harnesses:
     - release-github-com-looprig-carbon
+  choose-a-source:
+    - release-github-com-looprig-carbon
+  launchers:
+    - release-github-com-looprig-carbon
+  access-posture-inherited-by-children:
+    - release-github-com-looprig-carbon
+  collaboration-mcp-service:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Use ACP harnesses from Carbon

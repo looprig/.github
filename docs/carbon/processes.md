@@ -11,6 +11,14 @@ proofs:
     - release-github-com-looprig-carbon
   process-tests:
     - release-github-com-looprig-carbon
+  start-and-follow-a-process:
+    - release-github-com-looprig-carbon
+  pty-and-deadlines:
+    - release-github-com-looprig-carbon
+  access-mapping:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon supervised processes

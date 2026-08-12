@@ -11,6 +11,14 @@ proofs:
     - release-github-com-looprig-carbon
   access-tests:
     - release-github-com-looprig-carbon
+  what-the-table-means:
+    - release-github-com-looprig-carbon
+  approval-and-persisted-rules:
+    - release-github-com-looprig-carbon
+  proxy-and-sandbox-routes:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon access profiles and sandbox boundaries

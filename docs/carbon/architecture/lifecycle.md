@@ -11,6 +11,16 @@ proofs:
     - release-github-com-looprig-carbon
   lifecycle:
     - release-github-com-looprig-carbon
+  open:
+    - release-github-com-looprig-carbon
+  work:
+    - release-github-com-looprig-carbon
+  close:
+    - release-github-com-looprig-carbon
+  cancellation-and-failure:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon runtime lifecycle and shutdown

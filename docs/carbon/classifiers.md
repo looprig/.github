@@ -11,6 +11,14 @@ proofs:
     - release-github-com-looprig-carbon
   review-tests:
     - release-github-com-looprig-carbon
+  enablement-rules:
+    - release-github-com-looprig-carbon
+  what-a-review-means:
+    - release-github-com-looprig-carbon
+  relationship-to-command-families:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Permission classifiers and review in Carbon

@@ -11,6 +11,14 @@ proofs:
     - release-github-com-looprig-carbon
   runtime:
     - release-github-com-looprig-carbon
+  runtime-controls:
+    - release-github-com-looprig-carbon
+  sessions-and-clear:
+    - release-github-com-looprig-carbon
+  quit-and-signal-handling:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Use Carbon's terminal UI

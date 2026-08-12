@@ -11,6 +11,18 @@ proofs:
     - release-github-com-looprig-carbon
   production-models:
     - release-github-com-looprig-carbon
+  primer-candidates:
+    - release-github-com-looprig-carbon
+  effort-and-mode:
+    - release-github-com-looprig-carbon
+  delegate-routes:
+    - release-github-com-looprig-carbon
+  permission-review-route:
+    - release-github-com-looprig-carbon
+  configuration-changes-and-restore:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon model routing and runtime selection

@@ -12,6 +12,12 @@ proofs:
   client-boundary:
     - source-client-sdk-core-package
     - source-client-sdk-svelte-package
+  keep-the-authority-boundary-visible:
+    - release-github-com-looprig-carbon
+  product-status:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon and browser clients

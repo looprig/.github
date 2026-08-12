@@ -11,6 +11,20 @@ proofs:
     - release-github-com-looprig-carbon
   tests:
     - release-github-com-looprig-carbon
+  carbon-says-there-is-no-model:
+    - release-github-com-looprig-carbon
+  restore-is-rejected:
+    - release-github-com-looprig-carbon
+  mcp-does-not-appear:
+    - release-github-com-looprig-carbon
+  acp-does-not-launch:
+    - release-github-com-looprig-carbon
+  a-command-is-denied-or-a-sandbox-is-unavailable:
+    - release-github-com-looprig-carbon
+  a-process-is-still-running:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Troubleshoot Carbon without weakening the boundary

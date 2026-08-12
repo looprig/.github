@@ -11,6 +11,14 @@ proofs:
     - release-github-com-looprig-carbon
   cli:
     - release-github-com-looprig-carbon
+  first-run:
+    - release-github-com-looprig-carbon
+  home-and-data-choices:
+    - release-github-com-looprig-carbon
+  access-profile-warning:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Install and start Carbon

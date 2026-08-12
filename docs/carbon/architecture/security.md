@@ -11,6 +11,20 @@ proofs:
     - release-github-com-looprig-carbon
   security-tests:
     - release-github-com-looprig-carbon
+  access-ceiling:
+    - release-github-com-looprig-carbon
+  credentials:
+    - release-github-com-looprig-carbon
+  classifier-review:
+    - release-github-com-looprig-carbon
+  mcp-and-acp:
+    - release-github-com-looprig-carbon
+  persistence-and-restore:
+    - release-github-com-looprig-carbon
+  platform-qualification:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Carbon security and evidence boundaries

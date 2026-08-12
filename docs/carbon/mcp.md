@@ -11,6 +11,16 @@ proofs:
     - release-github-com-looprig-carbon
   decoder-and-tests:
     - release-github-com-looprig-carbon
+  start-and-adopt-tools:
+    - release-github-com-looprig-carbon
+  elicitation-and-headless-behavior:
+    - release-github-com-looprig-carbon
+  sampling-and-reconfiguration-posture:
+    - release-github-com-looprig-carbon
+  shutdown:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Connect MCP tools to Carbon

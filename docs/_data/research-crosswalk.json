@@ -1,4 +1,133 @@
 {
   "schemaVersion": 1,
-  "entries": []
+  "retrievedOn": "2026-08-11",
+  "purpose": "Record documentation patterns reviewed while designing the Looprig developer site. These sources guide information architecture only. Technical claims about Looprig remain pinned to repository source, tests, module files, and release records in evidence.json.",
+  "entries": [
+    {
+      "id": "strands-agents",
+      "name": "Strands Agents",
+      "officialSources": [
+        "https://strandsagents.com/docs/user-guide/quickstart/overview/",
+        "https://strandsagents.com/docs/examples/"
+      ],
+      "patternsReviewed": [
+        "Begin with a short, runnable quickstart and then offer examples as a browsable catalogue.",
+        "Separate build topics such as tools, streaming, multi-agent composition, and deployment from conceptual topics such as state, storage, sessions, and interrupts.",
+        "Keep provider and language support visible without making the first example depend on a provider account."
+      ],
+      "appliedInLooprig": [
+        "start/first-run.md",
+        "build/01-model-access.md",
+        "build/03-credentials.md",
+        "build/14-delegation.md",
+        "examples/index.md"
+      ]
+    },
+    {
+      "id": "langgraph",
+      "name": "LangGraph and LangChain documentation",
+      "officialSources": [
+        "https://docs.langchain.com/oss/python/langgraph/persistence",
+        "https://docs.langchain.com/oss/python/langgraph/interrupts",
+        "https://docs.langchain.com/oss/python/langgraph/use-subgraphs"
+      ],
+      "patternsReviewed": [
+        "Explain persistence as a named runtime concern with threads, checkpoints, and recovery behavior rather than hiding it inside a quickstart.",
+        "Give interrupts and resume their own lifecycle explanation, including what state is durable and what must be replay-safe.",
+        "Describe subgraphs as an explicit composition boundary and show how state crosses that boundary."
+      ],
+      "appliedInLooprig": [
+        "concepts/state-and-storage.md",
+        "concepts/flows-and-evaluation.md",
+        "build/06-flows.md",
+        "build/20-flow.md",
+        "build/21-workflows.md",
+        "reference/packages/flow/pkg/flow.md"
+      ]
+    },
+    {
+      "id": "vercel-ai-sdk",
+      "name": "Vercel AI SDK",
+      "officialSources": [
+        "https://ai-sdk.dev/docs/ai-sdk-core",
+        "https://ai-sdk.dev/docs/reference/ai-sdk-core/agent",
+        "https://ai-sdk.dev/docs/reference/ai-sdk-ui"
+      ],
+      "patternsReviewed": [
+        "Keep the core agent and model contracts independent from UI bindings.",
+        "Treat framework UI support as adapters over a stream and message protocol, with a framework-neutral layer available for custom clients.",
+        "Organize the reference around stable interfaces and examples that can be copied into an application."
+      ],
+      "appliedInLooprig": [
+        "concepts/composition.md",
+        "build/23-client.md",
+        "modules/client.md",
+        "reference/packages/client/sdk/core.md",
+        "reference/packages/client/sdk/svelte.md"
+      ]
+    },
+    {
+      "id": "google-adk",
+      "name": "Google Agent Development Kit",
+      "officialSources": [
+        "https://adk.dev/",
+        "https://adk.dev/sessions/"
+      ],
+      "patternsReviewed": [
+        "Introduce the agent system through a small set of named concepts, then connect sessions, state, events, tools, and memory to those concepts.",
+        "Show the storage choice at the point where session lifetime and deployment scope are explained.",
+        "Make language and runtime availability discoverable from the concept and API pages."
+      ],
+      "appliedInLooprig": [
+        "concepts/state-and-storage.md",
+        "build/07-inference-gateway.md",
+        "build/10-workspaces.md",
+        "build/21-workflows.md",
+        "modules/harness.md"
+      ]
+    },
+    {
+      "id": "claude-agent-sdk",
+      "name": "Claude Agent SDK",
+      "officialSources": [
+        "https://code.claude.com/docs/en/agent-sdk/overview",
+        "https://code.claude.com/docs/en/agent-sdk/claude-code-features",
+        "https://code.claude.com/docs/en/agent-sdk/hosting"
+      ],
+      "patternsReviewed": [
+        "Lead with the smallest working agent and make the transition from one-shot query to a reusable session explicit.",
+        "Document tools, skills, hooks, subagents, and MCP as separate extension surfaces with distinct permission and lifecycle behavior.",
+        "Treat hosting, sandboxing, credentials, and process lifetime as part of the developer documentation rather than deployment afterthoughts."
+      ],
+      "appliedInLooprig": [
+        "build/11-sandbox.md",
+        "build/14-delegation.md",
+        "build/15-acp.md",
+        "build/17-mcp-transport.md",
+        "carbon/access-and-sandbox.md",
+        "carbon/processes.md"
+      ]
+    },
+    {
+      "id": "opencode",
+      "name": "OpenCode",
+      "officialSources": [
+        "https://opencode.ai/docs/agents",
+        "https://dev.opencode.ai/docs/server/"
+      ],
+      "patternsReviewed": [
+        "Distinguish primary agents from subagents and show how a configured permission set shapes each one.",
+        "Document the server as a client boundary with a concrete HTTP contract, authentication, event stream, and browser or TUI consumer.",
+        "Offer configuration examples beside the conceptual explanation so an operator can trace a setting to runtime behavior."
+      ],
+      "appliedInLooprig": [
+        "build/14-delegation.md",
+        "build/22-serving.md",
+        "build/23-client.md",
+        "build/24-tui.md",
+        "carbon/browser-clients.md",
+        "carbon/tui.md"
+      ]
+    }
+  ]
 }

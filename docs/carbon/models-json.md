@@ -11,6 +11,20 @@ proofs:
     - release-github-com-looprig-carbon
   decoder-and-tests:
     - release-github-com-looprig-carbon
+  local-and-provider-models:
+    - release-github-com-looprig-carbon
+  required-shape:
+    - release-github-com-looprig-carbon
+  version-2-and-version-3-authentication:
+    - release-github-com-looprig-carbon
+  uses-primers-and-delegates:
+    - release-github-com-looprig-carbon
+  native-acp-and-review-extensions:
+    - release-github-com-looprig-carbon
+  migration:
+    - release-github-com-looprig-carbon
+  evidence:
+    - release-github-com-looprig-carbon
 ---
 
 # Configure and validate `models.json`
