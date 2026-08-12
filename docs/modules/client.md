@@ -40,4 +40,4 @@ The optional source-workspace adapter exports `SessionListStore`, `SessionStatus
 
 ## Cleanup proof {#cleanup-proof}
 
-The [stage 20 web example](../examples/index.md#stage-20-web-client) typechecks the framework-neutral client, runs Svelte checks, and exercises deterministic cleanup. Its `SessionClient` requires an injected transport and matching `LiveSourceFactory` together; disconnect aborts the controller, invokes the active iterator's `return()`, and returns a disposer. Vanilla, Svelte, React, Vue, and Solid can all consume the core view/actions; only vanilla and the optional Svelte source adapter are reviewed here.
+The reviewed web fixture typechecks the framework-neutral client, runs Svelte checks, and exercises deterministic cleanup. Its `SessionClient` requires an injected transport and matching `LiveSourceFactory` together; disconnect aborts the controller, invokes the active iterator's `return()`, and returns a disposer. Vanilla, Svelte, React, Vue, and Solid can all consume the core view/actions; only vanilla and the optional Svelte source adapter are reviewed here.

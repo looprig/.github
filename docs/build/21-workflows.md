@@ -39,4 +39,4 @@ The lifecycle is deliberately session-owned. `ErrSupervisorActive`, `ErrSupervis
 
 ## Source-workspace proof {#source-workspace-proof}
 
-The [stage 18 workflow fixture](../examples/index.md#stage-18-workflows) is the reviewed proof. It validates typed input, interrupts a Flow run, recovers the checkpoint, resumes with typed input, cancels another run, and asserts append-only history. Its expected output is `started: Interrupted`, `recovered: Interrupted`, `resumed: Completed count=3`, `cancelled: Cancelled`, and `history: append-only`. The fixture remains source-workspace until a module release is recorded.
+The reviewed workflow fixture validates typed input, interrupts a Flow run, recovers the checkpoint, resumes with typed input, cancels another run, and asserts append-only history. Its expected output is `started: Interrupted`, `recovered: Interrupted`, `resumed: Completed count=3`, `cancelled: Cancelled`, and `history: append-only`. The fixture remains source-workspace until a module release is recorded.

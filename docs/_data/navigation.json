@@ -3372,9 +3372,19 @@
       "order": 408
     },
     {
-      "path": "examples/index.md",
+      "path": "products/index.md",
       "audience": "human",
-      "order": 400
+      "order": 1
+    },
+    {
+      "path": "products/carbon.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "products/pluto.md",
+      "audience": "human",
+      "order": 3
     }
   ],
   "legacyPages": [

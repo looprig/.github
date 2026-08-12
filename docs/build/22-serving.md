@@ -39,4 +39,4 @@ Malformed IDs and paging are 400 responses. Missing sessions are 404. Invalid JS
 
 ## Runnable proof {#runnable-proof}
 
-The [stage 19 serving example](../examples/index.md#stage-19-http-serve) prints the capabilities document, creates one session, and exercises a protected control route. Its source and route tests are pinned to the [harness release commit](https://github.com/looprig/harness/tree/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve).
+The reviewed serving fixture prints the capabilities document, creates one session, and exercises a protected control route. Its source and route tests are pinned to the [harness release commit](https://github.com/looprig/harness/tree/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve).

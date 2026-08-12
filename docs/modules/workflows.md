@@ -44,4 +44,4 @@ Typed errors include `ErrActivityValidation`, `ErrReconciliation`, `ErrUnknownDe
 
 ## Source status {#source-status}
 
-The [stage 18 fixture](../examples/index.md#stage-18-workflows) is the reviewed executable proof. It prints interrupted, recovered, resumed, cancelled, and append-only-history results. Until a release record exists, keep imports and publication labels source-workspace.
+The reviewed workflow fixture prints interrupted, recovered, resumed, cancelled, and append-only-history results. Until a release record exists, keep imports and publication labels source-workspace.
