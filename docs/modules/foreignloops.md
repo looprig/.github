@@ -9,6 +9,7 @@ publication: released
 examples:
   - stage-15-acp-foreign
 proofs:
+  repository: release-github-com-looprig-foreignloops
   boundary:
     - release-github-com-looprig-foreignloops
   composition:
@@ -24,6 +25,10 @@ proofs:
 ---
 
 # Foreign agent runtimes
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/foreignloops` repository](https://github.com/looprig/foreignloops).
 
 Foreignloops `v0.2.3` adapts external agent processes without making provider wire formats part of Harness. It offers neutral driver contracts, a Harness backend, an ACP driver, and explicit Claude and Codex CLI drivers.
 

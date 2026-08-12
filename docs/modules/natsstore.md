@@ -7,6 +7,7 @@ section: modules
 order: 6
 publication: released
 proofs:
+  repository: release-github-com-looprig-natsstore
   embedded-engine:
     - release-github-com-looprig-natsstore
   remote-mode:
@@ -18,6 +19,10 @@ proofs:
 ---
 
 # JetStream-backed storage
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/natsstore` repository](https://github.com/looprig/natsstore).
 
 Natsstore `v0.3.1` implements Storage over NATS JetStream. Install `github.com/looprig/natsstore@v0.3.1` with `github.com/looprig/storage@v0.3.1`.
 

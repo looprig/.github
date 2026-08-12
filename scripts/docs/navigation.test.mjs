@@ -75,26 +75,6 @@ const evals = [
   "integration/pluto",
 ].map((page) => `guides/evals/${page}.md`);
 
-const protocols = [
-  "index",
-  "acp/index",
-  "acp/serve",
-  "acp/client",
-  "acp/host-agent",
-  "acp/stdio",
-  "acp/sessions",
-  "acp/auth-and-config",
-  "acp/gateway-launch",
-  "mcp/index",
-  "mcp/serve",
-  "mcp/client",
-  "mcp/transports",
-  "mcp/auth",
-  "mcp/harness-adoption",
-  "mcp/sampling-and-reconfiguration",
-  "mcp/acp-passthrough",
-].map((page) => `guides/protocols/${page}.md`);
-
 const tui = [
   "index",
   "getting-started/index",
@@ -202,16 +182,6 @@ test("navigation includes the evals hierarchy and removes the legacy page", () =
     assert.equal(fs.existsSync(path.join(root, "docs", pagePath)), true, `missing ${pagePath}`);
   }
   assert.equal(manifest.pages.some(({ path: pagePath }) => pagePath === "guides/evals.md"), false);
-});
-
-test("navigation includes the protocols hierarchy and removes the legacy page", () => {
-  const manifest = navigation();
-
-  assert.deepEqual(pathsUnder("guides/protocols/"), protocols);
-  for (const pagePath of protocols) {
-    assert.equal(fs.existsSync(path.join(root, "docs", pagePath)), true, `missing ${pagePath}`);
-  }
-  assert.equal(manifest.pages.some(({ path: pagePath }) => pagePath === "guides/protocols.md"), false);
 });
 
 test("navigation includes the TUI hierarchy and removes the legacy page", () => {

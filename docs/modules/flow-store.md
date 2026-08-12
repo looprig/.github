@@ -7,6 +7,7 @@ section: modules
 order: 10
 publication: source-workspace
 proofs:
+  repository: module-flow-store
   boundary:
     - module-flow-store
   adapter:
@@ -18,6 +19,10 @@ proofs:
 ---
 
 # Flow checkpoint storage in the source workspace
+
+## Repository
+
+The nested `flow/store` module is developed separately inside the Flow workspace. Its surrounding project is available in the [Flow repository](https://github.com/looprig/flow).
 
 `github.com/looprig/flow/store` is a distinct nested Go module, not a package released by `github.com/looprig/flow`. The current module file is source-workspace code with local replacements for Flow, Fsstore, and Storage. It has no immutable tag and no supported public `go get` version.
 

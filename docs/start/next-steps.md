@@ -30,7 +30,7 @@ The Web UI client is framework-neutral. The optional Svelte adapter does not req
 
 ## Expose a protocol
 
-Use [ACP Serve and ACP Client](/docs/guides/protocols/acp/) when an editor or another ACP host should create and drive agent sessions. Use [MCP Serve and MCP Client](/docs/guides/protocols/mcp/) when the coding assistant publishes tools or adopts tools from another process.
+Use the [ACP module](/docs/modules/acp/) when an editor or another ACP host should create and drive agent sessions. Use the [MCP module](/docs/modules/mcp/) when the coding assistant publishes tools or adopts tools from another process.
 
 ```text
 Session runtime → ACP Serve → editor or external ACP client

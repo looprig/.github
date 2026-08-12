@@ -9,6 +9,7 @@ publication: released
 examples:
   - stage-21-tui
 proofs:
+  repository: release-github-com-looprig-tui
   module-and-screen: release-github-com-looprig-tui
   session-adapter: release-github-com-looprig-tui
   runtime-and-restore: release-github-com-looprig-tui
@@ -16,6 +17,10 @@ proofs:
 ---
 
 # TUI module
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/tui` repository](https://github.com/looprig/tui).
 
 The released module is [github.com/looprig/tui v0.15.1](https://github.com/looprig/tui/tree/6b362dda04b086c8a94146320e9faad38dac9b6c). The package family separates presentation from session ownership: TUI folds public events and renders them, while the session remains the owner of event history, live subscriptions, and shutdown.
 

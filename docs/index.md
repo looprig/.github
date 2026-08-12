@@ -25,7 +25,7 @@ Looprig is a collection of composable Go modules for building model-powered appl
 | Add file, search, process, interaction, and task capabilities | [Tools](/docs/guides/tools/) |
 | Confine child processes and verify native guarantees | [Sandboxing](/docs/guides/sandboxing/) |
 | Add durable graphs, interruption, recovery, and workflow tools | [Workflows](/docs/guides/workflows/) |
-| Connect terminal, browser, ACP, or MCP consumers | [TUI](/docs/guides/tui/), [Web UI](/docs/guides/web-ui/), and [Protocols](/docs/guides/protocols/) |
+| Connect terminal or browser consumers | [TUI](/docs/guides/tui/) and [Web UI](/docs/guides/web-ui/) |
 
 ## Start with an outcome
 

@@ -7,6 +7,7 @@ section: modules
 order: 7
 publication: released
 proofs:
+  repository: release-github-com-looprig-rclonestore
   construction:
     - release-github-com-looprig-rclonestore
   blob-contract:
@@ -16,6 +17,10 @@ proofs:
 ---
 
 # Remote blobs through rclone
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/rclonestore` repository](https://github.com/looprig/rclonestore).
 
 Rclonestore `v0.3.2` adapts Storage Blobs to an installed `rclone` binary. Install `github.com/looprig/rclonestore@v0.3.2` with `github.com/looprig/storage@v0.3.1`.
 

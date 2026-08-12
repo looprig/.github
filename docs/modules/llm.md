@@ -7,6 +7,7 @@ section: modules
 order: 12
 publication: released
 proofs:
+  repository: release-github-com-looprig-llm
   model-policy:
     - release-github-com-looprig-llm
   provider-families:
@@ -18,6 +19,10 @@ proofs:
 ---
 
 # Model providers and credential-backed clients
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/llm` repository](https://github.com/looprig/llm).
 
 LLM `v0.13.3` supplies provider labels, provider implementations, authentication policy, exact counters, and automatic client selection on top of Inference. Install `github.com/looprig/llm@v0.13.3` together with the immutable Core, Inference, Credentials, and Secrets versions named by its module file.
 

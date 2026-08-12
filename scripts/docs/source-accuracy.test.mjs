@@ -27,12 +27,3 @@ test("Build 08 describes counters as preflight ContextCounters", () => {
   assert.match(content, /github\.com\/looprig\/llm\/blob\/v0\.13\.3\/auto\/counter\.go/);
   assert.doesNotMatch(content, /counter (?:wraps|is a wrapper)|usage-accounting wrapper/i);
 });
-
-test("Carbon install documents flag help as an invalid invocation", () => {
-  const content = page("carbon/install.md");
-
-  assert.doesNotMatch(content, /carbon\s+--help/);
-  assert.match(content, /flag\.ErrHelp/);
-  assert.match(content, /invalid flags/);
-  assert.match(content, /github\.com\/looprig\/carbon\/blob\/cac0608ae0bd873e35ee793bec5e4a56b02273bd\/cmd\/carbon\/main\.go/);
-});

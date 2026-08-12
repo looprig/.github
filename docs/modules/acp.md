@@ -9,6 +9,7 @@ publication: released
 examples:
   - stage-15-acp-foreign
 proofs:
+  repository: release-github-com-looprig-acp
   boundary:
     - release-github-com-looprig-acp
   composition:
@@ -23,6 +24,10 @@ proofs:
 ---
 
 # Agent Client Protocol bridge
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/acp` repository](https://github.com/looprig/acp).
 
 ACP `v0.2.2` is a reusable bridge for the Agent Client Protocol. Its protocol and stdio packages are pure wire and process layers; client and launch drive a child; agent exposes a host. Install the immutable release `github.com/looprig/acp@v0.2.2` when a product needs that boundary.
 

@@ -11,6 +11,7 @@ examples:
   - stage-02-streaming
   - stage-22-model-gateway
 proofs:
+  repository: release-github-com-looprig-inference
   request-and-response:
     - release-github-com-looprig-inference
   streaming:
@@ -22,6 +23,10 @@ proofs:
 ---
 
 # Provider-neutral inference
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/inference` repository](https://github.com/looprig/inference).
 
 Inference `v0.9.2` is the transport-neutral layer between Core content and provider clients. Install `github.com/looprig/inference@v0.9.2` with the released Core module. It does not store API keys and it does not decide which provider a model identity is allowed to use.
 

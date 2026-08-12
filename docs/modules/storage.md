@@ -9,6 +9,7 @@ publication: released
 examples:
   - stage-10-workspace
 proofs:
+  repository: release-github-com-looprig-storage
   primitives:
     - release-github-com-looprig-storage
   composition:
@@ -20,6 +21,10 @@ proofs:
 ---
 
 # Neutral storage primitives
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/storage` repository](https://github.com/looprig/storage).
 
 Storage `v0.3.1` defines four deliberately separate interfaces. Install `github.com/looprig/storage@v0.3.1`; choose a backend such as `memstore`, `fsstore`, `natsstore`, or `rclonestore` at the composition root.
 

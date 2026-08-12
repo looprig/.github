@@ -7,6 +7,7 @@ section: modules
 order: 2
 publication: released
 proofs:
+  repository: release-github-com-looprig-secrets
   value-safety:
     - release-github-com-looprig-secrets
   references-and-pages:
@@ -18,6 +19,10 @@ proofs:
 ---
 
 # Secrets and opaque references
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/secrets` repository](https://github.com/looprig/secrets).
 
 Secrets `v0.1.0` defines the value, reference, version, and store contracts used by credential implementations. Install `github.com/looprig/secrets@v0.1.0` when consuming the released API. A secret value is not a configuration string with convenient formatting; it is an opaque value that a caller explicitly unwraps only at the point of use.
 

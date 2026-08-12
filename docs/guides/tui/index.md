@@ -51,7 +51,7 @@ User input travels in the opposite direction. The screen calls `Agent.Submit` or
 
 ## Related Looprig contracts
 
-The screen is a consumer of [Harness sessions and events](/docs/guides/harness/), not a replacement for them. Use [Tools](/docs/guides/tools/) to understand preparation, permission requirements, and tool results that become TUI gate cards and tool summaries. Use the [Protocols](/docs/guides/protocols/) guides when the agent behind the TUI speaks ACP or MCP. The TUI only renders the resulting session contract.
+The screen is a consumer of [Harness sessions and events](/docs/guides/harness/), not a replacement for them. Use [Tools](/docs/guides/tools/) to understand preparation, permission requirements, and tool results that become TUI gate cards and tool summaries. The TUI only renders the resulting session contract.
 
 There are no separate public TUI pages for keymaps or layout engines. Those details belong to the internal presentation implementation and Bubble Tea integration. The public surfaces are the `Screen`, `Agent`, components, styles, and adapters documented here.
 

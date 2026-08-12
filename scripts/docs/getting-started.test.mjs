@@ -79,7 +79,8 @@ test("Getting Started uses consumer commands and canonical deep-guide links", ()
     "/docs/guides/sandboxing/",
     "/docs/guides/tui/",
     "/docs/guides/web-ui/",
-    "/docs/guides/protocols/",
+    "/docs/modules/acp/",
+    "/docs/modules/mcp/",
     "/docs/guides/workflows/",
     "/docs/guides/evals/",
   ]) assert.match(corpus, new RegExp(destination.replaceAll("/", "\\/")), `tutorial omits ${destination}`);

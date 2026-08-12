@@ -9,6 +9,7 @@ publication: released
 examples:
   - stage-11-sandbox-process
 proofs:
+  repository: release-github-com-looprig-sandbox
   profile:
     - release-github-com-looprig-sandbox
   execution:
@@ -20,6 +21,10 @@ proofs:
 ---
 
 # OS-level command confinement
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/sandbox` repository](https://github.com/looprig/sandbox).
 
 Sandbox `v0.8.1` enforces access after a caller has chosen authority. Install `github.com/looprig/sandbox@v0.8.1`; it does not import a permission gate or read a policy file.
 

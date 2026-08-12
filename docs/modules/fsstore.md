@@ -10,6 +10,7 @@ examples:
   - stage-08-session-store
   - stage-09-restore
 proofs:
+  repository: release-github-com-looprig-fsstore
   opening:
     - release-github-com-looprig-fsstore
   recovery:
@@ -21,6 +22,10 @@ proofs:
 ---
 
 # Durable local storage with fsstore
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/fsstore` repository](https://github.com/looprig/fsstore).
 
 Fsstore `v0.3.2` is the local filesystem backend for Storage. Install `github.com/looprig/fsstore@v0.3.2` with `github.com/looprig/storage@v0.3.1`.
 

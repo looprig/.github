@@ -10,6 +10,7 @@ examples:
   - stage-01-inference
   - stage-02-streaming
 proofs:
+  repository: release-github-com-looprig-core
   boundary:
     - release-github-com-looprig-core
   composition:
@@ -31,6 +32,10 @@ proofs:
 ---
 
 # Messages, content blocks, and shared values
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/core` repository](https://github.com/looprig/core).
 
 Core `v0.5.1` defines the provider-neutral values passed between applications, model clients, Harness, stores, and UIs. Most consumers begin with `github.com/looprig/core/content`.
 

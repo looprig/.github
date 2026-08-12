@@ -12,6 +12,13 @@ examples:
   - stage-17-flow
   - stage-23-eval
 proofs:
+  start-with-a-small-task: [release-github-com-looprig-core, release-github-com-looprig-inference]
+  the-hello-agent: [release-github-com-looprig-core, release-github-com-looprig-inference]
+  the-full-session-assistant: [release-github-com-looprig-harness, release-github-com-looprig-inference, release-github-com-looprig-storage]
+  add-a-boundary-when-the-task-needs-it: [release-github-com-looprig-sandbox, release-github-com-looprig-flow]
+  the-safe-shell-boundary: release-github-com-looprig-sandbox
+  the-durable-approval-workflow: release-github-com-looprig-flow
+  before-you-ship: [release-github-com-looprig-eval, release-github-com-looprig-pluto]
   hello-agent: [release-github-com-looprig-core, release-github-com-looprig-inference]
   session-assistant: [release-github-com-looprig-harness, release-github-com-looprig-inference, release-github-com-looprig-storage]
   safe-shell: release-github-com-looprig-sandbox

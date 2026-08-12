@@ -142,7 +142,6 @@ test("the TUI overview names its public boundary and canonical neighbors", () =>
   for (const destination of [
     "/docs/guides/harness/",
     "/docs/guides/tools/",
-    "/docs/guides/protocols/",
   ]) {
     assert.match(index, new RegExp(destination.replaceAll("/", "\\/")), `overview omits ${destination}`);
   }

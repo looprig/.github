@@ -7,6 +7,7 @@ section: modules
 order: 3
 publication: released
 proofs:
+  repository: release-github-com-looprig-credentials
   catalog-and-source:
     - release-github-com-looprig-credentials
   dependency-injection:
@@ -18,6 +19,10 @@ proofs:
 ---
 
 # Credential catalogs, sources, and refresh
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/credentials` repository](https://github.com/looprig/credentials).
 
 Credentials `v0.1.0` turns a catalog identity into a usable, short-lived source without placing secret bytes in the catalog. Install `github.com/looprig/credentials@v0.1.0`. The module depends on the released Secrets contract and keeps provider construction explicit.
 

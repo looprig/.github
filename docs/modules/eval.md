@@ -9,6 +9,7 @@ publication: released
 examples:
   - stage-23-eval
 proofs:
+  repository: release-github-com-looprig-eval
   domain:
     - release-github-com-looprig-eval
   evaluators-and-targets:
@@ -20,6 +21,10 @@ proofs:
 ---
 
 # Evaluation domain, targets, and redacted reports
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/eval` repository](https://github.com/looprig/eval).
 
 Eval `v0.1.2` defines scenario, observation, evaluator, assessment, evidence, suite, and report contracts. Install `github.com/looprig/eval@v0.1.2` with its released Core and Inference dependencies.
 

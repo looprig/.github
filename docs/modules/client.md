@@ -9,6 +9,7 @@ publication: source-workspace
 examples:
   - stage-20-web-client
 proofs:
+  repository: release-github-com-looprig-client
   go-handler: release-github-com-looprig-client
   core-sdk: [source-client-sdk-core-package, central-client-stage20-session-client-source]
   svelte-sdk: [source-client-sdk-svelte-package, central-client-stage20-svelte-page-source]
@@ -16,6 +17,10 @@ proofs:
 ---
 
 # Client module
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/client` repository](https://github.com/looprig/client).
 
 The Go module is released as [github.com/looprig/client v0.1.0](https://github.com/looprig/client/tree/9941c8da1308d0a01562f17bdbbec963ce2a26ca). The TypeScript packages are private source-workspace packages: `sdk/core` is `@looprig/client` and `sdk/svelte` is `@looprig/svelte`, both at [the pinned source commit](https://github.com/looprig/client/tree/9941c8da1308d0a01562f17bdbbec963ce2a26ca/sdk). Do not turn their `0.0.0` private package files into release-install instructions.
 

@@ -9,6 +9,7 @@ publication: source-workspace
 examples:
   - stage-18-workflows
 proofs:
+  repository: module-workflows
   module-and-definition: [module-workflows, central-workflows-typed-definition-source]
   persistence-and-tools: [central-workflows-artifacts-contract-test, central-workflows-catalog-source]
   lifecycle-and-recovery: [central-workflows-recovery-test, central-workflows-stage18-output-test]
@@ -16,6 +17,10 @@ proofs:
 ---
 
 # Workflows module
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/workflows` repository](https://github.com/looprig/workflows).
 
 Workflows is a source-workspace Go module. Its module file is pinned at [go.mod](https://github.com/looprig/workflows/blob/89059af7dded45b8f57678e17c66e528549ce78a/go.mod), and the reviewed implementation is at [commit f241ecb](https://github.com/looprig/workflows/tree/f241ecbd6299a00d52fc6755b5be946a41b3a73f). It is not a released version, so a consumer should use the source workspace and stage 18 fixture rather than a versioned `go get` instruction.
 

@@ -9,6 +9,7 @@ publication: released
 examples:
   - stage-16-mcp-adoption
 proofs:
+  repository: release-github-com-looprig-mcp
   boundary:
     - release-github-com-looprig-mcp
   composition:
@@ -23,6 +24,10 @@ proofs:
 ---
 
 # MCP clients, servers, transports, and Harness adoption
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/mcp` repository](https://github.com/looprig/mcp).
 
 MCP `v0.6.2` supplies typed clients and servers, auth seams, stdio, Streamable HTTP and legacy SSE transports, collaboration framing, and a Harness adapter. The module speaks MCP below the adoption boundary and exposes protocol-neutral tool definitions above it.
 

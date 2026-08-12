@@ -9,6 +9,7 @@ publication: released
 examples:
   - stage-17-flow
 proofs:
+  repository: release-github-com-looprig-flow
   graph-and-runner:
     - release-github-com-looprig-flow
   interruption:
@@ -20,6 +21,10 @@ proofs:
 ---
 
 # Compiled graphs and durable workflow runs
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/flow` repository](https://github.com/looprig/flow).
 
 Flow `v0.3.0` provides graph construction, compilation, checkpointed execution, and optional control-plane and HTTP ingress packages. Install `github.com/looprig/flow@v0.3.0` with its released Core dependency.
 

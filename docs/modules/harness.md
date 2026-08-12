@@ -14,6 +14,7 @@ examples:
   - stage-14-delegation
   - stage-19-http-serve
 proofs:
+  repository: release-github-com-looprig-harness
   before-you-begin:
     - release-github-com-looprig-harness
   how-the-pieces-fit:
@@ -33,6 +34,10 @@ proofs:
 ---
 
 # Build and run agents with Harness
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/harness` repository](https://github.com/looprig/harness).
 
 Harness is the runtime for applications that need more than a single model call. It turns an immutable loop definition into a live session with events, tools, gates, persistence, workspaces, delegation, and controlled shutdown.
 

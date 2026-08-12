@@ -9,6 +9,7 @@ publication: released
 examples:
   - stage-13-classifier
 proofs:
+  repository: release-github-com-looprig-classifiers
   boundary:
     - release-github-com-looprig-classifiers
     - release-github-com-looprig-harness
@@ -23,6 +24,10 @@ proofs:
 ---
 
 # Permission classifiers and command safety
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/classifiers` repository](https://github.com/looprig/classifiers).
 
 Classifiers `v0.1.4` supplies `pkg/commandsafety`, a Harness permission classifier for prepared command execution. Install it with its released Core, Harness, and Inference dependencies. The package is an evidence and review layer, never an authority issuer.
 

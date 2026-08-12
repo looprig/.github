@@ -49,7 +49,7 @@ The adapter does not instantiate the Rig or call restore by itself. The composit
 
 [Session Stores and Durable Replay](/docs/guides/tui/integration/session-stores/) documents the `ReplayOpener` interface, journal sequence recovery, and the difference between `New`, `NewWithReplay`, and `Restore`.
 
-For the capabilities being rendered, read [Tools](/docs/guides/tools/) and [Harness](/docs/guides/harness/). For agent transport boundaries, read [Protocols](/docs/guides/protocols/).
+For the capabilities being rendered, read [Tools](/docs/guides/tools/) and [Harness](/docs/guides/harness/).
 
 ## Source
 

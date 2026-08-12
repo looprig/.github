@@ -10,6 +10,7 @@ examples:
   - stage-03-pure-tool
   - stage-04-prepared-tool
 proofs:
+  repository: release-github-com-looprig-tools
   boundary:
     - release-github-com-looprig-tools
     - release-github-com-looprig-harness
@@ -25,6 +26,10 @@ proofs:
 ---
 
 # Standard prepared tools
+
+## Repository
+
+Source, package documentation, tests, and examples are available in the [`looprig/tools` repository](https://github.com/looprig/tools).
 
 Tools `v0.10.0` provides independent implementations for common capabilities. Install `github.com/looprig/tools@v0.10.0` and compose only the definitions a loop should see. The module implements Harness contracts; it does not own the gate policy, Sandbox backend, model, or durable session store.
 

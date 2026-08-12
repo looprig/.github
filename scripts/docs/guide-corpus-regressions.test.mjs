@@ -14,7 +14,6 @@ const guideRoots = [
   "workflows",
   "sandboxing",
   "evals",
-  "protocols",
   "tui",
   "web-ui",
 ];
@@ -45,12 +44,6 @@ const canonicalReplacements = {
   "docs/guides/sandboxing/enforcement/filesystem.md": [
     ["/docs/guides/tools/permissions/", "/docs/guides/tools/safety/permissions/"],
   ],
-  "docs/guides/protocols/acp/auth-and-config.md": [
-    ["/docs/guides/tools/permissions/", "/docs/guides/tools/safety/permissions/"],
-  ],
-  "docs/guides/protocols/acp/client.md": [
-    ["/docs/guides/tools/permissions/", "/docs/guides/tools/safety/permissions/"],
-  ],
   "docs/guides/sandboxing/index.md": [
     ["/docs/guides/tools/safety-and-gates/", "/docs/guides/tools/safety/"],
   ],
@@ -59,39 +52,6 @@ const canonicalReplacements = {
   ],
   "docs/guides/sandboxing/profiles/restriction.md": [
     ["/docs/guides/tools/safety-and-gates/", "/docs/guides/tools/safety/"],
-  ],
-  "docs/guides/protocols/acp/serve.md": [
-    ["/docs/guides/tools/safety-and-gates/", "/docs/guides/tools/safety/"],
-  ],
-  "docs/guides/protocols/mcp/acp-passthrough.md": [
-    ["/docs/guides/tools/safety-and-gates/", "/docs/guides/tools/safety/"],
-  ],
-  "docs/guides/protocols/acp/gateway-launch.md": [
-    ["/docs/guides/inference/gateways/", "/docs/reference/packages/inference/gateway/"],
-  ],
-  "docs/guides/protocols/acp/host-agent.md": [
-    ["/docs/guides/tools/registration/", "/docs/guides/tools/core-concepts/registration/"],
-  ],
-  "docs/guides/protocols/mcp/client.md": [
-    ["/docs/guides/tools/registration/", "/docs/guides/tools/core-concepts/registration/"],
-  ],
-  "docs/guides/protocols/mcp/harness-adoption.md": [
-    ["/docs/guides/tools/registration/", "/docs/guides/tools/core-concepts/registration/"],
-  ],
-  "docs/guides/protocols/mcp/index.md": [
-    ["/docs/guides/tools/registration/", "/docs/guides/tools/core-concepts/registration/"],
-  ],
-  "docs/guides/protocols/acp/index.md": [
-    ["/docs/guides/tools/concepts/", "/docs/guides/tools/core-concepts/"],
-  ],
-  "docs/guides/protocols/acp/stdio.md": [
-    ["/docs/guides/tools/concepts/", "/docs/guides/tools/core-concepts/"],
-  ],
-  "docs/guides/protocols/mcp/serve.md": [
-    ["/docs/guides/tools/concepts/", "/docs/guides/tools/core-concepts/"],
-  ],
-  "docs/guides/protocols/mcp/transports.md": [
-    ["/docs/guides/tools/concepts/", "/docs/guides/tools/core-concepts/"],
   ],
 };
 
@@ -103,13 +63,6 @@ test("selected guide cross-links use the canonical hierarchy", () => {
       assert.match(markdown, new RegExp(escapeRegex(canonical)), `${relativePath} must use ${canonical}`);
     }
   }
-});
-
-test("the ACP gateway link targets the existing inference gateway reference", () => {
-  assert.equal(fs.existsSync(path.join(root, "docs/reference/packages/inference/gateway.md")), true);
-  const markdown = read("docs/guides/protocols/acp/gateway-launch.md");
-  assert.doesNotMatch(markdown, /\/docs\/guides\/inference\/gateways\//);
-  assert.match(markdown, /\/docs\/reference\/packages\/inference\/gateway\//);
 });
 
 test("every Harness Mermaid block opts into the dark theme", () => {
