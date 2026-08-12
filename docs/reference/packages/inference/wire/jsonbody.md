@@ -22,7 +22,7 @@ proofs:
 
 # jsonbody package · wire/jsonbody
 
-Import path: `github.com/looprig/inference/wire/jsonbody`. Package jsonbody holds small stdlib helpers for JSON HTTP bodies: marshal a value into a request-body reader (with its content type) and unmarshal response bytes back into a value. It is byte-level wire framing only - it knows nothing about LLM messages, tools
+Import path: `github.com/looprig/inference/wire/jsonbody`. The source is pinned to github.com/looprig/inference@v0.9.2.
 
 ## Package role {#package-role}
 
@@ -30,24 +30,46 @@ This page indexes the exported declarations in the current source package. Infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Decode`, `Encode`, `Error`, `Unwrap`
+- `func Encode(v any) (io.Reader, string, error)`
+- `func Decode(data []byte, v any) error`
+
+### Methods {#methods}
+
+- `func (e *EncodeError) Error() string`
+- `func (e *EncodeError) Unwrap() error`
+- `func (e *DecodeError) Error() string`
+- `func (e *DecodeError) Unwrap() error`
 
 ### Types {#types}
 
-`DecodeError`, `EncodeError`
+`EncodeError`, `DecodeError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
 `ContentType`
 
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
 ## Ownership and errors {#ownership-and-errors}
 
-The jsonbody package exposes `Decode`, `Encode` as its main operations. Its exported typed failures include `DecodeError`, `EncodeError`; classify them with errors.Is or errors.As. Retries do not replay a stream after output has started.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `EncodeError`, `DecodeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/inference/tree/v0.9.2/wire/jsonbody/) and adjacent tests. The progressive entries `stage-01-inference`, `stage-02-streaming`, `stage-22-model-gateway` cover deterministic invoke, stream, and gateway paths; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-inference`.
+Source files at the pinned commit:
+
+- [wire/jsonbody/jsonbody.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/wire/jsonbody/jsonbody.go)
+
+Adjacent tests at the same commit:
+
+- [wire/jsonbody/jsonbody_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/wire/jsonbody/jsonbody_test.go)
+
+Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

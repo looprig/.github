@@ -18,7 +18,7 @@ proofs:
 
 # gemini package · providers/gemini
 
-Import path: `github.com/looprig/llm/providers/gemini`. Package gemini is a bespoke client for Google's Gemini generateContent API. It satisfies inference.Client for both the non-streaming (generateContent) and streaming (streamGenerateContent, SSE) paths. Gemini is not plain OpenAI-over-HTTP: the model id lives in
+Import path: `github.com/looprig/llm/providers/gemini`. The source is pinned to github.com/looprig/llm@v0.13.3.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,62 @@ This provider package binds one external model service to provider-neutral infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`CountContext`, `CounterCapability`, `Error`, `Invoke`, `New`, `NewCounter`, `Stream`, `Unwrap`
+- `func New(key auth.APIKey) (inference.Client, error)`
+- `func NewCounter(key auth.APIKey) (contextcount.ContextCounter, error)`
+
+### Methods {#methods}
+
+- `func (c *Client) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
+- `func (c *Client) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
+- `func (c *Counter) CountContext(ctx context.Context, req inference.Request) (contextcount.ContextCount, error)`
+- `func (c *countScalar) UnmarshalJSON(data []byte) error`
+- `func (c *Counter) CounterCapability() contextcount.CounterCapability`
+- `func (e *CounterStateError) Error() string`
+- `func (e *CounterRequestError) Error() string`
+- `func (e *CounterRequestError) Unwrap() error`
+- `func (e *CounterEndpointError) Error() string`
+- `func (e *CounterResponseFieldError) Error() string`
+- `func (e *CounterResponseError) Error() string`
+- `func (e *CounterResponseError) Unwrap() error`
+- `func (e *UnsupportedAPIFormatError) Error() string`
+- `func (e *RequestBuildError) Error() string`
+- `func (e *RequestBuildError) Unwrap() error`
 
 ### Types {#types}
 
-`Client`, `Counter`, `CounterEndpointError`, `CounterEndpointReason`, `CounterRequestError`, `CounterRequestReason`, `CounterResponseError`, `CounterResponseField`, `CounterResponseFieldError`, `CounterResponseFieldReason`, `CounterResponseReason`, `CounterStateError`, `CounterStateReason`, `RequestBuildError`, `UnsupportedAPIFormatError`
+`Client`, `Counter`, `CounterStateReason`, `CounterStateError`, `CounterRequestReason`, `CounterRequestError`, `CounterEndpointReason`, `CounterEndpointError`, `CounterResponseReason`, `CounterResponseField`, `CounterResponseFieldReason`, `CounterResponseFieldError`, `CounterResponseError`, `UnsupportedAPIFormatError`, `RequestBuildError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`CounterStateNilReceiver`, `CounterStateNilContext`, `CounterStateMissingEndpoint`, `CounterStateMissingAuthenticator`, `CounterStateMissingHTTPDoer`, `CounterStateInvalidTimeout`, `CounterRequestGenerateBodyInvalid`, `CounterRequestModelEncodingFailed`, `CounterRequestModelCollision`, `CounterEndpointMalformed`, `CounterEndpointMissingHost`, `CounterEndpointCredentials`, `CounterEndpointUnsupportedScheme`, `CounterEndpointInsecureTransport`, `CounterEndpointNonASCIIHost`, `CounterEndpointInvalidHost`, `CounterEndpointAmbiguousPath`, `CounterResponseMalformed`, `CounterResponseMissingCount`, `CounterResponseInvalidCount`, `CounterResponseDuplicateField`, `CounterResponseBodyTooLarge`, `CounterResponseFieldTotalTokens`, `CounterResponseFieldDuplicate`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The gemini package exposes `CountContext`, `CounterCapability`, `Invoke`, `New` as its main operations. The principal handle or value is `Client`; retain it according to its declaration before calling a terminal method. Use `New` as the package construction entry point when creating that value. Its exported typed failures include `CounterEndpointError`, `CounterRequestError`, `CounterResponseError`, `CounterResponseFieldError`; classify them with errors.Is or errors.As. Provider subscriptions may intentionally fail closed when the required gate is unavailable.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `CounterStateError`, `CounterRequestError`, `CounterEndpointError`, `CounterResponseFieldError`, `CounterResponseError`, `UnsupportedAPIFormatError`, `RequestBuildError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/llm/tree/v0.13.3/providers/gemini/) and adjacent tests. Provider deterministic tests run in the llm module; live probes are opt-in. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-llm`.
+Source files at the pinned commit:
+
+- [providers/gemini/client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/client.go)
+- [providers/gemini/counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/counter.go)
+- [providers/gemini/errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/errors.go)
+
+Adjacent tests at the same commit:
+
+- [providers/gemini/client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/client_test.go)
+- [providers/gemini/counter_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/counter_test.go)
+- [providers/gemini/export_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/export_test.go)
+- [providers/gemini/usage_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/usage_test.go)
+
+Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

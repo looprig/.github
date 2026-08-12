@@ -20,7 +20,7 @@ proofs:
 
 # compare package · compare
 
-Import path: `github.com/looprig/eval/compare`. Package compare contains code for generating comparison routines for structs, strings and interfaces.
+Import path: `github.com/looprig/eval/compare`. The source is pinned to github.com/looprig/eval@v0.1.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,47 @@ This page indexes the exported declarations in the current source package. Eval 
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`EqCanPanic`, `EqInterface`, `EqString`, `EqStruct`, `EqStructCost`, `IsRegularMemory`, `Memrun`
+- `func Compare(baseline, candidate eval.Report) (Comparison, error)`
+
+### Methods {#methods}
+
+- `func (e *InvalidReportError) Error() string`
+- `func (e *InvalidReportError) Unwrap() error`
+- `func (e *NonFiniteMeasurementError) Error() string`
+- `func (e *EvaluatorRevisionDriftError) Error() string`
 
 ### Types {#types}
 
-None reported.
+`CaseClass`, `CaseKey`, `TrialResult`, `Distribution`, `MeasurementDelta`, `CaseComparison`, `Comparison`, `ComparisonSide`, `InvalidReportError`, `NonFiniteMeasurementError`, `EvaluatorRevisionDriftError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`CaseAdded`, `CaseRemoved`, `CaseIncompatible`, `CaseErrored`, `CaseUnverified`, `CaseFailed`, `CaseChanged`, `CaseUnchanged`, `SideBaseline`, `SideCandidate`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The compare package exposes `EqCanPanic`, `EqInterface`, `EqString`, `EqStruct` as its main operations. No package-specific error type is exported here; use the owning contract or helper return error rather than parsing diagnostic text. Report JSON redacts raw observations and target causes at its persistence boundary.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `InvalidReportError`, `NonFiniteMeasurementError`, `EvaluatorRevisionDriftError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/eval/tree/v0.1.2/compare/) and adjacent tests. The progressive entry `stage-23-eval` runs an exact evaluator, encodes and decodes a redacted report, then checks a qualification card; run it with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-eval`.
+Source files at the pinned commit:
+
+- [compare/compare.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/compare/compare.go)
+- [compare/errors.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/compare/errors.go)
+
+Adjacent tests at the same commit:
+
+- [compare/compare_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/compare/compare_test.go)
+- [compare/index_internal_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/compare/index_internal_test.go)
+
+Run `GOWORK=off go test ./...` from the `eval` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

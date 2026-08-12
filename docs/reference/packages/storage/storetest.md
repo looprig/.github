@@ -20,7 +20,7 @@ proofs:
 
 # storetest package · storetest
 
-Import path: `github.com/looprig/storage/storetest`. Package storetest provides backend-conformance suites for the four storage primitives - Ledger, Leaser, KV, and Blobs. A backend's own _test.go calls TestLedger/TestLeaser/TestKV/TestBlobs with a factory that returns a fresh, empty primitive; the suite drives
+Import path: `github.com/looprig/storage/storetest`. The source is pinned to github.com/looprig/storage@v0.3.1.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,50 @@ This page indexes the exported declarations in the current source package. The o
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`TestBlobs`, `TestKV`, `TestLeaser`, `TestLedger`
+- `func TestBlobs(t *testing.T, newBackend func(t *testing.T) storage.Blobs)`
+- `func TestKV(t *testing.T, newBackend func(t *testing.T) storage.KV)`
+- `func TestLeaser(t *testing.T, newBackend func(t *testing.T) storage.Leaser)`
+- `func TestLedger(t *testing.T, newBackend func(t *testing.T) storage.Ledger)`
+
+### Methods {#methods}
+
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-None reported.
+No exported types are declared in this package.
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The storetest package exposes `TestBlobs`, `TestKV`, `TestLeaser`, `TestLedger` as its main operations. No package-specific error type is exported here; use the owning contract or helper return error rather than parsing diagnostic text. The contract leaves backend durability and retry semantics to the selected implementation.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/storage/tree/v0.3.1/storetest/) and adjacent tests. The progressive manifest entries `stage-10-workspace` exercise this area; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-storage`.
+Source files at the pinned commit:
+
+- [storetest/blobs.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/storetest/blobs.go)
+- [storetest/doc.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/storetest/doc.go)
+- [storetest/kv.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/storetest/kv.go)
+- [storetest/leaser.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/storetest/leaser.go)
+- [storetest/ledger.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/storetest/ledger.go)
+- [storetest/shared.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/storetest/shared.go)
+
+Adjacent tests at the same commit:
+
+No `_test.go` file is present in this package directory at the pinned commit.
+
+Run `GOWORK=off go test ./...` from the `storage` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

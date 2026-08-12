@@ -20,7 +20,7 @@ proofs:
 
 # websearch package · websearch
 
-Import path: `github.com/looprig/tools/websearch`. Websearch adapts an injected search provider to a bounded Harness tool.
+Import path: `github.com/looprig/tools/websearch`. The source is pinned to github.com/looprig/tools@v0.10.0.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,57 @@ Import path: `github.com/looprig/tools/websearch`. Websearch adapts an injected 
 
 ## Exported surface {#exported-surface}
 
-The API includes `WebSearch`, `SearchProvider`, `SearchResult`, `Endpoint`, and `DuckDuckGoProvider`; constructors are `NewWebSearch` and `NewDuckDuckGoProvider`.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-The provider performs one bounded search; no automatic retry or credential selection is hidden in the tool.
+- `func NewDuckDuckGoProvider(client *http.Client) *DuckDuckGoProvider`
+- `func NewWebSearch(provider SearchProvider) *WebSearch`
+
+### Methods {#methods}
+
+- `func (p *DuckDuckGoProvider) Endpoints() []Endpoint`
+- `func (p *DuckDuckGoProvider) Search(ctx context.Context, query string, max int) ([]SearchResult, error)`
+- `func (e *searchProviderError) Error() string`
+- `func (e *searchProviderError) Unwrap() error`
+- `func (w *WebSearch) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (w *WebSearch) AuditSummary(argsJSON string) string`
+- `func (w *WebSearch) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
+- `func (w *WebSearch) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
+- `func (e *webSearchError) Error() string`
+- `func (e *webSearchError) Unwrap() error`
 
 ### Types {#types}
 
-`SearchResult` carries bounded title, URL, and snippet values. Provider and decoding failures are distinct from zero results.
+`DuckDuckGoProvider`, `SearchResult`, `Endpoint`, `SearchProvider`, `WebSearch`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-No network provider is global; the caller chooses the implementation.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The caller owns the HTTP client and provider. Search results are untrusted text and cannot add tools or authority.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned websearch package](https://github.com/looprig/tools/tree/151f5530f95a9bba95be10551a8f08282d8959ab/websearch/). The package tests cover provider and result boundaries.
+Source files at the pinned commit:
+
+- [websearch/duckduckgo.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/websearch/duckduckgo.go)
+- [websearch/websearch.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/websearch/websearch.go)
+
+Adjacent tests at the same commit:
+
+- [websearch/duckduckgo_fuzz_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/websearch/duckduckgo_fuzz_test.go)
+- [websearch/preparecall_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/websearch/preparecall_test.go)
+- [websearch/result_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/websearch/result_test.go)
+- [websearch/web_integration_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/websearch/web_integration_test.go)
+- [websearch/websearch_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/websearch/websearch_test.go)
+
+Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -25,12 +25,48 @@ The package turns a session-facing `Agent` and event stream into a terminal `Scr
 
 ## Exported surface {#exported-surface}
 
-Functions are `New`, `WithSessionBrowser`, `WithSessionPresentation`, `FoldDisplay`, `AllLoopsEventFilter`, and `RenderStatusLine`. Public seams and views include `Agent`, `AgentHolder`, `AgentBanner`, `OpenAgent`, `EventStream`, `Screen`, `RuntimeController`, `RuntimeCatalog`, `SessionBrowser`, `SessionPresentation`, `SessionPresenter`, `SessionID`, `SessionSummary`, `DisplayProjection`, `Status`, `ToolCallView`, `ToolStatus`, `LoopRuntimeOptions`, and option/model/mode/effort identifiers. Status and tool constants cover idle/running/interrupting/resetting and running/OK/error/cancelled.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-## Lifecycle and errors {#lifecycle-and-errors}
+### Functions {#functions}
 
-The caller owns the session and calls the returned screen/runtime teardown path. Attachment reads fail with typed missing, denied, too-large, unreadable, binary, or unsupported-image errors. Preserve those distinctions in the UI; do not silently place binary or inaccessible data in model context.
+- `func New(ctx context.Context, agent Agent, open OpenAgent, banner AgentBanner, options ...Option) Screen`
+- `func WithSessionBrowser(browser SessionBrowser) Option`
+- `func WithSessionPresentation(p SessionPresentation) Option`
+- `func FoldDisplay(events []event.Event) DisplayProjection`
+- `func AllLoopsEventFilter() event.EventFilter`
+- `func RenderStatusLine(status Status) string`
 
-## Source proof {#source-proof}
+### Methods {#methods}
 
-The [stage 21 TUI example](../../../examples/index.md#stage-21-tui) proves adapter state, image capability, one event, and shutdown. Declarations are pinned to the [release tree](https://github.com/looprig/tui/tree/6b362dda04b086c8a94146320e9faad38dac9b6c).
+No exported methods are declared in this package.
+
+### Types {#types}
+
+No exported types are declared in this package.
+
+### Constants {#constants}
+
+`StatusIdle`, `StatusRunning`, `StatusInterrupting`, `StatusResetting`, `ToolRunning`, `ToolOK`, `ToolError`, `ToolCancelled`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
+## Ownership and errors {#ownership-and-errors}
+
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+
+## Source and runnable proof {#source-and-runnable-proof}
+
+Source files at the pinned commit:
+
+- [api.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/api.go)
+- [errors.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/errors.go)
+
+Adjacent tests at the same commit:
+
+- [api_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/api_test.go)
+
+Run `GOWORK=off go test ./...` from the `tui` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

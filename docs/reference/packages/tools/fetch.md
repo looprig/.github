@@ -20,7 +20,7 @@ proofs:
 
 # fetch package · fetch
 
-Import path: `github.com/looprig/tools/fetch`. Fetch performs a prepared HTTP read through a caller-owned `http.Client`.
+Import path: `github.com/looprig/tools/fetch`. The source is pinned to github.com/looprig/tools@v0.10.0.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,49 @@ Import path: `github.com/looprig/tools/fetch`. Fetch performs a prepared HTTP re
 
 ## Exported surface {#exported-surface}
 
-The public API is `Fetch` and `NewFetch`; root composition is `tools.FetchDefinition`.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`NewFetch` constructs a client-bound tool. Calls return bounded status, headers, and body values.
+- `func NewFetch(client *http.Client) *Fetch`
+
+### Methods {#methods}
+
+- `func (f *Fetch) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (f *Fetch) AuditSummary(argsJSON string) string`
+- `func (f *Fetch) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
+- `func (f *Fetch) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
+- `func (e *redirectBlockedError) Error() string`
+- `func (e *fetchError) Error() string`
+- `func (e *fetchError) Unwrap() error`
 
 ### Types {#types}
 
-`Fetch` implements the Harness tool contract. Transport, status, body-limit, and invalid-request failures stay distinct in the result.
+`Fetch`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-No default global HTTP client or credential source is installed.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The caller owns the HTTP client and its transport. Do not log authorization headers or retry a non-idempotent request after a partial response.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned fetch package](https://github.com/looprig/tools/tree/151f5530f95a9bba95be10551a8f08282d8959ab/fetch/). Use the prepared tool example for the caller-owned boundary.
+Source files at the pinned commit:
+
+- [fetch/fetch.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/fetch/fetch.go)
+
+Adjacent tests at the same commit:
+
+- [fetch/fetch_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/fetch/fetch_test.go)
+- [fetch/preparecall_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/fetch/preparecall_test.go)
+
+Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

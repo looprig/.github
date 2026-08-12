@@ -20,7 +20,7 @@ proofs:
 
 # commandsafety package · commandsafety
 
-Import path: `github.com/looprig/classifiers/pkg/commandsafety`. Commandsafety reviews prepared command requests with bounded evidence and a structured model result.
+Import path: `github.com/looprig/classifiers/pkg/commandsafety`. The source is pinned to github.com/looprig/classifiers@v0.1.4.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,60 @@ Import path: `github.com/looprig/classifiers/pkg/commandsafety`. Commandsafety r
 
 ## Exported surface {#exported-surface}
 
-Public values include `Classifier`, `Options`, `Policy`, `ReadEvidencePolicy`, `EvaluationCase`, `EvaluationOptions`, `ModelResponder`, `Report`, `ConfusionMatrix`, `CaseMismatch`, `CaseFailure`, and construction/evaluation error types. Functions include `DefaultPolicy`, `RequiredEvidenceKinds`, `StandardEvidence`, `EncodeAssessmentAsModelOutput`, `New`, and `Evaluate`. `Name`, `AbsoluteHumanCategoryFloor`, and `ErrPolicyMissingAbsoluteHumanFloor` are exported policy contracts.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Applies`, `Name`, `Revision`, `Definition`, `MarshalInput`, and `ValidateResult` form the classifier contract. `Evaluate` runs deterministic caller-provided responders and records failures per case instead of aborting the whole corpus.
+- `func DefaultPolicy() Policy`
+- `func StandardEvidence(policy ReadEvidencePolicy) hustle.EvidenceToolPolicy`
+- `func New(options Options) (*Classifier, error)`
+- `func Evaluate(classifier *Classifier, cases []EvaluationCase, options EvaluationOptions) (Report, error)`
+- `func EncodeAssessmentAsModelOutput( subject gate.PermissionReviewSubject, risk gate.ReviewRisk, authorization gate.ReviewAuthorization, categories []gate.ReviewRiskCategory, recommendation gate.ReviewRecommendation, rationale string,) (json.RawMessage, error)`
+- `func RequiredEvidenceKinds() []string`
+
+### Methods {#methods}
+
+- `func (e *ConstructionError) Error() string`
+- `func (e *ConstructionError) Unwrap() error`
+- `func (c *Classifier) Name() hustle.Name`
+- `func (c *Classifier) Revision() string`
+- `func (c *Classifier) Definition() hustle.Definition`
+- `func (c *Classifier) Applies(subject gate.PermissionReviewSubject) bool`
+- `func (c *Classifier) MarshalInput(subject gate.PermissionReviewSubject) (json.RawMessage, error)`
+- `func (c *Classifier) ValidateResult( subject gate.PermissionReviewSubject, result hustle.Result,) (gate.PermissionAssessment, error)`
+- `func (e *EvaluationError) Error() string`
 
 ### Types {#types}
 
-`ConstructionError` identifies an invalid field without echoing untrusted values. `Policy` carries risk floors, minimum authorization, and absolute-human categories. `Report` records false allows separately from false humans so dangerous regressions remain visible.
+`Policy`, `ReadEvidencePolicy`, `Options`, `ConstructionField`, `ConstructionError`, `Classifier`, `ModelResponder`, `EvaluationCase`, `EvaluationOptions`, `ConfusionMatrix`, `CaseMismatch`, `CaseFailureReason`, `CaseFailure`, `Report`, `EvaluationError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`Name` is `gate.command-safety`. The absolute-human floor always includes data exfiltration, prompt injection, authorization conflict, target ambiguity, and insufficient evidence; a caller can add categories but cannot remove these.
+`Name`, `FieldInference`, `FieldModel`, `FieldModelCapabilities`, `FieldPolicy`, `FieldEvidence`, `FieldDefinition`, `CaseFailureMarshalInput`, `CaseFailureRespond`, `CaseFailureValidateResult`, `CaseFailureGatePolicy`
+
+### Variables {#variables}
+
+`AbsoluteHumanCategoryFloor`, `ErrPolicyMissingAbsoluteHumanFloor`
 
 ## Ownership and errors {#ownership-and-errors}
 
-Classifier output is evidence. Reconciliation may tighten a recommendation to human review, never widen authority or alter the gate request. Evidence tools are read-only and workspace-confined; the caller must explicitly configure their requirement kinds.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `ConstructionError`, `EvaluationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned commandsafety package](https://github.com/looprig/classifiers/tree/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/commandsafety/). `stage-13-classifier` proves that an allow recommendation for data exfiltration is not locally eligible.
+Source files at the pinned commit:
+
+- [pkg/commandsafety/commandsafety.go](https://github.com/looprig/classifiers/blob/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/commandsafety/commandsafety.go)
+- [pkg/commandsafety/doc.go](https://github.com/looprig/classifiers/blob/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/commandsafety/doc.go)
+- [pkg/commandsafety/evaluation.go](https://github.com/looprig/classifiers/blob/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/commandsafety/evaluation.go)
+- [pkg/commandsafety/evidence_kinds.go](https://github.com/looprig/classifiers/blob/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/commandsafety/evidence_kinds.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/commandsafety/commandsafety_test.go](https://github.com/looprig/classifiers/blob/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/commandsafety/commandsafety_test.go)
+- [pkg/commandsafety/evaluation_test.go](https://github.com/looprig/classifiers/blob/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/commandsafety/evaluation_test.go)
+- [pkg/commandsafety/evidence_kinds_test.go](https://github.com/looprig/classifiers/blob/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/commandsafety/evidence_kinds_test.go)
+
+Run `GOWORK=off go test ./...` from the `classifiers` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

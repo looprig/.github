@@ -21,7 +21,7 @@ proofs:
 
 # rig package · rig
 
-Import path: `github.com/looprig/harness/pkg/rig`. Rig is the design-time composition root and lifecycle owner for sessions.
+Import path: `github.com/looprig/harness/pkg/rig`. The source is pinned to github.com/looprig/harness@v0.24.2.
 
 ## Package role {#package-role}
 
@@ -29,24 +29,117 @@ Import path: `github.com/looprig/harness/pkg/rig`. Rig is the design-time compos
 
 ## Exported surface {#exported-surface}
 
-Options include `WithLoops`, `WithHustles`, `WithSessionStore`, `WithSessionWorkspaces`, `WithSharedWorkspace`, `WithExclusiveWorkspace`, `WithDelegationLimits`, `WithGateCaps`, `WithPermissionReviewPolicy`, `WithPermissionClassifiers`, `WithForeignBuilders`, `WithRuntimeCatalog`, `WithRestoreDecider`, `WithSnapshots`, and `WithOffloadGC`. Public values include `Rig`, `DelegationLimits`, `GateCaps`, `HustleLimits`, `SnapshotPolicy`, `PermissionReviewLimits`, `SessionResourceStorage`, and workspace recovery errors.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Define` constructs a Rig. `FingerprintFrom` derives configuration identity from a bound definition. `WithSeedSnapshot` is a session option for workspace recovery.
+- `func Define(options ...Option) (*Rig, error)`
+- `func FingerprintFrom(definition loop.BoundDefinition) event.ConfigFingerprint`
+- `func WithOffloadGC(policy OffloadGCPolicy) Option`
+- `func WithPermissionClassifiers(classifiers gate.PermissionClassifierSet) Option`
+- `func WithPermissionReviewPolicy(policy gate.PermissionReviewPolicy) Option`
+- `func WithPermissionReviewLimits(limits PermissionReviewLimits) Option`
+- `func WithPermissionReviewEvidence(access gate.EvidenceAccessEvaluator, containment gate.EvidenceContainmentVerifier, allowedKinds []string) Option`
+- `func WithPermissionReviewSecurityCeiling(ceiling string) Option`
+- `func WithPermissionReviewObservations(verifier gate.EvidenceObservationVerifier) Option`
+- `func WithLoops(definitions ...loop.Definition) Option`
+- `func WithHustles(definitions ...hustle.Definition) Option`
+- `func WithHustleLimits(limits HustleLimits) Option`
+- `func WithPrimers(names ...string) Option`
+- `func WithActivePrimer(name string) Option`
+- `func WithSessionStore(store *sessionstore.Store) Option`
+- `func WithDelegationLimits(limits DelegationLimits) Option`
+- `func WithFingerprintFields(fields ConfigFingerprintFields) Option`
+- `func WithHooks(set hook.Set) Option`
+- `func WithForeignBuilders(builder foreign.Builder, restored foreign.RestoredBuilder) Option`
+- `func WithForeignServicesBuilders(builder foreign.ServicesBuilder, restored foreign.ServicesRestoredBuilder) Option`
+- `func WithRuntimeCatalog(catalog loop.RuntimeCatalog) Option`
+- `func WithGateCaps(caps GateCaps) Option`
+- `func WithAllowConfigMismatch() Option`
+- `func WithRestoreDecider(decider session.RestoreDecider) Option`
+- `func WithSeedSnapshot(ref workspacestore.Ref) SessionOption`
+- `func WithSessionResourceStorage(provider SessionResourceStorageProvider) Option`
+- `func WithSnapshots(policy SnapshotPolicy) Option`
+- `func WithExclusiveWorkspace(store *workspacestore.Store, root string, leaser storage.Leaser) Option`
+- `func WithSessionWorkspaces(store *workspacestore.Store, baseDir string) Option`
+- `func WithSharedWorkspace(store *workspacestore.Store, root string) Option`
+
+### Methods {#methods}
+
+- `func (e *DefinitionError) Error() string`
+- `func (e *DefinitionError) Unwrap() error`
+- `func (e *LifecycleError) Error() string`
+- `func (e *LifecycleError) Unwrap() error`
+- `func (*permissionReviewFingerprintError) Error() string`
+- `func (r *Rig) NewSession(ctx context.Context, opts ...SessionOption) (session.SessionController, error)`
+- `func (r *Rig) RestoreSession(ctx context.Context, id uuid.UUID) (session.SessionController, error)`
+- `func (e *InvalidOffloadGCIntervalError) Error() string`
+- `func (e *InvalidOffloadGCTimeoutError) Error() string`
+- `func (e *SnapshotPolicyError) Error() string`
+- `func (e *WorkspacePlacementError) Error() string`
+- `func (e *WorkspacePlacementError) Unwrap() error`
+- `func (e *PersistenceOverlapError) Error() string`
+- `func (e *SessionOptionError) Error() string`
 
 ### Types {#types}
 
-Typed errors classify definition, lifecycle, snapshot, session-option, persistence-overlap, workspace-placement, and workspace-recovery failures. Snapshot priority and trigger enums make persistence policy explicit.
+`Rig`, `DefinitionErrorKind`, `DefinitionError`, `LifecycleErrorKind`, `LifecycleError`, `ConfigFingerprintFields`, `OffloadGCPolicy`, `InvalidOffloadGCIntervalError`, `InvalidOffloadGCTimeoutError`, `Option`, `PermissionReviewLimits`, `PermissionReviewSessionLimits`, `DelegationLimits`, `GateCaps`, `HustleLimits`, `SessionOption`, `SessionResourceStorage`, `SessionResourceStorageProvider`, `SnapshotTrigger`, `SnapshotPriority`, `SnapshotPolicy`, `SnapshotPolicyErrorKind`, `SnapshotPolicyError`, `WorkspaceRootBusyError`, `WorkspaceRootLeaseLostError`, `WorkspaceRecoveryError`, `WorkspacePlacementErrorKind`, `WorkspacePlacementError`, `PersistenceOverlapError`, `SessionOptionErrorKind`, `SessionOptionError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-The package exposes queue and permission-review breaker defaults plus snapshot, delegation, and workspace enum values. Defaults are conservative bounds, not user authority.
+`DefinitionNilOption`, `DefinitionMissingLoop`, `DefinitionInvalidLoop`, `DefinitionDuplicateLoop`, `DefinitionMissingPrimer`, `DefinitionInvalidPrimer`, `DefinitionInvalidActivePrimer`, `DefinitionMissingSessionStore`, `DefinitionInvalidSessionStore`, `DefinitionInvalidDelegationLimits`, `DefinitionInvalidForeignBuilders`, `DefinitionInvalidGateCaps`, `DefinitionInvalidRestoreDecider`, `DefinitionDuplicateOption`, `DefinitionInvalidHustle`, `DefinitionDuplicateHustle`, `DefinitionMissingHustleLimits`, `DefinitionUnusedHustleLimits`, `DefinitionInvalidHustleLimits`, `DefinitionInvalidHooks`, `DefinitionMissingResourceStorage`, `DefinitionInvalidResourceStorage`, `DefinitionMissingCompactionHustle`, `DefinitionIncompatibleCompactionHustle`, `DefinitionInvalidPermissionClassifiers`, `DefinitionInvalidPermissionReviewPolicy`, `DefinitionIncompletePermissionReview`, `DefinitionUnusedPermissionReviewLimits`, `DefinitionInvalidPermissionReviewEvidence`, `DefinitionMissingPermissionReviewEvidence`, `DefinitionUnusedPermissionReviewEvidence`, `DefinitionInvalidPermissionReviewSecurityCeiling`, `DefinitionMissingPermissionReviewSecurityCeiling`, `DefinitionUnusedPermissionReviewSecurityCeiling`, `DefinitionInvalidPermissionReviewObservations`, `DefinitionUnusedPermissionReviewObservations`, `LifecycleContextDone`, `LifecycleIDGenerationFailed`, `LifecycleLeaseFailed`, `LifecycleJournalFailed`, `LifecycleAppenderFailed`, `LifecycleSessionFailed`, `LifecycleProcessNotificationsUnsupported`, `DefaultPermissionReviewBreakerThreshold`, `MaxHustleQueued`, `SnapshotTriggerUnset`, `SnapshotManual`, `SnapshotOnIdle`, `SnapshotOnTurnDone`, `SnapshotOnStepDone`, `SnapshotBestEffort`, `SnapshotRequired`, `SnapshotPolicyRequired`, `SnapshotPolicyWithoutWorkspace`, `SnapshotPolicyInvalidTrigger`, `SnapshotPolicyInvalidPriority`, `SnapshotPolicyInvalidTimeout`, `SnapshotPolicySharedRequired`, `WorkspaceMultiplePlacements`, `WorkspaceNilStore`, `WorkspaceNilLeaser`, `WorkspaceEmptyRoot`, `WorkspaceCanonicalizeFailed`, `WorkspaceLeaseNameInvalid`, `WorkspaceToolWithoutPlacement`, `SessionOptionNil`, `SessionOptionDuplicateSeed`, `SessionOptionEmptySeed`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The Rig owns the session store, workspace store, child builders, and resource providers passed to it. A failed `Define` or `NewSession` must be handled before any turn starts. Shutdown is the final owner operation and should be called even after a turn error.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `DefinitionError`, `LifecycleError`, `InvalidOffloadGCIntervalError`, `InvalidOffloadGCTimeoutError`, `SnapshotPolicyError`, `WorkspacePlacementError`, `PersistenceOverlapError`, `SessionOptionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned Rig package](https://github.com/looprig/harness/tree/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/). `stage-06-rig` and `stage-14-delegation` show composition and session creation.
+Source files at the pinned commit:
+
+- [pkg/rig/definition.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/definition.go)
+- [pkg/rig/doc.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/doc.go)
+- [pkg/rig/errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/errors.go)
+- [pkg/rig/fingerprint.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/fingerprint.go)
+- [pkg/rig/lifecycle.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/lifecycle.go)
+- [pkg/rig/offload_gc.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/offload_gc.go)
+- [pkg/rig/options.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/options.go)
+- [pkg/rig/session_options.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/session_options.go)
+- [pkg/rig/session_resource_storage.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/session_resource_storage.go)
+- [pkg/rig/snapshot_policy.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/snapshot_policy.go)
+- [pkg/rig/workspace.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/workspace.go)
+- [pkg/rig/workspace_errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/workspace_errors.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/rig/agent_injection_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/agent_injection_test.go)
+- [pkg/rig/compaction_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/compaction_test.go)
+- [pkg/rig/deps_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/deps_test.go)
+- [pkg/rig/fingerprint_ownership_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/fingerprint_ownership_test.go)
+- [pkg/rig/fingerprint_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/fingerprint_test.go)
+- [pkg/rig/gate_host_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/gate_host_test.go)
+- [pkg/rig/hooks_integration_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/hooks_integration_test.go)
+- [pkg/rig/hooks_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/hooks_test.go)
+- [pkg/rig/hustle_fingerprint_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/hustle_fingerprint_test.go)
+- [pkg/rig/hustle_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/hustle_test.go)
+- [pkg/rig/lifecycle_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/lifecycle_test.go)
+- [pkg/rig/optional_dependencies_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/optional_dependencies_test.go)
+- [pkg/rig/options_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/options_test.go)
+- [pkg/rig/permission_review_evidence_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/permission_review_evidence_test.go)
+- [pkg/rig/permission_review_observations_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/permission_review_observations_test.go)
+- [pkg/rig/permission_review_security_ceiling_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/permission_review_security_ceiling_test.go)
+- [pkg/rig/readme_example_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/readme_example_test.go)
+- [pkg/rig/rig_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/rig_test.go)
+- [pkg/rig/runtime_catalog_option_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/runtime_catalog_option_test.go)
+- [pkg/rig/session_resource_storage_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/session_resource_storage_test.go)
+- [pkg/rig/snapshot_policy_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/snapshot_policy_test.go)
+- [pkg/rig/workspace_integration_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/workspace_integration_test.go)
+- [pkg/rig/workspace_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/workspace_test.go)
+
+Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

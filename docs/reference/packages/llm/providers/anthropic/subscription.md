@@ -18,7 +18,7 @@ proofs:
 
 # subscription package · providers/anthropic/subscription
 
-Import path: `github.com/looprig/llm/providers/anthropic/subscription`. Package subscription exposes the Anthropic subscription registration policy boundary. It deliberately has no credential, request, or discovery implementation: the current policy is to reject unsanctioned third-party registration attempts before they can become
+Import path: `github.com/looprig/llm/providers/anthropic/subscription`. The source is pinned to github.com/looprig/llm@v0.13.3.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,53 @@ This provider package binds one external model service to provider-neutral infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Error`, `EvidenceURLs`, `Format`, `LogValue`, `Provider`, `Require`, `ReviewedAt`, `ReviewedDate`, `Status`
+- `func AnthropicRegistration() RegistrationGate`
+
+### Methods {#methods}
+
+- `func (e *UnsupportedRegistrationError) Error() string`
+- `func (e *UnsupportedRegistrationError) Format(state fmt.State, verb rune)`
+- `func (e *UnsupportedRegistrationError) LogValue() slog.Value`
+- `func (g RegistrationGate) Status() Status`
+- `func (g RegistrationGate) Provider() llm.Provider`
+- `func (g RegistrationGate) ReviewedAt() time.Time`
+- `func (g RegistrationGate) ReviewedDate() string`
+- `func (g RegistrationGate) EvidenceURLs() []string`
+- `func (g RegistrationGate) Format(state fmt.State, verb rune)`
+- `func (g RegistrationGate) LogValue() slog.Value`
+- `func (g RegistrationGate) Require() error`
 
 ### Types {#types}
 
-`RegistrationGate`, `Status`, `UnsupportedRegistrationError`
+`UnsupportedRegistrationError`, `Status`, `RegistrationGate`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`EvidenceAgentOverviewURL`, `EvidenceAgentQuickstartURL`, `EvidenceAuthenticationURL`, `EvidenceLegalURL`, `EvidenceThirdPartyUsageURL`, `RegistrationStatusBlocked`, `RegistrationStatusUnavailable`, `ReviewedAtDate`, `StatusBlocked`, `StatusUnavailable`
+`StatusUnavailable`, `StatusBlocked`, `RegistrationStatusUnavailable`, `RegistrationStatusBlocked`, `ReviewedAtDate`, `EvidenceAuthenticationURL`, `EvidenceLegalURL`, `EvidenceAgentOverviewURL`, `EvidenceAgentQuickstartURL`, `EvidenceThirdPartyUsageURL`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The Anthropic subscription package exposes `EvidenceURLs`, `Format`, `LogValue`, and `Provider` for its registration policy. `Require` evaluates the `RegistrationGate`; `UnsupportedRegistrationError`, `RegistrationStatusUnavailable`, and `StatusUnavailable` classify a gate that cannot authorize the registration. Provider subscriptions may intentionally fail closed when the required gate is unavailable.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `UnsupportedRegistrationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/llm/tree/v0.13.3/providers/anthropic/subscription/) and adjacent tests. Provider deterministic tests run in the llm module; live probes are opt-in. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-llm`.
+Source files at the pinned commit:
+
+- [providers/anthropic/subscription/errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/subscription/errors.go)
+- [providers/anthropic/subscription/registration.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/subscription/registration.go)
+
+Adjacent tests at the same commit:
+
+- [providers/anthropic/subscription/registration_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/subscription/registration_test.go)
+
+Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

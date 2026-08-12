@@ -20,7 +20,7 @@ proofs:
 
 # exact package · exact
 
-Import path: `github.com/looprig/eval/exact`. Package exact provides deterministic, programmatic evaluators over the typed core/content conversation and eval evidence. Every evaluator here satisfies eval.Evaluator, declares a stable Descriptor with Method eval.MethodProgrammatic, and reaches its verdict f
+Import path: `github.com/looprig/eval/exact`. The source is pinned to github.com/looprig/eval@v0.1.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,67 @@ This page indexes the exported declarations in the current source package. Eval 
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`ForbiddenText`, `ForbiddenTool`, `MaxDuration`, `NoToolCall`, `RequiredText`, `RequiredTool`, `SchemaResult`, `ToolErrorRate`
+- `func MaxErrorRate(r float64) RateOption`
+- `func ToolErrorRate(opts ...RateOption) eval.Evaluator`
+- `func MaxDuration(limit time.Duration) eval.Evaluator`
+- `func SchemaResult() eval.Evaluator`
+- `func RequiredText(substrings ...string) eval.Evaluator`
+- `func ForbiddenText(substrings ...string) eval.Evaluator`
+- `func RequiredTool(name string) eval.Evaluator`
+- `func ForbiddenTool(name string) eval.Evaluator`
+- `func NoToolCall(name string) eval.Evaluator`
+
+### Methods {#methods}
+
+- `func (e toolErrorRate) Descriptor() eval.Descriptor`
+- `func (e toolErrorRate) Evaluate(_ context.Context, s eval.Sample) (eval.Assessment, error)`
+- `func (e maxDuration) Descriptor() eval.Descriptor`
+- `func (e maxDuration) Evaluate(_ context.Context, s eval.Sample) (eval.Assessment, error)`
+- `func (e schemaResult) Descriptor() eval.Descriptor`
+- `func (e schemaResult) Evaluate(_ context.Context, s eval.Sample) (eval.Assessment, error)`
+- `func (e requiredText) Descriptor() eval.Descriptor`
+- `func (e requiredText) Evaluate(_ context.Context, s eval.Sample) (eval.Assessment, error)`
+- `func (e forbiddenText) Descriptor() eval.Descriptor`
+- `func (e forbiddenText) Evaluate(_ context.Context, s eval.Sample) (eval.Assessment, error)`
+- `func (e toolPresence) Descriptor() eval.Descriptor`
+- `func (e toolPresence) Evaluate(_ context.Context, s eval.Sample) (eval.Assessment, error)`
 
 ### Types {#types}
 
 `RateOption`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The exact package exposes `ForbiddenText`, `ForbiddenTool`, `MaxDuration`, `NoToolCall` as its main operations. No package-specific error type is exported here; use the owning contract or helper return error rather than parsing diagnostic text. Report JSON redacts raw observations and target causes at its persistence boundary.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/eval/tree/v0.1.2/exact/) and adjacent tests. The progressive entry `stage-23-eval` runs an exact evaluator, encodes and decodes a redacted report, then checks a qualification card; run it with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-eval`.
+Source files at the pinned commit:
+
+- [exact/operational.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/exact/operational.go)
+- [exact/structured.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/exact/structured.go)
+- [exact/text.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/exact/text.go)
+- [exact/tool.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/exact/tool.go)
+
+Adjacent tests at the same commit:
+
+- [exact/operational_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/exact/operational_test.go)
+- [exact/structured_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/exact/structured_test.go)
+- [exact/text_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/exact/text_test.go)
+- [exact/tool_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/exact/tool_test.go)
+
+Run `GOWORK=off go test ./...` from the `eval` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

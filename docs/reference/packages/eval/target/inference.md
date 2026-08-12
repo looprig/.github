@@ -20,7 +20,7 @@ proofs:
 
 # inference package · target/inference
 
-Import path: `github.com/looprig/eval/target/inference`. Package inference implements the active-inference eval.Target: it drives a scenario's input thread through an inference.Client and projects the model's reply into an eval.Observation. It is one of the two eval packages (with judge/) permitted to depend on gith
+Import path: `github.com/looprig/eval/target/inference`. The source is pinned to github.com/looprig/eval@v0.1.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,59 @@ This page indexes the exported declarations in the current source package. Eval 
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Error`, `NewTarget`, `Unwrap`
+- `func WithName(name eval.Name) Option`
+- `func WithRevision(rev eval.Revision) Option`
+- `func WithSubjectID(id string) Option`
+- `func WithClock(now func() time.Time) Option`
+- `func NewTarget(client llm.Client, template llm.Request, opts ...Option) eval.Target`
+
+### Methods {#methods}
+
+- `func (e *InferenceError) Error() string`
+- `func (e *InferenceError) Unwrap() error`
+- `func (e *EmptyResponseError) Error() string`
+- `func (e *IdentityError) Error() string`
+- `func (e *IdentityError) Unwrap() error`
+- `func (e *ObservationInvalidError) Error() string`
+- `func (e *ObservationInvalidError) Unwrap() error`
+- `func (t *target) Name() string`
+- `func (t *target) Observe(ctx context.Context, sc eval.Scenario) (eval.Observation, error)`
 
 ### Types {#types}
 
-`EmptyResponseError`, `EmptyResponseReason`, `IdentityError`, `InferenceError`, `ObservationInvalidError`, `Option`
+`InferenceError`, `EmptyResponseReason`, `EmptyResponseError`, `IdentityError`, `ObservationInvalidError`, `Option`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`ReasonNilResponse`, `ReasonNilMessage`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The inference package exposes `NewTarget` as its main operations. Use `NewTarget` as the package construction entry point when creating that value. Its exported typed failures include `EmptyResponseError`, `IdentityError`, `InferenceError`, `ObservationInvalidError`; classify them with errors.Is or errors.As. Report JSON redacts raw observations and target causes at its persistence boundary.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `InferenceError`, `EmptyResponseError`, `IdentityError`, `ObservationInvalidError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/eval/tree/v0.1.2/target/inference/) and adjacent tests. The progressive entry `stage-23-eval` runs an exact evaluator, encodes and decodes a redacted report, then checks a qualification card; run it with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-eval`.
+Source files at the pinned commit:
+
+- [target/inference/conform.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/target/inference/conform.go)
+- [target/inference/errors.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/target/inference/errors.go)
+- [target/inference/project.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/target/inference/project.go)
+- [target/inference/target.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/target/inference/target.go)
+
+Adjacent tests at the same commit:
+
+- [target/inference/conform_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/target/inference/conform_test.go)
+- [target/inference/target_integration_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/target/inference/target_integration_test.go)
+- [target/inference/target_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/target/inference/target_test.go)
+
+Run `GOWORK=off go test ./...` from the `eval` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

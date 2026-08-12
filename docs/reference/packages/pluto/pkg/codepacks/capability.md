@@ -25,12 +25,42 @@ The pack describes capability qualification tables. It supplies declarative eval
 
 ## Exported surface {#exported-surface}
 
-`Revision` is `v1`; `V1()` returns a `qual.Pack`.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-## Lifecycle and errors {#lifecycle-and-errors}
+### Functions {#functions}
 
-`V1` is a pure constructor. Validate the returned pack before execution; pack and table validation errors come from Pluto's qualification layer. Capability tables may be skipped when the target manifest lacks a declared capability, and `run.Execute` preserves those skips.
+- `func V1() qual.Pack`
 
-## Source proof {#source-proof}
+### Methods {#methods}
 
-See the pinned [capability codepack source](https://github.com/looprig/pluto/tree/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/codepacks/capability).
+No exported methods are declared in this package.
+
+### Types {#types}
+
+No exported types are declared in this package.
+
+### Constants {#constants}
+
+`Revision`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
+## Ownership and errors {#ownership-and-errors}
+
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+
+## Source and runnable proof {#source-and-runnable-proof}
+
+Source files at the pinned commit:
+
+- [pkg/codepacks/capability/v1.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/codepacks/capability/v1.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/codepacks/capability/v1_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/codepacks/capability/v1_test.go)
+
+Run `GOWORK=off go test ./...` from the `pluto` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

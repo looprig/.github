@@ -25,12 +25,52 @@ The package translates an `event.DriftAssessment` into a session restore decisio
 
 ## Exported surface {#exported-surface}
 
-`UI` is the narrow seam with `ConfirmDrift(context.Context, warnings)` and `Notify(infos)`. `Decider` implements the restore decision, with `NewDecider(ui)` and `DecideRestore`. `NewTerminalUI` supplies the production terminal implementation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-## Lifecycle and errors {#lifecycle-and-errors}
+### Functions {#functions}
 
-Information-only changes are notified and accepted automatically. Warning changes call `ConfirmDrift`; acceptance is marked as a user decision. Context cancellation, timeout, or UI failure returns a rejected decision and preserves the cause. The caller owns the UI and may reuse a decider for multiple restore attempts.
+- `func NewTerminalUI() UI`
+- `func NewDecider(ui UI) Decider`
 
-## Source proof {#source-proof}
+### Methods {#methods}
 
-See the pinned [restore implementation and tests](https://github.com/looprig/tui/tree/6b362dda04b086c8a94146320e9faad38dac9b6c/restore) and the stage 21 consumer proof.
+- `func (m *confirmModel) Init() tea.Cmd`
+- `func (m *confirmModel) Update(msg tea.Msg) (tea.Model, tea.Cmd)`
+- `func (m *confirmModel) View() tea.View`
+- `func (terminalUI) ConfirmDrift(ctx context.Context, warns []event.DriftChange) (bool, string, error)`
+- `func (terminalUI) Notify(infos []event.DriftChange)`
+- `func (d Decider) DecideRestore(ctx context.Context, a event.DriftAssessment) (session.RestoreDecision, error)`
+
+### Types {#types}
+
+`UI`, `Decider`
+
+### Constants {#constants}
+
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
+## Ownership and errors {#ownership-and-errors}
+
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+
+## Source and runnable proof {#source-and-runnable-proof}
+
+Source files at the pinned commit:
+
+- [restore/confirm.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/restore/confirm.go)
+- [restore/decider.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/restore/decider.go)
+- [restore/driftview.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/restore/driftview.go)
+
+Adjacent tests at the same commit:
+
+- [restore/confirm_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/restore/confirm_test.go)
+- [restore/decider_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/restore/decider_test.go)
+- [restore/driftview_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/restore/driftview_test.go)
+
+Run `GOWORK=off go test ./...` from the `tui` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

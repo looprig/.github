@@ -25,12 +25,43 @@ Inference rate-limit decorator in [Pluto v0.1.2](https://github.com/looprig/plut
 
 ## Exported surface {#exported-surface}
 
-`Config` carries `MaxRPM`, `MaxConcurrent`, `MaxRetries`, `BaseBackoff`, and `MaxBackoff`; `New(inner, config)` returns an `inference.Client` decorator.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-## Lifecycle and errors {#lifecycle-and-errors}
+### Functions {#functions}
 
-Zero limits disable the corresponding bound. Retries cover 429, 5xx, and network failures with exponential full jitter. The underlying inference interface does not expose response headers, so `Retry-After` cannot be honored. Context cancellation stops waiting and returns its cause.
+- `func New(inner inference.Client, cfg Config) inference.Client`
 
-## Source proof {#source-proof}
+### Methods {#methods}
 
-See the pinned [rate-limit implementation](https://github.com/looprig/pluto/tree/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/ratelimit).
+- `func (c *client) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
+- `func (c *client) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
+
+### Types {#types}
+
+`Config`
+
+### Constants {#constants}
+
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
+## Ownership and errors {#ownership-and-errors}
+
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+
+## Source and runnable proof {#source-and-runnable-proof}
+
+Source files at the pinned commit:
+
+- [pkg/ratelimit/ratelimit.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/ratelimit/ratelimit.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/ratelimit/ratelimit_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/ratelimit/ratelimit_test.go)
+
+Run `GOWORK=off go test ./...` from the `pluto` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -47,4 +47,4 @@ Reject malformed requests, missing or invalid tokens, unknown aliases, unsupport
 
 ## Runnable proof {#runnable-proof}
 
-`stage-22-model-gateway` asserts alias routing, upstream model identity, and strict rejection of an unknown alias. Run it with `node scripts/docs/run-examples.mjs`; source is pinned in the [Inference gateway tree](https://github.com/looprig/inference/tree/v0.9.2/gateway/). Precise source and test proof IDs beyond the release record are pending Task15 evidence promotion.
+`stage-22-model-gateway` asserts alias routing, upstream model identity, and strict rejection of an unknown alias. Run it with `node scripts/docs/run-examples.mjs`; source is pinned in the [Inference gateway tree](https://github.com/looprig/inference/tree/v0.9.2/gateway/). The referenced package pages list the pinned source files and adjacent tests used for this boundary.

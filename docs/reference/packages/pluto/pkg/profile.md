@@ -25,12 +25,45 @@ Profiles turn a scorecard into an explicit disposition. They are policy inputs f
 
 ## Exported surface {#exported-surface}
 
-`Profile` contains name, revision, requirements, and restrictions. `Requirement` and `Restriction` set dimensions, score/coverage bounds, finding codes, severity limits, and counts. `Evaluate(card, profile)` returns `Result` with `RequirementResult`, `RestrictionResult`, `Disposition`, and `Outcome` values.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-## Lifecycle and errors {#lifecycle-and-errors}
+### Functions {#functions}
 
-`Profile.Validate` rejects malformed bounds and duplicate rules before `Evaluate`. Dispositions are `Qualified`, `Restricted`, `Rejected`, and `Unverified`; outcomes are `Met`, `Violated`, and `Undecided`. A missing or skipped capability cannot silently become a qualified requirement.
+- `func Evaluate(card Card, p Profile) (Result, error)`
 
-## Source proof {#source-proof}
+### Methods {#methods}
 
-See the pinned [profile implementation](https://github.com/looprig/pluto/tree/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/profile).
+- `func (d Disposition) Rank() int`
+- `func (r Requirement) Validate() error`
+- `func (p Profile) Validate() error`
+
+### Types {#types}
+
+`Card`, `Outcome`, `RequirementResult`, `RestrictionResult`, `Result`, `Disposition`, `Requirement`, `Restriction`, `Profile`
+
+### Constants {#constants}
+
+`Met`, `Violated`, `Undecided`, `Qualified`, `Restricted`, `Rejected`, `Unverified`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
+## Ownership and errors {#ownership-and-errors}
+
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+
+## Source and runnable proof {#source-and-runnable-proof}
+
+Source files at the pinned commit:
+
+- [pkg/profile/evaluate.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/profile/evaluate.go)
+- [pkg/profile/profile.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/profile/profile.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/profile/evaluate_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/profile/evaluate_test.go)
+
+Run `GOWORK=off go test ./...` from the `pluto` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

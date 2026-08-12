@@ -20,7 +20,7 @@ proofs:
 
 # writefile package · writefile
 
-Import path: `github.com/looprig/tools/writefile`. Writefile creates or replaces a permitted file through the workspace mutation seam.
+Import path: `github.com/looprig/tools/writefile`. The source is pinned to github.com/looprig/tools@v0.10.0.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,44 @@ Import path: `github.com/looprig/tools/writefile`. Writefile creates or replaces
 
 ## Exported surface {#exported-surface}
 
-`Tool` aliases `filemutation.WriteFile`; `Option`, `WithHostWrites`, and `WithMutationCoordinator` configure it. `FileCreateConflictError`, `IrregularFileError`, `LeaseUnhealthyError`, and `StaleFileError` are re-exported failures.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`New` constructs the tool. Invocation distinguishes create conflict from stale replacement and does not overwrite silently.
+- `func New(root string, observations tool.WorkspaceObservations, options ...Option) *Tool`
+- `func WithMutationCoordinator(coordinator tool.WorkspaceCoordinator) Option`
+- `func WithHostWrites() Option`
+
+### Methods {#methods}
+
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-File mutation errors preserve the target and reason without embedding file contents in a diagnostic.
+`Tool`, `Option`, `LeaseUnhealthyError`, `StaleFileError`, `FileCreateConflictError`, `IrregularFileError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-Host writes are opt-in. There is no unbounded file-size default exposed by this package.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The caller owns the workspace coordinator and observations. A conflict or stale-file failure requires a new read and prepared call; blind retry could overwrite a user's change.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned writefile package](https://github.com/looprig/tools/tree/151f5530f95a9bba95be10551a8f08282d8959ab/writefile/). `stage-04-prepared-tool` covers the prepared effect path.
+Source files at the pinned commit:
+
+- [writefile/writefile.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/writefile/writefile.go)
+
+Adjacent tests at the same commit:
+
+No `_test.go` file is present in this package directory at the pinned commit.
+
+Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

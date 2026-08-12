@@ -22,7 +22,7 @@ proofs:
 
 # codec package · codec
 
-Import path: `github.com/looprig/inference/codec`. This public package defines one part of the provider-neutral inference API.
+Import path: `github.com/looprig/inference/codec`. The source is pinned to github.com/looprig/inference@v0.9.2.
 
 ## Package role {#package-role}
 
@@ -30,24 +30,43 @@ This page indexes the exported declarations in the current source package. Infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-None reported.
+No exported functions are declared in this package.
+
+### Methods {#methods}
+
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-`Codec`, `DecodedRequest`, `EncodedRequest`, `RequestEncoder`, `RequestMode`, `ResponseDecoder`, `ServerCodec`, `StreamDecoder`, `StreamEncoder`, `StreamFramer`, `StreamingCodec`
+`EncodedRequest`, `RequestEncoder`, `ResponseDecoder`, `StreamFramer`, `StreamDecoder`, `Codec`, `StreamingCodec`, `DecodedRequest`, `ServerCodec`, `StreamEncoder`, `RequestMode`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`RequestModeInvoke`, `RequestModeStream`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The codec package exposes value declarations for its boundary. The principal handle or value is `Codec`; retain it according to its declaration before calling a terminal method. No package-specific error type is exported here; use the owning contract or helper return error rather than parsing diagnostic text. Retries do not replay a stream after output has started.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/inference/tree/v0.9.2/codec/) and adjacent tests. The progressive entries `stage-01-inference`, `stage-02-streaming`, `stage-22-model-gateway` cover deterministic invoke, stream, and gateway paths; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-inference`.
+Source files at the pinned commit:
+
+- [codec/contracts.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/contracts.go)
+- [codec/requestmode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/requestmode.go)
+
+Adjacent tests at the same commit:
+
+- [codec/contracts_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/contracts_test.go)
+
+Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

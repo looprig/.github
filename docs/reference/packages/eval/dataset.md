@@ -20,7 +20,7 @@ proofs:
 
 # dataset package · dataset
 
-Import path: `github.com/looprig/eval/dataset`. Package dataset is the versioned JSONL codec for eval scenarios. It is the eval framework's untrusted deserialization boundary: a dataset file is one dataset/v1 envelope per line, each carrying an explicit version discriminator and a scenario payload. The code
+Import path: `github.com/looprig/eval/dataset`. The source is pinned to github.com/looprig/eval@v0.1.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,67 @@ This page indexes the exported declarations in the current source package. Eval 
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`DecodeRecord`, `Encode`, `EncodeRecord`, `Error`, `Unwrap`
+- `func Load(ctx context.Context, dir, name string) (*Dataset, error)`
+- `func Decode(ctx context.Context, r io.Reader, name string) (*Dataset, error)`
+- `func Encode(w io.Writer, scenarios []eval.Scenario) error`
+- `func DecodeRecord(data []byte) (eval.Scenario, error)`
+- `func EncodeRecord(sc eval.Scenario) ([]byte, error)`
+
+### Methods {#methods}
+
+- `func (e *UnknownVersionError) Error() string`
+- `func (e *RecordTooLargeError) Error() string`
+- `func (e *FileTooLargeError) Error() string`
+- `func (e *MalformedRecordError) Error() string`
+- `func (e *DuplicateScenarioError) Error() string`
+- `func (e *InvalidScenarioError) Error() string`
+- `func (e *InvalidScenarioError) Unwrap() error`
+- `func (e *PathEscapeError) Error() string`
+- `func (e *PathEscapeError) Unwrap() error`
+- `func (e *OpenError) Error() string`
+- `func (e *OpenError) Unwrap() error`
+- `func (e *DirectoryError) Error() string`
+- `func (e *DirectoryError) Unwrap() error`
+- `func (e *ReadError) Error() string`
+- `func (e *ReadError) Unwrap() error`
+- `func (e *EncodeError) Error() string`
+- `func (e *EncodeError) Unwrap() error`
+- `func (e *WriteError) Error() string`
+- `func (e *WriteError) Unwrap() error`
 
 ### Types {#types}
 
-`Dataset`, `DirectoryError`, `DuplicateScenarioError`, `EncodeError`, `FileTooLargeError`, `InvalidScenarioError`, `MalformedRecordError`, `OpenError`, `PathEscapeError`, `ReadError`, `RecordTooLargeError`, `UnknownVersionError`, `WriteError`
+`Dataset`, `UnknownVersionError`, `RecordTooLargeError`, `FileTooLargeError`, `MalformedRecordError`, `DuplicateScenarioError`, `InvalidScenarioError`, `PathEscapeError`, `OpenError`, `DirectoryError`, `ReadError`, `EncodeError`, `WriteError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`MaxFileBytes`, `MaxRecordBytes`
+`MaxRecordBytes`, `MaxFileBytes`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The dataset package exposes `DecodeRecord`, `Encode`, `EncodeRecord` as its main operations. Its exported typed failures include `DirectoryError`, `DuplicateScenarioError`, `EncodeError`, `FileTooLargeError`; classify them with errors.Is or errors.As. Report JSON redacts raw observations and target causes at its persistence boundary.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `UnknownVersionError`, `RecordTooLargeError`, `FileTooLargeError`, `MalformedRecordError`, `DuplicateScenarioError`, `InvalidScenarioError`, `PathEscapeError`, `OpenError`, `DirectoryError`, `ReadError`, `EncodeError`, `WriteError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/eval/tree/v0.1.2/dataset/) and adjacent tests. The progressive entry `stage-23-eval` runs an exact evaluator, encodes and decodes a redacted report, then checks a qualification card; run it with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-eval`.
+Source files at the pinned commit:
+
+- [dataset/dataset.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/dataset/dataset.go)
+- [dataset/errors.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/dataset/errors.go)
+- [dataset/json.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/dataset/json.go)
+
+Adjacent tests at the same commit:
+
+- [dataset/json_fuzz_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/dataset/json_fuzz_test.go)
+- [dataset/json_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/dataset/json_test.go)
+
+Run `GOWORK=off go test ./...` from the `eval` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

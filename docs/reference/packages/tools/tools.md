@@ -21,7 +21,7 @@ proofs:
 
 # tools package · tools
 
-Import path: `github.com/looprig/tools`. The root package composes focused tool packages into Harness definitions.
+Import path: `github.com/looprig/tools`. The source is pinned to github.com/looprig/tools@v0.10.0.
 
 ## Package role {#package-role}
 
@@ -29,24 +29,60 @@ Root builders are declarative. They return `tool.Definition` values that Harness
 
 ## Exported surface {#exported-surface}
 
-Builders include `AskUserDefinition`, `Bash`, `BashDefinition`, `EditFileDefinition`, `FetchDefinition`, `GlobDefinition`, `GrepDefinition`, `ProcessInputDefinition`, `ProcessOutputDefinition`, `ProcessStopDefinition`, `ReadFileDefinition`, `TaskDefinitions`, `WebSearchDefinition`, and `WriteFileDefinition`. `AsyncProcessRunnerResolver` lets supervised Bash resolve a validated loop runner.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-Definition functions capture only static options and collaborators explicitly passed by the composition root. `BashDefinition` resolves its runner once during Build, not from invocation-time provenance.
+- `func GlobDefinition(readGuard loop.ReadGuard, options ...glob.GlobOption) tool.Definition`
+- `func GrepDefinition(readGuard loop.ReadGuard, options ...grep.GrepOption) tool.Definition`
+- `func TaskDefinitions() tool.Definition`
+- `func AskUserDefinition() tool.Definition`
+- `func WebSearchDefinition(provider websearch.SearchProvider) tool.Definition`
+- `func FetchDefinition(client *http.Client) tool.Definition`
+- `func ReadFileDefinition(readGuard loop.ReadGuard, options ...readfile.ReadFileOption) tool.Definition`
+- `func WriteFileDefinition(options ...writefile.Option) tool.Definition`
+- `func EditFileDefinition(options ...editfile.Option) tool.Definition`
+- `func Bash(options ...bash.BashOption) tool.Definition`
+- `func BashDefinition(resolver AsyncProcessRunnerResolver, options ...bash.BashOption) tool.Definition`
+- `func ProcessOutputDefinition() tool.Definition`
+- `func ProcessInputDefinition() tool.Definition`
+- `func ProcessStopDefinition() tool.Definition`
+
+### Methods {#methods}
+
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-`DefinitionBuildError` wraps a failed concrete definition build. Concrete types live in subpackages and retain their own lifecycle and error contracts.
+`DefinitionBuildError`, `AsyncProcessRunnerResolver`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-The root package exposes no global tool registry. Definition names and produced tool names are owned by the returned Harness definitions.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The caller owns HTTP clients, read guards, and providers passed to builders. Harness owns the built tool and session resources. Do not pass a second mutation coordinator through an option that the root builder injects itself.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned root builders](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/definitions.go). The progressive pure and prepared tool examples are runnable with `node scripts/docs/run-examples.mjs`.
+Source files at the pinned commit:
+
+- [definitions.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/definitions.go)
+
+Adjacent tests at the same commit:
+
+- [definitions_hostreads_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/definitions_hostreads_test.go)
+- [definitions_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/definitions_test.go)
+- [dependency_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/dependency_test.go)
+- [example_readme_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/example_readme_test.go)
+- [integration_helpers_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/integration_helpers_test.go)
+- [task_bundle_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task_bundle_test.go)
+
+Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

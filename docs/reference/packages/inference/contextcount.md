@@ -22,7 +22,7 @@ proofs:
 
 # contextcount package · contextcount
 
-Import path: `github.com/looprig/inference/contextcount`. Package contextcount provides deterministic complete-request context counting.
+Import path: `github.com/looprig/inference/contextcount`. The source is pinned to github.com/looprig/inference@v0.9.2.
 
 ## Package role {#package-role}
 
@@ -30,24 +30,63 @@ This page indexes the exported declarations in the current source package. Infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`CompatibleCounter`, `CountContext`, `CounterCapability`, `Error`, `Unwrap`, `Validate`
+- `func CompatibleCounter(inf InferenceCapability, counter CounterCapability) error`
+- `func NewEstimator() *Estimator`
+
+### Methods {#methods}
+
+- `func (c ContextCounterFunc) CountContext(ctx context.Context, req inference.Request) (ContextCount, error)`
+- `func (c ContextCounterFunc) CounterCapability() CounterCapability`
+- `func (c CounterCapability) Validate() error`
+- `func (c InferenceCapability) Validate() error`
+- `func (e *ContextCountError) Error() string`
+- `func (e *ContextCountError) Unwrap() error`
+- `func (e *CapabilityValidationError) Error() string`
+- `func (e *CounterCompatibilityError) Error() string`
+- `func (e *CounterCompatibilityError) Unwrap() error`
+- `func (e *EstimatorStateError) Error() string`
+- `func (e *ModelIdentityError) Error() string`
+- `func (e *ModelIdentityError) Unwrap() error`
+- `func (e *UnsupportedAPIFormatError) Error() string`
+- `func (e *RequestEncodingError) Error() string`
+- `func (e *RequestEncodingError) Unwrap() error`
+- `func (e *Estimator) CountContext(ctx context.Context, req inference.Request) (ContextCount, error)`
+- `func (e *Estimator) CounterCapability() CounterCapability`
 
 ### Types {#types}
 
-`CapabilityField`, `CapabilityKind`, `CapabilityValidationError`, `CapabilityValidationReason`, `ContextCount`, `ContextCountError`, `ContextCountFunc`, `ContextCounter`, `ContextCounterFunc`, `CountQuality`, `CounterCapability`, `CounterCompatibilityError`, `CounterCompatibilityReason`, `CounterTransport`, `Estimator`, `EstimatorStateError`, `EstimatorStateReason`, `InferenceCapability`, `InferenceTransport`, `ModelIdentityError`, `ProviderID`, `RequestEncodingError`, `RetentionPosture`, `SecurityIdentity`, `TokenizerRevision`, `UnsupportedAPIFormatError`
+`ProviderID`, `TokenizerRevision`, `SecurityIdentity`, `CountQuality`, `ContextCount`, `ContextCounter`, `ContextCountFunc`, `ContextCounterFunc`, `CounterTransport`, `RetentionPosture`, `CounterCapability`, `InferenceTransport`, `InferenceCapability`, `ContextCountError`, `CapabilityKind`, `CapabilityField`, `CapabilityValidationReason`, `CapabilityValidationError`, `CounterCompatibilityReason`, `CounterCompatibilityError`, `EstimatorStateReason`, `EstimatorStateError`, `ModelIdentityError`, `UnsupportedAPIFormatError`, `RequestEncodingError`, `Estimator`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`ErrContextCountCapabilityQualityMismatch`, `ErrContextCountFunctionMissing`, `ErrContextCountModelMismatch`, `ErrContextCountQualityInvalid`
+`CountQualityUnknown`, `CountQualityExactProvider`, `CountQualityExactLocal`, `CountQualityHeuristicEstimate`, `CounterTransportUnknown`, `CounterTransportLocal`, `CounterTransportSameEndpoint`, `CounterTransportSeparateEndpoint`, `RetentionUnknown`, `RetentionNone`, `RetentionEphemeral`, `RetentionLogged`, `InferenceTransportUnknown`, `InferenceTransportLocal`, `InferenceTransportTLS`, `InferenceTransportAttestedTLS`, `InferenceTransportEndToEndEncrypted`, `CapabilityKindCounter`, `CapabilityKindInference`, `CapabilityFieldProvider`, `CapabilityFieldTransport`, `CapabilityFieldSecurityIdentity`, `CapabilityFieldRetention`, `CapabilityFieldTokenizerRevision`, `CapabilityFieldQuality`, `CapabilityValidationReasonUnknown`, `CapabilityValidationReasonOutOfRange`, `CapabilityValidationReasonEmpty`, `CapabilityValidationReasonMustBeZero`, `CounterCompatibilityInvalidInference`, `CounterCompatibilityInvalidCounter`, `CounterCompatibilityProviderMismatch`, `CounterCompatibilityIdentityMismatch`, `CounterCompatibilityTransportDowngrade`, `CounterCompatibilityRetentionDowngrade`, `EstimatorStateNilReceiver`, `EstimatorStateNilContext`, `EstimatorRevision`
+
+### Variables {#variables}
+
+`ErrContextCountFunctionMissing`
 
 ## Ownership and errors {#ownership-and-errors}
 
-The contextcount package exposes `CompatibleCounter`, `CountContext`, `CounterCapability`, `Validate` as its main operations. The principal handle or value is `ContextCounter`; retain it according to its declaration before calling a terminal method. Its exported typed failures include `CapabilityValidationError`, `ContextCountError`, `CounterCompatibilityError`, `EstimatorStateError`; classify them with errors.Is or errors.As. Retries do not replay a stream after output has started.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `ContextCountError`, `CapabilityValidationError`, `CounterCompatibilityError`, `EstimatorStateError`, `ModelIdentityError`, `UnsupportedAPIFormatError`, `RequestEncodingError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/inference/tree/v0.9.2/contextcount/) and adjacent tests. The progressive entries `stage-01-inference`, `stage-02-streaming`, `stage-22-model-gateway` cover deterministic invoke, stream, and gateway paths; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-inference`.
+Source files at the pinned commit:
+
+- [contextcount/contracts.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/contextcount/contracts.go)
+- [contextcount/contracts_errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/contextcount/contracts_errors.go)
+- [contextcount/errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/contextcount/errors.go)
+- [contextcount/estimator.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/contextcount/estimator.go)
+
+Adjacent tests at the same commit:
+
+- [contextcount/contracts_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/contextcount/contracts_test.go)
+- [contextcount/estimator_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/contextcount/estimator_test.go)
+
+Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

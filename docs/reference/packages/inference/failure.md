@@ -22,7 +22,7 @@ proofs:
 
 # failure package · failure
 
-Import path: `github.com/looprig/inference/failure`. Package failure owns provider-neutral inference failures shared by codecs, transports, and provider integrations.
+Import path: `github.com/looprig/inference/failure`. The source is pinned to github.com/looprig/inference@v0.9.2.
 
 ## Package role {#package-role}
 
@@ -30,24 +30,53 @@ This page indexes the exported declarations in the current source package. Infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Error`, `Format`, `GoString`, `LogValue`, `Unwrap`
+- `func NewAPIError(status int, code, requestID string, retryAfter time.Duration) *APIError`
+- `func NewAPIErrorWithStatusText(status int, code, requestID string, retryAfter time.Duration, statusText string) *APIError`
+- `func APIErrorFromResponse(status int, body []byte, headers http.Header, retryAfter time.Duration) *APIError`
+
+### Methods {#methods}
+
+- `func (e *NetworkError) Error() string`
+- `func (e *NetworkError) Unwrap() error`
+- `func (e *APIError) Error() string`
+- `func (e APIError) Format(state fmt.State, _ rune)`
+- `func (e APIError) GoString() string`
+- `func (e APIError) LogValue() slog.Value`
+- `func (e *ResponseBodyTooLargeError) Error() string`
+- `func (e *ResponseBodyTooLargeError) Format(state fmt.State, _ rune)`
+- `func (e *ResponseBodyTooLargeError) GoString() string`
+- `func (e *ModelMismatchError) Error() string`
 
 ### Types {#types}
 
-`APIError`, `ModelMismatchError`, `NetworkError`, `ResponseBodyTooLargeError`
+`NetworkError`, `APIError`, `ResponseBodyTooLargeError`, `ModelMismatchError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
 `MaxErrorBodyBytes`
 
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
 ## Ownership and errors {#ownership-and-errors}
 
-The failure package exposes `Format`, `GoString`, `LogValue` as its main operations. Its exported typed failures include `APIError`, `ModelMismatchError`, `NetworkError`, `ResponseBodyTooLargeError`; classify them with errors.Is or errors.As. Retries do not replay a stream after output has started.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `NetworkError`, `APIError`, `ResponseBodyTooLargeError`, `ModelMismatchError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/inference/tree/v0.9.2/failure/) and adjacent tests. The progressive entries `stage-01-inference`, `stage-02-streaming`, `stage-22-model-gateway` cover deterministic invoke, stream, and gateway paths; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-inference`.
+Source files at the pinned commit:
+
+- [failure/errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/failure/errors.go)
+
+Adjacent tests at the same commit:
+
+- [failure/errors_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/failure/errors_test.go)
+
+Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

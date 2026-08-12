@@ -20,7 +20,7 @@ proofs:
 
 # client package · client
 
-Import path: `github.com/looprig/acp/client`. Client drives an ACP child over a protocol connection and exposes one typed Session per ACP session ID.
+Import path: `github.com/looprig/acp/client`. The source is pinned to github.com/looprig/acp@v0.2.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,100 @@ Import path: `github.com/looprig/acp/client`. Client drives an ACP child over a 
 
 ## Exported surface {#exported-surface}
 
-Public values are `Client`, `Session`, `Options`, new/load/resume parameter values, `PromptResult`, `Update`, `UpdateMeta`, `InitializeMetadata`, handler interfaces, steering values, and typed closed, duplicate, load-timeout, not-dialed, set-model, and steering errors. `New`, `Dial`, and `DecodeUpdateMeta` are constructors and codecs.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-Session methods cover `NewSession`, `LoadSession`, `ResumeSession`, `Prompt`, `Cancel`, `Updates`, and close. Prompt admission is one in flight per session; cancellation completes with a cancelled stop reason.
+- `func New(cmd stdio.Command, opts Options) *Client`
+- `func Dial(ctx context.Context, cmd stdio.Command, opts Options) (*Client, error)`
+- `func DecodeUpdateMeta(raw json.RawMessage) UpdateMeta`
+
+### Methods {#methods}
+
+- `func (c *Client) Dial(ctx context.Context) error`
+- `func (c *Client) Done() <-chan struct{}`
+- `func (c *Client) Close(ctx context.Context) error`
+- `func (c *Client) DroppedUpdates() uint64`
+- `func (c *Client) ProveSetModelCapability(key string) (proof SetModelCapability, ok bool)`
+- `func (e *ClosedError) Error() string`
+- `func (e *ClosedError) Unwrap() error`
+- `func (e *NotDialedError) Error() string`
+- `func (e *DuplicateSessionError) Error() string`
+- `func (e *LoadTimeoutError) Error() string`
+- `func (e *SetModelUnsupportedError) Error() string`
+- `func (c *Client) InitializeMetadata() (InitializeMetadata, error)`
+- `func (s *Session) Prompt(ctx context.Context, blocks []protocol.ContentBlock) (*PromptResult, error)`
+- `func (s *Session) Cancel(ctx context.Context) error`
+- `func (s *Session) ID() protocol.SessionID`
+- `func (s *Session) ConfigOptions() []protocol.SessionConfigOption`
+- `func (s *Session) Modes() *protocol.SessionModeState`
+- `func (s *Session) Updates() <-chan Update`
+- `func (s *Session) DroppedUpdates() uint64`
+- `func (s *Session) WaitForUpdates(ctx context.Context) error`
+- `func (s *Session) WaitForUpdatesThrough(ctx context.Context, sequence uint64) error`
+- `func (c *Client) NewSession(ctx context.Context, p NewSessionParams) (*Session, error)`
+- `func (c *Client) LoadSession(ctx context.Context, p LoadSessionParams) (*Session, error)`
+- `func (c *Client) ResumeSession(ctx context.Context, p ResumeSessionParams) (*Session, error)`
+- `func (s *Session) SetConfigOption(ctx context.Context, configID protocol.SessionConfigID, valueID protocol.SessionConfigValueID) error`
+- `func (s *Session) SetMode(ctx context.Context, modeID protocol.SessionModeID) error`
+- `func (s *Session) SetModel(ctx context.Context, proof SetModelCapability, modelID string) error`
+- `func (h *SteerHandle) Admission() <-chan bool`
+- `func (h *SteerHandle) Result() <-chan SteerCompletion`
+- `func (h *SteerHandle) Cancel()`
+- `func (e *boundedSteeringTransportCause) Error() string`
+- `func (e *boundedSteeringTransportCause) Is(target error) bool`
+- `func (e *boundedSteeringTransportCause) As(target any) bool`
+- `func (e *SteeringError) Error() string`
+- `func (e *SteeringError) Unwrap() error`
+- `func (s *Session) StartSteer(ctx context.Context, p SteerParams) *SteerHandle`
+- `func (s *Session) Steer(ctx context.Context, p SteerParams) (SteerResult, error)`
 
 ### Types {#types}
 
-Update metadata supports deduplication in a bounded window. `SteerHandle`, `SteerParams`, and `SteerResult` keep steering admission and outcome explicit.
+`Client`, `SetModelCapability`, `ClosedError`, `NotDialedError`, `DuplicateSessionError`, `LoadTimeoutError`, `SetModelUnsupportedError`, `InitializeMetadata`, `FSHandler`, `TerminalHandler`, `PermissionHandler`, `Options`, `PromptResult`, `NewSessionParams`, `LoadSessionParams`, `ResumeSessionParams`, `Session`, `SteerParams`, `SteerOutcome`, `SteerResult`, `SteerCompletion`, `SteerHandle`, `SteeringError`, `UpdateMeta`, `Update`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-Update queues and deduplication windows are bounded; load has a 90-second timeout. These are safety limits, not a guarantee that a child will respond.
+`LoadTimeout`, `UpdateQueueDepth`, `EventDedupWindowDepth`, `SteerOutcomeInjected`, `SteerOutcomePromptRequired`, `SteerOutcomeStartedNewTurn`, `SteerOutcomeFailed`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-Client owns the connection and child lifecycle; injected handlers own host resources. Validate inbound session IDs and resource identifiers before callback invocation. Close sessions before the client and let the transport reap the child.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `ClosedError`, `NotDialedError`, `DuplicateSessionError`, `LoadTimeoutError`, `SetModelUnsupportedError`, `SteeringError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned ACP client](https://github.com/looprig/acp/tree/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/). `stage-15-acp-foreign` configures the client indirectly through the foreign ACP driver.
+Source files at the pinned commit:
+
+- [client/client.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/client.go)
+- [client/dispatch.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/dispatch.go)
+- [client/errors.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/errors.go)
+- [client/initialize.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/initialize.go)
+- [client/options.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/options.go)
+- [client/prompt.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/prompt.go)
+- [client/session.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/session.go)
+- [client/steering.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/steering.go)
+- [client/updates.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/updates.go)
+
+Adjacent tests at the same commit:
+
+- [client/capabilities_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/capabilities_internal_test.go)
+- [client/client_integration_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/client_integration_test.go)
+- [client/config_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/config_internal_test.go)
+- [client/death_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/death_internal_test.go)
+- [client/dial_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/dial_internal_test.go)
+- [client/dispatch_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/dispatch_internal_test.go)
+- [client/fakeagent_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/fakeagent_internal_test.go)
+- [client/interop_integration_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/interop_integration_test.go)
+- [client/leak_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/leak_internal_test.go)
+- [client/prompt_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/prompt_internal_test.go)
+- [client/session_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/session_internal_test.go)
+- [client/steering_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/steering_internal_test.go)
+- [client/updates_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/updates_internal_test.go)
+
+Run `GOWORK=off go test ./...` from the `acp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

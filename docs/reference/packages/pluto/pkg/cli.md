@@ -25,12 +25,67 @@ The package keeps command parsing and process policy at a narrow seam. It receiv
 
 ## Exported surface {#exported-surface}
 
-`Main(args, app)` returns an integer. `App` carries registry, client factory, counter factory, environment lookup, stdout/stderr, clock, and rate-limit policy. `LLMConfig` carries provider/model/API-format/base-URL configuration. Exit constants are `ExitOK`, `ExitCommandFailure`, `ExitUsage`, `ExitGateFailed`, and `ExitPricing`.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-## Lifecycle and errors {#lifecycle-and-errors}
+### Functions {#functions}
 
-`Main` owns command lifetime and output; the caller owns injected resources. Usage, gate, pricing, and command failures remain distinct exit classes. API keys are looked up through the environment function, and sensitive values are not placed in `LLMConfig` diagnostics.
+- `func Main(args []string, app App) int`
 
-## Source proof {#source-proof}
+### Methods {#methods}
 
-Root CLI declarations are pinned to [pkg/cli](https://github.com/looprig/pluto/tree/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli); the separately released command module is pinned at [cmd/pluto/v0.1.2](https://github.com/looprig/pluto/tree/8ffaa725ece6b937e4852b23bbb3fa57a1e5dd03/cmd/pluto).
+- `func (s *stringList) String() string`
+- `func (s *stringList) Set(v string) error`
+
+### Types {#types}
+
+`App`, `LLMConfig`
+
+### Constants {#constants}
+
+`ExitOK`, `ExitCommandFailure`, `ExitUsage`, `ExitGateFailed`, `ExitPricing`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
+## Ownership and errors {#ownership-and-errors}
+
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+
+## Source and runnable proof {#source-and-runnable-proof}
+
+Source files at the pinned commit:
+
+- [pkg/cli/cli.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/cli.go)
+- [pkg/cli/comparecmd.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/comparecmd.go)
+- [pkg/cli/evaluators.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/evaluators.go)
+- [pkg/cli/gencmd.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/gencmd.go)
+- [pkg/cli/initcmd.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/initcmd.go)
+- [pkg/cli/runcmd.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/runcmd.go)
+- [pkg/cli/schema.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/schema.go)
+- [pkg/cli/ui.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/ui.go)
+- [pkg/cli/validate.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/validate.go)
+- [pkg/cli/viewport.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/viewport.go)
+- [pkg/cli/winsize_darwin.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/winsize_darwin.go)
+- [pkg/cli/winsize_linux.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/winsize_linux.go)
+- [pkg/cli/winsize_other.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/winsize_other.go)
+- [pkg/cli/winsize_unix.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/winsize_unix.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/cli/cli_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/cli_test.go)
+- [pkg/cli/comparecmd_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/comparecmd_test.go)
+- [pkg/cli/evaluators_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/evaluators_test.go)
+- [pkg/cli/gencmd_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/gencmd_test.go)
+- [pkg/cli/initcmd_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/initcmd_test.go)
+- [pkg/cli/preflight_counter_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/preflight_counter_test.go)
+- [pkg/cli/ratelimit_wiring_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/ratelimit_wiring_test.go)
+- [pkg/cli/runcmd_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/runcmd_test.go)
+- [pkg/cli/schema_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/schema_test.go)
+- [pkg/cli/validate_judge_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/validate_judge_test.go)
+- [pkg/cli/validate_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/validate_test.go)
+- [pkg/cli/viewport_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/cli/viewport_test.go)
+
+Run `GOWORK=off go test ./...` from the `pluto` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

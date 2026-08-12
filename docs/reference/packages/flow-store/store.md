@@ -18,7 +18,7 @@ proofs:
 
 # flowstore package · store
 
-Import path: `github.com/looprig/flow/store`. Flow checkpoint storage adapter over the neutral storage Ledger contract.
+Import path: `github.com/looprig/flow/store`. This nested package is available from the coordinated local source workspace at commit `c89d0eb101158996bd278578c0b93d55d67a8d8a`.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,47 @@ This is the nested `github.com/looprig/flow/store` module, distinct from release
 
 ## Exported surface {#exported-surface}
 
-The source package exports the following declarations.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`New`
+- `func New(ledger storage.Ledger) flow.CheckpointStore`
+
+### Methods {#methods}
+
+- `func (s *checkpointStore) Append(ctx context.Context, cp *flow.Checkpoint) error`
+- `func (s *checkpointStore) Latest(ctx context.Context, id flow.GraphRunID) (*flow.Checkpoint, error)`
+- `func (s *checkpointStore) History(ctx context.Context, id flow.GraphRunID) ([]*flow.Checkpoint, error)`
 
 ### Types {#types}
 
-None reported.
+No exported types are declared in this package.
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-`New` receives one caller-owned `storage.Ledger` and returns a Flow checkpoint store. The adapter does not own the ledger backend or upgrade it into a release. Checkpoint append and latest-checkpoint semantics remain the runner and ledger contracts; classify conflicts and decode failures with the exported Flow or storage errors.
+`New` receives a caller-provided `storage.Ledger` and returns a `flow.CheckpointStore`. The linked source and tests define how that ledger is used; no additional ownership, lifecycle, or retry behavior is inferred here.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [nested module source](https://github.com/looprig/flow/tree/main/store) and its tests. Use source-workspace replacements only in a coordinated checkout, then run `GOWORK=off go test ./...` from `flow/store`. The module proof pins the source-workspace location only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `module-flow-store`.
+Source files at the pinned commit:
+
+- local source `flow/store/codec.go` at commit `c89d0eb101158996bd278578c0b93d55d67a8d8a`
+- local source `flow/store/errors.go` at commit `c89d0eb101158996bd278578c0b93d55d67a8d8a`
+- local source `flow/store/store.go` at commit `c89d0eb101158996bd278578c0b93d55d67a8d8a`
+
+Adjacent tests at the same commit:
+
+- local test `flow/store/store_integration_test.go` at commit `c89d0eb101158996bd278578c0b93d55d67a8d8a`
+- local test `flow/store/store_test.go` at commit `c89d0eb101158996bd278578c0b93d55d67a8d8a`
+
+Run `GOWORK=off go test ./...` from the local `flow/store` directory after its source-workspace dependencies are available. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

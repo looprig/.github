@@ -25,12 +25,68 @@ The adapter turns a `session.SessionController` into the agent shape consumed by
 
 ## Exported surface {#exported-surface}
 
-`Adapter` is the public alias. Constructors are `New`, `NewWithReplay`, and `Restore`; `ReplayOpener` opens a `journal.EventReplayer` for a `sessionstore.ReplayRequest`. `GateNotOpenError` reports a missing `(loop ID, tool execution ID)` gate.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-## Lifecycle and errors {#lifecycle-and-errors}
+### Functions {#functions}
 
-`New` starts with no replay backlog. The replay constructors cold-replay and then repair gaps through a replaying live subscription. `Subscribe` returns a closeable subscription and the caller must close it. `Close` performs one session `Shutdown`; it does not own a root context or separate GC. Restore initialization failures call bounded shutdown on a detached context and return joined errors. A gate action without a matching open gate fails secure.
+- `func New(sess session.SessionController) *Adapter`
+- `func NewWithReplay(ctx context.Context, sess session.SessionController, store ReplayOpener) (*Adapter, error)`
+- `func Restore(ctx context.Context, sess session.SessionController, store ReplayOpener) (*Adapter, error)`
 
-## Source proof {#source-proof}
+### Methods {#methods}
 
-The package's lifecycle declarations and replay tests are pinned at the [sessionadapter source tree](https://github.com/looprig/tui/tree/6b362dda04b086c8a94146320e9faad38dac9b6c/sessionadapter). Stage 21 proves one adapter shutdown.
+- `func (a *sessionAdapter) Submit(ctx context.Context, blocks []content.Block) (uuid.UUID, error)`
+- `func (a *sessionAdapter) SubmitToLoop(ctx context.Context, loopID uuid.UUID, blocks []content.Block) (uuid.UUID, error)`
+- `func (a *sessionAdapter) ActiveLoopID() uuid.UUID`
+- `func (a *sessionAdapter) AcceptsImages(loopID uuid.UUID) bool`
+- `func (a *sessionAdapter) Subscribe(filter event.EventFilter) (event.Subscription, error)`
+- `func (a *sessionAdapter) ReplayBacklog(_ context.Context) ([]event.Event, error)`
+- `func (a *sessionAdapter) SessionID() uuid.UUID`
+- `func (a *sessionAdapter) Controller() session.SessionController`
+- `func (a *sessionAdapter) Interrupt(ctx context.Context) (bool, error)`
+- `func (e *GateNotOpenError) Error() string`
+- `func (a *sessionAdapter) Approve(ctx context.Context, loopID, callID uuid.UUID, action gate.ApprovalAction) error`
+- `func (a *sessionAdapter) Deny(ctx context.Context, loopID, callID uuid.UUID) error`
+- `func (a *sessionAdapter) ProvideAnswer(ctx context.Context, loopID, callID uuid.UUID, answer string) error`
+- `func (a *sessionAdapter) RespondGate(ctx context.Context, gateID gate.ID, action string, values map[string]json.RawMessage) error`
+- `func (a *sessionAdapter) Close(ctx context.Context) error`
+- `func (a *sessionAdapter) CompactToLoop(ctx context.Context, loopID uuid.UUID) (uuid.UUID, error)`
+- `func (s *gateFoldingSubscription) Events() <-chan event.Delivery`
+- `func (s *gateFoldingSubscription) Close() error`
+- `func (s *gateFoldingSubscription) Err() error`
+- `func (s *replayingSubscription) Events() <-chan event.Delivery`
+- `func (s *replayingSubscription) Close() error`
+- `func (s *replayingSubscription) Err() error`
+
+### Types {#types}
+
+`Adapter`, `ReplayOpener`, `GateNotOpenError`
+
+### Constants {#constants}
+
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
+## Ownership and errors {#ownership-and-errors}
+
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `GateNotOpenError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+
+## Source and runnable proof {#source-and-runnable-proof}
+
+Source files at the pinned commit:
+
+- [sessionadapter/adapter.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/sessionadapter/adapter.go)
+- [sessionadapter/replaying_subscription.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/sessionadapter/replaying_subscription.go)
+
+Adjacent tests at the same commit:
+
+- [sessionadapter/adapter_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/sessionadapter/adapter_test.go)
+- [sessionadapter/api_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/sessionadapter/api_test.go)
+- [sessionadapter/replaying_subscription_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/sessionadapter/replaying_subscription_test.go)
+
+Run `GOWORK=off go test ./...` from the `tui` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

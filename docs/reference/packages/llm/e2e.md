@@ -18,7 +18,7 @@ proofs:
 
 # e2e package · e2e
 
-Import path: `github.com/looprig/llm/e2e`. Package e2e - shared end-to-end envelope primitives. ML-KEM-768 encapsulation, HKDF-SHA256 key derivation, ChaCha20-Poly1305 AEAD, and gzip, in the wire layout used by chutes. Each provider package owns its own discovery, attestation, transport, and stream han
+Import path: `github.com/looprig/llm/e2e`. The source is pinned to github.com/looprig/llm@v0.13.3.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,48 @@ This package seals and opens bounded encrypted frames for an end-to-end transpor
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`DeriveKey`, `Error`, `Open`, `OpenFrame`, `Seal`, `SealFrame`, `Unwrap`
+- `func DeriveKey(shared, mlkemCT, info []byte) ([]byte, error)`
+- `func Seal(plaintext, recipientPub, info []byte, gzipFirst bool) (mlkemCT, blob []byte, err error)`
+- `func Open(shared, mlkemCT, blob, info []byte, gunzip bool) ([]byte, error)`
+- `func OpenFrame(key, blob []byte) ([]byte, error)`
+- `func SealFrame(key, plaintext []byte) ([]byte, error)`
+
+### Methods {#methods}
+
+- `func (e *Error) Error() string`
+- `func (e *Error) Unwrap() error`
 
 ### Types {#types}
 
 `Error`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`KeySize`, `MLKEMCTSize`, `NonceSize`, `SaltSize`, `TagSize`, `ErrShortBlob`
+`MLKEMCTSize`, `SaltSize`, `KeySize`, `NonceSize`, `TagSize`
+
+### Variables {#variables}
+
+`ErrShortBlob`
 
 ## Ownership and errors {#ownership-and-errors}
 
-The e2e package exposes `DeriveKey`, `Open`, `OpenFrame`, `Seal` as its main operations. Use `Open` as the package construction entry point when creating that value. Its exported typed failures include `Error`, `ErrShortBlob`; classify them with errors.Is or errors.As. Provider subscriptions may intentionally fail closed when the required gate is unavailable.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `Error`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/llm/tree/v0.13.3/e2e/) and adjacent tests. The module's deterministic examples live under `llm/examples` and are run by the module's native test command; provider live probes remain opt-in. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-llm`.
+Source files at the pinned commit:
+
+- [e2e/envelope.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/e2e/envelope.go)
+- [e2e/errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/e2e/errors.go)
+
+Adjacent tests at the same commit:
+
+- [e2e/envelope_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/e2e/envelope_test.go)
+
+Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

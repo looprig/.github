@@ -20,7 +20,7 @@ proofs:
 
 # sandboxtest package · pkg/sandboxtest
 
-Import path: `github.com/looprig/sandbox/pkg/sandboxtest`. Package sandboxtest is a reusable conformance suite for sandbox executors, modelled on the storekit `storetest` pattern: a consumer supplies a factory that builds an executor, and RunSuite asserts the core sandbox invariants hold against it. It is the executor
+Import path: `github.com/looprig/sandbox/pkg/sandboxtest`. The source is pinned to github.com/looprig/sandbox@v0.8.1.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,50 @@ This page indexes the exported declarations in the current source package. Sandb
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`CheckClaimedImplications`, `RequireLiveGate`, `RunSuite`
+- `func CheckClaimedImplications(t *testing.T, sut SUT, probes ImplicationProbes)`
+- `func RequireLiveGate(t testing.TB, gate LiveGate)`
+- `func RunSuite(t *testing.T, name string, newSUT Factory)`
+
+### Methods {#methods}
+
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-`ArgvSUT`, `Factory`, `ImplicationProbe`, `ImplicationProbes`, `ImplicationResult`, `LiveGate`, `SUT`
+`SUT`, `ArgvSUT`, `ImplicationResult`, `ImplicationProbe`, `ImplicationProbes`, `Factory`, `LiveGate`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`GuaranteeProcessBoundary`, `LevelNone`
+`GuaranteeProcessBoundary`, `GuaranteeWriteBoundary`, `GuaranteeReadBoundary`, `GuaranteeEnvScrub`, `GuaranteeNetworkBoundary`, `GuaranteeAddressNetwork`, `GuaranteeResourceLimits`, `GuaranteeTargetNetwork`, `LevelNone`, `LevelDegraded`, `LevelFull`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The sandboxtest package exposes `CheckClaimedImplications`, `RequireLiveGate`, `RunSuite` as its main operations. Use `RunSuite` as the package construction entry point when creating that value. No package-specific error type is exported here; use the owning contract or helper return error rather than parsing diagnostic text. A requested sandbox guarantee is not silently replaced by an unconfined fallback.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/sandbox/tree/v0.8.1/pkg/sandboxtest/) and adjacent tests. Progressive entry `stage-11-sandbox-process` constructs a profile, runs a confined `echo` command, and asserts a non-none enforcement level; run it with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-sandbox`.
+Source files at the pinned commit:
+
+- [pkg/sandboxtest/sandboxtest.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/pkg/sandboxtest/sandboxtest.go)
+- [pkg/sandboxtest/shell_unix.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/pkg/sandboxtest/shell_unix.go)
+- [pkg/sandboxtest/shell_windows.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/pkg/sandboxtest/shell_windows.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/sandboxtest/fixture_windows_test.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/pkg/sandboxtest/fixture_windows_test.go)
+- [pkg/sandboxtest/live_platform_other_test.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/pkg/sandboxtest/live_platform_other_test.go)
+- [pkg/sandboxtest/live_platform_windows_test.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/pkg/sandboxtest/live_platform_windows_test.go)
+- [pkg/sandboxtest/sandboxtest_test.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/pkg/sandboxtest/sandboxtest_test.go)
+- [pkg/sandboxtest/shell_windows_test.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/pkg/sandboxtest/shell_windows_test.go)
+
+Run `GOWORK=off go test ./...` from the `sandbox` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

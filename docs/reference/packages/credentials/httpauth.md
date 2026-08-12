@@ -18,7 +18,7 @@ proofs:
 
 # httpauth package · httpauth
 
-Import path: `github.com/looprig/credentials/httpauth`. Package httpauth contains call-scoped HTTP request authorizers. It depends only on secrets and deliberately does not import the credentials root, keeping the protocol boundary usable by sources and transports alike.
+Import path: `github.com/looprig/credentials/httpauth`. The source is pinned to github.com/looprig/credentials@v0.1.0.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,94 @@ This page indexes the exported declarations in the current source package. The o
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-None reported.
+- `func None() Authorizer`
+- `func Header(name string, value secrets.Secret) (Authorizer, error)`
+- `func NewHeader(name string, value secrets.Secret) (Authorizer, error)`
+- `func Bearer(value secrets.Secret) (Authorizer, error)`
+- `func NewBearer(value secrets.Secret) (Authorizer, error)`
+
+### Methods {#methods}
+
+- `func (e *invalidHeaderNameError) LogValue() slog.Value`
+- `func (e *invalidHeaderNameError) Error() string`
+- `func (e *invalidHeaderNameError) Unwrap() error`
+- `func (e *invalidHeaderNameError) Reason() string`
+- `func (e *invalidHeaderNameError) Format(state fmt.State, _ rune)`
+- `func (e *invalidHeaderNameError) GoString() string`
+- `func (e *invalidHeaderValueError) Error() string`
+- `func (e *invalidHeaderValueError) Unwrap() error`
+- `func (e *invalidHeaderValueError) Reason() string`
+- `func (e *invalidHeaderValueError) Format(state fmt.State, _ rune)`
+- `func (e *invalidHeaderValueError) GoString() string`
+- `func (e *invalidHeaderValueError) LogValue() slog.Value`
+- `func (e *zeroSecretError) Error() string`
+- `func (e *zeroSecretError) Unwrap() error`
+- `func (e *zeroSecretError) Format(state fmt.State, _ rune)`
+- `func (e *zeroSecretError) GoString() string`
+- `func (e *zeroSecretError) LogValue() slog.Value`
+- `func (e *nilRequestError) Error() string`
+- `func (e *nilRequestError) Unwrap() error`
+- `func (e *nilRequestError) Format(state fmt.State, _ rune)`
+- `func (e *nilRequestError) GoString() string`
+- `func (e *nilRequestError) LogValue() slog.Value`
+- `func (e *nilContextError) Error() string`
+- `func (e *nilContextError) Unwrap() error`
+- `func (e *nilContextError) Format(state fmt.State, _ rune)`
+- `func (e *nilContextError) GoString() string`
+- `func (e *nilContextError) LogValue() slog.Value`
+- `func (e *canceledError) Error() string`
+- `func (e *canceledError) Unwrap() error`
+- `func (e *canceledError) Is(target error) bool`
+- `func (e *canceledError) Format(state fmt.State, _ rune)`
+- `func (e *canceledError) GoString() string`
+- `func (e *canceledError) LogValue() slog.Value`
+- `func (noneAuthorizer) Authorize(ctx context.Context, request *http.Request) error`
+- `func (noneAuthorizer) String() string`
+- `func (a noneAuthorizer) Format(state fmt.State, _ rune)`
+- `func (a noneAuthorizer) GoString() string`
+- `func (a noneAuthorizer) LogValue() slog.Value`
+- `func (a *headerAuthorizer) Authorize(ctx context.Context, request *http.Request) error`
+- `func (a *headerAuthorizer) String() string`
+- `func (a *headerAuthorizer) Format(state fmt.State, _ rune)`
+- `func (a *headerAuthorizer) GoString() string`
+- `func (a *headerAuthorizer) LogValue() slog.Value`
+- `func (a *bearerAuthorizer) Authorize(ctx context.Context, request *http.Request) error`
+- `func (a *bearerAuthorizer) String() string`
+- `func (a *bearerAuthorizer) Format(state fmt.State, _ rune)`
+- `func (a *bearerAuthorizer) GoString() string`
+- `func (a *bearerAuthorizer) LogValue() slog.Value`
 
 ### Types {#types}
 
-`Authorizer`, `InvalidHeaderNameError`, `InvalidHeaderValueError`, `NilRequestError`, `ZeroSecretError`
+`InvalidHeaderNameError`, `InvalidHeaderValueError`, `ZeroSecretError`, `NilRequestError`, `Authorizer`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`MaxHeaderNameLength`, `ErrCanceled`, `ErrInvalidHeaderName`, `ErrInvalidHeaderValue`, `ErrNilContext`, `ErrNilRequest`, `ErrZeroSecret`
+`MaxHeaderNameLength`
+
+### Variables {#variables}
+
+`ErrInvalidHeaderName`
 
 ## Ownership and errors {#ownership-and-errors}
 
-The httpauth package exposes value declarations for its boundary. Its exported typed failures include `InvalidHeaderNameError`, `InvalidHeaderValueError`, `NilRequestError`, `ZeroSecretError`; classify them with errors.Is or errors.As. Credential sources must redact tokens and cannot make provider authorization durable by themselves.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/credentials/tree/v0.1.0/httpauth/) and adjacent tests. The repository keeps deterministic examples beside the implementation. Run the module tests with `GOWORK=off go test ./...` and use the package-level examples where present. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-credentials`.
+Source files at the pinned commit:
+
+- [httpauth/httpauth.go](https://github.com/looprig/credentials/blob/d696dd78cf4773da660b7cbf59533832fbaf4ed0/httpauth/httpauth.go)
+
+Adjacent tests at the same commit:
+
+- [httpauth/httpauth_internal_test.go](https://github.com/looprig/credentials/blob/d696dd78cf4773da660b7cbf59533832fbaf4ed0/httpauth/httpauth_internal_test.go)
+- [httpauth/httpauth_test.go](https://github.com/looprig/credentials/blob/d696dd78cf4773da660b7cbf59533832fbaf4ed0/httpauth/httpauth_test.go)
+
+Run `GOWORK=off go test ./...` from the `credentials` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

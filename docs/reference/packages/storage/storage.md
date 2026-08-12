@@ -20,7 +20,7 @@ proofs:
 
 # storage package
 
-Import path: `github.com/looprig/storage`. Package storage defines four neutral storage primitives - Ledger (an append-only, CAS-sequenced record log), Leaser (a single-writer epoch lease), KV (revision-CAS metadata), and Blobs (content-addressed immutable bytes) - plus a typed error taxonomy, Validate
+Import path: `github.com/looprig/storage`. The source is pinned to github.com/looprig/storage@v0.3.1.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,65 @@ This page indexes the exported declarations in the current source package. The o
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`AppendDefinite`, `Error`, `Unwrap`, `ValidateName`
+- `func AppendDefinite(ctx context.Context, l Ledger, name string, expected uint64, payload []byte) error`
+- `func ValidateName(name string) error`
+- `func NewComposite(l Ledger, le Leaser, kv KV, bl Blobs) (*Composite, error)`
+
+### Methods {#methods}
+
+- `func (e *AppendVerifyError) Error() string`
+- `func (e *AppendVerifyError) Unwrap() error`
+- `func (e *ConflictError) Error() string`
+- `func (e *AmbiguousError) Error() string`
+- `func (e *AmbiguousError) Unwrap() error`
+- `func (e *RecordNotFoundError) Error() string`
+- `func (e *KeyNotFoundError) Error() string`
+- `func (e *BlobNotFoundError) Error() string`
+- `func (e *BlobConflictError) Error() string`
+- `func (e *LeaseHeldError) Error() string`
+- `func (e *LeaseLostError) Error() string`
+- `func (e *InvalidNameError) Error() string`
+- `func (e *IncompleteCompositeError) Error() string`
 
 ### Types {#types}
 
-`AmbiguousError`, `AppendVerifyError`, `BlobConflictError`, `BlobNotFoundError`, `Blobs`, `Composite`, `ConflictError`, `Cursor`, `IncompleteCompositeError`, `InvalidNameError`, `KV`, `KeyNotFoundError`, `Lease`, `LeaseHeldError`, `LeaseLostError`, `Leaser`, `Ledger`, `PathReporter`, `Record`, `RecordNotFoundError`
+`AppendVerifyError`, `ConflictError`, `AmbiguousError`, `RecordNotFoundError`, `KeyNotFoundError`, `BlobNotFoundError`, `BlobConflictError`, `LeaseHeldError`, `LeaseLostError`, `InvalidNameError`, `PathReporter`, `Ledger`, `Record`, `Cursor`, `Leaser`, `Lease`, `KV`, `Blobs`, `Composite`, `IncompleteCompositeError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The storage package exposes `AppendDefinite`, `ValidateName` as its main operations. Its exported typed failures include `AmbiguousError`, `AppendVerifyError`, `BlobConflictError`, `BlobNotFoundError`; classify them with errors.Is or errors.As. The contract leaves backend durability and retry semantics to the selected implementation.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `AppendVerifyError`, `ConflictError`, `AmbiguousError`, `RecordNotFoundError`, `KeyNotFoundError`, `BlobNotFoundError`, `BlobConflictError`, `LeaseHeldError`, `LeaseLostError`, `InvalidNameError`, `IncompleteCompositeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/storage/tree/v0.3.1/) and adjacent tests. The progressive manifest entries `stage-10-workspace` exercise this area; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-storage`.
+Source files at the pinned commit:
+
+- [appenddefinite.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/appenddefinite.go)
+- [errors.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/errors.go)
+- [names.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/names.go)
+- [paths.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/paths.go)
+- [storage.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/storage.go)
+
+Adjacent tests at the same commit:
+
+- [appenddefinite_test.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/appenddefinite_test.go)
+- [errors_test.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/errors_test.go)
+- [names_test.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/names_test.go)
+- [package_name_test.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/package_name_test.go)
+- [paths_test.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/paths_test.go)
+- [storage_test.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/storage_test.go)
+
+Run `GOWORK=off go test ./...` from the `storage` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

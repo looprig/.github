@@ -18,7 +18,7 @@ proofs:
 
 # sap package · providers/sap-ai-core
 
-Import path: `github.com/looprig/llm/providers/sap-ai-core`. Package sap provides SAP AI Core's orchestration chat endpoint. SAP AI Core uses a service-key OAuth client-credentials flow, deployment discovery, and the deployment URL's /v2/chat route; it is not treated as a generic hosted API-key provider.
+Import path: `github.com/looprig/llm/providers/sap-ai-core`. The source is pinned to github.com/looprig/llm@v0.13.3.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,65 @@ This provider package binds one external model service to provider-neutral infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Error`, `Invoke`, `New`, `NewCounter`, `NewFromEnvironment`, `Stream`, `Unwrap`
+- `func ParseServiceKey(raw []byte) (ServiceKey, error)`
+- `func WithDeploymentURL(value string) Option`
+- `func WithDeploymentID(value string) Option`
+- `func WithResourceGroup(value string) Option`
+- `func WithHeader(name, value string) Option`
+- `func WithModelParams(params map[string]any) Option`
+- `func WithModelParam(name string, value any) Option`
+- `func New(selected model.Model, serviceKey ServiceKey, options ...Option) (inference.Client, error)`
+- `func NewFromEnvironment(selected model.Model, options ...Option) (inference.Client, error)`
+- `func NewCounter(_ auth.APIKey) (contextcount.ContextCounter, error)`
+
+### Methods {#methods}
+
+- `func (c *Client) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
+- `func (c *Client) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
+- `func (c modelParamsCodec) EncodeRequest(req inference.Request, mode codec.RequestMode) (codec.EncodedRequest, error)`
+- `func (c modelParamsCodec) DecodeResponse(body []byte) (*inference.Response, error)`
+- `func (c modelParamsCodec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
+- `func (r headerRoute) BuildRoute(baseURL string, _ inference.Request, _ codec.RequestMode) (route.Route, error)`
+- `func (a *serviceKeyAuthenticator) Authorize(ctx context.Context, req *http.Request) error`
+- `func (e *ConfigurationError) Error() string`
+- `func (e *ConfigurationError) Unwrap() error`
+- `func (e *AuthError) Error() string`
+- `func (e *AuthError) Unwrap() error`
+- `func (e *RequestError) Error() string`
+- `func (e *RequestError) Unwrap() error`
 
 ### Types {#types}
 
-`AuthError`, `Client`, `ConfigurationError`, `ConfigurationReason`, `CounterSupportError`, `Option`, `RequestError`, `ServiceKey`
+`ServiceKey`, `Option`, `Client`, `ConfigurationReason`, `ConfigurationError`, `AuthError`, `RequestError`, `CounterSupportError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`ServiceKeyMissing`, `InvalidServiceKey`, `InvalidModelParams`, `DeploymentMissing`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The sap-ai-core package exposes `Invoke`, `New`, `NewCounter`, `NewFromEnvironment` as its main operations. The principal handle or value is `Client`; retain it according to its declaration before calling a terminal method. Use `New` as the package construction entry point when creating that value. Its exported typed failures include `AuthError`, `ConfigurationError`, `CounterSupportError`, `RequestError`; classify them with errors.Is or errors.As. Provider subscriptions may intentionally fail closed when the required gate is unavailable.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `ConfigurationError`, `AuthError`, `RequestError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/llm/tree/v0.13.3/providers/sap-ai-core/) and adjacent tests. Provider deterministic tests run in the llm module; live probes are opt-in. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-llm`.
+Source files at the pinned commit:
+
+- [providers/sap-ai-core/client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/sap-ai-core/client.go)
+- [providers/sap-ai-core/counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/sap-ai-core/counter.go)
+- [providers/sap-ai-core/errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/sap-ai-core/errors.go)
+
+Adjacent tests at the same commit:
+
+- [providers/sap-ai-core/client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/sap-ai-core/client_test.go)
+
+Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

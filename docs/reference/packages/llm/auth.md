@@ -18,7 +18,7 @@ proofs:
 
 # auth package · auth
 
-Import path: `github.com/looprig/llm/auth`. Package auth provides access to user-provided authentication credentials.
+Import path: `github.com/looprig/llm/auth`. The source is pinned to github.com/looprig/llm@v0.13.3.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,48 @@ This support package is part of LLM model access and is intended to be composed 
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`AddCredentials`
+- `func SigV4(creds SigV4Credentials, region, service string) inferauth.Authenticator`
+
+### Methods {#methods}
+
+- `func (e *MissingSigV4CredentialsError) Error() string`
+- `func (e *BodyReadError) Error() string`
+- `func (e *BodyReadError) Unwrap() error`
+- `func (s *sigV4Auth) Authorize(_ context.Context, r *http.Request) error`
+- `func (SigV4Credentials) String() string`
+- `func (SigV4Credentials) LogValue() slog.Value`
+- `func (SigV4Credentials) GoString() string`
 
 ### Types {#types}
 
-None reported.
+`SigV4Credentials`, `MissingSigV4CredentialsError`, `BodyReadError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The auth package exposes `AddCredentials` as its main operations. No package-specific error type is exported here; use the owning contract or helper return error rather than parsing diagnostic text. Provider subscriptions may intentionally fail closed when the required gate is unavailable.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `MissingSigV4CredentialsError`, `BodyReadError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/llm/tree/v0.13.3/auth/) and adjacent tests. The module's deterministic examples live under `llm/examples` and are run by the module's native test command; provider live probes remain opt-in. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-llm`.
+Source files at the pinned commit:
+
+- [auth/sigv4.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/auth/sigv4.go)
+
+Adjacent tests at the same commit:
+
+- [auth/sigv4_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/auth/sigv4_test.go)
+
+Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

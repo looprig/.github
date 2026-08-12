@@ -53,4 +53,4 @@ The codec rejects unknown tags, malformed payloads, typed-nil blocks, and inputs
 
 ## Runnable proof {#runnable-proof}
 
-`stage-01-inference` proves that an invocation can produce a complete assistant message. `stage-02-streaming` proves ordered chunks, accumulation, and the terminal `stop` result. Run them with `node scripts/docs/run-examples.mjs`; the source and adjacent tests are pinned in the [Core content tree](https://github.com/looprig/core/tree/v0.5.1/content/). Precise source and test proof IDs beyond the release record are a Task15 evidence-promotion gap.
+`stage-01-inference` proves that an invocation can produce a complete assistant message. `stage-02-streaming` proves ordered chunks, accumulation, and the terminal `stop` result. Run them with `node scripts/docs/run-examples.mjs`; the source and adjacent tests are pinned in the [Core content tree](https://github.com/looprig/core/tree/v0.5.1/content/). The referenced package pages list the pinned source files and adjacent tests used for this boundary.

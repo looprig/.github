@@ -25,12 +25,43 @@ The package compares two qualification scorecards without erasing differences in
 
 ## Exported surface {#exported-surface}
 
-`Compare(candidate, incumbent)` returns `Comparison`. `TableComparison`, `UnmatchedTable`, `CaseKey`, `CaseComparison`, `Distribution`, `MeasurementDelta`, `TrialResult`, `Side`, `ComparisonSide`, and `CaseClass` describe aligned, unmatched, skipped, and changed cases. `RoleMismatchError` rejects an invalid role pairing.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-## Lifecycle and errors {#lifecycle-and-errors}
+### Functions {#functions}
 
-Inputs are validated before alignment. Tables align by pack and table; unmatched and skipped entries remain visible. A single report carrying evaluator revision drift is rejected, while a legitimate cross-report revision change remains comparable with its provenance. Non-finite measurements are typed errors.
+- `func Compare(candidate, incumbent qual.Scorecard) (Comparison, error)`
 
-## Source proof {#source-proof}
+### Methods {#methods}
 
-See the pinned [comparison implementation](https://github.com/looprig/pluto/tree/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/compare).
+- `func (s Side) Validate() error`
+- `func (e *RoleMismatchError) Error() string`
+
+### Types {#types}
+
+`Side`, `UnmatchedTable`, `TableComparison`, `Comparison`, `RoleMismatchError`
+
+### Constants {#constants}
+
+`SideCandidateOnly`, `SideIncumbentOnly`, `SideSkipped`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
+## Ownership and errors {#ownership-and-errors}
+
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `RoleMismatchError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+
+## Source and runnable proof {#source-and-runnable-proof}
+
+Source files at the pinned commit:
+
+- [pkg/compare/compare.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/compare/compare.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/compare/compare_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/compare/compare_test.go)
+
+Run `GOWORK=off go test ./...` from the `pluto` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

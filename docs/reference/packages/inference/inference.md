@@ -22,7 +22,7 @@ proofs:
 
 # inference package · inference
 
-Import path: `github.com/looprig/inference`. This public package defines one part of the provider-neutral inference API.
+Import path: `github.com/looprig/inference`. The source is pinned to github.com/looprig/inference@v0.9.2.
 
 ## Package role {#package-role}
 
@@ -30,24 +30,69 @@ This page indexes the exported declarations in the current source package. Infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Clone`, `DecodeMessageOutput`, `DecodeOutput`, `Error`, `StructuredMessageResult`, `StructuredResult`, `ValidateOutputSchema`, `ValidateRequestFeatures`
+- `func ValidateRequestFeatures(req Request) error`
+- `func ValidateOutputSchema(output OutputSchema) error`
+- `func StructuredResult(resp *Response) (json.RawMessage, error)`
+- `func StructuredMessageResult(msg *content.AIMessage) (json.RawMessage, error)`
+- `func DecodeOutput(resp *Response, out any) error`
+- `func DecodeMessageOutput(msg *content.AIMessage, out any) error`
+
+### Methods {#methods}
+
+- `func (o OutputSchema) Clone() OutputSchema`
+- `func (v *schemaStringValue) UnmarshalJSON(raw []byte) error`
+- `func (v *schemaPropertiesValue) UnmarshalJSON(raw []byte) error`
+- `func (v *schemaRawValue) UnmarshalJSON(raw []byte) error`
+- `func (v *schemaEnumValue) UnmarshalJSON(raw []byte) error`
+- `func (v *schemaStringsValue) UnmarshalJSON(raw []byte) error`
+- `func (v *schemaBoolValue) UnmarshalJSON(raw []byte) error`
+- `func (e *SchemaValidationError) Error() string`
+- `func (e *StructuredOutputUnsupportedError) Error() string`
+- `func (e *StructuredOutputWithToolsUnsupportedError) Error() string`
+- `func (e *ImageInputUnsupportedError) Error() string`
+- `func (e *StructuredOutputConflictError) Error() string`
+- `func (e *MalformedStructuredOutputError) Error() string`
+- `func (e *StructuredOutputFinishError) Error() string`
 
 ### Types {#types}
 
-`Client`, `ImageInputUnsupportedError`, `MalformedStructuredOutputError`, `MalformedStructuredOutputReason`, `OutputSchema`, `Request`, `Response`, `SchemaValidationError`, `SchemaValidationField`, `SchemaValidationReason`, `StructuredOutputConflictError`, `StructuredOutputFinishError`, `StructuredOutputUnsupportedError`, `StructuredOutputWithToolsUnsupportedError`, `Tool`, `ToolChoice`
+`Client`, `ToolChoice`, `Request`, `Response`, `Tool`, `OutputSchema`, `SchemaValidationField`, `SchemaValidationReason`, `SchemaValidationError`, `StructuredOutputUnsupportedError`, `StructuredOutputWithToolsUnsupportedError`, `ImageInputUnsupportedError`, `StructuredOutputConflictError`, `MalformedStructuredOutputReason`, `MalformedStructuredOutputError`, `StructuredOutputFinishError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`MaxStructuredOutputDiagnosticBytes`, `MaxStructuredResultBytes`, `StructuredOutputFinishReasonOther`, `StructuredOutputRevision`, `StructuredOutputToolName`
+`ToolChoiceAuto`, `ToolChoiceRequired`, `StructuredOutputToolName`, `StructuredOutputRevision`, `MaxStructuredOutputDiagnosticBytes`, `MaxStructuredResultBytes`, `StructuredOutputFinishReasonOther`, `SchemaFieldName`, `SchemaFieldDescription`, `SchemaFieldSchema`, `SchemaFieldKeyword`, `SchemaFieldType`, `SchemaFieldProperties`, `SchemaFieldItems`, `SchemaFieldEnum`, `SchemaFieldRequired`, `SchemaFieldAdditionalProperties`, `SchemaFieldOutput`, `SchemaReasonEmpty`, `SchemaReasonInvalid`, `SchemaReasonReserved`, `SchemaReasonTooLong`, `SchemaReasonInvalidUTF8`, `SchemaReasonMalformed`, `SchemaReasonTooLarge`, `SchemaReasonRootNotObject`, `SchemaReasonUnknownKeyword`, `SchemaReasonMissing`, `SchemaReasonUnsupported`, `SchemaReasonMustBeFalse`, `SchemaReasonDuplicate`, `SchemaReasonUnknownProperty`, `SchemaReasonTypeMismatch`, `SchemaReasonTooDeep`, `SchemaReasonTooManyProperties`, `SchemaReasonInvalidTarget`, `SchemaReasonDecodeFailed`, `MalformedReasonNilResponse`, `MalformedReasonNilMessage`, `MalformedReasonWrongRole`, `MalformedReasonEmpty`, `MalformedReasonMalformedJSON`, `MalformedReasonRootNotObject`, `MalformedReasonInvalidRepresentation`, `MalformedReasonAmbiguous`, `MalformedReasonInvalidBlock`, `MalformedReasonNilBlock`, `MalformedReasonTooLarge`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The inference package exposes `Clone`, `DecodeMessageOutput`, `DecodeOutput`, `StructuredMessageResult` as its main operations. The principal handle or value is `Client`; retain it according to its declaration before calling a terminal method. Its exported typed failures include `ImageInputUnsupportedError`, `MalformedStructuredOutputError`, `SchemaValidationError`, `StructuredOutputConflictError`; classify them with errors.Is or errors.As. Retries do not replay a stream after output has started.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `SchemaValidationError`, `StructuredOutputUnsupportedError`, `StructuredOutputWithToolsUnsupportedError`, `ImageInputUnsupportedError`, `StructuredOutputConflictError`, `MalformedStructuredOutputError`, `StructuredOutputFinishError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/inference/tree/v0.9.2/) and adjacent tests. The progressive entries `stage-01-inference`, `stage-02-streaming`, `stage-22-model-gateway` cover deterministic invoke, stream, and gateway paths; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-inference`.
+Source files at the pinned commit:
+
+- [client.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/client.go)
+- [json_unique.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/json_unique.go)
+- [output.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/output.go)
+- [structured_errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/structured_errors.go)
+- [structured_result.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/structured_result.go)
+
+Adjacent tests at the same commit:
+
+- [client_images_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/client_images_test.go)
+- [client_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/client_test.go)
+- [output_fuzz_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/output_fuzz_test.go)
+- [output_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/output_test.go)
+- [structured_result_internal_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/structured_result_internal_test.go)
+- [structured_result_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/structured_result_test.go)
+
+Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

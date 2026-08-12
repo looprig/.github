@@ -18,7 +18,7 @@ proofs:
 
 # chutes package · providers/chutes
 
-Import path: `github.com/looprig/llm/providers/chutes`. Package chutes is a Chutes end-to-end-encrypted, TEE-attested LLM client. It satisfies inference.Client and tunnels OpenAI chat completions through the Chutes /e2e/invoke API sealed with post-quantum ML-KEM-768 + ChaCha20-Poly1305.
+Import path: `github.com/looprig/llm/providers/chutes`. The source is pinned to github.com/looprig/llm@v0.13.3.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,59 @@ This provider package binds one external model service to provider-neutral infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Invoke`, `Stream`
+- `func WithHTTPClient(hc *http.Client) Option`
+- `func WithLLMBase(base string) Option`
+- `func WithNRAS(nrasURL, jwksURL string) Option`
+- `func New(apiBase, apiKey string, opts ...Option) *Client`
+
+### Methods {#methods}
+
+- `func (c *Client) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
+- `func (c *Client) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
+- `func (s *sseEventReader) Close() error`
+- `func (c *cancelReadCloser) Close() error`
+- `func (c *onceReadCloser) Close() error`
 
 ### Types {#types}
 
-`AttestReason`, `Client`, `Option`
+`Client`, `Option`, `AttestReason`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`ReasonQuoteSignatureInvalid`, `ReasonRootCAUntrusted`, `ReasonBindingMismatch`, `ReasonEvidenceMalformed`, `ReasonNvidiaVerdictInvalid`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The chutes package exposes `Invoke`, `Stream` as its main operations. The principal handle or value is `Client`; retain it according to its declaration before calling a terminal method. No package-specific error type is exported here; use the owning contract or helper return error rather than parsing diagnostic text. Provider subscriptions may intentionally fail closed when the required gate is unavailable.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/llm/tree/v0.13.3/providers/chutes/) and adjacent tests. Provider deterministic tests run in the llm module; live probes are opt-in. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-llm`.
+Source files at the pinned commit:
+
+- [providers/chutes/attest.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/chutes/attest.go)
+- [providers/chutes/client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/chutes/client.go)
+- [providers/chutes/decode.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/chutes/decode.go)
+- [providers/chutes/discover.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/chutes/discover.go)
+- [providers/chutes/encode.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/chutes/encode.go)
+- [providers/chutes/errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/chutes/errors.go)
+- [providers/chutes/ssereader.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/chutes/ssereader.go)
+- [providers/chutes/stream.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/chutes/stream.go)
+
+Adjacent tests at the same commit:
+
+- [providers/chutes/client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/chutes/client_test.go)
+- [providers/chutes/encode_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/chutes/encode_test.go)
+- [providers/chutes/export_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/chutes/export_test.go)
+- [providers/chutes/usage_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/chutes/usage_test.go)
+
+Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

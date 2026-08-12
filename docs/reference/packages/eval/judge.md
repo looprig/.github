@@ -20,7 +20,7 @@ proofs:
 
 # judge package · judge
 
-Import path: `github.com/looprig/eval/judge`. Package judge implements the structured-output model judge: an eval.Evaluator that scores a sample's conversation against a rubric by calling an inference.Client with strict structured output. It is the first eval package permitted to depend on github.com/loop
+Import path: `github.com/looprig/eval/judge`. The source is pinned to github.com/looprig/eval@v0.1.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,65 @@ This page indexes the exported declarations in the current source package. Eval 
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Error`, `New`, `Unwrap`
+- `func WithMeasurementName(name eval.Name) Option`
+- `func New(r rubric.Rubric, client inference.Client, template inference.Request, opts ...Option) eval.Evaluator`
+
+### Methods {#methods}
+
+- `func (e *UnsupportedStructuredOutputError) Error() string`
+- `func (e *UnsupportedStructuredOutputError) Unwrap() error`
+- `func (e *RequestInvalidError) Error() string`
+- `func (e *RequestInvalidError) Unwrap() error`
+- `func (e *InferenceError) Error() string`
+- `func (e *InferenceError) Unwrap() error`
+- `func (e *MalformedOutputError) Error() string`
+- `func (e *MalformedOutputError) Unwrap() error`
+- `func (e *ScoreRangeError) Error() string`
+- `func (e *MessageIndexError) Error() string`
+- `func (e *QuoteNotFoundError) Error() string`
+- `func (e *RubricInvalidError) Error() string`
+- `func (e *RubricInvalidError) Unwrap() error`
+- `func (e *evaluator) Descriptor() eval.Descriptor`
+- `func (e *evaluator) Evaluate(ctx context.Context, s eval.Sample) (eval.Assessment, error)`
+- `func (s scoreSchema) Revision() eval.Revision`
+- `func (s scoreSchema) OutputSchema() inference.OutputSchema`
+- `func (s scoreSchema) Decode(raw []byte) (ScoreOutput, error)`
+- `func (s scoreSchema) Validate(out ScoreOutput, minScore, maxScore float64, conv content.AgenticMessages) error`
 
 ### Types {#types}
 
-`InferenceError`, `MalformedOutputError`, `MessageIndexError`, `Option`, `QuoteNotFoundError`, `QuotedEvidence`, `RequestInvalidError`, `RubricInvalidError`, `ScoreOutput`, `ScoreRangeError`, `UnsupportedStructuredOutputError`
+`UnsupportedStructuredOutputError`, `RequestInvalidError`, `InferenceError`, `MalformedOutputError`, `ScoreRangeError`, `MessageIndexError`, `QuoteNotFoundError`, `RubricInvalidError`, `Option`, `QuotedEvidence`, `ScoreOutput`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`MaxEvidenceQuotes`, `MaxQuoteBytes`, `MaxReasonBytes`, `ScoreSchemaRevision`, `ScoreSchemaV1`
+`ScoreSchemaRevision`, `MaxReasonBytes`, `MaxEvidenceQuotes`, `MaxQuoteBytes`
+
+### Variables {#variables}
+
+`ScoreSchemaV1`
 
 ## Ownership and errors {#ownership-and-errors}
 
-The judge package exposes `New` as its main operations. Use `New` as the package construction entry point when creating that value. Its exported typed failures include `InferenceError`, `MalformedOutputError`, `MessageIndexError`, `QuoteNotFoundError`; classify them with errors.Is or errors.As. Report JSON redacts raw observations and target causes at its persistence boundary.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `UnsupportedStructuredOutputError`, `RequestInvalidError`, `InferenceError`, `MalformedOutputError`, `ScoreRangeError`, `MessageIndexError`, `QuoteNotFoundError`, `RubricInvalidError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/eval/tree/v0.1.2/judge/) and adjacent tests. The progressive entry `stage-23-eval` runs an exact evaluator, encodes and decodes a redacted report, then checks a qualification card; run it with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-eval`.
+Source files at the pinned commit:
+
+- [judge/errors.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/judge/errors.go)
+- [judge/judge.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/judge/judge.go)
+- [judge/prompt.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/judge/prompt.go)
+- [judge/schema.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/judge/schema.go)
+
+Adjacent tests at the same commit:
+
+- [judge/judge_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/judge/judge_test.go)
+- [judge/schema_fuzz_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/judge/schema_fuzz_test.go)
+
+Run `GOWORK=off go test ./...` from the `eval` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

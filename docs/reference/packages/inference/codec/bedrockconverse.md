@@ -22,7 +22,7 @@ proofs:
 
 # bedrockconverse package · codec/bedrockconverse
 
-Import path: `github.com/looprig/inference/codec/bedrockconverse`. This public package defines one part of the provider-neutral inference API.
+Import path: `github.com/looprig/inference/codec/bedrockconverse`. The source is pinned to github.com/looprig/inference@v0.9.2.
 
 ## Package role {#package-role}
 
@@ -30,24 +30,64 @@ This page indexes the exported declarations in the current source package. Infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`DecodeResponse`, `DecodeStream`, `EncodeCountTokensInput`, `EncodeRequest`, `Error`, `Unwrap`
+- `func EncodeRequest(req inference.Request) ([]byte, error)`
+- `func EncodeCountTokensInput(req inference.Request) ([]byte, error)`
+- `func DecodeResponse(body []byte) (*inference.Response, error)`
+
+### Methods {#methods}
+
+- `func (Codec) EncodeRequest(req inference.Request, _ codec.RequestMode) (codec.EncodedRequest, error)`
+- `func (Codec) DecodeResponse(body []byte) (*inference.Response, error)`
+- `func (e *UnsupportedBlockError) Error() string`
+- `func (e *UnsupportedConversationError) Error() string`
+- `func (e *ToolSchemaError) Error() string`
+- `func (e *ToolInputError) Error() string`
+- `func (e *EncodeError) Error() string`
+- `func (e *EncodeError) Unwrap() error`
+- `func (e *DecodeError) Error() string`
+- `func (e *DecodeError) Unwrap() error`
+- `func (e *StreamDecodeError) Error() string`
+- `func (e *StreamDecodeError) Unwrap() error`
+- `func (e *StreamAPIError) Error() string`
+- `func (Codec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
 
 ### Types {#types}
 
-`Codec`, `DecodeError`, `EncodeError`, `StreamAPIError`, `StreamDecodeError`, `ToolInputError`, `ToolSchemaError`, `UnsupportedBlockError`, `UnsupportedConversationError`
+`Codec`, `UnsupportedBlockError`, `UnsupportedConversationError`, `ToolSchemaError`, `ToolInputError`, `EncodeError`, `DecodeError`, `StreamDecodeError`, `StreamAPIError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The bedrockconverse package exposes `DecodeResponse`, `DecodeStream`, `EncodeCountTokensInput`, `EncodeRequest` as its main operations. The principal handle or value is `Codec`; retain it according to its declaration before calling a terminal method. Its exported typed failures include `DecodeError`, `EncodeError`, `StreamAPIError`, `StreamDecodeError`; classify them with errors.Is or errors.As. Retries do not replay a stream after output has started.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `UnsupportedBlockError`, `UnsupportedConversationError`, `ToolSchemaError`, `ToolInputError`, `EncodeError`, `DecodeError`, `StreamDecodeError`, `StreamAPIError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/inference/tree/v0.9.2/codec/bedrockconverse/) and adjacent tests. The progressive entries `stage-01-inference`, `stage-02-streaming`, `stage-22-model-gateway` cover deterministic invoke, stream, and gateway paths; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-inference`.
+Source files at the pinned commit:
+
+- [codec/bedrockconverse/codec.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/bedrockconverse/codec.go)
+- [codec/bedrockconverse/decode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/bedrockconverse/decode.go)
+- [codec/bedrockconverse/encode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/bedrockconverse/encode.go)
+- [codec/bedrockconverse/errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/bedrockconverse/errors.go)
+- [codec/bedrockconverse/stream.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/bedrockconverse/stream.go)
+- [codec/bedrockconverse/types.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/bedrockconverse/types.go)
+
+Adjacent tests at the same commit:
+
+- [codec/bedrockconverse/decode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/bedrockconverse/decode_test.go)
+- [codec/bedrockconverse/encode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/bedrockconverse/encode_test.go)
+- [codec/bedrockconverse/stream_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/bedrockconverse/stream_test.go)
+
+Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -20,7 +20,7 @@ proofs:
 
 # editfile package · editfile
 
-Import path: `github.com/looprig/tools/editfile`. Editfile applies an expected-content replacement under the workspace mutation boundary.
+Import path: `github.com/looprig/tools/editfile`. The source is pinned to github.com/looprig/tools@v0.10.0.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,44 @@ Import path: `github.com/looprig/tools/editfile`. Editfile applies an expected-c
 
 ## Exported surface {#exported-surface}
 
-`Tool` aliases `filemutation.EditFile`; `Option`, `WithHostWrites`, and `WithMutationCoordinator` configure it. `StaleFileError`, `IrregularFileError`, and `LeaseUnhealthyError` are re-exported failures.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`New` creates the tool. Invocation checks freshness and applies a bounded replacement atomically.
+- `func New(root string, observations tool.WorkspaceObservations, options ...Option) *Tool`
+- `func WithMutationCoordinator(coordinator tool.WorkspaceCoordinator) Option`
+- `func WithHostWrites() Option`
+
+### Methods {#methods}
+
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-Errors distinguish a changed file, non-regular target, and unhealthy workspace lease. They are not safe to collapse into a blind retry.
+`Tool`, `Option`, `LeaseUnhealthyError`, `StaleFileError`, `IrregularFileError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-No host-write mode is enabled by default. `WithHostWrites` is an explicit authority request.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The caller owns the observations and coordinator; the tool owns only one prepared edit. A stale-file error means the caller must re-read and prepare a new request.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned editfile package](https://github.com/looprig/tools/tree/151f5530f95a9bba95be10551a8f08282d8959ab/editfile/). `stage-04-prepared-tool` demonstrates a prepared effect.
+Source files at the pinned commit:
+
+- [editfile/editfile.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/editfile/editfile.go)
+
+Adjacent tests at the same commit:
+
+No `_test.go` file is present in this package directory at the pinned commit.
+
+Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

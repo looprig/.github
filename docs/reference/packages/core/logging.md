@@ -21,7 +21,7 @@ proofs:
 
 # logging package · logging
 
-Import path: `github.com/looprig/core/logging`. Package logging builds the application's structured logger on top of the standard library's log/slog. The composition root constructs a *slog.Logger with New and injects it into the components that need it (dependency inversion: there is no package-level logge
+Import path: `github.com/looprig/core/logging`. The source is pinned to github.com/looprig/core@v0.5.1.
 
 ## Package role {#package-role}
 
@@ -29,24 +29,43 @@ This page indexes the exported declarations in the current source package. The o
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Error`, `New`, `ParseLevel`
+- `func New(cfg Config) *slog.Logger`
+- `func ParseLevel(s string) (slog.Level, error)`
+
+### Methods {#methods}
+
+- `func (e *LevelError) Error() string`
 
 ### Types {#types}
 
 `Config`, `LevelError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The logging package exposes `New`, `ParseLevel` as its main operations. Use `New` as the package construction entry point when creating that value. Its exported typed failures include `LevelError`; classify them with errors.Is or errors.As. It does not own network, credential, or storage resources.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `LevelError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the implementation and adjacent tests in the [core source tree](https://github.com/looprig/core/tree/v0.5.1/logging/). The progressive entries `stage-01-inference` and `stage-02-streaming` exercise the content and streaming contracts; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-core`.
+Source files at the pinned commit:
+
+- [logging/logging.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/logging/logging.go)
+
+Adjacent tests at the same commit:
+
+- [logging/logging_test.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/logging/logging_test.go)
+
+Run `GOWORK=off go test ./...` from the `core` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

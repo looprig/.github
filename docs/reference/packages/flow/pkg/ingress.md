@@ -20,7 +20,7 @@ proofs:
 
 # ingress package · pkg/ingress
 
-Import path: `github.com/looprig/flow/pkg/ingress`. Package ingress accepts inbound flow requests. md §18.3. Authorization model - NO cross-run tenancy. The ingress has NO notion of run ownership or tenant isolation: any caller that passes WithAuth (or any caller at all, when no authenticator is configured) may
+Import path: `github.com/looprig/flow/pkg/ingress`. The source is pinned to github.com/looprig/flow@v0.3.0.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,48 @@ This page indexes the exported declarations in the current source package. The o
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`New`, `Server`
+- `func WithMaxBodyBytes(n int64) Option`
+- `func WithAuth(authn func(*http.Request) error) Option`
+- `func WithVerboseErrors() Option`
+- `func New(reg *registry.Registry, cp flow.ControlPlane, store flow.CheckpointStore, opts ...Option) http.Handler`
+- `func Server(addr string, h http.Handler, opts ...ServerOption) *http.Server`
+
+### Methods {#methods}
+
+No exported methods are declared in this package.
 
 ### Types {#types}
 
 `Option`, `ServerOption`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
 `DefaultMaxBodyBytes`
 
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
 ## Ownership and errors {#ownership-and-errors}
 
-The ingress package exposes `New`, `Server` as its main operations. The principal handle or value is `ServerOption`; retain it according to its declaration before calling a terminal method. Use `New` as the package construction entry point when creating that value. No package-specific error type is exported here; use the owning contract or helper return error rather than parsing diagnostic text. Registry and ingress are not tenant isolation or authorization systems.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/flow/tree/v0.3.0/pkg/ingress/) and adjacent tests. The progressive manifest entry `stage-17-flow` exercises this area; run it with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-flow`.
+Source files at the pinned commit:
+
+- [pkg/ingress/doc.go](https://github.com/looprig/flow/blob/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/ingress/doc.go)
+- [pkg/ingress/dto.go](https://github.com/looprig/flow/blob/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/ingress/dto.go)
+- [pkg/ingress/ingress.go](https://github.com/looprig/flow/blob/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/ingress/ingress.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/ingress/ingress_test.go](https://github.com/looprig/flow/blob/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/ingress/ingress_test.go)
+
+Run `GOWORK=off go test ./...` from the `flow` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

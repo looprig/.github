@@ -21,7 +21,7 @@ proofs:
 
 # session package · session
 
-Import path: `github.com/looprig/harness/pkg/session`. Session exposes the live data-plane and control-plane contracts; `rig` owns construction and restoration.
+Import path: `github.com/looprig/harness/pkg/session`. The source is pinned to github.com/looprig/harness@v0.24.2.
 
 ## Package role {#package-role}
 
@@ -29,24 +29,68 @@ Import path: `github.com/looprig/harness/pkg/session`. Session exposes the live 
 
 ## Exported surface {#exported-surface}
 
-The package exports `Session`, `SessionController`, `GateHost`, `RestoreDecider`, `RestoreDecision`, `AcceptAllDecider`, `DefaultPolicyDecider`, restore discovery and runtime mismatch errors, `GateError`, `SessionError`, `TurnRejectedError`, and workspace recovery errors.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-Interfaces expose session creation's result, event subscriptions, gate response, loop control, input submission, restore, and shutdown. Deciders return an explicit accept, reject, or policy decision.
+No exported functions are declared in this package.
+
+### Methods {#methods}
+
+- `func (DefaultPolicyDecider) DecideRestore(_ context.Context, a event.DriftAssessment) (RestoreDecision, error)`
+- `func (AcceptAllDecider) DecideRestore(_ context.Context, _ event.DriftAssessment) (RestoreDecision, error)`
+- `func (e *SessionError) Error() string`
+- `func (e *SessionError) Unwrap() error`
+- `func (e *TurnRejectedError) Error() string`
+- `func (e *ConfigMismatchError) Error() string`
+- `func (e *RestoreRejectedError) Error() string`
+- `func (e *RestoreRejectedError) Unwrap() error`
+- `func (e *AgentNameMismatchError) Error() string`
+- `func (e *RestoreRuntimeMismatchError) Error() string`
+- `func (e *RestoreRuntimeMismatchError) Unwrap() error`
+- `func (e *RestoreDiscoveryError) Error() string`
+- `func (e *RestoreError) Error() string`
+- `func (e *RestoreError) Unwrap() error`
+- `func (e *GateError) Error() string`
+- `func (e *GateError) Unwrap() error`
+- `func (e *GateError) GateErrorKind() string`
+- `func (*WorkspaceNotConfiguredError) Error() string`
+- `func (e *WorkspaceRootBusyError) Error() string`
+- `func (e *WorkspaceRootBusyError) Unwrap() error`
+- `func (*WorkspaceRootLeaseLostError) Error() string`
+- `func (e *WorkspaceRecoveryError) Error() string`
+- `func (e *WorkspaceRecoveryError) Unwrap() error`
 
 ### Types {#types}
 
-`SessionErrorKind`, `GateErrorKind`, `RestoreErrorKind`, and discovery categories keep operational handling machine-readable. `ConfigMismatchError` and `AgentNameMismatchError` protect restore identity.
+`RestoreDecision`, `RestoreDecider`, `DefaultPolicyDecider`, `AcceptAllDecider`, `SessionErrorKind`, `SessionError`, `TurnRejectedError`, `ConfigMismatchError`, `RestoreRejectedError`, `AgentNameMismatchError`, `RestoreRuntimeMismatchError`, `RestoreDiscoveryErrorKind`, `RestoreDiscoveryError`, `RestoreErrorKind`, `RestoreError`, `GateErrorKind`, `GateError`, `WorkspaceNotConfiguredError`, `WorkspaceRootBusyError`, `WorkspaceRootLeaseLostError`, `WorkspaceRecoveryError`, `Session`, `GateHost`, `SessionController`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-Restore tombstone and runtime-missing categories are stable strings. Limits and policy defaults remain owned by Rig and runtime packages.
+`SessionIDGenerationFailed`, `SessionLoopIDGenerationFailed`, `SessionLoopExited`, `SessionLoopNotFound`, `SessionEventChannelClosed`, `SessionContextDone`, `SessionClosing`, `SessionFaulted`, `SessionLoopDepthExceeded`, `SessionLoopQuotaExceeded`, `SessionForeignBuilderMissing`, `SessionCompactionUnsupported`, `SessionDelegateIntentAppendFailed`, `SessionDelegateAdmissionCommitFailed`, `RestoreRuntimeMissing`, `RestoreRuntimeUnavailable`, `RestoreRuntimeTargetMismatch`, `RestoreRuntimeCredentialMismatch`, `RestoreRuntimeEffortMismatch`, `RestoreNoSessionStarted`, `RestoreNoPrimerLoop`, `RestoreLeaseFailed`, `RestoreJournalFailed`, `RestoreReplayFailed`, `RestoreAppendFailed`, `RestoreAdoptionInvalid`, `RestoreLoopFailed`, `RestoreContextDone`, `RestoreIDGenerationFailed`, `RestoreForeignSIDMissing`, `RestoreForeignBuilderMissing`, `RestoreMaterializeFailed`, `GateNotFound`, `GateNotReady`, `GateKindMismatch`, `GateActionInvalid`, `GateCapacity`, `GateAppendFailed`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The session owns live loops, gates, subscriptions, process resources, and external toolsets. A caller must answer or cancel a gate through the session that opened it. Restore rejection is safer than silently applying incompatible persisted state.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `SessionError`, `TurnRejectedError`, `ConfigMismatchError`, `RestoreRejectedError`, `AgentNameMismatchError`, `RestoreRuntimeMismatchError`, `RestoreDiscoveryError`, `RestoreError`, `GateError`, `WorkspaceNotConfiguredError`, `WorkspaceRootBusyError`, `WorkspaceRootLeaseLostError`, `WorkspaceRecoveryError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned session contracts](https://github.com/looprig/harness/tree/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/). `stage-07-session-events` and `stage-09-restore` cover live events and restoration.
+Source files at the pinned commit:
+
+- [pkg/session/decider.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/decider.go)
+- [pkg/session/errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/errors.go)
+- [pkg/session/session.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/session.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/session/contracts_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/contracts_test.go)
+- [pkg/session/decider_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/decider_test.go)
+- [pkg/session/errors_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/errors_test.go)
+
+Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

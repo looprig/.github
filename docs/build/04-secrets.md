@@ -43,4 +43,4 @@ Use the package's typed not-found, conflict, validation, and visibility errors w
 
 ## Runnable proof {#runnable-proof}
 
-The Secrets module's native examples and tests cover construction, namespace operations, listing, compare-and-swap, and close behavior. Run them with `GOWORK=off`; source is pinned in the [Secrets release tree](https://github.com/looprig/secrets/tree/v0.1.0/). No central progressive example currently registers this boundary, and precise source/test proof IDs are pending Task15 evidence promotion.
+The Secrets module's native examples and tests cover construction, namespace operations, listing, compare-and-swap, and close behavior. Run them with `GOWORK=off`; source is pinned in the [Secrets release tree](https://github.com/looprig/secrets/tree/v0.1.0/). No central progressive example currently registers this boundary; use the module's native tests and the pinned package proof links above.

@@ -25,12 +25,50 @@ The package estimates inference cost before a qualification run and records the 
 
 ## Exported surface {#exported-surface}
 
-`Amount`, `Usage`, `Rates`, `Plan`, `Counter`, and `Snapshot` model cost and uncertainty. `Cost`, `Preflight`, `FetchSnapshot`, and `ParseSnapshot` calculate estimates or load a snapshot. `MaxSnapshotBytes` is 8 MiB.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-## Lifecycle and errors {#lifecycle-and-errors}
+### Functions {#functions}
 
-`FetchSnapshot` uses caller context and HTTP; `ParseSnapshot` validates bounded bytes, source URL, timestamp, digest, and rows. Unknown rates produce an incomplete plan with explicit unknowns instead of a fabricated zero cost. A counter is optional and its quality is carried in the plan.
+- `func Cost(u Usage, r Rates) Amount`
+- `func Preflight(ctx context.Context, plans []qual.TablePlan, cfg eval.RunConfig, rates Rates, counter Counter, templates map[eval.Name]inference.Request) (Plan, error)`
+- `func ParseSnapshot(raw []byte, sourceURL string, fetchedAt time.Time) (Snapshot, error)`
+- `func FetchSnapshot(ctx context.Context, client *http.Client, rawURL string) (Snapshot, error)`
 
-## Source proof {#source-proof}
+### Methods {#methods}
 
-See the pinned [pricing implementation](https://github.com/looprig/pluto/tree/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/pricing).
+No exported methods are declared in this package.
+
+### Types {#types}
+
+`Usage`, `Amount`, `Counter`, `Plan`, `Snapshot`, `Rates`
+
+### Constants {#constants}
+
+`MaxSnapshotBytes`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
+## Ownership and errors {#ownership-and-errors}
+
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+
+## Source and runnable proof {#source-and-runnable-proof}
+
+Source files at the pinned commit:
+
+- [pkg/pricing/cost.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/pricing/cost.go)
+- [pkg/pricing/doc.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/pricing/doc.go)
+- [pkg/pricing/preflight.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/pricing/preflight.go)
+- [pkg/pricing/snapshot.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/pricing/snapshot.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/pricing/cost_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/pricing/cost_test.go)
+- [pkg/pricing/preflight_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/pricing/preflight_test.go)
+- [pkg/pricing/snapshot_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/pricing/snapshot_test.go)
+
+Run `GOWORK=off go test ./...` from the `pluto` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

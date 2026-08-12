@@ -20,7 +20,7 @@ proofs:
 
 # evaltest package · evaltest
 
-Import path: `github.com/looprig/eval/evaltest`. Package evaltest integrates eval reports with Go's testing package. It presents a report through a *testing.T as subtests and provides report-level assertions (RequirePass, RequireVerified) for use in ordinary Go tests. All orchestration stays in github.com/lo
+Import path: `github.com/looprig/eval/evaltest`. The source is pinned to github.com/looprig/eval@v0.1.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,47 @@ This page indexes the exported declarations in the current source package. Eval 
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`RequirePass`, `RequireVerified`, `Run`, `RunScenario`
+- `func RequirePass(tb TB, report eval.Report)`
+- `func RequireVerified(tb TB, report eval.Report)`
+- `func Run(tb TB, suite eval.Suite, target eval.Target, evaluators ...eval.Evaluator) eval.Report`
+- `func RunScenario(tb TB, scenario eval.Scenario, target eval.Target, evaluators ...eval.Evaluator) eval.Report`
+
+### Methods {#methods}
+
+No exported methods are declared in this package.
 
 ### Types {#types}
 
 `TB`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The evaltest package exposes `RequirePass`, `RequireVerified`, `Run`, `RunScenario` as its main operations. Use `Run` as the package construction entry point when creating that value. No package-specific error type is exported here; use the owning contract or helper return error rather than parsing diagnostic text. Report JSON redacts raw observations and target causes at its persistence boundary.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/eval/tree/v0.1.2/evaltest/) and adjacent tests. The progressive entry `stage-23-eval` runs an exact evaluator, encodes and decodes a redacted report, then checks a qualification card; run it with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-eval`.
+Source files at the pinned commit:
+
+- [evaltest/assert.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/evaltest/assert.go)
+- [evaltest/render.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/evaltest/render.go)
+- [evaltest/run.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/evaltest/run.go)
+
+Adjacent tests at the same commit:
+
+- [evaltest/run_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/evaltest/run_test.go)
+
+Run `GOWORK=off go test ./...` from the `eval` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

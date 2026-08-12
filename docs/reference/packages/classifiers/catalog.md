@@ -20,7 +20,7 @@ proofs:
 
 # catalog package · catalog
 
-Import path: `github.com/looprig/classifiers/pkg/catalog`. Catalog is a public scaffold reserved for explicit classifier discovery and construction.
+Import path: `github.com/looprig/classifiers/pkg/catalog`. The source is pinned to github.com/looprig/classifiers@v0.1.4.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,42 @@ The package currently has no exported construction API. It performs no implicit 
 
 ## Exported surface {#exported-surface}
 
-No exported functions, types, constants, or variables are present in the released package. Consumers construct `pkg/commandsafety.Classifier` and register it explicitly with Harness.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-None in `v0.1.4`.
+No exported functions are declared in this package.
+
+### Methods {#methods}
+
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-None in `v0.1.4`.
+No exported types are declared in this package.
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None in `v0.1.4`.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-Do not rely on package import side effects or assume a future catalog API exists. Registration, policy, lifecycle, and shutdown remain owned by the application and Harness.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned catalog package](https://github.com/looprig/classifiers/tree/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/catalog/). `stage-13-classifier` uses the explicit commandsafety constructor instead.
+Source files at the pinned commit:
+
+- [pkg/catalog/doc.go](https://github.com/looprig/classifiers/blob/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/catalog/doc.go)
+
+Adjacent tests at the same commit:
+
+No `_test.go` file is present in this package directory at the pinned commit.
+
+Run `GOWORK=off go test ./...` from the `classifiers` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

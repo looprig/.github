@@ -22,7 +22,7 @@ proofs:
 
 # anthropicapi package · codec/anthropicapi
 
-Import path: `github.com/looprig/inference/codec/anthropicapi`. This public package defines one part of the provider-neutral inference API.
+Import path: `github.com/looprig/inference/codec/anthropicapi`. The source is pinned to github.com/looprig/inference@v0.9.2.
 
 ## Package role {#package-role}
 
@@ -30,24 +30,85 @@ This page indexes the exported declarations in the current source package. Infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`DecodeCountTokensRequest`, `DecodeEvent`, `DecodeRequest`, `DecodeResponse`, `DecodeStream`, `EncodeRequest`, `Error`, `MatchCountTokensRequest`, `MatchRequest`, `OpenStream`, `WriteCountTokensResponse`, `WriteError`, `WriteResponse`
+- `func DecodeResponse(body []byte) (*inference.Response, error)`
+- `func EncodeRequest(req inference.Request, stream bool) ([]byte, error)`
+- `func MatchCountTokensRequest(req *http.Request) bool`
+- `func DecodeCountTokensRequest(req *http.Request) (codec.DecodedRequest, error)`
+- `func WriteCountTokensResponse(w http.ResponseWriter, inputTokens int) error`
+
+### Methods {#methods}
+
+- `func (Codec) MatchRequest(req *http.Request) bool`
+- `func (Codec) DecodeRequest(req *http.Request) (codec.DecodedRequest, error)`
+- `func (Codec) WriteResponse(w http.ResponseWriter, resp *inference.Response) error`
+- `func (Codec) OpenStream(w http.ResponseWriter) (codec.StreamEncoder, error)`
+- `func (Codec) WriteError(w http.ResponseWriter, err error)`
+- `func (Codec) EncodeRequest(req inference.Request, mode codec.RequestMode) (codec.EncodedRequest, error)`
+- `func (Codec) DecodeResponse(body []byte) (*inference.Response, error)`
+- `func (Codec) DecodeEvent(event []byte) ([]content.Chunk, error)`
+- `func (e *UnsupportedBlockError) Error() string`
+- `func (e *UnsupportedConversationError) Error() string`
+- `func (e *StreamAPIError) Error() string`
+- `func (s *wireSystem) UnmarshalJSON(data []byte) error`
+- `func (e *ServerDecodeError) Error() string`
+- `func (e *DuplicateKeyError) Error() string`
+- `func (e *StreamTerminatedError) Error() string`
+- `func (e *UnsupportedChunkError) Error() string`
+- `func (e *serverStreamEncoder) WriteChunk(chunk content.Chunk) error`
+- `func (e *serverStreamEncoder) Finish(result stream.StreamResult) error`
+- `func (e *serverStreamEncoder) Fail(err error) error`
+- `func (Codec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
+- `func (s systemPrompt) MarshalJSON() ([]byte, error)`
 
 ### Types {#types}
 
-`Codec`, `DuplicateKeyError`, `ServerDecodeError`, `StreamAPIError`, `StreamTerminatedError`, `UnsupportedBlockError`, `UnsupportedChunkError`, `UnsupportedConversationError`
+`Codec`, `UnsupportedBlockError`, `UnsupportedConversationError`, `StreamAPIError`, `ServerDecodeError`, `DuplicateKeyError`, `StreamTerminatedError`, `UnsupportedChunkError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The anthropicapi package exposes `DecodeCountTokensRequest`, `DecodeEvent`, `DecodeRequest`, `DecodeResponse` as its main operations. The principal handle or value is `Codec`; retain it according to its declaration before calling a terminal method. Use `OpenStream` as the package construction entry point when creating that value. Its exported typed failures include `DuplicateKeyError`, `ServerDecodeError`, `StreamAPIError`, `StreamTerminatedError`; classify them with errors.Is or errors.As. Retries do not replay a stream after output has started.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `UnsupportedBlockError`, `UnsupportedConversationError`, `StreamAPIError`, `ServerDecodeError`, `DuplicateKeyError`, `StreamTerminatedError`, `UnsupportedChunkError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/inference/tree/v0.9.2/codec/anthropicapi/) and adjacent tests. The progressive entries `stage-01-inference`, `stage-02-streaming`, `stage-22-model-gateway` cover deterministic invoke, stream, and gateway paths; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-inference`.
+Source files at the pinned commit:
+
+- [codec/anthropicapi/codec.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/codec.go)
+- [codec/anthropicapi/decode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/decode.go)
+- [codec/anthropicapi/encode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/encode.go)
+- [codec/anthropicapi/errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/errors.go)
+- [codec/anthropicapi/server_decode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_decode.go)
+- [codec/anthropicapi/server_encode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_encode.go)
+- [codec/anthropicapi/server_error.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_error.go)
+- [codec/anthropicapi/server_stream.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_stream.go)
+- [codec/anthropicapi/stream.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/stream.go)
+- [codec/anthropicapi/types.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/types.go)
+
+Adjacent tests at the same commit:
+
+- [codec/anthropicapi/codec_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/codec_test.go)
+- [codec/anthropicapi/decode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/decode_test.go)
+- [codec/anthropicapi/encode_cache_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/encode_cache_test.go)
+- [codec/anthropicapi/encode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/encode_test.go)
+- [codec/anthropicapi/fuzz_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/fuzz_test.go)
+- [codec/anthropicapi/server_decode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_decode_test.go)
+- [codec/anthropicapi/server_encode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_encode_test.go)
+- [codec/anthropicapi/server_fuzz_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_fuzz_test.go)
+- [codec/anthropicapi/server_roundtrip_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_roundtrip_test.go)
+- [codec/anthropicapi/server_stream_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_stream_test.go)
+- [codec/anthropicapi/stream_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/stream_test.go)
+
+Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

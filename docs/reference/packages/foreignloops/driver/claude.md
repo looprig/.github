@@ -20,7 +20,7 @@ proofs:
 
 # driver/claude package · claude
 
-Import path: `github.com/looprig/foreignloops/driver/claude`. Claude constructs a neutral `driver.Agent` around an explicitly configured CLI process.
+Import path: `github.com/looprig/foreignloops/driver/claude`. The source is pinned to github.com/looprig/foreignloops@v0.2.3.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,79 @@ Import path: `github.com/looprig/foreignloops/driver/claude`. Claude constructs 
 
 ## Exported surface {#exported-surface}
 
-Public values are `Config`, `CommandWrapper`, `NewAgent`, and path, platform, spawn, wrap, and config error types.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`NewAgent` validates command and environment configuration before any provider process starts. The returned Agent creates and closes streams per turn.
+- `func NewAgent(parentEnv []string, cfg Config) (driver.Agent, error)`
+
+### Methods {#methods}
+
+- `func (e *WrapError) Error() string`
+- `func (e *WrapError) Unwrap() error`
+- `func (a *agent) Spawn(_ context.Context, turn driver.Turn) (driver.Stream, error)`
+- `func (s *stream) Events() <-chan driver.Event`
+- `func (s *stream) History() (driver.History, error)`
+- `func (s *stream) Close() error`
+- `func (e *ConfigError) Error() string`
+- `func (e *SpawnConfigError) Error() string`
+- `func (e *PlatformError) Error() string`
+- `func (e *PathError) Error() string`
 
 ### Types {#types}
 
-`PathError`, `PlatformError`, `SpawnConfigError`, and `WrapError` preserve provider setup and process failures without leaking raw command output.
+`WrapError`, `CommandWrapper`, `Config`, `ConfigError`, `SpawnConfigError`, `PlatformError`, `PathError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-No implicit environment inheritance or global Claude process is exposed.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The caller owns the parent environment and wrapper; the Agent owns child processes. Provider history is authoritative only when the driver can verify it.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `WrapError`, `ConfigError`, `SpawnConfigError`, `PlatformError`, `PathError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned Claude driver](https://github.com/looprig/foreignloops/tree/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/). Use a scripted driver fixture for deterministic tests; the progressive proof uses the ACP adapter.
+Source files at the pinned commit:
+
+- [driver/claude/args.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/args.go)
+- [driver/claude/claude.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/claude.go)
+- [driver/claude/config.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/config.go)
+- [driver/claude/decode_stream.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/decode_stream.go)
+- [driver/claude/decode_transcript.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/decode_transcript.go)
+- [driver/claude/doc.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/doc.go)
+- [driver/claude/env.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/env.go)
+- [driver/claude/history.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/history.go)
+- [driver/claude/process_darwin.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/process_darwin.go)
+- [driver/claude/process_linux.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/process_linux.go)
+- [driver/claude/process_linux_pidfd_generic.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/process_linux_pidfd_generic.go)
+- [driver/claude/process_linux_pidfd_legacy32.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/process_linux_pidfd_legacy32.go)
+- [driver/claude/process_linux_pidfd_legacy64.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/process_linux_pidfd_legacy64.go)
+- [driver/claude/process_unix.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/process_unix.go)
+- [driver/claude/process_unsupported.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/process_unsupported.go)
+- [driver/claude/transcript.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/transcript.go)
+
+Adjacent tests at the same commit:
+
+- [driver/claude/args_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/args_test.go)
+- [driver/claude/claude_integration_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/claude_integration_test.go)
+- [driver/claude/claude_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/claude_test.go)
+- [driver/claude/claude_unix_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/claude_unix_test.go)
+- [driver/claude/claude_unsupported_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/claude_unsupported_test.go)
+- [driver/claude/config_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/config_test.go)
+- [driver/claude/decode_fuzz_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/decode_fuzz_test.go)
+- [driver/claude/decode_stream_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/decode_stream_test.go)
+- [driver/claude/decode_transcript_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/decode_transcript_test.go)
+- [driver/claude/deps_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/deps_test.go)
+- [driver/claude/env_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/env_test.go)
+- [driver/claude/history_stream_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/history_stream_test.go)
+- [driver/claude/transcript_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/transcript_test.go)
+- [driver/claude/wrap_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/claude/wrap_test.go)
+
+Run `GOWORK=off go test ./...` from the `foreignloops` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

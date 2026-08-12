@@ -21,7 +21,7 @@ proofs:
 
 # content package · content
 
-Import path: `github.com/looprig/core/content`. Package content defines the unified content vocabulary shared across all internal packages. Block is a sealed interface; the concrete payload type is the discriminator. Only this package can add variants (unexported marker).
+Import path: `github.com/looprig/core/content`. The source is pinned to github.com/looprig/core@v0.5.1.
 
 ## Package role {#package-role}
 
@@ -29,24 +29,79 @@ This page indexes the exported declarations in the current source package. The o
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Add`, `ContextTokens`, `Error`, `MarshalBlock`, `MarshalBlocks`, `MarshalJSON`, `ReplayableAs`, `TotalTokens`, `UnmarshalJSON`, `Unwrap`, `Validate`
+- `func NewThinkingBlock(thinking, signature string, providerState json.RawMessage, providerStateFormat string) *ThinkingBlock`
+- `func MarshalBlock(b Block) ([]byte, error)`
+- `func UnmarshalBlock(data []byte) (Block, error)`
+- `func MarshalBlocks(bs []Block) ([]byte, error)`
+- `func UnmarshalBlocks(data []byte) ([]Block, error)`
+
+### Methods {#methods}
+
+- `func (b *ThinkingBlock) ReplayableAs(format string) bool`
+- `func (t *ToolResultBlock) MarshalJSON() ([]byte, error)`
+- `func (t *ToolResultBlock) UnmarshalJSON(data []byte) error`
+- `func (e *UnknownBlockTypeError) Error() string`
+- `func (e *NilBlockError) Error() string`
+- `func (e *BlockEncodeError) Error() string`
+- `func (e *BlockEncodeError) Unwrap() error`
+- `func (e *BlockDecodeError) Error() string`
+- `func (e *BlockDecodeError) Unwrap() error`
+- `func (e *BlockLimitError) Error() string`
+- `func (m Message) MarshalJSON() ([]byte, error)`
+- `func (m *Message) UnmarshalJSON(data []byte) error`
+- `func (m AIMessage) MarshalJSON() ([]byte, error)`
+- `func (m *AIMessage) UnmarshalJSON(data []byte) error`
+- `func (m ToolResultMessage) MarshalJSON() ([]byte, error)`
+- `func (m *ToolResultMessage) UnmarshalJSON(data []byte) error`
+- `func (e *UsageValidationError) Error() string`
+- `func (e *UsageOverflowError) Error() string`
+- `func (u Usage) Validate() error`
+- `func (u Usage) ContextTokens() (TokenCount, error)`
+- `func (u Usage) TotalTokens() (TokenCount, error)`
+- `func (u Usage) Add(other Usage) (Usage, error)`
 
 ### Types {#types}
 
-`AIMessage`, `AgenticMessages`, `AudioBlock`, `Block`, `BlockDecodeError`, `BlockEncodeError`, `BlockLimitError`, `BlockType`, `Chunk`, `Conversation`, `DocumentBlock`, `ImageBlock`, `ImageSource`, `MediaType`, `Message`, `NilBlockError`, `Role`, `SystemMessage`, `TextBlock`, `TextChunk`, `ThinkingBlock`, `ThinkingChunk`, `TokenCount`, `ToolResultBlock`, `ToolResultMessage`, `ToolUseBlock`, `ToolUseChunk`, `UnknownBlockTypeError`, `Usage`, `UsageField`, `UsageOverflowError`, `UsageValidationError`, `UsageValidationReason`, `UserMessage`
+`BlockType`, `Block`, `TextBlock`, `ImageSource`, `ImageBlock`, `AudioBlock`, `DocumentBlock`, `ThinkingBlock`, `ToolUseBlock`, `ToolResultBlock`, `Chunk`, `TextChunk`, `ThinkingChunk`, `ToolUseChunk`, `UnknownBlockTypeError`, `NilBlockError`, `BlockEncodeError`, `BlockDecodeError`, `BlockLimitError`, `MediaType`, `Role`, `Message`, `UserMessage`, `AIMessage`, `SystemMessage`, `ToolResultMessage`, `Conversation`, `AgenticMessages`, `TokenCount`, `UsageField`, `UsageValidationReason`, `Usage`, `UsageValidationError`, `UsageOverflowError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`TypeText`, `TypeImage`, `TypeAudio`, `TypeDocument`, `TypeThinking`, `TypeToolUse`, `TypeToolResult`, `MediaTypeImageJPEG`, `MediaTypeImagePNG`, `MediaTypeImageGIF`, `MediaTypeImageWebP`, `MediaTypeImageSVG`, `MediaTypeAudioMPEG`, `MediaTypeAudioWAV`, `MediaTypeAudioOGG`, `MediaTypeAudioFLAC`, `MediaTypeAudioAAC`, `MediaTypeAudioMP4`, `MediaTypeAudioWebM`, `MediaTypeDocumentPDF`, `MediaTypeDocumentText`, `MediaTypeDocumentHTML`, `MediaTypeDocumentCSV`, `MediaTypeDocumentMarkdown`, `MediaTypeDocumentDOCX`, `MediaTypeDocumentXLSX`, `RoleUser`, `RoleAssistant`, `RoleSystem`, `RoleTool`, `UsageFieldInputTokens`, `UsageFieldOutputTokens`, `UsageFieldCacheReadTokens`, `UsageFieldCacheCreationTokens`, `UsageFieldReasoningTokens`, `UsageFieldContextTokens`, `UsageFieldTotalTokens`, `UsageValidationReasonReasoningExceedsOutput`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The content package exposes `Add`, `ContextTokens`, `ReplayableAs`, `TotalTokens` as its main operations. Its exported typed failures include `BlockDecodeError`, `BlockEncodeError`, `BlockLimitError`, `NilBlockError`; classify them with errors.Is or errors.As. It does not own network, credential, or storage resources.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `UnknownBlockTypeError`, `NilBlockError`, `BlockEncodeError`, `BlockDecodeError`, `BlockLimitError`, `UsageValidationError`, `UsageOverflowError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the implementation and adjacent tests in the [core source tree](https://github.com/looprig/core/tree/v0.5.1/content/). The progressive entries `stage-01-inference` and `stage-02-streaming` exercise the content and streaming contracts; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-core`.
+Source files at the pinned commit:
+
+- [content/block.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/block.go)
+- [content/block_json.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/block_json.go)
+- [content/chunk.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/chunk.go)
+- [content/errors.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/errors.go)
+- [content/media_type.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/media_type.go)
+- [content/message.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/message.go)
+- [content/usage.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/usage.go)
+
+Adjacent tests at the same commit:
+
+- [content/block_json_fuzz_test.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/block_json_fuzz_test.go)
+- [content/block_json_test.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/block_json_test.go)
+- [content/block_test.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/block_test.go)
+- [content/chunk_test.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/chunk_test.go)
+- [content/message_json_test.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/message_json_test.go)
+- [content/message_test.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/message_test.go)
+- [content/usage_test.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/usage_test.go)
+
+Run `GOWORK=off go test ./...` from the `core` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

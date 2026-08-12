@@ -18,7 +18,7 @@ proofs:
 
 # rclonestore package
 
-Import path: `github.com/looprig/rclonestore`. Package rclonestore implements storage.Blobs by driving the external rclone binary as a context-bounded subprocess (argv exec - never a shell string, never librclone/cgo).
+Import path: `github.com/looprig/rclonestore`. The source is pinned to github.com/looprig/rclonestore@v0.3.2.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,67 @@ This page indexes the exported declarations in the current source package. The o
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Close`, `Delete`, `Error`, `Get`, `List`, `Put`, `StoragePaths`, `Unwrap`
+- `func New(opts Options) (*Store, error)`
+
+### Methods {#methods}
+
+- `func (b *blobStore) StoragePaths() []string`
+- `func (e *PutSourceError) Error() string`
+- `func (e *PutSourceError) Unwrap() error`
+- `func (b *blobStore) Put(ctx context.Context, key string, r io.Reader) error`
+- `func (b *blobStore) Get(ctx context.Context, key string) (io.ReadCloser, error)`
+- `func (b *blobStore) Delete(ctx context.Context, key string) error`
+- `func (b *blobStore) List(ctx context.Context, prefix string) ([]string, error)`
+- `func (e *PersistencePathError) Error() string`
+- `func (e *PersistencePathError) Unwrap() error`
+- `func (e *RcloneError) Error() string`
+- `func (e *RcloneError) Unwrap() error`
+- `func (s *Store) Close() error`
+- `func (e *OptionsError) Error() string`
+- `func (e *BinaryError) Error() string`
+- `func (e *BinaryError) Unwrap() error`
+- `func (e *ProbeError) Error() string`
+- `func (e *ProbeError) Unwrap() error`
+- `func (w *tailWriter) Write(p []byte) (int, error)`
 
 ### Types {#types}
 
-`BinaryError`, `Options`, `OptionsError`, `PersistencePathError`, `ProbeError`, `PutSourceError`, `RcloneError`, `Store`
+`PutSourceError`, `PersistencePathError`, `RcloneError`, `Options`, `Store`, `OptionsError`, `BinaryError`, `ProbeError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The rclonestore package exposes `Close`, `Delete`, `Get`, `List` as its main operations. The principal handle or value is `Store`; retain it according to its declaration before calling a terminal method. Its exported typed failures include `BinaryError`, `OptionsError`, `PersistencePathError`, `ProbeError`; classify them with errors.Is or errors.As. External rclone execution is not a multi-object transaction, and command errors are redacted.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `PutSourceError`, `PersistencePathError`, `RcloneError`, `OptionsError`, `BinaryError`, `ProbeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/rclonestore/tree/v0.3.2/) and adjacent tests. The repository keeps deterministic examples beside the implementation. Run `GOWORK=off go test ./...` in the module and inspect the package tests. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-rclonestore`.
+Source files at the pinned commit:
+
+- [blobs.go](https://github.com/looprig/rclonestore/blob/994e14f9184726b57798df4049b7b731fde608f9/blobs.go)
+- [errors.go](https://github.com/looprig/rclonestore/blob/994e14f9184726b57798df4049b7b731fde608f9/errors.go)
+- [rclonestore.go](https://github.com/looprig/rclonestore/blob/994e14f9184726b57798df4049b7b731fde608f9/rclonestore.go)
+- [runner.go](https://github.com/looprig/rclonestore/blob/994e14f9184726b57798df4049b7b731fde608f9/runner.go)
+
+Adjacent tests at the same commit:
+
+- [blobs_test.go](https://github.com/looprig/rclonestore/blob/994e14f9184726b57798df4049b7b731fde608f9/blobs_test.go)
+- [conformance_integration_test.go](https://github.com/looprig/rclonestore/blob/994e14f9184726b57798df4049b7b731fde608f9/conformance_integration_test.go)
+- [rclonestore_test.go](https://github.com/looprig/rclonestore/blob/994e14f9184726b57798df4049b7b731fde608f9/rclonestore_test.go)
+- [runner_test.go](https://github.com/looprig/rclonestore/blob/994e14f9184726b57798df4049b7b731fde608f9/runner_test.go)
+- [symlink_capability_unix_test.go](https://github.com/looprig/rclonestore/blob/994e14f9184726b57798df4049b7b731fde608f9/symlink_capability_unix_test.go)
+- [symlink_capability_windows_test.go](https://github.com/looprig/rclonestore/blob/994e14f9184726b57798df4049b7b731fde608f9/symlink_capability_windows_test.go)
+
+Run `GOWORK=off go test ./...` from the `rclonestore` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

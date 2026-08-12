@@ -25,12 +25,43 @@ Process runtime in [tui v0.15.1](https://github.com/looprig/tui/tree/6b362dda04b
 
 ## Exported surface {#exported-surface}
 
-`Banner` carries startup `Name` and `Description`. `Run(context.Context, newAgent, Banner, ...tui.Option) int` constructs the agent, starts the screen, and returns an exit code. The caller supplies the `newAgent` callback used for initial creation and `/clear` reopen.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-## Lifecycle and errors {#lifecycle-and-errors}
+### Functions {#functions}
 
-`Run` opens `~/.looprig/looprig.log`, installs signal-driven cancellation, captures stdout and stderr, starts Bubble Tea, and closes the final agent with bounded teardown. It never invokes `os.Exit`. A final in-flight handoff is closed before the process returns; the integer result is the only process-exit contract.
+- `func Run(ctx context.Context, newAgent func(context.Context) (tui.Agent, error), banner Banner, options ...tui.Option) int`
 
-## Source proof {#source-proof}
+### Methods {#methods}
 
-Runtime lifecycle tests and declarations are pinned at the [release source tree](https://github.com/looprig/tui/tree/6b362dda04b086c8a94146320e9faad38dac9b6c/runtime).
+No exported methods are declared in this package.
+
+### Types {#types}
+
+`Banner`
+
+### Constants {#constants}
+
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
+## Ownership and errors {#ownership-and-errors}
+
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+
+## Source and runnable proof {#source-and-runnable-proof}
+
+Source files at the pinned commit:
+
+- [runtime/run.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/runtime/run.go)
+
+Adjacent tests at the same commit:
+
+- [runtime/api_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/runtime/api_test.go)
+- [runtime/run_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/runtime/run_test.go)
+
+Run `GOWORK=off go test ./...` from the `tui` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

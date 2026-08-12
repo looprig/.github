@@ -21,7 +21,7 @@ proofs:
 
 # permission package · permission
 
-Import path: `github.com/looprig/tools/permission`. Permission stores match candidates and diagnostics for a consumer-owned gate rule matcher.
+Import path: `github.com/looprig/tools/permission`. The source is pinned to github.com/looprig/tools@v0.10.0.
 
 ## Package role {#package-role}
 
@@ -29,24 +29,69 @@ Import path: `github.com/looprig/tools/permission`. Permission stores match cand
 
 ## Exported surface {#exported-surface}
 
-The public surface includes `Config`, `Store`, `Rule`, `Diagnostic`, `DiagnosticCode`, `Effect`, `FamilyEligibility`, `FileError`, `FileErrorReason`, `RuleError`, and constructors `NewReadOnlyStore` and `NewWorkspaceStore`. Helpers include `TreeMatch`, `HostAccessMatch`, `BroadEgressMatch`, `NetworkTargetMatch`, and `ProposeCommandCandidate`.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-Store methods load, match, propose, and persist rules; constructors return diagnostics for recoverable file conditions.
+- `func ProposeCommandCandidate(command string, eligible FamilyEligibility) string`
+- `func NetworkTargetMatch(transport, host string, port int) string`
+- `func BroadEgressMatch(command, target string) string`
+- `func HostAccessMatch(command string) string`
+- `func TreeMatch(root string) string`
+- `func NewWorkspaceStore(cfg Config) (*Store, []Diagnostic, error)`
+- `func NewReadOnlyStore(cfg Config) (*Store, []Diagnostic, error)`
+
+### Methods {#methods}
+
+- `func (e *RuleError) Error() string`
+- `func (e *FileError) Error() string`
+- `func (e *FileError) Unwrap() error`
+- `func (s *Store) MatchesDeny(ctx context.Context, requirement tool.Requirement) (bool, error)`
+- `func (s *Store) MatchesAllow(ctx context.Context, requirement tool.Requirement) (bool, error)`
+- `func (s *Store) Diagnostics() []Diagnostic`
+- `func (s *Store) WriteRules(ctx context.Context, candidates []tool.RuleCandidate) error`
 
 ### Types {#types}
 
-`RuleError` and `FileError` preserve validation and persistence reasons. A diagnostic can explain a rule but does not grant authority by itself.
+`DiagnosticCode`, `Diagnostic`, `FamilyEligibility`, `Effect`, `Rule`, `RuleError`, `FileErrorReason`, `FileError`, `Config`, `Store`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-Schema and normalization versions, maximum file bytes, and diagnostic codes are stable persistence labels.
+`DiagnosticAllowFamilyOutOfCatalog`, `SchemaVersion`, `NormalizationVersion`, `EffectAllow`, `EffectDeny`, `CapabilityCommandExecute`, `CapabilityNetwork`, `CapabilityFilesystemRead`, `CapabilityFilesystemWrite`, `ClassCommandInvoke`, `ClassCommandInvokeWildcard`, `ClassCommandInvokeFamily`, `ClassNetworkTarget`, `ClassNetworkBroad`, `ClassFilesystemPathRead`, `ClassFilesystemPathWrite`, `ClassFilesystemTreeRead`, `ClassFilesystemTreeWrite`, `ClassFilesystemHostRead`, `ClassFilesystemHostWrite`, `GrantClassCommandStart`, `GrantClassNetworkProxyTarget`, `FileMalformed`, `FileVersionUnsupported`, `FileRuleInvalid`, `FileNotRegular`, `FileSymlink`, `FileOwnerUnexpected`, `FileModeUnexpected`, `FileLinkCount`, `FileTooLarge`, `FileMissing`, `FileIO`, `FileLock`, `FileReadOnly`, `FileCandidateInvalid`, `DefaultMaxFileBytes`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The consumer owns the rule path, store lifetime, and integration with Harness `RuleMatcher` and `RuleWriter`. Treat malformed or stale rules as errors and preserve deny precedence.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `RuleError`, `FileError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned permission package](https://github.com/looprig/tools/tree/151f5530f95a9bba95be10551a8f08282d8959ab/permission/). Gate and classifier examples prove that rule evidence and recommendations remain below the trusted decision.
+Source files at the pinned commit:
+
+- [permission/bashrule.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/bashrule.go)
+- [permission/diagnostic.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/diagnostic.go)
+- [permission/match.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/match.go)
+- [permission/rule.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/rule.go)
+- [permission/rule_json.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/rule_json.go)
+- [permission/store.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/store.go)
+- [permission/store_unix.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/store_unix.go)
+- [permission/store_windows.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/store_windows.go)
+
+Adjacent tests at the same commit:
+
+- [permission/bashrule_fuzz_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/bashrule_fuzz_test.go)
+- [permission/bashrule_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/bashrule_test.go)
+- [permission/contract_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/contract_test.go)
+- [permission/file_fuzz_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/file_fuzz_test.go)
+- [permission/hardening_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/hardening_test.go)
+- [permission/headless_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/headless_test.go)
+- [permission/match_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/match_test.go)
+- [permission/rule_json_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/rule_json_test.go)
+- [permission/store_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/store_test.go)
+
+Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

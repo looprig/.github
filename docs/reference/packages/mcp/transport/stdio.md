@@ -20,7 +20,7 @@ proofs:
 
 # transport/stdio package · stdio
 
-Import path: `github.com/looprig/mcp/pkg/transport/stdio`. Stdio launches an MCP server child and carries protocol messages over stdin/stdout.
+Import path: `github.com/looprig/mcp/pkg/transport/stdio`. The source is pinned to github.com/looprig/mcp@v0.6.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,72 @@ Import path: `github.com/looprig/mcp/pkg/transport/stdio`. Stdio launches an MCP
 
 ## Exported surface {#exported-surface}
 
-Public values are `Config`, `EnvAllowlist`, `Var`, `ProcessSpec`, `ProcessLauncher`, `Process`, `ExitStatus`, `New`, and the default stderr limit.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`New` validates command and environment configuration. Factory methods create and close one child process for a client connection.
+- `func New(cfg Config) (client.TransportFactory, error)`
+
+### Methods {#methods}
+
+- `func (s ExitStatus) String() string`
+- `func (osLauncher) Start(ctx context.Context, spec ProcessSpec) (Process, error)`
+- `func (p *osProcess) Pid() int`
+- `func (p *osProcess) Terminate() error`
+- `func (p *osProcess) Kill() error`
+- `func (p *osProcess) Wait() (ExitStatus, error)`
+- `func (r *ring) Write(p []byte) (int, error)`
+- `func (r *ring) Tail(n int) []byte`
+- `func (r *ring) Len() int`
+- `func (r *ring) Dropped() int64`
+- `func (f *factory) Kind() string`
+- `func (f *factory) RedactedOrigin() string`
+- `func (f *factory) Connect(ctx context.Context, cfg protocol.ConnectConfig) (protocol.Conn, error)`
+- `func (c *conn) Initialize(ctx context.Context) (protocol.InitializeResult, error)`
+- `func (c *conn) ListTools(ctx context.Context, cursor string) (protocol.ToolPage, error)`
+- `func (c *conn) ListPrompts(ctx context.Context, cursor string) (protocol.PromptPage, error)`
+- `func (c *conn) ListResources(ctx context.Context, cursor string) (protocol.ResourcePage, error)`
+- `func (c *conn) ListResourceTemplates(ctx context.Context, cursor string) (protocol.ResourceTemplatePage, error)`
+- `func (c *conn) CallTool(ctx context.Context, rawName string, args json.RawMessage, opts protocol.CallOptions) (protocol.ToolResult, error)`
+- `func (c *conn) GetPrompt(ctx context.Context, name string, args map[string]string) (protocol.PromptResult, error)`
+- `func (c *conn) ReadResource(ctx context.Context, uri string) (protocol.ResourceResult, error)`
+- `func (c *conn) Subscribe(ctx context.Context, uri string) error`
+- `func (c *conn) Unsubscribe(ctx context.Context, uri string) error`
+- `func (c *conn) SetLogLevel(ctx context.Context, level string) error`
+- `func (c *conn) Close(ctx context.Context) error`
 
 ### Types {#types}
 
-`Process` abstracts start, signal, wait, and close; `ExitStatus` preserves a bounded child result. Config errors are separate from protocol errors.
+`ProcessSpec`, `ExitStatus`, `Process`, `ProcessLauncher`, `Var`, `EnvAllowlist`, `Config`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`DefaultStderrLimit` bounds diagnostics. Environment variables are passed only through an allowlist.
+`DefaultStderrLimit`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The factory owns each child after startup. Close the MCP client before closing the process so in-flight calls drain. A child is untrusted; stdout is protocol data and exit status is not authorization evidence.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned stdio transport](https://github.com/looprig/mcp/tree/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/stdio/). `stage-16-mcp-adoption` uses it to run the deterministic child.
+Source files at the pinned commit:
+
+- [pkg/transport/stdio/process.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/stdio/process.go)
+- [pkg/transport/stdio/process_other.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/stdio/process_other.go)
+- [pkg/transport/stdio/process_unix.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/stdio/process_unix.go)
+- [pkg/transport/stdio/stderr.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/stdio/stderr.go)
+- [pkg/transport/stdio/stdio.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/stdio/stdio.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/transport/stdio/stderr_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/stdio/stderr_test.go)
+- [pkg/transport/stdio/stdio_integration_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/stdio/stdio_integration_test.go)
+- [pkg/transport/stdio/stdio_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/stdio/stdio_test.go)
+
+Run `GOWORK=off go test ./...` from the `mcp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

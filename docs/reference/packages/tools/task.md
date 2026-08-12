@@ -20,7 +20,7 @@ proofs:
 
 # task package · task
 
-Import path: `github.com/looprig/tools/task`. Task exposes model-facing task records backed by a caller-owned task store.
+Import path: `github.com/looprig/tools/task`. The source is pinned to github.com/looprig/tools@v0.10.0.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,73 @@ The package keeps task identity, title, status, description, and timestamps expl
 
 ## Exported surface {#exported-surface}
 
-Types include `Task`, `TaskCreate`, `TaskGet`, `TaskList`, `TaskUpdate`, and `Status`; `NewTools` returns the invokable task tool set. Status includes the terminal `deleted` value.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`NewTools` builds the create, get, list, and update tools over the runtime store binding.
+- `func NewTools() []tool.InvokableTool`
+
+### Methods {#methods}
+
+- `func (t *TaskCreate) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (*TaskCreate) AuditSummary(string) string`
+- `func (t *TaskCreate) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
+- `func (t *TaskCreate) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
+- `func (*TaskCreate) Sequential() bool`
+- `func (t *TaskGet) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (*TaskGet) AuditSummary(string) string`
+- `func (t *TaskGet) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
+- `func (t *TaskGet) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
+- `func (*TaskGet) Sequential() bool`
+- `func (t *TaskList) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (t *TaskList) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
+- `func (t *TaskList) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
+- `func (*TaskList) Sequential() bool`
+- `func (*prepareError) Error() string`
+- `func (b toolBase) AuditSummary(string) string`
+- `func (t *TaskUpdate) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (t *TaskUpdate) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
+- `func (t *TaskUpdate) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
+- `func (*TaskUpdate) Sequential() bool`
 
 ### Types {#types}
 
-Task values carry bounded fields and stable IDs. Store and validation errors remain typed at the tool boundary.
+`TaskCreate`, `TaskGet`, `TaskList`, `Status`, `Task`, `TaskUpdate`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-Status values are closed labels; there is no process or network permission implied by a task record.
+`StatusPending`, `StatusInProgress`, `StatusCompleted`, `StatusCommandDeleted`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-Harness owns the store and task lifecycle. A task update is not a delegation or approval action, and callers must handle a missing or deleted task explicitly.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned task package](https://github.com/looprig/tools/tree/151f5530f95a9bba95be10551a8f08282d8959ab/task/). Component task examples cover CRUD and tool binding.
+Source files at the pinned commit:
+
+- [task/create.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/create.go)
+- [task/get.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/get.go)
+- [task/list.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/list.go)
+- [task/model.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/model.go)
+- [task/store.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/store.go)
+- [task/tool.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/tool.go)
+- [task/update.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/update.go)
+
+Adjacent tests at the same commit:
+
+- [task/create_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/create_test.go)
+- [task/get_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/get_test.go)
+- [task/list_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/list_test.go)
+- [task/model_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/model_test.go)
+- [task/store_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/store_test.go)
+- [task/tool_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/tool_test.go)
+- [task/update_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/task/update_test.go)
+
+Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -20,7 +20,7 @@ proofs:
 
 # driver package · driver
 
-Import path: `github.com/looprig/foreignloops/driver`. Driver defines the neutral contract concrete providers satisfy.
+Import path: `github.com/looprig/foreignloops/driver`. The source is pinned to github.com/looprig/foreignloops@v0.2.3.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,72 @@ Import path: `github.com/looprig/foreignloops/driver`. Driver defines the neutra
 
 ## Exported surface {#exported-surface}
 
-Public values include `Agent`, `Closer`, `Stream`, `OrderedStream`, `Steerer`, `Turn`, `Event`, `Observation`, `PromptObservation`, `UpdateObservation`, `SteerObservation`, `SteerRequest`, `SteerResult`, `SteerOutcome`, `Posture`, `PermissionPosture`, `Kind`, `ObservationKind`, `History`, and typed spawn, decode, exit, history, and steering errors. `NewSteerRequest` validates content blocks.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`NewSteerRequest` builds a bounded request; Agent and Turn methods start and close a stream, while Steerer methods admit or reject steering.
+- `func NewSteerRequest(prompt []content.Block) (SteerRequest, error)`
+
+### Methods {#methods}
+
+- `func (*SteerAdmissionError) Error() string`
+- `func (*SteerAdmissionError) Unwrap() error`
+- `func (e *SpawnError) Error() string`
+- `func (e *SpawnError) Unwrap() error`
+- `func (e *ExitError) Error() string`
+- `func (e *DecodeError) Error() string`
+- `func (e *DecodeError) Unwrap() error`
+- `func (e *HistoryError) Error() string`
+- `func (e *HistoryError) Unwrap() error`
+- `func (p Posture) Valid() bool`
+- `func (r SteerRequest) Validate() error`
+- `func (r SteerRequest) Prompt() []content.Block`
+- `func (e *steerRequestError) Error() string`
+- `func (o SteerOutcome) Valid() bool`
+- `func (o SteerOutcome) RetrySafe() bool`
+- `func (r SteerResult) Validate() error`
+- `func (k ObservationKind) Valid() bool`
+- `func (PromptObservation) Kind() ObservationKind`
+- `func (o PromptObservation) Sequence() uint64`
+- `func (UpdateObservation) Kind() ObservationKind`
+- `func (o UpdateObservation) Sequence() uint64`
+- `func (SteerObservation) Kind() ObservationKind`
+- `func (o SteerObservation) Sequence() uint64`
 
 ### Types {#types}
 
-Event kinds and observations normalize provider lifecycle without exposing transcript paths. `SteerOutcome` distinguishes injected, queued, rejected, interrupted, and unknown delivery.
+`Agent`, `Steerer`, `Closer`, `Turn`, `Stream`, `Kind`, `Event`, `PermissionPosture`, `SteerAdmissionError`, `SpawnError`, `ExitError`, `DecodeError`, `HistoryError`, `History`, `Posture`, `SteerRequest`, `SteerOutcome`, `SteerResult`, `ObservationKind`, `Observation`, `OrderedStream`, `PromptObservation`, `UpdateObservation`, `SteerObservation`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-Posture and event enums are closed values. `ErrSteerAdmissionCapacity` reports bounded admission pressure.
+`KindInit`, `KindTextDelta`, `KindThinkingDelta`, `KindToolUse`, `KindToolResult`, `KindStepComplete`, `KindTerminalOK`, `KindTerminalError`, `KindModelFacingError`, `PostureDefault`, `PostureAcceptEdits`, `PostureReadOnly`, `PostureWorkspaceWrite`, `SteerOutcomeInjected`, `SteerOutcomeFallbackRequired`, `SteerOutcomeUnsupported`, `SteerOutcomeAdmissionUnknown`, `SteerOutcomeDeliveryUnknown`, `SteerOutcomeDeliveredUntrackable`, `ObservationPrompt`, `ObservationUpdate`, `ObservationSteer`
+
+### Variables {#variables}
+
+`ErrSteerAdmissionCapacity`
 
 ## Ownership and errors {#ownership-and-errors}
 
-Provider drivers own process and wire resources; Harness owns loop IDs, gates, workspace, and authority. A missing authoritative history is a supported state, not a decode failure.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `SteerAdmissionError`, `SpawnError`, `ExitError`, `DecodeError`, `HistoryError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned driver contract](https://github.com/looprig/foreignloops/tree/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/). The ACP-backed progressive example verifies the composition boundary without a live provider.
+Source files at the pinned commit:
+
+- [driver/driver.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/driver.go)
+- [driver/errors.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/errors.go)
+- [driver/history.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/history.go)
+- [driver/posture.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/posture.go)
+- [driver/steering.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/steering.go)
+
+Adjacent tests at the same commit:
+
+- [driver/deps_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/deps_test.go)
+- [driver/driver_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/driver_test.go)
+- [driver/errors_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/errors_test.go)
+- [driver/posture_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/posture_test.go)
+- [driver/steering_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/steering_test.go)
+
+Run `GOWORK=off go test ./...` from the `foreignloops` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

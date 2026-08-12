@@ -20,7 +20,7 @@ proofs:
 
 # askuser package · askuser
 
-Import path: `github.com/looprig/tools/askuser`. Askuser is a pure Harness tool that requests a user answer through the session's user-input requester.
+Import path: `github.com/looprig/tools/askuser`. The source is pinned to github.com/looprig/tools@v0.10.0.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,47 @@ Import path: `github.com/looprig/tools/askuser`. Askuser is a pure Harness tool 
 
 ## Exported surface {#exported-surface}
 
-The package exports `AskUser` and `NewAskUser`. The root module exposes it as `AskUserDefinition`.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`NewAskUser` constructs the tool. Invocation validates the question and choices before requesting input.
+- `func NewAskUser() *AskUser`
+
+### Methods {#methods}
+
+- `func (a *AskUser) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (a *AskUser) AuditSummary(argsJSON string) string`
+- `func (a *AskUser) InvokableRun(ctx context.Context, argsJSON string) (*tool.ToolResult, error)`
+- `func (a *AskUser) PrepareCall(context.Context, uuid.UUID, string) (tool.Request, tool.PreparedArtifact, error)`
 
 ### Types {#types}
 
-`AskUser` implements the Harness tool contracts and returns bounded textual results or a typed user-input failure.
+`AskUser`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-No package-global answer store or mutable UI state is exposed.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The session owns the requester and cancellation. A user response is not a permission grant; callers still need a gate for effectful tools.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned askuser package](https://github.com/looprig/tools/tree/151f5530f95a9bba95be10551a8f08282d8959ab/askuser/). Use `node scripts/docs/run-examples.mjs` for the progressive tool path.
+Source files at the pinned commit:
+
+- [askuser/askuser.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/askuser/askuser.go)
+
+Adjacent tests at the same commit:
+
+- [askuser/askuser_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/askuser/askuser_test.go)
+- [askuser/preparecall_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/askuser/preparecall_test.go)
+- [askuser/result_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/askuser/result_test.go)
+
+Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

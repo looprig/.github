@@ -20,7 +20,7 @@ proofs:
 
 # hub package · hub
 
-Import path: `github.com/looprig/harness/pkg/hub`. Hub is the in-process event fan-out and session publication boundary.
+Import path: `github.com/looprig/harness/pkg/hub`. The source is pinned to github.com/looprig/harness@v0.24.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,96 @@ Import path: `github.com/looprig/harness/pkg/hub`. Hub is the in-process event f
 
 ## Exported surface {#exported-surface}
 
-The package contains `Hub`, `EventSubscription`, `FaultReporter`, `HustleActivityLease`, `TurnStartReservation`, options for appenders, event factories, commit observers, and fault reporters, plus typed publication, subscription-loss, session-abort, persistence, and turn-reservation errors.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`New` constructs a hub with a session ID and options. Hub methods publish events, subscribe, reserve turn starts, and close the publication boundary.
+- `func WithCommitObserver(observer func(event.Event)) Option`
+- `func WithAppender(a eventAppender) Option`
+- `func WithFactory(f *event.Factory) Option`
+- `func WithFaultReporter(r FaultReporter) Option`
+- `func New(sessionID uuid.UUID, opts ...Option) *Hub`
+
+### Methods {#methods}
+
+- `func (nopEventAppender) AppendEvent(context.Context, event.Event) (uint64, error)`
+- `func (nopEventAppender) AppendEventResult(context.Context, event.Event) (uint64, bool, error)`
+- `func (immediateSessionIdleBoundary) CommitSessionIdle(_ context.Context, _ event.SessionIdle, commit func() error) error`
+- `func (e *PublishBoundaryError) Error() string`
+- `func (e *PublishBoundaryError) Unwrap() error`
+- `func (e *HustleActivityError) Error() string`
+- `func (e *TurnStartReservationError) Error() string`
+- `func (e *SessionAbortedError) Error() string`
+- `func (e *SessionAbortedError) Unwrap() error`
+- `func (e *SessionPersistenceFault) Error() string`
+- `func (e *SessionPersistenceFault) Unwrap() error`
+- `func (*SessionPersistenceFault) FatalPublication() bool`
+- `func (nopFaultReporter) ReportFault(context.Context, *SessionPersistenceFault)`
+- `func (h *Hub) SubscribeEvents(filter event.EventFilter) (*EventSubscription, error)`
+- `func (h *Hub) PublishEvent(ctx context.Context, ev event.Event) error`
+- `func (h *Hub) PublishEventChecked(ctx context.Context, ev event.Event) error`
+- `func (h *Hub) PublishInternalEventChecked(ctx context.Context, ev event.Event) error`
+- `func (h *Hub) ExpectTurn(ctx context.Context, subagentLoopID uuid.UUID)`
+- `func (h *Hub) CancelExpectTurn(ctx context.Context, subagentLoopID uuid.UUID)`
+- `func (h *Hub) AcquireHustleActivity(ctx context.Context, runID hustle.RunID) (*HustleActivityLease, error)`
+- `func (l *HustleActivityLease) Release(ctx context.Context) error`
+- `func (h *Hub) StopSession(ctx context.Context)`
+- `func (h *Hub) AbortSession(cause error) <-chan struct{}`
+- `func (h *Hub) WaitIdle(ctx context.Context) error`
+- `func (h *Hub) IsIdle() bool`
+- `func (h *Hub) FailWaiters(err error) uint64`
+- `func (h *Hub) ClearWaiterFailure(token uint64)`
+- `func (e *SubscriptionLossError) Error() string`
+- `func (e *SubscriptionLossError) Unwrap() error`
+- `func (s *EventSubscription) Events() <-chan event.Delivery`
+- `func (s *EventSubscription) Close() error`
+- `func (s *EventSubscription) Err() error`
+- `func (h *Hub) ReserveTurnStart(loopID uuid.UUID) (*TurnStartReservation, error)`
+- `func (r *TurnStartReservation) Release()`
+- `func (r *TurnStartReservation) PublishTurnStarted(ctx context.Context, started event.TurnStarted) error`
+- `func (r *TurnStartReservation) PublishTurnStartedChecked(ctx context.Context, started event.TurnStarted) (committed bool, err error)`
 
 ### Types {#types}
 
-`SessionPhase`, `HustleActivityReason`, `PublishBoundaryReason`, and `TurnStartReservationReason` classify lifecycle state; corresponding errors preserve the reason without exposing unbounded event data.
+`Option`, `PublishBoundaryReason`, `PublishBoundaryError`, `HustleActivityReason`, `HustleActivityError`, `TurnStartReservationReason`, `TurnStartReservationError`, `SessionPersistenceFault`, `SessionAbortedError`, `FaultReporter`, `Hub`, `HustleActivityLease`, `SessionPhase`, `SubscriptionLossError`, `EventSubscription`, `TurnStartReservation`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`ErrSessionStopped` is the sentinel for admission after shutdown. Option functions configure collaborators without global state.
+`PublishBoundaryNilEvent`, `PublishBoundaryVisibility`, `PublishBoundaryClass`, `PublishBoundarySession`, `PublishBoundaryType`, `PublishBoundaryInvalid`, `HustleActivityInvalidRunID`, `HustleActivityDuplicate`, `HustleActivityStopped`, `TurnStartReservationInvalidLoop`, `TurnStartReservationStopped`, `TurnStartReservationMismatch`, `TurnStartReservationReleased`, `TurnStartReservationReused`, `SessionIdle`, `SessionActive`, `SessionStopped`
+
+### Variables {#variables}
+
+`ErrSessionStopped`
 
 ## Ownership and errors {#ownership-and-errors}
 
-The session owns the hub and closes subscriptions during shutdown. Subscribers own their read loop and must handle a closed channel plus `Err` separately. A persistence fault is not equivalent to a transient subscriber cancellation.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `PublishBoundaryError`, `HustleActivityError`, `TurnStartReservationError`, `SessionAbortedError`, `SessionPersistenceFault`, `SubscriptionLossError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned hub package](https://github.com/looprig/harness/tree/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/). `stage-07-session-events` exercises the event stream and terminal lifecycle.
+Source files at the pinned commit:
+
+- [pkg/hub/deps.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/deps.go)
+- [pkg/hub/errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/errors.go)
+- [pkg/hub/fault.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/fault.go)
+- [pkg/hub/hub.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/hub.go)
+- [pkg/hub/state.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/state.go)
+- [pkg/hub/subscription.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/subscription.go)
+- [pkg/hub/turn_start.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/turn_start.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/hub/deps_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/deps_test.go)
+- [pkg/hub/durability_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/durability_test.go)
+- [pkg/hub/durable_tap_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/durable_tap_test.go)
+- [pkg/hub/fault_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/fault_test.go)
+- [pkg/hub/hub_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/hub_test.go)
+- [pkg/hub/hustle_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/hustle_test.go)
+- [pkg/hub/permission_review_publish_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/permission_review_publish_test.go)
+- [pkg/hub/state_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/state_test.go)
+- [pkg/hub/subscription_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/subscription_test.go)
+- [pkg/hub/turn_start_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/turn_start_test.go)
+
+Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

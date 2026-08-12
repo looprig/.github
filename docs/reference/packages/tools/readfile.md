@@ -20,7 +20,7 @@ proofs:
 
 # readfile package · readfile
 
-Import path: `github.com/looprig/tools/readfile`. Readfile reads bounded text from a permitted workspace path.
+Import path: `github.com/looprig/tools/readfile`. The source is pinned to github.com/looprig/tools@v0.10.0.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,51 @@ Import path: `github.com/looprig/tools/readfile`. Readfile reads bounded text fr
 
 ## Exported surface {#exported-surface}
 
-The API is `ReadFile`, `ReadFileOption`, `NewReadFile`, and `WithHostReads`. Root composition uses `tools.ReadFileDefinition`.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`NewReadFile` constructs the tool. Calls validate path containment and output bounds before opening a file.
+- `func WithHostReads() ReadFileOption`
+- `func NewReadFile(root string, guard loop.ReadGuard, obs tool.WorkspaceObservations, opts ...ReadFileOption) *ReadFile`
+
+### Methods {#methods}
+
+- `func (r *ReadFile) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (r *ReadFile) AuditSummary(argsJSON string) string`
+- `func (r *ReadFile) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
+- `func (r *ReadFile) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
+- `func (e *readFileError) Error() string`
+- `func (e *readFileError) Unwrap() error`
 
 ### Types {#types}
 
-`ReadFile` is read-only and reports path, permission, irregular-file, and size failures separately.
+`ReadFile`, `ReadFileOption`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-No host-read option or unbounded output is enabled by default.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The caller owns the guard and root. A symlink or path escape is a rejection, not a reason to retry from the process or host filesystem.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned readfile package](https://github.com/looprig/tools/tree/151f5530f95a9bba95be10551a8f08282d8959ab/readfile/). The prepared tool example covers the boundary.
+Source files at the pinned commit:
+
+- [readfile/readfile.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/readfile/readfile.go)
+
+Adjacent tests at the same commit:
+
+- [readfile/preparecall_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/readfile/preparecall_test.go)
+- [readfile/readfile_hostreads_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/readfile/readfile_hostreads_test.go)
+- [readfile/readfile_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/readfile/readfile_test.go)
+- [readfile/readtools_test_helpers_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/readfile/readtools_test_helpers_test.go)
+
+Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

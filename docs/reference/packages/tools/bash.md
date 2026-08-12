@@ -20,7 +20,7 @@ proofs:
 
 # bash package · bash
 
-Import path: `github.com/looprig/tools/bash`. Bash prepares shell commands and routes synchronous or supervised execution through a Harness command runner.
+Import path: `github.com/looprig/tools/bash`. The source is pinned to github.com/looprig/tools@v0.10.0.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,65 @@ Import path: `github.com/looprig/tools/bash`. Bash prepares shell commands and r
 
 ## Exported surface {#exported-surface}
 
-The package exports `BashTool`, `Factory`, `SupervisedFactory`, `BashOption`, `NewBash`, `NewFactory`, `NewSupervisedFactory`, `WithRunner`, `WithWorkspaceCoordinator`, `WithObservations`, and `WithFamilyCatalog`.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-Factories validate bindings before returning a tool. Supervised calls use the shared process supervisor and the runner resolved from the validated loop ID.
+- `func WithRunner(r tool.CommandRunner) BashOption`
+- `func WithWorkspaceCoordinator(coord tool.WorkspaceCoordinator) BashOption`
+- `func WithFamilyCatalog(eligible permission.FamilyEligibility) BashOption`
+- `func WithObservations(obs tool.WorkspaceObservations) BashOption`
+- `func NewBash(root string, opts ...BashOption) *BashTool`
+- `func NewFactory(options ...BashOption) (Factory, error)`
+- `func NewSupervisedFactory(options ...BashOption) (SupervisedFactory, error)`
+
+### Methods {#methods}
+
+- `func (noPermit) Release()`
+- `func (b *BashTool) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (b *BashTool) AuditSummary(argsJSON string) string`
+- `func (b *BashTool) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
+- `func (c *cappedBuffer) Write(p []byte) (int, error)`
+- `func (e *bashPrepareError) Error() string`
+- `func (b *BashTool) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
+- `func (l leaseFromPermit) Release() error`
 
 ### Types {#types}
 
-`BashTool` returns command output, exit status, and typed preparation or process errors. Options do not change gate policy.
+`BashTool`, `BashOption`, `Factory`, `SupervisedFactory`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-No shell allowlist is implicit. Family eligibility is an explicit option and a gate still evaluates the normalized command requirement.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The caller owns the command runner or resolver; Harness owns the tool lifetime. Unprepared, invalid, denied, stale, output-limited, and lifetime-containment failures must stop the call before a weaker execution path is attempted.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned Bash package](https://github.com/looprig/tools/tree/151f5530f95a9bba95be10551a8f08282d8959ab/bash/). The prepared tool example and component preparation tests cover normalization and gate handoff.
+Source files at the pinned commit:
+
+- [bash/bash.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/bash.go)
+- [bash/prepare.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/prepare.go)
+- [bash/result.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/result.go)
+- [bash/supervised.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/supervised.go)
+
+Adjacent tests at the same commit:
+
+- [bash/bash_grants_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/bash_grants_test.go)
+- [bash/bash_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/bash_test.go)
+- [bash/integration_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/integration_test.go)
+- [bash/preparecall_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/preparecall_test.go)
+- [bash/result_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/result_test.go)
+- [bash/runner_injection_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/runner_injection_test.go)
+- [bash/supervised_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/supervised_test.go)
+- [bash/supervision_args_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/supervision_args_test.go)
+
+Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

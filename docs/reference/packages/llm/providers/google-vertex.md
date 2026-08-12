@@ -18,7 +18,7 @@ proofs:
 
 # vertex package · providers/google-vertex
 
-Import path: `github.com/looprig/llm/providers/google-vertex`. Package vertex provides Google Vertex AI's documented Gemini generateContent route and Anthropic Claude rawPredict route. It reuses the shared Gemini and Anthropic codecs; only Vertex routing, bearer authentication, and the Vertex-required anthropic_version fi
+Import path: `github.com/looprig/llm/providers/google-vertex`. The source is pinned to github.com/looprig/llm@v0.13.3.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,56 @@ This provider package binds one external model service to provider-neutral infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Error`, `New`, `NewCounter`
+- `func WithProject(project string) Option`
+- `func WithLocation(location string) Option`
+- `func WithHeader(name, value string) Option`
+- `func WithAnthropicVersion(version string) Option`
+- `func New(selected model.Model, accessToken auth.APIKey, options ...Option) (inference.Client, error)`
+- `func NewCounter(_ auth.APIKey) (contextcount.ContextCounter, error)`
+
+### Methods {#methods}
+
+- `func (r headerRoute) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (route.Route, error)`
+- `func (c requestCodec) EncodeRequest(req inference.Request, mode codec.RequestMode) (codec.EncodedRequest, error)`
+- `func (c requestCodec) DecodeResponse(body []byte) (*inference.Response, error)`
+- `func (c requestCodec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
+- `func (r vertexGeminiRoute) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (route.Route, error)`
+- `func (r vertexAnthropicRoute) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (route.Route, error)`
+- `func (e *ConfigurationError) Error() string`
 
 ### Types {#types}
 
-`ConfigurationError`, `ConfigurationReason`, `CounterSupportError`, `Option`
+`Option`, `ConfigurationReason`, `ConfigurationError`, `CounterSupportError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`ProjectOrLocationMissing`, `ProjectOrLocationInvalid`, `ModelMissing`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The google-vertex package exposes `New`, `NewCounter` as its main operations. The principal handle or value is `CounterSupportError`; retain it according to its declaration before calling a terminal method. Use `New` as the package construction entry point when creating that value. Its exported typed failures include `ConfigurationError`, `CounterSupportError`; classify them with errors.Is or errors.As. Provider subscriptions may intentionally fail closed when the required gate is unavailable.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `ConfigurationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/llm/tree/v0.13.3/providers/google-vertex/) and adjacent tests. Provider deterministic tests run in the llm module; live probes are opt-in. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-llm`.
+Source files at the pinned commit:
+
+- [providers/google-vertex/client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/google-vertex/client.go)
+- [providers/google-vertex/counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/google-vertex/counter.go)
+- [providers/google-vertex/errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/google-vertex/errors.go)
+
+Adjacent tests at the same commit:
+
+- [providers/google-vertex/client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/google-vertex/client_test.go)
+- [providers/google-vertex/validation_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/google-vertex/validation_test.go)
+
+Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

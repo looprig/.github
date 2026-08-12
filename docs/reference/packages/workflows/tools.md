@@ -25,12 +25,66 @@ The bundle is the model-facing control surface for workflow orchestration. It tr
 
 ## Exported surface {#exported-surface}
 
-`Config` carries `SessionID`, `Catalog`, a run `Registry`, `Inputs`, `Supervisor`, `Now`, and `NewID`. An optional `PrepareRun` hook can normalize or attach run metadata before start. `NewBundle(config)` returns `[]tool.InvokableTool` and currently creates `workflow_run_start`, `workflow_run_get`, `workflow_run_list`, `workflow_run_history`, `workflow_run_resume`, and `workflow_run_cancel`.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-## Lifecycle and errors {#lifecycle-and-errors}
+### Functions {#functions}
 
-The caller owns the returned tools and the resources in `Config`; the bundle does not start or shut down a supervisor. Start and resume retain the workflow's typed validation boundaries. A failed or inconsistent prepare hook returns `PrepareRunIntegrityError`; underlying catalog, registry, input, and supervisor errors remain typed and are not flattened into tool text.
+- `func NewBundle(config Config) ([]tool.InvokableTool, error)`
 
-## Source proof {#source-proof}
+### Methods {#methods}
 
-The [stage 18 workflow fixture](../../../examples/index.md#stage-18-workflows) is the reviewed source-workspace proof. Package declarations are pinned at the [workflows commit](https://github.com/looprig/workflows/tree/f241ecbd6299a00d52fc6755b5be946a41b3a73f/tools).
+- `func (e *PrepareRunIntegrityError) Error() string`
+- `func (t *definitionListTool) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (t *definitionListTool) InvokableRun(_ context.Context, raw string) (*tool.ToolResult, error)`
+- `func (t *runCancelTool) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (t *runCancelTool) InvokableRun(ctx context.Context, raw string) (*tool.ToolResult, error)`
+- `func (t *runGetTool) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (t *runGetTool) InvokableRun(ctx context.Context, raw string) (*tool.ToolResult, error)`
+- `func (t *runHistoryTool) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (t *runHistoryTool) InvokableRun(ctx context.Context, raw string) (*tool.ToolResult, error)`
+- `func (t *runListTool) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (t *runListTool) InvokableRun(ctx context.Context, raw string) (*tool.ToolResult, error)`
+- `func (t *runResumeTool) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (t *runResumeTool) InvokableRun(ctx context.Context, raw string) (*tool.ToolResult, error)`
+- `func (t *runStartTool) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (t *runStartTool) InvokableRun(ctx context.Context, raw string) (*tool.ToolResult, error)`
+
+### Types {#types}
+
+`Config`, `PrepareRunIntegrityError`
+
+### Constants {#constants}
+
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
+## Ownership and errors {#ownership-and-errors}
+
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `PrepareRunIntegrityError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+
+## Source and runnable proof {#source-and-runnable-proof}
+
+Source files at the pinned commit:
+
+- [tools/bundle.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/bundle.go)
+- [tools/definition_list.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/definition_list.go)
+- [tools/results.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/results.go)
+- [tools/run_cancel.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/run_cancel.go)
+- [tools/run_get.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/run_get.go)
+- [tools/run_history.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/run_history.go)
+- [tools/run_list.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/run_list.go)
+- [tools/run_resume.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/run_resume.go)
+- [tools/run_start.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/run_start.go)
+
+Adjacent tests at the same commit:
+
+- [tools/cancel_test.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/cancel_test.go)
+- [tools/prepare_run_test.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/prepare_run_test.go)
+- [tools/tools_test.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/tools_test.go)
+
+Run `GOWORK=off go test ./...` from the `workflows` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

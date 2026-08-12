@@ -22,7 +22,7 @@ proofs:
 
 # auth package · auth
 
-Import path: `github.com/looprig/inference/auth`. Package auth provides access to user-provided authentication credentials.
+Import path: `github.com/looprig/inference/auth`. The source is pinned to github.com/looprig/inference@v0.9.2.
 
 ## Package role {#package-role}
 
@@ -30,24 +30,60 @@ This page indexes the exported declarations in the current source package. Infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`AddCredentials`
+- `func Key(k APIKey) Authenticator`
+- `func Header(k APIKey, name string) Authenticator`
+- `func None() Authenticator`
+
+### Methods {#methods}
+
+- `func (a failedAuthorizer) Authorize(context.Context, *http.Request) error`
+- `func (a failedAuthorizer) String() string`
+- `func (a failedAuthorizer) GoString() string`
+- `func (a failedAuthorizer) Format(state fmt.State, _ rune)`
+- `func (a failedAuthorizer) LogValue() slog.Value`
+- `func (a legacyHeaderAuth) Authorize(ctx context.Context, request *http.Request) error`
+- `func (legacyNoneAuth) Authorize(context.Context, *http.Request) error`
+- `func (a legacyHeaderAuth) String() string`
+- `func (a legacyHeaderAuth) GoString() string`
+- `func (a legacyHeaderAuth) Format(state fmt.State, _ rune)`
+- `func (a legacyHeaderAuth) LogValue() slog.Value`
+- `func (e *MissingCredentialsError) Error() string`
+- `func (e *MissingCredentialsError) Format(state fmt.State, _ rune)`
+- `func (e *MissingCredentialsError) GoString() string`
+- `func (e *MissingCredentialsError) LogValue() slog.Value`
 
 ### Types {#types}
 
-None reported.
+`APIKey`, `Authorizer`, `Authenticator`, `AuthKind`, `MissingCredentialsError`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`AuthNone`, `AuthAPIKey`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The auth package exposes `AddCredentials` as its main operations. No package-specific error type is exported here; use the owning contract or helper return error rather than parsing diagnostic text. Retries do not replay a stream after output has started.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `MissingCredentialsError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/inference/tree/v0.9.2/auth/) and adjacent tests. The progressive entries `stage-01-inference`, `stage-02-streaming`, `stage-22-model-gateway` cover deterministic invoke, stream, and gateway paths; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-inference`.
+Source files at the pinned commit:
+
+- [auth/auth.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/auth/auth.go)
+- [auth/contracts.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/auth/contracts.go)
+- [auth/errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/auth/errors.go)
+
+Adjacent tests at the same commit:
+
+- [auth/auth_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/auth/auth_test.go)
+
+Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

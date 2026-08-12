@@ -18,7 +18,7 @@ proofs:
 
 # xai package · providers/xai
 
-Import path: `github.com/looprig/llm/providers/xai`. Package xai provides xAI Chat Completions and Responses API clients. The selected model's APIFormat chooses the codec; this package owns xAI's endpoint, bearer authentication, options, and one native Responses reasoning stream-event alias.
+Import path: `github.com/looprig/llm/providers/xai`. The source is pinned to github.com/looprig/llm@v0.13.3.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,53 @@ This provider package binds one external model service to provider-neutral infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`New`, `NewCounter`
+- `func New(selected model.Model, key auth.APIKey, options ...Option) (inference.Client, error)`
+- `func NewCounter(_ auth.APIKey) (contextcount.ContextCounter, error)`
+- `func WithReasoning(options ReasoningOptions) Option`
+- `func WithServiceTier(tier ServiceTier) Option`
+- `func WithPromptCacheKey(key string) Option`
+
+### Methods {#methods}
+
+- `func (apiRouter) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (route.Route, error)`
+- `func (c requestCodec) EncodeRequest(req inference.Request, mode codec.RequestMode) (codec.EncodedRequest, error)`
+- `func (c requestCodec) DecodeResponse(body []byte) (*inference.Response, error)`
+- `func (c requestCodec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
+- `func (b *reasoningEventBody) Read(p []byte) (int, error)`
+- `func (b *reasoningEventBody) Close() error`
 
 ### Types {#types}
 
-`Option`, `ReasoningOptions`, `ServiceTier`
+`ReasoningOptions`, `ServiceTier`, `Option`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`ServiceTierDefault`, `ServiceTierPriority`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The xai package exposes `New`, `NewCounter` as its main operations. Use `New` as the package construction entry point when creating that value. No package-specific error type is exported here; use the owning contract or helper return error rather than parsing diagnostic text. Provider subscriptions may intentionally fail closed when the required gate is unavailable.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/llm/tree/v0.13.3/providers/xai/) and adjacent tests. Provider deterministic tests run in the llm module; live probes are opt-in. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-llm`.
+Source files at the pinned commit:
+
+- [providers/xai/client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/xai/client.go)
+- [providers/xai/counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/xai/counter.go)
+- [providers/xai/options.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/xai/options.go)
+
+Adjacent tests at the same commit:
+
+- [providers/xai/client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/xai/client_test.go)
+
+Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

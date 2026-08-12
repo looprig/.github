@@ -18,7 +18,7 @@ proofs:
 
 # contracttest package · contracttest
 
-Import path: `github.com/looprig/secrets/contracttest`. Package contracttest contains reusable contract checks for secrets.Store implementations. It intentionally inspects only the public secrets API.
+Import path: `github.com/looprig/secrets/contracttest`. The source is pinned to github.com/looprig/secrets@v0.1.0.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,45 @@ This page indexes the exported declarations in the current source package. The o
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`AssertListMetadata`, `ErrorText`, `RunList`, `RunStore`
+- `func RunStore(t *testing.T, factory StoreFactory, options ...StoreContractOptions)`
+- `func RunList(t *testing.T, lister secrets.Lister, config StoreContractOptions)`
+- `func AssertListMetadata(t *testing.T, lister secrets.Lister, namespace secrets.Namespace)`
+- `func ErrorText(err error) string`
+
+### Methods {#methods}
+
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-`ContractOptions`, `StoreContractConfig`, `StoreContractOptions`, `StoreFactory`
+`StoreFactory`, `StoreContractOptions`, `StoreContractConfig`, `ContractOptions`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The contracttest package exposes `AssertListMetadata`, `ErrorText`, `RunList`, `RunStore` as its main operations. The principal handle or value is `StoreContractConfig`; retain it according to its declaration before calling a terminal method. Use `RunList` as the package construction entry point when creating that value. No package-specific error type is exported here; use the owning contract or helper return error rather than parsing diagnostic text. Secret bytes remain sensitive, and the local store can report a visible but not durable commit.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/secrets/tree/v0.1.0/contracttest/) and adjacent tests. The repository keeps deterministic examples beside the implementation. Run the module tests with `GOWORK=off go test ./...` and use the package-level examples where present. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-secrets`.
+Source files at the pinned commit:
+
+- [contracttest/store.go](https://github.com/looprig/secrets/blob/7b2e3a604b59343e9a0775398ce10c80f9708d12/contracttest/store.go)
+
+Adjacent tests at the same commit:
+
+No `_test.go` file is present in this package directory at the pinned commit.
+
+Run `GOWORK=off go test ./...` from the `secrets` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

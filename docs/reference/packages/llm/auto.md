@@ -18,7 +18,7 @@ proofs:
 
 # auto package · auto
 
-Import path: `github.com/looprig/llm/auto`. Package auto is the composition root that selects and wires a concrete inference.Client for a validated Model. It imports every provider it can fully construct from (model, key) alone, so business logic depends only on the inference.Client interface - never on
+Import path: `github.com/looprig/llm/auto`. The source is pinned to github.com/looprig/llm@v0.13.3.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,51 @@ This package selects a provider client and credential path from a validated mode
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Error`, `New`, `NewCounter`, `NewWithAuth`
+- `func WithTLSRootCAs(roots *x509.CertPool) Option`
+- `func WithOpenRouterOptions(opts ...openrouter.Option) Option`
+- `func New(selected model.Model, key auth.APIKey, opts ...Option) (inference.Client, error)`
+- `func NewWithAuth(selected model.Model, source credentials.Source, opts ...Option) (inference.Client, error)`
+- `func NewCounter(model model.Model, key auth.APIKey) (contextcount.ContextCounter, error)`
+
+### Methods {#methods}
+
+- `func (e *SigV4NotConstructibleError) Error() string`
+- `func (e *PolicyNotConstructibleError) Error() string`
+- `func (e *CredentialNotConstructibleError) Error() string`
 
 ### Types {#types}
 
-`CredentialNotConstructibleError`, `Option`, `PolicyNotConstructibleError`, `SigV4NotConstructibleError`
+`SigV4NotConstructibleError`, `PolicyNotConstructibleError`, `CredentialNotConstructibleError`, `Option`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The auto package exposes `New`, `NewCounter`, `NewWithAuth` as its main operations. Use `New` as the package construction entry point when creating that value. Its exported typed failures include `CredentialNotConstructibleError`, `PolicyNotConstructibleError`, `SigV4NotConstructibleError`; classify them with errors.Is or errors.As. Provider subscriptions may intentionally fail closed when the required gate is unavailable.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `SigV4NotConstructibleError`, `PolicyNotConstructibleError`, `CredentialNotConstructibleError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/llm/tree/v0.13.3/auto/) and adjacent tests. The module's deterministic examples live under `llm/examples` and are run by the module's native test command; provider live probes remain opt-in. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-llm`.
+Source files at the pinned commit:
+
+- [auto/auto.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/auto/auto.go)
+- [auto/counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/auto/counter.go)
+
+Adjacent tests at the same commit:
+
+- [auto/apiformat_e2e_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/auto/apiformat_e2e_test.go)
+- [auto/auto_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/auto/auto_test.go)
+- [auto/counter_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/auto/counter_test.go)
+
+Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

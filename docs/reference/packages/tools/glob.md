@@ -20,7 +20,7 @@ proofs:
 
 # glob package · glob
 
-Import path: `github.com/looprig/tools/glob`. Glob lists workspace paths through a read guard.
+Import path: `github.com/looprig/tools/glob`. The source is pinned to github.com/looprig/tools@v0.10.0.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,53 @@ Import path: `github.com/looprig/tools/glob`. Glob lists workspace paths through
 
 ## Exported surface {#exported-surface}
 
-The API is `Glob`, `GlobOption`, `NewGlob`, and `WithHostReads`. Root composition uses `tools.GlobDefinition`.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`NewGlob` constructs the tool; `WithHostReads` changes the requested read scope. Calls normalize patterns and cap result count and path size.
+- `func WithHostReads() GlobOption`
+- `func NewGlob(root string, guard loop.ReadGuard, opts ...GlobOption) *Glob`
+
+### Methods {#methods}
+
+- `func (g *Glob) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (g *Glob) AuditSummary(argsJSON string) string`
+- `func (g *Glob) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
+- `func (g *Glob) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
+- `func (e *globError) Error() string`
+- `func (e *globError) Unwrap() error`
+- `func (stopWalkError) Error() string`
+- `func (ctxCancelledError) Error() string`
 
 ### Types {#types}
 
-`Glob` is read-only and returns tool results rather than mutating files.
+`Glob`, `GlobOption`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-Pattern and result bounds are implementation limits; no host-read permission is implicit.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The caller owns the guard and workspace root. Invalid patterns, escapes, unreadable entries, and result limits must be reported rather than silently broadening the root.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned glob package](https://github.com/looprig/tools/tree/151f5530f95a9bba95be10551a8f08282d8959ab/glob/). The preparation examples cover read-only path handling.
+Source files at the pinned commit:
+
+- [glob/glob.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/glob/glob.go)
+
+Adjacent tests at the same commit:
+
+- [glob/glob_hostreads_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/glob/glob_hostreads_test.go)
+- [glob/glob_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/glob/glob_test.go)
+- [glob/preparecall_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/glob/preparecall_test.go)
+- [glob/readtools_test_helpers_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/glob/readtools_test_helpers_test.go)
+
+Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

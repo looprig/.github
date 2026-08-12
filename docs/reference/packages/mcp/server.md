@@ -20,7 +20,7 @@ proofs:
 
 # server package · server
 
-Import path: `github.com/looprig/mcp/pkg/server`. Server publishes product-owned tools through MCP framing and wire-error classification.
+Import path: `github.com/looprig/mcp/pkg/server`. The source is pinned to github.com/looprig/mcp@v0.6.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,55 @@ Import path: `github.com/looprig/mcp/pkg/server`. Server publishes product-owned
 
 ## Exported surface {#exported-surface}
 
-The API is `Config`, `Server`, `Tool`, `Handler`, `Result`, `Content`, and aliases `ServerConfig`, `ToolHandler`, and `ToolResult`; constructors are `New` and `NewServer`.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`RegisterTool` validates and stores a definition. `Run` handles initialize, list, and call operations while bounding request and result payloads.
+- `func New(cfg Config) (*Server, error)`
+- `func NewServer(cfg Config) (*Server, error)`
+
+### Methods {#methods}
+
+- `func (s *Server) Config() Config`
+- `func (s *Server) RegisterTool(tool Tool) error`
+- `func (s *Server) AddTool(tool Tool) error`
+- `func (s *Server) Register(tool Tool) error`
+- `func (s *Server) Serve(ctx context.Context, reader io.Reader, writer io.Writer) error`
+- `func (s *Server) Run(ctx context.Context) error`
+- `func (s *Server) ServeStdio(ctx context.Context, reader io.Reader, writer io.Writer) error`
+- `func (nopCloser) Close() error`
+- `func (r *boundedFrameReader) Read(p []byte) (int, error)`
+- `func (w *boundedFrameWriter) Write(p []byte) (int, error)`
 
 ### Types {#types}
 
-`Result` and `Content` support text and resource values; invalid argument, unknown tool, handler, and protocol failures are returned as typed wire errors.
+`Config`, `ServerConfig`, `Server`, `Handler`, `ToolHandler`, `Tool`, `Content`, `Result`, `ToolResult`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-Default server identity and maximum message size are explicit values. No product handler or credential is global.
+`DefaultServerName`, `DefaultServerVersion`, `DefaultMaxInputBytes`, `DefaultMaxOutputBytes`, `MaxFrameOverheadBytes`, `MaxRequestIDBytes`, `DefaultMaxMessageBytes`, `DefaultMaxConcurrentRequests`, `MaxConcurrentRequests`, `MaxMessageBytes`, `MaxInputBytes`, `MaxOutputBytes`
+
+### Variables {#variables}
+
+`ErrInvalidArgument`
 
 ## Ownership and errors {#ownership-and-errors}
 
-The application owns handlers and any effectful resources. The server owns protocol registration and must not claim a successful tool result when the handler returned an error.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned server package](https://github.com/looprig/mcp/tree/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/server/). `stage-16-mcp-adoption` runs a deterministic server child.
+Source files at the pinned commit:
+
+- [pkg/server/server.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/server/server.go)
+- [pkg/server/stdio.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/server/stdio.go)
+- [pkg/server/tool.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/server/tool.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/server/server_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/server/server_test.go)
+- [pkg/server/stdio_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/server/stdio_test.go)
+
+Run `GOWORK=off go test ./...` from the `mcp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

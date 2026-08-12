@@ -20,7 +20,7 @@ proofs:
 
 # controlplane package · pkg/controlplane
 
-Import path: `github.com/looprig/flow/pkg/controlplane`. Package controlplane coordinates flow execution. md §18.5.
+Import path: `github.com/looprig/flow/pkg/controlplane`. The source is pinned to github.com/looprig/flow@v0.3.0.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,48 @@ This page indexes the exported declarations in the current source package. The o
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Close`, `Consume`, `Error`, `Submit`
+- `func WithNackBackoff(d time.Duration) MemOption`
+- `func Mem(opts ...MemOption) *MemControlPlane`
+
+### Methods {#methods}
+
+- `func (e *ClosedError) Error() string`
+- `func (cp *MemControlPlane) Close()`
+- `func (cp *MemControlPlane) Submit(ctx context.Context, w flow.Work) error`
+- `func (cp *MemControlPlane) Consume(ctx context.Context, serves []flow.GraphVersionKey) (<-chan flow.Delivery, error)`
 
 ### Types {#types}
 
-`ClosedError`, `MemControlPlane`, `MemOption`
+`ClosedError`, `MemOption`, `MemControlPlane`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
 `DefaultNackBackoff`
 
+### Variables {#variables}
+
+No exported variables are declared in this package.
+
 ## Ownership and errors {#ownership-and-errors}
 
-The controlplane package exposes `Close`, `Consume`, `Submit` as its main operations. Its exported typed failures include `ClosedError`; classify them with errors.Is or errors.As. Registry and ingress are not tenant isolation or authorization systems.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `ClosedError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/flow/tree/v0.3.0/pkg/controlplane/) and adjacent tests. The progressive manifest entry `stage-17-flow` exercises this area; run it with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-flow`.
+Source files at the pinned commit:
+
+- [pkg/controlplane/doc.go](https://github.com/looprig/flow/blob/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/controlplane/doc.go)
+- [pkg/controlplane/errors.go](https://github.com/looprig/flow/blob/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/controlplane/errors.go)
+- [pkg/controlplane/mem.go](https://github.com/looprig/flow/blob/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/controlplane/mem.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/controlplane/mem_test.go](https://github.com/looprig/flow/blob/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/controlplane/mem_test.go)
+
+Run `GOWORK=off go test ./...` from the `flow` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

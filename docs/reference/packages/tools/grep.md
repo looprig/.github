@@ -20,7 +20,7 @@ proofs:
 
 # grep package · grep
 
-Import path: `github.com/looprig/tools/grep`. Grep searches permitted files with a fixed argv runner, not a shell.
+Import path: `github.com/looprig/tools/grep`. The source is pinned to github.com/looprig/tools@v0.10.0.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,55 @@ Import path: `github.com/looprig/tools/grep`. Grep searches permitted files with
 
 ## Exported surface {#exported-surface}
 
-The API is `Grep`, `GrepOption`, `NewGrep`, `WithHostReads`, and `WithArgvRunner`. Root composition uses `tools.GrepDefinition`.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`NewGrep` constructs the tool. It normalizes pattern, path, and limit arguments before invoking direct argv.
+- `func WithArgvRunner(r tool.ArgvRunner) GrepOption`
+- `func WithHostReads() GrepOption`
+- `func NewGrep(root string, guard loop.ReadGuard, opts ...GrepOption) *Grep`
+
+### Methods {#methods}
+
+- `func (stopWalkError) Error() string`
+- `func (ctxCancelledError) Error() string`
+- `func (g *Grep) Info(context.Context) (*tool.ToolInfo, error)`
+- `func (g *Grep) AuditSummary(argsJSON string) string`
+- `func (g *Grep) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
+- `func (g *Grep) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
+- `func (e *grepError) Error() string`
+- `func (e *grepError) Unwrap() error`
 
 ### Types {#types}
 
-`Grep` is read-only. Runner and parse errors remain separate from a valid search with zero matches.
+`Grep`, `GrepOption`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-No shell command string or inherited host-read mode is global.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The caller owns the read guard and runner. A failed or unavailable rg process is not permission to fall back to shell execution.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned grep package](https://github.com/looprig/tools/tree/151f5530f95a9bba95be10551a8f08282d8959ab/grep/). The package tests cover direct argv and read-boundary behavior.
+Source files at the pinned commit:
+
+- [grep/grep.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/grep/grep.go)
+
+Adjacent tests at the same commit:
+
+- [grep/grep_hostreads_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/grep/grep_hostreads_test.go)
+- [grep/grep_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/grep/grep_test.go)
+- [grep/preparecall_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/grep/preparecall_test.go)
+- [grep/readtools_test_helpers_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/grep/readtools_test_helpers_test.go)
+- [grep/runner_injection_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/grep/runner_injection_test.go)
+
+Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -18,7 +18,7 @@ proofs:
 
 # oauth package · oauth
 
-Import path: `github.com/looprig/credentials/oauth`. Package oauth contains provider-neutral OAuth acquisition mechanics. Provider packages provide a reviewed Definition: this package never chooses provider endpoints, client identities, scopes, or browser behavior for callers. It only validates and applies the d
+Import path: `github.com/looprig/credentials/oauth`. The source is pinned to github.com/looprig/credentials@v0.1.0.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,146 @@ This page indexes the exported declarations in the current source package. The o
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`BeginAuthorization`, `CallbackError`, `Client`, `Close`, `Code`, `Consume`, `Error`, `Exchange`, `ExchangeCode`, `Format`, `GenerateState`, `GenerateVerifier`, `GoString`, `HasError`, `Instructions`, `IsProviderError`, `LogValue`, `NewState`, `NewVerifier`, `ParseCallback`, `ParseExpiresIn`, `Poll`, `PollDevice`, `RefreshToken`, `RevokeToken`, `Rotate`, `S256`, `S256Challenge`, `ServeHTTP`, `SortOrigins`, `StartDeviceAuthorization`, `StartDeviceFlow`, `State`, `StatusCode`, `String`, `Unwrap`, `Valid`, `Validate`, `ValidateState`, `ValidateVerifier`, `Wait`
+- `func ParseCallbackURL(raw, expectedState string, exactPath ...string) (CallbackResult, error)`
+- `func ParseCallbackURLForInstructions(raw, expectedState string, instructions CallbackInstructions) (CallbackResult, error)`
+- `func ParseCallbackQuery(query url.Values, expectedState string) (CallbackResult, error)`
+- `func ListenLoopback(ctx context.Context, options ...Option) (*LoopbackListener, error)`
+- `func NewLoopbackListener(ctx context.Context, options ...Option) (*LoopbackListener, error)`
+- `func WithHTTPClient(client *http.Client) Option`
+- `func WithPollInterval(interval time.Duration) Option`
+- `func WithMaxPolls(attempts int) Option`
+- `func WithPollSleeper(sleeper func(context.Context, time.Duration) error) Option`
+- `func BeginAuthorization(ctx context.Context, definition Definition, options ...Option) (*AuthorizationFlow, error)`
+- `func BeginAuthorizationCode(ctx context.Context, definition Definition, options ...Option) (*AuthorizationFlow, error)`
+- `func ParseDeviceAuthorizationResponse(body []byte) (DeviceAuthorization, error)`
+- `func DeviceAuthorizationRequest(ctx context.Context, definition Definition, options ...Option) (DeviceAuthorization, error)`
+- `func Poll(ctx context.Context, definition Definition, device DeviceAuthorization, options ...Option) (TokenResponse, error)`
+- `func PollDeviceAuthorization(ctx context.Context, definition Definition, device DeviceAuthorization, options ...Option) (TokenResponse, error)`
+- `func NewVerifier() (string, error)`
+- `func GenerateVerifier() (string, error)`
+- `func NewState() (string, error)`
+- `func GenerateState() (string, error)`
+- `func NewPKCE() (PKCE, error)`
+- `func S256Challenge(verifier string) (string, error)`
+- `func S256(verifier string) (string, error)`
+- `func ValidateVerifier(verifier string) error`
+- `func ValidateState(expected, received string) error`
+- `func NewStateGuard(expected string) (*StateGuard, error)`
+- `func RotateRefreshToken(previous, next TokenResponse) TokenResponse`
+- `func ParseTokenResponse(body []byte) (TokenResponse, error)`
+- `func ExchangeAuthorizationCode(ctx context.Context, definition Definition, code, verifier, redirectURI string, options ...Option) (TokenResponse, error)`
+- `func IsProviderError(err error) bool`
+- `func ParseExpiresIn(value string) (int64, error)`
+
+### Methods {#methods}
+
+- `func (i CallbackInstructions) String() string`
+- `func (i CallbackInstructions) Format(state fmt.State, _ rune)`
+- `func (i CallbackInstructions) GoString() string`
+- `func (i CallbackInstructions) LogValue() slog.Value`
+- `func (r CallbackResult) HasError() bool`
+- `func (r CallbackResult) String() string`
+- `func (r CallbackResult) Format(state fmt.State, _ rune)`
+- `func (r CallbackResult) GoString() string`
+- `func (r CallbackResult) LogValue() slog.Value`
+- `func (l *LoopbackListener) String() string`
+- `func (l *LoopbackListener) Format(state fmt.State, _ rune)`
+- `func (l *LoopbackListener) GoString() string`
+- `func (l *LoopbackListener) LogValue() slog.Value`
+- `func (l *LoopbackListener) Instructions() CallbackInstructions`
+- `func (l *LoopbackListener) ParseCallback(raw string) (CallbackResult, error)`
+- `func (l *LoopbackListener) State() string`
+- `func (l *LoopbackListener) Client() *http.Client`
+- `func (l *LoopbackListener) Wait(ctx context.Context) (CallbackResult, error)`
+- `func (l *LoopbackListener) Close() error`
+- `func (l *LoopbackListener) ServeHTTP(response http.ResponseWriter, request *http.Request)`
+- `func (r CallbackResult) CallbackError() error`
+- `func (d Definition) String() string`
+- `func (d Definition) Format(state fmt.State, _ rune)`
+- `func (d Definition) GoString() string`
+- `func (d Definition) LogValue() slog.Value`
+- `func (d Definition) Validate() error`
+- `func (d Definition) BeginAuthorization(ctx context.Context, options ...Option) (*AuthorizationFlow, error)`
+- `func (f *AuthorizationFlow) Wait(ctx context.Context) (CallbackResult, error)`
+- `func (f *AuthorizationFlow) Exchange(ctx context.Context, result CallbackResult, options ...Option) (TokenResponse, error)`
+- `func (f *AuthorizationFlow) Close() error`
+- `func (f AuthorizationFlow) String() string`
+- `func (f AuthorizationFlow) Format(state fmt.State, _ rune)`
+- `func (f AuthorizationFlow) LogValue() slog.Value`
+- `func (d Definition) SortOrigins() []string`
+- `func (d DeviceAuthorization) Valid() bool`
+- `func (d DeviceAuthorization) String() string`
+- `func (d DeviceAuthorization) Format(state fmt.State, _ rune)`
+- `func (d DeviceAuthorization) GoString() string`
+- `func (d DeviceAuthorization) LogValue() slog.Value`
+- `func (d Definition) StartDeviceAuthorization(ctx context.Context, options ...Option) (DeviceAuthorization, error)`
+- `func (d Definition) StartDeviceFlow(ctx context.Context, options ...Option) (*DeviceFlow, error)`
+- `func (f *DeviceFlow) Poll(ctx context.Context, options ...Option) (TokenResponse, error)`
+- `func (d Definition) PollDevice(ctx context.Context, device DeviceAuthorization, options ...Option) (TokenResponse, error)`
+- `func (p PKCE) String() string`
+- `func (p PKCE) Format(state fmt.State, _ rune)`
+- `func (p PKCE) GoString() string`
+- `func (p PKCE) LogValue() slog.Value`
+- `func (b *atomicBool) Swap(value bool) bool`
+- `func (g *StateGuard) Consume(received string) error`
+- `func (g *StateGuard) State() string`
+- `func (g StateGuard) String() string`
+- `func (g StateGuard) Format(state fmt.State, _ rune)`
+- `func (g StateGuard) GoString() string`
+- `func (g StateGuard) LogValue() slog.Value`
+- `func (t TokenResponse) Valid() bool`
+- `func (t TokenResponse) String() string`
+- `func (t TokenResponse) Format(state fmt.State, _ rune)`
+- `func (t TokenResponse) GoString() string`
+- `func (t TokenResponse) LogValue() slog.Value`
+- `func (t TokenResponse) Rotate(previous TokenResponse) TokenResponse`
+- `func (e *ProviderError) Error() string`
+- `func (e *ProviderError) Unwrap() error`
+- `func (e *ProviderError) StatusCode() int`
+- `func (e *ProviderError) Code() string`
+- `func (e *ProviderError) String() string`
+- `func (e *ProviderError) Format(state fmt.State, _ rune)`
+- `func (e *ProviderError) GoString() string`
+- `func (e *ProviderError) LogValue() slog.Value`
+- `func (d Definition) ExchangeCode(ctx context.Context, code, verifier, redirectURI string, options ...Option) (TokenResponse, error)`
+- `func (d Definition) RefreshToken(ctx context.Context, refreshToken string, previous TokenResponse, options ...Option) (TokenResponse, error)`
+- `func (d Definition) RevokeToken(ctx context.Context, token string, options ...Option) error`
 
 ### Types {#types}
 
-`AuthorizationFlow`, `CallbackInstructions`, `CallbackResult`, `ClientIdentity`, `ClientRegistration`, `Config`, `Definition`, `DeviceAuthorization`, `DeviceAuthorizationResponse`, `DeviceFlow`, `Grant`, `LoopbackListener`, `LoopbackRedirectPolicy`, `Option`, `PKCE`, `ProviderDefinition`, `ProviderError`, `ResponseParser`, `Revoker`, `StateGuard`, `Token`, `TokenResponse`
+`CallbackInstructions`, `CallbackResult`, `LoopbackListener`, `Grant`, `ClientRegistration`, `LoopbackRedirectPolicy`, `ClientIdentity`, `ResponseParser`, `Definition`, `ProviderDefinition`, `Config`, `Option`, `AuthorizationFlow`, `DeviceAuthorization`, `DeviceAuthorizationResponse`, `DeviceFlow`, `PKCE`, `StateGuard`, `TokenResponse`, `Token`, `ProviderError`, `Revoker`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`CallbackIdleTimeout`, `CallbackReadHeaderTimeout`, `DefaultPollInterval`, `MaxCallbackValueLength`, `MaxExtraParams`, `MaxHeaderBytes`, `MaxPollAttempts`, `MaxPollInterval`, `MaxRequestBodyBytes`, `MaxRequestHeaders`, `MaxResponseBodyBytes`, `MaxResponseHeaders`, `MaxScopeLength`, `MaxScopes`, `MaxStateLength`, `MaxTokenLifetime`, `MaxTokenValueLength`, `MaxVerifierLength`, `MinVerifierLength`, `ErrCallbackClosed`, `ErrCallbackOrigin`, `ErrCallbackTimeout`, `ErrCanceled`, `ErrDeviceExpired`, `ErrInvalidClient`, `ErrInvalidDefinition`, `ErrInvalidEndpoint`, `ErrInvalidRequest`, `ErrInvalidResponse`, `ErrInvalidVerifier`, `ErrNetwork`, `ErrNilContext`, `ErrOriginMismatch`, `ErrPollLimit`, `ErrProvider`, `ErrRedirectRejected`, `ErrRequestHeadersTooLarge`, `ErrRequestTooLarge`, `ErrResponseHeadersTooLarge`, `ErrResponseTooLarge`, `ErrRevocationUnsupported`, `ErrStateMismatch`, `ErrStateUsed`, `ErrUnsupportedGrant`
+`MaxVerifierLength`, `MinVerifierLength`, `MaxStateLength`, `MaxCallbackValueLength`, `MaxTokenValueLength`, `MaxScopeLength`, `MaxScopes`, `MaxExtraParams`, `MaxRequestBodyBytes`, `MaxResponseBodyBytes`, `MaxRequestHeaders`, `MaxResponseHeaders`, `MaxHeaderBytes`, `MaxPollAttempts`, `MaxPollInterval`, `DefaultPollInterval`, `MaxTokenLifetime`, `CallbackReadHeaderTimeout`, `CallbackIdleTimeout`, `GrantAuthorizationCode`, `GrantDeviceCode`, `GrantDeviceAuthorization`, `GrantRefreshToken`
+
+### Variables {#variables}
+
+`ErrInvalidDefinition`, `ErrInvalidVerifier`
 
 ## Ownership and errors {#ownership-and-errors}
 
-The oauth package exposes `BeginAuthorization`, `CallbackError`, `Client`, `Close` as its main operations. The principal handle or value is `AuthorizationFlow`; retain it according to its declaration before calling a terminal method. Use `NewState` as the package construction entry point when creating that value. Its exported typed failures include `ProviderError`, `ErrCallbackClosed`, `ErrCallbackOrigin`, `ErrCallbackTimeout`; classify them with errors.Is or errors.As. Credential sources must redact tokens and cannot make provider authorization durable by themselves.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `ProviderError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/credentials/tree/v0.1.0/oauth/) and adjacent tests. The repository keeps deterministic examples beside the implementation. Run the module tests with `GOWORK=off go test ./...` and use the package-level examples where present. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-credentials`.
+Source files at the pinned commit:
+
+- [oauth/callback.go](https://github.com/looprig/credentials/blob/d696dd78cf4773da660b7cbf59533832fbaf4ed0/oauth/callback.go)
+- [oauth/config.go](https://github.com/looprig/credentials/blob/d696dd78cf4773da660b7cbf59533832fbaf4ed0/oauth/config.go)
+- [oauth/device.go](https://github.com/looprig/credentials/blob/d696dd78cf4773da660b7cbf59533832fbaf4ed0/oauth/device.go)
+- [oauth/pkce.go](https://github.com/looprig/credentials/blob/d696dd78cf4773da660b7cbf59533832fbaf4ed0/oauth/pkce.go)
+- [oauth/token.go](https://github.com/looprig/credentials/blob/d696dd78cf4773da660b7cbf59533832fbaf4ed0/oauth/token.go)
+
+Adjacent tests at the same commit:
+
+- [oauth/fuzz_test.go](https://github.com/looprig/credentials/blob/d696dd78cf4773da660b7cbf59533832fbaf4ed0/oauth/fuzz_test.go)
+- [oauth/oauth_test.go](https://github.com/looprig/credentials/blob/d696dd78cf4773da660b7cbf59533832fbaf4ed0/oauth/oauth_test.go)
+
+Run `GOWORK=off go test ./...` from the `credentials` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

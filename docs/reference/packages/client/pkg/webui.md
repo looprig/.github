@@ -25,12 +25,42 @@ Go web asset package in [client v0.1.0](https://github.com/looprig/client/tree/9
 
 ## Exported surface {#exported-surface}
 
-`FS` is the embedded asset filesystem. `Handler()` returns an `http.Handler` that serves files below the embedded `dist` directory and uses `dist/index.html` as the SPA fallback for non-file routes.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-## Lifecycle and errors {#lifecycle-and-errors}
+### Functions {#functions}
 
-The handler constrains cleaned request paths under `dist` and rejects traversal. Existing assets are served with content metadata; route misses fall back to the embedded index. If the index is absent or unreadable, the handler returns 500 rather than a misleading empty document. The handler owns no external resources and needs no close operation.
+- `func Handler() http.Handler`
 
-## Source proof {#source-proof}
+### Methods {#methods}
 
-The [webui source and tests](https://github.com/looprig/client/tree/9941c8da1308d0a01562f17bdbbec963ce2a26ca/pkg/webui) are pinned to the v0.1.0 release commit.
+No exported methods are declared in this package.
+
+### Types {#types}
+
+No exported types are declared in this package.
+
+### Constants {#constants}
+
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+`FS`
+
+## Ownership and errors {#ownership-and-errors}
+
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+
+## Source and runnable proof {#source-and-runnable-proof}
+
+Source files at the pinned commit:
+
+- [pkg/webui/webui.go](https://github.com/looprig/client/blob/9941c8da1308d0a01562f17bdbbec963ce2a26ca/pkg/webui/webui.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/webui/webui_test.go](https://github.com/looprig/client/blob/9941c8da1308d0a01562f17bdbbec963ce2a26ca/pkg/webui/webui_test.go)
+
+Run `GOWORK=off go test ./...` from the `client` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

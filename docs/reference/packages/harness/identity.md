@@ -20,7 +20,7 @@ proofs:
 
 # identity package · identity
 
-Import path: `github.com/looprig/harness/pkg/identity`. Identity provides small, validated values used to correlate loops, turns, steps, sessions, and agents.
+Import path: `github.com/looprig/harness/pkg/identity`. The source is pinned to github.com/looprig/harness@v0.24.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,42 @@ Import path: `github.com/looprig/harness/pkg/identity`. Identity provides small,
 
 ## Exported surface {#exported-surface}
 
-The public types are `AgentName`, `Coordinates`, `Agency`, and `Cause`. Values are deliberately small and can be embedded in command, event, gate, and tool records.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-Methods validate or format names and coordinate values; no constructor reaches into a session or store.
+No exported functions are declared in this package.
+
+### Methods {#methods}
+
+- `func (a Agency) String() string`
 
 ### Types {#types}
 
-`Agency` identifies the actor class, `Cause` captures a bounded causal identity, and `Coordinates` preserves the exact runtime scope for an audit or error.
+`Coordinates`, `AgentName`, `Agency`, `Cause`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-Agency values are closed enums. There is no global name registry; a Rig validates uniqueness when definitions are composed.
+`AgencyMachine`, `AgencyUser`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-IDs are immutable values. A caller must not reuse a loop ID for a new child or substitute a display name for an identity coordinate. Invalid or empty names are rejected at the owning package boundary.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned identity package](https://github.com/looprig/harness/tree/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/identity/). The delegation example creates explicit planner and worker identities.
+Source files at the pinned commit:
+
+- [pkg/identity/identifier_types.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/identity/identifier_types.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/identity/identifier_types_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/identity/identifier_types_test.go)
+
+Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

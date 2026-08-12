@@ -18,7 +18,7 @@ proofs:
 
 # tee package · tee
 
-Import path: `github.com/looprig/llm/tee`. Package tee - shared TEE attestation primitives. Each provider package (llm/chutes, llm/phala) handles its own provider-specific report_data binding; this package handles the parts that are common: Intel TDX quote signature + chain verification against the emb
+Import path: `github.com/looprig/llm/tee`. The source is pinned to github.com/looprig/llm@v0.13.3.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,52 @@ This support package is part of LLM model access and is intended to be composed 
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Error`, `TDXQuoteRTMR3`, `Unwrap`, `VerifyGPUEvidence`, `VerifyTDXQuote`, `VerifyTDXQuoteWithOptions`
+- `func VerifyTDXQuote(rawQuote []byte) ([]byte, error)`
+- `func VerifyTDXQuoteWithOptions(rawQuote []byte, opts Options) ([]byte, error)`
+- `func TDXQuoteRTMR3(rawQuote []byte) ([]byte, error)`
+- `func VerifyGPUEvidence(ctx context.Context, hc *http.Client, nrasURL, jwksURL string, gpu []GPUEvidence) error`
+
+### Methods {#methods}
+
+- `func (e *Error) Error() string`
+- `func (e *Error) Unwrap() error`
+- `func (e *getterError) Error() string`
+- `func (e *getterError) Unwrap() error`
+- `func (g *boundedGetter) Get(rawURL string) (map[string][]string, []byte, error)`
 
 ### Types {#types}
 
-`Error`, `GPUEvidence`, `Options`, `Reason`
+`Reason`, `Error`, `Options`, `GPUEvidence`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`ReasonQuoteSignatureInvalid`, `ReasonRootCAUntrusted`, `ReasonEvidenceMalformed`, `ReasonNvidiaVerdictInvalid`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The tee package exposes `TDXQuoteRTMR3`, `VerifyGPUEvidence`, `VerifyTDXQuote`, `VerifyTDXQuoteWithOptions` as its main operations. Its exported typed failures include `Error`; classify them with errors.Is or errors.As. Provider subscriptions may intentionally fail closed when the required gate is unavailable.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `Error`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/llm/tree/v0.13.3/tee/) and adjacent tests. The module's deterministic examples live under `llm/examples` and are run by the module's native test command; provider live probes remain opt-in. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-llm`.
+Source files at the pinned commit:
+
+- [tee/errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/tee/errors.go)
+- [tee/intel_quote.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/tee/intel_quote.go)
+- [tee/nvidia_nras.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/tee/nvidia_nras.go)
+
+Adjacent tests at the same commit:
+
+- [tee/intel_quote_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/tee/intel_quote_test.go)
+- [tee/tee_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/tee/tee_test.go)
+
+Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

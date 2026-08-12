@@ -20,7 +20,7 @@ proofs:
 
 # rubric package · rubric
 
-Import path: `github.com/looprig/eval/rubric`. Package rubric declares evaluation rubrics: the trusted definition of what "good" means for a model judge. A rubric names the quality being judged, the prose definition of it, the criteria a judge weighs, and the labeled anchor points that give the numeric sca
+Import path: `github.com/looprig/eval/rubric`. The source is pinned to github.com/looprig/eval@v0.1.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,49 @@ This page indexes the exported declarations in the current source package. Eval 
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Error`, `PassThreshold`, `ScoreRange`, `Validate`
+- `func Catalog() []Rubric`
+
+### Methods {#methods}
+
+- `func (e *ValidationError) Error() string`
+- `func (e *DuplicateCriterionError) Error() string`
+- `func (c Criterion) Validate() error`
+- `func (r Rubric) Validate() error`
+- `func (r Rubric) ScoreRange() (float64, float64)`
+- `func (r Rubric) PassThreshold() float64`
 
 ### Types {#types}
 
-`Anchor`, `Criterion`, `DuplicateCriterionError`, `Rubric`, `ValidationError`
+`ValidationError`, `DuplicateCriterionError`, `Criterion`, `Anchor`, `Rubric`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`MaxAnchorDescriptionBytes`, `MaxAnchors`, `MaxCriteria`, `MaxCriterionDescriptionBytes`, `MaxDefinitionBytes`, `AnswerRelevanceV1`, `GoalAdherenceV1`, `GroundednessV1`, `InstructionAdherenceV1`, `InternetUseAppropriatenessV1`, `ToxicityV1`, `VulgarityV1`
+`MaxDefinitionBytes`, `MaxCriterionDescriptionBytes`, `MaxAnchorDescriptionBytes`, `MaxCriteria`, `MaxAnchors`
+
+### Variables {#variables}
+
+`AnswerRelevanceV1`, `GroundednessV1`, `InstructionAdherenceV1`, `GoalAdherenceV1`, `ToxicityV1`, `VulgarityV1`, `InternetUseAppropriatenessV1`
 
 ## Ownership and errors {#ownership-and-errors}
 
-The rubric package exposes `PassThreshold`, `ScoreRange`, `Validate` as its main operations. Its exported typed failures include `DuplicateCriterionError`, `ValidationError`; classify them with errors.Is or errors.As. Report JSON redacts raw observations and target causes at its persistence boundary.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `ValidationError`, `DuplicateCriterionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/eval/tree/v0.1.2/rubric/) and adjacent tests. The progressive entry `stage-23-eval` runs an exact evaluator, encodes and decodes a redacted report, then checks a qualification card; run it with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-eval`.
+Source files at the pinned commit:
+
+- [rubric/catalog.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/rubric/catalog.go)
+- [rubric/errors.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/rubric/errors.go)
+- [rubric/rubric.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/rubric/rubric.go)
+
+Adjacent tests at the same commit:
+
+- [rubric/rubric_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/rubric/rubric_test.go)
+
+Run `GOWORK=off go test ./...` from the `eval` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

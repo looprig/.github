@@ -58,4 +58,4 @@ Handle unsupported provider/model combinations, missing credentials, unavailable
 
 ## Runnable proof {#runnable-proof}
 
-The LLM module's native provider, automatic-selection, counter, and subscription examples are the runnable evidence for this path. Run those examples and tests with `GOWORK=off`; source is pinned in the [LLM release tree](https://github.com/looprig/llm/tree/v0.13.3/) and [Credentials release tree](https://github.com/looprig/credentials/tree/v0.1.0/). No central progressive example currently covers provider counters, and precise source/test proof IDs are pending Task15 evidence promotion.
+The LLM module's native provider, automatic-selection, counter, and subscription examples are the runnable evidence for this path. Run those examples and tests with `GOWORK=off`; source is pinned in the [LLM release tree](https://github.com/looprig/llm/tree/v0.13.3/) and [Credentials release tree](https://github.com/looprig/credentials/tree/v0.1.0/). No central progressive example currently covers provider counters; use the native examples, tests, and pinned package proof links above.

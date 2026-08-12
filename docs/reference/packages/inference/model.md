@@ -22,7 +22,7 @@ proofs:
 
 # model package · model
 
-Import path: `github.com/looprig/inference/model`. This public package defines one part of the provider-neutral inference API.
+Import path: `github.com/looprig/inference/model`. The source is pinned to github.com/looprig/inference@v0.9.2.
 
 ## Package role {#package-role}
 
@@ -30,24 +30,75 @@ This page indexes the exported declarations in the current source package. Infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Clone`, `Error`, `Key`, `String`, `Valid`, `Validate`
+- `func CustomModel(p ProviderName, f APIFormat, baseURL, name string, opts ...ModelOption) Model`
+- `func WithContextLimits(limits ContextLimits) ModelOption`
+- `func WithTools() ModelOption`
+- `func WithImages() ModelOption`
+- `func WithThinking() ModelOption`
+- `func WithPromptCaching() ModelOption`
+- `func WithStructuredOutput() ModelOption`
+- `func WithStructuredOutputWithTools() ModelOption`
+- `func WithSampling(s Sampling) ModelOption`
+
+### Methods {#methods}
+
+- `func (e *ContextLimitsValidationError) Error() string`
+- `func (l ContextLimits) Validate() error`
+- `func (e Effort) Valid() bool`
+- `func (e *ValidationError) Error() string`
+- `func (m Model) Validate() error`
+- `func (m Model) Key() ModelKey`
+- `func (m Model) Clone() Model`
+- `func (e *ModelKeyValidationError) Error() string`
+- `func (k ModelKey) Validate() error`
+- `func (o Origin) String() string`
+- `func (s Sampling) Clone() Sampling`
 
 ### Types {#types}
 
-`APIFormat`, `Capabilities`, `ContextLimitField`, `ContextLimitValidationReason`, `ContextLimits`, `ContextLimitsValidationError`, `Effort`, `Model`, `ModelKey`, `ModelKeyField`, `ModelKeyValidationError`, `ModelKeyValidationReason`, `ModelOption`, `Origin`, `ProviderName`, `Sampling`, `ValidationError`
+`APIFormat`, `Capabilities`, `ContextLimits`, `ContextLimitField`, `ContextLimitValidationReason`, `ContextLimitsValidationError`, `Effort`, `ValidationError`, `Model`, `ModelOption`, `ModelKey`, `ModelKeyField`, `ModelKeyValidationReason`, `ModelKeyValidationError`, `Origin`, `ProviderName`, `Sampling`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`APIFormatOpenAI`, `APIFormatAnthropic`, `APIFormatGemini`, `APIFormatOpenAIResponses`, `APIFormatBedrockConverse`, `ContextLimitFieldMaxInputTokens`, `ContextLimitFieldMaxOutputTokens`, `ContextLimitValidationReasonExceedsWindow`, `EffortNone`, `EffortLow`, `EffortMedium`, `EffortHigh`, `EffortMax`, `ModelKeyFieldProvider`, `ModelKeyFieldModel`, `ModelKeyValidationReasonEmpty`, `OriginCustom`, `OriginCatalog`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The model package exposes `Clone`, `Key`, `Valid`, `Validate` as its main operations. Its exported typed failures include `ContextLimitField`, `ContextLimitValidationReason`, `ContextLimits`, `ContextLimitsValidationError`; classify them with errors.Is or errors.As. Retries do not replay a stream after output has started.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `ContextLimitsValidationError`, `ValidationError`, `ModelKeyValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/inference/tree/v0.9.2/model/) and adjacent tests. The progressive entries `stage-01-inference`, `stage-02-streaming`, `stage-22-model-gateway` cover deterministic invoke, stream, and gateway paths; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-inference`.
+Source files at the pinned commit:
+
+- [model/apiformat.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/apiformat.go)
+- [model/capabilities.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/capabilities.go)
+- [model/contextlimits.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/contextlimits.go)
+- [model/effort.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/effort.go)
+- [model/errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/errors.go)
+- [model/model.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/model.go)
+- [model/modelkey.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/modelkey.go)
+- [model/origin.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/origin.go)
+- [model/provider.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/provider.go)
+- [model/sampling.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/sampling.go)
+
+Adjacent tests at the same commit:
+
+- [model/apiformat_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/apiformat_test.go)
+- [model/contextlimits_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/contextlimits_test.go)
+- [model/effort_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/effort_test.go)
+- [model/model_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/model_test.go)
+- [model/modelkey_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/modelkey_test.go)
+- [model/origin_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/origin_test.go)
+- [model/sampling_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/sampling_test.go)
+
+Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

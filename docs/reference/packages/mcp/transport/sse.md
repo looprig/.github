@@ -20,7 +20,7 @@ proofs:
 
 # transport/sse package · sse
 
-Import path: `github.com/looprig/mcp/pkg/transport/sse`. SSE supports legacy MCP HTTP plus SSE endpoints that cannot yet move to Streamable HTTP.
+Import path: `github.com/looprig/mcp/pkg/transport/sse`. The source is pinned to github.com/looprig/mcp@v0.6.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,48 @@ Import path: `github.com/looprig/mcp/pkg/transport/sse`. SSE supports legacy MCP
 
 ## Exported surface {#exported-surface}
 
-The package exports `Config`, `Timeouts`, and `New`. Configuration identifies the endpoint, auth seam, and bounded HTTP behavior.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`New` validates the endpoint and returns a factory. The server's endpoint event is origin-pinned before a POST or credential is sent.
+- `func New(cfg Config) (client.TransportFactory, error)`
+
+### Methods {#methods}
+
+- `func (f *factory) Kind() string`
+- `func (f *factory) RedactedOrigin() string`
+- `func (f *factory) Connect(ctx context.Context, cfg protocol.ConnectConfig) (protocol.Conn, error)`
+- `func (t *sessionTransport) Connect(ctx context.Context) (mcp.Connection, error)`
+- `func (c *sessionConn) Close() error`
 
 ### Types {#types}
 
-`Config` and `Timeouts` keep legacy compatibility explicit; transport failures flow into MCP client failure classes.
+`Config`, `Timeouts`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-Dial, stream, frame, and body defaults are bounded. No fallback from Streamable HTTP selects SSE.
+`DefaultDialTimeout`, `DefaultTLSHandshakeTimeout`, `DefaultResponseHeaderTimeout`, `DefaultFrameTimeout`, `DefaultIdleConnTimeout`, `DefaultRequestTimeout`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The client owns the factory and HTTP session. A dropped SSE stream is not resumed because the legacy protocol has no safe Last-Event-ID call replay; the caller may rebuild the session deliberately.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned SSE transport](https://github.com/looprig/mcp/tree/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/sse/). Use it only for an endpoint with a tested legacy contract.
+Source files at the pinned commit:
+
+- [pkg/transport/sse/sse.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/sse/sse.go)
+- [pkg/transport/sse/stream.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/sse/stream.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/transport/sse/sse_integration_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/sse/sse_integration_test.go)
+- [pkg/transport/sse/sse_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/sse/sse_test.go)
+
+Run `GOWORK=off go test ./...` from the `mcp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

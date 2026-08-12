@@ -22,7 +22,7 @@ proofs:
 
 # retry package · retry
 
-Import path: `github.com/looprig/inference/retry`. Package retry decorates an inference.Client with bounded, classified retry and exponential backoff. It retries Invoke calls and Stream establishment only; once a StreamReader is handed out, a mid-stream failure is terminal for the wrapper exactly as for the in
+Import path: `github.com/looprig/inference/retry`. The source is pinned to github.com/looprig/inference@v0.9.2.
 
 ## Package role {#package-role}
 
@@ -30,24 +30,57 @@ This page indexes the exported declarations in the current source package. Infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Error`, `Invoke`, `Retryable`, `Stream`, `Unwrap`, `Validate`
+- `func Retryable(err error) bool`
+- `func New(inner inference.Client, policy Policy) (*Client, error)`
+
+### Methods {#methods}
+
+- `func (*InvalidResponseError) Error() string`
+- `func (e *ExhaustedError) Error() string`
+- `func (e *ExhaustedError) Unwrap() error`
+- `func (p Policy) Validate() error`
+- `func (e *ConfigError) Error() string`
+- `func (c *Client) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
+- `func (c *Client) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
 
 ### Types {#types}
 
-`Client`, `ConfigError`, `ExhaustedError`, `InvalidResponseError`, `Policy`
+`InvalidResponseError`, `ExhaustedError`, `Policy`, `ConfigError`, `Client`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+No exported constants are declared in this package.
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The retry package exposes `Invoke`, `Retryable`, `Stream`, `Validate` as its main operations. The principal handle or value is `Client`; retain it according to its declaration before calling a terminal method. Its exported typed failures include `ConfigError`, `ExhaustedError`, `InvalidResponseError`; classify them with errors.Is or errors.As. Retries do not replay a stream after output has started.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `InvalidResponseError`, `ExhaustedError`, `ConfigError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/inference/tree/v0.9.2/retry/) and adjacent tests. The progressive entries `stage-01-inference`, `stage-02-streaming`, `stage-22-model-gateway` cover deterministic invoke, stream, and gateway paths; run them with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-inference`.
+Source files at the pinned commit:
+
+- [retry/classify.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/retry/classify.go)
+- [retry/delay.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/retry/delay.go)
+- [retry/errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/retry/errors.go)
+- [retry/exhausted.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/retry/exhausted.go)
+- [retry/retry.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/retry/retry.go)
+
+Adjacent tests at the same commit:
+
+- [retry/classify_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/retry/classify_test.go)
+- [retry/delay_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/retry/delay_test.go)
+- [retry/invoke_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/retry/invoke_test.go)
+- [retry/retry_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/retry/retry_test.go)
+- [retry/stream_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/retry/stream_test.go)
+
+Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

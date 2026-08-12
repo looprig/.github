@@ -18,7 +18,7 @@ proofs:
 
 # anthropic package · providers/anthropic
 
-Import path: `github.com/looprig/llm/providers/anthropic`. Package anthropic provides a native Anthropic Messages API client. It keeps Anthropic's top-level system prompt, typed content blocks, tool_result/tool_use turns, thinking controls, and SSE lifecycle intact by delegating wire semantics to inference/codec/anthr
+Import path: `github.com/looprig/llm/providers/anthropic`. The source is pinned to github.com/looprig/llm@v0.13.3.
 
 ## Package role {#package-role}
 
@@ -26,24 +26,64 @@ This provider package binds one external model service to provider-neutral infer
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`CountContext`, `CounterCapability`, `Error`, `New`, `NewCounter`, `Unwrap`
+- `func New(selected model.Model, key auth.APIKey, options ...Option) (inference.Client, error)`
+- `func NewCounter(key auth.APIKey) (contextcount.ContextCounter, error)`
+- `func WithThinking(options ThinkingOptions) Option`
+- `func WithBetaHeaders(values ...string) Option`
+- `func WithMetadataUserID(userID string) Option`
+- `func WithPromptCacheControl(options CacheControlOptions) Option`
+
+### Methods {#methods}
+
+- `func (r messagesRouter) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (route.Route, error)`
+- `func (c requestCodec) EncodeRequest(req inference.Request, mode codec.RequestMode) (codec.EncodedRequest, error)`
+- `func (requestCodec) DecodeResponse(body []byte) (*inference.Response, error)`
+- `func (requestCodec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
+- `func (c *Counter) CountContext(ctx context.Context, req inference.Request) (contextcount.ContextCount, error)`
+- `func (c *countScalar) UnmarshalJSON(data []byte) error`
+- `func (c *Counter) CounterCapability() contextcount.CounterCapability`
+- `func (e *CounterStateError) Error() string`
+- `func (e *CounterRequestError) Error() string`
+- `func (e *CounterRequestError) Unwrap() error`
+- `func (e *CounterEndpointError) Error() string`
+- `func (e *CounterResponseFieldError) Error() string`
+- `func (e *CounterResponseError) Error() string`
+- `func (e *CounterResponseError) Unwrap() error`
 
 ### Types {#types}
 
-`CacheControlOptions`, `Counter`, `CounterEndpointError`, `CounterEndpointReason`, `CounterRequestError`, `CounterRequestReason`, `CounterResponseError`, `CounterResponseField`, `CounterResponseFieldError`, `CounterResponseFieldReason`, `CounterResponseReason`, `CounterStateError`, `CounterStateReason`, `Option`, `ThinkingOptions`
+`Counter`, `CounterStateReason`, `CounterStateError`, `CounterRequestReason`, `CounterRequestError`, `CounterEndpointReason`, `CounterEndpointError`, `CounterResponseReason`, `CounterResponseField`, `CounterResponseFieldReason`, `CounterResponseFieldError`, `CounterResponseError`, `ThinkingOptions`, `CacheControlOptions`, `Option`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-None reported.
+`CounterStateNilReceiver`, `CounterStateNilContext`, `CounterStateMissingEndpoint`, `CounterStateMissingAuthenticator`, `CounterStateMissingHTTPDoer`, `CounterStateInvalidTimeout`, `CounterRequestEncodeFailed`, `CounterRequestMalformed`, `CounterEndpointMalformed`, `CounterEndpointMissingHost`, `CounterEndpointCredentials`, `CounterEndpointUnsupportedScheme`, `CounterEndpointInsecureTransport`, `CounterResponseMalformed`, `CounterResponseMissingCount`, `CounterResponseInvalidCount`, `CounterResponseDuplicateField`, `CounterResponseBodyTooLarge`, `CounterResponseFieldInputTokens`, `CounterResponseFieldDuplicate`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The anthropic package exposes `CountContext`, `CounterCapability`, `New`, `NewCounter` as its main operations. The principal handle or value is `Counter`; retain it according to its declaration before calling a terminal method. Use `New` as the package construction entry point when creating that value. Its exported typed failures include `CounterEndpointError`, `CounterRequestError`, `CounterResponseError`, `CounterResponseFieldError`; classify them with errors.Is or errors.As. Provider subscriptions may intentionally fail closed when the required gate is unavailable.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `CounterStateError`, `CounterRequestError`, `CounterEndpointError`, `CounterResponseFieldError`, `CounterResponseError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/llm/tree/v0.13.3/providers/anthropic/) and adjacent tests. Provider deterministic tests run in the llm module; live probes are opt-in. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-llm`.
+Source files at the pinned commit:
+
+- [providers/anthropic/client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/client.go)
+- [providers/anthropic/counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/counter.go)
+- [providers/anthropic/errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/errors.go)
+- [providers/anthropic/options.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/options.go)
+
+Adjacent tests at the same commit:
+
+- [providers/anthropic/client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/client_test.go)
+- [providers/anthropic/counter_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/counter_test.go)
+
+Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

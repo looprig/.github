@@ -20,7 +20,7 @@ proofs:
 
 # sandbox package · sandbox
 
-Import path: `github.com/looprig/sandbox`. Package sandbox provides standalone OS-level confinement for command execution under immutable, consumer-defined access profiles. Harness's permission gates answer "may this tool call run?". This module answers "what can it touch once it runs?". The two compos
+Import path: `github.com/looprig/sandbox`. The source is pinned to github.com/looprig/sandbox@v0.8.1.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,64 @@ This page indexes the exported declarations in the current source package. Sandb
 
 ## Exported surface {#exported-surface}
 
-The names below are the exported functions, methods, types, constants, and variables returned by the source package documentation.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`Init`, `RemoveWindowsSandbox`, `SetupWindowsSandbox`
+- `func Init()`
+- `func Init()`
+- `func NewProfile(config ProfileConfig) (*Profile, error)`
+- `func Restrict(base, ceiling *Profile) (*Profile, error)`
+- `func ParseNetworkTarget(raw string) (NetworkTarget, error)`
+- `func NewDirectEgressRoute() (EgressRoute, error)`
+- `func NewUpstreamEgressRoute(rawURL string, trustedAddressGuarantee bool) (EgressRoute, error)`
+- `func NewEgressRouteResolver(routes []EgressRoute, selector func(context.Context, NetworkTarget) string) (*EgressRouteResolver, error)`
+- `func InspectWindowsSandbox(ctx context.Context, config WindowsSetupConfig) (WindowsSetupStatus, error)`
+- `func SetupWindowsSandbox(ctx context.Context, config WindowsSetupConfig) error`
+- `func RemoveWindowsSandbox(ctx context.Context, config WindowsSetupConfig) error`
+- `func NewExecutorSet(p *Profile, options ...ExecutorSetOption) (*ExecutorSet, error)`
+- `func WithScratchRoot(path string) ExecutorSetOption`
+- `func WithMaxExecutors(max int) ExecutorSetOption`
+- `func WithGrantTTL(duration time.Duration) ExecutorSetOption`
+- `func WithEgressRoute(route EgressRoute) ExecutorSetOption`
+- `func WithWindowsSandboxMode(mode WindowsSandboxMode) ExecutorSetOption`
+- `func WithWindowsSandboxStateRoot(path string) ExecutorSetOption`
+
+### Methods {#methods}
+
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-`Access`, `CompileReport`, `EgressRoute`, `EgressRouteResolver`, `Executor`, `ExecutorSet`, `ExecutorSetOption`, `Guarantees`, `Home`, `Isolation`, `LifetimeContainment`, `NetworkTarget`, `NetworkTargetDeniedError`, `PreparedProcess`, `Process`, `ProcessAccess`, `ProcessAccessKind`, `ProcessActivity`, `ProcessActivityKind`, `ProcessOptions`, `ProcessResult`, `ProcessSignal`, `ProcessStreamMode`, `Profile`, `ProfileConfig`, `ReportEntry`, `RootAccess`, `WindowsSandboxMode`, `WindowsSetupConfig`, `WindowsSetupProblem`, `WindowsSetupProblemCode`, `WindowsSetupStatus`
+No exported types are declared in this package.
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-`Allow`, `Deny`, `Gated`, `GrantClassCommandStart`, `GrantClassFilesystemHostRead`, `GrantClassFilesystemHostWrite`, `GrantClassFilesystemPathRead`, `GrantClassFilesystemPathWrite`, `GrantClassFilesystemTreeRead`, `GrantClassFilesystemTreeWrite`, `GrantClassNetworkBroad`, `GrantClassNetworkProxyTarget`, `GuaranteeAddressNetwork`, `GuaranteeEnvScrub`, `GuaranteeNetworkBoundary`, `GuaranteeProcessBoundary`, `GuaranteeReadBoundary`, `GuaranteeResourceLimits`, `GuaranteeTargetNetwork`, `GuaranteeWriteBoundary`, `IsolatedHome`, `LevelDegraded`, `LevelFull`, `LevelNone`, `LifetimeContainmentBestEffort`, `LifetimeContainmentEnforced`, `LifetimeContainmentUnspecified`, `ProcessAccessBroadWrite`, `ProcessAccessReadOnly`, `ProcessAccessScopedWrite`, `ProcessActivityBroadWrite`, `ProcessActivityWrite`, `ProcessSignalInterrupt`, `ProcessSignalKill`, `ProcessSignalTerminate`, `ProcessStreamModePTY`, `ProcessStreamModePipes`, `RealHome`, `Sandboxed`, `Unconfined`, `WindowsAuto`, `WindowsElevated`, `WindowsRestrictedToken`, `WindowsSetupProblemAccountMissing`, `WindowsSetupProblemCredentialUnavailable`, `WindowsSetupProblemFirewallOverridden`, `WindowsSetupProblemFirewallRuleChanged`, `WindowsSetupProblemHostBinaryStale`, `WindowsSetupProblemLeaseRecoveryPending`, `WindowsSetupProblemManifestMissing`, `WindowsSetupProblemOwnerMismatch`, `WindowsSetupProblemPortInUse`, `WindowsSetupProblemProtocolMismatch`, `WindowsSetupProblemRuntimeBaselineGap`, `WindowsSetupProblemServiceUnavailable`, `WindowsSetupProblemUnknown`, `ErrEgressRouteDenied`, `ErrExecutorClosed`, `ErrExecutorLimit`, `ErrExecutorSetClosed`, `ErrGrantBadMAC`, `ErrGrantDenied`, `ErrGrantExpired`, `ErrGrantGuaranteeMismatch`, `ErrGrantMalformed`, `ErrGrantProfileMismatch`, `ErrGrantReplay`, `ErrGrantRequired`, `ErrGrantRouteMismatch`, `ErrGrantTargetChanged`, `ErrGrantUnsupported`, `ErrGrantWrongCommand`, `ErrGrantWrongExecution`, `ErrGrantWrongWorkingDirectory`, `ErrInvalidProfile`, `ErrLifetimeContainmentUnavailable`, `ErrNetworkTargetDenied`, `ErrOutputLimit`, `ErrProcessAlreadyStarted`, `ErrProcessClosed`, `ErrProcessConPTYUnavailable`, `ErrProcessStdinClosed`, `ErrProcessTTYUnsupported`, `ErrSandboxUnavailable`, `ErrWindowsElevationRequired`, `ErrWindowsSetupRequired`, `ErrWindowsSetupStale`
+`Deny`, `Gated`, `Allow`, `IsolatedHome`, `RealHome`, `Sandboxed`, `Unconfined`, `LevelNone`, `LevelDegraded`, `LevelFull`, `GuaranteeProcessBoundary`, `GuaranteeWriteBoundary`, `GuaranteeReadBoundary`, `GuaranteeEnvScrub`, `GuaranteeNetworkBoundary`, `GuaranteeAddressNetwork`, `GuaranteeResourceLimits`, `GuaranteeTargetNetwork`, `WindowsAuto`, `WindowsRestrictedToken`, `WindowsElevated`, `WindowsSetupProblemUnknown`, `WindowsSetupProblemManifestMissing`, `WindowsSetupProblemOwnerMismatch`, `WindowsSetupProblemHostBinaryStale`, `WindowsSetupProblemServiceUnavailable`, `WindowsSetupProblemAccountMissing`, `WindowsSetupProblemCredentialUnavailable`, `WindowsSetupProblemFirewallOverridden`, `WindowsSetupProblemFirewallRuleChanged`, `WindowsSetupProblemPortInUse`, `WindowsSetupProblemRuntimeBaselineGap`, `WindowsSetupProblemLeaseRecoveryPending`, `WindowsSetupProblemProtocolMismatch`, `GrantClassCommandStart`, `GrantClassNetworkProxyTarget`, `GrantClassNetworkBroad`, `GrantClassFilesystemPathRead`, `GrantClassFilesystemTreeRead`, `GrantClassFilesystemHostRead`, `GrantClassFilesystemPathWrite`, `GrantClassFilesystemTreeWrite`, `GrantClassFilesystemHostWrite`, `ProcessAccessReadOnly`, `ProcessAccessScopedWrite`, `ProcessAccessBroadWrite`, `ProcessActivityWrite`, `ProcessActivityBroadWrite`, `ProcessStreamModePipes`, `ProcessStreamModePTY`, `ProcessSignalInterrupt`, `ProcessSignalTerminate`, `ProcessSignalKill`, `LifetimeContainmentUnspecified`, `LifetimeContainmentEnforced`, `LifetimeContainmentBestEffort`
+
+### Variables {#variables}
+
+`ErrInvalidProfile`, `ErrEgressRouteDenied`, `ErrNetworkTargetDenied`, `ErrSandboxUnavailable`, `ErrWindowsSetupRequired`, `ErrWindowsSetupStale`, `ErrWindowsElevationRequired`, `ErrOutputLimit`, `ErrExecutorLimit`, `ErrExecutorSetClosed`, `ErrExecutorClosed`, `ErrGrantMalformed`, `ErrGrantBadMAC`, `ErrGrantExpired`, `ErrGrantWrongCommand`, `ErrGrantWrongExecution`, `ErrGrantWrongWorkingDirectory`, `ErrGrantProfileMismatch`, `ErrGrantGuaranteeMismatch`, `ErrGrantRouteMismatch`, `ErrGrantTargetChanged`, `ErrGrantReplay`, `ErrGrantRequired`, `ErrGrantDenied`, `ErrGrantUnsupported`, `ErrProcessClosed`, `ErrProcessAlreadyStarted`, `ErrProcessTTYUnsupported`, `ErrProcessConPTYUnavailable`, `ErrProcessStdinClosed`, `ErrLifetimeContainmentUnavailable`
 
 ## Ownership and errors {#ownership-and-errors}
 
-The sandbox package exposes `Init`, `RemoveWindowsSandbox`, `SetupWindowsSandbox` as its main operations. The principal handle or value is `Profile`; retain it according to its declaration before calling a terminal method. Use `Init` as the package construction entry point when creating that value. Its exported typed failures include `NetworkTargetDeniedError`, `GuaranteeResourceLimits`, `WindowsSetupProblemCredentialUnavailable`, `WindowsSetupProblemServiceUnavailable`; classify them with errors.Is or errors.As. A requested sandbox guarantee is not silently replaced by an unconfined fallback.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [package source](https://github.com/looprig/sandbox/tree/v0.8.1/) and adjacent tests. Progressive entry `stage-11-sandbox-process` constructs a profile, runs a confined `echo` command, and asserts a non-none enforcement level; run it with `node scripts/docs/run-examples.mjs`. The release proof pins the module tag only; Task15 should promote declaration and adjacent-test evidence from this package path. Draft proof: `release-github-com-looprig-sandbox`.
+Source files at the pinned commit:
+
+- [doc.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/doc.go)
+- [init_linux.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/init_linux.go)
+- [init_other.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/init_other.go)
+- [sandbox.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/sandbox.go)
+
+Adjacent tests at the same commit:
+
+- [executor_set_external_test.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/executor_set_external_test.go)
+- [facade_test.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/facade_test.go)
+- [reexec_main_test.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/reexec_main_test.go)
+
+Run `GOWORK=off go test ./...` from the `sandbox` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

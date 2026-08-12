@@ -20,7 +20,7 @@ proofs:
 
 # foreign package · foreign
 
-Import path: `github.com/looprig/harness/pkg/foreign`. Foreign defines the structural seam a Harness Rig uses to install ACP, Claude, Codex, or another external loop backend.
+Import path: `github.com/looprig/harness/pkg/foreign`. The source is pinned to github.com/looprig/harness@v0.24.2.
 
 ## Package role {#package-role}
 
@@ -28,24 +28,59 @@ Builders receive the loop context, session and loop identity, parent provenance,
 
 ## Exported surface {#exported-surface}
 
-The surface contains `Builder`, `RestoredBuilder`, `ServicesBuilder`, `ServicesRestoredBuilder`, `BuilderRegistry`, `Services`, `RestoredForeign`, `BrokerDescriptor`, `DeliveryHook`, `DeliveryIntent`, `DeliveryResolution`, `EventPublisher`, and `UnknownProfileError`. `NewBrokerDescriptor` and `NewServices` construct the value seams.
+The following surface is read from the pinned implementation files. Signatures are shown as declared by the source package; methods include their receivers.
 
-### Functions and methods {#functions-and-methods}
+### Functions {#functions}
 
-`NewBrokerDescriptor` copies a broker endpoint and capability token; `NewServices` groups broker and delivery hooks. `BuilderRegistry.Register`, `RegisterServices`, `ServicesBuilder`, and lookup methods keep live and restored constructors under one profile.
+- `func NewBrokerDescriptor(endpoint string, capability []byte) BrokerDescriptor`
+- `func NewServices(broker BrokerDescriptor, delivery DeliveryHook) Services`
+
+### Methods {#methods}
+
+- `func (*UnknownProfileError) Error() string`
+- `func (r *BuilderRegistry) Register(profile loop.RuntimeProfileName, builder Builder, restored RestoredBuilder) error`
+- `func (r *BuilderRegistry) RegisterServices(profile loop.RuntimeProfileName, builder ServicesBuilder, restored ServicesRestoredBuilder) error`
+- `func (r *BuilderRegistry) Builder(profile loop.RuntimeProfileName) (Builder, RestoredBuilder, error)`
+- `func (r *BuilderRegistry) ServicesBuilder(profile loop.RuntimeProfileName) (ServicesBuilder, ServicesRestoredBuilder, error)`
+- `func (r *BuilderRegistry) HasServicesBuilder(profile loop.RuntimeProfileName) bool`
+- `func (d BrokerDescriptor) Format(state fmt.State, verb rune)`
+- `func (d BrokerDescriptor) Endpoint() string`
+- `func (d BrokerDescriptor) Capability() []byte`
+- `func (s Services) Format(state fmt.State, verb rune)`
+- `func (s Services) Clone() Services`
 
 ### Types {#types}
 
-`DeliveryResolutionState` distinguishes injected, queued, rejected, and unknown delivery. `RestoredForeign` carries persisted provider identity and session state without exposing provider wire data to the loop package.
+`EventPublisher`, `Builder`, `ServicesBuilder`, `UnknownProfileError`, `BuilderRegistry`, `RestoredForeign`, `RestoredBuilder`, `ServicesRestoredBuilder`, `BrokerDescriptor`, `DeliveryIntent`, `DeliveryReservation`, `DeliveryFallback`, `DeliveryResolutionState`, `DeliveryResolution`, `DeliveryHook`, `Services`
 
-### Constants and variables {#constants-and-variables}
+### Constants {#constants}
 
-The package has no authority-bearing global registry. Profile names and delivery states are values supplied by the composition root.
+`DeliveryResolutionInjected`, `DeliveryResolutionUnknown`, `DeliveryResolutionUntrackable`
+
+### Variables {#variables}
+
+No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The Rig owns registration and lifetime. A builder owns only the backend it creates and must not retain mutable caller bindings after construction. Unknown profile, invalid service, and delivery errors are terminal for that operation; do not fabricate a restored backend.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+
+Exported named types with an explicit `Error() string` method are `UnknownProfileError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
-Read the [pinned foreign seam](https://github.com/looprig/harness/tree/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/foreign/). `stage-15-acp-foreign` registers both service builder variants and checks their availability.
+Source files at the pinned commit:
+
+- [pkg/foreign/builder.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/foreign/builder.go)
+- [pkg/foreign/restored.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/foreign/restored.go)
+- [pkg/foreign/services.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/foreign/services.go)
+
+Adjacent tests at the same commit:
+
+- [pkg/foreign/builder_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/foreign/builder_test.go)
+- [pkg/foreign/deps_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/foreign/deps_test.go)
+- [pkg/foreign/registry_internal_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/foreign/registry_internal_test.go)
+- [pkg/foreign/registry_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/foreign/registry_test.go)
+- [pkg/foreign/restored_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/foreign/restored_test.go)
+
+Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
