@@ -1,29 +1,40 @@
 ---
 id: index
-title: Looprig developer documentation
-description: Entry point for building with Looprig libraries, runtimes, and products.
+title: Overview
+description: Start building model-powered applications with Looprig modules for inference, agent runtimes, tools, persistence, sandboxing, workflows, protocols, and interfaces.
 audience: human
 section: home
 order: 1
 publication: released
 proofs:
-  choose-a-path:
-    - release-github-com-looprig-core
-    - release-github-com-looprig-carbon
-  publication-labels:
-    - release-github-com-looprig-core
-    - module-workflows
-    - module-flow-store
-    - module-kosa
+  build-with-looprig: [release-github-com-looprig-core, release-github-com-looprig-inference, release-github-com-looprig-harness]
+  start-with-an-outcome: [release-github-com-looprig-harness, release-github-com-looprig-tools]
+  choose-only-what-you-need: [release-github-com-looprig-inference, release-github-com-looprig-harness, release-github-com-looprig-sandbox]
 ---
-# Looprig developer documentation
 
-Looprig provides reusable building blocks for agent runtimes and separately assembled products. This documentation distinguishes immutable releases from code that is available only in the coordinated source workspace.
+# Overview
 
-## Choose a path {#choose-a-path}
+Looprig is a collection of composable Go modules for building model-powered applications. Start with a provider-neutral model call, add Harness when you need an agent runtime, then select tools, storage, sandboxing, workflows, protocols, and interfaces according to the product you are building.
 
-Use the human guides to learn the released libraries and compose an application. Use the compact [agent architecture map](agents/architecture.md) when an automated reader needs repository boundaries and publication status without narrative background. Carbon is a product assembled from Looprig libraries rather than another reusable package.
+## Build with Looprig
 
-## Publication labels {#publication-labels}
+| Goal | Begin with |
+| --- | --- |
+| Call OpenAI, Anthropic, Ollama, or another model through one contract | [Inference](/docs/guides/inference/) |
+| Run stateful turns, tools, events, sessions, gates, and delegation | [Harness](/docs/guides/harness/) |
+| Add file, search, process, interaction, and task capabilities | [Tools](/docs/guides/tools/) |
+| Confine child processes and verify native guarantees | [Sandboxing](/docs/guides/sandboxing/) |
+| Add durable graphs, interruption, recovery, and workflow tools | [Workflows](/docs/guides/workflows/) |
+| Connect terminal, browser, ACP, or MCP consumers | [TUI](/docs/guides/tui/), [Web UI](/docs/guides/web-ui/), and [Protocols](/docs/guides/protocols/) |
 
-`released` identifies a module with an immutable tag recorded in this snapshot. `source-workspace` identifies code that must be used from the coordinated checkout and must not be presented as a public install path. `unavailable` identifies code, such as Kosa, for which consumers cannot obtain a supported release from a configured remote.
+## Start with an outcome
+
+The [Getting Started tutorial](/docs/start/choose-a-path/) builds a coding assistant from an empty Go module. It connects a model, creates a Loop and Rig, runs a Session, adds read-only tools, persists history, manages a workspace, confines process tools, and exposes a CLI.
+
+Every implementation step links to a runnable checkpoint and the deeper guide for its module.
+
+## Choose only what you need
+
+The modules have narrow responsibilities and compose through explicit interfaces. An application can use Inference without Harness, Harness without a browser client, or the Web UI with any frontend framework. Add a module when the application needs the boundary it owns.
+
+When you need API-level detail, use the module guides in the left navigation and follow their source and runnable-example links.
