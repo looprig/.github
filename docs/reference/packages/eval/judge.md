@@ -26,7 +26,7 @@ Import path: `github.com/looprig/eval/judge`. The source is pinned to github.com
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. Eval `v0.1.2` separates scenario and observation data from targets, evaluators, exact checks, judge-driven scoring, and redacted report persistence. The root package does not import the inference module; `target/inference` is the explicit integration edge.
+Package judge implements the structured-output model judge: an eval.Evaluator that scores a sample's conversation against a rubric by calling an inference.Client with strict structured output.
 
 ## Exported surface {#exported-surface}
 
@@ -137,9 +137,9 @@ type ScoreOutput struct {
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `InferenceError`, `MalformedOutputError`, `MessageIndexError`, `QuoteNotFoundError`, `RequestInvalidError`, `RubricInvalidError`, `ScoreRangeError`, `UnsupportedStructuredOutputError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `InferenceError`, `MalformedOutputError`, `MessageIndexError`, `QuoteNotFoundError`, `RequestInvalidError`, `RubricInvalidError`, `ScoreRangeError`, `UnsupportedStructuredOutputError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -155,4 +155,4 @@ Adjacent tests at the same commit:
 - [judge/judge_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/judge/judge_test.go)
 - [judge/schema_fuzz_test.go](https://github.com/looprig/eval/blob/ba758feb51fc22f009acf67dadfa692750e3cdd1/judge/schema_fuzz_test.go)
 
-Run `GOWORK=off go test ./...` from the `eval` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `eval` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

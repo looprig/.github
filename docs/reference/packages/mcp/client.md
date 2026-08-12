@@ -26,7 +26,7 @@ Import path: `github.com/looprig/mcp/pkg/client`. The source is pinned to github
 
 ## Package role {#package-role}
 
-`Connect` initializes, discovers, and maintains a server catalog. `Definition` names the server and transport; `Handlers` receives sampling, elicitation, roots, progress, logs, and events. Tool calls, resources, prompts, and completion are represented as bounded values.
+Package client provides the MCP client surface for the looprig/mcp module.
 
 ## Exported surface {#exported-surface}
 
@@ -273,7 +273,7 @@ type Profile struct {
 
 ```go
 type Content interface {
-	content()
+	// contains filtered or unexported methods
 }
 ```
 
@@ -340,10 +340,12 @@ type ToolFilter struct {
 
 ```go
 type TransportFactory interface {
+	// Kind names the transport, e.g. "stdio", "streamablehttp", "sse".
 	Kind() string
-
+	// RedactedOrigin returns a safe display origin. It must never contain
+	// credentials.
 	RedactedOrigin() string
-
+	// Connect establishes one connection using cfg.
 	Connect(ctx context.Context, cfg protocol.ConnectConfig) (protocol.Conn, error)
 }
 ```
@@ -664,7 +666,7 @@ type LogHandler func(LogMessage)
 
 ```go
 type Event interface {
-	event()
+	// contains filtered or unexported methods
 }
 ```
 
@@ -864,9 +866,9 @@ type Status struct {
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `Error`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `Error`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -916,4 +918,4 @@ Adjacent tests at the same commit:
 - [pkg/client/scheduler_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/client/scheduler_test.go)
 - [pkg/client/status_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/client/status_test.go)
 
-Run `GOWORK=off go test ./...` from the `mcp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `mcp` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

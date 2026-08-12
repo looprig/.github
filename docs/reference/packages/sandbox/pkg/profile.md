@@ -26,7 +26,7 @@ Import path: `github.com/looprig/sandbox/pkg/profile`. The source is pinned to g
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. Sandbox `v0.8.1` separates profile construction and achieved guarantees from executor and network details. It does not decide whether a tool call is allowed; it enforces the authority the caller has already chosen.
+Package profile exposes the source-defined API.
 
 ## Exported surface {#exported-surface}
 
@@ -150,9 +150,9 @@ type Settings struct {
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -171,4 +171,4 @@ Adjacent tests at the same commit:
 - [pkg/profile/equivalent_root_windows_test.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/pkg/profile/equivalent_root_windows_test.go)
 - [pkg/profile/profile_test.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/pkg/profile/profile_test.go)
 
-Run `GOWORK=off go test ./...` from the `sandbox` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `sandbox` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -24,7 +24,7 @@ Import path: `github.com/looprig/llm/providers/openai`. The source is pinned to 
 
 ## Package role {#package-role}
 
-This provider package binds one external model service to provider-neutral inference requests. The released module is `github.com/looprig/llm@v0.13.3`. Model descriptors remain secret-free; credentials are injected through `credentials` and `secrets` rather than placed on `model.Model`.
+Package openai provides OpenAI Chat Completions and Responses API clients.
 
 ## Exported surface {#exported-surface}
 
@@ -139,9 +139,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `CounterEndpointError`, `CounterRequestError`, `CounterResponseError`, `CounterResponseFieldError`, `CounterStateError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CounterEndpointError`, `CounterRequestError`, `CounterResponseError`, `CounterResponseFieldError`, `CounterStateError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -157,4 +157,4 @@ Adjacent tests at the same commit:
 - [providers/openai/client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/openai/client_test.go)
 - [providers/openai/counter_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/openai/counter_test.go)
 
-Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `llm` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

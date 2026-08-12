@@ -23,11 +23,11 @@ proofs:
 
 # permission package · permission
 
-Import path: `github.com/looprig/tools/permission`. The source is pinned to github.com/looprig/tools@v0.10.0.
+Import path: `github.com/looprig/tools/permission`. The source is pinned to github.com/looprig/tools@v0.10.1.
 
 ## Package role {#package-role}
 
-`Store` reads and writes normalized rules under a caller-selected configuration. It supplies match helpers for exact command, family, workspace tree, host access, broad egress, and network target. It does not decide the final gate resolution.
+Package permission implements the single hardened workspace permission store defined by the access-profile specification.
 
 ## Exported surface {#exported-surface}
 
@@ -143,33 +143,33 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `FileError`, `RuleError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `FileError`, `RuleError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [permission/bashrule.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/bashrule.go)
-- [permission/diagnostic.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/diagnostic.go)
-- [permission/match.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/match.go)
-- [permission/rule.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/rule.go)
-- [permission/rule_json.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/rule_json.go)
-- [permission/store.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/store.go)
-- [permission/store_unix.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/store_unix.go)
-- [permission/store_windows.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/store_windows.go)
+- [permission/bashrule.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/bashrule.go)
+- [permission/diagnostic.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/diagnostic.go)
+- [permission/match.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/match.go)
+- [permission/rule.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/rule.go)
+- [permission/rule_json.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/rule_json.go)
+- [permission/store.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/store.go)
+- [permission/store_unix.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/store_unix.go)
+- [permission/store_windows.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/store_windows.go)
 
 Adjacent tests at the same commit:
 
-- [permission/bashrule_fuzz_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/bashrule_fuzz_test.go)
-- [permission/bashrule_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/bashrule_test.go)
-- [permission/contract_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/contract_test.go)
-- [permission/file_fuzz_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/file_fuzz_test.go)
-- [permission/hardening_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/hardening_test.go)
-- [permission/headless_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/headless_test.go)
-- [permission/match_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/match_test.go)
-- [permission/rule_json_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/rule_json_test.go)
-- [permission/store_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/permission/store_test.go)
+- [permission/bashrule_fuzz_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/bashrule_fuzz_test.go)
+- [permission/bashrule_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/bashrule_test.go)
+- [permission/contract_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/contract_test.go)
+- [permission/file_fuzz_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/file_fuzz_test.go)
+- [permission/hardening_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/hardening_test.go)
+- [permission/headless_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/headless_test.go)
+- [permission/match_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/match_test.go)
+- [permission/rule_json_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/rule_json_test.go)
+- [permission/store_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/permission/store_test.go)
 
-Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `tools` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

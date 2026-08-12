@@ -1,34 +1,81 @@
 ---
 id: start/installation
-title: Install immutable Looprig modules
-description: Add released modules by tag and keep source-workspace development separate from published consumers.
+title: Use Inference
+description: Construct one provider-neutral request, call an inference client, read the assistant message, and understand where production provider clients enter.
 audience: developer
 section: start
 order: 2
 publication: released
 proofs:
-  release-pins:
+  invoke:
     - release-github-com-looprig-core
     - release-github-com-looprig-inference
+  production:
     - release-github-com-looprig-llm
-  workspace-warning:
-    - module-flow-store
-  tidy:
-    - release-github-com-looprig-storage
 ---
 
-# Install immutable Looprig modules
+# Use Inference
 
-Add the module that owns the API you import, using the immutable version shown by its module guide. For example, Core is `github.com/looprig/core@v0.5.1`, Inference is `github.com/looprig/inference@v0.9.2`, LLM is `github.com/looprig/llm@v0.13.3`, and Storage is `github.com/looprig/storage@v0.3.1`. Dependent modules name compatible released versions in their own `go.mod` files.
+Inference is the provider-neutral boundary used by the rest of Looprig:
 
-## Release pins {#release-pins}
+```go
+type Client interface {
+	Invoke(context.Context, inference.Request) (*inference.Response, error)
+	Stream(context.Context, inference.Request) (*stream.StreamReader[content.Chunk], error)
+}
+```
 
-Use `go get github.com/looprig/<module>@<tag>` from a consumer module, then run `GOWORK=off go mod tidy`. Keep the selected tag visible in the consumer's module graph. A local `go.work` can make an unreleased checkout appear healthy while hiding a missing published dependency, so standalone verification must disable the workspace.
+Install the message and inference contracts:
 
-## Workspace warning {#workspace-warning}
+```sh
+go mod init example.com/model-call
+go get github.com/looprig/core@v0.5.1 github.com/looprig/inference@v0.9.2
+```
 
-The nested `github.com/looprig/flow/store` module is source-workspace-only. It currently relies on local replacements for its sibling modules and has no immutable tag. Use it only from the coordinated source tree. Do not publish its `replace` directives and do not write an installation command with a fabricated version.
+## Invoke a client {#invoke}
 
-## Tidy and verify {#tidy}
+Construct messages with Core and pass them through `Client.Invoke`:
 
-After changing versions, run the module's native check and its standalone tests with `GOWORK=off`. A release tag is immutable, but a consumer's dependency selection is not: review the final graph and verify that no local filesystem replacement remains in published module files. The progressive example runner creates clean temporary modules and isolated Go caches, which is useful for checking the released path rather than the workspace path.
+```go
+request := inference.Request{
+	Model: selectedModel,
+	System: "Answer briefly.",
+	Messages: content.AgenticMessages{
+		&content.UserMessage{Message: content.Message{
+			Role: content.RoleUser,
+			Blocks: []content.Block{
+				&content.TextBlock{Text: "Say hello."},
+			},
+		}},
+	},
+}
+
+response, err := client.Invoke(context.Background(), request)
+if err != nil {
+	return err
+}
+text := response.Message.Blocks[0].(*content.TextBlock).Text
+fmt.Println(text)
+```
+
+Expected output depends on the model. A deterministic test client can return:
+
+```text
+Hello from Looprig.
+```
+
+## Use a production provider {#production}
+
+Inference does not choose credentials or construct hosted clients. LLM provides OpenAI, Anthropic, Ollama, and other provider adapters that implement `inference.Client`:
+
+```go
+selected := model.CustomModel(
+	model.ProviderName(llm.ProviderOpenAI),
+	model.APIFormatOpenAIResponses,
+	"https://api.openai.com/v1",
+	"your-model-id",
+)
+client, err := auto.New(selected, auth.APIKey(os.Getenv("OPENAI_API_KEY")))
+```
+
+Call `Invoke` for a complete response or `Stream` for text, thinking, and tool-call chunks. Continue with [Messages and content blocks](/docs/modules/core) or [build an agent with Harness](/docs/start/first-run).

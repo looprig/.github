@@ -27,7 +27,7 @@ Import path: `github.com/looprig/fsstore`. The source is pinned to github.com/lo
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. The owning module is released as v0.3.2; pin that version in consumers and keep local workspace replacements out of published go.mod files.
+Package fsstore exposes the source-defined API.
 
 ## Exported surface {#exported-surface}
 
@@ -239,9 +239,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `BlobIOError`, `BlobPathError`, `BlobRootError`, `FlockError`, `FrameError`, `KVCorruptError`, `KVIOError`, `KVPathError`, `KVRootError`, `LeaseCorruptError`, `LeaseIOError`, `LeasePathError`, `LeaseRootError`, `LedgerCorruptError`, `LedgerIOError`, `LedgerPathError`, `LedgerRootError`, `OptionsError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BlobIOError`, `BlobPathError`, `BlobRootError`, `FlockError`, `FrameError`, `KVCorruptError`, `KVIOError`, `KVPathError`, `KVRootError`, `LeaseCorruptError`, `LeaseIOError`, `LeasePathError`, `LeaseRootError`, `LedgerCorruptError`, `LedgerIOError`, `LedgerPathError`, `LedgerRootError`, `OptionsError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -269,4 +269,4 @@ Adjacent tests at the same commit:
 - [lease_test.go](https://github.com/looprig/fsstore/blob/52a1924c7ed97fd4789024a66da281e5465832fc/lease_test.go)
 - [ledger_test.go](https://github.com/looprig/fsstore/blob/52a1924c7ed97fd4789024a66da281e5465832fc/ledger_test.go)
 
-Run `GOWORK=off go test ./...` from the `fsstore` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `fsstore` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

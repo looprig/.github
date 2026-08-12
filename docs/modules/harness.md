@@ -18,7 +18,7 @@ proofs:
     - release-github-com-looprig-harness
   how-the-pieces-fit:
     - release-github-com-looprig-harness
-  example-run-an-offline-session:
+  example-run-a-deterministic-session:
     - release-github-com-looprig-harness
   what-the-example-does:
     - release-github-com-looprig-harness
@@ -36,7 +36,7 @@ proofs:
 
 Harness is the runtime for applications that need more than a single model call. It turns an immutable loop definition into a live session with events, tools, gates, persistence, workspaces, delegation, and controlled shutdown.
 
-This guide builds the smallest useful Harness application. It runs entirely offline, so you can understand the runtime before adding provider credentials or external tools.
+This guide builds the smallest useful Harness application. It runs entirely with a deterministic model stub, so you can understand the runtime before adding provider credentials or external tools. Once the boundaries are clear, the same loop and session wiring can point at a hosted OpenAI GPT or Anthropic Claude model, a local Ollama model, or another OpenAI-compatible endpoint.
 
 > **What you will build**
 >
@@ -47,8 +47,8 @@ This guide builds the smallest useful Harness application. It runs entirely offl
 You need:
 
 - [x] Go `1.26.4` or newer
-- [x] A new directory outside the Looprig workspace
-- [ ] Provider credentials. They are **not** required for this offline example.
+- [x] An empty directory for the example
+- [ ] Provider credentials. They are **not** required for this deterministic fixture.
 
 Create the project:
 
@@ -79,23 +79,9 @@ harness-quickstart/
 
 ## How the pieces fit {#how-the-pieces-fit}
 
-```text
- immutable configuration                         live runtime
+![Harness runtime flow: a model client becomes a loop and Rig, a Rig opens a Session, input produces events, and shutdown closes resources.](/docs/assets/diagrams/harness-runtime.svg)
 
- ┌──────────────┐     ┌──────────────┐     ┌──────────────────┐
- │ model.Client │────▶│ loop.Define  │────▶│    rig.Define    │
- └──────────────┘     └──────────────┘     │ loops + storage  │
-                                           └────────┬─────────┘
-                                                    │ NewSession
-                                           ┌────────▼─────────┐
- input ────────────────────────────────────▶│     Session      │
-                                           │ Submit + events  │
-                                           └────────┬─────────┘
-                                                    │ Shutdown
-                                           ┌────────▼─────────┐
-                                           │ resources closed │
-                                           └──────────────────┘
-```
+> **Textual fallback:** Your model client is frozen into a loop with `loop.Define`; `rig.Define` assembles loops and storage; `Rig.NewSession` opens live state; `Session.Submit` admits input; `SubscribeEvents` delivers the outcome; and `Shutdown` drains and releases session resources.
 
 The layers have deliberately different jobs:
 
@@ -108,7 +94,9 @@ The layers have deliberately different jobs:
 
 The Rig is reusable configuration. A Session is live state. Create the Rig once, then create or restore sessions from it.
 
-## Example: run an offline session {#example-run-an-offline-session}
+> **Using a production model:** Harness accepts an `inference.Client`. This example supplies a deterministic test double so it runs without credentials. In production, replace that client with an OpenAI GPT, Anthropic Claude, Ollama, or another supported provider client. The Rig, Session, event subscription, and shutdown code stays the same. See [Model access](/docs/build/01-model-access) for provider configuration.
+
+## Example: run a deterministic session {#example-run-a-deterministic-session}
 
 Create `main.go` with the complete program below.
 
@@ -134,13 +122,19 @@ import (
 	"github.com/looprig/storage/memstore"
 )
 
-type offlineModel struct{}
+// deterministicModelStub is the deterministic model boundary used by this fixture.
+// Replace it with an inference.Client backed by a hosted or local provider while
+// keeping the loop, Rig, session, and event-handling code unchanged.
+type deterministicModelStub struct{}
 
-func (offlineModel) Invoke(context.Context, inference.Request) (*inference.Response, error) {
+// Invoke is intentionally unused: this quickstart demonstrates streaming.
+func (deterministicModelStub) Invoke(context.Context, inference.Request) (*inference.Response, error) {
 	return nil, errors.New("this example uses streaming")
 }
 
-func (offlineModel) Stream(context.Context, inference.Request) (*stream.StreamReader[content.Chunk], error) {
+// Stream yields one deterministic text chunk and then EOF, so the example is
+// reproducible without credentials, a network, or a provider process.
+func (deterministicModelStub) Stream(context.Context, inference.Request) (*stream.StreamReader[content.Chunk], error) {
 	sent := false
 	return stream.NewStreamReader(func() (content.Chunk, error) {
 		if sent {
@@ -154,8 +148,8 @@ func (offlineModel) Stream(context.Context, inference.Request) (*stream.StreamRe
 func run(ctx context.Context, output io.Writer) error {
 	agent, err := loop.Define(
 		loop.WithName("assistant"),
-		loop.WithInference(offlineModel{}, model.CustomModel(
-			"offline", model.APIFormatOpenAI, "http://localhost", "fixture",
+		loop.WithInference(deterministicModelStub{}, model.CustomModel(
+			"fixture", model.APIFormatOpenAI, "http://localhost", "fixture-model",
 		)),
 	)
 	if err != nil {
@@ -214,10 +208,10 @@ func main() {
 }
 ```
 
-Run it without the Looprig workspace:
+Run the application:
 
 ```sh
-GOWORK=off go run .
+go run .
 ```
 
 Expected output:
@@ -230,7 +224,7 @@ ready
 
 ## What the example does {#what-the-example-does}
 
-1. **Defines a model boundary.** `offlineModel` implements `inference.Client` without a network call.
+1. **Defines a model boundary.** `deterministicModelStub` implements `inference.Client` without a network call. A hosted or local client can replace it later.
 2. **Freezes one loop.** `loop.Define` validates the name and model binding before runtime work begins.
 3. **Adds session storage.** `sessionstore.Open(memstore.New())` supplies deterministic process-local persistence.
 4. **Assembles a Rig.** `rig.Define` names `assistant` as the primer loop for new sessions.
@@ -244,7 +238,7 @@ ready
 
 | Resource | Owner in this example | Release operation |
 | --- | --- | --- |
-| `offlineModel` | Application | None; it has no external resource. |
+| `deterministicModelStub` | Application | None; it has no external resource. |
 | `loop.Definition` | Application configuration | None; it is immutable. |
 | `rig.Rig` | Application | None; live resources belong to sessions. |
 | Event subscription | Calling consumer | `Close` when the consumer stops reading. |
@@ -306,7 +300,7 @@ Run the checked fixture directly:
 
 ```sh
 cd examples/go/guides/harness-quickstart
-GOWORK=off go test ./...
+go test ./...
 ```
 
 The fixture uses immutable releases and contains no local `replace` directive.

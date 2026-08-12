@@ -22,11 +22,11 @@ proofs:
 
 # serve package · serve
 
-Import path: `github.com/looprig/harness/pkg/serve`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/serve`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-`ReadHandler` serves capabilities, session lists, status, and public journals through a `Reader`. Generic `Handler` adds live session creation, input, gate response, interruption, and shutdown through structural `Rig` and `LiveSession` interfaces. `Server` validates binding policy and creates an `http.Server`.
+Package serve hosts the HTTP surface over a live session.
 
 ## Exported surface {#exported-surface}
 
@@ -206,58 +206,58 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `InvalidAddrError`, `InvalidParamError`, `LoopNotFoundError`, `NonPublicEventError`, `PublicBindWithoutAuthError`, `SessionNotFoundError`, `StoreReadError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `InvalidAddrError`, `InvalidParamError`, `LoopNotFoundError`, `NonPublicEventError`, `PublicBindWithoutAuthError`, `SessionNotFoundError`, `StoreReadError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/serve/ephemeral.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/ephemeral.go)
-- [pkg/serve/errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/errors.go)
-- [pkg/serve/handlers_capabilities.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/handlers_capabilities.go)
-- [pkg/serve/handlers_control.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/handlers_control.go)
-- [pkg/serve/handlers_events.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/handlers_events.go)
-- [pkg/serve/handlers_gate.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/handlers_gate.go)
-- [pkg/serve/handlers_lifecycle.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/handlers_lifecycle.go)
-- [pkg/serve/handlers_read.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/handlers_read.go)
-- [pkg/serve/idempotency.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/idempotency.go)
-- [pkg/serve/middleware.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/middleware.go)
-- [pkg/serve/mux.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/mux.go)
-- [pkg/serve/options.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/options.go)
-- [pkg/serve/parse.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/parse.go)
-- [pkg/serve/read_server.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/read_server.go)
-- [pkg/serve/reader.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/reader.go)
-- [pkg/serve/registry.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/registry.go)
-- [pkg/serve/serve.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/serve.go)
-- [pkg/serve/server.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/server.go)
-- [pkg/serve/server_core.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/server_core.go)
-- [pkg/serve/visibility.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/visibility.go)
+- [pkg/serve/ephemeral.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/ephemeral.go)
+- [pkg/serve/errors.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/errors.go)
+- [pkg/serve/handlers_capabilities.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/handlers_capabilities.go)
+- [pkg/serve/handlers_control.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/handlers_control.go)
+- [pkg/serve/handlers_events.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/handlers_events.go)
+- [pkg/serve/handlers_gate.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/handlers_gate.go)
+- [pkg/serve/handlers_lifecycle.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/handlers_lifecycle.go)
+- [pkg/serve/handlers_read.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/handlers_read.go)
+- [pkg/serve/idempotency.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/idempotency.go)
+- [pkg/serve/middleware.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/middleware.go)
+- [pkg/serve/mux.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/mux.go)
+- [pkg/serve/options.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/options.go)
+- [pkg/serve/parse.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/parse.go)
+- [pkg/serve/read_server.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/read_server.go)
+- [pkg/serve/reader.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/reader.go)
+- [pkg/serve/registry.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/registry.go)
+- [pkg/serve/serve.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/serve.go)
+- [pkg/serve/server.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/server.go)
+- [pkg/serve/server_core.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/server_core.go)
+- [pkg/serve/visibility.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/visibility.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/serve/deps_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/deps_test.go)
-- [pkg/serve/ephemeral_fuzz_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/ephemeral_fuzz_test.go)
-- [pkg/serve/errors_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/errors_test.go)
-- [pkg/serve/fixtures_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/fixtures_test.go)
-- [pkg/serve/handlers_capabilities_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/handlers_capabilities_test.go)
-- [pkg/serve/handlers_control_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/handlers_control_test.go)
-- [pkg/serve/handlers_events_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/handlers_events_test.go)
-- [pkg/serve/handlers_gate_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/handlers_gate_test.go)
-- [pkg/serve/handlers_lifecycle_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/handlers_lifecycle_test.go)
-- [pkg/serve/handlers_read_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/handlers_read_test.go)
-- [pkg/serve/idempotency_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/idempotency_test.go)
-- [pkg/serve/join_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/join_test.go)
-- [pkg/serve/middleware_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/middleware_test.go)
-- [pkg/serve/mux_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/mux_test.go)
-- [pkg/serve/options_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/options_test.go)
-- [pkg/serve/parse_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/parse_test.go)
-- [pkg/serve/privacy_visibility_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/privacy_visibility_test.go)
-- [pkg/serve/read_server_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/read_server_test.go)
-- [pkg/serve/reader_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/reader_test.go)
-- [pkg/serve/registry_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/registry_test.go)
-- [pkg/serve/schema_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/schema_test.go)
-- [pkg/serve/server_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve/server_test.go)
+- [pkg/serve/deps_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/deps_test.go)
+- [pkg/serve/ephemeral_fuzz_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/ephemeral_fuzz_test.go)
+- [pkg/serve/errors_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/errors_test.go)
+- [pkg/serve/fixtures_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/fixtures_test.go)
+- [pkg/serve/handlers_capabilities_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/handlers_capabilities_test.go)
+- [pkg/serve/handlers_control_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/handlers_control_test.go)
+- [pkg/serve/handlers_events_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/handlers_events_test.go)
+- [pkg/serve/handlers_gate_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/handlers_gate_test.go)
+- [pkg/serve/handlers_lifecycle_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/handlers_lifecycle_test.go)
+- [pkg/serve/handlers_read_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/handlers_read_test.go)
+- [pkg/serve/idempotency_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/idempotency_test.go)
+- [pkg/serve/join_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/join_test.go)
+- [pkg/serve/middleware_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/middleware_test.go)
+- [pkg/serve/mux_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/mux_test.go)
+- [pkg/serve/options_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/options_test.go)
+- [pkg/serve/parse_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/parse_test.go)
+- [pkg/serve/privacy_visibility_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/privacy_visibility_test.go)
+- [pkg/serve/read_server_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/read_server_test.go)
+- [pkg/serve/reader_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/reader_test.go)
+- [pkg/serve/registry_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/registry_test.go)
+- [pkg/serve/schema_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/schema_test.go)
+- [pkg/serve/server_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/serve/server_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

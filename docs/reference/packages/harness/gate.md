@@ -23,11 +23,11 @@ proofs:
 
 # gate package · gate
 
-Import path: `github.com/looprig/harness/pkg/gate`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/gate`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-The package evaluates normalized requirements against structural access sources, rules, and optional approvers. It combines unmet gated requirements into one approval and carries review context, classifier assessments, and audit data without importing Sandbox or a concrete tool module.
+Package gate defines the durable domain envelope for human and policy gates and the generic three-state access evaluator.
 
 ## Exported surface {#exported-surface}
 
@@ -353,7 +353,7 @@ type EvidenceObservationVerifier interface {
 
 ```go
 type Payload interface {
-	payload()
+	// contains filtered or unexported methods
 }
 ```
 
@@ -554,7 +554,7 @@ type ResponseSource struct {
 
 ```go
 type ResponseAudit interface {
-	responseAudit()
+	// contains filtered or unexported methods
 }
 ```
 
@@ -837,60 +837,60 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `AccessError`, `ApprovalActionDecodeError`, `DisplayOriginError`, `EvaluationError`, `FormAnswerError`, `FormAuditError`, `FormSchemaError`, `GateValidationError`, `NilPayloadError`, `NilResponseAuditError`, `OpenURLPayloadError`, `PayloadDecodeError`, `PayloadEncodeError`, `PermissionClassifierNameValidationError`, `PermissionClassifierPanicError`, `PermissionClassifierValidationError`, `RequestDecodeError`, `ResponseAuditDecodeError`, `ResponseAuditEncodeError`, `ReviewValidationError`, `UnknownPayloadKindError`, `UnknownResponseAuditKindError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AccessError`, `ApprovalActionDecodeError`, `DisplayOriginError`, `EvaluationError`, `FormAnswerError`, `FormAuditError`, `FormSchemaError`, `GateValidationError`, `NilPayloadError`, `NilResponseAuditError`, `OpenURLPayloadError`, `PayloadDecodeError`, `PayloadEncodeError`, `PermissionClassifierNameValidationError`, `PermissionClassifierPanicError`, `PermissionClassifierValidationError`, `RequestDecodeError`, `ResponseAuditDecodeError`, `ResponseAuditEncodeError`, `ReviewValidationError`, `UnknownPayloadKindError`, `UnknownResponseAuditKindError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/gate/access.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/access.go)
-- [pkg/gate/evaluator.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/evaluator.go)
-- [pkg/gate/evidence.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/evidence.go)
-- [pkg/gate/form.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/form.go)
-- [pkg/gate/gate.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/gate.go)
-- [pkg/gate/observation.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/observation.go)
-- [pkg/gate/payload.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/payload.go)
-- [pkg/gate/policy.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/policy.go)
-- [pkg/gate/prompt.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/prompt.go)
-- [pkg/gate/response.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/response.go)
-- [pkg/gate/response_audit.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/response_audit.go)
-- [pkg/gate/review.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review.go)
-- [pkg/gate/review_context.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_context.go)
-- [pkg/gate/review_policy.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_policy.go)
-- [pkg/gate/review_subject.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_subject.go)
-- [pkg/gate/review_wire.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_wire.go)
-- [pkg/gate/reviewer.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/reviewer.go)
-- [pkg/gate/validate.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/validate.go)
+- [pkg/gate/access.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/access.go)
+- [pkg/gate/evaluator.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/evaluator.go)
+- [pkg/gate/evidence.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/evidence.go)
+- [pkg/gate/form.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/form.go)
+- [pkg/gate/gate.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/gate.go)
+- [pkg/gate/observation.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/observation.go)
+- [pkg/gate/payload.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/payload.go)
+- [pkg/gate/policy.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/policy.go)
+- [pkg/gate/prompt.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/prompt.go)
+- [pkg/gate/response.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/response.go)
+- [pkg/gate/response_audit.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/response_audit.go)
+- [pkg/gate/review.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review.go)
+- [pkg/gate/review_context.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_context.go)
+- [pkg/gate/review_policy.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_policy.go)
+- [pkg/gate/review_subject.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_subject.go)
+- [pkg/gate/review_wire.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_wire.go)
+- [pkg/gate/reviewer.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/reviewer.go)
+- [pkg/gate/validate.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/validate.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/gate/access_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/access_test.go)
-- [pkg/gate/deps_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/deps_test.go)
-- [pkg/gate/evaluator_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/evaluator_test.go)
-- [pkg/gate/example_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/example_test.go)
-- [pkg/gate/form_audit_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/form_audit_test.go)
-- [pkg/gate/form_payload_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/form_payload_test.go)
-- [pkg/gate/fuzz_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/fuzz_test.go)
-- [pkg/gate/gate_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/gate_test.go)
-- [pkg/gate/interaction_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/interaction_test.go)
-- [pkg/gate/observation_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/observation_test.go)
-- [pkg/gate/openurl_payload_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/openurl_payload_test.go)
-- [pkg/gate/payload_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/payload_test.go)
-- [pkg/gate/permission_payload_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/permission_payload_test.go)
-- [pkg/gate/prompt_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/prompt_test.go)
-- [pkg/gate/response_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/response_test.go)
-- [pkg/gate/review_context_fuzz_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_context_fuzz_test.go)
-- [pkg/gate/review_context_internal_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_context_internal_test.go)
-- [pkg/gate/review_context_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_context_test.go)
-- [pkg/gate/review_context_testbridge_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_context_testbridge_test.go)
-- [pkg/gate/review_fuzz_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_fuzz_test.go)
-- [pkg/gate/review_policy_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_policy_test.go)
-- [pkg/gate/review_subject_internal_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_subject_internal_test.go)
-- [pkg/gate/review_subject_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_subject_test.go)
-- [pkg/gate/review_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_test.go)
-- [pkg/gate/review_wire_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/review_wire_test.go)
-- [pkg/gate/reviewer_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/reviewer_test.go)
+- [pkg/gate/access_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/access_test.go)
+- [pkg/gate/deps_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/deps_test.go)
+- [pkg/gate/evaluator_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/evaluator_test.go)
+- [pkg/gate/example_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/example_test.go)
+- [pkg/gate/form_audit_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/form_audit_test.go)
+- [pkg/gate/form_payload_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/form_payload_test.go)
+- [pkg/gate/fuzz_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/fuzz_test.go)
+- [pkg/gate/gate_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/gate_test.go)
+- [pkg/gate/interaction_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/interaction_test.go)
+- [pkg/gate/observation_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/observation_test.go)
+- [pkg/gate/openurl_payload_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/openurl_payload_test.go)
+- [pkg/gate/payload_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/payload_test.go)
+- [pkg/gate/permission_payload_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/permission_payload_test.go)
+- [pkg/gate/prompt_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/prompt_test.go)
+- [pkg/gate/response_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/response_test.go)
+- [pkg/gate/review_context_fuzz_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_context_fuzz_test.go)
+- [pkg/gate/review_context_internal_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_context_internal_test.go)
+- [pkg/gate/review_context_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_context_test.go)
+- [pkg/gate/review_context_testbridge_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_context_testbridge_test.go)
+- [pkg/gate/review_fuzz_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_fuzz_test.go)
+- [pkg/gate/review_policy_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_policy_test.go)
+- [pkg/gate/review_subject_internal_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_subject_internal_test.go)
+- [pkg/gate/review_subject_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_subject_test.go)
+- [pkg/gate/review_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_test.go)
+- [pkg/gate/review_wire_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/review_wire_test.go)
+- [pkg/gate/reviewer_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/gate/reviewer_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

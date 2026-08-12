@@ -26,7 +26,7 @@ Restore decision adapter in [tui v0.15.1](https://github.com/looprig/tui/tree/6b
 
 ## Package role {#package-role}
 
-The package translates an `event.DriftAssessment` into a session restore decision. It owns presentation policy, not the durable session state or replay store.
+Package restore provides a reusable, interactive session.RestoreDecider that an application embedding tui wires into its harness Rig via rig.WithRestoreDecider.
 
 ## Exported surface {#exported-surface}
 
@@ -45,8 +45,11 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ```go
 type UI interface {
+	// ConfirmDrift renders the warn changes and blocks for a user answer, honoring
+	// ctx (a cancelled/expired ctx must return promptly). note is an optional
+	// user-authored message recorded on the resulting adoption.
 	ConfirmDrift(ctx context.Context, warns []event.DriftChange) (accept bool, note string, err error)
-
+	// Notify surfaces accepted informational drift without blocking.
 	Notify(infos []event.DriftChange)
 }
 ```
@@ -67,22 +70,22 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [restore/confirm.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/restore/confirm.go)
-- [restore/decider.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/restore/decider.go)
-- [restore/driftview.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/restore/driftview.go)
+- [restore/confirm.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/restore/confirm.go)
+- [restore/decider.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/restore/decider.go)
+- [restore/driftview.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/restore/driftview.go)
 
 Adjacent tests at the same commit:
 
-- [restore/confirm_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/restore/confirm_test.go)
-- [restore/decider_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/restore/decider_test.go)
-- [restore/driftview_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/restore/driftview_test.go)
+- [restore/confirm_test.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/restore/confirm_test.go)
+- [restore/decider_test.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/restore/decider_test.go)
+- [restore/driftview_test.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/restore/driftview_test.go)
 
-Run `GOWORK=off go test ./...` from the `tui` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `tui` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

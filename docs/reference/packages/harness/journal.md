@@ -23,11 +23,11 @@ proofs:
 
 # journal package · journal
 
-Import path: `github.com/looprig/harness/pkg/journal`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/journal`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-`JournalRecord` is the sealed record boundary. Event, command, gate, and fence appenders add the correct route and codec envelope. `Lease` and `LeaseFence` prevent two session owners from appending concurrently; cursors and replay requests make recovery explicit.
+Package journal exposes the source-defined API.
 
 ## Exported surface {#exported-surface}
 
@@ -213,7 +213,12 @@ type AppendResult struct {
 ```go
 type IdempotentJournal interface {
 	SessionJournal
-
+	// AppendIdempotent behaves exactly like Append, same fencing, same errors, // except a record whose IdempotencyID() already names a durable record with an
+	// IDENTICAL persisted kind+payload is detected and reported via
+	// AppendResult.Appended=false (carrying the ORIGINAL sequence) rather than
+	// durably appended a second time. A record whose id names a durable record with
+	// a DIFFERENT persisted kind or payload fails closed with a typed
+	// *IdempotencyCollisionError.
 	AppendIdempotent(ctx context.Context, rec JournalRecord) (AppendResult, error)
 }
 ```
@@ -239,17 +244,25 @@ type IdempotencyIndex struct {
 
 ```go
 type SessionJournal interface {
+	// Append serializes rec, persists it under the next expected sequence, and
+	// returns the assigned sequence. ctx bounds the caller's willingness to wait; the
+	// implementation additionally carries a per-append deadline independent of ctx so
+	// one stuck call cannot wedge the serialized writer forever. Appends are totally
+	// ordered: the returned sequences are strictly monotonic across calls.
 	Append(ctx context.Context, rec JournalRecord) (seq uint64, err error)
 }
 ```
 
 ```go
 type Lease interface {
-	ownershipToken
 
+	// SessionID is the session this lease grants single-writer ownership of.
 	SessionID() uuid.UUID
-
+	// Release relinquishes the lease: stops any heartbeat, marks it no longer held
+	// (firing Lost), and best-effort clears the entry so a successor can re-acquire
+	// without waiting out the TTL. Idempotent.
 	Release(ctx context.Context) error
+	// contains filtered or unexported methods
 }
 ```
 
@@ -284,9 +297,12 @@ type DeliveryTransitionError struct {
 
 ```go
 type JournalRecord interface {
-	isJournalRecord()
 
+	// IdempotencyID is the stable per-record id a backend uses as its de-dup key so
+	// a redelivered append de-duplicates: an event's EventID, a command's physical
+	// CommandRecordID, or a fence's epoch.
 	IdempotencyID() string
+	// contains filtered or unexported methods
 }
 ```
 
@@ -354,14 +370,20 @@ type GatePreparedDecodeError struct {
 
 ```go
 type RecordReplayer interface {
+	// Open binds a cursor over the WHOLE session log (every record kind) positioned at
+	// req.From. Only the cold path (Follow:false) need be implemented; Follow:true
+	// returns a typed *FollowUnsupportedError, matching EventReplayer.
 	Open(ctx context.Context, req ReplayRequest) (RecordCursor, error)
 }
 ```
 
 ```go
 type RecordCursor interface {
+	// Next returns the next record and its sequence, or io.EOF when the cold backlog is
+	// exhausted. A decode/read error fails secure: the cursor surfaces the typed error
+	// rather than skipping or zero-valuing the record.
 	Next(ctx context.Context) (JournalRecord, uint64, error)
-
+	// Close tears down the reader. Idempotent: a second call is a no-op.
 	Close() error
 }
 ```
@@ -386,14 +408,19 @@ type ReplayRequest struct {
 
 ```go
 type EventReplayer interface {
+	// Open binds a cursor over the session's events selected by req and positioned at
+	// req.From.
 	Open(ctx context.Context, req ReplayRequest) (EventCursor, error)
 }
 ```
 
 ```go
 type EventCursor interface {
+	// Next returns the next event and its sequence, or io.EOF when the cold backlog is
+	// exhausted. A decode/read error fails secure: the cursor surfaces the typed error
+	// rather than skipping or zero-valuing the record.
 	Next(ctx context.Context) (event.Event, uint64, error)
-
+	// Close tears down the reader. Idempotent: a second call is a no-op.
 	Close() error
 }
 ```
@@ -414,32 +441,32 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `AmbiguousAckError`, `AppendError`, `CommandRouteMismatchError`, `DeliveryTransitionError`, `FenceDecodeError`, `FenceEncodeError`, `FollowUnsupportedError`, `GatePreparedDecodeError`, `GatePreparedEncodeError`, `IdempotencyCollisionError`, `JournalLeaseLostError`, `JournalNotReadyError`, `LeaseHeldError`, `LeaseLostError`, `MarshalRecordError`, `NilJournalError`, `RecordKindError`, `RecordTooLargeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AmbiguousAckError`, `AppendError`, `CommandRouteMismatchError`, `DeliveryTransitionError`, `FenceDecodeError`, `FenceEncodeError`, `FollowUnsupportedError`, `GatePreparedDecodeError`, `GatePreparedEncodeError`, `IdempotencyCollisionError`, `JournalLeaseLostError`, `JournalNotReadyError`, `LeaseHeldError`, `LeaseLostError`, `MarshalRecordError`, `NilJournalError`, `RecordKindError`, `RecordTooLargeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/journal/appender.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/appender.go)
-- [pkg/journal/errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/errors.go)
-- [pkg/journal/hooked.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/hooked.go)
-- [pkg/journal/idempotency.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/idempotency.go)
-- [pkg/journal/journal.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/journal.go)
-- [pkg/journal/lease.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/lease.go)
-- [pkg/journal/record.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/record.go)
-- [pkg/journal/record_json.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/record_json.go)
-- [pkg/journal/record_replay.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/record_replay.go)
-- [pkg/journal/replay.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/replay.go)
+- [pkg/journal/appender.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/appender.go)
+- [pkg/journal/errors.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/errors.go)
+- [pkg/journal/hooked.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/hooked.go)
+- [pkg/journal/idempotency.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/idempotency.go)
+- [pkg/journal/journal.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/journal.go)
+- [pkg/journal/lease.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/lease.go)
+- [pkg/journal/record.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/record.go)
+- [pkg/journal/record_json.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/record_json.go)
+- [pkg/journal/record_replay.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/record_replay.go)
+- [pkg/journal/replay.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/replay.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/journal/appender_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/appender_test.go)
-- [pkg/journal/delivery_transition_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/delivery_transition_test.go)
-- [pkg/journal/hooked_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/hooked_test.go)
-- [pkg/journal/idempotency_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/idempotency_test.go)
-- [pkg/journal/record_json_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/record_json_test.go)
-- [pkg/journal/record_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/journal/record_test.go)
+- [pkg/journal/appender_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/appender_test.go)
+- [pkg/journal/delivery_transition_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/delivery_transition_test.go)
+- [pkg/journal/hooked_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/hooked_test.go)
+- [pkg/journal/idempotency_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/idempotency_test.go)
+- [pkg/journal/record_json_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/record_json_test.go)
+- [pkg/journal/record_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/journal/record_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

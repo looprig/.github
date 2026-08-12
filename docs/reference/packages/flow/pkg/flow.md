@@ -26,7 +26,7 @@ Import path: `github.com/looprig/flow/pkg/flow`. The source is pinned to github.
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. The owning module is released as v0.3.0; pin that version in consumers and keep local workspace replacements out of published go.mod files.
+Package flow is the durable, pregel-style workflow engine.
 
 ## Exported surface {#exported-surface}
 
@@ -208,8 +208,11 @@ type Delivery struct {
 
 ```go
 type ControlPlane interface {
+	// Submit enqueues w for consumers serving w.Key. It honors ctx and must not
+	// block unboundedly.
 	Submit(ctx context.Context, w Work) error
-
+	// Consume returns a channel delivering only Work whose Key is in serves. The
+	// channel is closed when ctx is done (clean shutdown, no goroutine leak).
 	Consume(ctx context.Context, serves []GraphVersionKey) (<-chan Delivery, error)
 }
 ```
@@ -365,18 +368,22 @@ type RunResult struct {
 
 ```go
 type RunnerHandle interface {
+	// GraphID returns the wrapped Runner's stable definition identity (§8.1).
 	GraphID() GraphID
-
+	// GraphVersion returns the wrapped Runner's compatibility fingerprint (§8.1).
 	GraphVersion() string
-
+	// Run decodes stateJSON into the graph state S and starts a run. A malformed
+	// stateJSON is rejected at the decode boundary; an empty/nil stateJSON decodes
+	// to the zero S.
 	Run(ctx context.Context, stateJSON json.RawMessage, opts ...RunOption) (*RunResult, error)
-
+	// Resume continues run id, passing payloadJSON to the run as the live Resume
+	// payload (see the runnerHandle.Resume doc for the payload-typing nuance).
 	Resume(ctx context.Context, id GraphRunID, payloadJSON json.RawMessage, opts ...RunOption) (*RunResult, error)
-
+	// Status returns the latest GraphRunState for id without decoding S (§18.2).
 	Status(ctx context.Context, id GraphRunID) (GraphRunState, error)
-
+	// Get returns the latest run record with the marshaled current State (§18.2).
 	Get(ctx context.Context, id GraphRunID) (*RunResult, error)
-
+	// Cancel appends a terminal RunCancelled checkpoint for id (§18.2).
 	Cancel(ctx context.Context, id GraphRunID, reason string, opts ...RunOption) error
 }
 ```
@@ -396,23 +403,23 @@ type Hooks struct {
 ```
 
 ```go
-type GraphID uuid.UUID
+type GraphID uuid.UUID // stable definition id, pinned as a const by callers.
 ```
 
 ```go
-type VertexID uuid.UUID
+type VertexID uuid.UUID // stable definition id, pinned as a const by callers.
 ```
 
 ```go
-type GraphRunID uuid.UUID
+type GraphRunID uuid.UUID // runtime instance, minted per run via NewGraphRunID.
 ```
 
 ```go
-type VertexRunID uuid.UUID
+type VertexRunID uuid.UUID // runtime instance, minted per vertex execution.
 ```
 
 ```go
-type StepID int
+type StepID int // super-step index within a run: 0, 1, 2, …
 ```
 
 ```go
@@ -469,8 +476,11 @@ type RunOption func(*runConfig)
 
 ```go
 type Resolver interface {
+	// Resolve returns the handle registered under the exact (id, version) and true,
+	// or (nil, false) if none is registered.
 	Resolve(id GraphID, version string) (RunnerHandle, bool)
-
+	// Keys returns one GraphVersionKey per registration, the exact set of versions
+	// this worker serves, which Serve hands to Consume.
 	Keys() []GraphVersionKey
 }
 ```
@@ -537,10 +547,19 @@ type IdempotencyKey string
 
 ```go
 type CheckpointStore interface {
+	// Append durably records cp iff cp.Run.Revision is the next revision in
+	// sequence for cp.Run.GraphRunID (compare-and-append). Otherwise it returns a
+	// *RevisionConflictError. A serialization failure is a *StoreError.
 	Append(ctx context.Context, cp *Checkpoint) error
-
+	// Latest returns the highest-revision checkpoint for id (the source of truth),
+	// or a *CheckpointNotFoundError if the run has no checkpoints. It MUST return
+	// the checkpoint with the HIGHEST Run.Revision for the run: the §10.4 resume
+	// contract depends on the loaded checkpoint being genuinely the latest, and a
+	// backend that returns a stale revision violates the contract (it would fork or
+	// overwrite committed history on the next append).
 	Latest(ctx context.Context, id GraphRunID) (*Checkpoint, error)
-
+	// History returns every checkpoint for id ordered by revision (0,1,2,…), or a
+	// *CheckpointNotFoundError if the run has no checkpoints.
 	History(ctx context.Context, id GraphRunID) ([]*Checkpoint, error)
 }
 ```
@@ -562,7 +581,7 @@ type Task[I, O any] interface {
 ```
 
 ```go
-type FuncTask[I, O any] struct{
+type FuncTask[I, O any] struct {
 	// contains filtered or unexported fields
 }
 ```
@@ -589,9 +608,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `AmbiguousRoutingError`, `BuildError`, `CheckpointDecodeError`, `CheckpointNotFoundError`, `ConditionError`, `DeadEndError`, `DuplicateConditionalEdgeError`, `DuplicateVertexError`, `GraphMismatchError`, `GraphRunExistsError`, `GraphRunMismatchError`, `GraphVersionMismatchError`, `MaxStepsExceededError`, `MissingEntryError`, `ResumeTerminalError`, `RevisionConflictError`, `StoreError`, `UndeclaredTargetError`, `UnknownVertexError`, `UnknownWorkOpError`, `UnreachableVertexError`, `VertexError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AmbiguousRoutingError`, `BuildError`, `CheckpointDecodeError`, `CheckpointNotFoundError`, `ConditionError`, `DeadEndError`, `DuplicateConditionalEdgeError`, `DuplicateVertexError`, `GraphMismatchError`, `GraphRunExistsError`, `GraphRunMismatchError`, `GraphVersionMismatchError`, `MaxStepsExceededError`, `MissingEntryError`, `ResumeTerminalError`, `RevisionConflictError`, `StoreError`, `UndeclaredTargetError`, `UnknownVertexError`, `UnknownWorkOpError`, `UnreachableVertexError`, `VertexError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -645,4 +664,4 @@ Adjacent tests at the same commit:
 - [pkg/flow/version_test.go](https://github.com/looprig/flow/blob/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/flow/version_test.go)
 - [pkg/flow/vertex_test.go](https://github.com/looprig/flow/blob/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/flow/vertex_test.go)
 
-Run `GOWORK=off go test ./...` from the `flow` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `flow` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 1280 560" role="img" aria-labelledby="harness-runtime-title harness-runtime-description">
+  <title id="harness-runtime-title">Harness runtime flow</title>
+  <desc id="harness-runtime-description">A model client is frozen into a loop definition, assembled into a Rig, and opened as a live Session. Input enters the Session, events leave through the event stream, and Shutdown releases session resources.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#a2d2ff" />
+    </marker>
+    <style>
+      .background { fill: #0d0d0c; }
+      .config-box { fill: #17242a; stroke: #a2d2ff; }
+      .runtime-box { fill: #202118; stroke: #d4f84d; }
+      .output-box { fill: #182b22; stroke: #8ce0ae; }
+      .box { stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+      .arrow { fill: none; stroke: #a2d2ff; stroke-width: 3; marker-end: url(#arrow); vector-effect: non-scaling-stroke; }
+      .section { fill: #d4f84d; font: 700 16px system-ui, sans-serif; letter-spacing: 1.3px; }
+      .label { fill: #ece9e2; font: 700 18px system-ui, sans-serif; }
+      .detail { fill: #c6c3bb; font: 15px system-ui, sans-serif; }
+      .arrow-label { fill: #a2d2ff; font: 600 14px system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="background" width="1280" height="560" rx="18" />
+  <text x="40" y="45" class="section">DESIGN-TIME CONFIGURATION</text>
+  <text x="760" y="45" class="section">LIVE SESSION</text>
+
+  <rect class="config-box box" x="40" y="95" width="200" height="125" rx="12" />
+  <text x="140" y="135" class="label" text-anchor="middle">Model client</text>
+  <text x="140" y="166" class="detail" text-anchor="middle">complete or streamed</text>
+  <text x="140" y="190" class="detail" text-anchor="middle">inference responses</text>
+
+  <rect class="config-box box" x="280" y="95" width="200" height="125" rx="12" />
+  <text x="380" y="135" class="label" text-anchor="middle">loop.Define</text>
+  <text x="380" y="166" class="detail" text-anchor="middle">name, model, tools,</text>
+  <text x="380" y="190" class="detail" text-anchor="middle">instructions, limits</text>
+
+  <rect class="config-box box" x="520" y="95" width="200" height="125" rx="12" />
+  <text x="620" y="135" class="label" text-anchor="middle">rig.Define</text>
+  <text x="620" y="166" class="detail" text-anchor="middle">loops, storage, gates,</text>
+  <text x="620" y="190" class="detail" text-anchor="middle">workspace, policy</text>
+
+  <path class="arrow" vector-effect="non-scaling-stroke" marker-end="url(#arrow)" d="M240 157 H280" />
+  <path class="arrow" d="M480 157 H520" />
+
+  <rect class="runtime-box box" x="760" y="95" width="220" height="145" rx="12" />
+  <text x="870" y="137" class="label" text-anchor="middle">Session</text>
+  <text x="870" y="169" class="detail" text-anchor="middle">live turns and</text>
+  <text x="870" y="193" class="detail" text-anchor="middle">runtime ownership</text>
+  <text x="870" y="217" class="detail" text-anchor="middle">from Rig.NewSession</text>
+
+  <path class="arrow" d="M720 157 H760" />
+  <text x="740" y="143" class="arrow-label" text-anchor="middle">NewSession</text>
+
+  <rect class="runtime-box box" x="40" y="345" width="200" height="110" rx="12" />
+  <text x="140" y="385" class="label" text-anchor="middle">Input</text>
+  <text x="140" y="417" class="detail" text-anchor="middle">content.Block values</text>
+
+  <path class="arrow" d="M240 400 H650 V210 H760" />
+  <text x="450" y="388" class="arrow-label" text-anchor="middle">Submit</text>
+
+  <rect class="output-box box" x="760" y="345" width="220" height="110" rx="12" />
+  <text x="870" y="385" class="label" text-anchor="middle">Event stream</text>
+  <text x="870" y="417" class="detail" text-anchor="middle">SubscribeEvents</text>
+
+  <path class="arrow" d="M870 240 V345" />
+
+  <rect class="output-box box" x="1040" y="345" width="200" height="110" rx="12" />
+  <text x="1140" y="385" class="label" text-anchor="middle">Resources closed</text>
+  <text x="1140" y="417" class="detail" text-anchor="middle">Shutdown drains and</text>
+  <text x="1140" y="439" class="detail" text-anchor="middle">releases session state</text>
+
+  <path class="arrow" d="M980 167 H1060 V345 H1040" />
+  <text x="1060" y="150" class="arrow-label" text-anchor="middle">Shutdown</text>
+</svg>

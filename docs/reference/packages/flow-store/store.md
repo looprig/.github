@@ -24,7 +24,7 @@ Import path: `github.com/looprig/flow/store`. This nested package is available f
 
 ## Package role {#package-role}
 
-This is the nested `github.com/looprig/flow/store` module, distinct from released `github.com/looprig/flow`. It adapts a neutral `storage.Ledger` to Flow checkpoints and is available from the coordinated source workspace only. There is no immutable tag or supported public `go get` version.
+Package flowstore adapts the neutral storage.Ledger contract to Flow's append-only checkpoint store.
 
 ## Exported surface {#exported-surface}
 
@@ -52,9 +52,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-`New` receives a caller-provided `storage.Ledger` and returns a `flow.CheckpointStore`. The linked source and tests define how that ledger is used; no additional ownership, lifecycle, or retry behavior is inferred here.
+`New` receives a caller-provided `storage.Ledger` and returns a `flow.CheckpointStore`. The linked source and tests define how that ledger is used; no additional ownership or retry behavior is inferred here.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -69,4 +69,4 @@ Adjacent tests at the same commit:
 - local test `flow/store/store_integration_test.go` at commit `c89d0eb101158996bd278578c0b93d55d67a8d8a`
 - local test `flow/store/store_test.go` at commit `c89d0eb101158996bd278578c0b93d55d67a8d8a`
 
-Run `GOWORK=off go test ./...` from the local `flow/store` directory after its source-workspace dependencies are available. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from the local `flow/store` module after its source-workspace dependencies are available. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

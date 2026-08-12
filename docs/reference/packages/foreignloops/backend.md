@@ -26,7 +26,7 @@ Import path: `github.com/looprig/foreignloops/backend`. The source is pinned to 
 
 ## Package role {#package-role}
 
-`Loop` owns provider turn coordination, normalized publication, snapshots, locks, and delivery reservations for one foreign loop. `New` constructs a live backend; the builder functions install it into a Rig.
+Package backend implements the concrete Harness foreign-loop backend.
 
 ## Exported surface {#exported-surface}
 
@@ -134,9 +134,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ConfigError`, `ForeignProtocolError`, `ForeignPublicationError`, `ForeignResultError`, `ForeignSessionBusyError`, `LockError`, `SnapshotError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ConfigError`, `ForeignProtocolError`, `ForeignPublicationError`, `ForeignResultError`, `ForeignSessionBusyError`, `LockError`, `SnapshotError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -178,4 +178,4 @@ Adjacent tests at the same commit:
 - [backend/steering_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/backend/steering_test.go)
 - [backend/turn_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/backend/turn_test.go)
 
-Run `GOWORK=off go test ./...` from the `foreignloops` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `foreignloops` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -24,7 +24,7 @@ Import path: `github.com/looprig/llm/aci`. The source is pinned to github.com/lo
 
 ## Package role {#package-role}
 
-This package defines attested-client interfaces, canonical values, receipts, and reports. The released module is `github.com/looprig/llm@v0.13.3`. Model descriptors remain secret-free; API keys, OAuth tokens, and signing credentials are injected through the credential boundary rather than placed on `model.Model`.
+Package aci implements a client for the Dstack private-ai-gateway "aci/1" confidential-inference protocol.
 
 ## Exported surface {#exported-surface}
 
@@ -97,7 +97,7 @@ type UnpinnedPolicyError struct{}
 
 ```go
 type Value interface {
-	isValue()
+	// contains filtered or unexported methods
 }
 ```
 
@@ -371,9 +371,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `FloatNotAllowedError`, `FloatOutOfDomainError`, `InvalidUTF8Error`, `NonFiniteFloatError`, `UnpinnedPolicyError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `FloatNotAllowedError`, `FloatOutOfDomainError`, `InvalidUTF8Error`, `NonFiniteFloatError`, `UnpinnedPolicyError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -420,4 +420,4 @@ Adjacent tests at the same commit:
 - [aci/verify_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/aci/verify_test.go)
 - [aci/verifyreport_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/aci/verifyreport_test.go)
 
-Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `llm` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

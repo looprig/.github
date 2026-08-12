@@ -22,11 +22,11 @@ proofs:
 
 # bash package · bash
 
-Import path: `github.com/looprig/tools/bash`. The source is pinned to github.com/looprig/tools@v0.10.0.
+Import path: `github.com/looprig/tools/bash`. The source is pinned to github.com/looprig/tools@v0.10.1.
 
 ## Package role {#package-role}
 
-`NewBash` binds a root and optional command runner, workspace coordinator, observations, and family catalog. `NewFactory` and `NewSupervisedFactory` build definitions for normal and background calls.
+Package bash implements the Bash tool: single-command shell execution inside a workspace-contained working directory, with a bounded timeout and a capped combined-output capture.
 
 ## Exported surface {#exported-surface}
 
@@ -79,28 +79,28 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [bash/bash.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/bash.go)
-- [bash/prepare.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/prepare.go)
-- [bash/result.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/result.go)
-- [bash/supervised.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/supervised.go)
+- [bash/bash.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/bash/bash.go)
+- [bash/prepare.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/bash/prepare.go)
+- [bash/result.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/bash/result.go)
+- [bash/supervised.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/bash/supervised.go)
 
 Adjacent tests at the same commit:
 
-- [bash/bash_grants_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/bash_grants_test.go)
-- [bash/bash_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/bash_test.go)
-- [bash/integration_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/integration_test.go)
-- [bash/preparecall_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/preparecall_test.go)
-- [bash/result_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/result_test.go)
-- [bash/runner_injection_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/runner_injection_test.go)
-- [bash/supervised_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/supervised_test.go)
-- [bash/supervision_args_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/bash/supervision_args_test.go)
+- [bash/bash_grants_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/bash/bash_grants_test.go)
+- [bash/bash_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/bash/bash_test.go)
+- [bash/integration_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/bash/integration_test.go)
+- [bash/preparecall_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/bash/preparecall_test.go)
+- [bash/result_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/bash/result_test.go)
+- [bash/runner_injection_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/bash/runner_injection_test.go)
+- [bash/supervised_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/bash/supervised_test.go)
+- [bash/supervision_args_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/bash/supervision_args_test.go)
 
-Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `tools` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -26,7 +26,7 @@ Import path: `github.com/looprig/mcp/pkg/harness`. The source is pinned to githu
 
 ## Package role {#package-role}
 
-`Manager` owns bindings, connection startup, status, notices, and reconfiguration. `Adopter` installs discovered tools into selected loop controllers as a `loop.ExternalToolset`. `Binding` declares name, server definition, scope, visibility, and required startup.
+Package mcpharness binds MCP servers into a Harness Session.
 
 ## Exported surface {#exported-surface}
 
@@ -355,9 +355,9 @@ type LoopSelector struct {
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `DuplicateModelNameError`, `StartupError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DuplicateModelNameError`, `StartupError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -395,4 +395,4 @@ Adjacent tests at the same commit:
 - [pkg/harness/selector_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/harness/selector_test.go)
 - [pkg/harness/tools_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/harness/tools_test.go)
 
-Run `GOWORK=off go test ./...` from the `mcp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `mcp` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

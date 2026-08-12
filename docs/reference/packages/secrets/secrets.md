@@ -24,7 +24,7 @@ Import path: `github.com/looprig/secrets`. The source is pinned to github.com/lo
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. The owning module is released as v0.1.0; pin that version in consumers and keep local workspace replacements out of published go.mod files.
+Package secrets defines the opaque value and reference contracts used by LoopRig's credential stores.
 
 ## Exported surface {#exported-surface}
 
@@ -233,7 +233,7 @@ type DeleteResult struct {
 ```
 
 ```go
-type PageToken struct{
+type PageToken struct {
 	// contains filtered or unexported fields
 }
 ```
@@ -246,25 +246,25 @@ type Page[T any] struct {
 ```
 
 ```go
-type InvalidVersionError struct{
+type InvalidVersionError struct {
 	// contains filtered or unexported fields
 }
 ```
 
 ```go
-type InvalidPageTokenError struct{
+type InvalidPageTokenError struct {
 	// contains filtered or unexported fields
 }
 ```
 
 ```go
-type InvalidOptionsError struct{
+type InvalidOptionsError struct {
 	// contains filtered or unexported fields
 }
 ```
 
 ```go
-type NotFoundError struct{
+type NotFoundError struct {
 	// contains filtered or unexported fields
 }
 ```
@@ -278,19 +278,19 @@ type UnsupportedCapabilityError struct{}
 ```
 
 ```go
-type InsecurePathError struct{
+type InsecurePathError struct {
 	// contains filtered or unexported fields
 }
 ```
 
 ```go
-type CorruptRecordError struct{
+type CorruptRecordError struct {
 	// contains filtered or unexported fields
 }
 ```
 
 ```go
-type ConflictError struct{
+type ConflictError struct {
 	// contains filtered or unexported fields
 }
 ```
@@ -336,13 +336,13 @@ type Reference struct {
 ```
 
 ```go
-type InvalidReferenceError struct{
+type InvalidReferenceError struct {
 	// contains filtered or unexported fields
 }
 ```
 
 ```go
-type InvalidNamespaceError struct{
+type InvalidNamespaceError struct {
 	// contains filtered or unexported fields
 }
 ```
@@ -418,9 +418,9 @@ type VisibleCommitError interface {
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `CanceledError`, `ConflictError`, `CorruptRecordError`, `EmptySecretError`, `InsecurePathError`, `InvalidNamespaceError`, `InvalidOptionsError`, `InvalidPageTokenError`, `InvalidReferenceError`, `InvalidVersionError`, `NotFoundError`, `SecretSizeError`, `UnavailableError`, `UnsupportedCapabilityError`, `UnsupportedSchemeError`, `ZeroSecretError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CanceledError`, `ConflictError`, `CorruptRecordError`, `EmptySecretError`, `InsecurePathError`, `InvalidNamespaceError`, `InvalidOptionsError`, `InvalidPageTokenError`, `InvalidReferenceError`, `InvalidVersionError`, `NotFoundError`, `SecretSizeError`, `UnavailableError`, `UnsupportedCapabilityError`, `UnsupportedSchemeError`, `ZeroSecretError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -439,4 +439,4 @@ Adjacent tests at the same commit:
 - [secret_test.go](https://github.com/looprig/secrets/blob/7b2e3a604b59343e9a0775398ce10c80f9708d12/secret_test.go)
 - [store_test.go](https://github.com/looprig/secrets/blob/7b2e3a604b59343e9a0775398ce10c80f9708d12/store_test.go)
 
-Run `GOWORK=off go test ./...` from the `secrets` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `secrets` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

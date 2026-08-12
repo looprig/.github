@@ -44,6 +44,58 @@ rules. The decoders avoid echoing environment, header, credential, and path
 values in errors. This matters because a configuration failure is often the
 first thing an operator sends to another person.
 
+These are complete minimal inputs for the two user-editable configuration
+files. They are separate files; Carbon does not accept one merged object.
+
+`models.json`:
+
+```json
+{
+  "version": 2,
+  "primer_default": "local",
+  "models": [{
+    "alias": "local",
+    "description": "Local LM Studio coding model.",
+    "provider": "lmstudio",
+    "api_format": "openai",
+    "base_url": "http://localhost:1234/v1",
+    "model": "qwen3-coder",
+    "api_key": "",
+    "uses": ["primer", "delegate"],
+    "capabilities": {
+      "tools": true,
+      "thinking": false,
+      "images": false,
+      "prompt_caching": false,
+      "structured_output": false,
+      "structured_output_with_tools": false
+    },
+    "efforts": ["none"],
+    "default_effort": "none"
+  }]
+}
+```
+
+`mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "local-tools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": {"MCP_MODE": "readonly"},
+      "roles": ["carbon"]
+    }
+  }
+}
+```
+
+The exact decoders and normalization paths are covered by Carbon's
+[`modelconfig_decode_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_decode_test.go)
+and [`mcpconfig_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/mcpconfig_test.go).
+
 ## Normalization and identity
 
 Model rows are normalized by alias, and model credentials are represented as

@@ -13,6 +13,8 @@ proofs:
     - release-github-com-looprig-carbon
   choose-a-source:
     - release-github-com-looprig-carbon
+  complete-acp-configuration:
+    - release-github-com-looprig-carbon
   launchers:
     - release-github-com-looprig-carbon
   access-posture-inherited-by-children:
@@ -50,6 +52,63 @@ There are two ACP source modes:
 The choice is part of the runtime identity. It is not safe to restore a
 gateway session as native or to treat a native model name as a Carbon provider
 alias.
+
+## Complete ACP configuration
+
+The following is a complete `models.json` file with both native harness
+profiles and explicit launcher paths. Codex uses harness-managed model
+selection (`models: null`); Claude uses a structured allowlist. Replace the
+absolute paths with adapters installed on the host before starting Carbon.
+
+```json
+{
+  "version": 2,
+  "primer_default": "local",
+  "models": [{
+    "alias": "local",
+    "description": "Local LM Studio coding model.",
+    "provider": "lmstudio",
+    "api_format": "openai",
+    "base_url": "http://localhost:1234/v1",
+    "model": "qwen3-coder",
+    "api_key": "",
+    "uses": ["primer", "delegate"],
+    "capabilities": {
+      "tools": true,
+      "thinking": false,
+      "images": false,
+      "prompt_caching": false,
+      "structured_output": false,
+      "structured_output_with_tools": false
+    },
+    "efforts": ["none"],
+    "default_effort": "none"
+  }],
+  "native_acp": {
+    "claude-code": {
+      "enabled": true,
+      "models": [{
+        "model": "sonnet",
+        "efforts": ["none"],
+        "default_effort": "none"
+      }]
+    },
+    "codex": {
+      "enabled": true,
+      "models": null
+    }
+  },
+  "acp_launchers": {
+    "claude-code": {"executable": "/usr/local/bin/claude-code-acp"},
+    "codex": {"executable": "/usr/local/bin/codex-acp"}
+  }
+}
+```
+
+The strict shape and managed-versus-explicit distinction are covered by
+[`modelconfig_native_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_native_test.go)
+and launcher validation by
+[`modelconfig_validate_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_validate_test.go).
 
 ## Launchers
 

@@ -22,11 +22,11 @@ proofs:
 
 # hustle package · hustle
 
-Import path: `github.com/looprig/harness/pkg/hustle`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/hustle`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-`hustle.Definition` is immutable configuration for inference, system prompt, output schema, evidence tools, limits, policy revision, timeout, and retry policy. `Define` validates the declaration; a bound definition resolves the per-call model and tool context.
+Package hustle exposes the source-defined API.
 
 ## Exported surface {#exported-surface}
 
@@ -180,7 +180,7 @@ type Option func(*definitionOptions) error
 ```
 
 ```go
-type Definition struct{
+type Definition struct {
 	// contains filtered or unexported fields
 }
 ```
@@ -198,7 +198,7 @@ type BoundDefinition interface {
 	EvidenceToolPolicy() (EvidenceToolPolicy, bool)
 	RetryPolicy() RetryPolicy
 	BindEvidenceTools(context.Context, EvidenceBindings) ([]BoundEvidenceTool, error)
-	boundDefinition()
+	// contains filtered or unexported methods
 }
 ```
 
@@ -241,7 +241,7 @@ type RevisionError struct{ Cause error }
 ```
 
 ```go
-type BoundEvidenceTool struct{
+type BoundEvidenceTool struct {
 	// contains filtered or unexported fields
 }
 ```
@@ -300,25 +300,25 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `BindError`, `DefinitionError`, `ResolveError`, `RevisionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BindError`, `DefinitionError`, `ResolveError`, `RevisionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/hustle/definition.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hustle/definition.go)
-- [pkg/hustle/definition_errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hustle/definition_errors.go)
-- [pkg/hustle/evidence.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hustle/evidence.go)
-- [pkg/hustle/run.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hustle/run.go)
+- [pkg/hustle/definition.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hustle/definition.go)
+- [pkg/hustle/definition_errors.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hustle/definition_errors.go)
+- [pkg/hustle/evidence.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hustle/evidence.go)
+- [pkg/hustle/run.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hustle/run.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/hustle/definition_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hustle/definition_test.go)
-- [pkg/hustle/deps_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hustle/deps_test.go)
-- [pkg/hustle/descriptor_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hustle/descriptor_test.go)
-- [pkg/hustle/evidence_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hustle/evidence_test.go)
-- [pkg/hustle/run_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hustle/run_test.go)
+- [pkg/hustle/definition_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hustle/definition_test.go)
+- [pkg/hustle/deps_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hustle/deps_test.go)
+- [pkg/hustle/descriptor_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hustle/descriptor_test.go)
+- [pkg/hustle/evidence_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hustle/evidence_test.go)
+- [pkg/hustle/run_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hustle/run_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

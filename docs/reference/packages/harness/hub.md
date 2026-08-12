@@ -22,11 +22,11 @@ proofs:
 
 # hub package · hub
 
-Import path: `github.com/looprig/harness/pkg/hub`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/hub`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-`Hub` publishes events to subscriptions, coordinates append and commit observation, and reports faults that affect the session. It also reserves turn starts and tracks hustle activity so callers cannot begin work after a session has stopped.
+Package hub implements the session-level event fan-in: a publish/subscribe hub with a federated-quiescence model.
 
 ## Exported surface {#exported-surface}
 
@@ -178,33 +178,33 @@ type TurnStartReservation struct {
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `HustleActivityError`, `PublishBoundaryError`, `SessionAbortedError`, `SessionPersistenceFault`, `SubscriptionLossError`, `TurnStartReservationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `HustleActivityError`, `PublishBoundaryError`, `SessionAbortedError`, `SessionPersistenceFault`, `SubscriptionLossError`, `TurnStartReservationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/hub/deps.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/deps.go)
-- [pkg/hub/errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/errors.go)
-- [pkg/hub/fault.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/fault.go)
-- [pkg/hub/hub.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/hub.go)
-- [pkg/hub/state.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/state.go)
-- [pkg/hub/subscription.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/subscription.go)
-- [pkg/hub/turn_start.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/turn_start.go)
+- [pkg/hub/deps.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/deps.go)
+- [pkg/hub/errors.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/errors.go)
+- [pkg/hub/fault.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/fault.go)
+- [pkg/hub/hub.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/hub.go)
+- [pkg/hub/state.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/state.go)
+- [pkg/hub/subscription.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/subscription.go)
+- [pkg/hub/turn_start.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/turn_start.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/hub/deps_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/deps_test.go)
-- [pkg/hub/durability_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/durability_test.go)
-- [pkg/hub/durable_tap_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/durable_tap_test.go)
-- [pkg/hub/fault_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/fault_test.go)
-- [pkg/hub/hub_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/hub_test.go)
-- [pkg/hub/hustle_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/hustle_test.go)
-- [pkg/hub/permission_review_publish_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/permission_review_publish_test.go)
-- [pkg/hub/state_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/state_test.go)
-- [pkg/hub/subscription_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/subscription_test.go)
-- [pkg/hub/turn_start_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/hub/turn_start_test.go)
+- [pkg/hub/deps_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/deps_test.go)
+- [pkg/hub/durability_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/durability_test.go)
+- [pkg/hub/durable_tap_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/durable_tap_test.go)
+- [pkg/hub/fault_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/fault_test.go)
+- [pkg/hub/hub_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/hub_test.go)
+- [pkg/hub/hustle_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/hustle_test.go)
+- [pkg/hub/permission_review_publish_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/permission_review_publish_test.go)
+- [pkg/hub/state_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/state_test.go)
+- [pkg/hub/subscription_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/subscription_test.go)
+- [pkg/hub/turn_start_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/hub/turn_start_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

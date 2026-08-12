@@ -24,11 +24,11 @@ proofs:
 
 # inference package · inference
 
-Import path: `github.com/looprig/inference`. The source is pinned to github.com/looprig/inference@v0.9.2.
+Import path: `github.com/looprig/inference`. The source is pinned to github.com/looprig/inference@v0.10.0.
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. Inference `v0.9.2` keeps model descriptors, request and response values, codec contracts, streams, retries, and gateway behavior independent of provider credentials.
+Package inference exposes the source-defined API.
 
 ## Exported surface {#exported-surface}
 
@@ -45,6 +45,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
+- `func (e *InvalidTransientMessagesError) Error() string`
 - `func (o OutputSchema) Clone() OutputSchema`
 - `func (e *SchemaValidationError) Error() string`
 - `func (e *StructuredOutputUnsupportedError) Error() string`
@@ -69,13 +70,21 @@ type ToolChoice uint8
 
 ```go
 type Request struct {
-	Model      model.Model
-	System     string
-	Messages   content.AgenticMessages
-	Tools      []Tool
-	Output     *OutputSchema
-	ToolChoice ToolChoice
-	Override   *model.Sampling
+	Model             model.Model
+	System            string
+	Messages          content.AgenticMessages
+	TransientMessages int
+	Tools             []Tool
+	Output            *OutputSchema
+	ToolChoice        ToolChoice
+	Override          *model.Sampling
+}
+```
+
+```go
+type InvalidTransientMessagesError struct {
+	Transient int
+	Messages  int
 }
 ```
 
@@ -174,27 +183,27 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ImageInputUnsupportedError`, `MalformedStructuredOutputError`, `SchemaValidationError`, `StructuredOutputConflictError`, `StructuredOutputFinishError`, `StructuredOutputUnsupportedError`, `StructuredOutputWithToolsUnsupportedError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ImageInputUnsupportedError`, `InvalidTransientMessagesError`, `MalformedStructuredOutputError`, `SchemaValidationError`, `StructuredOutputConflictError`, `StructuredOutputFinishError`, `StructuredOutputUnsupportedError`, `StructuredOutputWithToolsUnsupportedError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [client.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/client.go)
-- [json_unique.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/json_unique.go)
-- [output.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/output.go)
-- [structured_errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/structured_errors.go)
-- [structured_result.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/structured_result.go)
+- [client.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/client.go)
+- [json_unique.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/json_unique.go)
+- [output.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/output.go)
+- [structured_errors.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/structured_errors.go)
+- [structured_result.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/structured_result.go)
 
 Adjacent tests at the same commit:
 
-- [client_images_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/client_images_test.go)
-- [client_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/client_test.go)
-- [output_fuzz_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/output_fuzz_test.go)
-- [output_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/output_test.go)
-- [structured_result_internal_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/structured_result_internal_test.go)
-- [structured_result_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/structured_result_test.go)
+- [client_images_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/client_images_test.go)
+- [client_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/client_test.go)
+- [output_fuzz_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/output_fuzz_test.go)
+- [output_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/output_test.go)
+- [structured_result_internal_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/structured_result_internal_test.go)
+- [structured_result_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/structured_result_test.go)
 
-Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `inference` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

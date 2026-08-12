@@ -24,11 +24,11 @@ proofs:
 
 # failure package · failure
 
-Import path: `github.com/looprig/inference/failure`. The source is pinned to github.com/looprig/inference@v0.9.2.
+Import path: `github.com/looprig/inference/failure`. The source is pinned to github.com/looprig/inference@v0.10.0.
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. Inference `v0.9.2` keeps model descriptors, request and response values, codec contracts, streams, retries, and gateway behavior independent of provider credentials.
+Package failure owns provider-neutral inference failures shared by codecs, transports, and provider integrations.
 
 ## Exported surface {#exported-surface}
 
@@ -101,18 +101,18 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `APIError`, `ModelMismatchError`, `NetworkError`, `ResponseBodyTooLargeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `APIError`, `ModelMismatchError`, `NetworkError`, `ResponseBodyTooLargeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [failure/errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/failure/errors.go)
+- [failure/errors.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/failure/errors.go)
 
 Adjacent tests at the same commit:
 
-- [failure/errors_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/failure/errors_test.go)
+- [failure/errors_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/failure/errors_test.go)
 
-Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `inference` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

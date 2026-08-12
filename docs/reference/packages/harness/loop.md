@@ -23,11 +23,11 @@ proofs:
 
 # loop package · loop
 
-Import path: `github.com/looprig/harness/pkg/loop`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/loop`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-`Definition` is built with `Define` and options for name, model, modes, tools, delegates, compaction, context transport, and limits. `BoundDefinition` carries session bindings without changing the source definition. `Controller`, `Handle`, and `Backend` are runtime seams.
+Package loop defines immutable loop recipes and the public contracts for live loops.
 
 ## Exported surface {#exported-surface}
 
@@ -231,15 +231,17 @@ type CounterPolicy uint8
 
 ```go
 type CompactionPolicy struct {
-	Automatic        bool
-	CounterPolicy    CounterPolicy
-	CompactAt        event.BasisPoints
-	RearmBelow       event.BasisPoints
-	ReservedOutput   content.TokenCount
-	SafetyMargin     content.TokenCount
-	MaxSummaryTokens content.TokenCount
-	CountTimeout     time.Duration
-	Hustle           hustle.Name
+	Automatic          bool
+	CounterPolicy      CounterPolicy
+	CompactAt          event.BasisPoints
+	RearmBelow         event.BasisPoints
+	KeepRecentSegments int
+	KeepRecentTokens   content.TokenCount
+	ReservedOutput     content.TokenCount
+	SafetyMargin       content.TokenCount
+	MaxSummaryTokens   content.TokenCount
+	CountTimeout       time.Duration
+	Hustle             hustle.Name
 }
 ```
 
@@ -352,7 +354,11 @@ type Controller interface {
 	Handle
 	SetMode(context.Context, ModeName) error
 	Change(context.Context, ...Change) error
-
+	// Interrupt cancels this loop's current turn AND every loop below it in the delegate
+	// subtree, marking the whole subtree interrupt-pending so a parent whose interrupted
+	// delegate wait resolves cannot open a fresh delegate step. It is the subtree-scoped
+	// counterpart to the session-wide Session.Interrupt and the single-child agent
+	// interrupt. The runtime holds an admission barrier over the subtree until it is idle.
 	Interrupt(context.Context) error
 }
 ```
@@ -375,7 +381,7 @@ type ExternalToolInstaller interface {
 type Change interface {
 	InferenceModel() (model.Model, bool)
 	InferenceEffort() (model.Effort, bool)
-	change()
+	// contains filtered or unexported methods
 }
 ```
 
@@ -401,7 +407,7 @@ type Option func(*definitionOptions) error
 ```
 
 ```go
-type Definition struct{
+type Definition struct {
 	// contains filtered or unexported fields
 }
 ```
@@ -443,7 +449,9 @@ type BoundDefinition interface {
 	ContextCounter() contextcount.ContextCounter
 	CounterCapability() (contextcount.CounterCapability, bool)
 	InferenceCapability() (contextcount.InferenceCapability, bool)
-
+	// ContextTransportCapability resolves the declared InferenceCapability for
+	// model's transport, or (zero, false) if that transport is not a member of
+	// this definition's declared ContextTransport set.
 	ContextTransportCapability(model.Model) (contextcount.InferenceCapability, bool)
 	ContextObservationPolicy() (ContextObservationPolicy, bool)
 	CompactionPolicy() (CompactionPolicy, bool)
@@ -451,7 +459,7 @@ type BoundDefinition interface {
 	ValidateContextModel(model.Model) error
 	Delegation() Delegation
 	Delegates() []identity.AgentName
-	boundDefinition()
+	// contains filtered or unexported methods
 }
 ```
 
@@ -497,8 +505,23 @@ type Delegation struct{ Style DelegationStyle }
 
 ```go
 type ReadGuard interface {
+	// DeniedRead reports whether reading absPath is denied by policy (e.g. the
+	// §5.3 secret deny-reads such as "**/.env*", or a zerotrust restricted-read).
+	//
+	// CANONICAL-PATH CONTRACT (fail-secure): absPath MUST be an ABSOLUTE,
+	// filepath.Clean'ed, SYMLINK-RESOLVED path. The guard is purely LEXICAL, it
+	// matches the string it is handed and performs NO filesystem resolution of its
+	// own. Resolving symlinks (and, on a case-insensitive volume such as default
+	// macOS/APFS, canonicalising case) BEFORE the call is the CALLER's (the tool's)
+	// responsibility: a guard fed a non-canonical path can be bypassed by a symlink
+	// or a case variant that resolves to the denied file. The native read tools
+	// honour this, ReadFile passes the containedPath-resolved abs, Grep/Glob pass
+	// the EvalSymlinks'd path via denyFilteredRel. This mirrors the sandbox Resolve
+	// contract, so the confinement adapter and the native tools must both feed canonical
+	// paths or a deny is trivially evaded.
 	DeniedRead(absPath string) bool
-
+	// MaxReadBytes is the per-file read cap (bytes) ReadFile/Grep apply via
+	// io.LimitReader.
 	MaxReadBytes() int64
 }
 ```
@@ -550,9 +573,10 @@ type ModeName string
 
 ```go
 type ToolLimits struct {
-	Iterations int
-	Calls      int
-	Parallel   int
+	Iterations  int
+	Calls       int
+	Parallel    int
+	ResultBytes int
 }
 ```
 
@@ -703,7 +727,7 @@ type ApprovalContextError struct{}
 
 ### Constants {#constants}
 
-`CompactionWireVersionUnknown`, `CompactionWireV1`, `CompactionInputFieldBasis`, `CompactionInputFieldModel`, `CompactionInputFieldRequestFingerprint`, `CompactionInputFieldTranscript`, `CompactionInputFieldMaxSummaryTokens`, `InvalidSummaryWire`, `InvalidSummaryIdentity`, `InvalidSummaryOutputShape`, `InvalidSummaryByteLimit`, `InvalidSummaryTokenUsage`, `InvalidSummaryTokenLimit`, `InvalidSummaryXMLSyntax`, `InvalidSummaryXMLRoot`, `InvalidSummaryXMLStructure`, `InvalidSummaryXMLContent`, `CounterPolicyUnknown`, `CounterPolicyRequireExact`, `CounterPolicyAllowConservative`, `CompactionFieldCounterPolicy`, `CompactionFieldCompactAt`, `CompactionFieldRearmBelow`, `CompactionFieldReservedOutput`, `CompactionFieldSafetyMargin`, `CompactionFieldMaxSummaryTokens`, `CompactionFieldCountTimeout`, `CompactionFieldHustle`, `ContextObservationFieldReservedOutput`, `ContextObservationFieldSafetyMargin`, `ContextObservationFieldCountTimeout`, `ChangeInvalidMode`, `ChangeInvalidModel`, `ChangeInvalidEffort`, `ChangeNoChanges`, `ChangeLoopShuttingDown`, `ChangeLoopExited`, `ChangeContextDone`, `ChangeDurableAppendFailed`, `ChangeInvalidExternalSource`, `ChangeInvalidExternalGeneration`, `ChangeExternalBuildFailed`, `ChangeExternalToolCollision`, `ChangeExternalToolsUnsupported`, `CredentialGatewayBacked`, `CredentialNativeAuth`, `DefinitionMissingName`, `DefinitionInvalidClient`, `DefinitionInvalidModel`, `DefinitionNilOption`, `DefinitionDuplicateOption`, `DefinitionInvalidTool`, `DefinitionInvalidToolLimits`, `DefinitionInvalidDrainTimeout`, `DefinitionInvalidMiddleware`, `DefinitionInvalidAccessGate`, `DefinitionInvalidEngine`, `DefinitionInvalidRuntimeContext`, `DefinitionInvalidDelegate`, `DefinitionInvalidDelegation`, `DefinitionInvalidMode`, `DefinitionDuplicateMode`, `DefinitionMissingInitialMode`, `DefinitionInvalidInitialMode`, `DefinitionMissingPolicyRevision`, `DefinitionInvalidPolicyRevision`, `DefinitionMissingContextCounter`, `DefinitionInvalidContextCounter`, `DefinitionMissingInferenceCapability`, `DefinitionInvalidInferenceCapability`, `DefinitionIncompatibleContextCounter`, `DefinitionMissingContextPolicy`, `DefinitionConflictingContextPolicy`, `DefinitionInvalidContextObservation`, `DefinitionInvalidCompaction`, `DefinitionInvalidModeBinding`, `DefinitionInvalidOutputSchema`, `DefinitionReservedToolName`, `DefinitionDuplicateContextTransport`, `DefinitionInvalidContextTransport`, `BindInvalidDefinition`, `BindInvalidContext`, `BindDuplicateDefinitionName`, `BindDuplicateToolName`, `BindInvalidToolInfo`, `BindInvalidAccessGate`, `BindInvalidRuntime`, `BindInvalidSessionID`, `BindInvalidLoopID`, `DelegationSyncOnly`, `DelegationManaged`, `EngineNative`, `EngineForeignClaude`, `EngineForeignCodex`, `EngineAdapter`, `ConfigMissingClient`, `ConfigInvalidModel`, `ConfigMissingPublisher`, `CommitTurnCancelled`, `ManagedInputQueueCapacity`, `RuntimeCatalogInvalidCredential`, `RuntimeCatalogInvalidSource`, `RuntimeCatalogInvalidSelectionKind`, `RuntimeCatalogInvalidIdentifier`, `RuntimeCatalogInvalidDescription`, `RuntimeCatalogInvalidModel`, `RuntimeCatalogMissingDefaultModel`, `RuntimeCatalogInvalidDefaultModel`, `RuntimeCatalogDuplicateAlias`, `RuntimeCatalogDuplicateHarness`, `RuntimeCatalogDefaultHarnessCount`, `RuntimeCatalogInvalidEffort`, `RuntimeCatalogDuplicateEffort`, `RuntimeCatalogInvalidDefaultEffort`, `RuntimeCatalogInvalidSmallModel`, `RuntimeCatalogNativeAliasConflict`, `RuntimeCatalogDerivedAliasConflict`, `RuntimeCatalogUnknownAgent`, `RuntimeCatalogUnknownHarness`, `RuntimeCatalogUnknownSource`, `RuntimeCatalogUnknownModel`, `RuntimeCatalogIncompatibleEffort`, `RuntimeSourceGateway`, `RuntimeSourceNative`, `RuntimeSelectionExplicit`, `RuntimeSelectionHarnessManaged`
+`CompactionWireVersionUnknown`, `CompactionWireV1`, `CompactionInputFieldBasis`, `CompactionInputFieldModel`, `CompactionInputFieldRequestFingerprint`, `CompactionInputFieldTranscript`, `CompactionInputFieldMaxSummaryTokens`, `InvalidSummaryWire`, `InvalidSummaryIdentity`, `InvalidSummaryOutputShape`, `InvalidSummaryByteLimit`, `InvalidSummaryTokenUsage`, `InvalidSummaryTokenLimit`, `InvalidSummaryXMLSyntax`, `InvalidSummaryXMLRoot`, `InvalidSummaryXMLStructure`, `InvalidSummaryXMLContent`, `CounterPolicyUnknown`, `CounterPolicyRequireExact`, `CounterPolicyAllowConservative`, `CompactionFieldCounterPolicy`, `CompactionFieldCompactAt`, `CompactionFieldRearmBelow`, `CompactionFieldKeepRecentSegments`, `CompactionFieldKeepRecentTokens`, `CompactionFieldReservedOutput`, `CompactionFieldSafetyMargin`, `CompactionFieldMaxSummaryTokens`, `CompactionFieldCountTimeout`, `CompactionFieldHustle`, `ContextObservationFieldReservedOutput`, `ContextObservationFieldSafetyMargin`, `ContextObservationFieldCountTimeout`, `ChangeInvalidMode`, `ChangeInvalidModel`, `ChangeInvalidEffort`, `ChangeNoChanges`, `ChangeLoopShuttingDown`, `ChangeLoopExited`, `ChangeContextDone`, `ChangeDurableAppendFailed`, `ChangeInvalidExternalSource`, `ChangeInvalidExternalGeneration`, `ChangeExternalBuildFailed`, `ChangeExternalToolCollision`, `ChangeExternalToolsUnsupported`, `CredentialGatewayBacked`, `CredentialNativeAuth`, `DefinitionMissingName`, `DefinitionInvalidClient`, `DefinitionInvalidModel`, `DefinitionNilOption`, `DefinitionDuplicateOption`, `DefinitionInvalidTool`, `DefinitionInvalidToolLimits`, `DefinitionInvalidDrainTimeout`, `DefinitionInvalidMiddleware`, `DefinitionInvalidAccessGate`, `DefinitionInvalidEngine`, `DefinitionInvalidRuntimeContext`, `DefinitionInvalidDelegate`, `DefinitionInvalidDelegation`, `DefinitionInvalidMode`, `DefinitionDuplicateMode`, `DefinitionMissingInitialMode`, `DefinitionInvalidInitialMode`, `DefinitionMissingPolicyRevision`, `DefinitionInvalidPolicyRevision`, `DefinitionMissingContextCounter`, `DefinitionInvalidContextCounter`, `DefinitionMissingInferenceCapability`, `DefinitionInvalidInferenceCapability`, `DefinitionIncompatibleContextCounter`, `DefinitionMissingContextPolicy`, `DefinitionConflictingContextPolicy`, `DefinitionInvalidContextObservation`, `DefinitionInvalidCompaction`, `DefinitionInvalidModeBinding`, `DefinitionInvalidOutputSchema`, `DefinitionReservedToolName`, `DefinitionDuplicateContextTransport`, `DefinitionInvalidContextTransport`, `BindInvalidDefinition`, `BindInvalidContext`, `BindDuplicateDefinitionName`, `BindDuplicateToolName`, `BindInvalidToolInfo`, `BindInvalidAccessGate`, `BindInvalidRuntime`, `BindInvalidSessionID`, `BindInvalidLoopID`, `DelegationSyncOnly`, `DelegationManaged`, `EngineNative`, `EngineForeignClaude`, `EngineForeignCodex`, `EngineAdapter`, `ConfigMissingClient`, `ConfigInvalidModel`, `ConfigMissingPublisher`, `CommitTurnCancelled`, `ManagedInputQueueCapacity`, `RuntimeCatalogInvalidCredential`, `RuntimeCatalogInvalidSource`, `RuntimeCatalogInvalidSelectionKind`, `RuntimeCatalogInvalidIdentifier`, `RuntimeCatalogInvalidDescription`, `RuntimeCatalogInvalidModel`, `RuntimeCatalogMissingDefaultModel`, `RuntimeCatalogInvalidDefaultModel`, `RuntimeCatalogDuplicateAlias`, `RuntimeCatalogDuplicateHarness`, `RuntimeCatalogDefaultHarnessCount`, `RuntimeCatalogInvalidEffort`, `RuntimeCatalogDuplicateEffort`, `RuntimeCatalogInvalidDefaultEffort`, `RuntimeCatalogInvalidSmallModel`, `RuntimeCatalogNativeAliasConflict`, `RuntimeCatalogDerivedAliasConflict`, `RuntimeCatalogUnknownAgent`, `RuntimeCatalogUnknownHarness`, `RuntimeCatalogUnknownSource`, `RuntimeCatalogUnknownModel`, `RuntimeCatalogIncompatibleEffort`, `RuntimeSourceGateway`, `RuntimeSourceNative`, `RuntimeSelectionExplicit`, `RuntimeSelectionHarnessManaged`
 
 ### Variables {#variables}
 
@@ -711,59 +735,59 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ApprovalContextError`, `BindError`, `ChangeError`, `CommitError`, `CompactionInputError`, `CompactionPolicyError`, `ConfigError`, `ContextLimitError`, `ContextLimitUnknownError`, `ContextObservationPolicyError`, `ContextTransportNotDeclaredError`, `DefinitionError`, `IDGenerationError`, `InputRejectedError`, `InvalidSummaryError`, `OccupancyError`, `PolicyRevisionMarshalError`, `RequestFingerprintError`, `RuntimeCatalogError`, `SummaryTooLargeError`, `UserInputContextError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ApprovalContextError`, `BindError`, `ChangeError`, `CommitError`, `CompactionInputError`, `CompactionPolicyError`, `ConfigError`, `ContextLimitError`, `ContextLimitUnknownError`, `ContextObservationPolicyError`, `ContextTransportNotDeclaredError`, `DefinitionError`, `IDGenerationError`, `InputRejectedError`, `InvalidSummaryError`, `OccupancyError`, `PolicyRevisionMarshalError`, `RequestFingerprintError`, `RuntimeCatalogError`, `SummaryTooLargeError`, `UserInputContextError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/loop/backend.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/backend.go)
-- [pkg/loop/bound_overrides.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/bound_overrides.go)
-- [pkg/loop/compaction.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/compaction.go)
-- [pkg/loop/compaction_policy.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/compaction_policy.go)
-- [pkg/loop/context.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/context.go)
-- [pkg/loop/context_observation.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/context_observation.go)
-- [pkg/loop/context_transport.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/context_transport.go)
-- [pkg/loop/controller.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/controller.go)
-- [pkg/loop/credential_mode.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/credential_mode.go)
-- [pkg/loop/definition.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/definition.go)
-- [pkg/loop/definition_errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/definition_errors.go)
-- [pkg/loop/deps.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/deps.go)
-- [pkg/loop/doc.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/doc.go)
-- [pkg/loop/engine.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/engine.go)
-- [pkg/loop/errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/errors.go)
-- [pkg/loop/managed_queue.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/managed_queue.go)
-- [pkg/loop/mode.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/mode.go)
-- [pkg/loop/provenance.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/provenance.go)
-- [pkg/loop/provenance_ctx.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/provenance_ctx.go)
-- [pkg/loop/runtime_catalog.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/runtime_catalog.go)
-- [pkg/loop/runtime_context.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/runtime_context.go)
-- [pkg/loop/runtime_selection.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/runtime_selection.go)
-- [pkg/loop/tool_context.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/tool_context.go)
+- [pkg/loop/backend.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/backend.go)
+- [pkg/loop/bound_overrides.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/bound_overrides.go)
+- [pkg/loop/compaction.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/compaction.go)
+- [pkg/loop/compaction_policy.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/compaction_policy.go)
+- [pkg/loop/context.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/context.go)
+- [pkg/loop/context_observation.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/context_observation.go)
+- [pkg/loop/context_transport.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/context_transport.go)
+- [pkg/loop/controller.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/controller.go)
+- [pkg/loop/credential_mode.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/credential_mode.go)
+- [pkg/loop/definition.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/definition.go)
+- [pkg/loop/definition_errors.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/definition_errors.go)
+- [pkg/loop/deps.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/deps.go)
+- [pkg/loop/doc.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/doc.go)
+- [pkg/loop/engine.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/engine.go)
+- [pkg/loop/errors.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/errors.go)
+- [pkg/loop/managed_queue.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/managed_queue.go)
+- [pkg/loop/mode.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/mode.go)
+- [pkg/loop/provenance.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/provenance.go)
+- [pkg/loop/provenance_ctx.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/provenance_ctx.go)
+- [pkg/loop/runtime_catalog.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/runtime_catalog.go)
+- [pkg/loop/runtime_context.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/runtime_context.go)
+- [pkg/loop/runtime_selection.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/runtime_selection.go)
+- [pkg/loop/tool_context.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/tool_context.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/loop/access_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/access_test.go)
-- [pkg/loop/bound_runtime_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/bound_runtime_test.go)
-- [pkg/loop/compaction_policy_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/compaction_policy_test.go)
-- [pkg/loop/compaction_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/compaction_test.go)
-- [pkg/loop/config_engine_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/config_engine_test.go)
-- [pkg/loop/context_observation_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/context_observation_test.go)
-- [pkg/loop/context_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/context_test.go)
-- [pkg/loop/context_transport_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/context_transport_test.go)
-- [pkg/loop/controller_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/controller_test.go)
-- [pkg/loop/credential_mode_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/credential_mode_test.go)
-- [pkg/loop/definition_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/definition_test.go)
-- [pkg/loop/display_metadata_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/display_metadata_test.go)
-- [pkg/loop/errors_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/errors_test.go)
-- [pkg/loop/fake_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/fake_test.go)
-- [pkg/loop/managed_queue_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/managed_queue_test.go)
-- [pkg/loop/mode_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/mode_test.go)
-- [pkg/loop/provenance_ctx_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/provenance_ctx_test.go)
-- [pkg/loop/public_boundary_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/public_boundary_test.go)
-- [pkg/loop/runtime_catalog_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/runtime_catalog_test.go)
-- [pkg/loop/runtime_context_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/loop/runtime_context_test.go)
+- [pkg/loop/access_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/access_test.go)
+- [pkg/loop/bound_runtime_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/bound_runtime_test.go)
+- [pkg/loop/compaction_policy_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/compaction_policy_test.go)
+- [pkg/loop/compaction_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/compaction_test.go)
+- [pkg/loop/config_engine_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/config_engine_test.go)
+- [pkg/loop/context_observation_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/context_observation_test.go)
+- [pkg/loop/context_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/context_test.go)
+- [pkg/loop/context_transport_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/context_transport_test.go)
+- [pkg/loop/controller_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/controller_test.go)
+- [pkg/loop/credential_mode_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/credential_mode_test.go)
+- [pkg/loop/definition_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/definition_test.go)
+- [pkg/loop/display_metadata_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/display_metadata_test.go)
+- [pkg/loop/errors_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/errors_test.go)
+- [pkg/loop/fake_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/fake_test.go)
+- [pkg/loop/managed_queue_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/managed_queue_test.go)
+- [pkg/loop/mode_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/mode_test.go)
+- [pkg/loop/provenance_ctx_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/provenance_ctx_test.go)
+- [pkg/loop/public_boundary_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/public_boundary_test.go)
+- [pkg/loop/runtime_catalog_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/runtime_catalog_test.go)
+- [pkg/loop/runtime_context_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/loop/runtime_context_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

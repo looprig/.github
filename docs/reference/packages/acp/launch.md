@@ -26,7 +26,7 @@ Import path: `github.com/looprig/acp/launch`. The source is pinned to github.com
 
 ## Package role {#package-role}
 
-`Codex`, `ClaudeCode`, and `Gemini` construct adapter values. `Dial` uses a proxy-backed config; `DialNative` uses a native harness config. The package supplies command and environment shape, not provider credentials or model policy.
+claude_connector.go implements ClaudeConnector's session-level behavior: locating claude-agent-acp's "model" select config option (tolerating a legacy identifier quirk some adapter versions have), applying model selection, and setting only permission modes the adapter actually advertised.
 
 ## Exported surface {#exported-surface}
 
@@ -129,10 +129,18 @@ type ProxyBinding struct {
 
 ```go
 type ModelProxy interface {
+	// Start brings the proxy up. It must return before Binding is called.
 	Start(context.Context) error
-
+	// Binding reports the proxy's current connection info. ready is false
+	// until the proxy has something callers can actually use; Dial treats a
+	// false ready immediately after a successful Start as a startup-contract
+	// violation (see ProxyNotReadyError) rather than proceeding with an
+	// undefined binding.
 	Binding() (baseURL, token string, ready bool)
-
+	// Close tears the proxy down. Implementations must make Close safe to
+	// call at most once in practice; ManagedClient itself also never calls
+	// it more than once for a given owned proxy (see ManagedClient.Close's
+	// doc), but a well-behaved ModelProxy should not depend on that.
 	Close(context.Context) error
 }
 ```
@@ -245,9 +253,9 @@ type CodexVersionRunner func(ctx context.Context, path string) (stdout []byte, e
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `CodexVersionError`, `ConfigError`, `ConflictingEnvError`, `EffortAliasError`, `ModelAliasError`, `PathError`, `ProxyNotReadyError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CodexVersionError`, `ConfigError`, `ConflictingEnvError`, `EffortAliasError`, `ModelAliasError`, `PathError`, `ProxyNotReadyError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -276,4 +284,4 @@ Adjacent tests at the same commit:
 - [launch/version_integration_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/launch/version_integration_test.go)
 - [launch/version_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/launch/version_test.go)
 
-Run `GOWORK=off go test ./...` from the `acp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `acp` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

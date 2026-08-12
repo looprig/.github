@@ -26,7 +26,7 @@ This package is the typed orchestration layer above Flow. It is source-workspace
 
 ## Package role {#package-role}
 
-The package owns workflow identity, typed validation, session-scoped run projections, immutable input references, and a supervisor lifecycle. A workflow run record is a bounded projection; Flow checkpoint history and Harness event history remain separate sources of truth.
+Package workflows contains the storage-neutral workflow bridge and its typed workflow definitions.
 
 ## Exported surface {#exported-surface}
 
@@ -184,7 +184,7 @@ type Definition interface {
 	Get(context.Context, flow.GraphRunID) (*Result, error)
 	History(context.Context, flow.GraphRunID) ([]flow.GraphRunState, error)
 	Cancel(context.Context, flow.GraphRunID, string, ...flow.RunOption) error
-	registeredCopy() (Definition, error)
+	// contains filtered or unexported methods
 }
 ```
 
@@ -395,9 +395,9 @@ type TypedDefinition[S any] struct {
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ActivityValidationError`, `AdoptionError`, `ConflictError`, `CorruptRecordError`, `DuplicateDefinitionError`, `InvalidInputError`, `InvalidSchemaError`, `NotFoundError`, `ReconciliationError`, `SessionOwnedError`, `UnknownDefinitionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ActivityValidationError`, `AdoptionError`, `ConflictError`, `CorruptRecordError`, `DuplicateDefinitionError`, `InvalidInputError`, `InvalidSchemaError`, `NotFoundError`, `ReconciliationError`, `SessionOwnedError`, `UnknownDefinitionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -445,4 +445,4 @@ Adjacent tests at the same commit:
 - [session_resource_test.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/session_resource_test.go)
 - [supervisor_test.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/supervisor_test.go)
 
-Run `GOWORK=off go test ./...` from the `workflows` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `workflows` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

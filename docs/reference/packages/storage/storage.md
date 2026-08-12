@@ -26,7 +26,7 @@ Import path: `github.com/looprig/storage`. The source is pinned to github.com/lo
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. The owning module is released as v0.3.1; pin that version in consumers and keep local workspace replacements out of published go.mod files.
+Package storage defines four neutral storage primitives, Ledger (an append-only, CAS-sequenced record log), Leaser (a single-writer epoch lease), KV (revision-CAS metadata), and Blobs (content-addressed immutable bytes), plus a typed error taxonomy, ValidateName, and the AppendDefinite ambiguity resolver.
 
 ## Exported surface {#exported-surface}
 
@@ -149,7 +149,7 @@ type Record struct {
 
 ```go
 type Cursor interface {
-	Next(ctx context.Context) (Record, error)
+	Next(ctx context.Context) (Record, error) // io.EOF when drained
 	Close() error
 }
 ```
@@ -163,8 +163,8 @@ type Leaser interface {
 ```go
 type Lease interface {
 	Epoch() uint64
-	Lost() <-chan struct{}
-	Release(ctx context.Context) error
+	Lost() <-chan struct{}             // closed when ownership is lost (expiry, takeover)
+	Release(ctx context.Context) error // releasing may cross the network; ctx bounds it
 }
 ```
 
@@ -211,9 +211,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `AmbiguousError`, `AppendVerifyError`, `BlobConflictError`, `BlobNotFoundError`, `ConflictError`, `IncompleteCompositeError`, `InvalidNameError`, `KeyNotFoundError`, `LeaseHeldError`, `LeaseLostError`, `RecordNotFoundError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AmbiguousError`, `AppendVerifyError`, `BlobConflictError`, `BlobNotFoundError`, `ConflictError`, `IncompleteCompositeError`, `InvalidNameError`, `KeyNotFoundError`, `LeaseHeldError`, `LeaseLostError`, `RecordNotFoundError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -234,4 +234,4 @@ Adjacent tests at the same commit:
 - [paths_test.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/paths_test.go)
 - [storage_test.go](https://github.com/looprig/storage/blob/e7cdd7ea32fd4b8dba87822cc97e3a55d65668fd/storage_test.go)
 
-Run `GOWORK=off go test ./...` from the `storage` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `storage` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -24,11 +24,11 @@ proofs:
 
 # openaiapi package · codec/openaiapi
 
-Import path: `github.com/looprig/inference/codec/openaiapi`. The source is pinned to github.com/looprig/inference@v0.9.2.
+Import path: `github.com/looprig/inference/codec/openaiapi`. The source is pinned to github.com/looprig/inference@v0.10.0.
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. Inference `v0.9.2` keeps model descriptors, request and response values, codec contracts, streams, retries, and gateway behavior independent of provider credentials.
+Package openaiapi exposes the source-defined API.
 
 ## Exported surface {#exported-surface}
 
@@ -128,36 +128,36 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `DuplicateKeyError`, `ServerDecodeError`, `StreamTerminatedError`, `UnsupportedBlockError`, `UnsupportedChoiceCountError`, `UnsupportedChunkError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DuplicateKeyError`, `ServerDecodeError`, `StreamTerminatedError`, `UnsupportedBlockError`, `UnsupportedChoiceCountError`, `UnsupportedChunkError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [codec/openaiapi/codec.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/codec.go)
-- [codec/openaiapi/decode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/decode.go)
-- [codec/openaiapi/encode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/encode.go)
-- [codec/openaiapi/errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/errors.go)
-- [codec/openaiapi/server_decode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/server_decode.go)
-- [codec/openaiapi/server_encode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/server_encode.go)
-- [codec/openaiapi/server_stream.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/server_stream.go)
-- [codec/openaiapi/stream.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/stream.go)
-- [codec/openaiapi/types.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/types.go)
+- [codec/openaiapi/codec.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/codec.go)
+- [codec/openaiapi/decode.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/decode.go)
+- [codec/openaiapi/encode.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/encode.go)
+- [codec/openaiapi/errors.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/errors.go)
+- [codec/openaiapi/server_decode.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/server_decode.go)
+- [codec/openaiapi/server_encode.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/server_encode.go)
+- [codec/openaiapi/server_stream.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/server_stream.go)
+- [codec/openaiapi/stream.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/stream.go)
+- [codec/openaiapi/types.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/types.go)
 
 Adjacent tests at the same commit:
 
-- [codec/openaiapi/codec_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/codec_test.go)
-- [codec/openaiapi/decode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/decode_test.go)
-- [codec/openaiapi/encode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/encode_test.go)
-- [codec/openaiapi/encode_toolargs_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/encode_toolargs_test.go)
-- [codec/openaiapi/encode_unsupported_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/encode_unsupported_test.go)
-- [codec/openaiapi/fuzz_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/fuzz_test.go)
-- [codec/openaiapi/server_decode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/server_decode_test.go)
-- [codec/openaiapi/server_encode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/server_encode_test.go)
-- [codec/openaiapi/server_roundtrip_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/server_roundtrip_test.go)
-- [codec/openaiapi/server_stream_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/server_stream_test.go)
-- [codec/openaiapi/stream_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/openaiapi/stream_test.go)
+- [codec/openaiapi/codec_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/codec_test.go)
+- [codec/openaiapi/decode_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/decode_test.go)
+- [codec/openaiapi/encode_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/encode_test.go)
+- [codec/openaiapi/encode_toolargs_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/encode_toolargs_test.go)
+- [codec/openaiapi/encode_unsupported_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/encode_unsupported_test.go)
+- [codec/openaiapi/fuzz_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/fuzz_test.go)
+- [codec/openaiapi/server_decode_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/server_decode_test.go)
+- [codec/openaiapi/server_encode_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/server_encode_test.go)
+- [codec/openaiapi/server_roundtrip_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/server_roundtrip_test.go)
+- [codec/openaiapi/server_stream_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/server_stream_test.go)
+- [codec/openaiapi/stream_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/openaiapi/stream_test.go)
 
-Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `inference` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

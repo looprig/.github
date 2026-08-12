@@ -26,7 +26,7 @@ Rendering palette in [tui v0.15.1](https://github.com/looprig/tui/tree/6b362dda0
 
 ## Package role {#package-role}
 
-Styles centralize terminal colors and markup behavior for the screen and components. They do not access a terminal, session, journal, or model context.
+Package styles holds the shared lipgloss styles and glamour helpers for the LoopRig TUI.
 
 ## Exported surface {#exported-surface}
 
@@ -62,22 +62,22 @@ type NodeStatus uint8
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [styles/card.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/styles/card.go)
-- [styles/markdown_tables.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/styles/markdown_tables.go)
-- [styles/styles.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/styles/styles.go)
+- [styles/card.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/styles/card.go)
+- [styles/markdown_tables.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/styles/markdown_tables.go)
+- [styles/styles.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/styles/styles.go)
 
 Adjacent tests at the same commit:
 
-- [styles/markdown_table_fuzz_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/styles/markdown_table_fuzz_test.go)
-- [styles/markdown_tables_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/styles/markdown_tables_test.go)
-- [styles/styles_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/styles/styles_test.go)
+- [styles/markdown_table_fuzz_test.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/styles/markdown_table_fuzz_test.go)
+- [styles/markdown_tables_test.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/styles/markdown_tables_test.go)
+- [styles/styles_test.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/styles/styles_test.go)
 
-Run `GOWORK=off go test ./...` from the `tui` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `tui` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

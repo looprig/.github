@@ -23,11 +23,11 @@ proofs:
 
 # sessionstore package · sessionstore
 
-Import path: `github.com/looprig/harness/pkg/sessionstore`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/sessionstore`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-`Store` opens over a `storage.Composite`, owns catalog and journal projections, and exposes session metadata, status, replay, checkpoint, usage, and object-GC operations. `Catalog` can be configured with a clock, logger, and replay opener. Offload thresholds separate journal envelopes from large blobs.
+Package sessionstore frames a session's ledger records for durable storage.
 
 ## Exported surface {#exported-surface}
 
@@ -314,6 +314,9 @@ type CatalogClock func() time.Time
 
 ```go
 type CatalogLogger interface {
+	// CatalogUpdateFailed is called with the typed error when a best-effort catalog update
+	// could not read or write its KV entry. The implementation must not panic and must not
+	// re-raise, it is the end of the error's life.
 	CatalogUpdateFailed(err error)
 }
 ```
@@ -485,38 +488,38 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `BlobIntegrityError`, `BlobPointerIDMismatchError`, `BlobUnavailableError`, `CatalogCompactionError`, `CatalogConflictError`, `CatalogDecodeError`, `CatalogDuplicateFieldError`, `CatalogEncodeError`, `CatalogHustleError`, `CatalogHustleMetaValidationError`, `CatalogMetaValidationError`, `CatalogOrderingError`, `CatalogReadError`, `CatalogUsageError`, `CatalogWriteError`, `EmptySessionError`, `EnvelopeError`, `GCDeleteError`, `GCLeaseNotHeldError`, `GCListError`, `GCScanError`, `InvalidBackendError`, `NilLeaseError`, `PersistencePathError`, `ReplayDecodeError`, `ReplayReadError`, `WorkspaceJournalScanError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BlobIntegrityError`, `BlobPointerIDMismatchError`, `BlobUnavailableError`, `CatalogCompactionError`, `CatalogConflictError`, `CatalogDecodeError`, `CatalogDuplicateFieldError`, `CatalogEncodeError`, `CatalogHustleError`, `CatalogHustleMetaValidationError`, `CatalogMetaValidationError`, `CatalogOrderingError`, `CatalogReadError`, `CatalogUsageError`, `CatalogWriteError`, `EmptySessionError`, `EnvelopeError`, `GCDeleteError`, `GCLeaseNotHeldError`, `GCListError`, `GCScanError`, `InvalidBackendError`, `NilLeaseError`, `PersistencePathError`, `ReplayDecodeError`, `ReplayReadError`, `WorkspaceJournalScanError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/sessionstore/catalog.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/catalog.go)
-- [pkg/sessionstore/envelope.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/envelope.go)
-- [pkg/sessionstore/gc.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/gc.go)
-- [pkg/sessionstore/journal.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/journal.go)
-- [pkg/sessionstore/lease.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/lease.go)
-- [pkg/sessionstore/replay.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/replay.go)
-- [pkg/sessionstore/sessionstore.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/sessionstore.go)
+- [pkg/sessionstore/catalog.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/catalog.go)
+- [pkg/sessionstore/envelope.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/envelope.go)
+- [pkg/sessionstore/gc.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/gc.go)
+- [pkg/sessionstore/journal.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/journal.go)
+- [pkg/sessionstore/lease.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/lease.go)
+- [pkg/sessionstore/replay.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/replay.go)
+- [pkg/sessionstore/sessionstore.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/sessionstore.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/sessionstore/catalog_context_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/catalog_context_test.go)
-- [pkg/sessionstore/catalog_hustle_usage_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/catalog_hustle_usage_test.go)
-- [pkg/sessionstore/catalog_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/catalog_test.go)
-- [pkg/sessionstore/catalog_usage_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/catalog_usage_test.go)
-- [pkg/sessionstore/catalog_validation_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/catalog_validation_test.go)
-- [pkg/sessionstore/delivery_transition_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/delivery_transition_test.go)
-- [pkg/sessionstore/envelope_fuzz_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/envelope_fuzz_test.go)
-- [pkg/sessionstore/envelope_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/envelope_test.go)
-- [pkg/sessionstore/gc_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/gc_test.go)
-- [pkg/sessionstore/hustle_visibility_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/hustle_visibility_test.go)
-- [pkg/sessionstore/journal_hook_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/journal_hook_test.go)
-- [pkg/sessionstore/journal_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/journal_test.go)
-- [pkg/sessionstore/lease_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/lease_test.go)
-- [pkg/sessionstore/replay_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/replay_test.go)
-- [pkg/sessionstore/sessionstore_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/sessionstore/sessionstore_test.go)
+- [pkg/sessionstore/catalog_context_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/catalog_context_test.go)
+- [pkg/sessionstore/catalog_hustle_usage_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/catalog_hustle_usage_test.go)
+- [pkg/sessionstore/catalog_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/catalog_test.go)
+- [pkg/sessionstore/catalog_usage_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/catalog_usage_test.go)
+- [pkg/sessionstore/catalog_validation_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/catalog_validation_test.go)
+- [pkg/sessionstore/delivery_transition_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/delivery_transition_test.go)
+- [pkg/sessionstore/envelope_fuzz_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/envelope_fuzz_test.go)
+- [pkg/sessionstore/envelope_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/envelope_test.go)
+- [pkg/sessionstore/gc_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/gc_test.go)
+- [pkg/sessionstore/hustle_visibility_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/hustle_visibility_test.go)
+- [pkg/sessionstore/journal_hook_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/journal_hook_test.go)
+- [pkg/sessionstore/journal_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/journal_test.go)
+- [pkg/sessionstore/lease_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/lease_test.go)
+- [pkg/sessionstore/replay_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/replay_test.go)
+- [pkg/sessionstore/sessionstore_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/sessionstore/sessionstore_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -22,9 +22,2149 @@
       "order": 3
     },
     {
-      "path": "start/verification.md",
+      "path": "start/tools-and-gates.md",
       "audience": "human",
       "order": 4
+    },
+    {
+      "path": "start/sessions.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "start/workspaces.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "start/sandbox-and-interfaces.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "contributing/verification.md",
+      "audience": "human",
+      "order": 1
+    },
+    {
+      "path": "guides/inference.md",
+      "audience": "human",
+      "order": 1
+    },
+    {
+      "path": "guides/inference/content-blocks/index.md",
+      "audience": "human",
+      "order": 1
+    },
+    {
+      "path": "guides/inference/content-blocks/text.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "guides/inference/content-blocks/image.md",
+      "audience": "human",
+      "order": 3
+    },
+    {
+      "path": "guides/inference/content-blocks/audio.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "guides/inference/content-blocks/document.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/inference/content-blocks/thinking.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/inference/content-blocks/tool-use.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/inference/content-blocks/tool-result.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/inference/messages/index.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/inference/messages/message-types/system-message.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/inference/messages/message-types/user-message.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/inference/messages/message-types/ai-message.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/inference/messages/message-types/tool-result-message.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/inference/messages/conversation.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/inference/messages/agentic-messages.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/inference/messages/construct.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/inference/messages/traverse.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/inference/messages/codecs.md",
+      "audience": "human",
+      "order": 18
+    },
+    {
+      "path": "guides/inference/models/index.md",
+      "audience": "human",
+      "order": 19
+    },
+    {
+      "path": "guides/inference/models/model.md",
+      "audience": "human",
+      "order": 20
+    },
+    {
+      "path": "guides/inference/models/identity.md",
+      "audience": "human",
+      "order": 21
+    },
+    {
+      "path": "guides/inference/models/capabilities.md",
+      "audience": "human",
+      "order": 22
+    },
+    {
+      "path": "guides/inference/models/context-limits.md",
+      "audience": "human",
+      "order": 23
+    },
+    {
+      "path": "guides/inference/models/sampling.md",
+      "audience": "human",
+      "order": 24
+    },
+    {
+      "path": "guides/inference/models/reasoning-effort.md",
+      "audience": "human",
+      "order": 25
+    },
+    {
+      "path": "guides/inference/models/custom-models.md",
+      "audience": "human",
+      "order": 26
+    },
+    {
+      "path": "guides/inference/models/validation.md",
+      "audience": "human",
+      "order": 27
+    },
+    {
+      "path": "guides/inference/client/index.md",
+      "audience": "human",
+      "order": 28
+    },
+    {
+      "path": "guides/inference/client/invoke.md",
+      "audience": "human",
+      "order": 29
+    },
+    {
+      "path": "guides/inference/client/stream.md",
+      "audience": "human",
+      "order": 30
+    },
+    {
+      "path": "guides/inference/client/ownership.md",
+      "audience": "human",
+      "order": 31
+    },
+    {
+      "path": "guides/inference/requests/index.md",
+      "audience": "human",
+      "order": 32
+    },
+    {
+      "path": "guides/inference/requests/model-selection.md",
+      "audience": "human",
+      "order": 33
+    },
+    {
+      "path": "guides/inference/requests/system-instructions.md",
+      "audience": "human",
+      "order": 34
+    },
+    {
+      "path": "guides/inference/requests/messages.md",
+      "audience": "human",
+      "order": 35
+    },
+    {
+      "path": "guides/inference/requests/tools.md",
+      "audience": "human",
+      "order": 36
+    },
+    {
+      "path": "guides/inference/requests/tool-choice.md",
+      "audience": "human",
+      "order": 37
+    },
+    {
+      "path": "guides/inference/requests/structured-output.md",
+      "audience": "human",
+      "order": 38
+    },
+    {
+      "path": "guides/inference/requests/sampling-overrides.md",
+      "audience": "human",
+      "order": 39
+    },
+    {
+      "path": "guides/inference/requests/feature-validation.md",
+      "audience": "human",
+      "order": 40
+    },
+    {
+      "path": "guides/inference/responses/index.md",
+      "audience": "human",
+      "order": 41
+    },
+    {
+      "path": "guides/inference/responses/assistant-message.md",
+      "audience": "human",
+      "order": 42
+    },
+    {
+      "path": "guides/inference/responses/finish-reasons.md",
+      "audience": "human",
+      "order": 43
+    },
+    {
+      "path": "guides/inference/responses/usage.md",
+      "audience": "human",
+      "order": 44
+    },
+    {
+      "path": "guides/inference/responses/resolved-model.md",
+      "audience": "human",
+      "order": 45
+    },
+    {
+      "path": "guides/inference/responses/attempts.md",
+      "audience": "human",
+      "order": 46
+    },
+    {
+      "path": "guides/inference/streaming/index.md",
+      "audience": "human",
+      "order": 47
+    },
+    {
+      "path": "guides/inference/streaming/stream-reader.md",
+      "audience": "human",
+      "order": 48
+    },
+    {
+      "path": "guides/inference/streaming/chunks.md",
+      "audience": "human",
+      "order": 49
+    },
+    {
+      "path": "guides/inference/streaming/text-deltas.md",
+      "audience": "human",
+      "order": 50
+    },
+    {
+      "path": "guides/inference/streaming/thinking-deltas.md",
+      "audience": "human",
+      "order": 51
+    },
+    {
+      "path": "guides/inference/streaming/tool-call-deltas.md",
+      "audience": "human",
+      "order": 52
+    },
+    {
+      "path": "guides/inference/streaming/accumulation.md",
+      "audience": "human",
+      "order": 53
+    },
+    {
+      "path": "guides/inference/streaming/terminal-results.md",
+      "audience": "human",
+      "order": 54
+    },
+    {
+      "path": "guides/inference/streaming/close.md",
+      "audience": "human",
+      "order": 55
+    },
+    {
+      "path": "guides/inference/streaming/errors.md",
+      "audience": "human",
+      "order": 56
+    },
+    {
+      "path": "guides/inference/structured-output/index.md",
+      "audience": "human",
+      "order": 57
+    },
+    {
+      "path": "guides/inference/structured-output/output-schema.md",
+      "audience": "human",
+      "order": 58
+    },
+    {
+      "path": "guides/inference/structured-output/portable-json-schema.md",
+      "audience": "human",
+      "order": 59
+    },
+    {
+      "path": "guides/inference/structured-output/validation.md",
+      "audience": "human",
+      "order": 60
+    },
+    {
+      "path": "guides/inference/structured-output/with-tools.md",
+      "audience": "human",
+      "order": 61
+    },
+    {
+      "path": "guides/inference/structured-output/decoding.md",
+      "audience": "human",
+      "order": 62
+    },
+    {
+      "path": "guides/inference/structured-output/errors.md",
+      "audience": "human",
+      "order": 63
+    },
+    {
+      "path": "guides/inference/codecs/index.md",
+      "audience": "human",
+      "order": 64
+    },
+    {
+      "path": "guides/inference/codecs/architecture.md",
+      "audience": "human",
+      "order": 65
+    },
+    {
+      "path": "guides/inference/codecs/request.md",
+      "audience": "human",
+      "order": 66
+    },
+    {
+      "path": "guides/inference/codecs/response.md",
+      "audience": "human",
+      "order": 67
+    },
+    {
+      "path": "guides/inference/codecs/streaming.md",
+      "audience": "human",
+      "order": 68
+    },
+    {
+      "path": "guides/inference/codecs/content.md",
+      "audience": "human",
+      "order": 69
+    },
+    {
+      "path": "guides/inference/codecs/tools.md",
+      "audience": "human",
+      "order": 70
+    },
+    {
+      "path": "guides/inference/codecs/thinking.md",
+      "audience": "human",
+      "order": 71
+    },
+    {
+      "path": "guides/inference/codecs/usage.md",
+      "audience": "human",
+      "order": 72
+    },
+    {
+      "path": "guides/inference/codecs/custom.md",
+      "audience": "human",
+      "order": 73
+    },
+    {
+      "path": "guides/inference/api-formats/index.md",
+      "audience": "human",
+      "order": 74
+    },
+    {
+      "path": "guides/inference/api-formats/comparison.md",
+      "audience": "human",
+      "order": 75
+    },
+    {
+      "path": "guides/inference/api-formats/openai-chat.md",
+      "audience": "human",
+      "order": 76
+    },
+    {
+      "path": "guides/inference/api-formats/openai-responses.md",
+      "audience": "human",
+      "order": 77
+    },
+    {
+      "path": "guides/inference/api-formats/anthropic.md",
+      "audience": "human",
+      "order": 78
+    },
+    {
+      "path": "guides/inference/api-formats/gemini.md",
+      "audience": "human",
+      "order": 79
+    },
+    {
+      "path": "guides/inference/api-formats/bedrock-converse.md",
+      "audience": "human",
+      "order": 80
+    },
+    {
+      "path": "guides/inference/api-formats/custom.md",
+      "audience": "human",
+      "order": 81
+    },
+    {
+      "path": "guides/inference/context-counting/index.md",
+      "audience": "human",
+      "order": 82
+    },
+    {
+      "path": "guides/inference/context-counting/complete-requests.md",
+      "audience": "human",
+      "order": 83
+    },
+    {
+      "path": "guides/inference/context-counting/counter-capabilities.md",
+      "audience": "human",
+      "order": 84
+    },
+    {
+      "path": "guides/inference/context-counting/exact-provider.md",
+      "audience": "human",
+      "order": 85
+    },
+    {
+      "path": "guides/inference/context-counting/exact-local.md",
+      "audience": "human",
+      "order": 86
+    },
+    {
+      "path": "guides/inference/context-counting/conservative-estimates.md",
+      "audience": "human",
+      "order": 87
+    },
+    {
+      "path": "guides/inference/context-counting/api-format-estimators.md",
+      "audience": "human",
+      "order": 88
+    },
+    {
+      "path": "guides/inference/context-counting/compatibility.md",
+      "audience": "human",
+      "order": 89
+    },
+    {
+      "path": "guides/inference/context-counting/fail-closed.md",
+      "audience": "human",
+      "order": 90
+    },
+    {
+      "path": "guides/inference/context-counting/errors.md",
+      "audience": "human",
+      "order": 91
+    },
+    {
+      "path": "guides/inference/usage/index.md",
+      "audience": "human",
+      "order": 92
+    },
+    {
+      "path": "guides/inference/usage/response.md",
+      "audience": "human",
+      "order": 93
+    },
+    {
+      "path": "guides/inference/usage/streaming.md",
+      "audience": "human",
+      "order": 94
+    },
+    {
+      "path": "guides/inference/usage/validation.md",
+      "audience": "human",
+      "order": 95
+    },
+    {
+      "path": "guides/inference/usage/aggregation.md",
+      "audience": "human",
+      "order": 96
+    },
+    {
+      "path": "guides/inference/errors-and-cancellation/index.md",
+      "audience": "human",
+      "order": 97
+    },
+    {
+      "path": "guides/inference/errors-and-cancellation/typed-errors.md",
+      "audience": "human",
+      "order": 98
+    },
+    {
+      "path": "guides/inference/errors-and-cancellation/request-validation.md",
+      "audience": "human",
+      "order": 99
+    },
+    {
+      "path": "guides/inference/errors-and-cancellation/capabilities.md",
+      "audience": "human",
+      "order": 100
+    },
+    {
+      "path": "guides/inference/errors-and-cancellation/codec-errors.md",
+      "audience": "human",
+      "order": 101
+    },
+    {
+      "path": "guides/inference/errors-and-cancellation/transport-errors.md",
+      "audience": "human",
+      "order": 102
+    },
+    {
+      "path": "guides/inference/errors-and-cancellation/stream-errors.md",
+      "audience": "human",
+      "order": 103
+    },
+    {
+      "path": "guides/inference/errors-and-cancellation/cancellation.md",
+      "audience": "human",
+      "order": 104
+    },
+    {
+      "path": "guides/inference/errors-and-cancellation/deadlines.md",
+      "audience": "human",
+      "order": 105
+    },
+    {
+      "path": "guides/inference/retries/index.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "guides/inference/secrets/index.md",
+      "audience": "human",
+      "order": 3
+    },
+    {
+      "path": "guides/inference/providers/index.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "guides/inference/providers/anthropic.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/inference/providers/atomic-chat.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/inference/providers/azure-cognitive-services.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/inference/providers/azure.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/inference/providers/baseten.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/inference/providers/bedrock.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/inference/providers/cerebras.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/inference/providers/chutes.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/inference/providers/cloudflare-ai-gateway.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/inference/providers/cloudflare-workers-ai.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/inference/providers/cortecs.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/inference/providers/deepinfra.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/inference/providers/deepseek.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/inference/providers/digitalocean.md",
+      "audience": "human",
+      "order": 18
+    },
+    {
+      "path": "guides/inference/providers/fireworks.md",
+      "audience": "human",
+      "order": 19
+    },
+    {
+      "path": "guides/inference/providers/frogbot.md",
+      "audience": "human",
+      "order": 20
+    },
+    {
+      "path": "guides/inference/providers/gemini.md",
+      "audience": "human",
+      "order": 21
+    },
+    {
+      "path": "guides/inference/providers/github-copilot.md",
+      "audience": "human",
+      "order": 22
+    },
+    {
+      "path": "guides/inference/providers/gitlab.md",
+      "audience": "human",
+      "order": 23
+    },
+    {
+      "path": "guides/inference/providers/gmicloud.md",
+      "audience": "human",
+      "order": 24
+    },
+    {
+      "path": "guides/inference/providers/google-vertex.md",
+      "audience": "human",
+      "order": 25
+    },
+    {
+      "path": "guides/inference/providers/groq.md",
+      "audience": "human",
+      "order": 26
+    },
+    {
+      "path": "guides/inference/providers/helicone.md",
+      "audience": "human",
+      "order": 27
+    },
+    {
+      "path": "guides/inference/providers/huggingface.md",
+      "audience": "human",
+      "order": 28
+    },
+    {
+      "path": "guides/inference/providers/ionet.md",
+      "audience": "human",
+      "order": 29
+    },
+    {
+      "path": "guides/inference/providers/llama.md",
+      "audience": "human",
+      "order": 30
+    },
+    {
+      "path": "guides/inference/providers/llamacpp.md",
+      "audience": "human",
+      "order": 31
+    },
+    {
+      "path": "guides/inference/providers/llmgateway.md",
+      "audience": "human",
+      "order": 32
+    },
+    {
+      "path": "guides/inference/providers/minimax.md",
+      "audience": "human",
+      "order": 33
+    },
+    {
+      "path": "guides/inference/providers/moonshot.md",
+      "audience": "human",
+      "order": 34
+    },
+    {
+      "path": "guides/inference/providers/nebius.md",
+      "audience": "human",
+      "order": 35
+    },
+    {
+      "path": "guides/inference/providers/nvidia.md",
+      "audience": "human",
+      "order": 36
+    },
+    {
+      "path": "guides/inference/providers/ollama.md",
+      "audience": "human",
+      "order": 37
+    },
+    {
+      "path": "guides/inference/providers/ollamacloud.md",
+      "audience": "human",
+      "order": 38
+    },
+    {
+      "path": "guides/inference/providers/openai.md",
+      "audience": "human",
+      "order": 39
+    },
+    {
+      "path": "guides/inference/providers/opencode-go.md",
+      "audience": "human",
+      "order": 40
+    },
+    {
+      "path": "guides/inference/providers/opencode.md",
+      "audience": "human",
+      "order": 41
+    },
+    {
+      "path": "guides/inference/providers/openrouter.md",
+      "audience": "human",
+      "order": 42
+    },
+    {
+      "path": "guides/inference/providers/ovhcloud.md",
+      "audience": "human",
+      "order": 43
+    },
+    {
+      "path": "guides/inference/providers/p302ai.md",
+      "audience": "human",
+      "order": 44
+    },
+    {
+      "path": "guides/inference/providers/phala.md",
+      "audience": "human",
+      "order": 45
+    },
+    {
+      "path": "guides/inference/providers/sap-ai-core.md",
+      "audience": "human",
+      "order": 46
+    },
+    {
+      "path": "guides/inference/providers/scaleway.md",
+      "audience": "human",
+      "order": 47
+    },
+    {
+      "path": "guides/inference/providers/snowflake-cortex.md",
+      "audience": "human",
+      "order": 48
+    },
+    {
+      "path": "guides/inference/providers/stackit.md",
+      "audience": "human",
+      "order": 49
+    },
+    {
+      "path": "guides/inference/providers/synthetic.md",
+      "audience": "human",
+      "order": 50
+    },
+    {
+      "path": "guides/inference/providers/together.md",
+      "audience": "human",
+      "order": 51
+    },
+    {
+      "path": "guides/inference/providers/venice.md",
+      "audience": "human",
+      "order": 52
+    },
+    {
+      "path": "guides/inference/providers/vercel.md",
+      "audience": "human",
+      "order": 53
+    },
+    {
+      "path": "guides/inference/providers/xai.md",
+      "audience": "human",
+      "order": 54
+    },
+    {
+      "path": "guides/inference/providers/zai.md",
+      "audience": "human",
+      "order": 55
+    },
+    {
+      "path": "guides/inference/providers/zenmux.md",
+      "audience": "human",
+      "order": 56
+    },
+    {
+      "path": "guides/harness.md",
+      "audience": "human",
+      "order": 1
+    },
+    {
+      "path": "guides/harness/commands/index.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "guides/harness/commands/command-envelope-and-routing.md",
+      "audience": "human",
+      "order": 3
+    },
+    {
+      "path": "guides/harness/commands/submit-input.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "guides/harness/commands/interrupt.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/harness/commands/approve-and-deny.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/harness/commands/provide-user-input.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/harness/commands/compact.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/harness/commands/change-loop.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/harness/commands/manage-loop-tools.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/harness/commands/cancel-queued-input.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/harness/commands/cancel-delegated-work.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/harness/commands/process-notifications.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/harness/commands/shutdown.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/harness/events/index.md",
+      "audience": "human",
+      "order": 3
+    },
+    {
+      "path": "guides/harness/events/event-envelope.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "guides/harness/events/session-lifecycle.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/harness/events/turn-and-step.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/harness/events/tool-events.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/harness/events/gate-and-review.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/harness/events/delegation.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/harness/events/process-and-workflow.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/harness/events/context-and-compaction.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/harness/events/filtering-and-subscriptions.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/harness/step/index.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "guides/harness/step/model-request.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/harness/step/streaming-response.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/harness/step/tool-calls-and-results.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/harness/step/commit-boundary.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/harness/step/hooks-and-events.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/harness/step/failure-and-cancellation.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/harness/turn/index.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/harness/turn/submit-and-admission.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/harness/turn/turn-lifecycle.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/harness/turn/multiple-steps.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/harness/turn/queued-input-and-folding.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/harness/turn/terminal-outcomes.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/harness/turn/interruptions.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/harness/turn/hooks-and-events.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/harness/loop/index.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/harness/loop/define-a-loop.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/harness/loop/models-and-inference.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/harness/loop/system-instructions.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/harness/loop/output-schema.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/harness/loop/tools-and-tool-limits.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/harness/loop/access-gates.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/harness/loop/context-limits.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/harness/loop/context-transports.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/harness/loop/context-observation.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/harness/loop/runtime-context.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/harness/loop/modes.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/harness/loop/runtime-model-selection.md",
+      "audience": "human",
+      "order": 18
+    },
+    {
+      "path": "guides/harness/loop/delegation-policy.md",
+      "audience": "human",
+      "order": 19
+    },
+    {
+      "path": "guides/harness/loop/compaction-policy.md",
+      "audience": "human",
+      "order": 20
+    },
+    {
+      "path": "guides/harness/loop/live-loop-controller.md",
+      "audience": "human",
+      "order": 21
+    },
+    {
+      "path": "guides/harness/loop/configuration-changes.md",
+      "audience": "human",
+      "order": 22
+    },
+    {
+      "path": "guides/harness/loop/errors.md",
+      "audience": "human",
+      "order": 23
+    },
+    {
+      "path": "guides/harness/rig/index.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/harness/rig/define-a-rig.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/harness/rig/loops-and-primers.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/harness/rig/session-store.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/harness/rig/workspaces-and-snapshots.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/harness/rig/gates-and-hooks.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/harness/rig/hustles-and-limits.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/harness/rig/runtime-services.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/harness/rig/session-options.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/harness/rig/validation-and-fingerprints.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/harness/rig/lifecycle.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/harness/session-runtime/index.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/harness/session-runtime/create-and-restore.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/harness/session-runtime/controller.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/harness/session-runtime/input-queue.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/harness/session-runtime/live-loops.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/harness/session-runtime/subscriptions.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/harness/session-runtime/interrupt-and-drain.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/harness/session-runtime/shutdown.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/harness/session-persistence/index.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/harness/session-persistence/journal/index.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/harness/session-persistence/journal/records-and-append.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/harness/session-persistence/journal/replay.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/harness/session-persistence/journal/idempotency.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/harness/session-persistence/journal/leases.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/harness/session-persistence/journal/hooks.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/harness/session-persistence/session-store/index.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/harness/session-persistence/session-store/catalog.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/harness/session-persistence/session-store/event-history.md",
+      "audience": "human",
+      "order": 18
+    },
+    {
+      "path": "guides/harness/session-persistence/session-store/restore.md",
+      "audience": "human",
+      "order": 19
+    },
+    {
+      "path": "guides/harness/session-persistence/session-store/garbage-collection.md",
+      "audience": "human",
+      "order": 20
+    },
+    {
+      "path": "guides/harness/workspaces/index.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/harness/workspaces/bindings-and-roots.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/harness/workspaces/leases.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/harness/workspaces/materialization.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/harness/workspaces/snapshots.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/harness/workspaces/restore-and-cleanup.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/harness/gates/index.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/harness/gates/access-gates.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/harness/gates/approval-gates.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/harness/gates/evidence.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/harness/gates/forms.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/harness/gates/permission-review.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/harness/gates/review-policies.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/harness/hooks/index.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/harness/hooks/operations.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/harness/hooks/before-around-after.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/harness/hooks/lifecycle.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/harness/hooks/failures.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/harness/delegation/index.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/harness/delegation/declare-delegates.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/harness/delegation/start-and-message.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/harness/delegation/delivery-and-cancellation.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/harness/delegation/limits-and-authority.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/harness/delegation/restore.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/harness/hustles/index.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/harness/hustles/define-a-hustle.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/harness/hustles/participation-modes.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/harness/hustles/model-selection.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/harness/hustles/limits-and-lanes.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/harness/hustles/evidence.md",
+      "audience": "human",
+      "order": 18
+    },
+    {
+      "path": "guides/harness/hustles/retries.md",
+      "audience": "human",
+      "order": 19
+    },
+    {
+      "path": "guides/harness/hustles/internal-audit.md",
+      "audience": "human",
+      "order": 20
+    },
+    {
+      "path": "guides/harness/hustles/cancellation-and-shutdown.md",
+      "audience": "human",
+      "order": 21
+    },
+    {
+      "path": "guides/harness/hustles/restore-behavior.md",
+      "audience": "human",
+      "order": 22
+    },
+    {
+      "path": "guides/harness/hustles/errors.md",
+      "audience": "human",
+      "order": 23
+    },
+    {
+      "path": "guides/harness/compaction/index.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/harness/compaction/compaction-policy.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/harness/compaction/context-thresholds.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/harness/compaction/configure-the-hustle.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/harness/compaction/automatic-compaction.md",
+      "audience": "human",
+      "order": 18
+    },
+    {
+      "path": "guides/harness/compaction/manual-compaction.md",
+      "audience": "human",
+      "order": 19
+    },
+    {
+      "path": "guides/harness/compaction/safe-boundaries.md",
+      "audience": "human",
+      "order": 20
+    },
+    {
+      "path": "guides/harness/compaction/summary-validation.md",
+      "audience": "human",
+      "order": 21
+    },
+    {
+      "path": "guides/harness/compaction/events-and-waiters.md",
+      "audience": "human",
+      "order": 22
+    },
+    {
+      "path": "guides/harness/compaction/restore-and-recovery.md",
+      "audience": "human",
+      "order": 23
+    },
+    {
+      "path": "guides/harness/compaction/errors.md",
+      "audience": "human",
+      "order": 24
+    },
+    {
+      "path": "guides/harness/http-server/index.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/harness/http-server/create-a-server.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/harness/http-server/read-only-endpoints.md",
+      "audience": "human",
+      "order": 18
+    },
+    {
+      "path": "guides/harness/http-server/session-lifecycle.md",
+      "audience": "human",
+      "order": 19
+    },
+    {
+      "path": "guides/harness/http-server/commands.md",
+      "audience": "human",
+      "order": 20
+    },
+    {
+      "path": "guides/harness/http-server/event-streaming.md",
+      "audience": "human",
+      "order": 21
+    },
+    {
+      "path": "guides/harness/http-server/gate-responses.md",
+      "audience": "human",
+      "order": 22
+    },
+    {
+      "path": "guides/harness/http-server/idempotency.md",
+      "audience": "human",
+      "order": 23
+    },
+    {
+      "path": "guides/harness/http-server/authentication.md",
+      "audience": "human",
+      "order": 24
+    },
+    {
+      "path": "guides/harness/http-server/public-bind-protection.md",
+      "audience": "human",
+      "order": 25
+    },
+    {
+      "path": "guides/harness/http-server/event-visibility.md",
+      "audience": "human",
+      "order": 26
+    },
+    {
+      "path": "guides/harness/http-server/errors-and-status.md",
+      "audience": "human",
+      "order": 27
+    },
+    {
+      "path": "guides/harness/errors-and-recovery/index.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/harness/errors-and-recovery/configuration.md",
+      "audience": "human",
+      "order": 18
+    },
+    {
+      "path": "guides/harness/errors-and-recovery/runtime.md",
+      "audience": "human",
+      "order": 19
+    },
+    {
+      "path": "guides/harness/errors-and-recovery/restore.md",
+      "audience": "human",
+      "order": 20
+    },
+    {
+      "path": "guides/harness/errors-and-recovery/shutdown.md",
+      "audience": "human",
+      "order": 21
+    },
+    {
+      "path": "guides/tools/index.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "guides/tools/core-concepts/index.md",
+      "audience": "human",
+      "order": 3
+    },
+    {
+      "path": "guides/tools/core-concepts/registration.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "guides/tools/safety/index.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/tools/safety/permissions.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/tools/processes/index.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/tools/processes/lifecycle.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/tools/processes/tools.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/tools/built-in-tools/index.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/tools/built-in-tools/askuser.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/tools/built-in-tools/bash.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/tools/built-in-tools/editfile.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/tools/built-in-tools/fetch.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/tools/built-in-tools/glob.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/tools/built-in-tools/grep.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/tools/built-in-tools/readfile.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/tools/built-in-tools/skill.md",
+      "audience": "human",
+      "order": 18
+    },
+    {
+      "path": "guides/tools/built-in-tools/task.md",
+      "audience": "human",
+      "order": 19
+    },
+    {
+      "path": "guides/tools/built-in-tools/websearch.md",
+      "audience": "human",
+      "order": 20
+    },
+    {
+      "path": "guides/tools/built-in-tools/writefile.md",
+      "audience": "human",
+      "order": 21
+    },
+    {
+      "path": "guides/sandboxing/index.md",
+      "audience": "human",
+      "order": 0
+    },
+    {
+      "path": "guides/sandboxing/profiles/index.md",
+      "audience": "human",
+      "order": 1
+    },
+    {
+      "path": "guides/sandboxing/profiles/restriction.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "guides/sandboxing/enforcement/index.md",
+      "audience": "human",
+      "order": 3
+    },
+    {
+      "path": "guides/sandboxing/enforcement/platforms.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "guides/sandboxing/enforcement/reports.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/sandboxing/enforcement/filesystem.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/sandboxing/enforcement/network.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/sandboxing/runtime/index.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/sandboxing/runtime/executors.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/sandboxing/runtime/argv-and-confinement.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/sandboxing/runtime/processes.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/sandboxing/runtime/errors.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/sandboxing/integration/index.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/workflows/index.md",
+      "audience": "human",
+      "order": 0
+    },
+    {
+      "path": "guides/workflows/workflow-runtime/index.md",
+      "audience": "human",
+      "order": 1
+    },
+    {
+      "path": "guides/workflows/workflow-runtime/definitions.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "guides/workflows/workflow-runtime/runtime.md",
+      "audience": "human",
+      "order": 3
+    },
+    {
+      "path": "guides/workflows/workflow-runtime/state-and-history.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "guides/workflows/workflow-runtime/interruption-and-resume.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/workflows/workflow-runtime/lifecycle.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/workflows/flow/index.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/workflows/workflow-tools/index.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/workflows/workflow-tools/harness-integration.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/protocols/index.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/protocols/acp/index.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/protocols/acp/serve.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/protocols/acp/client.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/protocols/acp/host-agent.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/protocols/acp/stdio.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/protocols/acp/sessions.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/protocols/acp/auth-and-config.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/protocols/acp/gateway-launch.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/protocols/mcp/index.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/protocols/mcp/serve.md",
+      "audience": "human",
+      "order": 18
+    },
+    {
+      "path": "guides/protocols/mcp/client.md",
+      "audience": "human",
+      "order": 19
+    },
+    {
+      "path": "guides/protocols/mcp/transports.md",
+      "audience": "human",
+      "order": 20
+    },
+    {
+      "path": "guides/protocols/mcp/auth.md",
+      "audience": "human",
+      "order": 21
+    },
+    {
+      "path": "guides/protocols/mcp/harness-adoption.md",
+      "audience": "human",
+      "order": 22
+    },
+    {
+      "path": "guides/protocols/mcp/sampling-and-reconfiguration.md",
+      "audience": "human",
+      "order": 23
+    },
+    {
+      "path": "guides/protocols/mcp/acp-passthrough.md",
+      "audience": "human",
+      "order": 24
+    },
+    {
+      "path": "guides/tui/index.md",
+      "audience": "human",
+      "order": 1
+    },
+    {
+      "path": "guides/tui/getting-started/index.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "guides/tui/getting-started/create.md",
+      "audience": "human",
+      "order": 3
+    },
+    {
+      "path": "guides/tui/getting-started/run.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "guides/tui/runtime/index.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/tui/runtime/events.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/tui/runtime/commands.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/tui/runtime/restore.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/tui/runtime/lifecycle.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/tui/runtime/session-adapter.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/tui/components/index.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/tui/components/input.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/tui/components/completion.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/tui/components/sessions.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/tui/styling/index.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/tui/styling/styles.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/tui/styling/markdown.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/tui/integration/index.md",
+      "audience": "human",
+      "order": 18
+    },
+    {
+      "path": "guides/tui/integration/harness.md",
+      "audience": "human",
+      "order": 19
+    },
+    {
+      "path": "guides/tui/integration/workspaces.md",
+      "audience": "human",
+      "order": 20
+    },
+    {
+      "path": "guides/tui/integration/session-stores.md",
+      "audience": "human",
+      "order": 21
+    },
+    {
+      "path": "guides/web-ui/index.md",
+      "audience": "human",
+      "order": 0
+    },
+    {
+      "path": "guides/web-ui/client-sdk/index.md",
+      "audience": "human",
+      "order": 1
+    },
+    {
+      "path": "guides/web-ui/client-sdk/session-client.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "guides/web-ui/client-sdk/events.md",
+      "audience": "human",
+      "order": 3
+    },
+    {
+      "path": "guides/web-ui/client-sdk/commands.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "guides/web-ui/client-sdk/fold.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/web-ui/client-sdk/validation.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/web-ui/client-sdk/ownership.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/web-ui/framework-adapters/index.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/web-ui/framework-adapters/vanilla.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/web-ui/framework-adapters/svelte.md",
+      "audience": "human",
+      "order": 10
+    },
+    {
+      "path": "guides/web-ui/embedding/index.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
+      "path": "guides/web-ui/embedding/static-bundle.md",
+      "audience": "human",
+      "order": 12
+    },
+    {
+      "path": "guides/web-ui/embedding/go-webui.md",
+      "audience": "human",
+      "order": 13
+    },
+    {
+      "path": "guides/web-ui/embedding/app-integration.md",
+      "audience": "human",
+      "order": 14
+    },
+    {
+      "path": "guides/web-ui/sessions/index.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/web-ui/sessions/binding.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
+      "path": "guides/web-ui/sessions/reconnect.md",
+      "audience": "human",
+      "order": 17
+    },
+    {
+      "path": "guides/web-ui/sessions/restore.md",
+      "audience": "human",
+      "order": 18
+    },
+    {
+      "path": "guides/evals/index.md",
+      "audience": "human",
+      "order": 0
+    },
+    {
+      "path": "guides/evals/cases-and-runs/index.md",
+      "audience": "human",
+      "order": 1
+    },
+    {
+      "path": "guides/evals/cases-and-runs/cases-and-suites.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "guides/evals/cases-and-runs/runs-and-results.md",
+      "audience": "human",
+      "order": 3
+    },
+    {
+      "path": "guides/evals/evaluators/index.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "guides/evals/evaluators/exact.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/evals/evaluators/judge.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/evals/reporting/index.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/evals/integration/index.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
+      "path": "guides/evals/integration/composition-and-testing.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "guides/evals/integration/pluto.md",
+      "audience": "human",
+      "order": 10
     },
     {
       "path": "concepts/composition.md",
@@ -1730,6 +3870,41 @@
       "path": "agents/repositories/kosa.md",
       "audience": "agent",
       "order": 27
+    },
+    {
+      "path": "agents/harness/index.md",
+      "audience": "agent",
+      "order": 28
+    },
+    {
+      "path": "agents/harness/definition.md",
+      "audience": "agent",
+      "order": 29
+    },
+    {
+      "path": "agents/harness/runtime.md",
+      "audience": "agent",
+      "order": 30
+    },
+    {
+      "path": "agents/harness/policy.md",
+      "audience": "agent",
+      "order": 31
+    },
+    {
+      "path": "agents/harness/persistence.md",
+      "audience": "agent",
+      "order": 32
+    },
+    {
+      "path": "agents/harness/delegation.md",
+      "audience": "agent",
+      "order": 33
+    },
+    {
+      "path": "agents/harness/serve.md",
+      "audience": "agent",
+      "order": 34
     }
   ],
   "legacyPages": [

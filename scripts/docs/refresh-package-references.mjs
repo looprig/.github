@@ -95,6 +95,18 @@ function importParagraph(item, id) {
   return "Import path: \x60" + importPath + "\x60." + release;
 }
 
+export function sanitizeGeneratedText(text) {
+  return text.replace(/\s*—\s*/g, ", ");
+}
+
+export function packageRoleSection(item) {
+  const synopsis = typeof item.synopsis === "string" ? item.synopsis.trim() : "";
+  const packageName = (item.importPath || "package").split("/").at(-1);
+  const sourceSynopsis = /docs\/plans/i.test(synopsis) ? "" : synopsis;
+  const body = sourceSynopsis || `Package ${packageName} exposes the source-defined API.`;
+  return "## Package role {#package-role}\n\n" + sanitizeGeneratedText(body) + "\n\n";
+}
+
 function surfaceSection(item) {
   const functions = codeList(item.functions, (value) => value.signature);
   const methods = codeList(item.methods, (value) => value.signature);
@@ -115,15 +127,15 @@ function surfaceSection(item) {
     "### Variables {#variables}\n\n" + variableBody + "\n\n";
 }
 
-function ownershipSection(item) {
+export function ownershipSection(item) {
   const errorSentence = item.errors.length
     ? "Exported named types with an explicit \x60Error() string\x60 method are " + listNames(item.errors) + "."
     : "No exported named type with an explicit \x60Error() string\x60 method was found in the pinned source package.";
   const ownership = item.repository === "flow/store"
-    ? "\x60New\x60 receives a caller-provided \x60storage.Ledger\x60 and returns a \x60flow.CheckpointStore\x60. The linked source and tests define how that ledger is used; no additional ownership, lifecycle, or retry behavior is inferred here."
-    : "The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.";
+    ? "\x60New\x60 receives a caller-provided \x60storage.Ledger\x60 and returns a \x60flow.CheckpointStore\x60. The linked source and tests define how that ledger is used; no additional ownership or retry behavior is inferred here."
+    : "The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.";
   return "## Ownership and errors {#ownership-and-errors}\n\n" + ownership + "\n\n" +
-    errorSentence + " Use \x60errors.Is\x60 or \x60errors.As\x60 only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.\n\n";
+    errorSentence + " Use \x60errors.Is\x60 or \x60errors.As\x60 only when the relevant function or method returns one of these errors or wraps it.\n\n";
 }
 
 function proofSection(item) {
@@ -137,8 +149,8 @@ function proofSection(item) {
       : "- [" + file + "](" + sourceUrl(item, file) + ")").join("\n")
     : "No \x60_test.go\x60 file is present in this package directory at the pinned commit.";
   const command = isSourceWorkspace
-    ? "Run \x60GOWORK=off go test ./...\x60 from the local \x60flow/store\x60 directory after its source-workspace dependencies are available."
-    : "Run \x60GOWORK=off go test ./...\x60 from the \x60" + item.repository + "\x60 repository.";
+    ? "Run \x60go test ./...\x60 from the local \x60flow/store\x60 module after its source-workspace dependencies are available."
+    : "Run \x60go test ./...\x60 from a checkout of the \x60" + item.repository + "\x60 module.";
   return "## Source and runnable proof {#source-and-runnable-proof}\n\n" +
     "Source files at the pinned commit:\n\n" + sourceLines + "\n\n" +
     "Adjacent tests at the same commit:\n\n" + testLines + "\n\n" +
@@ -151,11 +163,12 @@ function refreshPage(file, item) {
   const id = pageId(text);
   text = normalizeProofMappings(text);
   text = text.replace(/^Import path: .*$/m, importParagraph(item, id));
+  text = replaceBetween(text, /^## Package role .*$/m, /^## Exported surface .*$/m, packageRoleSection(item));
   text = replaceBetween(text, /^## Exported surface .*$/m, /^## (?:Ownership and errors|Lifecycle and errors|Source proof|Source and runnable proof) .*$/m, surfaceSection(item));
   text = replaceBetween(text, /^## (?:Ownership and errors|Lifecycle and errors) .*$/m, /^## (?:Source proof|Source and runnable proof) .*$/m, ownershipSection(item));
   text = replaceBetween(text, /^## Source proof .*$/m, /$^/, proofSection(item));
   text = replaceBetween(text, /^## Source and runnable proof .*$/m, /$^/, proofSection(item));
-  text = text.replace(/\n{3,}/g, "\n\n").replace(/\s+$/g, "\n");
+  text = sanitizeGeneratedText(text).replace(/\n{3,}/g, "\n\n").replace(/\s+$/g, "\n");
   fs.writeFileSync(full, text);
 }
 

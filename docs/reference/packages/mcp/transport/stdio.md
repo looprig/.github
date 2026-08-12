@@ -26,7 +26,7 @@ Import path: `github.com/looprig/mcp/pkg/transport/stdio`. The source is pinned 
 
 ## Package role {#package-role}
 
-`New` returns a transport factory that owns process grouping, environment allowlists, bounded stderr, graceful close, termination, and reaping. It intentionally does not use the SDK command transport because the caller needs a confinement seam.
+Package stdio is the MCP stdio transport: it runs an MCP server as a child process and speaks the protocol over that child's stdin and stdout.
 
 ## Exported surface {#exported-surface}
 
@@ -68,12 +68,15 @@ type ExitStatus struct {
 
 ```go
 type Process interface {
+	// Pid reports the process id, for diagnostics only.
 	Pid() int
-
+	// Terminate asks the process, and everything it spawned, to shut down.
 	Terminate() error
-
+	// Kill destroys the process, and everything it spawned, unconditionally.
 	Kill() error
-
+	// Wait blocks until the process has exited and been reaped, and reports how
+	// it ended. It is called exactly once. A non-nil error means the process
+	// could not be reaped, a non-zero exit is a status, not an error.
 	Wait() (ExitStatus, error)
 }
 ```
@@ -126,9 +129,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -146,4 +149,4 @@ Adjacent tests at the same commit:
 - [pkg/transport/stdio/stdio_integration_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/stdio/stdio_integration_test.go)
 - [pkg/transport/stdio/stdio_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/stdio/stdio_test.go)
 
-Run `GOWORK=off go test ./...` from the `mcp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `mcp` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

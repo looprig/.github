@@ -26,7 +26,7 @@ The tools package is a source-workspace companion to the workflows root package.
 
 ## Package role {#package-role}
 
-The bundle is the model-facing control surface for workflow orchestration. It translates tool calls into the typed catalog, run registry, input store, and session-owned supervisor. Workflow event history and run records remain durable projections outside the tool implementation.
+Package tools exposes the source-defined API.
 
 ## Exported surface {#exported-surface}
 
@@ -72,9 +72,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `PrepareRunIntegrityError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `PrepareRunIntegrityError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -96,4 +96,4 @@ Adjacent tests at the same commit:
 - [tools/prepare_run_test.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/prepare_run_test.go)
 - [tools/tools_test.go](https://github.com/looprig/workflows/blob/852dd8dd80305f57a7224570c906f73f2646820d/tools/tools_test.go)
 
-Run `GOWORK=off go test ./...` from the `workflows` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `workflows` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

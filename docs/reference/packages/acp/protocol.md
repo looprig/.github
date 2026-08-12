@@ -26,7 +26,7 @@ Import path: `github.com/looprig/acp/protocol`. The source is pinned to github.c
 
 ## Package role {#package-role}
 
-`Conn` reads bounded newline-delimited frames, parses JSON-RPC envelopes, dispatches registered handlers, and serializes writes. `AgentConn` and `ClientConn` provide typed ACP calls over that connection. Generated types and methods encode the pinned schema vocabulary.
+acp.go is the typed protocol surface over Conn: it binds the generated method-name constants in methods_gen.go to the generated request/response types in types_gen.go, one Go method per ACP RPC.
 
 ## Exported surface {#exported-surface}
 
@@ -1591,9 +1591,9 @@ type WriteTextFileResponse struct {
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ConnClosedError`, `Error`, `Fault`, `FrameTooLargeError`, `InvalidFrameError`, `ReceiveSequenceOverflowError`, `TruncatedFrameError`, `ValidationError`, `WriterClosedError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ConnClosedError`, `Error`, `Fault`, `FrameTooLargeError`, `InvalidFrameError`, `ReceiveSequenceOverflowError`, `TruncatedFrameError`, `ValidationError`, `WriterClosedError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -1620,4 +1620,4 @@ Adjacent tests at the same commit:
 - [protocol/gen_stale_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/protocol/gen_stale_test.go)
 - [protocol/jsonrpc_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/protocol/jsonrpc_test.go)
 
-Run `GOWORK=off go test ./...` from the `acp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `acp` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

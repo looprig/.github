@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
-import { normalizeProofMappings } from "./refresh-package-references.mjs";
+import { normalizeProofMappings, ownershipSection, packageRoleSection, sanitizeGeneratedText } from "./refresh-package-references.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const packageRoot = path.join(root, "docs/reference/packages");
@@ -86,4 +86,25 @@ test("the package generator normalizes legacy proof keys without inventing a pro
   }
   assert.equal(proofs["functions-and-methods"], undefined);
   assert.equal(proofs["constants-and-variables"], undefined);
+});
+
+test("generated package roles use only the source synopsis and never synthesize a handle lifecycle", () => {
+  const role = packageRoleSection({
+    synopsis: "Package fixture validates caller-provided values.",
+    functions: [{ name: "Start", signature: "func Start() error" }],
+    types: [{ name: "AlphabeticalType" }],
+  });
+  assert.match(role, /Package fixture validates caller-provided values\./);
+  assert.doesNotMatch(role, /principal handle|AlphabeticalType|Start constructs|construction entry point|lifecycle/i);
+  assert.doesNotMatch(ownershipSection({ errors: [] }), /lifecycle|principal handle|construction entry point/i);
+});
+
+test("generated package prose does not publish plan references or em dashes copied from source comments", () => {
+  const role = packageRoleSection({
+    importPath: "github.com/looprig/fixture",
+    synopsis: "Package fixture will provide an API described in docs/plans/example.md.",
+  });
+  assert.match(role, /Package fixture exposes the source-defined API\./);
+  assert.doesNotMatch(role, /docs\/plans|—/i);
+  assert.equal(sanitizeGeneratedText("value — source comment"), "value, source comment");
 });

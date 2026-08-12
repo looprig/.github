@@ -26,7 +26,7 @@ Go web asset package in [client v0.1.0](https://github.com/looprig/client/tree/9
 
 ## Package role {#package-role}
 
-`webui` serves the built browser application through `net/http`. It is the asset boundary only; transport, event folding, and framework bindings live in the private SDK source workspace.
+Package webui embeds the client's built single-page app and serves it with the standard SPA-router fallback pattern: a request for a real file under dist/ (JS, CSS, images, ...) is served as-is; any other request falls back to dist/index.html so client-side routes like /sessions/abc123 still return the app shell.
 
 ## Exported surface {#exported-surface}
 
@@ -54,9 +54,9 @@ No exported constants are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -68,4 +68,4 @@ Adjacent tests at the same commit:
 
 - [pkg/webui/webui_test.go](https://github.com/looprig/client/blob/9941c8da1308d0a01562f17bdbbec963ce2a26ca/pkg/webui/webui_test.go)
 
-Run `GOWORK=off go test ./...` from the `client` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `client` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

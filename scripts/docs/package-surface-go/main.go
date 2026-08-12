@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go/ast"
+	godoc "go/doc"
 	"go/format"
 	"go/parser"
 	"go/token"
@@ -38,6 +39,7 @@ type declaration struct {
 
 type surface struct {
 	ID        string        `json:"id"`
+	Synopsis  string        `json:"synopsis,omitempty"`
 	Functions []declaration `json:"functions"`
 	Methods   []declaration `json:"methods"`
 	Types     []declaration `json:"types"`
@@ -179,15 +181,31 @@ func isErrorMethod(decl *ast.FuncDecl) bool {
 	return ok && result.Name == "string"
 }
 
+func packageSynopsis(fset *token.FileSet, files []parsedFile, importPath string) (string, error) {
+	asts := make([]*ast.File, 0, len(files))
+	for _, parsed := range files {
+		asts = append(asts, parsed.file)
+	}
+	documentation, err := godoc.NewFromFiles(fset, asts, importPath, godoc.PreserveAST)
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(documentation.Synopsis(documentation.Doc)), nil
+}
+
 func analyzePackage(item packageInput) (surface, error) {
 	fset := token.NewFileSet()
 	files := make([]parsedFile, 0, len(item.Files))
 	for _, source := range item.Files {
-		file, err := parser.ParseFile(fset, source.Name, source.Source, parser.SkipObjectResolution)
+		file, err := parser.ParseFile(fset, source.Name, source.Source, parser.SkipObjectResolution|parser.ParseComments)
 		if err != nil {
 			return surface{}, fmt.Errorf("parse %s: %w", source.Name, err)
 		}
 		files = append(files, parsedFile{name: source.Name, file: file})
+	}
+	synopsis, err := packageSynopsis(fset, files, item.ID)
+	if err != nil {
+		return surface{}, fmt.Errorf("document %s: %w", item.ID, err)
 	}
 
 	aliases := map[string][]string{}
@@ -209,7 +227,7 @@ func analyzePackage(item packageInput) (surface, error) {
 		}
 	}
 
-	result := surface{ID: item.ID, Functions: []declaration{}, Methods: []declaration{}, Types: []declaration{}, Constants: []declaration{}, Variables: []declaration{}, Errors: []string{}}
+	result := surface{ID: item.ID, Synopsis: synopsis, Functions: []declaration{}, Methods: []declaration{}, Types: []declaration{}, Constants: []declaration{}, Variables: []declaration{}, Errors: []string{}}
 	errorNames := map[string]bool{}
 	for _, parsed := range files {
 		for _, rawDecl := range parsed.file.Decls {

@@ -24,7 +24,7 @@ Import path: `github.com/looprig/rclonestore`. The source is pinned to github.co
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. The owning module is released as v0.3.2; pin that version in consumers and keep local workspace replacements out of published go.mod files.
+Package rclonestore implements storage.Blobs by driving the external rclone binary as a context-bounded subprocess (argv exec, never a shell string, never librclone/cgo).
 
 ## Exported surface {#exported-surface}
 
@@ -128,9 +128,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `BinaryError`, `OptionsError`, `PersistencePathError`, `ProbeError`, `PutSourceError`, `RcloneError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BinaryError`, `OptionsError`, `PersistencePathError`, `ProbeError`, `PutSourceError`, `RcloneError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -150,4 +150,4 @@ Adjacent tests at the same commit:
 - [symlink_capability_unix_test.go](https://github.com/looprig/rclonestore/blob/994e14f9184726b57798df4049b7b731fde608f9/symlink_capability_unix_test.go)
 - [symlink_capability_windows_test.go](https://github.com/looprig/rclonestore/blob/994e14f9184726b57798df4049b7b731fde608f9/symlink_capability_windows_test.go)
 
-Run `GOWORK=off go test ./...` from the `rclonestore` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `rclonestore` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

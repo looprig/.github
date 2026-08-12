@@ -22,11 +22,11 @@ proofs:
 
 # process package · process
 
-Import path: `github.com/looprig/tools/process`. The source is pinned to github.com/looprig/tools@v0.10.0.
+Import path: `github.com/looprig/tools/process`. The source is pinned to github.com/looprig/tools@v0.10.1.
 
 ## Package role {#package-role}
 
-`NewSupervisor` manages process admission, signals, output spools, manifests, lifecycle notifications, and restore. `NewProcessInput`, `NewProcessOutput`, and `NewProcessStop` expose model-facing operations over the same supervisor resource.
+Package process defines the Tools-owned long-running-command supervision domain: process identity, lifecycle state, the stable error taxonomy, and quota configuration (spec "docs/specs/long-running-command-supervision.md", sections "Identity and authorization", "State machine", "Stable errors", and "Quotas and retention").
 
 ## Exported surface {#exported-surface}
 
@@ -450,57 +450,57 @@ type WaitStatus struct {
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `CollisionError`, `Error`, `GenerateError`, `ImmutableIdentityChangedError`, `LifecycleEventIDChangedError`, `NonMonotonicUpdateError`, `RestoreError`, `TerminalResultChangedError`, `TransitionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CollisionError`, `Error`, `GenerateError`, `ImmutableIdentityChangedError`, `LifecycleEventIDChangedError`, `NonMonotonicUpdateError`, `RestoreError`, `TerminalResultChangedError`, `TransitionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [process/buffer.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/buffer.go)
-- [process/config.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/config.go)
-- [process/entry.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/entry.go)
-- [process/errors.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/errors.go)
-- [process/identity.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/identity.go)
-- [process/input_tool.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/input_tool.go)
-- [process/lifecycle_bridge.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/lifecycle_bridge.go)
-- [process/manifest.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/manifest.go)
-- [process/output_tool.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/output_tool.go)
-- [process/render.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/render.go)
-- [process/restore.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/restore.go)
-- [process/session_resource.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/session_resource.go)
-- [process/spool.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/spool.go)
-- [process/state.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/state.go)
-- [process/stop_tool.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/stop_tool.go)
-- [process/supervisor.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/supervisor.go)
-- [process/types.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/types.go)
-- [process/wait.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/wait.go)
+- [process/buffer.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/buffer.go)
+- [process/config.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/config.go)
+- [process/entry.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/entry.go)
+- [process/errors.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/errors.go)
+- [process/identity.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/identity.go)
+- [process/input_tool.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/input_tool.go)
+- [process/lifecycle_bridge.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/lifecycle_bridge.go)
+- [process/manifest.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/manifest.go)
+- [process/output_tool.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/output_tool.go)
+- [process/render.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/render.go)
+- [process/restore.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/restore.go)
+- [process/session_resource.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/session_resource.go)
+- [process/spool.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/spool.go)
+- [process/state.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/state.go)
+- [process/stop_tool.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/stop_tool.go)
+- [process/supervisor.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/supervisor.go)
+- [process/types.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/types.go)
+- [process/wait.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/wait.go)
 
 Adjacent tests at the same commit:
 
-- [process/buffer_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/buffer_test.go)
-- [process/config_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/config_test.go)
-- [process/definitions_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/definitions_test.go)
-- [process/entry_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/entry_test.go)
-- [process/errors_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/errors_test.go)
-- [process/fake_process_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/fake_process_test.go)
-- [process/identity_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/identity_test.go)
-- [process/input_tool_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/input_tool_test.go)
-- [process/integration_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/integration_test.go)
-- [process/manifest_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/manifest_test.go)
-- [process/output_tool_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/output_tool_test.go)
-- [process/pty_integration_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/pty_integration_test.go)
-- [process/render_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/render_test.go)
-- [process/restore_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/restore_test.go)
-- [process/session_resource_activate_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/session_resource_activate_test.go)
-- [process/shutdown_restore_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/shutdown_restore_test.go)
-- [process/shutdown_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/shutdown_test.go)
-- [process/spool_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/spool_test.go)
-- [process/state_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/state_test.go)
-- [process/stop_tool_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/stop_tool_test.go)
-- [process/supervisor_integration_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/supervisor_integration_test.go)
-- [process/supervisor_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/supervisor_test.go)
-- [process/wait_test.go](https://github.com/looprig/tools/blob/151f5530f95a9bba95be10551a8f08282d8959ab/process/wait_test.go)
+- [process/buffer_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/buffer_test.go)
+- [process/config_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/config_test.go)
+- [process/definitions_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/definitions_test.go)
+- [process/entry_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/entry_test.go)
+- [process/errors_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/errors_test.go)
+- [process/fake_process_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/fake_process_test.go)
+- [process/identity_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/identity_test.go)
+- [process/input_tool_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/input_tool_test.go)
+- [process/integration_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/integration_test.go)
+- [process/manifest_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/manifest_test.go)
+- [process/output_tool_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/output_tool_test.go)
+- [process/pty_integration_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/pty_integration_test.go)
+- [process/render_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/render_test.go)
+- [process/restore_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/restore_test.go)
+- [process/session_resource_activate_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/session_resource_activate_test.go)
+- [process/shutdown_restore_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/shutdown_restore_test.go)
+- [process/shutdown_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/shutdown_test.go)
+- [process/spool_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/spool_test.go)
+- [process/state_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/state_test.go)
+- [process/stop_tool_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/stop_tool_test.go)
+- [process/supervisor_integration_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/supervisor_integration_test.go)
+- [process/supervisor_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/supervisor_test.go)
+- [process/wait_test.go](https://github.com/looprig/tools/blob/1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a/process/wait_test.go)
 
-Run `GOWORK=off go test ./...` from the `tools` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `tools` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

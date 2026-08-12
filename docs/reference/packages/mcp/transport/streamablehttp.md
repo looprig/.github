@@ -26,7 +26,7 @@ Import path: `github.com/looprig/mcp/pkg/transport/streamablehttp`. The source i
 
 ## Package role {#package-role}
 
-`New` configures an SDK transport with a caller-owned HTTP client, auth RoundTripper, TLS, body, stream, timeout, redirect, and session controls. It leaves OAuthHandler replay disabled so a 401 cannot resend a tool call.
+Package streamablehttp is the MCP Streamable HTTP transport: it speaks the protocol to a remote server over HTTP POST, with server-to-client messages arriving on SSE streams.
 
 ## Exported surface {#exported-surface}
 
@@ -82,9 +82,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -98,4 +98,4 @@ Adjacent tests at the same commit:
 - [pkg/transport/streamablehttp/streamablehttp_integration_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/streamablehttp/streamablehttp_integration_test.go)
 - [pkg/transport/streamablehttp/streamablehttp_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/transport/streamablehttp/streamablehttp_test.go)
 
-Run `GOWORK=off go test ./...` from the `mcp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `mcp` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

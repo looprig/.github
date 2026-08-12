@@ -26,7 +26,7 @@ Import path: `github.com/looprig/acp/transport/stdio`. The source is pinned to g
 
 ## Package role {#package-role}
 
-`Spawn` starts a validated `Command`, connects stdin/stdout to ACP, groups the child for teardown, and reaps it exactly once. `Serve` wires an agent process's own streams to a caller-created protocol connection.
+Package stdio is the process-boundary transport for the Agent Client Protocol bridge: it carries a *protocol.Conn over a process's stdin and stdout.
 
 ## Exported surface {#exported-surface}
 
@@ -95,9 +95,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `CommandError`, `ExitError`, `PlatformError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CommandError`, `ExitError`, `PlatformError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -121,4 +121,4 @@ Adjacent tests at the same commit:
 - [transport/stdio/spawn_unsupported_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/transport/stdio/spawn_unsupported_test.go)
 - [transport/stdio/stdio_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/transport/stdio/stdio_test.go)
 
-Run `GOWORK=off go test ./...` from the `acp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `acp` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

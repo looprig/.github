@@ -24,11 +24,11 @@ proofs:
 
 # anthropicapi package · codec/anthropicapi
 
-Import path: `github.com/looprig/inference/codec/anthropicapi`. The source is pinned to github.com/looprig/inference@v0.9.2.
+Import path: `github.com/looprig/inference/codec/anthropicapi`. The source is pinned to github.com/looprig/inference@v0.10.0.
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. Inference `v0.9.2` keeps model descriptors, request and response values, codec contracts, streams, retries, and gateway behavior independent of provider credentials.
+Package anthropicapi exposes the source-defined API.
 
 ## Exported surface {#exported-surface}
 
@@ -119,37 +119,37 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `DuplicateKeyError`, `ServerDecodeError`, `StreamAPIError`, `StreamTerminatedError`, `UnsupportedBlockError`, `UnsupportedChunkError`, `UnsupportedConversationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DuplicateKeyError`, `ServerDecodeError`, `StreamAPIError`, `StreamTerminatedError`, `UnsupportedBlockError`, `UnsupportedChunkError`, `UnsupportedConversationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [codec/anthropicapi/codec.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/codec.go)
-- [codec/anthropicapi/decode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/decode.go)
-- [codec/anthropicapi/encode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/encode.go)
-- [codec/anthropicapi/errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/errors.go)
-- [codec/anthropicapi/server_decode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_decode.go)
-- [codec/anthropicapi/server_encode.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_encode.go)
-- [codec/anthropicapi/server_error.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_error.go)
-- [codec/anthropicapi/server_stream.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_stream.go)
-- [codec/anthropicapi/stream.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/stream.go)
-- [codec/anthropicapi/types.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/types.go)
+- [codec/anthropicapi/codec.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/codec.go)
+- [codec/anthropicapi/decode.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/decode.go)
+- [codec/anthropicapi/encode.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/encode.go)
+- [codec/anthropicapi/errors.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/errors.go)
+- [codec/anthropicapi/server_decode.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/server_decode.go)
+- [codec/anthropicapi/server_encode.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/server_encode.go)
+- [codec/anthropicapi/server_error.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/server_error.go)
+- [codec/anthropicapi/server_stream.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/server_stream.go)
+- [codec/anthropicapi/stream.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/stream.go)
+- [codec/anthropicapi/types.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/types.go)
 
 Adjacent tests at the same commit:
 
-- [codec/anthropicapi/codec_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/codec_test.go)
-- [codec/anthropicapi/decode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/decode_test.go)
-- [codec/anthropicapi/encode_cache_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/encode_cache_test.go)
-- [codec/anthropicapi/encode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/encode_test.go)
-- [codec/anthropicapi/fuzz_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/fuzz_test.go)
-- [codec/anthropicapi/server_decode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_decode_test.go)
-- [codec/anthropicapi/server_encode_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_encode_test.go)
-- [codec/anthropicapi/server_fuzz_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_fuzz_test.go)
-- [codec/anthropicapi/server_roundtrip_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_roundtrip_test.go)
-- [codec/anthropicapi/server_stream_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/server_stream_test.go)
-- [codec/anthropicapi/stream_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/codec/anthropicapi/stream_test.go)
+- [codec/anthropicapi/codec_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/codec_test.go)
+- [codec/anthropicapi/decode_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/decode_test.go)
+- [codec/anthropicapi/encode_cache_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/encode_cache_test.go)
+- [codec/anthropicapi/encode_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/encode_test.go)
+- [codec/anthropicapi/fuzz_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/fuzz_test.go)
+- [codec/anthropicapi/server_decode_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/server_decode_test.go)
+- [codec/anthropicapi/server_encode_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/server_encode_test.go)
+- [codec/anthropicapi/server_fuzz_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/server_fuzz_test.go)
+- [codec/anthropicapi/server_roundtrip_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/server_roundtrip_test.go)
+- [codec/anthropicapi/server_stream_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/server_stream_test.go)
+- [codec/anthropicapi/stream_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/codec/anthropicapi/stream_test.go)
 
-Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `inference` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -24,7 +24,7 @@ Import path: `github.com/looprig/llm/auth`. The source is pinned to github.com/l
 
 ## Package role {#package-role}
 
-This support package is part of LLM model access and is intended to be composed by the root or provider packages. The released module is `github.com/looprig/llm@v0.13.3`. Model descriptors remain secret-free; API keys, OAuth tokens, and signing credentials are injected through the credential boundary rather than placed on `model.Model`.
+Package auth provides the provider-specific AWS Signature Version 4 (SigV4) Authenticator for the inference client seam.
 
 ## Exported surface {#exported-surface}
 
@@ -76,9 +76,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `BodyReadError`, `MissingSigV4CredentialsError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BodyReadError`, `MissingSigV4CredentialsError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -90,4 +90,4 @@ Adjacent tests at the same commit:
 
 - [auth/sigv4_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/auth/sigv4_test.go)
 
-Run `GOWORK=off go test ./...` from the `llm` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `llm` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

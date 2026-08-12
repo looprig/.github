@@ -36,7 +36,10 @@ released dependency versions recorded in Carbon's `go.mod`.
 ## First run
 
 Carbon currently has no printed `--help` screen, so use this manual as the flag
-reference. The process resolves the Carbon home once. By default it is
+reference. The standard-library `flag.FlagSet` returns `flag.ErrHelp` for
+`-h`/`--help`; Carbon wraps that parser result as an `invalid flags`
+`FlagParseError` and exits with its usage status. There is therefore no
+successful help command to run. The process resolves the Carbon home once. By default it is
 `~/.looprig/carbon`; the default session data directory is
 `~/.looprig/carbon/store`. `--data-dir` selects another store root. The home
 also contains `models.json`, `mcp.json`, and workspace permission state.

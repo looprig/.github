@@ -32,7 +32,7 @@ Begin at the `inference` boundary when the application needs one request and one
 
 ## Boundary {#boundary}
 
-`model.Model`, `inference.Request`, and `inference.Response` describe the provider-neutral call. A `model.Model` supplies an ID, capabilities, and limits; a `Request` carries messages, optional tools, and call options; a `Response` carries the assistant message, usage, finish information, and provider metadata. `Client.Invoke` is the one-shot operation and `Client.Stream` returns a reader for incremental chunks.
+`model.Model`, `inference.Request`, and `inference.Response` describe the provider-neutral call. A `model.Model` supplies an ID, capabilities, and limits; a `Request` carries messages, optional tools, and call options; a `Response` carries the assistant message, usage, finish information, and provider metadata. `Client.Invoke` is the one-shot operation and `Client.Stream` returns a reader for incremental chunks. The descriptor is defined in [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.9.2/model/model.go), not in the root `inference` package.
 
 `llm` is a policy and construction layer. Its `AuthPolicy` controls whether a provider may use an explicit credential, a named credential source, or no credential. `auto.New` chooses a provider from the configured model and `auto.NewWithAuth` makes that credential decision explicit. The resulting client still exposes the `inference.Client` contract, so the rest of the loop does not need provider-specific request types.
 

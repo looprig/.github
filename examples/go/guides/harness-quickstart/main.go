@@ -19,13 +19,19 @@ import (
 	"github.com/looprig/storage/memstore"
 )
 
-type offlineModel struct{}
+// deterministicModelStub is the deterministic model boundary used by this fixture.
+// Replace it with an inference.Client backed by a hosted or local provider while
+// keeping the loop, Rig, session, and event-handling code unchanged.
+type deterministicModelStub struct{}
 
-func (offlineModel) Invoke(context.Context, inference.Request) (*inference.Response, error) {
+// Invoke is intentionally unused: this quickstart demonstrates streaming.
+func (deterministicModelStub) Invoke(context.Context, inference.Request) (*inference.Response, error) {
 	return nil, errors.New("this example uses streaming")
 }
 
-func (offlineModel) Stream(context.Context, inference.Request) (*stream.StreamReader[content.Chunk], error) {
+// Stream yields one deterministic text chunk and then EOF, so the example is
+// reproducible without credentials, a network, or a provider process.
+func (deterministicModelStub) Stream(context.Context, inference.Request) (*stream.StreamReader[content.Chunk], error) {
 	sent := false
 	return stream.NewStreamReader(func() (content.Chunk, error) {
 		if sent {
@@ -39,8 +45,8 @@ func (offlineModel) Stream(context.Context, inference.Request) (*stream.StreamRe
 func run(ctx context.Context, output io.Writer) error {
 	agent, err := loop.Define(
 		loop.WithName("assistant"),
-		loop.WithInference(offlineModel{}, model.CustomModel(
-			"offline", model.APIFormatOpenAI, "http://localhost", "fixture",
+		loop.WithInference(deterministicModelStub{}, model.CustomModel(
+			"fixture", model.APIFormatOpenAI, "http://localhost", "fixture-model",
 		)),
 	)
 	if err != nil {

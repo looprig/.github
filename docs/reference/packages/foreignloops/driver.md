@@ -26,7 +26,7 @@ Import path: `github.com/looprig/foreignloops/driver`. The source is pinned to g
 
 ## Package role {#package-role}
 
-`Agent` creates provider turns; `Turn` carries prompt, cwd, posture, and session selection; `Stream` yields normalized updates; `History` states whether a provider's history is authoritative. Steering is explicit and bounded.
+Package driver defines provider-neutral contracts for foreign agents.
 
 ## Exported surface {#exported-surface}
 
@@ -182,12 +182,15 @@ type ObservationKind uint8
 type Observation interface {
 	Kind() ObservationKind
 	Sequence() uint64
-	observation()
+	// contains filtered or unexported methods
 }
 ```
 
 ```go
 type OrderedStream interface {
+	// Observations returns the stream-owned ordered projection. A stream selects
+	// exactly one projection before production starts: legacy Events or this
+	// channel. The inactive projection is closed and carries no traffic.
 	Observations() <-chan Observation
 }
 ```
@@ -230,9 +233,9 @@ type SteerObservation struct {
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `DecodeError`, `ExitError`, `HistoryError`, `SpawnError`, `SteerAdmissionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DecodeError`, `ExitError`, `HistoryError`, `SpawnError`, `SteerAdmissionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -252,4 +255,4 @@ Adjacent tests at the same commit:
 - [driver/posture_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/posture_test.go)
 - [driver/steering_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/steering_test.go)
 
-Run `GOWORK=off go test ./...` from the `foreignloops` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `foreignloops` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

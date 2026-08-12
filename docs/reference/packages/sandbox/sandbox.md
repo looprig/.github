@@ -26,7 +26,7 @@ Import path: `github.com/looprig/sandbox`. The source is pinned to github.com/lo
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. Sandbox `v0.8.1` separates profile construction and achieved guarantees from executor and network details. It does not decide whether a tool call is allowed; it enforces the authority the caller has already chosen.
+Package sandbox provides standalone OS-level confinement for command execution under immutable, consumer-defined access profiles.
 
 ## Exported surface {#exported-surface}
 
@@ -60,55 +60,94 @@ No exported methods are declared in this package.
 ### Types {#types}
 
 ```go
-type Access = profile.Access
+type
+
+// Access is the requested authority for one profile capability.
+Access = profile.Access
 ```
 
 ```go
-type Home = profile.Home
+type
+
+// Home selects the HOME value exposed to a child process.
+Home = profile.Home
 ```
 
 ```go
-type Isolation = profile.Isolation
+type
+
+// Isolation selects whether process authority is OS-confined.
+Isolation = profile.Isolation
 ```
 
 ```go
-type RootAccess = profile.RootAccess
+type
+
+// RootAccess describes read and write authority for one additional root.
+RootAccess = profile.RootAccess
 ```
 
 ```go
-type ProfileConfig = profile.ProfileConfig
+type
+
+// ProfileConfig contains every consumer-selected sandbox authority value.
+ProfileConfig = profile.ProfileConfig
 ```
 
 ```go
-type Profile = profile.Profile
+type
+
+// Profile is an immutable, normalized access profile.
+Profile = profile.Profile
 ```
 
 ```go
-type ReportEntry = profile.ReportEntry
+type
+
+// ReportEntry records how one requested feature was compiled by a backend.
+ReportEntry = profile.ReportEntry
 ```
 
 ```go
-type CompileReport = profile.CompileReport
+type
+
+// CompileReport records enforced, narrowed, and unavailable features.
+CompileReport = profile.CompileReport
 ```
 
 ```go
-type Guarantees = profile.Guarantees
+type
+
+// Guarantees reports properties actually enforced by the selected backend.
+Guarantees = profile.Guarantees
 ```
 
 ```go
-type NetworkTarget = network.Target
+type
+
+// NetworkTarget is one normalized transport/host/port egress destination.
+NetworkTarget = network.Target
 ```
 
 ```go
-type EgressRoute = network.Route
+type
+
+// EgressRoute is how a sandboxed process reaches the network.
+EgressRoute = network.Route
 ```
 
 ```go
-type EgressRouteResolver = network.RouteResolver
+type
+
+// EgressRouteResolver selects a route per target.
+EgressRouteResolver = network.RouteResolver
 ```
 
 ```go
-type NetworkTargetDeniedError = network.TargetDeniedError
+type
+
+// NetworkTargetDeniedError reports a spawn that ran but was denied a target.
+NetworkTargetDeniedError = network.TargetDeniedError
 ```
 
 ```go
@@ -132,59 +171,106 @@ type WindowsSetupStatus = windows.SetupStatus
 ```
 
 ```go
-type Executor = exec.Executor
+type
+
+// Executor compiles a policy once and runs commands under it.
+Executor = exec.Executor
 ```
 
 ```go
-type ExecutorSet = exec.ExecutorSet
+type
+
+// ExecutorSet owns per-key executors, their grant keys, and isolated HOMEs.
+ExecutorSet = exec.ExecutorSet
 ```
 
 ```go
-type ExecutorSetOption = exec.ExecutorSetOption
+type
+
+// ExecutorSetOption configures executor ownership and resource limits.
+ExecutorSetOption = exec.ExecutorSetOption
 ```
 
 ```go
-type ProcessOptions = exec.ProcessOptions
+type
+
+// ProcessOptions describes one asynchronous process admission request.
+ProcessOptions = exec.ProcessOptions
 ```
 
 ```go
-type PreparedProcess = exec.PreparedProcess
+type
+
+// PreparedProcess is a validated, single-use process start.
+PreparedProcess = exec.PreparedProcess
 ```
 
 ```go
-type Process = exec.Process
+type
+
+// Process is a running asynchronous process with live stdio pipes.
+Process = exec.Process
 ```
 
 ```go
-type ProcessResult = exec.ProcessResult
+type
+
+// ProcessResult is the terminal result of an asynchronous process.
+ProcessResult = exec.ProcessResult
 ```
 
 ```go
-type ProcessAccess = exec.ProcessAccess
+type
+
+// ProcessAccess is the authoritative, immutable description of a
+// prepared process's workspace access.
+ProcessAccess = exec.ProcessAccess
 ```
 
 ```go
-type ProcessAccessKind = exec.ProcessAccessKind
+type
+
+// ProcessAccessKind classifies ProcessAccess.
+ProcessAccessKind = exec.ProcessAccessKind
 ```
 
 ```go
-type ProcessActivity = exec.ProcessActivity
+type
+
+// ProcessActivity reports one unit of workspace activity from a running
+// process.
+ProcessActivity = exec.ProcessActivity
 ```
 
 ```go
-type ProcessActivityKind = exec.ProcessActivityKind
+type
+
+// ProcessActivityKind classifies ProcessActivity.
+ProcessActivityKind = exec.ProcessActivityKind
 ```
 
 ```go
-type ProcessStreamMode = exec.ProcessStreamMode
+type
+
+// ProcessStreamMode describes a running process's stream topology
+// (distinct pipes or one combined PTY stream).
+ProcessStreamMode = exec.ProcessStreamMode
 ```
 
 ```go
-type ProcessSignal = exec.ProcessSignal
+type
+
+// ProcessSignal is a portable process-tree signal request.
+ProcessSignal = exec.ProcessSignal
 ```
 
 ```go
-type LifetimeContainment = exec.LifetimeContainment
+type
+
+// LifetimeContainment reports the process-tree teardown contract a
+// Supervised spawn actually received (enforced / best-effort /
+// unspecified). See Process.LifetimeContainment.
+LifetimeContainment = exec.LifetimeContainment
 ```
 
 ### Constants {#constants}
@@ -197,9 +283,9 @@ type LifetimeContainment = exec.LifetimeContainment
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -216,4 +302,4 @@ Adjacent tests at the same commit:
 - [facade_test.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/facade_test.go)
 - [reexec_main_test.go](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/reexec_main_test.go)
 
-Run `GOWORK=off go test ./...` from the `sandbox` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `sandbox` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

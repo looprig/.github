@@ -26,7 +26,7 @@ Session bridge in [tui v0.15.1](https://github.com/looprig/tui/tree/6b362dda04b0
 
 ## Package role {#package-role}
 
-The adapter turns a `session.SessionController` into the agent shape consumed by the TUI. It folds public enduring history, subscribes to live enduring and ephemeral events, and tracks open gates. It is not a session store and does not make ephemeral events durable.
+Package sessionadapter adapts harness sessions to the terminal Agent contract.
 
 ## Exported surface {#exported-surface}
 
@@ -86,21 +86,21 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `GateNotOpenError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `GateNotOpenError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [sessionadapter/adapter.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/sessionadapter/adapter.go)
-- [sessionadapter/replaying_subscription.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/sessionadapter/replaying_subscription.go)
+- [sessionadapter/adapter.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/sessionadapter/adapter.go)
+- [sessionadapter/replaying_subscription.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/sessionadapter/replaying_subscription.go)
 
 Adjacent tests at the same commit:
 
-- [sessionadapter/adapter_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/sessionadapter/adapter_test.go)
-- [sessionadapter/api_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/sessionadapter/api_test.go)
-- [sessionadapter/replaying_subscription_test.go](https://github.com/looprig/tui/blob/6b362dda04b086c8a94146320e9faad38dac9b6c/sessionadapter/replaying_subscription_test.go)
+- [sessionadapter/adapter_test.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/sessionadapter/adapter_test.go)
+- [sessionadapter/api_test.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/sessionadapter/api_test.go)
+- [sessionadapter/replaying_subscription_test.go](https://github.com/looprig/tui/blob/2d733c1d6880e851ee0c917066913206ad4a6d3d/sessionadapter/replaying_subscription_test.go)
 
-Run `GOWORK=off go test ./...` from the `tui` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `tui` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

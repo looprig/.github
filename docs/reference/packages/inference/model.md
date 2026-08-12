@@ -24,11 +24,11 @@ proofs:
 
 # model package · model
 
-Import path: `github.com/looprig/inference/model`. The source is pinned to github.com/looprig/inference@v0.9.2.
+Import path: `github.com/looprig/inference/model`. The source is pinned to github.com/looprig/inference@v0.10.0.
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. Inference `v0.9.2` keeps model descriptors, request and response values, codec contracts, streams, retries, and gateway behavior independent of provider credentials.
+Package model exposes the source-defined API.
 
 ## Exported surface {#exported-surface}
 
@@ -181,33 +181,33 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ContextLimitsValidationError`, `ModelKeyValidationError`, `ValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ContextLimitsValidationError`, `ModelKeyValidationError`, `ValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [model/apiformat.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/apiformat.go)
-- [model/capabilities.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/capabilities.go)
-- [model/contextlimits.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/contextlimits.go)
-- [model/effort.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/effort.go)
-- [model/errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/errors.go)
-- [model/model.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/model.go)
-- [model/modelkey.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/modelkey.go)
-- [model/origin.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/origin.go)
-- [model/provider.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/provider.go)
-- [model/sampling.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/sampling.go)
+- [model/apiformat.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/apiformat.go)
+- [model/capabilities.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/capabilities.go)
+- [model/contextlimits.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/contextlimits.go)
+- [model/effort.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/effort.go)
+- [model/errors.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/errors.go)
+- [model/model.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/model.go)
+- [model/modelkey.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/modelkey.go)
+- [model/origin.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/origin.go)
+- [model/provider.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/provider.go)
+- [model/sampling.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/sampling.go)
 
 Adjacent tests at the same commit:
 
-- [model/apiformat_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/apiformat_test.go)
-- [model/contextlimits_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/contextlimits_test.go)
-- [model/effort_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/effort_test.go)
-- [model/model_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/model_test.go)
-- [model/modelkey_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/modelkey_test.go)
-- [model/origin_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/origin_test.go)
-- [model/sampling_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/model/sampling_test.go)
+- [model/apiformat_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/apiformat_test.go)
+- [model/contextlimits_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/contextlimits_test.go)
+- [model/effort_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/effort_test.go)
+- [model/model_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/model_test.go)
+- [model/modelkey_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/modelkey_test.go)
+- [model/origin_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/origin_test.go)
+- [model/sampling_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/model/sampling_test.go)
 
-Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `inference` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

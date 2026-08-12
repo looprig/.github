@@ -26,7 +26,7 @@ Import path: `github.com/looprig/acp/client`. The source is pinned to github.com
 
 ## Package role {#package-role}
 
-`New` creates a lazy client; `Dial` starts the supplied stdio command and shares one start attempt among concurrent callers. The client handles child-to-host session updates, permission requests, filesystem, and terminal operations when handlers are configured.
+client.go implements Client: the connection runtime that drives a foreign ACP agent as a client, over a subprocess spawned via acp/transport/stdio and a protocol.Conn built on top of it.
 
 ## Exported surface {#exported-surface}
 
@@ -281,9 +281,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ClosedError`, `DuplicateSessionError`, `LoadTimeoutError`, `NotDialedError`, `SetModelUnsupportedError`, `SteeringError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ClosedError`, `DuplicateSessionError`, `LoadTimeoutError`, `NotDialedError`, `SetModelUnsupportedError`, `SteeringError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -315,4 +315,4 @@ Adjacent tests at the same commit:
 - [client/steering_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/steering_internal_test.go)
 - [client/updates_internal_test.go](https://github.com/looprig/acp/blob/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/updates_internal_test.go)
 
-Run `GOWORK=off go test ./...` from the `acp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `acp` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

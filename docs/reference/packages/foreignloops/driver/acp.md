@@ -26,7 +26,7 @@ Import path: `github.com/looprig/foreignloops/driver/acp`. The source is pinned 
 
 ## Package role {#package-role}
 
-`Driver` owns ACP client session setup, updates, prompts, cancellation, and history mapping for one foreign runtime. `Config` describes harness selection, executable, credentials, posture, workspace, and child MCP server definitions.
+Package acp adapts a foreign agent that speaks the Agent Client Protocol to the neutral driver contracts.
 
 ## Exported surface {#exported-surface}
 
@@ -105,9 +105,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ConfigError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ConfigError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -138,4 +138,4 @@ Adjacent tests at the same commit:
 - [driver/acp/steering_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/acp/steering_test.go)
 - [driver/acp/turn_test.go](https://github.com/looprig/foreignloops/blob/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/acp/turn_test.go)
 
-Run `GOWORK=off go test ./...` from the `foreignloops` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `foreignloops` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

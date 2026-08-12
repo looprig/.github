@@ -32,6 +32,24 @@ credential-only commands and `--list` to avoid constructing a live session.
 The factory remains open until the runtime and every session it opened have
 closed.
 
+The session and workspace stores are Harness storage records, not hand-edited
+JSON files. The operator-maintained JSON beside them is the workspace
+permission file; an empty file is a complete valid starting point:
+
+```json
+{
+  "version": 2,
+  "normalization_version": 1,
+  "rules": []
+}
+```
+
+Carbon resolves that file under the workspace digest. The strict schema is
+implemented by the released
+[`tools/permission/rule_json.go`](https://github.com/looprig/tools/blob/v0.10.0/permission/rule_json.go)
+codec; session journals, listings, leases, and resources remain owned by the
+Harness storage APIs.
+
 ## List without replaying
 
 Use:

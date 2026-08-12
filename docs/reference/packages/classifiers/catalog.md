@@ -26,7 +26,7 @@ Import path: `github.com/looprig/classifiers/pkg/catalog`. The source is pinned 
 
 ## Package role {#package-role}
 
-The package currently has no exported construction API. It performs no implicit global registration and does not make a classifier available to a Rig by import alone.
+Package catalog exposes the source-defined API.
 
 ## Exported surface {#exported-surface}
 
@@ -54,9 +54,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -68,4 +68,4 @@ Adjacent tests at the same commit:
 
 No `_test.go` file is present in this package directory at the pinned commit.
 
-Run `GOWORK=off go test ./...` from the `classifiers` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `classifiers` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

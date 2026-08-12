@@ -24,7 +24,7 @@ Import path: `github.com/looprig/natsstore`. The source is pinned to github.com/
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. The owning module is released as v0.3.1; pin that version in consumers and keep local workspace replacements out of published go.mod files.
+Package natsstore implements storage's storage primitives over NATS JetStream and owns an embedded, in-process JetStream server (no TCP socket) over a persistent on-disk StoreDir, so a single process gets a durable JetStream backend with no external broker.
 
 ## Exported surface {#exported-surface}
 
@@ -219,9 +219,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `BlobOpError`, `ConnectError`, `KVOpError`, `LeaseEncodeError`, `LeaseOpError`, `NameEncodingError`, `OptionsError`, `RecordReadError`, `ServerStartError`, `StoreDirError`, `StoreLockError`, `StoreLockedError`, `StreamOpError`, `WiringError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BlobOpError`, `ConnectError`, `KVOpError`, `LeaseEncodeError`, `LeaseOpError`, `NameEncodingError`, `OptionsError`, `RecordReadError`, `ServerStartError`, `StoreDirError`, `StoreLockError`, `StoreLockedError`, `StreamOpError`, `WiringError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -257,4 +257,4 @@ Adjacent tests at the same commit:
 - [paths_test.go](https://github.com/looprig/natsstore/blob/054dcab200c5a3d0ddde76208d3b117e76c521f2/paths_test.go)
 - [subject_test.go](https://github.com/looprig/natsstore/blob/054dcab200c5a3d0ddde76208d3b117e76c521f2/subject_test.go)
 
-Run `GOWORK=off go test ./...` from the `natsstore` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `natsstore` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -101,6 +101,54 @@ test('Carbon configuration examples cover the released source fixtures and tests
   }
 });
 
+test('Carbon operational pages carry complete JSON examples for their config boundaries', () => {
+  const documents = carbonDocuments();
+  const byPath = new Map(documents.map((document) => [document.relativePath, document.text]));
+  const required = [
+    {
+      file: 'docs/carbon/classifiers.md',
+      terms: ['permission_review', 'structured_output_with_tools', '"models"'],
+    },
+    {
+      file: 'docs/carbon/acp.md',
+      terms: ['native_acp', 'acp_launchers', '"codex"'],
+    },
+    {
+      file: 'docs/carbon/model-proxy.md',
+      terms: ['"uses": ["delegate"]', 'credential_ref', '"primer_default"'],
+    },
+    {
+      file: 'docs/carbon/credentials.md',
+      terms: ['"version": 3', 'credential_ref', '"models"'],
+    },
+    {
+      file: 'docs/carbon/workspaces.md',
+      terms: ['"normalization_version": 1', '"rules"', 'command.invoke.v1'],
+    },
+    {
+      file: 'docs/carbon/sessions-and-stores.md',
+      terms: ['"normalization_version": 1', '"rules"'],
+    },
+    {
+      file: 'docs/carbon/architecture/configuration.md',
+      terms: ['"primer_default"', '"mcpServers"', '"models"'],
+    },
+  ];
+
+  for (const { file, terms } of required) {
+    const document = byPath.get(file);
+    assert.ok(document, `missing required Carbon documentation file ${file}`);
+    const fences = jsonFences({ text: document });
+    assert.ok(fences.length > 0, `${file} needs at least one complete JSON fence`);
+    for (const term of terms) assert.match(document, new RegExp(escapeRegExp(term)), `${file} omits ${term}`);
+    for (const { body } of fences) {
+      const parsed = JSON.parse(body);
+      assert.equal(typeof parsed, 'object', `${file} JSON example must be an object`);
+      assert.notEqual(parsed, null, `${file} JSON example must not be null`);
+    }
+  }
+});
+
 test('Carbon configuration docs do not cite plan files or secret sentinels', () => {
   const allText = carbonDocuments().map(({ text }) => text).join('\n');
   assert.doesNotMatch(allText, /docs\/plans\//, 'Carbon docs must use code and test sources, not plan documents');

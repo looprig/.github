@@ -26,7 +26,7 @@ Import path: `github.com/looprig/mcp/pkg/auth`. The source is pinned to github.c
 
 ## Package role {#package-role}
 
-`TokenSet`, `Header`, `ClientCredentials`, and `Status` separate secret material from loggable metadata. `OAuthProvider` drives the configured browser, token store, and provider endpoints through explicit interfaces.
+Package auth provides the reusable OAuth and bearer-token contracts an application plugs into when connecting to a network MCP server.
 
 ## Exported surface {#exported-surface}
 
@@ -98,12 +98,15 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ```go
 type BrowserOpener interface {
+	// OpenURL presents url to the user, or returns an error if it cannot.
 	OpenURL(ctx context.Context, url string) error
 }
 ```
 
 ```go
 type HeaderProvider interface {
+	// Headers returns the headers to attach, or an error if they cannot be
+	// obtained. An empty result is valid and means "add nothing".
 	Headers(ctx context.Context) ([]Header, error)
 }
 ```
@@ -194,10 +197,13 @@ type TokenSet struct {
 
 ```go
 type TokenStore interface {
+	// Load returns the tokens held for key, or an error wrapping ErrNoToken
+	// when there are none.
 	Load(ctx context.Context, key Key) (TokenSet, error)
-
+	// Store saves tokens for key, replacing any already held.
 	Store(ctx context.Context, key Key, set TokenSet) error
-
+	// Delete removes the tokens held for key. Deleting an absent key is not
+	// an error.
 	Delete(ctx context.Context, key Key) error
 }
 ```
@@ -218,9 +224,9 @@ type MemoryStore struct {
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `Error`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `Error`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -249,4 +255,4 @@ Adjacent tests at the same commit:
 - [pkg/auth/status_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/auth/status_test.go)
 - [pkg/auth/tokenstore_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/auth/tokenstore_test.go)
 
-Run `GOWORK=off go test ./...` from the `mcp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `mcp` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

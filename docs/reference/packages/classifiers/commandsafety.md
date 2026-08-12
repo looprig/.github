@@ -26,7 +26,7 @@ Import path: `github.com/looprig/classifiers/pkg/commandsafety`. The source is p
 
 ## Package role {#package-role}
 
-`New` validates the inference/model binding, policy revision, and evidence policy. The resulting `Classifier` implements Harness permission-classifier methods and preserves the subject basis through model input and output.
+Package commandsafety exposes the source-defined API.
 
 ## Exported surface {#exported-surface}
 
@@ -187,9 +187,9 @@ type EvaluationError struct {
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ConstructionError`, `EvaluationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ConstructionError`, `EvaluationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -206,4 +206,4 @@ Adjacent tests at the same commit:
 - [pkg/commandsafety/evaluation_test.go](https://github.com/looprig/classifiers/blob/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/commandsafety/evaluation_test.go)
 - [pkg/commandsafety/evidence_kinds_test.go](https://github.com/looprig/classifiers/blob/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/commandsafety/evidence_kinds_test.go)
 
-Run `GOWORK=off go test ./...` from the `classifiers` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `classifiers` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -26,7 +26,7 @@ Import path: `github.com/looprig/mcp/pkg/server`. The source is pinned to github
 
 ## Package role {#package-role}
 
-`New` validates server identity and limits. `RegisterTool` adds a name, description, input schema, and handler. `Run` serves requests until context cancellation or transport closure.
+Package server provides the small MCP server surface used by a product's injected collaboration process.
 
 ## Exported surface {#exported-surface}
 
@@ -120,9 +120,9 @@ type ToolResult = Result
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -137,4 +137,4 @@ Adjacent tests at the same commit:
 - [pkg/server/server_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/server/server_test.go)
 - [pkg/server/stdio_test.go](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/server/stdio_test.go)
 
-Run `GOWORK=off go test ./...` from the `mcp` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `mcp` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

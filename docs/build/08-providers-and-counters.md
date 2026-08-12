@@ -46,7 +46,7 @@ Use `llm` as the provider assembly layer when a process needs a common model pol
 
 ## Counters {#counters}
 
-`auto.NewCounter` and provider-level counter constructors return a `contextcount.ContextCounter`. A counter estimates or obtains the number of input-context tokens before a model call; it does not wrap an inference client or aggregate response usage. Automatic selection returns only exact counters for supported provider and API-format pairs. Unsupported pairs fail closed with a typed support error rather than silently substituting an estimator. Call `CountContext` with the intended `inference.Request`, inspect the returned capability when policy depends on exactness, and keep response usage accounting separate.
+`auto.NewCounter` and provider-level counter constructors return a `contextcount.ContextCounter`. The implementation is in [`llm/auto/counter.go`](https://github.com/looprig/llm/blob/v0.13.3/auto/counter.go). A counter estimates or obtains the number of input-context tokens as a preflight operation before a model call; it does not wrap an inference client or aggregate response usage. Automatic selection returns only exact counters for supported provider and API-format pairs. Unsupported pairs fail closed with a typed support error rather than silently substituting an estimator. Call `CountContext` with the intended `inference.Request`, inspect the returned capability when policy depends on exactness, and keep response usage accounting separate.
 
 ## Subscription and credential boundaries {#subscription-and-credential-boundaries}
 

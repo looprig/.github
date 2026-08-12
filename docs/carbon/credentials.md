@@ -11,6 +11,8 @@ proofs:
     - release-github-com-looprig-carbon
   lifecycle:
     - release-github-com-looprig-carbon
+  complete-credential-bound-model-file:
+    - release-github-com-looprig-carbon
   list-what-is-configured:
     - release-github-com-looprig-carbon
   login-posture:
@@ -30,6 +32,44 @@ every model or child process. A version-3 model row can refer to
 `credential://provider/name`; Carbon resolves that reference through its local
 catalog when it composes an inference client. The reference and provider are
 safe identity data. The credential value stays inside the credential source.
+
+## Complete credential-bound model file
+
+A version-3 row carries a reference, not the provider secret. This complete
+`models.json` file can be used after the referenced catalog entry has been
+created with the explicit login or provisioning path.
+
+```json
+{
+  "version": 3,
+  "primer_default": "cloud",
+  "models": [{
+    "alias": "cloud",
+    "description": "Credential-backed coding model.",
+    "provider": "openai",
+    "api_format": "openai-responses",
+    "base_url": "https://api.openai.com/v1",
+    "model": "gpt-5",
+    "credential_ref": "credential://openai/personal",
+    "uses": ["primer", "delegate"],
+    "capabilities": {
+      "tools": true,
+      "thinking": true,
+      "images": false,
+      "prompt_caching": false,
+      "structured_output": true,
+      "structured_output_with_tools": true
+    },
+    "efforts": ["none"],
+    "default_effort": "none"
+  }]
+}
+```
+
+The accepted schema-v3 shape is exercised by
+[`modelconfig_decode_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_decode_test.go)
+and the credential mode checks in
+[`modelconfig_validate_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_validate_test.go).
 
 ## List what is configured
 

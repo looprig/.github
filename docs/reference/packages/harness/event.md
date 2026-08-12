@@ -23,11 +23,11 @@ proofs:
 
 # event package · event
 
-Import path: `github.com/looprig/harness/pkg/event`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/event`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-Every event has a producer `Header`, lifecycle class, visibility, and scope. Durable events are replay inputs; ephemeral streaming values are intentionally not persisted. Reply events carry correlation data for a command or gate.
+Package event defines the sealed union of rig, session, loop, turn, step, and tool events.
 
 ## Exported surface {#exported-surface}
 
@@ -53,6 +53,8 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (id *CompactAttemptID) UnmarshalText(text []byte) error`
 - `func (r CompactionReason) Valid() bool`
 - `func (r CompactRejectReason) Valid() bool`
+- `func (value CompactionCommitted) MarshalJSON() ([]byte, error)`
+- `func (value *CompactionCommitted) UnmarshalJSON(data []byte) error`
 - `func (f ConfigFingerprint) Equal(other ConfigFingerprint) bool`
 - `func (m ConfigManifest) Fingerprint() string`
 - `func (m ConfigManifest) ToolNamesRev() string`
@@ -121,13 +123,14 @@ type CompactionStarted struct {
 ```go
 type CompactionCommitted struct {
 	Header
-	AttemptID        CompactAttemptID     `json:"attempt_id"`
-	WaiterCommandIDs []uuid.UUID          `json:"waiter_command_ids"`
-	Reason           CompactionReason     `json:"reason"`
-	Basis            ContextBasis         `json:"basis"`
-	Summary          *content.UserMessage `json:"summary"`
-	PostContext      ContextMeasurement   `json:"post_context"`
-	Duration         time.Duration        `json:"duration,omitzero"`
+	AttemptID        CompactAttemptID        `json:"attempt_id"`
+	WaiterCommandIDs []uuid.UUID             `json:"waiter_command_ids"`
+	Reason           CompactionReason        `json:"reason"`
+	Basis            ContextBasis            `json:"basis"`
+	Summary          *content.UserMessage    `json:"summary"`
+	Retained         content.AgenticMessages `json:"retained,omitempty"`
+	PostContext      ContextMeasurement      `json:"post_context"`
+	Duration         time.Duration           `json:"duration,omitzero"`
 	// contains filtered or unexported fields
 }
 ```
@@ -363,20 +366,21 @@ type TurnPanicError struct{ Detail string }
 
 ```go
 type Event interface {
-	isEvent()
 	Class() Class
 	Scope() Scope
-	EndsTurn() bool
+	EndsTurn() bool // turn-terminal: the last event this turn's per-turn stream carries
 	EventHeader() Header
 	Visibility() EventVisibility
+	// contains filtered or unexported methods
 }
 ```
 
 ```go
 type Reply interface {
 	Event
-	isReply()
-	ReplyTo() uuid.UUID
+
+	ReplyTo() uuid.UUID // == Header.Cause.CommandID: the command this answers
+	// contains filtered or unexported methods
 }
 ```
 
@@ -1104,7 +1108,7 @@ type WorkflowActivity struct {
 
 ### Constants {#constants}
 
-`CompactionReasonUnspecified`, `CompactionReasonManual`, `CompactionReasonAutomatic`, `CompactRejectUnspecified`, `CompactRejectControlLaneFull`, `CompactRejectShuttingDown`, `CompactRejectInterrupted`, `CompactRejectCanceled`, `CompactRejectStaleBasis`, `CompactRejectProgressPublication`, `CompactRejectUnavailable`, `CompactRejectExecutionFailed`, `CompactRejectInvalidSummary`, `CompactRejectContextCountFailed`, `CompactRejectSummaryTooLarge`, `CompactRejectInternal`, `CompactRejectContextLimitUnknown`, `ManifestSchemaVersion`, `ContextFieldRevision`, `ContextFieldThroughEventID`, `ContextFieldModel`, `ContextFieldRequestFingerprint`, `ContextFieldInputLimit`, `ContextFieldQuality`, `FullScaleBasisPoints`, `PressureUnknown`, `PressureNormal`, `PressureCompact`, `PressureHardLimit`, `DelegateDeliverySteerAttemptReserved`, `DelegateDeliveryResolvedUnknown`, `DelegateDeliveryResolvedUntrackable`, `DriftInfo`, `DriftWarn`, `DriftTool`, `DriftModel`, `DriftPrompt`, `DriftTopology`, `DriftExternal`, `DriftConfinement`, `DriftPermission`, `DriftWorkspace`, `DriftTrust`, `DriftAgentKind`, `DriftAgentName`, `DriftAdapter`, `DriftRuntimeSkills`, `DriftHookPolicy`, `DriftRuntime`, `DriftApp`, `Ephemeral`, `Enduring`, `ScopeSession`, `ScopeLoop`, `Public`, `Internal`, `CancelClientRetracted`, `CancelTurnInterrupted`, `CancelTurnFailed`, `DecisionSourceUser`, `DecisionSourcePolicy`, `DecisionSourceOperator`, `DecisionSourceMigration`, `SnapshotConsistencyUnknown`, `SnapshotQuiescent`, `SnapshotFuzzy`, `SnapshotTriggerKindUnknown`, `SnapshotTriggerManual`, `SnapshotTriggerIdle`, `SnapshotTriggerInterrupt`, `SnapshotTriggerTurnDone`, `SnapshotTriggerStepDone`, `SnapshotTriggerSeed`, `LoopRestoreTombstoneRuntimeMismatch`, `LoopRestoreTombstoneRuntimeUnavailable`, `IntegrationStarting`, `IntegrationReady`, `IntegrationDegraded`, `IntegrationFailed`, `IntegrationClosed`, `MaxIntegrationSourceBytes`, `MaxIntegrationNameBytes`, `MaxIntegrationDetailBytes`, `KindEmptyResponse`, `KindToolLimit`, `KindTurnPanic`, `KindUnknown`, `PermissionEffectApprove`, `PermissionEffectDeny`, `RejectUnspecified`, `RejectQueueFull`, `RejectShuttingDown`, `RejectInternal`, `RuleRequired`, `RuleMustBeZero`, `RuleUnknownType`, `RuleInvalid`, `FieldEventID`, `FieldSessionID`, `FieldLoopID`, `FieldTurnID`, `FieldStepID`, `FieldToolExecutionID`, `FieldConsistency`, `FieldTrigger`, `FieldCause`, `FieldCommandID`, `FieldRequestID`, `FieldActiveLoopID`, `FieldTargetLoopID`, `FieldCategory`, `FieldModel`, `FieldModelKey`, `FieldContextLimits`, `FieldEffort`, `FieldUsage`, `FieldMessages`, `FieldVisibility`, `FieldDefinition`, `FieldRunID`, `FieldRuntime`, `FieldAgentRuntime`, `FieldACPSessionID`, `FieldDuration`, `FieldStage`, `FieldReasonCode`, `FieldAttemptID`, `FieldReason`, `FieldRejectReason`, `FieldWaiterCommandIDs`, `FieldSummary`, `FieldPostContext`, `FieldCommittedEventID`, `FieldSource`, `FieldActor`, `FieldGeneration`, `FieldTools`, `FieldProcess`, `FieldGateID`, `FieldClassifier`, `FieldClassifierRevision`, `FieldStatus`, `FieldRisk`, `FieldAuthorization`, `FieldCategories`, `FieldAutoApproved`, `FieldIntegrationName`, `FieldState`, `FieldDetail`, `FieldEpoch`, `FieldAdoptedFingerprint`, `FieldManifest`, `FieldDrift`, `FieldMessage`, `FieldWorkflowName`, `FieldWorkflowVersion`, `FieldActivityKind`, `FieldOccurredAt`, `FieldVertexID`, `FieldVertexLabel`, `FieldProgress`, `FieldType`, `MaxConfigMessageLen`, `MaxConfigActorLen`, `WorkflowActivityRunStarted`, `WorkflowActivityVertexCompleted`, `WorkflowActivityRunInterrupted`, `WorkflowActivityRunResumed`, `WorkflowActivityRunCompleted`, `WorkflowActivityRunCancelled`, `WorkflowActivityRunFailed`, `WorkflowActivityKindRunStarted`, `WorkflowActivityKindVertexCompleted`, `WorkflowActivityKindRunInterrupted`, `WorkflowActivityKindRunResumed`, `WorkflowActivityKindRunCompleted`, `WorkflowActivityKindRunCancelled`, `WorkflowActivityKindRunFailed`, `WorkflowRunStatusRunning`, `WorkflowRunStatusInterrupted`, `WorkflowRunStatusCompleted`, `WorkflowRunStatusCancelled`, `WorkflowRunStatusFailed`, `MaxWorkflowNameBytes`, `MaxWorkflowVersionBytes`, `MaxWorkflowVertexLabelBytes`, `MaxWorkflowActivityMessageBytes`, `MaxWorkflowActivityProgress`
+`CompactionReasonUnspecified`, `CompactionReasonManual`, `CompactionReasonAutomatic`, `CompactRejectUnspecified`, `CompactRejectControlLaneFull`, `CompactRejectShuttingDown`, `CompactRejectInterrupted`, `CompactRejectCanceled`, `CompactRejectStaleBasis`, `CompactRejectProgressPublication`, `CompactRejectUnavailable`, `CompactRejectExecutionFailed`, `CompactRejectInvalidSummary`, `CompactRejectContextCountFailed`, `CompactRejectSummaryTooLarge`, `CompactRejectInternal`, `CompactRejectContextLimitUnknown`, `CompactRejectRetainedTailTooLarge`, `ManifestSchemaVersion`, `ContextFieldRevision`, `ContextFieldThroughEventID`, `ContextFieldModel`, `ContextFieldRequestFingerprint`, `ContextFieldInputLimit`, `ContextFieldQuality`, `FullScaleBasisPoints`, `PressureUnknown`, `PressureNormal`, `PressureCompact`, `PressureHardLimit`, `DelegateDeliverySteerAttemptReserved`, `DelegateDeliveryResolvedUnknown`, `DelegateDeliveryResolvedUntrackable`, `DriftInfo`, `DriftWarn`, `DriftTool`, `DriftModel`, `DriftPrompt`, `DriftTopology`, `DriftExternal`, `DriftConfinement`, `DriftPermission`, `DriftWorkspace`, `DriftTrust`, `DriftAgentKind`, `DriftAgentName`, `DriftAdapter`, `DriftRuntimeSkills`, `DriftHookPolicy`, `DriftRuntime`, `DriftApp`, `Ephemeral`, `Enduring`, `ScopeSession`, `ScopeLoop`, `Public`, `Internal`, `CancelClientRetracted`, `CancelTurnInterrupted`, `CancelTurnFailed`, `DecisionSourceUser`, `DecisionSourcePolicy`, `DecisionSourceOperator`, `DecisionSourceMigration`, `SnapshotConsistencyUnknown`, `SnapshotQuiescent`, `SnapshotFuzzy`, `SnapshotTriggerKindUnknown`, `SnapshotTriggerManual`, `SnapshotTriggerIdle`, `SnapshotTriggerInterrupt`, `SnapshotTriggerTurnDone`, `SnapshotTriggerStepDone`, `SnapshotTriggerSeed`, `LoopRestoreTombstoneRuntimeMismatch`, `LoopRestoreTombstoneRuntimeUnavailable`, `IntegrationStarting`, `IntegrationReady`, `IntegrationDegraded`, `IntegrationFailed`, `IntegrationClosed`, `MaxIntegrationSourceBytes`, `MaxIntegrationNameBytes`, `MaxIntegrationDetailBytes`, `KindEmptyResponse`, `KindToolLimit`, `KindTurnPanic`, `KindUnknown`, `PermissionEffectApprove`, `PermissionEffectDeny`, `RejectUnspecified`, `RejectQueueFull`, `RejectShuttingDown`, `RejectInternal`, `RuleRequired`, `RuleMustBeZero`, `RuleUnknownType`, `RuleInvalid`, `FieldEventID`, `FieldSessionID`, `FieldLoopID`, `FieldTurnID`, `FieldStepID`, `FieldToolExecutionID`, `FieldConsistency`, `FieldTrigger`, `FieldCause`, `FieldCommandID`, `FieldRequestID`, `FieldActiveLoopID`, `FieldTargetLoopID`, `FieldCategory`, `FieldModel`, `FieldModelKey`, `FieldContextLimits`, `FieldEffort`, `FieldUsage`, `FieldMessages`, `FieldVisibility`, `FieldDefinition`, `FieldRunID`, `FieldRuntime`, `FieldAgentRuntime`, `FieldACPSessionID`, `FieldDuration`, `FieldStage`, `FieldReasonCode`, `FieldAttemptID`, `FieldReason`, `FieldRejectReason`, `FieldWaiterCommandIDs`, `FieldSummary`, `FieldRetained`, `FieldPostContext`, `FieldCommittedEventID`, `FieldSource`, `FieldActor`, `FieldGeneration`, `FieldTools`, `FieldProcess`, `FieldGateID`, `FieldClassifier`, `FieldClassifierRevision`, `FieldStatus`, `FieldRisk`, `FieldAuthorization`, `FieldCategories`, `FieldAutoApproved`, `FieldIntegrationName`, `FieldState`, `FieldDetail`, `FieldEpoch`, `FieldAdoptedFingerprint`, `FieldManifest`, `FieldDrift`, `FieldMessage`, `FieldWorkflowName`, `FieldWorkflowVersion`, `FieldActivityKind`, `FieldOccurredAt`, `FieldVertexID`, `FieldVertexLabel`, `FieldProgress`, `FieldType`, `MaxConfigMessageLen`, `MaxConfigActorLen`, `WorkflowActivityRunStarted`, `WorkflowActivityVertexCompleted`, `WorkflowActivityRunInterrupted`, `WorkflowActivityRunResumed`, `WorkflowActivityRunCompleted`, `WorkflowActivityRunCancelled`, `WorkflowActivityRunFailed`, `WorkflowActivityKindRunStarted`, `WorkflowActivityKindVertexCompleted`, `WorkflowActivityKindRunInterrupted`, `WorkflowActivityKindRunResumed`, `WorkflowActivityKindRunCompleted`, `WorkflowActivityKindRunCancelled`, `WorkflowActivityKindRunFailed`, `WorkflowRunStatusRunning`, `WorkflowRunStatusInterrupted`, `WorkflowRunStatusCompleted`, `WorkflowRunStatusCancelled`, `WorkflowRunStatusFailed`, `MaxWorkflowNameBytes`, `MaxWorkflowVersionBytes`, `MaxWorkflowVertexLabelBytes`, `MaxWorkflowActivityMessageBytes`, `MaxWorkflowActivityProgress`
 
 ### Variables {#variables}
 
@@ -1112,73 +1116,73 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ContextValidationError`, `EmptyResponseError`, `EphemeralNotPersistableError`, `EventDecodeError`, `EventEncodeError`, `EventLimitError`, `InvalidEventError`, `LegacyRuntimeMigrationError`, `RestoredError`, `RestoredModelFacingError`, `ToolLimitError`, `TurnPanicError`, `UnknownEventTypeError`, `UnknownMessageRoleError`, `UnsupportedSchemaError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ContextValidationError`, `EmptyResponseError`, `EphemeralNotPersistableError`, `EventDecodeError`, `EventEncodeError`, `EventLimitError`, `InvalidEventError`, `LegacyRuntimeMigrationError`, `RestoredError`, `RestoredModelFacingError`, `ToolLimitError`, `TurnPanicError`, `UnknownEventTypeError`, `UnknownMessageRoleError`, `UnsupportedSchemaError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/event/compaction.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/compaction.go)
-- [pkg/event/config_fingerprint.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/config_fingerprint.go)
-- [pkg/event/config_manifest.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/config_manifest.go)
-- [pkg/event/context.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/context.go)
-- [pkg/event/delegate_delivery.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/delegate_delivery.go)
-- [pkg/event/doc.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/doc.go)
-- [pkg/event/drift.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/drift.go)
-- [pkg/event/errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/errors.go)
-- [pkg/event/event.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/event.go)
-- [pkg/event/factory.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/factory.go)
-- [pkg/event/filter.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/filter.go)
-- [pkg/event/gate.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/gate.go)
-- [pkg/event/integration.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/integration.go)
-- [pkg/event/marshal.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/marshal.go)
-- [pkg/event/permission_review.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/permission_review.go)
-- [pkg/event/process.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/process.go)
-- [pkg/event/restored_error.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/restored_error.go)
-- [pkg/event/tool.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/tool.go)
-- [pkg/event/turn.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/turn.go)
-- [pkg/event/validate.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/validate.go)
-- [pkg/event/workflow.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/workflow.go)
+- [pkg/event/compaction.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/compaction.go)
+- [pkg/event/config_fingerprint.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/config_fingerprint.go)
+- [pkg/event/config_manifest.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/config_manifest.go)
+- [pkg/event/context.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/context.go)
+- [pkg/event/delegate_delivery.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/delegate_delivery.go)
+- [pkg/event/doc.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/doc.go)
+- [pkg/event/drift.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/drift.go)
+- [pkg/event/errors.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/errors.go)
+- [pkg/event/event.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/event.go)
+- [pkg/event/factory.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/factory.go)
+- [pkg/event/filter.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/filter.go)
+- [pkg/event/gate.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/gate.go)
+- [pkg/event/integration.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/integration.go)
+- [pkg/event/marshal.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/marshal.go)
+- [pkg/event/permission_review.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/permission_review.go)
+- [pkg/event/process.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/process.go)
+- [pkg/event/restored_error.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/restored_error.go)
+- [pkg/event/tool.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/tool.go)
+- [pkg/event/turn.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/turn.go)
+- [pkg/event/validate.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/validate.go)
+- [pkg/event/workflow.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/workflow.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/event/agent_runtime_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/agent_runtime_test.go)
-- [pkg/event/compaction_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/compaction_test.go)
-- [pkg/event/config_fingerprint_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/config_fingerprint_test.go)
-- [pkg/event/config_manifest_fuzz_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/config_manifest_fuzz_test.go)
-- [pkg/event/config_manifest_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/config_manifest_test.go)
-- [pkg/event/context_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/context_test.go)
-- [pkg/event/delegate_delivery_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/delegate_delivery_test.go)
-- [pkg/event/drift_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/drift_test.go)
-- [pkg/event/errors_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/errors_test.go)
-- [pkg/event/event_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/event_test.go)
-- [pkg/event/external_toolset_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/external_toolset_test.go)
-- [pkg/event/factory_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/factory_test.go)
-- [pkg/event/filter_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/filter_test.go)
-- [pkg/event/foreign_session_bound_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/foreign_session_bound_test.go)
-- [pkg/event/gate_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/gate_test.go)
-- [pkg/event/gate_wire_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/gate_wire_test.go)
-- [pkg/event/header_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/header_test.go)
-- [pkg/event/hustle_fuzz_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/hustle_fuzz_test.go)
-- [pkg/event/hustle_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/hustle_test.go)
-- [pkg/event/integration_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/integration_test.go)
-- [pkg/event/loop_restore_tombstone_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/loop_restore_tombstone_test.go)
-- [pkg/event/loopstarted_display_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/loopstarted_display_test.go)
-- [pkg/event/loopstarted_foreignsid_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/loopstarted_foreignsid_test.go)
-- [pkg/event/marshal_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/marshal_test.go)
-- [pkg/event/permission_review_fuzz_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/permission_review_fuzz_test.go)
-- [pkg/event/permission_review_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/permission_review_test.go)
-- [pkg/event/process_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/process_test.go)
-- [pkg/event/quality_validation_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/quality_validation_test.go)
-- [pkg/event/restored_error_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/restored_error_test.go)
-- [pkg/event/rig_fuzz_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/rig_fuzz_test.go)
-- [pkg/event/rig_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/rig_test.go)
-- [pkg/event/tool_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/tool_test.go)
-- [pkg/event/usage_runtime_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/usage_runtime_test.go)
-- [pkg/event/validate_internal_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/validate_internal_test.go)
-- [pkg/event/validate_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/validate_test.go)
-- [pkg/event/workflow_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/event/workflow_test.go)
+- [pkg/event/agent_runtime_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/agent_runtime_test.go)
+- [pkg/event/compaction_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/compaction_test.go)
+- [pkg/event/config_fingerprint_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/config_fingerprint_test.go)
+- [pkg/event/config_manifest_fuzz_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/config_manifest_fuzz_test.go)
+- [pkg/event/config_manifest_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/config_manifest_test.go)
+- [pkg/event/context_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/context_test.go)
+- [pkg/event/delegate_delivery_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/delegate_delivery_test.go)
+- [pkg/event/drift_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/drift_test.go)
+- [pkg/event/errors_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/errors_test.go)
+- [pkg/event/event_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/event_test.go)
+- [pkg/event/external_toolset_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/external_toolset_test.go)
+- [pkg/event/factory_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/factory_test.go)
+- [pkg/event/filter_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/filter_test.go)
+- [pkg/event/foreign_session_bound_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/foreign_session_bound_test.go)
+- [pkg/event/gate_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/gate_test.go)
+- [pkg/event/gate_wire_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/gate_wire_test.go)
+- [pkg/event/header_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/header_test.go)
+- [pkg/event/hustle_fuzz_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/hustle_fuzz_test.go)
+- [pkg/event/hustle_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/hustle_test.go)
+- [pkg/event/integration_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/integration_test.go)
+- [pkg/event/loop_restore_tombstone_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/loop_restore_tombstone_test.go)
+- [pkg/event/loopstarted_display_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/loopstarted_display_test.go)
+- [pkg/event/loopstarted_foreignsid_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/loopstarted_foreignsid_test.go)
+- [pkg/event/marshal_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/marshal_test.go)
+- [pkg/event/permission_review_fuzz_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/permission_review_fuzz_test.go)
+- [pkg/event/permission_review_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/permission_review_test.go)
+- [pkg/event/process_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/process_test.go)
+- [pkg/event/quality_validation_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/quality_validation_test.go)
+- [pkg/event/restored_error_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/restored_error_test.go)
+- [pkg/event/rig_fuzz_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/rig_fuzz_test.go)
+- [pkg/event/rig_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/rig_test.go)
+- [pkg/event/tool_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/tool_test.go)
+- [pkg/event/usage_runtime_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/usage_runtime_test.go)
+- [pkg/event/validate_internal_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/validate_internal_test.go)
+- [pkg/event/validate_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/validate_test.go)
+- [pkg/event/workflow_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/event/workflow_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

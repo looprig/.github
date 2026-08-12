@@ -24,7 +24,7 @@ Import path: `github.com/looprig/credentials/refresh`. The source is pinned to g
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. The owning module is released as v0.1.0; pin that version in consumers and keep local workspace replacements out of published go.mod files.
+Package refresh contains provider-neutral renewable credential sources.
 
 ## Exported surface {#exported-surface}
 
@@ -248,7 +248,7 @@ type ExchangeFunc func(context.Context, State) (TokenResponse, error)
 ```
 
 ```go
-type InvalidStateError struct{
+type InvalidStateError struct {
 	// contains filtered or unexported fields
 }
 ```
@@ -263,9 +263,9 @@ type InvalidStateError struct{
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `AmbiguousRotationError`, `ExchangeError`, `InvalidStateError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AmbiguousRotationError`, `ExchangeError`, `InvalidStateError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -283,4 +283,4 @@ Adjacent tests at the same commit:
 - [refresh/source_test.go](https://github.com/looprig/credentials/blob/d696dd78cf4773da660b7cbf59533832fbaf4ed0/refresh/source_test.go)
 - [refresh/state_test.go](https://github.com/looprig/credentials/blob/d696dd78cf4773da660b7cbf59533832fbaf4ed0/refresh/state_test.go)
 
-Run `GOWORK=off go test ./...` from the `credentials` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `credentials` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

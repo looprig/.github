@@ -27,7 +27,7 @@ Import path: `github.com/looprig/core/content`. The source is pinned to github.c
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. The owning module is released as v0.5.1; pin that version in consumers and do not publish local workspace replacements.
+Package content defines the unified content vocabulary shared across all internal packages.
 
 ## Exported surface {#exported-surface}
 
@@ -73,7 +73,9 @@ type BlockType string
 ```
 
 ```go
-type Block interface{ isBlock() }
+type Block interface {
+	// contains filtered or unexported methods
+}
 ```
 
 ```go
@@ -138,7 +140,9 @@ type ToolResultBlock struct {
 ```
 
 ```go
-type Chunk interface{ isChunk() }
+type Chunk interface {
+	// contains filtered or unexported methods
+}
 ```
 
 ```go
@@ -227,7 +231,9 @@ type ToolResultMessage struct {
 ```
 
 ```go
-type Conversation interface{ isMessage() }
+type Conversation interface {
+	// contains filtered or unexported methods
+}
 ```
 
 ```go
@@ -281,9 +287,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `BlockDecodeError`, `BlockEncodeError`, `BlockLimitError`, `NilBlockError`, `UnknownBlockTypeError`, `UsageOverflowError`, `UsageValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BlockDecodeError`, `BlockEncodeError`, `BlockLimitError`, `NilBlockError`, `UnknownBlockTypeError`, `UsageOverflowError`, `UsageValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -307,4 +313,4 @@ Adjacent tests at the same commit:
 - [content/message_test.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/message_test.go)
 - [content/usage_test.go](https://github.com/looprig/core/blob/a3dd61bfb5f89794eaf9a2eb7c5ff46c6e2eb894/content/usage_test.go)
 
-Run `GOWORK=off go test ./...` from the `core` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `core` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

@@ -414,10 +414,10 @@
     {
       "repository": "carbon",
       "module": "github.com/looprig/carbon",
-      "commit": "cac0608ae0bd873e35ee793bec5e4a56b02273bd",
+      "commit": "05637b819fabadba1b7f87c6bfa44445212d2bf8",
       "publication": {
         "status": "released",
-        "tag": "v0.19.0"
+        "tag": "v0.20.0"
       },
       "disposition": "product-only",
       "nested": false,
@@ -4355,10 +4355,10 @@
     {
       "repository": "harness",
       "module": "github.com/looprig/harness",
-      "commit": "43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb",
+      "commit": "3d1dafd7a9a3f8979b712e8e9b3184727e477d76",
       "publication": {
         "status": "released",
-        "tag": "v0.24.2"
+        "tag": "v0.25.0"
       },
       "disposition": "reusable",
       "nested": false,
@@ -8138,10 +8138,10 @@
     {
       "repository": "inference",
       "module": "github.com/looprig/inference",
-      "commit": "c56f83bd8653e650631ebfbf4035319fffba9033",
+      "commit": "081186f1b724b3d5220c15eccbd3762e0a55468d",
       "publication": {
         "status": "released",
-        "tag": "v0.9.2"
+        "tag": "v0.10.0"
       },
       "disposition": "reusable",
       "nested": false,
@@ -12802,10 +12802,10 @@
     {
       "repository": "tools",
       "module": "github.com/looprig/tools",
-      "commit": "151f5530f95a9bba95be10551a8f08282d8959ab",
+      "commit": "1a1c57c7ae8b1e59c37c89d38e9a4145c32dd62a",
       "publication": {
         "status": "released",
-        "tag": "v0.10.0"
+        "tag": "v0.10.1"
       },
       "disposition": "reusable",
       "nested": false,
@@ -14014,10 +14014,10 @@
     {
       "repository": "tui",
       "module": "github.com/looprig/tui",
-      "commit": "6b362dda04b086c8a94146320e9faad38dac9b6c",
+      "commit": "2d733c1d6880e851ee0c917066913206ad4a6d3d",
       "publication": {
         "status": "released",
-        "tag": "v0.15.1"
+        "tag": "v0.15.2"
       },
       "disposition": "reusable",
       "nested": false,

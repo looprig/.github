@@ -22,11 +22,11 @@ proofs:
 
 # command package · command
 
-Import path: `github.com/looprig/harness/pkg/command`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/command`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-Commands carry a header, command name, route, and typed payload into a session's serialized control path. The package keeps command validation separate from event validation so an acknowledgement cannot be mistaken for a durable event.
+Package command exposes the source-defined API.
 
 ## Exported surface {#exported-surface}
 
@@ -98,8 +98,8 @@ type CancelQueuedInput struct {
 
 ```go
 type Command interface {
-	isCommand()
 	CommandHeader() Header
+	// contains filtered or unexported methods
 }
 ```
 
@@ -321,46 +321,46 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `CommandDecodeError`, `CommandEncodeError`, `CommandLimitError`, `CommandValidationError`, `InvalidCommandError`, `LoopTerminatedError`, `UnbufferedAckError`, `UnknownCommandTypeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CommandDecodeError`, `CommandEncodeError`, `CommandLimitError`, `CommandValidationError`, `InvalidCommandError`, `LoopTerminatedError`, `UnbufferedAckError`, `UnknownCommandTypeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/command/approve.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/approve.go)
-- [pkg/command/cancel_delegate_request.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/cancel_delegate_request.go)
-- [pkg/command/cancel_queued_input.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/cancel_queued_input.go)
-- [pkg/command/command.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/command.go)
-- [pkg/command/compact.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/compact.go)
-- [pkg/command/deny.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/deny.go)
-- [pkg/command/header.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/header.go)
-- [pkg/command/interrupt.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/interrupt.go)
-- [pkg/command/loop_change.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/loop_change.go)
-- [pkg/command/loop_tools.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/loop_tools.go)
-- [pkg/command/marshal.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/marshal.go)
-- [pkg/command/process_notification.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/process_notification.go)
-- [pkg/command/provide_user_input.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/provide_user_input.go)
-- [pkg/command/route.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/route.go)
-- [pkg/command/shutdown.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/shutdown.go)
-- [pkg/command/submit.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/submit.go)
-- [pkg/command/validate.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/validate.go)
+- [pkg/command/approve.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/approve.go)
+- [pkg/command/cancel_delegate_request.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/cancel_delegate_request.go)
+- [pkg/command/cancel_queued_input.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/cancel_queued_input.go)
+- [pkg/command/command.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/command.go)
+- [pkg/command/compact.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/compact.go)
+- [pkg/command/deny.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/deny.go)
+- [pkg/command/header.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/header.go)
+- [pkg/command/interrupt.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/interrupt.go)
+- [pkg/command/loop_change.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/loop_change.go)
+- [pkg/command/loop_tools.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/loop_tools.go)
+- [pkg/command/marshal.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/marshal.go)
+- [pkg/command/process_notification.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/process_notification.go)
+- [pkg/command/provide_user_input.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/provide_user_input.go)
+- [pkg/command/route.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/route.go)
+- [pkg/command/shutdown.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/shutdown.go)
+- [pkg/command/submit.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/submit.go)
+- [pkg/command/validate.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/validate.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/command/approve_action_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/approve_action_test.go)
-- [pkg/command/cancel_delegate_request_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/cancel_delegate_request_test.go)
-- [pkg/command/cancel_queued_input_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/cancel_queued_input_test.go)
-- [pkg/command/compact_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/compact_test.go)
-- [pkg/command/control_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/control_test.go)
-- [pkg/command/header_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/header_test.go)
-- [pkg/command/interrupt_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/interrupt_test.go)
-- [pkg/command/loop_change_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/loop_change_test.go)
-- [pkg/command/marshal_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/marshal_test.go)
-- [pkg/command/process_notification_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/process_notification_test.go)
-- [pkg/command/shutdown_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/shutdown_test.go)
-- [pkg/command/submit_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/submit_test.go)
-- [pkg/command/validate_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/command/validate_test.go)
+- [pkg/command/approve_action_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/approve_action_test.go)
+- [pkg/command/cancel_delegate_request_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/cancel_delegate_request_test.go)
+- [pkg/command/cancel_queued_input_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/cancel_queued_input_test.go)
+- [pkg/command/compact_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/compact_test.go)
+- [pkg/command/control_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/control_test.go)
+- [pkg/command/header_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/header_test.go)
+- [pkg/command/interrupt_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/interrupt_test.go)
+- [pkg/command/loop_change_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/loop_change_test.go)
+- [pkg/command/marshal_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/marshal_test.go)
+- [pkg/command/process_notification_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/process_notification_test.go)
+- [pkg/command/shutdown_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/shutdown_test.go)
+- [pkg/command/submit_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/submit_test.go)
+- [pkg/command/validate_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/command/validate_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

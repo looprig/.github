@@ -24,7 +24,7 @@ Import path: `github.com/looprig/secrets/local`. The source is pinned to github.
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. The owning module is released as v0.1.0; pin that version in consumers and keep local workspace replacements out of published go.mod files.
+Package local implements an owner-only, descriptor-relative local secret store.
 
 ## Exported surface {#exported-surface}
 
@@ -118,9 +118,9 @@ No exported constants are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `CommitVisibleDurabilityUnknownError`, `PageTokenExpiredError`, `UnsupportedPlatformError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CommitVisibleDurabilityUnknownError`, `PageTokenExpiredError`, `UnsupportedPlatformError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -137,4 +137,4 @@ Adjacent tests at the same commit:
 - [local/store_test.go](https://github.com/looprig/secrets/blob/7b2e3a604b59343e9a0775398ce10c80f9708d12/local/store_test.go)
 - [local/store_unix_test.go](https://github.com/looprig/secrets/blob/7b2e3a604b59343e9a0775398ce10c80f9708d12/local/store_unix_test.go)
 
-Run `GOWORK=off go test ./...` from the `secrets` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `secrets` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

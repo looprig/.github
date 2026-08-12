@@ -26,7 +26,7 @@ Qualification report wire package in [Pluto v0.1.2](https://github.com/looprig/p
 
 ## Package role {#package-role}
 
-The package persists a redacted scorecard/result artifact with an explicit version. It is not a session event stream, checkpoint, or source model context.
+Package reportjson is Pluto's canonical, versioned JSON codec for a Scorecard plus an optional profile.Result.
 
 ## Exported surface {#exported-surface}
 
@@ -111,9 +111,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `EncodeError`, `InvalidReportError`, `MalformedReportError`, `ReportTooLargeError`, `UnknownVersionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `EncodeError`, `InvalidReportError`, `MalformedReportError`, `ReportTooLargeError`, `UnknownVersionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -126,4 +126,4 @@ Adjacent tests at the same commit:
 
 - [pkg/reportjson/codec_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/reportjson/codec_test.go)
 
-Run `GOWORK=off go test ./...` from the `pluto` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `pluto` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

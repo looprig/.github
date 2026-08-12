@@ -11,6 +11,8 @@ proofs:
     - release-github-com-looprig-carbon
   gateway:
     - release-github-com-looprig-carbon
+  complete-delegate-configuration:
+    - release-github-com-looprig-carbon
   what-crosses-the-boundary:
     - release-github-com-looprig-carbon
   what-the-proxy-does-not-do:
@@ -29,6 +31,65 @@ Carbon launches a delegate child, it starts one loopback
 `inference/gateway.Server` for that child, selects the protocol codec required
 by the harness, and gives the child a fresh short-lived token. The gateway
 routes only the model aliases authorized for that child.
+
+## Complete delegate configuration
+
+The proxy is derived from a gateway-backed delegate row; it is not configured
+as a standalone public proxy. This complete version-3 `models.json` file keeps
+the local primer and binds the delegate's upstream credential by reference.
+
+```json
+{
+  "version": 3,
+  "primer_default": "local",
+  "models": [
+    {
+      "alias": "local",
+      "description": "Local LM Studio coding model.",
+      "provider": "lmstudio",
+      "api_format": "openai",
+      "base_url": "http://localhost:1234/v1",
+      "model": "qwen3-coder",
+      "uses": ["primer"],
+      "capabilities": {
+        "tools": true,
+        "thinking": false,
+        "images": false,
+        "prompt_caching": false,
+        "structured_output": false,
+        "structured_output_with_tools": false
+      },
+      "efforts": ["none"],
+      "default_effort": "none"
+    },
+    {
+      "alias": "delegate",
+      "description": "Gateway-backed ACP delegate.",
+      "provider": "openai",
+      "api_format": "openai-responses",
+      "base_url": "https://api.openai.com/v1",
+      "model": "gpt-5",
+      "credential_ref": "credential://openai/personal",
+      "uses": ["delegate"],
+      "capabilities": {
+        "tools": true,
+        "thinking": true,
+        "images": false,
+        "prompt_caching": false,
+        "structured_output": true,
+        "structured_output_with_tools": true
+      },
+      "efforts": ["none"],
+      "default_effort": "none"
+    }
+  ]
+}
+```
+
+The delegate-row requirements and credential binding are validated by
+[`modelconfig_validate_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_validate_test.go)
+and the production gateway roster is covered by
+[`productionmodels_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/productionmodels_test.go).
 
 ## What crosses the boundary
 

@@ -23,11 +23,11 @@ proofs:
 
 # session package · session
 
-Import path: `github.com/looprig/harness/pkg/session`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/session`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-`Session` submits user input, exposes active loops, subscribes to events, answers gates, controls turns, and shuts down. `SessionController` and `GateHost` are narrower seams for serving and adapters. Restore deciders validate persisted identity, configuration fingerprints, runtime profiles, and workspace state before admitting a session.
+Package session exposes the live session data-plane and control-plane contracts.
 
 ## Exported surface {#exported-surface}
 
@@ -201,10 +201,20 @@ type Session interface {
 
 ```go
 type GateHost interface {
+	// OpenHostGate opens g and returns its id. The gate is public and answerable
+	// when it returns. The caller MUST then either AwaitGateAnswer or CloseGate;
+	// abandoning it without either leaks the answer slot for the session's life.
 	OpenHostGate(context.Context, uuid.UUID, gate.Gate, gate.Payload) (gate.ID, error)
-
+	// AwaitGateAnswer blocks until the gate is answered and returns the validated
+	// answer, including the form values that are absent from every durable record.
+	// An answer is delivered exactly once. Cancelling the context abandons the
+	// wait and frees the slot but does NOT close the gate, the gate is durable
+	// state and the context is the caller's, so an opener that gives up must
+	// CloseGate.
 	AwaitGateAnswer(context.Context, gate.ID) (gate.Answer, error)
-
+	// CloseGate withdraws a gate without answering it, waking any awaiter with a
+	// *GateError{GateNotFound}. It is how an opener cleans up after a cancelled or
+	// timed-out request.
 	CloseGate(context.Context, gate.ID, gate.CloseReason) error
 }
 ```
@@ -230,22 +240,22 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `AgentNameMismatchError`, `ConfigMismatchError`, `GateError`, `RestoreDiscoveryError`, `RestoreError`, `RestoreRejectedError`, `RestoreRuntimeMismatchError`, `SessionError`, `TurnRejectedError`, `WorkspaceNotConfiguredError`, `WorkspaceRecoveryError`, `WorkspaceRootBusyError`, `WorkspaceRootLeaseLostError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AgentNameMismatchError`, `ConfigMismatchError`, `GateError`, `RestoreDiscoveryError`, `RestoreError`, `RestoreRejectedError`, `RestoreRuntimeMismatchError`, `SessionError`, `TurnRejectedError`, `WorkspaceNotConfiguredError`, `WorkspaceRecoveryError`, `WorkspaceRootBusyError`, `WorkspaceRootLeaseLostError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/session/decider.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/decider.go)
-- [pkg/session/errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/errors.go)
-- [pkg/session/session.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/session.go)
+- [pkg/session/decider.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/session/decider.go)
+- [pkg/session/errors.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/session/errors.go)
+- [pkg/session/session.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/session/session.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/session/contracts_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/contracts_test.go)
-- [pkg/session/decider_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/decider_test.go)
-- [pkg/session/errors_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/session/errors_test.go)
+- [pkg/session/contracts_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/session/contracts_test.go)
+- [pkg/session/decider_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/session/decider_test.go)
+- [pkg/session/errors_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/session/errors_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

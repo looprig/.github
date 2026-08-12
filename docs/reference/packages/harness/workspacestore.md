@@ -22,11 +22,11 @@ proofs:
 
 # workspacestore package · workspacestore
 
-Import path: `github.com/looprig/harness/pkg/workspacestore`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/workspacestore`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-`Store` opens over `storage.Blobs`; `Snapshot` records a tree, `Ref` names its content, and materialization restores into a caller-selected destination. Snapshot options bound bytes, entries, and spool space.
+Package workspacestore captures a session's working directory as immutable, content-addressed snapshots so an agent's files survive the compute they ran on: snapshot a tree to a Ref, record the Ref in the session journal, and later materialize it on any host to resume.
 
 ## Exported surface {#exported-surface}
 
@@ -180,31 +180,31 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ArchiveEntryError`, `ArchiveLimitError`, `DestNotEmptyError`, `GCError`, `IntegrityError`, `InvalidRefError`, `MaterializeError`, `NilBlobsError`, `NotDirError`, `PersistencePathError`, `SnapshotError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ArchiveEntryError`, `ArchiveLimitError`, `DestNotEmptyError`, `GCError`, `IntegrityError`, `InvalidRefError`, `MaterializeError`, `NilBlobsError`, `NotDirError`, `PersistencePathError`, `SnapshotError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/workspacestore/archive.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/archive.go)
-- [pkg/workspacestore/extract.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/extract.go)
-- [pkg/workspacestore/gc.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/gc.go)
-- [pkg/workspacestore/materialize.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/materialize.go)
-- [pkg/workspacestore/ref.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/ref.go)
-- [pkg/workspacestore/snapshot.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/snapshot.go)
-- [pkg/workspacestore/store.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/store.go)
+- [pkg/workspacestore/archive.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/archive.go)
+- [pkg/workspacestore/extract.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/extract.go)
+- [pkg/workspacestore/gc.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/gc.go)
+- [pkg/workspacestore/materialize.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/materialize.go)
+- [pkg/workspacestore/ref.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/ref.go)
+- [pkg/workspacestore/snapshot.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/snapshot.go)
+- [pkg/workspacestore/store.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/store.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/workspacestore/archive_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/archive_test.go)
-- [pkg/workspacestore/extract_fuzz_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/extract_fuzz_test.go)
-- [pkg/workspacestore/extract_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/extract_test.go)
-- [pkg/workspacestore/gc_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/gc_test.go)
-- [pkg/workspacestore/materialize_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/materialize_test.go)
-- [pkg/workspacestore/ref_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/ref_test.go)
-- [pkg/workspacestore/snapshot_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/snapshot_test.go)
-- [pkg/workspacestore/store_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/workspacestore/store_test.go)
+- [pkg/workspacestore/archive_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/archive_test.go)
+- [pkg/workspacestore/extract_fuzz_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/extract_fuzz_test.go)
+- [pkg/workspacestore/extract_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/extract_test.go)
+- [pkg/workspacestore/gc_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/gc_test.go)
+- [pkg/workspacestore/materialize_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/materialize_test.go)
+- [pkg/workspacestore/ref_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/ref_test.go)
+- [pkg/workspacestore/snapshot_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/snapshot_test.go)
+- [pkg/workspacestore/store_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/workspacestore/store_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

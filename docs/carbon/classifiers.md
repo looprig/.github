@@ -13,6 +13,8 @@ proofs:
     - release-github-com-looprig-carbon
   enablement-rules:
     - release-github-com-looprig-carbon
+  complete-model-configuration:
+    - release-github-com-looprig-carbon
   what-a-review-means:
     - release-github-com-looprig-carbon
   relationship-to-command-families:
@@ -44,6 +46,67 @@ only within its configured risk and authorization floors. The `strict` option
 lowers the maximum automatically approved risk to low and raises the minimum
 authorization floor for every tier. A medium- or high-risk decision therefore
 stays human-answerable under strict mode.
+
+## Complete model configuration
+
+`permission_review.model` names a second model row; it is not an implicit alias
+for the active Carbon model. This complete version-2 file has a local primer
+and a separate structured-output classifier. Store it as the owner-only
+`models.json` file and replace the classifier key with a real approved value.
+
+```json
+{
+  "version": 2,
+  "primer_default": "local",
+  "models": [
+    {
+      "alias": "local",
+      "description": "Local LM Studio coding model.",
+      "provider": "lmstudio",
+      "api_format": "openai",
+      "base_url": "http://localhost:1234/v1",
+      "model": "qwen3-coder",
+      "api_key": "",
+      "uses": ["primer", "delegate"],
+      "capabilities": {
+        "tools": true,
+        "thinking": false,
+        "images": false,
+        "prompt_caching": false,
+        "structured_output": false,
+        "structured_output_with_tools": false
+      },
+      "efforts": ["none"],
+      "default_effort": "none"
+    },
+    {
+      "alias": "classifier",
+      "description": "Structured-output command-safety classifier.",
+      "provider": "openai",
+      "api_format": "openai-responses",
+      "base_url": "https://api.openai.com/v1",
+      "model": "classifier-model",
+      "api_key": "REPLACE_WITH_YOUR_OPENAI_API_KEY",
+      "capabilities": {
+        "tools": true,
+        "structured_output": true,
+        "structured_output_with_tools": true
+      },
+      "efforts": ["none"],
+      "default_effort": "none"
+    }
+  ],
+  "permission_review": {
+    "model": "classifier",
+    "strict": true
+  }
+}
+```
+
+The shape follows Carbon's
+[`modelConfigJSONWithUnusedClassifier`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_permission_review_test.go)
+fixture and the end-to-end resolution in
+[`productionmodels_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/productionmodels_test.go).
 
 ## What a review means
 

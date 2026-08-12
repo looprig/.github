@@ -44,6 +44,37 @@ Workspace permission state uses the canonical workspace path's SHA-256 under
 `<carbon-home>/workspaces/<digest>/permissions.json`. This keeps approvals
 scoped to a checkout identity rather than to a process-wide command history.
 
+The permission file is a strict schema-version-2 document. This complete
+example grants one exact command and one target-scoped network route; Carbon
+still evaluates each request against the selected access ceiling before an
+allow can take effect.
+
+```json
+{
+  "version": 2,
+  "normalization_version": 1,
+  "rules": [
+    {
+      "effect": "allow",
+      "capability": "command.execute",
+      "enforcement_class": "command.invoke.v1",
+      "match": {"command": "git status"}
+    },
+    {
+      "effect": "allow",
+      "capability": "network",
+      "enforcement_class": "network.target.v1",
+      "match": {"transport": "tcp", "host": "github.com", "port": 443}
+    }
+  ]
+}
+```
+
+The schema and class-shaped match objects come from the released
+[`tools/permission/rule_json.go`](https://github.com/looprig/tools/blob/v0.10.0/permission/rule_json.go)
+codec and its round-trip fixture in
+[`rule_json_test.go`](https://github.com/looprig/tools/blob/v0.10.0/permission/rule_json_test.go).
+
 ## Current checkout versus resources
 
 The checkout is the user's workspace. Carbon's per-session resource storage is

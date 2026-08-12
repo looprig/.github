@@ -24,11 +24,11 @@ proofs:
 
 # tool package · tool
 
-Import path: `github.com/looprig/harness/pkg/tool`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/tool`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-`Definition` describes immutable metadata and builds session-bound `InvokableTool` values. `CallPreparer` is the preparation boundary: it decodes untrusted arguments, normalizes them, and returns a typed `Request` and optional artifact before gate evaluation. `Requirements` and `Requirement` describe capability needs; `Bindings` supplies only session-scoped capabilities.
+Package tool defines the dependency-free contract surface for the tools subsystem: the BaseTool/InvokableTool interfaces every tool implements, the ToolResult value tools return, the tool-owned preparation boundary (CallPreparer, Request, Requirement, RuleCandidate, see preparation.go), and the optional capability interfaces the runner probes for via type assertion.
 
 ## Exported surface {#exported-surface}
 
@@ -238,7 +238,7 @@ type Definition interface {
 	ToolInfos() []ToolInfo
 	Requirements() Requirements
 	Build(context.Context, Bindings) ([]InvokableTool, error)
-	definition()
+	// contains filtered or unexported methods
 }
 ```
 
@@ -638,7 +638,9 @@ type Sequential interface {
 ```
 
 ```go
-type PreparedArtifact interface{ preparedArtifact() }
+type PreparedArtifact interface {
+	// contains filtered or unexported methods
+}
 ```
 
 ```go
@@ -714,36 +716,36 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `InvalidBindingsError`, `InvalidDefinitionError`, `InvalidRequirementsError`, `InvalidSchemaError`, `MissingBindingError`, `NilBuiltToolError`, `ProcessError`, `ProcessLifecycleValidationError`, `ProducedToolNamesError`, `RequestValidationError`, `SessionResourceServicesValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `InvalidBindingsError`, `InvalidDefinitionError`, `InvalidRequirementsError`, `InvalidSchemaError`, `MissingBindingError`, `NilBuiltToolError`, `ProcessError`, `ProcessLifecycleValidationError`, `ProducedToolNamesError`, `RequestValidationError`, `SessionResourceServicesValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/tool/definition.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/definition.go)
-- [pkg/tool/delegate_artifact.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/delegate_artifact.go)
-- [pkg/tool/model_facing_error.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/model_facing_error.go)
-- [pkg/tool/observations.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/observations.go)
-- [pkg/tool/preparation.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/preparation.go)
-- [pkg/tool/process.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/process.go)
-- [pkg/tool/schema_digest.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/schema_digest.go)
-- [pkg/tool/session_resource.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/session_resource.go)
-- [pkg/tool/skill_artifact.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/skill_artifact.go)
-- [pkg/tool/tool.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/tool.go)
+- [pkg/tool/definition.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/definition.go)
+- [pkg/tool/delegate_artifact.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/delegate_artifact.go)
+- [pkg/tool/model_facing_error.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/model_facing_error.go)
+- [pkg/tool/observations.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/observations.go)
+- [pkg/tool/preparation.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/preparation.go)
+- [pkg/tool/process.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/process.go)
+- [pkg/tool/schema_digest.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/schema_digest.go)
+- [pkg/tool/session_resource.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/session_resource.go)
+- [pkg/tool/skill_artifact.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/skill_artifact.go)
+- [pkg/tool/tool.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/tool.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/tool/capability_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/capability_test.go)
-- [pkg/tool/definition_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/definition_test.go)
-- [pkg/tool/delegate_artifact_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/delegate_artifact_test.go)
-- [pkg/tool/deps_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/deps_test.go)
-- [pkg/tool/model_facing_error_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/model_facing_error_test.go)
-- [pkg/tool/preparation_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/preparation_test.go)
-- [pkg/tool/process_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/process_test.go)
-- [pkg/tool/schema_digest_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/schema_digest_test.go)
-- [pkg/tool/session_resource_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/session_resource_test.go)
-- [pkg/tool/tool_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/tool/tool_test.go)
+- [pkg/tool/capability_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/capability_test.go)
+- [pkg/tool/definition_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/definition_test.go)
+- [pkg/tool/delegate_artifact_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/delegate_artifact_test.go)
+- [pkg/tool/deps_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/deps_test.go)
+- [pkg/tool/model_facing_error_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/model_facing_error_test.go)
+- [pkg/tool/preparation_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/preparation_test.go)
+- [pkg/tool/process_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/process_test.go)
+- [pkg/tool/schema_digest_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/schema_digest_test.go)
+- [pkg/tool/session_resource_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/session_resource_test.go)
+- [pkg/tool/tool_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/tool/tool_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

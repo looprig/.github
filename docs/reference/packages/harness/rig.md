@@ -23,11 +23,11 @@ proofs:
 
 # rig package · rig
 
-Import path: `github.com/looprig/harness/pkg/rig`. The source is pinned to github.com/looprig/harness@v0.24.2.
+Import path: `github.com/looprig/harness/pkg/rig`. The source is pinned to github.com/looprig/harness@v0.25.0.
 
 ## Package role {#package-role}
 
-`Define` validates loop and hustle topology, storage, gates, classifiers, foreign builders, workspace placement, permission review, snapshots, and runtime catalogs. A `Rig` creates or restores sessions through explicit options; it does not perform model inference itself.
+Package rig is the public composition root for defining an agent rig and creating or restoring its sessions.
 
 ## Exported surface {#exported-surface}
 
@@ -306,51 +306,51 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `DefinitionError`, `InvalidOffloadGCIntervalError`, `InvalidOffloadGCTimeoutError`, `LifecycleError`, `PersistenceOverlapError`, `SessionOptionError`, `SnapshotPolicyError`, `WorkspacePlacementError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DefinitionError`, `InvalidOffloadGCIntervalError`, `InvalidOffloadGCTimeoutError`, `LifecycleError`, `PersistenceOverlapError`, `SessionOptionError`, `SnapshotPolicyError`, `WorkspacePlacementError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [pkg/rig/definition.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/definition.go)
-- [pkg/rig/doc.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/doc.go)
-- [pkg/rig/errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/errors.go)
-- [pkg/rig/fingerprint.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/fingerprint.go)
-- [pkg/rig/lifecycle.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/lifecycle.go)
-- [pkg/rig/offload_gc.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/offload_gc.go)
-- [pkg/rig/options.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/options.go)
-- [pkg/rig/session_options.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/session_options.go)
-- [pkg/rig/session_resource_storage.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/session_resource_storage.go)
-- [pkg/rig/snapshot_policy.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/snapshot_policy.go)
-- [pkg/rig/workspace.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/workspace.go)
-- [pkg/rig/workspace_errors.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/workspace_errors.go)
+- [pkg/rig/definition.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/definition.go)
+- [pkg/rig/doc.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/doc.go)
+- [pkg/rig/errors.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/errors.go)
+- [pkg/rig/fingerprint.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/fingerprint.go)
+- [pkg/rig/lifecycle.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/lifecycle.go)
+- [pkg/rig/offload_gc.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/offload_gc.go)
+- [pkg/rig/options.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/options.go)
+- [pkg/rig/session_options.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/session_options.go)
+- [pkg/rig/session_resource_storage.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/session_resource_storage.go)
+- [pkg/rig/snapshot_policy.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/snapshot_policy.go)
+- [pkg/rig/workspace.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/workspace.go)
+- [pkg/rig/workspace_errors.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/workspace_errors.go)
 
 Adjacent tests at the same commit:
 
-- [pkg/rig/agent_injection_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/agent_injection_test.go)
-- [pkg/rig/compaction_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/compaction_test.go)
-- [pkg/rig/deps_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/deps_test.go)
-- [pkg/rig/fingerprint_ownership_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/fingerprint_ownership_test.go)
-- [pkg/rig/fingerprint_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/fingerprint_test.go)
-- [pkg/rig/gate_host_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/gate_host_test.go)
-- [pkg/rig/hooks_integration_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/hooks_integration_test.go)
-- [pkg/rig/hooks_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/hooks_test.go)
-- [pkg/rig/hustle_fingerprint_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/hustle_fingerprint_test.go)
-- [pkg/rig/hustle_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/hustle_test.go)
-- [pkg/rig/lifecycle_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/lifecycle_test.go)
-- [pkg/rig/optional_dependencies_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/optional_dependencies_test.go)
-- [pkg/rig/options_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/options_test.go)
-- [pkg/rig/permission_review_evidence_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/permission_review_evidence_test.go)
-- [pkg/rig/permission_review_observations_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/permission_review_observations_test.go)
-- [pkg/rig/permission_review_security_ceiling_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/permission_review_security_ceiling_test.go)
-- [pkg/rig/readme_example_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/readme_example_test.go)
-- [pkg/rig/rig_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/rig_test.go)
-- [pkg/rig/runtime_catalog_option_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/runtime_catalog_option_test.go)
-- [pkg/rig/session_resource_storage_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/session_resource_storage_test.go)
-- [pkg/rig/snapshot_policy_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/snapshot_policy_test.go)
-- [pkg/rig/workspace_integration_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/workspace_integration_test.go)
-- [pkg/rig/workspace_test.go](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/rig/workspace_test.go)
+- [pkg/rig/agent_injection_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/agent_injection_test.go)
+- [pkg/rig/compaction_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/compaction_test.go)
+- [pkg/rig/deps_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/deps_test.go)
+- [pkg/rig/fingerprint_ownership_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/fingerprint_ownership_test.go)
+- [pkg/rig/fingerprint_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/fingerprint_test.go)
+- [pkg/rig/gate_host_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/gate_host_test.go)
+- [pkg/rig/hooks_integration_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/hooks_integration_test.go)
+- [pkg/rig/hooks_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/hooks_test.go)
+- [pkg/rig/hustle_fingerprint_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/hustle_fingerprint_test.go)
+- [pkg/rig/hustle_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/hustle_test.go)
+- [pkg/rig/lifecycle_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/lifecycle_test.go)
+- [pkg/rig/optional_dependencies_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/optional_dependencies_test.go)
+- [pkg/rig/options_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/options_test.go)
+- [pkg/rig/permission_review_evidence_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/permission_review_evidence_test.go)
+- [pkg/rig/permission_review_observations_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/permission_review_observations_test.go)
+- [pkg/rig/permission_review_security_ceiling_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/permission_review_security_ceiling_test.go)
+- [pkg/rig/readme_example_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/readme_example_test.go)
+- [pkg/rig/rig_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/rig_test.go)
+- [pkg/rig/runtime_catalog_option_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/runtime_catalog_option_test.go)
+- [pkg/rig/session_resource_storage_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/session_resource_storage_test.go)
+- [pkg/rig/snapshot_policy_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/snapshot_policy_test.go)
+- [pkg/rig/workspace_integration_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/workspace_integration_test.go)
+- [pkg/rig/workspace_test.go](https://github.com/looprig/harness/blob/3d1dafd7a9a3f8979b712e8e9b3184727e477d76/pkg/rig/workspace_test.go)
 
-Run `GOWORK=off go test ./...` from the `harness` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `harness` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

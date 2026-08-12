@@ -26,7 +26,7 @@ Profile qualification package in [Pluto v0.1.2](https://github.com/looprig/pluto
 
 ## Package role {#package-role}
 
-Profiles turn a scorecard into an explicit disposition. They are policy inputs for qualification, not session authorization or live tool gates.
+Package profile derives an organization's qualification disposition from an Pluto scorecard.
 
 ## Exported surface {#exported-surface}
 
@@ -124,9 +124,9 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
@@ -139,4 +139,4 @@ Adjacent tests at the same commit:
 
 - [pkg/profile/evaluate_test.go](https://github.com/looprig/pluto/blob/a558d9006ba74559668d9929fb6d872cea0599b4/pkg/profile/evaluate_test.go)
 
-Run `GOWORK=off go test ./...` from the `pluto` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `pluto` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.

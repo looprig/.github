@@ -1,31 +1,64 @@
 ---
 id: start/first-run
-title: First deterministic inference run
-description: See one request and one streamed answer before adding providers, sessions, or tools.
-audience: human
+title: Build an agent with Harness
+description: Bind an inference client to a Loop, assemble a Rig, create a Session, submit input, consume events, and shut down cleanly.
+audience: developer
 section: start
 order: 3
 publication: released
 examples:
-  - stage-01-inference
-  - stage-02-streaming
+  - stage-05-loop
+  - stage-06-rig
+  - stage-07-session-events
 proofs:
-  invoke:
-    - release-github-com-looprig-core
-    - release-github-com-looprig-inference
-  stream:
-    - release-github-com-looprig-core
-    - release-github-com-looprig-inference
+  agent:
+    - release-github-com-looprig-harness
 ---
 
-# First deterministic inference run
+# Build an agent with Harness
 
-Run the existing progressive entries before connecting a real provider. `stage-01-inference` uses the fake inference transport, builds a Core message, invokes the Inference client, and asserts `assistant: Hello from Looprig.`. It proves the request and response boundary without a key, network, or mutable model catalog.
+Harness turns a model client into a stateful runtime. A Loop is immutable agent configuration, a Rig combines Loops with runtime services, and a Session owns live turns and resources.
 
-## Invoke {#invoke}
+## Assemble and run {#agent}
 
-The example constructs `inference.Request` with a system prompt and `content.AgenticMessages`, calls `Client.Invoke`, checks the returned assistant block, and confirms that exactly one request reached the fixture. Read `examples/go/progressive/stage01_inference/main.go` and its test for the complete runnable source. Execute the manifest command from the `.github` repository with `node scripts/docs/run-examples.mjs`.
+```go
+assistant, err := loop.Define(
+	loop.WithName("assistant"),
+	loop.WithInference(client, selectedModel),
+)
+if err != nil { return err }
 
-## Stream {#stream}
+store, err := sessionstore.Open(memstore.New())
+if err != nil { return err }
 
-`stage-02-streaming` calls `Client.Stream`, reads `TextChunk` values until `io.EOF`, closes the reader, and checks the terminal `stream.Result`. The fixture emits three chunks that become `Hello, Looprig!` with finish reason `stop`. The example demonstrates the ownership rule: close the reader even on a failed or canceled loop, and use the terminal result only after the stream has ended.
+runtime, err := rig.Define(
+	rig.WithLoops(assistant),
+	rig.WithPrimers("assistant"),
+	rig.WithSessionStore(store),
+)
+if err != nil { return err }
+
+session, err := runtime.NewSession(ctx)
+if err != nil { return err }
+defer session.Shutdown(context.Background())
+
+events, err := session.SubscribeEvents(event.EventFilter{
+	Enduring: event.LoopScope{All: true},
+})
+if err != nil { return err }
+defer events.Close()
+
+_, err = session.Submit(ctx, []content.Block{
+	&content.TextBlock{Text: "Report status."},
+})
+```
+
+Subscribe before submitting so a fast terminal event cannot pass before the consumer is ready. `Submit` returns a correlation ID; assistant output and terminal status arrive through events.
+
+Run the [complete commented Harness quickstart](/docs/modules/harness), which prints:
+
+```text
+ready
+```
+
+Next, [add tools and gates](/docs/start/tools-and-gates).

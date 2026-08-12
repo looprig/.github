@@ -24,11 +24,11 @@ proofs:
 
 # gateway package · gateway
 
-Import path: `github.com/looprig/inference/gateway`. The source is pinned to github.com/looprig/inference@v0.9.2.
+Import path: `github.com/looprig/inference/gateway`. The source is pinned to github.com/looprig/inference@v0.10.0.
 
 ## Package role {#package-role}
 
-This page indexes the exported declarations in the current source package. Inference `v0.9.2` keeps model descriptors, request and response values, codec contracts, streams, retries, and gateway behavior independent of provider credentials.
+Package gateway provides a local HTTP compatibility layer that lets coding-harness clients speaking different model-API dialects (Anthropic Messages, OpenAI Responses, OpenAI Chat Completions, Gemini) reach any injected inference.Client/model.Model target.
 
 ## Exported surface {#exported-surface}
 
@@ -78,6 +78,10 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ```go
 type Authenticator interface {
+	// Authenticate reports whether req carries a valid credential. It must
+	// not consume req.Body. A non-nil error is always an
+	// *AuthenticationError: this interface deliberately has exactly one
+	// failure mode so a caller never needs to distinguish "why" auth failed.
 	Authenticate(req *http.Request) error
 }
 ```
@@ -263,40 +267,40 @@ No exported variables are declared in this package.
 
 ## Ownership and errors {#ownership-and-errors}
 
-The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
+The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `AmbiguousCodecMatchError`, `AuthenticationError`, `ConcurrencyLimitExceededError`, `ConfigError`, `CountTokensUnavailableError`, `MethodNotAllowedError`, `NoMatchingCodecError`, `RequestTooLargeError`, `ResponseEncodeError`, `RouteNotFoundError`, `ServerStateError`, `ShutdownTimeoutError`, `UnknownRouteError`, `UnsupportedContentTypeError`, `UpstreamInvocationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AmbiguousCodecMatchError`, `AuthenticationError`, `ConcurrencyLimitExceededError`, `ConfigError`, `CountTokensUnavailableError`, `MethodNotAllowedError`, `NoMatchingCodecError`, `RequestTooLargeError`, `ResponseEncodeError`, `RouteNotFoundError`, `ServerStateError`, `ShutdownTimeoutError`, `UnknownRouteError`, `UnsupportedContentTypeError`, `UpstreamInvocationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
 Source files at the pinned commit:
 
-- [gateway/auth.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/auth.go)
-- [gateway/config.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/config.go)
-- [gateway/errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/errors.go)
-- [gateway/handler.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/handler.go)
-- [gateway/http_errors.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/http_errors.go)
-- [gateway/mux.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/mux.go)
-- [gateway/resolver.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/resolver.go)
-- [gateway/server.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/server.go)
-- [gateway/stream.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/stream.go)
-- [gateway/target.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/target.go)
+- [gateway/auth.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/auth.go)
+- [gateway/config.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/config.go)
+- [gateway/errors.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/errors.go)
+- [gateway/handler.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/handler.go)
+- [gateway/http_errors.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/http_errors.go)
+- [gateway/mux.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/mux.go)
+- [gateway/resolver.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/resolver.go)
+- [gateway/server.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/server.go)
+- [gateway/stream.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/stream.go)
+- [gateway/target.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/target.go)
 
 Adjacent tests at the same commit:
 
-- [gateway/auth_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/auth_test.go)
-- [gateway/cancel_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/cancel_test.go)
-- [gateway/concurrency_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/concurrency_test.go)
-- [gateway/errors_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/errors_test.go)
-- [gateway/handler_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/handler_test.go)
-- [gateway/limits_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/limits_test.go)
-- [gateway/matrix_fixtures_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/matrix_fixtures_test.go)
-- [gateway/matrix_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/matrix_test.go)
-- [gateway/mux_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/mux_test.go)
-- [gateway/server_race_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/server_race_test.go)
-- [gateway/server_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/server_test.go)
-- [gateway/stream_leak_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/stream_leak_test.go)
-- [gateway/stream_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/stream_test.go)
-- [gateway/target_test.go](https://github.com/looprig/inference/blob/c56f83bd8653e650631ebfbf4035319fffba9033/gateway/target_test.go)
+- [gateway/auth_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/auth_test.go)
+- [gateway/cancel_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/cancel_test.go)
+- [gateway/concurrency_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/concurrency_test.go)
+- [gateway/errors_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/errors_test.go)
+- [gateway/handler_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/handler_test.go)
+- [gateway/limits_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/limits_test.go)
+- [gateway/matrix_fixtures_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/matrix_fixtures_test.go)
+- [gateway/matrix_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/matrix_test.go)
+- [gateway/mux_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/mux_test.go)
+- [gateway/server_race_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/server_race_test.go)
+- [gateway/server_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/server_test.go)
+- [gateway/stream_leak_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/stream_leak_test.go)
+- [gateway/stream_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/stream_test.go)
+- [gateway/target_test.go](https://github.com/looprig/inference/blob/081186f1b724b3d5220c15eccbd3762e0a55468d/gateway/target_test.go)
 
-Run `GOWORK=off go test ./...` from the `inference` repository. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
+Run `go test ./...` from a checkout of the `inference` module. The page records source and test locations only; it does not claim behavior that the implementation and tests do not show.
