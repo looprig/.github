@@ -1,57 +1,135 @@
 ---
 id: examples/index
-title: Reviewed examples
-description: Progressive examples that connect Flow, Workflows, serving, browser clients, TUI, and evaluation to pinned source and test evidence.
+title: Build a small agent
+description: Four source-backed examples that show how a small agent grows from a model call into a session, a safe command boundary, and a durable approval workflow.
 audience: [human, developer]
 section: examples
 order: 400
 publication: released
 examples:
+  - stage-01-inference
+  - stage-11-sandbox-process
   - stage-17-flow
-  - stage-18-workflows
-  - stage-19-http-serve
-  - stage-20-web-client
-  - stage-21-tui
   - stage-23-eval
 proofs:
-  flow: release-github-com-looprig-flow
-  workflows: [module-workflows, central-workflows-stage18-output-test]
-  serving: release-github-com-looprig-harness
-  client: [source-client-sdk-core-package, central-client-stage20-session-client-proof]
-  tui: release-github-com-looprig-tui
+  hello-agent: [release-github-com-looprig-core, release-github-com-looprig-inference]
+  session-assistant: [release-github-com-looprig-harness, release-github-com-looprig-inference, release-github-com-looprig-storage]
+  safe-shell: release-github-com-looprig-sandbox
+  durable-approval: release-github-com-looprig-flow
   evaluation: [release-github-com-looprig-eval, release-github-com-looprig-pluto]
-  stage-17-flow: release-github-com-looprig-flow
-  stage-18-workflows: central-workflows-stage18-output-test
-  stage-19-http-serve: release-github-com-looprig-harness
-  stage-20-web-client: central-client-stage20-session-client-proof
-  stage-21-tui: release-github-com-looprig-tui
-  stage-23-eval: [release-github-com-looprig-eval, release-github-com-looprig-pluto]
 ---
 
-# Reviewed examples
+# Build a small agent
 
-These entries follow the progressive example manifest. “Released” means the Go component has a pinned release record. “Source-workspace” means the example is reviewed and runnable from the workspace, but its component does not yet have a release claim.
+Start with a small task and add one boundary at a time. The examples below are
+real, runnable fixtures from this repository. They use deterministic clients
+where possible, so you can read the control flow without first configuring a
+provider. A weather or research helper can start with the same first two
+examples and add its own provider and tools.
 
-## Stage 17: Flow {#stage-17-flow}
+## Start with a small task
 
-The [stage 17 Flow example](../build/20-flow.md) starts an interrupted graph run, resumes it, and shows growing checkpoint history. It uses released core and Flow modules. The assertion is about interruption and resumption, not about an event journal or UI.
+### The hello agent
 
-## Stage 18: Workflows {#stage-18-workflows}
+This is the smallest useful model boundary: send one user message and receive
+one assistant message. The fixture uses a fake client that returns a stable
+greeting, so it runs without credentials or network access.
 
-The [stage 18 Workflows fixture](../build/21-workflows.md) is source-workspace. It proves typed validation, interruption, checkpoint recovery, typed resume, cancellation, and append-only history. Its exact output is `started: Interrupted`, `interrupt: awaiting increment`, `recovered: Interrupted`, `resumed: Completed count=3`, `cancelled: Cancelled`, and `history: append-only`.
+```go
+// Keep the first model call deterministic while learning the request shape.
+client := fakeinference.New(fakeinference.Text("Hello from Looprig."))
+response, err := client.Invoke(context.Background(), inference.Request{
+	System: "Answer briefly.",
+	Messages: content.AgenticMessages{&content.UserMessage{Message: content.Message{
+		Role: content.RoleUser, Blocks: []content.Block{&content.TextBlock{Text: "Say hello."}},
+	}}},
+})
+```
 
-## Stage 19: HTTP serving {#stage-19-http-serve}
+[Open the runnable source](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage01_inference/main.go) and [its exact-output test](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage01_inference/main_test.go). Read [Model call](/docs/start/model-call/) for the provider-neutral request contract.
 
-The [stage 19 serving example](../build/22-serving.md) uses released core and Harness. It prints the capabilities document, one session, and a protected control-route response. Read routes are durable projections; the live SSE route is a separate live-session boundary.
+Run it from the repository root:
 
-## Stage 20: Web client {#stage-20-web-client}
+```sh
+node scripts/docs/run-examples.mjs --stage 1
+```
 
-The [stage 20 web example](../build/23-client.md) is source-workspace because the private browser packages are not release claims. It typechecks the framework-neutral TypeScript, runs Svelte checks for the optional source adapter, and proves that `SessionClient.disconnect()` disposes the active async iterator. Vanilla and Svelte are reviewed; React, Vue, and Solid remain possible consumers, not shipped bindings.
+### The full session assistant
 
-## Stage 21: TUI {#stage-21-tui}
+When the model call needs memory, events, and clean shutdown, put it in a
+`Loop`, assemble a `Rig`, and create a `Session`. This complete quickstart
+submits `Report status.` to an offline model and waits for `TurnDone` before it
+exits.
 
-The [stage 21 TUI example](../build/24-tui.md) uses released core, Harness, inference, and TUI. It prints session-adapter state, image capability, an event, and one shutdown. Adapter close is session shutdown; it is not deletion of durable history.
+```go
+// The Loop defines the agent; the Rig supplies storage and session lifecycle.
+agent, err := loop.Define(
+	loop.WithName("assistant"),
+	loop.WithInference(deterministicModelStub{}, model.CustomModel(
+		"fixture", model.APIFormatOpenAI, "http://localhost", "fixture-model",
+	)),
+)
+runtime, err := rig.Define(
+	rig.WithLoops(agent),
+	rig.WithPrimers("assistant"),
+	rig.WithSessionStore(store),
+)
+```
 
-## Stage 23: Evaluation {#stage-23-eval}
+[Open the complete quickstart](https://github.com/looprig/.github/blob/main/examples/go/guides/harness-quickstart/main.go) and [its exact-output test](https://github.com/looprig/.github/blob/main/examples/go/guides/harness-quickstart/main_test.go). Continue with [Run the agent with Harness](/docs/start/first-run/) to add a real model client and submit live work.
 
-The [stage 23 evaluation example](../build/25-evaluation.md) uses released core, Eval, and Pluto. It prints a passing exact evaluation report and a Qualified capability report. The report is an evaluation artifact, separate from session event history, workflow checkpoints, workspace snapshots, and model context.
+Run its checked fixture directly:
+
+```sh
+cd examples/go/guides/harness-quickstart && GOWORK=off go test ./...
+```
+
+## Add a boundary when the task needs it
+
+### The safe shell boundary
+
+An agent that can run commands needs a policy boundary before it needs a clever
+prompt. This fixture creates an isolated home, denies network and host writes,
+then runs one confined command. It demonstrates the sandbox boundary itself;
+your application still decides which tool requests reach it.
+
+```go
+// Deny the dangerous defaults before exposing a command to an agent.
+profile, err := sandbox.NewProfile(sandbox.ProfileConfig{
+	WorkspaceRoot: workspace, WorkspaceRead: sandbox.Allow, WorkspaceWrite: sandbox.Deny,
+	HostRead: sandbox.Allow, HostWrite: sandbox.Deny, Network: sandbox.Deny,
+	Command: sandbox.Allow, Home: sandbox.IsolatedHome, Isolation: sandbox.Sandboxed,
+})
+result, code, err := executor.RunCommand(context.Background(), workspace, "echo confined")
+```
+
+[Open the runnable source](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage11_sandbox_process/main.go) and [its exact-output test](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage11_sandbox_process/main_test.go). Read [Sandbox](/docs/build/11-sandbox/) before connecting this boundary to a tool.
+
+```sh
+node scripts/docs/run-examples.mjs --stage 11
+```
+
+### The durable approval workflow
+
+Some work must stop and wait for a person. This Flow fixture pauses at an
+approval interrupt, records checkpoint history, and resumes with `alice`. The
+approval state survives the pause as workflow state rather than an in-memory
+callback.
+
+```go
+// Pause at the approval point and continue later with the approver identity.
+return decision{}, flow.StatefulInterrupt(ctx, "approve "+change, 1)
+
+completed, err := runner.Resume(ctx, paused.Run.GraphRunID, "alice")
+```
+
+[Open the runnable source](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage17_flow/main.go) and [its exact-output test](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage17_flow/main_test.go). Read [Durable flows](/docs/build/06-flows/) for graph definitions, interruption, and resume.
+
+```sh
+node scripts/docs/run-examples.mjs --stage 17
+```
+
+## Before you ship
+
+Once an agent has a useful behavior, test it against a stable suite. The
+[evaluation checkpoint](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage23_eval/main.go) runs Eval and Pluto together: Eval produces a deterministic report, while Pluto is the qualification and evaluation framework for release decisions. It is the next example to read when a local prototype needs a repeatable “is this ready?” check.
