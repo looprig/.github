@@ -44,7 +44,19 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Option`, `ConfigurationReason`, `ConfigurationError`
+```go
+type Option func(*config)
+```
+
+```go
+type ConfigurationReason string
+```
+
+```go
+type ConfigurationError struct {
+	Reason ConfigurationReason
+}
+```
 
 ### Constants {#constants}
 

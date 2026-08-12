@@ -39,24 +39,28 @@ The following surface is read from the pinned implementation files. Signatures a
 ### Methods {#methods}
 
 - `func (e *PrepareRunIntegrityError) Error() string`
-- `func (t *definitionListTool) Info(context.Context) (*tool.ToolInfo, error)`
-- `func (t *definitionListTool) InvokableRun(_ context.Context, raw string) (*tool.ToolResult, error)`
-- `func (t *runCancelTool) Info(context.Context) (*tool.ToolInfo, error)`
-- `func (t *runCancelTool) InvokableRun(ctx context.Context, raw string) (*tool.ToolResult, error)`
-- `func (t *runGetTool) Info(context.Context) (*tool.ToolInfo, error)`
-- `func (t *runGetTool) InvokableRun(ctx context.Context, raw string) (*tool.ToolResult, error)`
-- `func (t *runHistoryTool) Info(context.Context) (*tool.ToolInfo, error)`
-- `func (t *runHistoryTool) InvokableRun(ctx context.Context, raw string) (*tool.ToolResult, error)`
-- `func (t *runListTool) Info(context.Context) (*tool.ToolInfo, error)`
-- `func (t *runListTool) InvokableRun(ctx context.Context, raw string) (*tool.ToolResult, error)`
-- `func (t *runResumeTool) Info(context.Context) (*tool.ToolInfo, error)`
-- `func (t *runResumeTool) InvokableRun(ctx context.Context, raw string) (*tool.ToolResult, error)`
-- `func (t *runStartTool) Info(context.Context) (*tool.ToolInfo, error)`
-- `func (t *runStartTool) InvokableRun(ctx context.Context, raw string) (*tool.ToolResult, error)`
 
 ### Types {#types}
 
-`Config`, `PrepareRunIntegrityError`
+```go
+type Config struct {
+	SessionID  uuid.UUID
+	Catalog    *workflows.Catalog
+	Registry   runRegistry
+	Inputs     inputStore
+	Supervisor supervisorControl
+	Now        func() time.Time
+	NewID      func() (uuid.UUID, error)
+
+	PrepareRun func(context.Context, workflows.Run) (workflows.Run, error)
+}
+```
+
+```go
+type PrepareRunIntegrityError struct {
+	Field string
+}
+```
 
 ### Constants {#constants}
 

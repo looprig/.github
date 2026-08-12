@@ -46,12 +46,6 @@ The following surface is read from the pinned implementation files. Signatures a
 ### Methods {#methods}
 
 - `func (o OutputSchema) Clone() OutputSchema`
-- `func (v *schemaStringValue) UnmarshalJSON(raw []byte) error`
-- `func (v *schemaPropertiesValue) UnmarshalJSON(raw []byte) error`
-- `func (v *schemaRawValue) UnmarshalJSON(raw []byte) error`
-- `func (v *schemaEnumValue) UnmarshalJSON(raw []byte) error`
-- `func (v *schemaStringsValue) UnmarshalJSON(raw []byte) error`
-- `func (v *schemaBoolValue) UnmarshalJSON(raw []byte) error`
 - `func (e *SchemaValidationError) Error() string`
 - `func (e *StructuredOutputUnsupportedError) Error() string`
 - `func (e *StructuredOutputWithToolsUnsupportedError) Error() string`
@@ -62,7 +56,113 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Client`, `ToolChoice`, `Request`, `Response`, `Tool`, `OutputSchema`, `SchemaValidationField`, `SchemaValidationReason`, `SchemaValidationError`, `StructuredOutputUnsupportedError`, `StructuredOutputWithToolsUnsupportedError`, `ImageInputUnsupportedError`, `StructuredOutputConflictError`, `MalformedStructuredOutputReason`, `MalformedStructuredOutputError`, `StructuredOutputFinishError`
+```go
+type Client interface {
+	Invoke(ctx context.Context, req Request) (*Response, error)
+	Stream(ctx context.Context, req Request) (*stream.StreamReader[content.Chunk], error)
+}
+```
+
+```go
+type ToolChoice uint8
+```
+
+```go
+type Request struct {
+	Model      model.Model
+	System     string
+	Messages   content.AgenticMessages
+	Tools      []Tool
+	Output     *OutputSchema
+	ToolChoice ToolChoice
+	Override   *model.Sampling
+}
+```
+
+```go
+type Response struct {
+	Message      *content.AIMessage
+	Usage        *content.Usage
+	Model        string
+	FinishReason stream.FinishReason
+
+	Attempts int
+}
+```
+
+```go
+type Tool struct {
+	Name        string
+	Description string
+	Schema      json.RawMessage
+}
+```
+
+```go
+type OutputSchema struct {
+	Name        string
+	Description string
+	Schema      json.RawMessage
+	Strict      bool
+}
+```
+
+```go
+type SchemaValidationField string
+```
+
+```go
+type SchemaValidationReason string
+```
+
+```go
+type SchemaValidationError struct {
+	Field      SchemaValidationField
+	ReasonCode SchemaValidationReason
+}
+```
+
+```go
+type StructuredOutputUnsupportedError struct {
+	Model string
+}
+```
+
+```go
+type StructuredOutputWithToolsUnsupportedError struct {
+	Model string
+}
+```
+
+```go
+type ImageInputUnsupportedError struct {
+	Model string
+}
+```
+
+```go
+type StructuredOutputConflictError struct {
+	Feature string
+}
+```
+
+```go
+type MalformedStructuredOutputReason string
+```
+
+```go
+type MalformedStructuredOutputError struct {
+	ReasonCode MalformedStructuredOutputReason
+	Length     int
+	SHA256     [sha256.Size]byte
+}
+```
+
+```go
+type StructuredOutputFinishError struct {
+	Reason stream.FinishReason
+}
+```
 
 ### Constants {#constants}
 
@@ -76,7 +176,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `SchemaValidationError`, `StructuredOutputUnsupportedError`, `StructuredOutputWithToolsUnsupportedError`, `ImageInputUnsupportedError`, `StructuredOutputConflictError`, `MalformedStructuredOutputError`, `StructuredOutputFinishError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ImageInputUnsupportedError`, `MalformedStructuredOutputError`, `SchemaValidationError`, `StructuredOutputConflictError`, `StructuredOutputFinishError`, `StructuredOutputUnsupportedError`, `StructuredOutputWithToolsUnsupportedError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

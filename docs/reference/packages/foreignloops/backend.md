@@ -36,7 +36,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 - `func BuildWith(backendCfg Config) foreign.Builder`
 - `func BuildWithServices(backendCfg Config) foreign.ServicesBuilder`
-- `func New(loopCtx context.Context, sessionID, loopID uuid.UUID, parent loop.Provenance, pub foreign.EventPublisher, loopCfg loop.BoundDefinition, backendCfg Config, idGen func() (uuid.UUID, error), fac *event.Factory,) (*Loop, string, error)`
+- `func New(loopCtx context.Context, sessionID, loopID uuid.UUID, parent loop.Provenance, pub foreign.EventPublisher, loopCfg loop.BoundDefinition, backendCfg Config, idGen func() (uuid.UUID, error), fac *event.Factory) (*Loop, string, error)`
 - `func BuildRestoredWith(backendCfg Config) foreign.RestoredBuilder`
 - `func BuildRestoredWithServices(backendCfg Config) foreign.ServicesRestoredBuilder`
 
@@ -47,8 +47,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *LockError) Error() string`
 - `func (e *LockError) Unwrap() error`
 - `func (e *ForeignResultError) Error() string`
-- `func (e *modelFacingResultError) Error() string`
-- `func (e *modelFacingResultError) ModelFacingError() string`
 - `func (e *ForeignProtocolError) Error() string`
 - `func (e *ForeignPublicationError) Error() string`
 - `func (e *ForeignPublicationError) Unwrap() error`
@@ -57,12 +55,74 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (l *Loop) CommandSink() chan<- command.Command`
 - `func (l *Loop) DoneChan() <-chan struct{}`
 - `func (l *Loop) Snapshot(ctx context.Context) (content.AgenticMessages, event.TurnIndex, error)`
-- `func (t *runtimeSteeringTimer) Chan() <-chan time.Time`
-- `func (t *runtimeSteeringTimer) Stop() bool`
 
 ### Types {#types}
 
-`SIDMode`, `Config`, `ConfigError`, `ForeignSessionBusyError`, `LockError`, `ForeignResultError`, `ForeignProtocolError`, `ForeignPublicationError`, `SnapshotErrorReason`, `SnapshotError`, `Loop`
+```go
+type SIDMode uint8
+```
+
+```go
+type Config struct {
+	Agent   driver.Agent
+	Cwd     string
+	Posture driver.PermissionPosture
+	SIDMode SIDMode
+}
+```
+
+```go
+type ConfigError struct{ Field, Reason string }
+```
+
+```go
+type ForeignSessionBusyError struct {
+	SID, Cwd string
+	PID      int
+}
+```
+
+```go
+type LockError struct {
+	Op    string
+	Path  string
+	Cause error
+}
+```
+
+```go
+type ForeignResultError struct{ Detail string }
+```
+
+```go
+type ForeignProtocolError struct{ Reason string }
+```
+
+```go
+type ForeignPublicationError struct {
+	Event string
+	Cause error
+}
+```
+
+```go
+type SnapshotErrorReason string
+```
+
+```go
+type SnapshotError struct {
+	Reason SnapshotErrorReason
+	Cause  error
+}
+```
+
+```go
+type Loop struct {
+	Commands chan command.Command
+	Done     chan struct{}
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -76,7 +136,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ConfigError`, `ForeignSessionBusyError`, `LockError`, `ForeignResultError`, `ForeignProtocolError`, `ForeignPublicationError`, `SnapshotError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ConfigError`, `ForeignProtocolError`, `ForeignPublicationError`, `ForeignResultError`, `ForeignSessionBusyError`, `LockError`, `SnapshotError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

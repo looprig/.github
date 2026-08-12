@@ -59,9 +59,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (proxy *Proxy) Release(executionID string)`
 - `func (proxy *Proxy) Denial(executionID string) error`
 - `func (proxy *Proxy) ServeHTTP(writer http.ResponseWriter, request *http.Request)`
-- `func (connection *contextOwnedConn) Close() error`
-- `func (connection *idleTimeoutConn) Read(buffer []byte) (int, error)`
-- `func (connection *idleTimeoutConn) Write(buffer []byte) (int, error)`
 - `func (proxy *Proxy) Close() error`
 - `func (target Target) String() string`
 - `func (target Target) Transport() string`
@@ -77,7 +74,45 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`LookupFunc`, `DialFunc`, `TargetDeniedError`, `Proxy`, `Target`, `Route`, `RouteResolver`
+```go
+type LookupFunc func(ctx context.Context, host string) ([]net.IP, error)
+```
+
+```go
+type DialFunc func(ctx context.Context, transport, address string) (net.Conn, error)
+```
+
+```go
+type TargetDeniedError struct {
+	ExitCode     int
+	ProcessError error
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Proxy struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Target struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Route struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type RouteResolver struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

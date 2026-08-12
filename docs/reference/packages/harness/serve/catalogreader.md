@@ -45,7 +45,15 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Reader`, `PrivateEventError`
+```go
+type Reader struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type PrivateEventError struct{ Visibility event.EventVisibility }
+```
 
 ### Constants {#constants}
 

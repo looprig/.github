@@ -197,7 +197,216 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Version`, `Record`, `Metadata`, `DeleteStatus`, `DeleteResult`, `PageToken`, `Page`, `InvalidVersionError`, `InvalidPageTokenError`, `InvalidOptionsError`, `NotFoundError`, `UnsupportedSchemeError`, `UnsupportedCapabilityError`, `InsecurePathError`, `CorruptRecordError`, `ConflictError`, `VersionMismatchError`, `UnavailableError`, `CanceledError`, `Precondition`, `PutOptions`, `DeleteOptions`, `Reference`, `InvalidReferenceError`, `InvalidNamespaceError`, `Namespace`, `Secret`, `EmptySecretError`, `SecretSizeError`, `ZeroSecretError`, `Resolver`, `Store`, `Lister`, `PreconditionCapabilities`, `VisibleCommitError`
+```go
+type Version struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Record struct {
+	Reference Reference
+	Value     Secret
+	Version   Version
+	UpdatedAt time.Time
+}
+```
+
+```go
+type Metadata struct {
+	Reference Reference
+	Version   Version
+	UpdatedAt time.Time
+}
+```
+
+```go
+type DeleteStatus uint8
+```
+
+```go
+type DeleteResult struct {
+	Reference Reference
+	Version   Version
+	Status    DeleteStatus
+}
+```
+
+```go
+type PageToken struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Page[T any] struct {
+	Items     []T
+	NextToken PageToken
+}
+```
+
+```go
+type InvalidVersionError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type InvalidPageTokenError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type InvalidOptionsError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type NotFoundError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type UnsupportedSchemeError struct{}
+```
+
+```go
+type UnsupportedCapabilityError struct{}
+```
+
+```go
+type InsecurePathError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CorruptRecordError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ConflictError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type VersionMismatchError = ConflictError
+```
+
+```go
+type UnavailableError struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CanceledError struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Precondition uint8
+```
+
+```go
+type PutOptions struct {
+	Precondition    Precondition
+	ExpectedVersion Version
+}
+```
+
+```go
+type DeleteOptions struct {
+	Precondition    Precondition
+	ExpectedVersion Version
+}
+```
+
+```go
+type Reference struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type InvalidReferenceError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type InvalidNamespaceError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Namespace struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Secret struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type EmptySecretError struct{}
+```
+
+```go
+type SecretSizeError struct {
+	Limit int
+	Got   int
+}
+```
+
+```go
+type ZeroSecretError struct{}
+```
+
+```go
+type Resolver interface {
+	Resolve(context.Context, Reference) (Record, error)
+}
+```
+
+```go
+type Store interface {
+	Resolver
+	Put(context.Context, Reference, Secret, PutOptions) (Record, error)
+	Delete(context.Context, Reference, DeleteOptions) (DeleteResult, error)
+}
+```
+
+```go
+type Lister interface {
+	List(context.Context, Namespace, PageToken, int) (Page[Metadata], error)
+}
+```
+
+```go
+type PreconditionCapabilities interface {
+	SupportsCreateOnly() bool
+	SupportsCompareAndSwap() bool
+}
+```
+
+```go
+type VisibleCommitError interface {
+	error
+	Visible() bool
+}
+```
 
 ### Constants {#constants}
 
@@ -205,13 +414,13 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Variables {#variables}
 
-`VersionUnsupported`, `ErrInvalidVersion`, `ErrInvalidReference`, `ErrEmptySecret`
+`VersionUnsupported`, `ErrInvalidVersion`, `ErrInvalidOptions`, `ErrInvalidPageToken`, `ErrNotFound`, `ErrUnsupportedScheme`, `ErrUnsupportedCapability`, `ErrInsecurePath`, `ErrCorruptRecord`, `ErrConflict`, `ErrUnavailable`, `ErrCanceled`, `ErrInvalidReference`, `ErrInvalidNamespace`, `ErrEmptySecret`, `ErrSecretTooLarge`, `ErrZeroSecret`
 
 ## Ownership and errors {#ownership-and-errors}
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `InvalidVersionError`, `InvalidPageTokenError`, `InvalidOptionsError`, `NotFoundError`, `UnsupportedSchemeError`, `UnsupportedCapabilityError`, `InsecurePathError`, `CorruptRecordError`, `ConflictError`, `UnavailableError`, `CanceledError`, `InvalidReferenceError`, `InvalidNamespaceError`, `EmptySecretError`, `SecretSizeError`, `ZeroSecretError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CanceledError`, `ConflictError`, `CorruptRecordError`, `EmptySecretError`, `InsecurePathError`, `InvalidNamespaceError`, `InvalidOptionsError`, `InvalidPageTokenError`, `InvalidReferenceError`, `InvalidVersionError`, `NotFoundError`, `SecretSizeError`, `UnavailableError`, `UnsupportedCapabilityError`, `UnsupportedSchemeError`, `ZeroSecretError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

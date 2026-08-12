@@ -70,9 +70,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (h *SteerHandle) Admission() <-chan bool`
 - `func (h *SteerHandle) Result() <-chan SteerCompletion`
 - `func (h *SteerHandle) Cancel()`
-- `func (e *boundedSteeringTransportCause) Error() string`
-- `func (e *boundedSteeringTransportCause) Is(target error) bool`
-- `func (e *boundedSteeringTransportCause) As(target any) bool`
 - `func (e *SteeringError) Error() string`
 - `func (e *SteeringError) Unwrap() error`
 - `func (s *Session) StartSteer(ctx context.Context, p SteerParams) *SteerHandle`
@@ -80,7 +77,199 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Client`, `SetModelCapability`, `ClosedError`, `NotDialedError`, `DuplicateSessionError`, `LoadTimeoutError`, `SetModelUnsupportedError`, `InitializeMetadata`, `FSHandler`, `TerminalHandler`, `PermissionHandler`, `Options`, `PromptResult`, `NewSessionParams`, `LoadSessionParams`, `ResumeSessionParams`, `Session`, `SteerParams`, `SteerOutcome`, `SteerResult`, `SteerCompletion`, `SteerHandle`, `SteeringError`, `UpdateMeta`, `Update`
+```go
+type Client struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SetModelCapability struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ClosedError struct {
+	Cause error
+}
+```
+
+```go
+type NotDialedError struct{}
+```
+
+```go
+type DuplicateSessionError struct {
+	SessionID protocol.SessionID
+}
+```
+
+```go
+type LoadTimeoutError struct {
+	SessionID protocol.SessionID
+	Timeout   time.Duration
+}
+```
+
+```go
+type SetModelUnsupportedError struct{}
+```
+
+```go
+type InitializeMetadata struct {
+	AgentInfo *protocol.Implementation
+	Meta      json.RawMessage
+}
+```
+
+```go
+type FSHandler interface {
+	ReadTextFile(ctx context.Context, req protocol.ReadTextFileRequest) (protocol.ReadTextFileResponse, error)
+	WriteTextFile(ctx context.Context, req protocol.WriteTextFileRequest) (protocol.WriteTextFileResponse, error)
+}
+```
+
+```go
+type TerminalHandler interface {
+	CreateTerminal(ctx context.Context, req protocol.CreateTerminalRequest) (protocol.CreateTerminalResponse, error)
+	TerminalOutput(ctx context.Context, req protocol.TerminalOutputRequest) (protocol.TerminalOutputResponse, error)
+	WaitForTerminalExit(ctx context.Context, req protocol.WaitForTerminalExitRequest) (protocol.WaitForTerminalExitResponse, error)
+	KillTerminal(ctx context.Context, req protocol.KillTerminalRequest) (protocol.KillTerminalResponse, error)
+	ReleaseTerminal(ctx context.Context, req protocol.ReleaseTerminalRequest) (protocol.ReleaseTerminalResponse, error)
+}
+```
+
+```go
+type PermissionHandler interface {
+	RequestPermission(ctx context.Context, req protocol.RequestPermissionRequest) (protocol.RequestPermissionResponse, error)
+}
+```
+
+```go
+type Options struct {
+	FS FSHandler
+
+	Terminal TerminalHandler
+
+	Permissions PermissionHandler
+
+	ClientInfo *protocol.Implementation
+
+	LoadTimeout time.Duration
+}
+```
+
+```go
+type PromptResult struct {
+	StopReason protocol.StopReason
+
+	ReceiveSequence uint64
+
+	ResponseSequence uint64
+
+	WriteAdmitted bool
+}
+```
+
+```go
+type NewSessionParams struct {
+	Cwd string
+
+	AdditionalDirectories []string
+
+	McpServers []protocol.McpServer
+}
+```
+
+```go
+type LoadSessionParams struct {
+	SessionID             protocol.SessionID
+	Cwd                   string
+	AdditionalDirectories []string
+	McpServers            []protocol.McpServer
+}
+```
+
+```go
+type ResumeSessionParams struct {
+	SessionID             protocol.SessionID
+	Cwd                   string
+	AdditionalDirectories []string
+	McpServers            []protocol.McpServer
+}
+```
+
+```go
+type Session struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SteerParams struct {
+	SessionID protocol.SessionID      `json:"sessionId"`
+	Prompt    []protocol.ContentBlock `json:"prompt"`
+	Meta      json.RawMessage         `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SteerOutcome string
+```
+
+```go
+type SteerResult struct {
+	Outcome SteerOutcome
+	Reason  string
+
+	WriteAdmitted    bool
+	ReceiveSequence  uint64
+	ResponseSequence uint64
+}
+```
+
+```go
+type SteerCompletion struct {
+	Result SteerResult
+	Err    error
+}
+```
+
+```go
+type SteerHandle struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SteeringError struct {
+	Code             protocol.ErrorCode
+	Message          string
+	WriteAdmitted    bool
+	ReceiveSequence  uint64
+	ResponseSequence uint64
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type UpdateMeta struct {
+	EventID  string
+	PromptID string
+	IsReplay bool
+}
+```
+
+```go
+type Update struct {
+	SessionUpdate protocol.SessionUpdate
+
+	Meta UpdateMeta
+
+	ReceiveSequence uint64
+}
+```
 
 ### Constants {#constants}
 
@@ -94,7 +283,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ClosedError`, `NotDialedError`, `DuplicateSessionError`, `LoadTimeoutError`, `SetModelUnsupportedError`, `SteeringError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ClosedError`, `DuplicateSessionError`, `LoadTimeoutError`, `NotDialedError`, `SetModelUnsupportedError`, `SteeringError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

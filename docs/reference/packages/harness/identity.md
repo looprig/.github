@@ -42,7 +42,32 @@ No exported functions are declared in this package.
 
 ### Types {#types}
 
-`Coordinates`, `AgentName`, `Agency`, `Cause`
+```go
+type Coordinates struct {
+	SessionID uuid.UUID `json:"session_id,omitzero"`
+	LoopID    uuid.UUID `json:"loop_id,omitzero"`
+	TurnID    uuid.UUID `json:"turn_id,omitzero"`
+	StepID    uuid.UUID `json:"step_id,omitzero"`
+}
+```
+
+```go
+type AgentName string
+```
+
+```go
+type Agency uint8
+```
+
+```go
+type Cause struct {
+	Coordinates
+	CommandID       uuid.UUID `json:"command_id,omitzero"`
+	EventID         uuid.UUID `json:"event_id,omitzero"`
+	ToolExecutionID uuid.UUID `json:"tool_execution_id,omitzero"`
+	Agency          Agency    `json:"agency,omitzero"`
+}
+```
 
 ### Constants {#constants}
 

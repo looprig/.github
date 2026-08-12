@@ -45,7 +45,12 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Error`
+```go
+type Error struct {
+	Op  string
+	Err error
+}
+```
 
 ### Constants {#constants}
 

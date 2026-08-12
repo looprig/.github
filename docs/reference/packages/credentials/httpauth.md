@@ -62,36 +62,30 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *nilRequestError) Format(state fmt.State, _ rune)`
 - `func (e *nilRequestError) GoString() string`
 - `func (e *nilRequestError) LogValue() slog.Value`
-- `func (e *nilContextError) Error() string`
-- `func (e *nilContextError) Unwrap() error`
-- `func (e *nilContextError) Format(state fmt.State, _ rune)`
-- `func (e *nilContextError) GoString() string`
-- `func (e *nilContextError) LogValue() slog.Value`
-- `func (e *canceledError) Error() string`
-- `func (e *canceledError) Unwrap() error`
-- `func (e *canceledError) Is(target error) bool`
-- `func (e *canceledError) Format(state fmt.State, _ rune)`
-- `func (e *canceledError) GoString() string`
-- `func (e *canceledError) LogValue() slog.Value`
-- `func (noneAuthorizer) Authorize(ctx context.Context, request *http.Request) error`
-- `func (noneAuthorizer) String() string`
-- `func (a noneAuthorizer) Format(state fmt.State, _ rune)`
-- `func (a noneAuthorizer) GoString() string`
-- `func (a noneAuthorizer) LogValue() slog.Value`
-- `func (a *headerAuthorizer) Authorize(ctx context.Context, request *http.Request) error`
-- `func (a *headerAuthorizer) String() string`
-- `func (a *headerAuthorizer) Format(state fmt.State, _ rune)`
-- `func (a *headerAuthorizer) GoString() string`
-- `func (a *headerAuthorizer) LogValue() slog.Value`
-- `func (a *bearerAuthorizer) Authorize(ctx context.Context, request *http.Request) error`
-- `func (a *bearerAuthorizer) String() string`
-- `func (a *bearerAuthorizer) Format(state fmt.State, _ rune)`
-- `func (a *bearerAuthorizer) GoString() string`
-- `func (a *bearerAuthorizer) LogValue() slog.Value`
 
 ### Types {#types}
 
-`InvalidHeaderNameError`, `InvalidHeaderValueError`, `ZeroSecretError`, `NilRequestError`, `Authorizer`
+```go
+type InvalidHeaderNameError = invalidHeaderNameError
+```
+
+```go
+type InvalidHeaderValueError = invalidHeaderValueError
+```
+
+```go
+type ZeroSecretError = zeroSecretError
+```
+
+```go
+type NilRequestError = nilRequestError
+```
+
+```go
+type Authorizer interface {
+	Authorize(context.Context, *http.Request) error
+}
+```
 
 ### Constants {#constants}
 
@@ -99,13 +93,13 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Variables {#variables}
 
-`ErrInvalidHeaderName`
+`ErrInvalidHeaderName`, `ErrInvalidHeaderValue`, `ErrZeroSecret`, `ErrNilRequest`, `ErrNilContext`, `ErrCanceled`
 
 ## Ownership and errors {#ownership-and-errors}
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-No exported named type with an explicit `Error() string` method was found in the pinned source package. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `InvalidHeaderNameError`, `InvalidHeaderValueError`, `NilRequestError`, `ZeroSecretError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

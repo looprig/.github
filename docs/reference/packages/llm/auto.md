@@ -46,7 +46,31 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`SigV4NotConstructibleError`, `PolicyNotConstructibleError`, `CredentialNotConstructibleError`, `Option`
+```go
+type SigV4NotConstructibleError struct {
+	Provider llm.Provider
+	Use      string
+}
+```
+
+```go
+type PolicyNotConstructibleError struct {
+	Provider llm.Provider
+	Use      string
+}
+```
+
+```go
+type CredentialNotConstructibleError struct {
+	Provider llm.Provider
+	Kind     auth.AuthKind
+	Use      string
+}
+```
+
+```go
+type Option func(*options)
+```
 
 ### Constants {#constants}
 
@@ -60,7 +84,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `SigV4NotConstructibleError`, `PolicyNotConstructibleError`, `CredentialNotConstructibleError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CredentialNotConstructibleError`, `PolicyNotConstructibleError`, `SigV4NotConstructibleError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

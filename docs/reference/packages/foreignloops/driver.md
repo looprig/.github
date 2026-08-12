@@ -50,7 +50,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (p Posture) Valid() bool`
 - `func (r SteerRequest) Validate() error`
 - `func (r SteerRequest) Prompt() []content.Block`
-- `func (e *steerRequestError) Error() string`
 - `func (o SteerOutcome) Valid() bool`
 - `func (o SteerOutcome) RetrySafe() bool`
 - `func (r SteerResult) Validate() error`
@@ -64,7 +63,162 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Agent`, `Steerer`, `Closer`, `Turn`, `Stream`, `Kind`, `Event`, `PermissionPosture`, `SteerAdmissionError`, `SpawnError`, `ExitError`, `DecodeError`, `HistoryError`, `History`, `Posture`, `SteerRequest`, `SteerOutcome`, `SteerResult`, `ObservationKind`, `Observation`, `OrderedStream`, `PromptObservation`, `UpdateObservation`, `SteerObservation`
+```go
+type Agent interface {
+	Spawn(context.Context, Turn) (Stream, error)
+}
+```
+
+```go
+type Steerer interface {
+	Steer(context.Context, SteerRequest) (SteerResult, error)
+}
+```
+
+```go
+type Closer interface {
+	Close() error
+}
+```
+
+```go
+type Turn struct {
+	SystemPrompt string
+	ForeignSID   string
+	StartNew     bool
+	Input        []content.Block
+	Cwd          string
+	Posture      PermissionPosture
+}
+```
+
+```go
+type Stream interface {
+	Events() <-chan Event
+	History() (History, error)
+	Close() error
+}
+```
+
+```go
+type Kind uint8
+```
+
+```go
+type Event struct {
+	Kind          Kind
+	SessionID     string
+	Text          string
+	ToolUseID     string
+	ToolName      string
+	IsError       bool
+	ResultPreview string
+	Message       *content.AIMessage
+	ErrText       string
+}
+```
+
+```go
+type PermissionPosture uint8
+```
+
+```go
+type SteerAdmissionError struct{}
+```
+
+```go
+type SpawnError struct{ Cause error }
+```
+
+```go
+type ExitError struct{ Code int }
+```
+
+```go
+type DecodeError struct{ Cause error }
+```
+
+```go
+type HistoryError struct{ Cause error }
+```
+
+```go
+type History struct {
+	Available bool
+	Steps     []content.AgenticMessages
+}
+```
+
+```go
+type Posture string
+```
+
+```go
+type SteerRequest struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SteerOutcome string
+```
+
+```go
+type SteerResult struct {
+	Outcome          SteerOutcome
+	Reason           string
+	WriteAdmitted    bool
+	ReceiveSequence  uint64
+	ResponseSequence uint64
+	OrderSequence    uint64
+}
+```
+
+```go
+type ObservationKind uint8
+```
+
+```go
+type Observation interface {
+	Kind() ObservationKind
+	Sequence() uint64
+	observation()
+}
+```
+
+```go
+type OrderedStream interface {
+	Observations() <-chan Observation
+}
+```
+
+```go
+type PromptObservation struct {
+	StopReason string
+
+	Message          *content.AIMessage
+	WriteAdmitted    bool
+	ReceiveSequence  uint64
+	ResponseSequence uint64
+	OrderSequence    uint64
+	Err              error
+}
+```
+
+```go
+type UpdateObservation struct {
+	Event           Event
+	ReceiveSequence uint64
+	OrderSequence   uint64
+}
+```
+
+```go
+type SteerObservation struct {
+	SteerResult
+	Err error
+}
+```
 
 ### Constants {#constants}
 
@@ -78,7 +232,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `SteerAdmissionError`, `SpawnError`, `ExitError`, `DecodeError`, `HistoryError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DecodeError`, `ExitError`, `HistoryError`, `SpawnError`, `SteerAdmissionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

@@ -43,7 +43,31 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`StoreFactory`, `StoreContractOptions`, `StoreContractConfig`, `ContractOptions`
+```go
+type StoreFactory func(t *testing.T) secrets.Store
+```
+
+```go
+type StoreContractOptions struct {
+	Reference        secrets.Reference
+	Namespace        secrets.Namespace
+	OtherReference   secrets.Reference
+	OutsideReference secrets.Reference
+
+	RequireCreateOnly     bool
+	RequireCompareAndSwap bool
+	RequireVersion        bool
+	RequireListing        bool
+}
+```
+
+```go
+type StoreContractConfig = StoreContractOptions
+```
+
+```go
+type ContractOptions = StoreContractOptions
+```
 
 ### Constants {#constants}
 

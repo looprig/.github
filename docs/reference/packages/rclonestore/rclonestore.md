@@ -36,13 +36,8 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (b *blobStore) StoragePaths() []string`
 - `func (e *PutSourceError) Error() string`
 - `func (e *PutSourceError) Unwrap() error`
-- `func (b *blobStore) Put(ctx context.Context, key string, r io.Reader) error`
-- `func (b *blobStore) Get(ctx context.Context, key string) (io.ReadCloser, error)`
-- `func (b *blobStore) Delete(ctx context.Context, key string) error`
-- `func (b *blobStore) List(ctx context.Context, prefix string) ([]string, error)`
 - `func (e *PersistencePathError) Error() string`
 - `func (e *PersistencePathError) Unwrap() error`
 - `func (e *RcloneError) Error() string`
@@ -53,11 +48,75 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *BinaryError) Unwrap() error`
 - `func (e *ProbeError) Error() string`
 - `func (e *ProbeError) Unwrap() error`
-- `func (w *tailWriter) Write(p []byte) (int, error)`
 
 ### Types {#types}
 
-`PutSourceError`, `PersistencePathError`, `RcloneError`, `Options`, `Store`, `OptionsError`, `BinaryError`, `ProbeError`
+```go
+type PutSourceError struct {
+	Key string
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type PersistencePathError struct {
+	Path string
+	Rule string
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type RcloneError struct {
+	Subcommand string
+	Args       []string
+	ExitCode   int
+	Stderr     string
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Options struct {
+	Remote string
+
+	Prefix string
+
+	Binary string
+
+	ConfigPath string
+
+	Timeout time.Duration
+
+	PersistencePaths []string
+}
+```
+
+```go
+type Store struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type OptionsError struct {
+	Field string
+	Rule  string
+}
+```
+
+```go
+type BinaryError struct {
+	Binary string
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ProbeError struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -71,7 +130,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `PutSourceError`, `PersistencePathError`, `RcloneError`, `OptionsError`, `BinaryError`, `ProbeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BinaryError`, `OptionsError`, `PersistencePathError`, `ProbeError`, `PutSourceError`, `RcloneError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

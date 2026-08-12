@@ -40,16 +40,23 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (apiRouter) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (route.Route, error)`
-- `func (c requestCodec) EncodeRequest(req inference.Request, mode codec.RequestMode) (codec.EncodedRequest, error)`
-- `func (c requestCodec) DecodeResponse(body []byte) (*inference.Response, error)`
-- `func (c requestCodec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
-- `func (b *reasoningEventBody) Read(p []byte) (int, error)`
-- `func (b *reasoningEventBody) Close() error`
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-`ReasoningOptions`, `ServiceTier`, `Option`
+```go
+type ReasoningOptions struct {
+	Effort string `json:"effort,omitempty"`
+}
+```
+
+```go
+type ServiceTier string
+```
+
+```go
+type Option func(*config)
+```
 
 ### Constants {#constants}
 

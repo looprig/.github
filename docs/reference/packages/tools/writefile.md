@@ -44,7 +44,29 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`Tool`, `Option`, `LeaseUnhealthyError`, `StaleFileError`, `FileCreateConflictError`, `IrregularFileError`
+```go
+type Tool = filemutation.WriteFile
+```
+
+```go
+type Option = filemutation.FileMutatorOption
+```
+
+```go
+type LeaseUnhealthyError = filemutation.LeaseUnhealthyError
+```
+
+```go
+type StaleFileError = filemutation.StaleFileError
+```
+
+```go
+type FileCreateConflictError = filemutation.FileCreateConflictError
+```
+
+```go
+type IrregularFileError = filemutation.IrregularFileError
+```
 
 ### Constants {#constants}
 

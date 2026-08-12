@@ -64,7 +64,96 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Dataset`, `UnknownVersionError`, `RecordTooLargeError`, `FileTooLargeError`, `MalformedRecordError`, `DuplicateScenarioError`, `InvalidScenarioError`, `PathEscapeError`, `OpenError`, `DirectoryError`, `ReadError`, `EncodeError`, `WriteError`
+```go
+type Dataset struct {
+	Scenarios []eval.Scenario
+}
+```
+
+```go
+type UnknownVersionError struct {
+	Line int
+
+	Version string
+}
+```
+
+```go
+type RecordTooLargeError struct {
+	Line int
+	Size int
+	Max  int
+}
+```
+
+```go
+type FileTooLargeError struct {
+	Path string
+	Max  int
+}
+```
+
+```go
+type MalformedRecordError struct {
+	Line   int
+	Reason string
+}
+```
+
+```go
+type DuplicateScenarioError struct {
+	Line int
+
+	FirstLine int
+}
+```
+
+```go
+type InvalidScenarioError struct {
+	Line  int
+	Cause error
+}
+```
+
+```go
+type PathEscapeError struct {
+	Path  string
+	Cause error
+}
+```
+
+```go
+type OpenError struct {
+	Path  string
+	Cause error
+}
+```
+
+```go
+type DirectoryError struct {
+	Dir   string
+	Cause error
+}
+```
+
+```go
+type ReadError struct {
+	Path  string
+	Cause error
+}
+```
+
+```go
+type EncodeError struct {
+	Cause error
+}
+```
+
+```go
+type WriteError struct {
+	Cause error
+}
+```
 
 ### Constants {#constants}
 
@@ -78,7 +167,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `UnknownVersionError`, `RecordTooLargeError`, `FileTooLargeError`, `MalformedRecordError`, `DuplicateScenarioError`, `InvalidScenarioError`, `PathEscapeError`, `OpenError`, `DirectoryError`, `ReadError`, `EncodeError`, `WriteError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DirectoryError`, `DuplicateScenarioError`, `EncodeError`, `FileTooLargeError`, `InvalidScenarioError`, `MalformedRecordError`, `OpenError`, `PathEscapeError`, `ReadError`, `RecordTooLargeError`, `UnknownVersionError`, `WriteError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

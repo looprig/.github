@@ -58,7 +58,35 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Client`, `RequestBuildError`, `UnsupportedStreamingError`, `Option`, `Endpoint`
+```go
+type Client struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type RequestBuildError struct {
+	Err error
+}
+```
+
+```go
+type UnsupportedStreamingError struct {
+	APIFormat model.APIFormat
+}
+```
+
+```go
+type Option func(*Client)
+```
+
+```go
+type Endpoint struct {
+	BaseURL   string
+	Provider  model.ProviderName
+	APIFormat model.APIFormat
+}
+```
 
 ### Constants {#constants}
 

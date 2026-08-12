@@ -42,7 +42,13 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`Option`, `CounterSupportError`
+```go
+type Option = simple.Option
+```
+
+```go
+type CounterSupportError = llm.CounterSupportError
+```
 
 ### Constants {#constants}
 

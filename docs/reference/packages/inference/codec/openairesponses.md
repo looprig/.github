@@ -55,15 +55,56 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *StreamTerminatedError) Error() string`
 - `func (e *UnsupportedChunkError) Error() string`
 - `func (e *StreamAPIError) Error() string`
-- `func (e *serverStreamEncoder) WriteChunk(chunk content.Chunk) error`
-- `func (e *serverStreamEncoder) Finish(result stream.StreamResult) error`
-- `func (e *serverStreamEncoder) Fail(err error) error`
 - `func (Codec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
 - `func (Codec) DecodeEvent(event []byte) ([]content.Chunk, error)`
 
 ### Types {#types}
 
-`Codec`, `UnsupportedBlockError`, `UnsupportedConversationError`, `ServerDecodeError`, `DuplicateKeyError`, `StreamTerminatedError`, `UnsupportedChunkError`, `StreamAPIError`
+```go
+type Codec struct{}
+```
+
+```go
+type UnsupportedBlockError struct {
+	Block string
+}
+```
+
+```go
+type UnsupportedConversationError struct {
+	Conversation string
+}
+```
+
+```go
+type ServerDecodeError struct {
+	Reason string
+	Detail string
+}
+```
+
+```go
+type DuplicateKeyError struct {
+	Key string
+}
+```
+
+```go
+type StreamTerminatedError struct{}
+```
+
+```go
+type UnsupportedChunkError struct {
+	Chunk string
+}
+```
+
+```go
+type StreamAPIError struct {
+	Code    string
+	Message string
+}
+```
 
 ### Constants {#constants}
 
@@ -77,7 +118,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `UnsupportedBlockError`, `UnsupportedConversationError`, `ServerDecodeError`, `DuplicateKeyError`, `StreamTerminatedError`, `UnsupportedChunkError`, `StreamAPIError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DuplicateKeyError`, `ServerDecodeError`, `StreamAPIError`, `StreamTerminatedError`, `UnsupportedBlockError`, `UnsupportedChunkError`, `UnsupportedConversationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

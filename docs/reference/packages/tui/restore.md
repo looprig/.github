@@ -39,16 +39,23 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (m *confirmModel) Init() tea.Cmd`
-- `func (m *confirmModel) Update(msg tea.Msg) (tea.Model, tea.Cmd)`
-- `func (m *confirmModel) View() tea.View`
-- `func (terminalUI) ConfirmDrift(ctx context.Context, warns []event.DriftChange) (bool, string, error)`
-- `func (terminalUI) Notify(infos []event.DriftChange)`
 - `func (d Decider) DecideRestore(ctx context.Context, a event.DriftAssessment) (session.RestoreDecision, error)`
 
 ### Types {#types}
 
-`UI`, `Decider`
+```go
+type UI interface {
+	ConfirmDrift(ctx context.Context, warns []event.DriftChange) (accept bool, note string, err error)
+
+	Notify(infos []event.DriftChange)
+}
+```
+
+```go
+type Decider struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

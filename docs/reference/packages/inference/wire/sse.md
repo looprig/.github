@@ -43,11 +43,15 @@ The following surface is read from the pinned implementation files. Signatures a
 
 - `func (e *FramerError) Error() string`
 - `func (e *FramerError) Unwrap() error`
-- `func (framer) DecodeStreamFrames(body io.ReadCloser) (*stream.StreamReader[stream.StreamFrame], error)`
 
 ### Types {#types}
 
-`FramerError`
+```go
+type FramerError struct {
+	Reason string
+	Err    error
+}
+```
 
 ### Constants {#constants}
 

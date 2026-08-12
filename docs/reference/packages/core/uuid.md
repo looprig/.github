@@ -52,7 +52,20 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`UUID`, `GenerateError`, `ParseError`
+```go
+type UUID [16]byte
+```
+
+```go
+type GenerateError struct{ Err error }
+```
+
+```go
+type ParseError struct {
+	Input string
+	Err   error
+}
+```
 
 ### Constants {#constants}
 

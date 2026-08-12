@@ -45,16 +45,35 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (a *directAccessAuthenticator) Authorize(ctx context.Context, request *http.Request) error`
-- `func (c *authRetryClient) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
-- `func (c *authRetryClient) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
 - `func (e *ModelMappingError) Error() string`
 - `func (e *DirectAccessError) Error() string`
 - `func (e *DirectAccessError) Unwrap() error`
 
 ### Types {#types}
 
-`Option`, `CounterSupportError`, `ModelMappingError`, `DirectAccessError`
+```go
+type Option func(*options)
+```
+
+```go
+type CounterSupportError = llm.CounterSupportError
+```
+
+```go
+type ModelMappingError struct {
+	Alias  string
+	Format model.APIFormat
+	Reason string
+}
+```
+
+```go
+type DirectAccessError struct {
+	Status int
+	Reason string
+	Err    error
+}
+```
 
 ### Constants {#constants}
 
@@ -68,7 +87,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ModelMappingError`, `DirectAccessError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DirectAccessError`, `ModelMappingError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

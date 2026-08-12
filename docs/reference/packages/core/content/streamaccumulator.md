@@ -51,7 +51,23 @@ No exported functions are declared in this package.
 
 ### Types {#types}
 
-`Thinking`, `Text`, `ToolUses`
+```go
+type Thinking struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Text struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ToolUses struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

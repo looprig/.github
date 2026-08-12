@@ -74,6 +74,10 @@ function codeList(values, format) {
   return values.length ? values.map((value) => "- \x60" + format(value) + "\x60").join("\n") : "";
 }
 
+function declarationList(values) {
+  return values.length ? values.map((value) => "```go\n" + value.declaration + "\n```").join("\n\n") : "";
+}
+
 function replaceBetween(text, startRe, endRe, replacement) {
   const start = text.search(startRe);
   if (start === -1) return text;
@@ -94,7 +98,7 @@ function importParagraph(item, id) {
 function surfaceSection(item) {
   const functions = codeList(item.functions, (value) => value.signature);
   const methods = codeList(item.methods, (value) => value.signature);
-  const types = listNames(item.types.map((value) => value.name));
+  const types = declarationList(item.types);
   const constants = listNames(item.constants.map((value) => value.name));
   const variables = listNames(item.variables.map((value) => value.name));
   const functionBody = functions || "No exported functions are declared in this package.";

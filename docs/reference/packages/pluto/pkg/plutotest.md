@@ -43,7 +43,14 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`RunSpec`
+```go
+type RunSpec struct {
+	Manifest qual.Manifest
+	Packs    []qual.Pack
+	Target   eval.Target
+	Trials   int
+}
+```
 
 ### Constants {#constants}
 

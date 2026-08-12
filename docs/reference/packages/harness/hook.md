@@ -53,18 +53,253 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (o Operation) Valid() bool`
 - `func (o Operation) Guardable() bool`
 - `func (o Outcome) Valid() bool`
-- `func (c *isolatedObserverContext) Deadline() (time.Time, bool)`
-- `func (c *isolatedObserverContext) Done() <-chan struct{}`
-- `func (c *isolatedObserverContext) Err() error`
-- `func (c *isolatedObserverContext) Value(key any) any`
-- `func (c *parentPreservingContext) Done() <-chan struct{}`
-- `func (c *parentPreservingContext) Err() error`
-- `func (r *Runner) Start( ctx context.Context, call Call,) (context.Context, FinishFunc, error)`
+- `func (r *Runner) Start(ctx context.Context, call Call) (context.Context, FinishFunc, error)`
 - `func (r *Runner) Handles(operation Operation) bool`
 
 ### Types {#types}
 
-`Call`, `Result`, `TurnData`, `StepData`, `InferenceData`, `CompactionData`, `ToolCallData`, `GateWaitData`, `ToolExecutionData`, `JournalAppendData`, `ConfigErrorKind`, `ConfigError`, `CallErrorKind`, `CallError`, `GuardError`, `CloneErrorKind`, `CloneError`, `Denial`, `Operation`, `Outcome`, `StepIndex`, `RecordFamily`, `GuardFunc`, `BeginFunc`, `FinishFunc`, `Guard`, `Around`, `Set`, `Runner`
+```go
+type Call struct {
+	Operation Operation
+
+	StartedAt time.Time
+
+	Coordinates identity.Coordinates
+
+	AgentName identity.AgentName
+
+	Cause identity.Cause
+
+	Turn          *TurnData
+	Step          *StepData
+	Inference     *InferenceData
+	Compaction    *CompactionData
+	ToolCall      *ToolCallData
+	GateWait      *GateWaitData
+	ToolExecution *ToolExecutionData
+	JournalAppend *JournalAppendData
+}
+```
+
+```go
+type Result struct {
+	Call
+
+	EndedAt time.Time
+
+	Outcome Outcome
+
+	Err error
+}
+```
+
+```go
+type TurnData struct {
+	Index event.TurnIndex
+
+	Input *content.UserMessage
+}
+```
+
+```go
+type StepData struct {
+	Index StepIndex
+}
+```
+
+```go
+type InferenceData struct {
+	Request *inference.Request
+
+	AIMessage *content.AIMessage
+
+	StreamResult *stream.StreamResult
+}
+```
+
+```go
+type CompactionData struct {
+	AttemptID event.CompactAttemptID
+
+	Input *loop.CompactionInput
+
+	Output *loop.CompactionOutput
+}
+```
+
+```go
+type ToolCallData struct {
+	ToolExecutionID uuid.UUID
+
+	ToolUseID string
+
+	ToolName string
+
+	Summary string
+
+	ArgsJSON json.RawMessage
+
+	PermissionEffect event.PermissionDecisionEffect
+
+	PermissionReason string
+
+	Result *tool.ToolResult
+
+	ResultPreview string
+
+	IsError bool
+}
+```
+
+```go
+type GateWaitData struct {
+	GateID gate.ID
+
+	Kind gate.Kind
+
+	Resolver gate.ResolverKind
+
+	Blocks gate.Blocks
+
+	Effect gate.Effect
+
+	Answer *gate.Answer
+}
+```
+
+```go
+type ToolExecutionData struct {
+	ToolExecutionID uuid.UUID
+
+	ToolUseID string
+
+	ToolName string
+
+	ArgsJSON json.RawMessage
+
+	Result *tool.ToolResult
+
+	ResultPreview string
+
+	IsError bool
+}
+```
+
+```go
+type JournalAppendData struct {
+	Family RecordFamily
+
+	RecordID string
+}
+```
+
+```go
+type ConfigErrorKind string
+```
+
+```go
+type ConfigError struct {
+	Kind      ConfigErrorKind
+	Operation Operation
+	Index     int
+	Field     string
+}
+```
+
+```go
+type CallErrorKind string
+```
+
+```go
+type CallError struct {
+	Kind      CallErrorKind
+	Operation Operation
+}
+```
+
+```go
+type GuardError struct {
+	Operation Operation
+	Index     int
+	Cause     error
+}
+```
+
+```go
+type CloneErrorKind string
+```
+
+```go
+type CloneError struct {
+	Kind      CloneErrorKind
+	ValueType string
+}
+```
+
+```go
+type Denial struct {
+	Code   string
+	Reason string
+}
+```
+
+```go
+type Operation uint8
+```
+
+```go
+type Outcome uint8
+```
+
+```go
+type StepIndex uint64
+```
+
+```go
+type RecordFamily string
+```
+
+```go
+type GuardFunc func(context.Context, Call) error
+```
+
+```go
+type BeginFunc func(context.Context, Call) (context.Context, FinishFunc)
+```
+
+```go
+type FinishFunc func(Result)
+```
+
+```go
+type Guard struct {
+	Operation Operation
+	Check     GuardFunc
+}
+```
+
+```go
+type Around struct {
+	Operation Operation
+	Begin     BeginFunc
+}
+```
+
+```go
+type Set struct {
+	PolicyRevision string
+
+	Guards []Guard
+
+	Around []Around
+}
+```
+
+```go
+type Runner struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -78,7 +313,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ConfigError`, `CallError`, `GuardError`, `CloneError`, `Denial`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CallError`, `CloneError`, `ConfigError`, `Denial`, `GuardError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

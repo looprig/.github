@@ -119,7 +119,271 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`ActivityValidationError`, `ReconciliationError`, `Catalog`, `VertexMetadata`, `Metadata`, `ValidatedInput`, `ValidatedResume`, `Result`, `Definition`, `UnknownDefinitionError`, `DuplicateDefinitionError`, `InvalidSchemaError`, `InvalidInputError`, `HarnessCancellationConflictDefinition`, `ActivityHistoryRecord`, `ActivityHistoryPage`, `InputStore`, `RunRegistry`, `ListRunsRequest`, `RunPage`, `NotFoundError`, `ConflictError`, `CorruptRecordError`, `InputReference`, `ArtifactReference`, `Run`, `RunStatus`, `SessionOwnedError`, `AdoptionError`, `SupervisorConfig`, `Supervisor`, `StateDecoder`, `ResumeDecoder`, `StatusSummarizer`, `TypedDefinition`
+```go
+type ActivityValidationError struct {
+	Field string
+	Rule  string
+}
+```
+
+```go
+type ReconciliationError struct {
+	RunID uuid.UUID
+	Op    string
+	Err   error
+}
+```
+
+```go
+type Catalog struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type VertexMetadata struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Metadata struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ValidatedInput struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ValidatedResume struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Result struct {
+	Run        flow.GraphRunState
+	State      json.RawMessage
+	Interrupts []flow.Interruption
+	Halt       *flow.Halt
+	Summary    string
+}
+```
+
+```go
+type Definition interface {
+	Metadata() Metadata
+	ValidateInput(json.RawMessage) (ValidatedInput, error)
+	ValidateResume(json.RawMessage) (ValidatedResume, error)
+	Start(context.Context, ValidatedInput, ...flow.RunOption) (*Result, error)
+	Resume(context.Context, flow.GraphRunID, ValidatedResume, ...flow.RunOption) (*Result, error)
+	Get(context.Context, flow.GraphRunID) (*Result, error)
+	History(context.Context, flow.GraphRunID) ([]flow.GraphRunState, error)
+	Cancel(context.Context, flow.GraphRunID, string, ...flow.RunOption) error
+	registeredCopy() (Definition, error)
+}
+```
+
+```go
+type UnknownDefinitionError struct{ Name, Version string }
+```
+
+```go
+type DuplicateDefinitionError struct{ Name, Version string }
+```
+
+```go
+type InvalidSchemaError struct {
+	Field string
+	Err   error
+}
+```
+
+```go
+type InvalidInputError struct {
+	Field string
+	Err   error
+}
+```
+
+```go
+type HarnessCancellationConflictDefinition struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ActivityHistoryRecord struct {
+	Revision uint64
+	Metadata tool.WorkflowActivityMetadata
+}
+```
+
+```go
+type ActivityHistoryPage struct {
+	Records      []ActivityHistoryRecord
+	NextRevision *uint64
+	NextEventID  *uuid.UUID
+}
+```
+
+```go
+type InputStore struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type RunRegistry struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ListRunsRequest struct {
+	After string
+	Limit int
+}
+```
+
+```go
+type RunPage struct {
+	Runs []Run
+	Next string
+}
+```
+
+```go
+type NotFoundError struct {
+	Kind      string
+	SessionID uuid.UUID
+	RunID     uuid.UUID
+	Digest    string
+}
+```
+
+```go
+type ConflictError struct {
+	SessionID uuid.UUID
+	RunID     uuid.UUID
+	Expected  uint64
+	Actual    uint64
+	Reason    string
+}
+```
+
+```go
+type CorruptRecordError struct {
+	Key string
+	Err error
+}
+```
+
+```go
+type InputReference struct {
+	Digest string `json:"digest"`
+	Key    string `json:"key"`
+	Size   int64  `json:"size"`
+}
+```
+
+```go
+type ArtifactReference struct {
+	ID     string `json:"id"`
+	Kind   string `json:"kind"`
+	Digest string `json:"digest"`
+	Size   int64  `json:"size"`
+}
+```
+
+```go
+type Run struct {
+	SessionID         uuid.UUID       `json:"session_id"`
+	ToolExecutionID   uuid.UUID       `json:"tool_execution_id"`
+	DefinitionName    string          `json:"definition_name"`
+	DefinitionVersion string          `json:"definition_version"`
+	ID                uuid.UUID       `json:"id"`
+	GraphRunID        flow.GraphRunID `json:"graph_run_id"`
+	ParentRunID       uuid.UUID       `json:"parent_run_id,omitzero"`
+
+	ArtifactSessionID      uuid.UUID           `json:"artifact_session_id"`
+	ArtifactRunID          uuid.UUID           `json:"artifact_run_id"`
+	ArtifactInputKind      string              `json:"artifact_input_kind,omitempty"`
+	ArtifactInputSessionID uuid.UUID           `json:"artifact_input_session_id,omitzero"`
+	ArtifactInputRunID     uuid.UUID           `json:"artifact_input_run_id,omitzero"`
+	Input                  InputReference      `json:"input"`
+	Status                 RunStatus           `json:"status"`
+	StatusSummary          string              `json:"status_summary,omitempty"`
+	CancelRequested        bool                `json:"cancel_requested,omitempty"`
+	CheckpointRevision     uint64              `json:"checkpoint_revision"`
+	ActivityCursor         uint64              `json:"activity_cursor"`
+	LedgerLocator          string              `json:"ledger_locator"`
+	Artifacts              []ArtifactReference `json:"artifacts,omitempty"`
+	CreatedAt              time.Time           `json:"created_at"`
+	UpdatedAt              time.Time           `json:"updated_at"`
+	Revision               uint64              `json:"-"`
+}
+```
+
+```go
+type RunStatus string
+```
+
+```go
+type SessionOwnedError struct {
+	SessionID   uuid.UUID
+	HolderEpoch uint64
+}
+```
+
+```go
+type AdoptionError struct {
+	RunID uuid.UUID
+	Op    string
+	Err   error
+}
+```
+
+```go
+type SupervisorConfig struct {
+	SessionID       uuid.UUID
+	Catalog         *Catalog
+	Registry        *RunRegistry
+	Inputs          *InputStore
+	Leaser          storage.Leaser
+	Now             func() time.Time
+	ShutdownTimeout time.Duration
+	MaxWorkers      int
+}
+```
+
+```go
+type Supervisor struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type StateDecoder[S any] func(json.RawMessage) (S, error)
+```
+
+```go
+type ResumeDecoder func(json.RawMessage) (any, error)
+```
+
+```go
+type StatusSummarizer[S any] func(S) string
+```
+
+```go
+type TypedDefinition[S any] struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -127,13 +391,13 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Variables {#variables}
 
-`ErrActivityValidation`, `ErrUnknownDefinition`, `ErrNotFound`, `ErrSupervisorActive`
+`ErrActivityValidation`, `ErrReconciliation`, `ErrUnknownDefinition`, `ErrDuplicateDefinition`, `ErrInvalidSchema`, `ErrInvalidInput`, `ErrNotFound`, `ErrConflict`, `ErrCorruptRecord`, `ErrSupervisorActive`, `ErrSupervisorClosed`, `ErrSessionOwned`, `ErrAdoption`, `ErrShutdownTimeout`
 
 ## Ownership and errors {#ownership-and-errors}
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ActivityValidationError`, `ReconciliationError`, `UnknownDefinitionError`, `DuplicateDefinitionError`, `InvalidSchemaError`, `InvalidInputError`, `NotFoundError`, `ConflictError`, `CorruptRecordError`, `SessionOwnedError`, `AdoptionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ActivityValidationError`, `AdoptionError`, `ConflictError`, `CorruptRecordError`, `DuplicateDefinitionError`, `InvalidInputError`, `InvalidSchemaError`, `NotFoundError`, `ReconciliationError`, `SessionOwnedError`, `UnknownDefinitionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

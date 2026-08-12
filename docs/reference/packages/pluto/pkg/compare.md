@@ -43,7 +43,44 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Side`, `UnmatchedTable`, `TableComparison`, `Comparison`, `RoleMismatchError`
+```go
+type Side string
+```
+
+```go
+type UnmatchedTable struct {
+	Pack, Table eval.Name
+	Side        Side
+}
+```
+
+```go
+type TableComparison struct {
+	Pack, Table, Dimension eval.Name
+	Result                 evalcompare.Comparison
+	Regressed              int
+	Improved               int
+	Unchanged              int
+	Incompatible           int
+}
+```
+
+```go
+type Comparison struct {
+	Candidate       qual.Manifest
+	Incumbent       qual.Manifest
+	Tables          []TableComparison
+	UnmatchedTables []UnmatchedTable
+}
+```
+
+```go
+type RoleMismatchError struct {
+	Field string
+	Role  qual.ModelRole
+	Want  qual.ModelRole
+}
+```
 
 ### Constants {#constants}
 

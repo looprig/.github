@@ -46,13 +46,69 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (s *Server) Serve(ctx context.Context, reader io.Reader, writer io.Writer) error`
 - `func (s *Server) Run(ctx context.Context) error`
 - `func (s *Server) ServeStdio(ctx context.Context, reader io.Reader, writer io.Writer) error`
-- `func (nopCloser) Close() error`
-- `func (r *boundedFrameReader) Read(p []byte) (int, error)`
-- `func (w *boundedFrameWriter) Write(p []byte) (int, error)`
 
 ### Types {#types}
 
-`Config`, `ServerConfig`, `Server`, `Handler`, `ToolHandler`, `Tool`, `Content`, `Result`, `ToolResult`
+```go
+type Config struct {
+	Name    string
+	Version string
+
+	MaxMessageBytes int
+
+	MaxInputBytes int
+
+	MaxOutputBytes        int
+	MaxConcurrentRequests int
+}
+```
+
+```go
+type ServerConfig = Config
+```
+
+```go
+type Server struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Handler func(context.Context, json.RawMessage) (Result, error)
+```
+
+```go
+type ToolHandler = Handler
+```
+
+```go
+type Tool struct {
+	Name         string
+	Title        string
+	Description  string
+	InputSchema  json.RawMessage
+	OutputSchema json.RawMessage
+	Handler      Handler
+}
+```
+
+```go
+type Content struct {
+	Text string
+}
+```
+
+```go
+type Result struct {
+	Content           []Content
+	StructuredContent json.RawMessage
+	IsError           bool
+}
+```
+
+```go
+type ToolResult = Result
+```
 
 ### Constants {#constants}
 
@@ -60,7 +116,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Variables {#variables}
 
-`ErrInvalidArgument`
+`ErrInvalidArgument`, `ErrInternal`, `ErrInvalidToolName`, `ErrDuplicateTool`, `ErrInvalidToolSchema`, `ErrInvalidConfig`, `ErrInputLimit`, `ErrOutputLimit`, `ErrInputEnvelope`, `ErrBatchUnsupported`
 
 ## Ownership and errors {#ownership-and-errors}
 

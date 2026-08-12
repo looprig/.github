@@ -56,7 +56,79 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`AuthBinding`, `AuthPolicy`, `InvalidAuthPolicyError`, `AuthPolicyMismatchError`, `AttestationError`, `AuthRequiredError`, `CounterSupportReason`, `CounterSupportError`, `CounterDirectConstructionReason`, `CounterConstructor`, `CounterDirectConstructionError`, `Provider`
+```go
+type AuthBinding struct {
+	Provider  string
+	Transport string
+	Scheme    credentials.Scheme
+	Usage     credentials.UsageClass
+	Issuer    string
+	Audience  string
+}
+```
+
+```go
+type AuthPolicy struct {
+	Accepted []AuthBinding
+}
+```
+
+```go
+type InvalidAuthPolicyError struct {
+	Reason string
+	Err    error
+}
+```
+
+```go
+type AuthPolicyMismatchError struct{ Reason string }
+```
+
+```go
+type AttestationError struct {
+	Reason string
+	Err    error
+}
+```
+
+```go
+type AuthRequiredError struct {
+	Provider Provider
+	Kind     auth.AuthKind
+}
+```
+
+```go
+type CounterSupportReason string
+```
+
+```go
+type CounterSupportError struct {
+	Provider  Provider
+	Reason    CounterSupportReason
+	APIFormat model.APIFormat
+}
+```
+
+```go
+type CounterDirectConstructionReason string
+```
+
+```go
+type CounterConstructor string
+```
+
+```go
+type CounterDirectConstructionError struct {
+	Provider Provider
+	Reason   CounterDirectConstructionReason
+	Use      CounterConstructor
+}
+```
+
+```go
+type Provider string
+```
 
 ### Constants {#constants}
 
@@ -70,7 +142,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `InvalidAuthPolicyError`, `AuthPolicyMismatchError`, `AttestationError`, `AuthRequiredError`, `CounterSupportError`, `CounterDirectConstructionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AttestationError`, `AuthPolicyMismatchError`, `AuthRequiredError`, `CounterDirectConstructionError`, `CounterSupportError`, `InvalidAuthPolicyError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

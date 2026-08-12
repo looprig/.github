@@ -60,14 +60,14 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func ParseReviewContextKind(value string) (ReviewContextKind, bool)`
 - `func BuildReviewContext(input ReviewContext, policy ReviewContextPolicy) (ReviewContext, error)`
 - `func ParseReviewDecisionReason(value string) (ReviewDecisionReason, bool)`
-- `func NewPermissionReviewPolicy( revision string, maximum ReviewRisk, minimum map[ReviewRisk]ReviewAuthorization, absoluteHuman []ReviewRiskCategory, material ReviewTruncationMask,) (PermissionReviewPolicy, error)`
+- `func NewPermissionReviewPolicy(revision string, maximum ReviewRisk, minimum map[ReviewRisk]ReviewAuthorization, absoluteHuman []ReviewRiskCategory, material ReviewTruncationMask) (PermissionReviewPolicy, error)`
 - `func DefaultPermissionReviewPolicy(revision string) (PermissionReviewPolicy, error)`
-- `func EvaluatePermissionAssessment( policy PermissionReviewPolicy, subject PermissionReviewSubject, assessment PermissionAssessment,) ReviewDecision`
-- `func NewPermissionReviewSubject( basis ReviewBasis, request tool.Request, context ReviewContext,) (PermissionReviewSubject, error)`
+- `func EvaluatePermissionAssessment(policy PermissionReviewPolicy, subject PermissionReviewSubject, assessment PermissionAssessment) ReviewDecision`
+- `func NewPermissionReviewSubject(basis ReviewBasis, request tool.Request, context ReviewContext) (PermissionReviewSubject, error)`
 - `func SubjectDigest(subject PermissionReviewSubject) ([32]byte, error)`
-- `func CombinePermissionAssessments( policy PermissionReviewPolicy, classifiers PermissionClassifierSet, outcomes []PermissionAssessmentOutcome,) ReviewDecision`
+- `func CombinePermissionAssessments(policy PermissionReviewPolicy, classifiers PermissionClassifierSet, outcomes []PermissionAssessmentOutcome) ReviewDecision`
 - `func ValidatePermissionClassifierName(name hustle.Name) error`
-- `func NewPermissionClassifierSet( classifiers ...PermissionClassifier,) (PermissionClassifierSet, error)`
+- `func NewPermissionClassifierSet(classifiers ...PermissionClassifier) (PermissionClassifierSet, error)`
 - `func ValidateGate(g Gate) error`
 - `func ValidateOpenURLPayload(p OpenURLPayload) error`
 
@@ -111,12 +111,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (*PermissionClassifierValidationError) Error() string`
 - `func (*PermissionClassifierNameValidationError) Error() string`
 - `func (e *PermissionClassifierPanicError) Error() string`
-- `func (c *frozenPermissionClassifier) Name() hustle.Name`
-- `func (c *frozenPermissionClassifier) Revision() string`
-- `func (c *frozenPermissionClassifier) Definition() hustle.Definition`
-- `func (c *frozenPermissionClassifier) Applies(subject PermissionReviewSubject) bool`
-- `func (c *frozenPermissionClassifier) MarshalInput( subject PermissionReviewSubject,) (raw json.RawMessage, err error)`
-- `func (c *frozenPermissionClassifier) ValidateResult( subject PermissionReviewSubject, result hustle.Result,) (assessment PermissionAssessment, err error)`
 - `func (s PermissionClassifierSet) Classifiers() []PermissionClassifier`
 - `func (e *GateValidationError) Error() string`
 - `func (e *GateValidationError) Unwrap() error`
@@ -125,7 +119,713 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`AccessSource`, `AccessBinding`, `AccessErrorKind`, `AccessError`, `AccessBindings`, `RuleMatcher`, `RuleWriter`, `GrantIssuer`, `Evaluation`, `DenialReason`, `Resolution`, `ApprovalPrompt`, `Approver`, `Evaluator`, `EvaluationErrorKind`, `EvaluationError`, `EvidenceAccessEvaluator`, `EvidenceContainmentPolicy`, `EvidenceContainmentVerifier`, `FormSchemaErrorKind`, `FormSchemaError`, `FormAnswerErrorKind`, `FormAnswerError`, `FormAuditErrorKind`, `FormAuditError`, `ID`, `Kind`, `ResolverKind`, `Blocks`, `Effect`, `CloseReason`, `Criticality`, `Subject`, `Route`, `Gate`, `ObservationRequirement`, `EvidenceObservationVerifier`, `Payload`, `OpenPayload`, `PermissionPayload`, `AskUserPayload`, `ResumeInputPayload`, `FormPayload`, `OpenURLPayload`, `UnknownPayloadKindError`, `NilPayloadError`, `PayloadEncodeError`, `PayloadDecodeError`, `RequestDecodeError`, `PolicyAction`, `ResponsePolicy`, `ResponseTemplate`, `ModelDecisionPolicy`, `FieldKind`, `Prompt`, `Control`, `Field`, `Option`, `PromptSchema`, `ApprovalAction`, `ApprovalActionDecodeError`, `ResponseSourceKind`, `ResponseRequest`, `GateResponse`, `Answer`, `ResponseSource`, `ResponseAudit`, `PermissionAudit`, `AskUserAudit`, `FormAudit`, `UnknownResponseAuditKindError`, `NilResponseAuditError`, `ResponseAuditEncodeError`, `ResponseAuditDecodeError`, `ReviewRisk`, `ReviewAuthorization`, `ReviewRecommendation`, `ReviewStatus`, `ReviewRiskCategory`, `ReviewValidationField`, `ReviewValidationReason`, `ReviewValidationError`, `ReviewContextOrigin`, `ReviewContextKind`, `ReviewContextEntry`, `ReviewContext`, `ReviewContextPolicy`, `ReviewTruncationMask`, `ReviewTruncation`, `PermissionAssessment`, `PermissionReviewPolicy`, `ReviewDecisionReason`, `ReviewDecision`, `ReviewBasis`, `PermissionReviewSubject`, `PermissionAssessmentOutcome`, `PermissionClassifier`, `PermissionClassifierSet`, `PermissionClassifierValidationReason`, `PermissionClassifierValidationError`, `PermissionClassifierNameValidationError`, `PermissionClassifierPanicMethod`, `PermissionClassifierPanicError`, `GateValidationErrorKind`, `GateValidationError`, `OpenURLPayloadErrorKind`, `OpenURLPayloadError`, `DisplayOriginError`
+```go
+type AccessSource interface {
+	AccessVersion() uint16
+	AccessFor(kind, scope string) (uint8, error)
+}
+```
+
+```go
+type AccessBinding struct {
+	Kind   string
+	Source AccessSource
+}
+```
+
+```go
+type AccessErrorKind string
+```
+
+```go
+type AccessError struct {
+	Kind        AccessErrorKind
+	Requirement string
+	Cause       error
+}
+```
+
+```go
+type AccessBindings struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type RuleMatcher interface {
+	MatchesDeny(context.Context, tool.Requirement) (bool, error)
+	MatchesAllow(context.Context, tool.Requirement) (bool, error)
+}
+```
+
+```go
+type RuleWriter interface {
+	WriteRules(context.Context, []tool.RuleCandidate) error
+}
+```
+
+```go
+type GrantIssuer interface {
+	GrantVersion() uint16
+	IssueGrant(ctx context.Context, executionID, command, cwd, kind, scope, class, target string, expiryUnixMilli int64) (string, error)
+}
+```
+
+```go
+type Evaluation struct {
+	Denied     []tool.Requirement
+	Unmet      []tool.Requirement
+	Candidates []tool.RuleCandidate
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type DenialReason string
+```
+
+```go
+type Resolution struct {
+	Approved          bool         `json:"approved"`
+	Grants            []string     `json:"-"`
+	Denial            DenialReason `json:"-"`
+	DenialDescription string       `json:"-"`
+}
+```
+
+```go
+type ApprovalPrompt struct {
+	Request    tool.Request
+	Unmet      []tool.Requirement
+	Candidates []tool.RuleCandidate
+}
+```
+
+```go
+type Approver interface {
+	RequestApproval(ctx context.Context, prompt ApprovalPrompt) (ApprovalAction, error)
+}
+```
+
+```go
+type Evaluator struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type EvaluationErrorKind string
+```
+
+```go
+type EvaluationError struct {
+	Kind        EvaluationErrorKind
+	Requirement string
+	Cause       error
+}
+```
+
+```go
+type EvidenceAccessEvaluator interface {
+	AccessFor(tool.Requirement) (uint8, error)
+}
+```
+
+```go
+type EvidenceContainmentPolicy struct {
+	ReadRoot        string
+	SecurityCeiling string
+}
+```
+
+```go
+type EvidenceContainmentVerifier interface {
+	VerifyEvidenceContainment(ctx context.Context, policy EvidenceContainmentPolicy, request tool.Request) error
+}
+```
+
+```go
+type FormSchemaErrorKind string
+```
+
+```go
+type FormSchemaError struct {
+	Kind  FormSchemaErrorKind
+	Field string
+}
+```
+
+```go
+type FormAnswerErrorKind string
+```
+
+```go
+type FormAnswerError struct {
+	Kind  FormAnswerErrorKind
+	Field string
+}
+```
+
+```go
+type FormAuditErrorKind string
+```
+
+```go
+type FormAuditError struct {
+	Kind  FormAuditErrorKind
+	Field string
+}
+```
+
+```go
+type ID = uuid.UUID
+```
+
+```go
+type Kind string
+```
+
+```go
+type ResolverKind string
+```
+
+```go
+type Blocks string
+```
+
+```go
+type Effect string
+```
+
+```go
+type CloseReason string
+```
+
+```go
+type Criticality string
+```
+
+```go
+type Subject struct {
+	ToolExecutionID ID     `json:"tool_execution_id,omitzero"`
+	ToolUseID       string `json:"tool_use_id,omitempty"`
+	TurnID          ID     `json:"turn_id,omitzero"`
+	StepID          ID     `json:"step_id,omitzero"`
+	InputID         ID     `json:"input_id,omitzero"`
+}
+```
+
+```go
+type Route struct {
+	GateID          ID `json:"gate_id,omitzero"`
+	LoopID          ID `json:"loop_id,omitzero"`
+	ToolExecutionID ID `json:"tool_execution_id,omitzero"`
+}
+```
+
+```go
+type Gate struct {
+	ID             ID             `json:"id,omitzero"`
+	Kind           Kind           `json:"kind,omitempty"`
+	Resolver       ResolverKind   `json:"resolver,omitempty"`
+	Blocks         Blocks         `json:"blocks,omitempty"`
+	Effect         Effect         `json:"effect,omitempty"`
+	Criticality    Criticality    `json:"criticality,omitempty"`
+	Subject        Subject        `json:"subject,omitzero"`
+	Prompt         Prompt         `json:"prompt,omitzero"`
+	ResponsePolicy ResponsePolicy `json:"response_policy,omitzero"`
+	Restorable     bool           `json:"restorable,omitzero"`
+}
+```
+
+```go
+type ObservationRequirement struct {
+	Target string
+	Token  string
+}
+```
+
+```go
+type EvidenceObservationVerifier interface {
+	VerifyEvidenceObservations(ctx context.Context, policy EvidenceContainmentPolicy, requirements []ObservationRequirement) error
+}
+```
+
+```go
+type Payload interface {
+	payload()
+}
+```
+
+```go
+type OpenPayload struct {
+	GateID  ID      `json:"gate_id,omitzero"`
+	Payload Payload `json:"payload,omitempty"`
+}
+```
+
+```go
+type PermissionPayload struct {
+	Request tool.Request `json:"request,omitzero"`
+}
+```
+
+```go
+type AskUserPayload struct {
+	Question string   `json:"question,omitempty"`
+	Choices  []string `json:"choices,omitempty"`
+}
+```
+
+```go
+type ResumeInputPayload struct {
+	InputID uuid.UUID `json:"input_id,omitzero"`
+	Preview string    `json:"preview,omitempty"`
+}
+```
+
+```go
+type FormPayload struct {
+	Title  string       `json:"title,omitempty"`
+	Body   string       `json:"body,omitempty"`
+	Schema PromptSchema `json:"schema,omitzero"`
+}
+```
+
+```go
+type OpenURLPayload struct {
+	DisplayOrigin string `json:"display_origin,omitempty"`
+
+	URL                string `json:"-"`
+	RequiresCompletion bool   `json:"requires_completion,omitzero"`
+}
+```
+
+```go
+type UnknownPayloadKindError struct {
+	Kind string
+}
+```
+
+```go
+type NilPayloadError struct{}
+```
+
+```go
+type PayloadEncodeError struct {
+	Kind  string
+	Cause error
+}
+```
+
+```go
+type PayloadDecodeError struct {
+	Kind  string
+	Cause error
+}
+```
+
+```go
+type RequestDecodeError struct{ Cause error }
+```
+
+```go
+type PolicyAction string
+```
+
+```go
+type ResponsePolicy struct {
+	Timeout time.Duration `json:"timeout,omitzero"`
+
+	OnTimeout PolicyAction `json:"on_timeout,omitempty"`
+
+	Response ResponseTemplate `json:"response,omitzero"`
+
+	ModelDecision ModelDecisionPolicy `json:"model_decision,omitzero"`
+}
+```
+
+```go
+type ResponseTemplate struct {
+	Action string                     `json:"action,omitempty"`
+	Values map[string]json.RawMessage `json:"values,omitempty"`
+}
+```
+
+```go
+type ModelDecisionPolicy struct {
+	Prompt         string           `json:"prompt,omitempty"`
+	AllowedActions []string         `json:"allowed_actions,omitempty"`
+	Default        ResponseTemplate `json:"default,omitzero"`
+	Metadata       json.RawMessage  `json:"metadata,omitempty"`
+}
+```
+
+```go
+type FieldKind string
+```
+
+```go
+type Prompt struct {
+	Title string `json:"title,omitempty"`
+	Body  string `json:"body,omitempty"`
+
+	Origin   string       `json:"origin,omitempty"`
+	Schema   PromptSchema `json:"schema,omitzero"`
+	Controls []Control    `json:"controls,omitempty"`
+}
+```
+
+```go
+type Control struct {
+	Action string `json:"action,omitempty"`
+	Label  string `json:"label,omitempty"`
+}
+```
+
+```go
+type Field struct {
+	Name     string          `json:"name,omitempty"`
+	Label    string          `json:"label,omitempty"`
+	Kind     FieldKind       `json:"kind,omitempty"`
+	Required bool            `json:"required,omitzero"`
+	Options  []Option        `json:"options,omitempty"`
+	Default  json.RawMessage `json:"default,omitempty"`
+}
+```
+
+```go
+type Option struct {
+	Value string `json:"value,omitempty"`
+	Label string `json:"label,omitempty"`
+}
+```
+
+```go
+type PromptSchema struct {
+	Fields []Field `json:"fields,omitempty"`
+}
+```
+
+```go
+type ApprovalAction string
+```
+
+```go
+type ApprovalActionDecodeError struct{ Cause error }
+```
+
+```go
+type ResponseSourceKind string
+```
+
+```go
+type ResponseRequest struct {
+	Action string                     `json:"action,omitempty"`
+	Values map[string]json.RawMessage `json:"values,omitempty"`
+}
+```
+
+```go
+type GateResponse struct {
+	GateID ID                         `json:"gate_id,omitzero"`
+	Action string                     `json:"action,omitempty"`
+	Values map[string]json.RawMessage `json:"values,omitempty"`
+	Source ResponseSource             `json:"source,omitzero"`
+}
+```
+
+```go
+type Answer struct {
+	GateID ID
+	Action string
+
+	Values map[string]string
+	Source ResponseSource
+}
+```
+
+```go
+type ResponseSource struct {
+	Kind   ResponseSourceKind `json:"kind,omitempty"`
+	Reason string             `json:"reason,omitempty"`
+}
+```
+
+```go
+type ResponseAudit interface {
+	responseAudit()
+}
+```
+
+```go
+type PermissionAudit struct {
+	RequirementDescriptions []string `json:"requirement_descriptions,omitempty"`
+	CandidateDescriptions   []string `json:"candidate_descriptions,omitempty"`
+}
+```
+
+```go
+type AskUserAudit struct {
+	AnswerPreview string `json:"answer_preview,omitempty"`
+}
+```
+
+```go
+type FormAudit struct {
+	Values map[string]string `json:"values,omitempty"`
+}
+```
+
+```go
+type UnknownResponseAuditKindError struct {
+	Kind string
+}
+```
+
+```go
+type NilResponseAuditError struct{}
+```
+
+```go
+type ResponseAuditEncodeError struct {
+	Kind  string
+	Cause error
+}
+```
+
+```go
+type ResponseAuditDecodeError struct {
+	Kind  string
+	Cause error
+}
+```
+
+```go
+type ReviewRisk string
+```
+
+```go
+type ReviewAuthorization string
+```
+
+```go
+type ReviewRecommendation string
+```
+
+```go
+type ReviewStatus string
+```
+
+```go
+type ReviewRiskCategory string
+```
+
+```go
+type ReviewValidationField string
+```
+
+```go
+type ReviewValidationReason string
+```
+
+```go
+type ReviewValidationError struct {
+	Field  ReviewValidationField
+	Reason ReviewValidationReason
+}
+```
+
+```go
+type ReviewContextOrigin string
+```
+
+```go
+type ReviewContextKind string
+```
+
+```go
+type ReviewContextEntry struct {
+	Origin    ReviewContextOrigin
+	Kind      ReviewContextKind
+	Content   string
+	Truncated bool
+}
+```
+
+```go
+type ReviewContext struct {
+	Coordinates        identity.Coordinates
+	ContextRevision    string
+	WorkspaceRoot      string
+	WorkingDirectory   string
+	RetryReason        string
+	SecurityCeiling    string
+	GatePolicyRevision string
+	Entries            []ReviewContextEntry
+	Truncation         ReviewTruncation
+}
+```
+
+```go
+type ReviewContextPolicy struct {
+	Revision             string
+	MaxBytes             int
+	MaxEstimatedTokens   int
+	MaxEntries           int
+	MaxUserEntryBytes    int
+	MaxAgentEntryBytes   int
+	MaxToolEntryBytes    int
+	MaxBlockBytes        int
+	MaxActiveActionBytes int
+}
+```
+
+```go
+type ReviewTruncationMask uint16
+```
+
+```go
+type ReviewTruncation struct {
+	Applied        ReviewTruncationMask
+	Material       ReviewTruncationMask
+	OmittedEntries int
+	OmittedBytes   int
+}
+```
+
+```go
+type PermissionAssessment struct {
+	Basis          ReviewBasis
+	Risk           ReviewRisk
+	Authorization  ReviewAuthorization
+	Categories     []ReviewRiskCategory
+	Recommendation ReviewRecommendation
+	Rationale      string
+}
+```
+
+```go
+type PermissionReviewPolicy struct {
+	Revision             string
+	MaximumAutoRisk      ReviewRisk
+	MinimumAuthorization map[ReviewRisk]ReviewAuthorization
+	AbsoluteHuman        []ReviewRiskCategory
+	MaterialTruncation   ReviewTruncationMask
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ReviewDecisionReason string
+```
+
+```go
+type ReviewDecision struct {
+	Eligible bool
+	Reason   ReviewDecisionReason
+}
+```
+
+```go
+type ReviewBasis struct {
+	GateID             ID       `json:"gate_id"`
+	ToolExecutionID    ID       `json:"tool_execution_id"`
+	SubjectDigest      [32]byte `json:"subject_digest"`
+	ContextRevision    string   `json:"context_revision"`
+	GatePolicyRevision string   `json:"gate_policy_revision"`
+	ClassifierRevision string   `json:"classifier_revision"`
+	SecurityCeiling    string   `json:"security_ceiling"`
+}
+```
+
+```go
+type PermissionReviewSubject struct {
+	Basis   ReviewBasis   `json:"basis"`
+	Request tool.Request  `json:"request"`
+	Context ReviewContext `json:"context"`
+}
+```
+
+```go
+type PermissionAssessmentOutcome struct {
+	Subject      PermissionReviewSubject
+	Applicable   bool
+	Status       ReviewStatus
+	Assessment   PermissionAssessment
+	Observations []ObservationRequirement
+}
+```
+
+```go
+type PermissionClassifier interface {
+	Name() hustle.Name
+	Revision() string
+	Definition() hustle.Definition
+	Applies(PermissionReviewSubject) bool
+	MarshalInput(PermissionReviewSubject) (json.RawMessage, error)
+	ValidateResult(PermissionReviewSubject, hustle.Result) (PermissionAssessment, error)
+}
+```
+
+```go
+type PermissionClassifierSet struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type PermissionClassifierValidationReason string
+```
+
+```go
+type PermissionClassifierValidationError struct {
+	Index  int
+	Reason PermissionClassifierValidationReason
+}
+```
+
+```go
+type PermissionClassifierNameValidationError struct{}
+```
+
+```go
+type PermissionClassifierPanicMethod string
+```
+
+```go
+type PermissionClassifierPanicError struct {
+	Method PermissionClassifierPanicMethod
+}
+```
+
+```go
+type GateValidationErrorKind string
+```
+
+```go
+type GateValidationError struct {
+	Kind     GateValidationErrorKind
+	GateKind Kind
+	Cause    error
+}
+```
+
+```go
+type OpenURLPayloadErrorKind string
+```
+
+```go
+type OpenURLPayloadError struct {
+	Kind OpenURLPayloadErrorKind
+}
+```
+
+```go
+type DisplayOriginError struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -139,7 +839,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `AccessError`, `EvaluationError`, `FormSchemaError`, `FormAnswerError`, `FormAuditError`, `UnknownPayloadKindError`, `NilPayloadError`, `PayloadEncodeError`, `PayloadDecodeError`, `RequestDecodeError`, `ApprovalActionDecodeError`, `UnknownResponseAuditKindError`, `NilResponseAuditError`, `ResponseAuditEncodeError`, `ResponseAuditDecodeError`, `ReviewValidationError`, `PermissionClassifierValidationError`, `PermissionClassifierNameValidationError`, `PermissionClassifierPanicError`, `GateValidationError`, `OpenURLPayloadError`, `DisplayOriginError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AccessError`, `ApprovalActionDecodeError`, `DisplayOriginError`, `EvaluationError`, `FormAnswerError`, `FormAuditError`, `FormSchemaError`, `GateValidationError`, `NilPayloadError`, `NilResponseAuditError`, `OpenURLPayloadError`, `PayloadDecodeError`, `PayloadEncodeError`, `PermissionClassifierNameValidationError`, `PermissionClassifierPanicError`, `PermissionClassifierValidationError`, `RequestDecodeError`, `ResponseAuditDecodeError`, `ResponseAuditEncodeError`, `ReviewValidationError`, `UnknownPayloadKindError`, `UnknownResponseAuditKindError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

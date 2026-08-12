@@ -55,7 +55,41 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`NetworkError`, `APIError`, `ResponseBodyTooLargeError`, `ModelMismatchError`
+```go
+type NetworkError struct {
+	Err error
+}
+```
+
+```go
+type APIError struct {
+	Status int
+
+	Code string
+
+	ProviderCode string
+
+	RequestID string
+
+	RetryAfter time.Duration
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ResponseBodyTooLargeError struct{ Limit int }
+```
+
+```go
+type ModelMismatchError struct {
+	BoundProvider    model.ProviderName
+	RequestProvider  model.ProviderName
+	BoundEndpoint    string
+	RequestEndpoint  string
+	BoundAPIFormat   model.APIFormat
+	RequestAPIFormat model.APIFormat
+}
+```
 
 ### Constants {#constants}
 
@@ -69,7 +103,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `NetworkError`, `APIError`, `ResponseBodyTooLargeError`, `ModelMismatchError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `APIError`, `ModelMismatchError`, `NetworkError`, `ResponseBodyTooLargeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

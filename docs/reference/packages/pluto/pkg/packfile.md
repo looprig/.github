@@ -62,7 +62,215 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`PackFile`, `TableFile`, `Environment`, `ToolSpec`, `OutputSchemaSpec`, `RubricSpec`, `CriterionSpec`, `AnchorSpec`, `EvaluatorSpec`, `RunSpec`, `ScenarioSpec`, `MessageSpec`, `ExpectSpec`, `ToolCallExpectSpec`, `StructuredExpectSpec`, `ScriptSpec`, `ScriptToolCall`, `StructuredSpec`, `StructuredErrSpec`, `Error`, `Document`, `BuildContext`, `Kind`, `Registry`
+```go
+type PackFile struct {
+	Pack     string   `yaml:"pack"`
+	Revision string   `yaml:"revision"`
+	Tables   []string `yaml:"tables"`
+}
+```
+
+```go
+type TableFile struct {
+	Table       string                `yaml:"table"`
+	Revision    string                `yaml:"revision"`
+	Dimension   string                `yaml:"dimension"`
+	Requires    []string              `yaml:"requires"`
+	Environment *Environment          `yaml:"environment"`
+	Rubrics     []RubricSpec          `yaml:"rubrics"`
+	Evaluators  []EvaluatorSpec       `yaml:"evaluators"`
+	Run         *RunSpec              `yaml:"run"`
+	Scenarios   []ScenarioSpec        `yaml:"scenarios"`
+	Script      map[string]ScriptSpec `yaml:"script"`
+}
+```
+
+```go
+type Environment struct {
+	System       string            `yaml:"system"`
+	Tools        []ToolSpec        `yaml:"tools"`
+	ToolChoice   string            `yaml:"tool-choice"`
+	OutputSchema *OutputSchemaSpec `yaml:"output-schema"`
+}
+```
+
+```go
+type ToolSpec struct {
+	Name        string    `yaml:"name"`
+	Description string    `yaml:"description"`
+	Schema      yaml.Node `yaml:"schema"`
+}
+```
+
+```go
+type OutputSchemaSpec struct {
+	Name        string    `yaml:"name"`
+	Description string    `yaml:"description"`
+	Schema      yaml.Node `yaml:"schema"`
+	Strict      bool      `yaml:"strict"`
+}
+```
+
+```go
+type RubricSpec struct {
+	Name       string          `yaml:"name"`
+	Revision   string          `yaml:"revision"`
+	Scope      string          `yaml:"scope"`
+	Definition string          `yaml:"definition"`
+	Criteria   []CriterionSpec `yaml:"criteria"`
+	Anchors    []AnchorSpec    `yaml:"anchors"`
+}
+```
+
+```go
+type CriterionSpec struct {
+	ID          string  `yaml:"id"`
+	Description string  `yaml:"description"`
+	MinScore    float64 `yaml:"min-score"`
+	MaxScore    float64 `yaml:"max-score"`
+}
+```
+
+```go
+type AnchorSpec struct {
+	Score       float64 `yaml:"score"`
+	Label       string  `yaml:"label"`
+	Description string  `yaml:"description"`
+}
+```
+
+```go
+type EvaluatorSpec struct {
+	Kind    string
+	Options yaml.Node
+}
+```
+
+```go
+type RunSpec struct {
+	Trials           int    `yaml:"trials"`
+	Concurrency      int    `yaml:"concurrency"`
+	TargetTimeout    string `yaml:"target-timeout"`
+	EvaluatorTimeout string `yaml:"evaluator-timeout"`
+}
+```
+
+```go
+type ScenarioSpec struct {
+	ID     string            `yaml:"id"`
+	Name   string            `yaml:"name"`
+	Input  []MessageSpec     `yaml:"input"`
+	Expect *ExpectSpec       `yaml:"expect"`
+	Labels map[string]string `yaml:"labels"`
+}
+```
+
+```go
+type MessageSpec struct {
+	Role string `yaml:"role"`
+	Text string `yaml:"text"`
+}
+```
+
+```go
+type ExpectSpec struct {
+	RequiredFacts     []string              `yaml:"required-facts"`
+	ForbiddenActions  []string              `yaml:"forbidden-actions"`
+	ExpectedToolCalls []ToolCallExpectSpec  `yaml:"expected-tool-calls"`
+	StructuredOutput  *StructuredExpectSpec `yaml:"structured-output"`
+	ReferenceAnswers  []string              `yaml:"reference-answers"`
+	PolicyRef         string                `yaml:"policy-ref"`
+}
+```
+
+```go
+type ToolCallExpectSpec struct {
+	Tool string `yaml:"tool"`
+	Min  int    `yaml:"min"`
+	Max  *int   `yaml:"max"`
+}
+```
+
+```go
+type StructuredExpectSpec struct {
+	Schema string `yaml:"schema"`
+	Strict bool   `yaml:"strict"`
+}
+```
+
+```go
+type ScriptSpec struct {
+	Reply         string             `yaml:"reply"`
+	Duration      string             `yaml:"duration"`
+	ToolCalls     []ScriptToolCall   `yaml:"tool-calls"`
+	Structured    *StructuredSpec    `yaml:"structured"`
+	StructuredErr *StructuredErrSpec `yaml:"structured-err"`
+}
+```
+
+```go
+type ScriptToolCall struct {
+	Name    string `yaml:"name"`
+	ID      string `yaml:"id"`
+	IsError bool   `yaml:"is-error"`
+}
+```
+
+```go
+type StructuredSpec struct {
+	SchemaName     string `yaml:"schema-name"`
+	SchemaRevision string `yaml:"schema-revision"`
+}
+```
+
+```go
+type StructuredErrSpec struct {
+	Schema string `yaml:"schema"`
+	Reason string `yaml:"reason"`
+}
+```
+
+```go
+type Error struct {
+	Path   string
+	Reason string
+	Err    error
+}
+```
+
+```go
+type Document struct {
+	Dir    string
+	Pack   PackFile
+	Raw    map[string][]byte
+	Tables []TableFile
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type BuildContext struct {
+	Rubrics       map[string]rubric.Rubric
+	JudgeClient   inference.Client
+	JudgeTemplate inference.Request
+}
+```
+
+```go
+type Kind struct {
+	Name          string
+	Doc           string
+	Evidence      string
+	OptionsSchema json.RawMessage
+	Build         func(opts *yaml.Node, bc BuildContext) (eval.Evaluator, error)
+}
+```
+
+```go
+type Registry struct{
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

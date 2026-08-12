@@ -53,10 +53,8 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (m *Manager) BindSession(sessionID uuid.UUID) error`
 - `func (s Scope) String() string`
 - `func (b Binding) Validate() error`
-- `func (systemClock) Now() time.Time`
 - `func (r SampleRole) String() string`
 - `func (k NoticeKind) String() string`
-- `func (e *elicitor) Elicit(ctx context.Context, req client.ElicitRequest) (client.ElicitResult, error)`
 - `func (m *Manager) ConfigIdentity() []BindingIdentity`
 - `func (m *Manager) ConfigDigest() string`
 - `func (e *StartupError) Error() string`
@@ -65,22 +63,287 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (m *Manager) Close(ctx context.Context) error`
 - `func (m *Manager) CloseLoop(ctx context.Context, loopID uuid.UUID) error`
 - `func (e *DuplicateModelNameError) Error() string`
-- `func (k opKind) String() string`
 - `func (o BindingOp) FailClosed() BindingOp`
 - `func (m *Manager) Reconfigure(ctx context.Context, ops []BindingOp) error`
-- `func (s *sampler) Sample(ctx context.Context, req client.SampleRequest) (client.SampleResult, error)`
 - `func (s LoopSelector) Permits(loopID uuid.UUID, name string) bool`
 - `func (s LoopSelector) String() string`
-- `func (t *adaptedTool) Info(context.Context) (*tool.ToolInfo, error)`
-- `func (t *adaptedTool) AuditSummary(string) string`
-- `func (t *adaptedTool) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
-- `func (t *adaptedTool) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
 - `func (m *Manager) SessionTools(loopID uuid.UUID, loopName string) []tool.Definition`
 - `func (m *Manager) LoopTools(loopID uuid.UUID) []tool.Definition`
 
 ### Types {#types}
 
-`EventSource`, `LoopControllers`, `Adopter`, `Scope`, `Binding`, `Clock`, `GateRequest`, `GateResponse`, `GateOpener`, `SampleRole`, `SampleMessage`, `SampleRequest`, `SampleResult`, `SamplingPolicy`, `EventPublisher`, `NoticeKind`, `Notice`, `Reporter`, `Deps`, `ToolIdentity`, `BindingIdentity`, `Manager`, `BindingFailure`, `StartupError`, `BindingStatus`, `DuplicateModelNameError`, `BindingOp`, `LoopSelector`
+```go
+type EventSource interface {
+	SubscribeEvents(event.EventFilter) (event.Subscription, error)
+}
+```
+
+```go
+type LoopControllers interface {
+	LoopController(uuid.UUID) (loop.Controller, bool)
+}
+```
+
+```go
+type Adopter struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Scope uint8
+```
+
+```go
+type Binding struct {
+	Name string
+
+	Server client.Definition
+
+	Scope Scope
+
+	Loop uuid.UUID
+
+	Visibility LoopSelector
+
+	Required bool
+}
+```
+
+```go
+type Clock interface {
+	Now() time.Time
+}
+```
+
+```go
+type GateRequest struct {
+	Kind gate.Kind
+
+	Payload gate.Payload
+
+	Prompt gate.Prompt
+
+	Restorable bool
+
+	Binding string
+
+	LoopID uuid.UUID
+}
+```
+
+```go
+type GateResponse struct {
+	Action string
+	Values map[string]string
+}
+```
+
+```go
+type GateOpener interface {
+	OpenGate(ctx context.Context, req GateRequest) (GateResponse, error)
+}
+```
+
+```go
+type SampleRole uint8
+```
+
+```go
+type SampleMessage struct {
+	Role SampleRole
+
+	Text string
+}
+```
+
+```go
+type SampleRequest struct {
+	Binding string
+
+	LoopID uuid.UUID
+
+	SystemPrompt string
+
+	Messages []SampleMessage
+
+	MaxTokens int
+}
+```
+
+```go
+type SampleResult struct {
+	Model string
+
+	Text string
+
+	StopReason string
+}
+```
+
+```go
+type SamplingPolicy interface {
+	Sample(ctx context.Context, req SampleRequest) (SampleResult, error)
+}
+```
+
+```go
+type EventPublisher interface {
+	PublishEvent(ctx context.Context, ev event.Event) error
+}
+```
+
+```go
+type NoticeKind uint8
+```
+
+```go
+type Notice struct {
+	Kind NoticeKind
+
+	Binding string
+
+	LoopID uuid.UUID
+
+	Generation uint64
+
+	Message string
+}
+```
+
+```go
+type Reporter interface {
+	Report(Notice)
+}
+```
+
+```go
+type Deps struct {
+	SessionID uuid.UUID
+
+	Gates GateOpener
+
+	Events EventPublisher
+
+	Sampling SamplingPolicy
+
+	Reporter Reporter
+
+	Clock Clock
+}
+```
+
+```go
+type ToolIdentity struct {
+	RawName string
+
+	ModelName string
+
+	InputSchemaDigest string
+
+	OutputSchemaDigest string
+}
+```
+
+```go
+type BindingIdentity struct {
+	Name string
+
+	Scope Scope
+
+	Loop uuid.UUID
+
+	SelectorDigest string
+
+	TransportKind string
+
+	RedactedOrigin string
+
+	Required bool
+
+	CapabilityDigest string
+
+	FilterDigest string
+
+	LimitsDigest string
+
+	CompatDigest string
+
+	Server client.ServerIdentity
+
+	ProtocolVersion string
+
+	CatalogGeneration uint64
+
+	CatalogDigest string
+
+	Tools []ToolIdentity
+
+	Digest string
+}
+```
+
+```go
+type Manager struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type BindingFailure struct {
+	Binding string
+
+	Class client.FailureClass
+
+	Message string
+}
+```
+
+```go
+type StartupError struct {
+	Failures []BindingFailure
+}
+```
+
+```go
+type BindingStatus struct {
+	Name string
+
+	Scope Scope
+
+	Loop uuid.UUID
+
+	Required bool
+
+	Enabled bool
+
+	Retiring bool
+
+	Client client.Status
+}
+```
+
+```go
+type DuplicateModelNameError struct {
+	ModelName string
+
+	Binding string
+
+	OtherBinding string
+}
+```
+
+```go
+type BindingOp struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type LoopSelector struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -94,7 +357,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `StartupError`, `DuplicateModelNameError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DuplicateModelNameError`, `StartupError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

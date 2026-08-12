@@ -89,7 +89,69 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`FileItem`, `FileComplete`, `InputBox`, `SessionItem`, `SessionComplete`, `SlashCmd`, `SlashComplete`, `ValueItem`, `ValueComplete`
+```go
+type FileItem struct {
+	Path  string
+	IsDir bool
+}
+```
+
+```go
+type FileComplete struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type InputBox struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SessionItem struct {
+	ID       string
+	Title    string
+	State    string
+	Activity string
+	LastUsed string
+	ShortID  string
+}
+```
+
+```go
+type SessionComplete struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SlashCmd struct {
+	Name string
+	Desc string
+}
+```
+
+```go
+type SlashComplete struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ValueItem struct {
+	ID          string
+	Label       string
+	Description string
+	Aliases     []string
+}
+```
+
+```go
+type ValueComplete struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

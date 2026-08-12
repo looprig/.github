@@ -51,7 +51,38 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`InvalidResponseError`, `ExhaustedError`, `Policy`, `ConfigError`, `Client`
+```go
+type InvalidResponseError struct{}
+```
+
+```go
+type ExhaustedError struct {
+	Attempts int
+	Cause    error
+}
+```
+
+```go
+type Policy struct {
+	StableRetries int
+	StableDelay   time.Duration
+	MaxAttempts   int
+	MaxDelay      time.Duration
+}
+```
+
+```go
+type ConfigError struct {
+	Field  string
+	Reason string
+}
+```
+
+```go
+type Client struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -65,7 +96,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `InvalidResponseError`, `ExhaustedError`, `ConfigError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ConfigError`, `ExhaustedError`, `InvalidResponseError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

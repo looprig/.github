@@ -55,7 +55,83 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`DiagnosticCode`, `Diagnostic`, `FamilyEligibility`, `Effect`, `Rule`, `RuleError`, `FileErrorReason`, `FileError`, `Config`, `Store`
+```go
+type DiagnosticCode string
+```
+
+```go
+type Diagnostic struct {
+	Code      DiagnosticCode
+	RuleIndex int
+	Message   string
+}
+```
+
+```go
+type FamilyEligibility func(tokens []string) bool
+```
+
+```go
+type Effect string
+```
+
+```go
+type Rule struct {
+	Effect     Effect
+	Capability string
+	Class      string
+
+	Command string
+
+	Tokens            []string
+	TrailingArguments bool
+
+	Transport string
+	Host      string
+	Port      int
+
+	Target string
+
+	Path string
+
+	Root string
+}
+```
+
+```go
+type RuleError struct {
+	Index  int
+	Reason string
+}
+```
+
+```go
+type FileErrorReason string
+```
+
+```go
+type FileError struct {
+	Path   string
+	Reason FileErrorReason
+	Err    error
+}
+```
+
+```go
+type Config struct {
+	Path string
+
+	MaxFileBytes int64
+
+	FamilyEligible FamilyEligibility
+}
+```
+
+```go
+type Store struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -69,7 +145,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `RuleError`, `FileError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `FileError`, `RuleError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

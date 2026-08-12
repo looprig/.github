@@ -59,7 +59,7 @@ for (const file of files) {
   const variables = section(text, "### Variables", /^## /m);
   for (const value of item.functions) if (!listedSignatures(functions).includes(value.signature)) fail(file + ": missing function " + value.signature);
   for (const value of item.methods) if (!listedSignatures(methods).includes(value.signature)) fail(file + ": missing method " + value.signature);
-  for (const value of item.types) if (!listedNames(types).includes(value.name)) fail(file + ": missing type " + value.name);
+  for (const value of item.types) if (!types.includes(value.declaration)) fail(file + ": missing type declaration " + value.name);
   for (const value of item.constants) if (!listedNames(constants).includes(value.name)) fail(file + ": missing constant " + value.name);
   for (const value of item.variables) if (!listedNames(variables).includes(value.name)) fail(file + ": missing variable " + value.name);
   if (!item.functions.length && !/No exported functions are declared/.test(functions)) fail(file + ": false empty function section");

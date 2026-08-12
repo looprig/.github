@@ -62,7 +62,114 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`APIFormat`, `Capabilities`, `ContextLimits`, `ContextLimitField`, `ContextLimitValidationReason`, `ContextLimitsValidationError`, `Effort`, `ValidationError`, `Model`, `ModelOption`, `ModelKey`, `ModelKeyField`, `ModelKeyValidationReason`, `ModelKeyValidationError`, `Origin`, `ProviderName`, `Sampling`
+```go
+type APIFormat string
+```
+
+```go
+type Capabilities struct {
+	AcceptsImages             bool
+	Tools                     bool
+	Thinking                  bool
+	StructuredOutput          bool
+	StructuredOutputWithTools bool
+
+	PromptCaching bool
+}
+```
+
+```go
+type ContextLimits struct {
+	WindowTokens    content.TokenCount
+	MaxInputTokens  content.TokenCount
+	MaxOutputTokens content.TokenCount
+}
+```
+
+```go
+type ContextLimitField string
+```
+
+```go
+type ContextLimitValidationReason string
+```
+
+```go
+type ContextLimitsValidationError struct {
+	Field        ContextLimitField
+	Reason       ContextLimitValidationReason
+	Value        content.TokenCount
+	WindowTokens content.TokenCount
+}
+```
+
+```go
+type Effort string
+```
+
+```go
+type ValidationError struct {
+	Field  string
+	Reason string
+}
+```
+
+```go
+type Model struct {
+	Provider  ProviderName
+	APIFormat APIFormat
+	BaseURL   string
+	Name      string
+	Origin    Origin
+	Caps      Capabilities
+	Limits    ContextLimits
+	Sampling  Sampling
+}
+```
+
+```go
+type ModelOption func(*Model)
+```
+
+```go
+type ModelKey struct {
+	Provider ProviderName
+	Model    string
+}
+```
+
+```go
+type ModelKeyField string
+```
+
+```go
+type ModelKeyValidationReason string
+```
+
+```go
+type ModelKeyValidationError struct {
+	Field  ModelKeyField
+	Reason ModelKeyValidationReason
+}
+```
+
+```go
+type Origin uint8
+```
+
+```go
+type ProviderName string
+```
+
+```go
+type Sampling struct {
+	Temperature *float64
+	TopP        *float64
+	MaxTokens   *int
+	Stop        []string
+	Effort      Effort
+}
+```
 
 ### Constants {#constants}
 
@@ -76,7 +183,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ContextLimitsValidationError`, `ValidationError`, `ModelKeyValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ContextLimitsValidationError`, `ModelKeyValidationError`, `ValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

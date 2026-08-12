@@ -112,7 +112,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (p PKCE) Format(state fmt.State, _ rune)`
 - `func (p PKCE) GoString() string`
 - `func (p PKCE) LogValue() slog.Value`
-- `func (b *atomicBool) Swap(value bool) bool`
 - `func (g *StateGuard) Consume(received string) error`
 - `func (g *StateGuard) State() string`
 - `func (g StateGuard) String() string`
@@ -139,7 +138,191 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`CallbackInstructions`, `CallbackResult`, `LoopbackListener`, `Grant`, `ClientRegistration`, `LoopbackRedirectPolicy`, `ClientIdentity`, `ResponseParser`, `Definition`, `ProviderDefinition`, `Config`, `Option`, `AuthorizationFlow`, `DeviceAuthorization`, `DeviceAuthorizationResponse`, `DeviceFlow`, `PKCE`, `StateGuard`, `TokenResponse`, `Token`, `ProviderError`, `Revoker`
+```go
+type CallbackInstructions struct {
+	URL         string
+	RedirectURI string
+	Path        string
+	Method      string
+}
+```
+
+```go
+type CallbackResult struct {
+	Code      string
+	State     string
+	ErrorCode string
+}
+```
+
+```go
+type LoopbackListener struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Grant string
+```
+
+```go
+type ClientRegistration struct {
+	ClientID            string
+	ID                  string
+	RedirectURIs        []string
+	AllowedRedirectURIs []string
+	AllowedOrigins      []string
+	AllowedGrants       []Grant
+	Scopes              []string
+	LoopbackRedirect    LoopbackRedirectPolicy
+	Sanctioned          bool
+	Evidence            string
+}
+```
+
+```go
+type LoopbackRedirectPolicy struct {
+	Enabled          bool
+	Host             string
+	Method           string
+	PathPrefix       string
+	AllowDynamicPort bool
+}
+```
+
+```go
+type ClientIdentity = ClientRegistration
+```
+
+```go
+type ResponseParser interface {
+	ParseTokenResponse([]byte) (TokenResponse, error)
+	ParseDeviceAuthorization([]byte) (DeviceAuthorization, error)
+}
+```
+
+```go
+type Definition struct {
+	AuthorizationEndpoint       string
+	TokenEndpoint               string
+	DeviceAuthorizationEndpoint string
+	RevocationEndpoint          string
+
+	AuthorizationURL       string
+	TokenURL               string
+	DeviceAuthorizationURL string
+	DeviceURL              string
+	RevocationURL          string
+
+	ClientID               string
+	SanctionedClientID     string
+	Client                 ClientRegistration
+	Registration           ClientRegistration
+	AllowedOrigins         []string
+	Origins                []string
+	AllowedEndpointOrigins []string
+	AllowedGrants          []Grant
+	Grants                 []Grant
+	Scopes                 []string
+	ExtraParams            map[string]string
+	AuthorizationParams    map[string]string
+	DeviceParams           map[string]string
+	TokenParams            map[string]string
+	Parser                 ResponseParser
+
+	TokenParser         func([]byte) (TokenResponse, error)
+	DeviceParser        func([]byte) (DeviceAuthorization, error)
+	ParseTokenResponse  func([]byte) (TokenResponse, error)
+	ParseDeviceResponse func([]byte) (DeviceAuthorization, error)
+}
+```
+
+```go
+type ProviderDefinition = Definition
+```
+
+```go
+type Config = Definition
+```
+
+```go
+type Option func(*operationOptions)
+```
+
+```go
+type AuthorizationFlow struct {
+	URL       string
+	State     string
+	Verifier  string
+	Challenge string
+	Callback  CallbackInstructions
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type DeviceAuthorization struct {
+	DeviceCode              string
+	UserCode                string
+	VerificationURI         string
+	VerificationURIComplete string
+	ExpiresIn               int64
+	Interval                int
+	ExpiresAt               time.Time
+}
+```
+
+```go
+type DeviceAuthorizationResponse = DeviceAuthorization
+```
+
+```go
+type DeviceFlow struct {
+	Definition Definition
+	Device     DeviceAuthorization
+}
+```
+
+```go
+type PKCE struct {
+	Verifier  string
+	Challenge string
+	State     string
+}
+```
+
+```go
+type StateGuard struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TokenResponse struct {
+	AccessToken  string
+	RefreshToken string
+	TokenType    string
+	Scope        string
+	ExpiresIn    int64
+	ExpiresAt    time.Time
+}
+```
+
+```go
+type Token = TokenResponse
+```
+
+```go
+type ProviderError struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Revoker interface {
+	RevokeToken(context.Context, string, ...Option) error
+}
+```
 
 ### Constants {#constants}
 
@@ -147,7 +330,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Variables {#variables}
 
-`ErrInvalidDefinition`, `ErrInvalidVerifier`
+`ErrInvalidDefinition`, `ErrInvalidEndpoint`, `ErrOriginMismatch`, `ErrRedirectRejected`, `ErrUnsupportedGrant`, `ErrInvalidClient`, `ErrInvalidRequest`, `ErrInvalidResponse`, `ErrResponseTooLarge`, `ErrResponseHeadersTooLarge`, `ErrRequestTooLarge`, `ErrRequestHeadersTooLarge`, `ErrProvider`, `ErrNetwork`, `ErrCanceled`, `ErrNilContext`, `ErrStateMismatch`, `ErrStateUsed`, `ErrCallbackOrigin`, `ErrCallbackClosed`, `ErrCallbackTimeout`, `ErrPollLimit`, `ErrDeviceExpired`, `ErrRevocationUnsupported`, `ErrInvalidVerifier`
 
 ## Ownership and errors {#ownership-and-errors}
 

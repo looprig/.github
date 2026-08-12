@@ -64,23 +64,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (p *OAuthProvider) Status() Status`
 - `func (p *OAuthProvider) Headers(ctx context.Context) ([]Header, error)`
 - `func (p *OAuthProvider) Token(ctx context.Context) (TokenSet, error)`
-- `func (p pkce) Verifier() string`
-- `func (p pkce) Challenge() string`
-- `func (p pkce) String() string`
-- `func (p pkce) GoString() string`
-- `func (p pkce) Format(f fmt.State, verb rune)`
-- `func (s state) Value() string`
-- `func (s state) Matches(got string) bool`
-- `func (s state) String() string`
-- `func (s state) GoString() string`
-- `func (s state) Format(f fmt.State, verb rune)`
-- `func (c authCode) Value() string`
-- `func (c authCode) Valid() bool`
-- `func (c authCode) String() string`
-- `func (c authCode) GoString() string`
-- `func (c authCode) Format(f fmt.State, verb rune)`
-- `func (r *redirectServer) URI() string`
-- `func (r *redirectServer) Close() error`
 - `func (c ClientCredentials) ID() string`
 - `func (c ClientCredentials) Secret() string`
 - `func (c ClientCredentials) Valid() bool`
@@ -113,7 +96,117 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`BrowserOpener`, `HeaderProvider`, `Header`, `Class`, `Error`, `OAuthConfig`, `OAuthProvider`, `ClientCredentials`, `State`, `Status`, `Key`, `TokenSet`, `TokenStore`, `MemoryStore`
+```go
+type BrowserOpener interface {
+	OpenURL(ctx context.Context, url string) error
+}
+```
+
+```go
+type HeaderProvider interface {
+	Headers(ctx context.Context) ([]Header, error)
+}
+```
+
+```go
+type Header struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Class uint8
+```
+
+```go
+type Error struct {
+	Class Class
+
+	Op string
+
+	Msg string
+
+	Err error
+}
+```
+
+```go
+type OAuthConfig struct {
+	ServerURL string
+
+	Credentials ClientCredentials
+
+	Scopes []string
+
+	Store TokenStore
+
+	Browser BrowserOpener
+
+	HTTPClient *http.Client
+
+	ClientName string
+
+	AuthorizationTimeout time.Duration
+}
+```
+
+```go
+type OAuthProvider struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ClientCredentials struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type State uint8
+```
+
+```go
+type Status struct {
+	State State
+
+	Expiry time.Time
+
+	Scopes []string
+
+	Failure string
+}
+```
+
+```go
+type Key struct {
+	ServerOrigin string
+
+	ClientID string
+}
+```
+
+```go
+type TokenSet struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TokenStore interface {
+	Load(ctx context.Context, key Key) (TokenSet, error)
+
+	Store(ctx context.Context, key Key, set TokenSet) error
+
+	Delete(ctx context.Context, key Key) error
+}
+```
+
+```go
+type MemoryStore struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

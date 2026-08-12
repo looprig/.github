@@ -50,7 +50,19 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`UnsupportedRegistrationError`, `Status`, `RegistrationGate`
+```go
+type UnsupportedRegistrationError struct{}
+```
+
+```go
+type Status string
+```
+
+```go
+type RegistrationGate struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

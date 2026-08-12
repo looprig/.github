@@ -68,7 +68,208 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`BlockType`, `Block`, `TextBlock`, `ImageSource`, `ImageBlock`, `AudioBlock`, `DocumentBlock`, `ThinkingBlock`, `ToolUseBlock`, `ToolResultBlock`, `Chunk`, `TextChunk`, `ThinkingChunk`, `ToolUseChunk`, `UnknownBlockTypeError`, `NilBlockError`, `BlockEncodeError`, `BlockDecodeError`, `BlockLimitError`, `MediaType`, `Role`, `Message`, `UserMessage`, `AIMessage`, `SystemMessage`, `ToolResultMessage`, `Conversation`, `AgenticMessages`, `TokenCount`, `UsageField`, `UsageValidationReason`, `Usage`, `UsageValidationError`, `UsageOverflowError`
+```go
+type BlockType string
+```
+
+```go
+type Block interface{ isBlock() }
+```
+
+```go
+type TextBlock struct {
+	Text string
+}
+```
+
+```go
+type ImageSource struct {
+	URL  string
+	Data []byte
+}
+```
+
+```go
+type ImageBlock struct {
+	MediaType MediaType
+	Source    ImageSource
+}
+```
+
+```go
+type AudioBlock struct {
+	MediaType MediaType
+	Data      []byte
+}
+```
+
+```go
+type DocumentBlock struct {
+	MediaType MediaType
+	Name      string
+	Data      []byte
+	Text      string
+}
+```
+
+```go
+type ThinkingBlock struct {
+	Thinking            string
+	Signature           string
+	ProviderState       json.RawMessage `json:"ProviderState,omitempty"`
+	ProviderStateFormat string          `json:"ProviderStateFormat,omitempty"`
+}
+```
+
+```go
+type ToolUseBlock struct {
+	ID    string
+	Name  string
+	Input json.RawMessage
+}
+```
+
+```go
+type ToolResultBlock struct {
+	ToolUseID string
+	Content   []Block
+	IsError   bool
+}
+```
+
+```go
+type Chunk interface{ isChunk() }
+```
+
+```go
+type TextChunk struct{ Text string }
+```
+
+```go
+type ThinkingChunk struct {
+	Thinking  string
+	Signature string
+}
+```
+
+```go
+type ToolUseChunk struct {
+	Index     int
+	ID        string
+	Name      string
+	InputJSON string
+}
+```
+
+```go
+type UnknownBlockTypeError struct{ Type BlockType }
+```
+
+```go
+type NilBlockError struct{ Type BlockType }
+```
+
+```go
+type BlockEncodeError struct {
+	Type  BlockType
+	Cause error
+}
+```
+
+```go
+type BlockDecodeError struct{ Cause error }
+```
+
+```go
+type BlockLimitError struct {
+	Limit string
+	Got   int
+	Max   int
+}
+```
+
+```go
+type MediaType string
+```
+
+```go
+type Role string
+```
+
+```go
+type Message struct {
+	Role   Role
+	Blocks []Block
+}
+```
+
+```go
+type UserMessage struct{ Message }
+```
+
+```go
+type AIMessage struct {
+	Message
+	Usage *Usage
+}
+```
+
+```go
+type SystemMessage struct{ Message }
+```
+
+```go
+type ToolResultMessage struct {
+	Message
+	ToolUseID string
+	IsError   bool
+}
+```
+
+```go
+type Conversation interface{ isMessage() }
+```
+
+```go
+type AgenticMessages []Conversation
+```
+
+```go
+type TokenCount uint64
+```
+
+```go
+type UsageField string
+```
+
+```go
+type UsageValidationReason string
+```
+
+```go
+type Usage struct {
+	InputTokens         TokenCount
+	OutputTokens        TokenCount
+	CacheReadTokens     TokenCount
+	CacheCreationTokens TokenCount
+	ReasoningTokens     TokenCount
+}
+```
+
+```go
+type UsageValidationError struct {
+	Field  UsageField
+	Reason UsageValidationReason
+}
+```
+
+```go
+type UsageOverflowError struct {
+	Field UsageField
+	Left  TokenCount
+	Right TokenCount
+}
+```
 
 ### Constants {#constants}
 
@@ -82,7 +283,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `UnknownBlockTypeError`, `NilBlockError`, `BlockEncodeError`, `BlockDecodeError`, `BlockLimitError`, `UsageValidationError`, `UsageOverflowError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BlockDecodeError`, `BlockEncodeError`, `BlockLimitError`, `NilBlockError`, `UnknownBlockTypeError`, `UsageOverflowError`, `UsageValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

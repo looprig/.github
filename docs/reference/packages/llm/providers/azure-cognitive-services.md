@@ -44,7 +44,23 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Option`, `CounterSupportError`, `ResourceConfigurationReason`, `ResourceConfigurationError`
+```go
+type Option func(*config)
+```
+
+```go
+type CounterSupportError = llm.CounterSupportError
+```
+
+```go
+type ResourceConfigurationReason string
+```
+
+```go
+type ResourceConfigurationError struct {
+	Reason ResourceConfigurationReason
+}
+```
 
 ### Constants {#constants}
 

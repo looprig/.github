@@ -42,9 +42,6 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (nopEventAppender) AppendEvent(context.Context, event.Event) (uint64, error)`
-- `func (nopEventAppender) AppendEventResult(context.Context, event.Event) (uint64, bool, error)`
-- `func (immediateSessionIdleBoundary) CommitSessionIdle(_ context.Context, _ event.SessionIdle, commit func() error) error`
 - `func (e *PublishBoundaryError) Error() string`
 - `func (e *PublishBoundaryError) Unwrap() error`
 - `func (e *HustleActivityError) Error() string`
@@ -54,7 +51,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *SessionPersistenceFault) Error() string`
 - `func (e *SessionPersistenceFault) Unwrap() error`
 - `func (*SessionPersistenceFault) FatalPublication() bool`
-- `func (nopFaultReporter) ReportFault(context.Context, *SessionPersistenceFault)`
 - `func (h *Hub) SubscribeEvents(filter event.EventFilter) (*EventSubscription, error)`
 - `func (h *Hub) PublishEvent(ctx context.Context, ev event.Event) error`
 - `func (h *Hub) PublishEventChecked(ctx context.Context, ev event.Event) error`
@@ -81,7 +77,96 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Option`, `PublishBoundaryReason`, `PublishBoundaryError`, `HustleActivityReason`, `HustleActivityError`, `TurnStartReservationReason`, `TurnStartReservationError`, `SessionPersistenceFault`, `SessionAbortedError`, `FaultReporter`, `Hub`, `HustleActivityLease`, `SessionPhase`, `SubscriptionLossError`, `EventSubscription`, `TurnStartReservation`
+```go
+type Option func(*Hub)
+```
+
+```go
+type PublishBoundaryReason string
+```
+
+```go
+type PublishBoundaryError struct {
+	Reason    PublishBoundaryReason
+	EventType string
+	Cause     error
+}
+```
+
+```go
+type HustleActivityReason string
+```
+
+```go
+type HustleActivityError struct {
+	Reason HustleActivityReason
+	RunID  hustle.RunID
+}
+```
+
+```go
+type TurnStartReservationReason string
+```
+
+```go
+type TurnStartReservationError struct {
+	Reason TurnStartReservationReason
+	LoopID uuid.UUID
+}
+```
+
+```go
+type SessionPersistenceFault struct {
+	Event event.Event
+
+	Cause error
+}
+```
+
+```go
+type SessionAbortedError struct{ Cause error }
+```
+
+```go
+type FaultReporter interface {
+	ReportFault(ctx context.Context, fault *SessionPersistenceFault)
+}
+```
+
+```go
+type Hub struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type HustleActivityLease struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SessionPhase uint8
+```
+
+```go
+type SubscriptionLossError struct {
+	DroppedClass event.Class
+	Cause        error
+}
+```
+
+```go
+type EventSubscription struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TurnStartReservation struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -95,7 +180,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `PublishBoundaryError`, `HustleActivityError`, `TurnStartReservationError`, `SessionAbortedError`, `SessionPersistenceFault`, `SubscriptionLossError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `HustleActivityError`, `PublishBoundaryError`, `SessionAbortedError`, `SessionPersistenceFault`, `SubscriptionLossError`, `TurnStartReservationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

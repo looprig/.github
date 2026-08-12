@@ -56,7 +56,13 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`DefinitionBuildError`, `AsyncProcessRunnerResolver`
+```go
+type DefinitionBuildError = definition.BuildError
+```
+
+```go
+type AsyncProcessRunnerResolver func(context.Context, uuid.UUID) (tool.AsyncProcessRunner, error)
+```
 
 ### Constants {#constants}
 

@@ -38,13 +38,39 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (f *factory) Kind() string`
-- `func (f *factory) RedactedOrigin() string`
-- `func (f *factory) Connect(ctx context.Context, cfg protocol.ConnectConfig) (protocol.Conn, error)`
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-`Config`, `Timeouts`
+```go
+type Config struct {
+	Endpoint string
+
+	Headers []auth.Header
+
+	Auth auth.HeaderProvider
+
+	HTTPClient *http.Client
+
+	Timeouts Timeouts
+}
+```
+
+```go
+type Timeouts struct {
+	Dial time.Duration
+
+	TLSHandshake time.Duration
+
+	ResponseHeader time.Duration
+
+	Frame time.Duration
+
+	IdleConn time.Duration
+
+	Request time.Duration
+}
+```
 
 ### Constants {#constants}
 

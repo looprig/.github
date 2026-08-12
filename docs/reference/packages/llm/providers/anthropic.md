@@ -41,12 +41,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (r messagesRouter) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (route.Route, error)`
-- `func (c requestCodec) EncodeRequest(req inference.Request, mode codec.RequestMode) (codec.EncodedRequest, error)`
-- `func (requestCodec) DecodeResponse(body []byte) (*inference.Response, error)`
-- `func (requestCodec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
 - `func (c *Counter) CountContext(ctx context.Context, req inference.Request) (contextcount.ContextCount, error)`
-- `func (c *countScalar) UnmarshalJSON(data []byte) error`
 - `func (c *Counter) CounterCapability() contextcount.CounterCapability`
 - `func (e *CounterStateError) Error() string`
 - `func (e *CounterRequestError) Error() string`
@@ -58,7 +53,83 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Counter`, `CounterStateReason`, `CounterStateError`, `CounterRequestReason`, `CounterRequestError`, `CounterEndpointReason`, `CounterEndpointError`, `CounterResponseReason`, `CounterResponseField`, `CounterResponseFieldReason`, `CounterResponseFieldError`, `CounterResponseError`, `ThinkingOptions`, `CacheControlOptions`, `Option`
+```go
+type Counter struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CounterStateReason string
+```
+
+```go
+type CounterStateError struct{ Reason CounterStateReason }
+```
+
+```go
+type CounterRequestReason string
+```
+
+```go
+type CounterRequestError struct {
+	Reason CounterRequestReason
+	Err    error
+}
+```
+
+```go
+type CounterEndpointReason string
+```
+
+```go
+type CounterEndpointError struct{ Reason CounterEndpointReason }
+```
+
+```go
+type CounterResponseReason string
+```
+
+```go
+type CounterResponseField string
+```
+
+```go
+type CounterResponseFieldReason string
+```
+
+```go
+type CounterResponseFieldError struct {
+	Field  CounterResponseField
+	Reason CounterResponseFieldReason
+}
+```
+
+```go
+type CounterResponseError struct {
+	Reason CounterResponseReason
+	Err    error
+}
+```
+
+```go
+type ThinkingOptions struct {
+	Type         string `json:"type"`
+	Effort       string `json:"effort,omitempty"`
+	BudgetTokens *int   `json:"budget_tokens,omitempty"`
+}
+```
+
+```go
+type CacheControlOptions struct {
+	Type string `json:"type"`
+	TTL  string `json:"ttl,omitempty"`
+}
+```
+
+```go
+type Option func(*config)
+```
 
 ### Constants {#constants}
 
@@ -72,7 +143,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `CounterStateError`, `CounterRequestError`, `CounterEndpointError`, `CounterResponseFieldError`, `CounterResponseError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CounterEndpointError`, `CounterRequestError`, `CounterResponseError`, `CounterResponseFieldError`, `CounterStateError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

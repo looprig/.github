@@ -71,7 +71,169 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`ClaudeModels`, `ClaudeConnector`, `EffortAliasError`, `EffortSelectionError`, `CodexPosture`, `CodexConnector`, `ProxyBinding`, `ModelProxy`, `HarnessAdapter`, `NativeHarnessAdapter`, `Config`, `NativeConfig`, `ConfigError`, `ProxyNotReadyError`, `PathError`, `ConflictingEnvError`, `ModelAliasError`, `CodexVersionError`, `GeminiAdapter`, `ManagedClient`, `CodexVersion`, `CodexVersionClass`, `CodexVersionResult`, `CodexVersionRunner`
+```go
+type ClaudeModels struct {
+	Default string
+	Small   string
+}
+```
+
+```go
+type ClaudeConnector struct {
+	Models ClaudeModels
+
+	Effort string
+
+	CLIPath string
+}
+```
+
+```go
+type EffortAliasError struct {
+	Effort string
+	Alias  string
+}
+```
+
+```go
+type EffortSelectionError = EffortAliasError
+```
+
+```go
+type CodexPosture struct {
+	ApprovalPolicy string
+
+	SandboxMode string
+
+	SandboxNetworkAccess bool
+}
+```
+
+```go
+type CodexConnector struct {
+	Model string
+
+	Effort string
+
+	Posture CodexPosture
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ProxyBinding struct {
+	BaseURL string
+	Token   string
+}
+```
+
+```go
+type ModelProxy interface {
+	Start(context.Context) error
+
+	Binding() (baseURL, token string, ready bool)
+
+	Close(context.Context) error
+}
+```
+
+```go
+type HarnessAdapter interface {
+	Configure(stdio.Command, ProxyBinding) (stdio.Command, error)
+}
+```
+
+```go
+type NativeHarnessAdapter interface {
+	HarnessAdapter
+	ConfigureNative(stdio.Command) (stdio.Command, error)
+}
+```
+
+```go
+type Config struct {
+	OwnedProxy ModelProxy
+
+	SharedProxy *ProxyBinding
+
+	NoProxy bool
+
+	Harness HarnessAdapter
+
+	Command stdio.Command
+
+	Client client.Options
+}
+```
+
+```go
+type NativeConfig struct {
+	Harness NativeHarnessAdapter
+	Command stdio.Command
+	Client  client.Options
+}
+```
+
+```go
+type ConfigError struct{ Reason string }
+```
+
+```go
+type ProxyNotReadyError struct{}
+```
+
+```go
+type PathError struct{ Field, Reason string }
+```
+
+```go
+type ConflictingEnvError struct{ Key string }
+```
+
+```go
+type ModelAliasError struct{ Alias string }
+```
+
+```go
+type CodexVersionError struct {
+	Path   string
+	Result CodexVersionResult
+}
+```
+
+```go
+type GeminiAdapter struct {
+	Model string
+}
+```
+
+```go
+type ManagedClient struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CodexVersion struct {
+	Major, Minor, Patch int
+}
+```
+
+```go
+type CodexVersionClass int
+```
+
+```go
+type CodexVersionResult struct {
+	Class   CodexVersionClass
+	Version CodexVersion
+	Raw     string
+}
+```
+
+```go
+type CodexVersionRunner func(ctx context.Context, path string) (stdout []byte, err error)
+```
 
 ### Constants {#constants}
 
@@ -85,7 +247,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `EffortAliasError`, `ConfigError`, `ProxyNotReadyError`, `PathError`, `ConflictingEnvError`, `ModelAliasError`, `CodexVersionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CodexVersionError`, `ConfigError`, `ConflictingEnvError`, `EffortAliasError`, `ModelAliasError`, `PathError`, `ProxyNotReadyError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

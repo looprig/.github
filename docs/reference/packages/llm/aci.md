@@ -54,82 +54,312 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (e *reportDataMismatchError) Error() string`
 - `func (e *NonFiniteFloatError) Error() string`
 - `func (e *FloatOutOfDomainError) Error() string`
 - `func (c *Client) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
 - `func (c *Client) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
-- `func (e *encodeError) Error() string`
-- `func (e *encodeError) Unwrap() error`
-- `func (e *decodeError) Error() string`
-- `func (e *decodeError) Unwrap() error`
-- `func (e *bodyShapeError) Error() string`
-- `func (e *receiptFetchError) Error() string`
-- `func (e *attestNonceError) Error() string`
-- `func (e *invalidURLError) Error() string`
-- `func (e *invalidURLError) Unwrap() error`
-- `func (e *responseTooLargeError) Error() string`
-- `func (e *streamParseError) Error() string`
-- `func (e *streamParseError) Unwrap() error`
-- `func (e *e2eeSealError) Error() string`
-- `func (e *e2eeSealError) Unwrap() error`
-- `func (e *e2eeOpenError) Error() string`
-- `func (e *e2eeOpenError) Unwrap() error`
-- `func (e *e2eeLengthError) Error() string`
-- `func (e *e2eeNoModelKeyError) Error() string`
-- `func (e *e2eeAmbiguityError) Error() string`
-- `func (e *e2eeModelFieldError) Error() string`
-- `func (e *e2eePubKeyParseError) Error() string`
-- `func (e *e2eePubKeyParseError) Unwrap() error`
-- `func (e *e2eeReplayError) Error() string`
-- `func (e *e2eeBodyShapeError) Error() string`
-- `func (e *apiVersionMismatchError) Error() string`
 - `func (e *UnpinnedPolicyError) Error() string`
-- `func (e *digestMismatchError) Error() string`
 - `func (o *Object) Set(key string, val Value) *Object`
 - `func (o *Object) Len() int`
 - `func (o *Object) KeyAt(i int) string`
 - `func (o *Object) ValueAt(i int) Value`
 - `func (e *FloatNotAllowedError) Error() string`
-- `func (e *nilValueError) Error() string`
 - `func (e *InvalidUTF8Error) Error() string`
-- `func (e *parseError) Error() string`
-- `func (e *parseError) Unwrap() error`
-- `func (e *trailingDataError) Error() string`
-- `func (e *malformedTokenError) Error() string`
-- `func (e *endorsementError) Error() string`
-- `func (e *endorsementError) Unwrap() error`
-- `func (e *kmsCustodyError) Error() string`
-- `func (e *kmsCustodyError) Unwrap() error`
 - `func (p Policy) IsPinned() bool`
-- `func (e *receiptParseError) Error() string`
-- `func (e *receiptParseError) Unwrap() error`
-- `func (e *receiptEventFieldsError) Error() string`
-- `func (e *receiptVerifyError) Error() string`
-- `func (e *receiptVerifyError) Unwrap() error`
-- `func (e *upstreamUnverifiedError) Error() string`
-- `func (e *reportParseError) Error() string`
-- `func (e *reportParseError) Unwrap() error`
-- `func (e *eventLogParseError) Error() string`
-- `func (e *eventLogParseError) Unwrap() error`
-- `func (e *digestDecodeError) Error() string`
-- `func (e *digestDecodeError) Unwrap() error`
-- `func (e *appIDDecodeError) Error() string`
-- `func (e *appIDDecodeError) Unwrap() error`
-- `func (e *missingAppIDError) Error() string`
-- `func (e *rtmr3MismatchError) Error() string`
-- `func (e *appIDRejectedError) Error() string`
-- `func (e *provenanceRejectedError) Error() string`
-- `func (e *teeTypeError) Error() string`
-- `func (e *quoteDecodeError) Error() string`
-- `func (e *quoteDecodeError) Unwrap() error`
-- `func (e *reportDataPlacementError) Error() string`
-- `func (e *freshnessError) Error() string`
-- `func (e *workloadIDRejectedError) Error() string`
 
 ### Types {#types}
 
-`NonFiniteFloatError`, `FloatOutOfDomainError`, `Client`, `Option`, `UnpinnedPolicyError`, `Value`, `String`, `Int`, `Uint`, `Number`, `Float`, `Bool`, `Null`, `Array`, `Object`, `FloatNotAllowedError`, `InvalidUTF8Error`, `Policy`, `Receipt`, `ReceiptEvent`, `ReceiptSignature`, `ReceiptExpect`, `Report`, `Attestation`, `Keyset`, `WorkloadIdentity`, `PublicKey`, `KeysetEpoch`, `KeyEntry`, `TLSBinding`, `KeysetEndorsement`, `SourceProvenance`, `Freshness`, `Evidence`, `KeyCustody`, `KeyCustodyEntry`, `ServiceCapabilities`, `EventLogEntry`, `ProvenanceKey`, `VerifiedReport`
+```go
+type NonFiniteFloatError struct {
+	Repr string
+}
+```
+
+```go
+type FloatOutOfDomainError struct {
+	Value string
+}
+```
+
+```go
+type Client struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Option func(*Client)
+```
+
+```go
+type UnpinnedPolicyError struct{}
+```
+
+```go
+type Value interface {
+	isValue()
+}
+```
+
+```go
+type String string
+```
+
+```go
+type Int int64
+```
+
+```go
+type Uint uint64
+```
+
+```go
+type Number json.Number
+```
+
+```go
+type Float float64
+```
+
+```go
+type Bool bool
+```
+
+```go
+type Null struct{}
+```
+
+```go
+type Array []Value
+```
+
+```go
+type Object struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type FloatNotAllowedError struct {
+	Literal string
+}
+```
+
+```go
+type InvalidUTF8Error struct {
+	Where string
+}
+```
+
+```go
+type Policy struct {
+	AcceptedWorkloadIDs map[string]struct{}
+
+	AcceptedSourceProvenance map[ProvenanceKey]struct{}
+
+	AcceptedAppIDs map[string]struct{}
+
+	AcceptedKMSRootPubKeys map[string]struct{}
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Receipt struct {
+	APIVersion           string           `json:"api_version"`
+	ReceiptID            string           `json:"receipt_id"`
+	ChatID               *string          `json:"chat_id"`
+	WorkloadID           string           `json:"workload_id"`
+	WorkloadKeysetDigest string           `json:"workload_keyset_digest"`
+	Endpoint             string           `json:"endpoint"`
+	Method               string           `json:"method"`
+	ServedAt             uint64           `json:"served_at"`
+	EventLog             []ReceiptEvent   `json:"event_log"`
+	Signature            ReceiptSignature `json:"signature"`
+}
+```
+
+```go
+type ReceiptEvent struct {
+	Seq       uint64          `json:"seq"`
+	EventType string          `json:"type"`
+	Fields    json.RawMessage `json:"-"`
+}
+```
+
+```go
+type ReceiptSignature struct {
+	Algo     string `json:"algo"`
+	KeyID    string `json:"key_id"`
+	ValueHex string `json:"value"`
+}
+```
+
+```go
+type ReceiptExpect struct {
+	Endpoint          string
+	Method            string
+	Vendor            string
+	ModelID           string
+	ReqBody           []byte
+	RespBodyCleartext []byte
+	RespWireBytes     []byte
+}
+```
+
+```go
+type Report struct {
+	APIVersion           string              `json:"api_version"`
+	WorkloadID           string              `json:"workload_id"`
+	WorkloadKeysetDigest string              `json:"workload_keyset_digest"`
+	Attestation          Attestation         `json:"attestation"`
+	ServiceCapabilities  ServiceCapabilities `json:"service_capabilities"`
+}
+```
+
+```go
+type Attestation struct {
+	Vendor            string            `json:"vendor"`
+	TEEType           string            `json:"tee_type"`
+	Keyset            Keyset            `json:"workload_keyset"`
+	ReportDataHex     string            `json:"report_data"`
+	KeysetEndorsement KeysetEndorsement `json:"keyset_endorsement"`
+	SourceProvenance  SourceProvenance  `json:"source_provenance"`
+	Freshness         Freshness         `json:"freshness"`
+	Evidence          Evidence          `json:"evidence"`
+}
+```
+
+```go
+type Keyset struct {
+	Identity           WorkloadIdentity `json:"workload_identity"`
+	Epoch              KeysetEpoch      `json:"keyset_epoch"`
+	ReceiptSigningKeys []KeyEntry       `json:"receipt_signing_keys"`
+	E2EEPublicKeys     []KeyEntry       `json:"e2ee_public_keys"`
+	TLSPublicKeys      []TLSBinding     `json:"tls_public_keys"`
+}
+```
+
+```go
+type WorkloadIdentity struct {
+	PublicKey PublicKey `json:"public_key"`
+	Subject   *string   `json:"subject"`
+}
+```
+
+```go
+type PublicKey struct {
+	Algo         string `json:"algo"`
+	PublicKeyHex string `json:"public_key"`
+}
+```
+
+```go
+type KeysetEpoch struct {
+	Version  uint64 `json:"version"`
+	NotAfter uint64 `json:"not_after"`
+}
+```
+
+```go
+type KeyEntry struct {
+	KeyID        string `json:"key_id"`
+	Algo         string `json:"algo"`
+	PublicKeyHex string `json:"public_key"`
+}
+```
+
+```go
+type TLSBinding struct {
+	Domain        string `json:"domain"`
+	SPKISHA256Hex string `json:"spki_sha256"`
+}
+```
+
+```go
+type KeysetEndorsement struct {
+	Algo     string `json:"algo"`
+	ValueHex string `json:"value"`
+}
+```
+
+```go
+type SourceProvenance struct {
+	RepoURL         string  `json:"repo_url"`
+	RepoCommit      string  `json:"repo_commit"`
+	ImageDigest     *string `json:"image_digest"`
+	ImageProvenance *string `json:"image_provenance"`
+}
+```
+
+```go
+type Freshness struct {
+	FetchedAt  int64 `json:"fetched_at"`
+	StaleAfter int64 `json:"stale_after"`
+}
+```
+
+```go
+type Evidence struct {
+	Quote                string     `json:"quote"`
+	QuoteReportData      string     `json:"quote_report_data"`
+	EventLog             string     `json:"event_log"`
+	VMConfig             string     `json:"vm_config"`
+	KeyCustody           KeyCustody `json:"key_custody"`
+	DownstreamTLSBinding TLSBinding `json:"downstream_tls_binding"`
+}
+```
+
+```go
+type KeyCustody struct {
+	Provider string            `json:"provider"`
+	Keys     []KeyCustodyEntry `json:"keys"`
+}
+```
+
+```go
+type KeyCustodyEntry struct {
+	Role           string   `json:"role"`
+	Path           string   `json:"path"`
+	Purpose        string   `json:"purpose"`
+	Algo           string   `json:"algo"`
+	PublicKeyHex   string   `json:"public_key"`
+	SignatureChain []string `json:"signature_chain"`
+}
+```
+
+```go
+type ServiceCapabilities struct {
+	SupportedE2EEVersions []string `json:"supported_e2ee_versions"`
+}
+```
+
+```go
+type EventLogEntry struct {
+	IMR          uint32 `json:"imr"`
+	EventType    uint32 `json:"event_type"`
+	Digest       string `json:"digest"`
+	Event        string `json:"event"`
+	EventPayload string `json:"event_payload"`
+}
+```
+
+```go
+type ProvenanceKey struct {
+	RepoURL    string
+	RepoCommit string
+}
+```
+
+```go
+type VerifiedReport struct {
+	WorkloadID string
+
+	WorkloadKeysetDigest string
+
+	Keyset Keyset
+}
+```
 
 ### Constants {#constants}
 
@@ -143,7 +373,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `NonFiniteFloatError`, `FloatOutOfDomainError`, `UnpinnedPolicyError`, `FloatNotAllowedError`, `InvalidUTF8Error`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `FloatNotAllowedError`, `FloatOutOfDomainError`, `InvalidUTF8Error`, `NonFiniteFloatError`, `UnpinnedPolicyError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

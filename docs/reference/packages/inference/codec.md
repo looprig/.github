@@ -44,7 +44,86 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`EncodedRequest`, `RequestEncoder`, `ResponseDecoder`, `StreamFramer`, `StreamDecoder`, `Codec`, `StreamingCodec`, `DecodedRequest`, `ServerCodec`, `StreamEncoder`, `RequestMode`
+```go
+type EncodedRequest struct {
+	Header http.Header
+	Body   io.Reader
+}
+```
+
+```go
+type RequestEncoder interface {
+	EncodeRequest(req inference.Request, mode RequestMode) (EncodedRequest, error)
+}
+```
+
+```go
+type ResponseDecoder interface {
+	DecodeResponse(body []byte) (*inference.Response, error)
+}
+```
+
+```go
+type StreamFramer interface {
+	DecodeStreamFrames(body io.ReadCloser) (*stream.StreamReader[stream.StreamFrame], error)
+}
+```
+
+```go
+type StreamDecoder interface {
+	DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)
+}
+```
+
+```go
+type Codec interface {
+	RequestEncoder
+	ResponseDecoder
+}
+```
+
+```go
+type StreamingCodec interface {
+	Codec
+	StreamDecoder
+}
+```
+
+```go
+type DecodedRequest struct {
+	Request        inference.Request
+	RequestedModel string
+	Streaming      bool
+}
+```
+
+```go
+type ServerCodec interface {
+	MatchRequest(req *http.Request) bool
+
+	DecodeRequest(req *http.Request) (DecodedRequest, error)
+
+	WriteResponse(w http.ResponseWriter, resp *inference.Response) error
+
+	OpenStream(w http.ResponseWriter) (StreamEncoder, error)
+
+	WriteError(w http.ResponseWriter, err error)
+}
+```
+
+```go
+type StreamEncoder interface {
+	WriteChunk(chunk content.Chunk) error
+
+	Finish(result stream.StreamResult) error
+
+	Fail(err error) error
+}
+```
+
+```go
+type RequestMode uint8
+```
 
 ### Constants {#constants}
 

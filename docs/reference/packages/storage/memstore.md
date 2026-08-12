@@ -38,24 +38,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (s *blobStore) Put(ctx context.Context, key string, r io.Reader) error`
-- `func (s *blobStore) Get(ctx context.Context, key string) (io.ReadCloser, error)`
-- `func (s *blobStore) Delete(ctx context.Context, key string) error`
-- `func (s *blobStore) List(ctx context.Context, prefix string) ([]string, error)`
-- `func (s *kvStore) Get(ctx context.Context, key string) ([]byte, uint64, error)`
-- `func (s *kvStore) Put(ctx context.Context, key string, expectedRev uint64, val []byte) (uint64, error)`
-- `func (s *kvStore) Keys(ctx context.Context, prefix string) ([]string, error)`
-- `func (s *kvStore) Delete(ctx context.Context, key string) error`
-- `func (s *leaserStore) Acquire(ctx context.Context, name string) (storage.Lease, error)`
-- `func (l *memLease) Epoch() uint64`
-- `func (l *memLease) Lost() <-chan struct{}`
-- `func (l *memLease) Release(ctx context.Context) error`
-- `func (s *ledgerStore) Append(ctx context.Context, name string, expected uint64, payload []byte) error`
-- `func (s *ledgerStore) Read(ctx context.Context, name string, from uint64) (storage.Cursor, error)`
-- `func (s *ledgerStore) Tip(ctx context.Context, name string) (uint64, error)`
-- `func (s *ledgerStore) Delete(ctx context.Context, name string) error`
-- `func (c *ledgerCursor) Next(ctx context.Context) (storage.Record, error)`
-- `func (c *ledgerCursor) Close() error`
+No exported methods are declared in this package.
 
 ### Types {#types}
 

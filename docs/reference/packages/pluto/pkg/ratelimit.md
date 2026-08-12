@@ -38,12 +38,23 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (c *client) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
-- `func (c *client) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-`Config`
+```go
+type Config struct {
+	MaxRPM int
+
+	MaxConcurrent int
+
+	MaxRetries int
+
+	BaseBackoff time.Duration
+
+	MaxBackoff time.Duration
+}
+```
 
 ### Constants {#constants}
 

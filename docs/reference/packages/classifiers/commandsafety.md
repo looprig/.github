@@ -38,7 +38,7 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func StandardEvidence(policy ReadEvidencePolicy) hustle.EvidenceToolPolicy`
 - `func New(options Options) (*Classifier, error)`
 - `func Evaluate(classifier *Classifier, cases []EvaluationCase, options EvaluationOptions) (Report, error)`
-- `func EncodeAssessmentAsModelOutput( subject gate.PermissionReviewSubject, risk gate.ReviewRisk, authorization gate.ReviewAuthorization, categories []gate.ReviewRiskCategory, recommendation gate.ReviewRecommendation, rationale string,) (json.RawMessage, error)`
+- `func EncodeAssessmentAsModelOutput(subject gate.PermissionReviewSubject, risk gate.ReviewRisk, authorization gate.ReviewAuthorization, categories []gate.ReviewRiskCategory, recommendation gate.ReviewRecommendation, rationale string) (json.RawMessage, error)`
 - `func RequiredEvidenceKinds() []string`
 
 ### Methods {#methods}
@@ -50,12 +50,132 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (c *Classifier) Definition() hustle.Definition`
 - `func (c *Classifier) Applies(subject gate.PermissionReviewSubject) bool`
 - `func (c *Classifier) MarshalInput(subject gate.PermissionReviewSubject) (json.RawMessage, error)`
-- `func (c *Classifier) ValidateResult( subject gate.PermissionReviewSubject, result hustle.Result,) (gate.PermissionAssessment, error)`
+- `func (c *Classifier) ValidateResult(subject gate.PermissionReviewSubject, result hustle.Result) (gate.PermissionAssessment, error)`
 - `func (e *EvaluationError) Error() string`
 
 ### Types {#types}
 
-`Policy`, `ReadEvidencePolicy`, `Options`, `ConstructionField`, `ConstructionError`, `Classifier`, `ModelResponder`, `EvaluationCase`, `EvaluationOptions`, `ConfusionMatrix`, `CaseMismatch`, `CaseFailureReason`, `CaseFailure`, `Report`, `EvaluationError`
+```go
+type Policy = policy.Policy
+```
+
+```go
+type ReadEvidencePolicy struct {
+	Limits             evidence.Limits
+	VisibilityResolver evidence.VisibilityResolver
+}
+```
+
+```go
+type Options struct {
+	Inference inference.Client
+	Model     model.Model
+	Policy    Policy
+	Evidence  hustle.EvidenceToolPolicy
+}
+```
+
+```go
+type ConstructionField string
+```
+
+```go
+type ConstructionError struct {
+	Field ConstructionField
+	Cause error
+}
+```
+
+```go
+type Classifier struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ModelResponder func(subject gate.PermissionReviewSubject) (json.RawMessage, error)
+```
+
+```go
+type EvaluationCase struct {
+	ID               string
+	Subject          gate.PermissionReviewSubject
+	Respond          ModelResponder
+	ExpectedEligible bool
+}
+```
+
+```go
+type EvaluationOptions struct {
+	CorpusRevision string
+}
+```
+
+```go
+type ConfusionMatrix struct {
+	TrueAllow int
+
+	TrueHuman int
+
+	FalseAllow int
+
+	FalseHuman int
+}
+```
+
+```go
+type CaseMismatch struct {
+	ID               string
+	ExpectedEligible bool
+	ActualEligible   bool
+	Risk             gate.ReviewRisk
+}
+```
+
+```go
+type CaseFailureReason string
+```
+
+```go
+type CaseFailure struct {
+	ID     string
+	Reason CaseFailureReason
+}
+```
+
+```go
+type Report struct {
+	CorpusRevision     string
+	ClassifierName     string
+	ClassifierRevision string
+
+	ModelIdentity string
+
+	TotalCases      int
+	ConfusionMatrix ConfusionMatrix
+
+	ByRisk          map[gate.ReviewRisk]int
+	ByAuthorization map[gate.ReviewAuthorization]int
+
+	CriticalFalseAllows int
+	HighRiskFalseAllows int
+
+	BenignSentToHuman int
+
+	Mismatches []CaseMismatch
+	Failures   []CaseFailure
+
+	ToolEvidenceUsage          string
+	LatencyTokenUsage          string
+	PreviousRevisionComparison string
+}
+```
+
+```go
+type EvaluationError struct {
+	Reason string
+}
+```
 
 ### Constants {#constants}
 

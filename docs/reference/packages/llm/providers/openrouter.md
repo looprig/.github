@@ -43,16 +43,34 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (r chatRouter) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (route.Route, error)`
-- `func (c requestCodec) EncodeRequest(req inference.Request, mode codec.RequestMode) (codec.EncodedRequest, error)`
-- `func (requestCodec) DecodeResponse(body []byte) (*inference.Response, error)`
-- `func (requestCodec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
-- `func (b *reasoningResponseBody) Read(p []byte) (int, error)`
-- `func (b *reasoningResponseBody) Close() error`
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-`ReasoningOptions`, `ProviderRoutingOptions`, `Option`
+```go
+type ReasoningOptions struct {
+	Effort    string `json:"effort,omitempty"`
+	MaxTokens *int   `json:"max_tokens,omitempty"`
+	Exclude   *bool  `json:"exclude,omitempty"`
+	Enabled   *bool  `json:"enabled,omitempty"`
+	Context   string `json:"context,omitempty"`
+	Mode      string `json:"mode,omitempty"`
+}
+```
+
+```go
+type ProviderRoutingOptions struct {
+	Order             []string `json:"order,omitempty"`
+	AllowFallbacks    *bool    `json:"allow_fallbacks,omitempty"`
+	RequireParameters *bool    `json:"require_parameters,omitempty"`
+	DataCollection    string   `json:"data_collection,omitempty"`
+	ZDR               *bool    `json:"zdr,omitempty"`
+}
+```
+
+```go
+type Option func(*config)
+```
 
 ### Constants {#constants}
 

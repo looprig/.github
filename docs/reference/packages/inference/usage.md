@@ -45,7 +45,28 @@ No exported functions are declared in this package.
 
 ### Types {#types}
 
-`UsageNormalizationField`, `UsageNormalizationReason`, `UsageNormalizationError`, `Usage`
+```go
+type UsageNormalizationField string
+```
+
+```go
+type UsageNormalizationReason string
+```
+
+```go
+type UsageNormalizationError struct {
+	Field  UsageNormalizationField
+	Reason UsageNormalizationReason
+	Value  int64
+	Left   content.TokenCount
+	Right  content.TokenCount
+	Cause  error
+}
+```
+
+```go
+type Usage = content.Usage
+```
 
 ### Constants {#constants}
 

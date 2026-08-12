@@ -61,7 +61,82 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`TargetErrorClass`, `DecodedTargetError`, `UnknownVersionError`, `ReportTooLargeError`, `MalformedReportError`, `NonFiniteValueError`, `InvalidReportError`, `EncodeError`, `InvalidReportIDError`, `PathEscapeError`, `DirectoryError`, `WriteError`, `FileSink`
+```go
+type TargetErrorClass string
+```
+
+```go
+type DecodedTargetError struct {
+	Class TargetErrorClass
+}
+```
+
+```go
+type UnknownVersionError struct {
+	Version string
+}
+```
+
+```go
+type ReportTooLargeError struct {
+	Size int
+	Max  int
+}
+```
+
+```go
+type MalformedReportError struct {
+	Reason string
+}
+```
+
+```go
+type NonFiniteValueError struct{}
+```
+
+```go
+type InvalidReportError struct {
+	Cause error
+}
+```
+
+```go
+type EncodeError struct {
+	Cause error
+}
+```
+
+```go
+type InvalidReportIDError struct {
+	Reason string
+}
+```
+
+```go
+type PathEscapeError struct {
+	Dir   string
+	Cause error
+}
+```
+
+```go
+type DirectoryError struct {
+	Dir   string
+	Cause error
+}
+```
+
+```go
+type WriteError struct {
+	Cause error
+}
+```
+
+```go
+type FileSink struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -75,7 +150,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `DecodedTargetError`, `UnknownVersionError`, `ReportTooLargeError`, `MalformedReportError`, `NonFiniteValueError`, `InvalidReportError`, `EncodeError`, `InvalidReportIDError`, `PathEscapeError`, `DirectoryError`, `WriteError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DecodedTargetError`, `DirectoryError`, `EncodeError`, `InvalidReportError`, `InvalidReportIDError`, `MalformedReportError`, `NonFiniteValueError`, `PathEscapeError`, `ReportTooLargeError`, `UnknownVersionError`, `WriteError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

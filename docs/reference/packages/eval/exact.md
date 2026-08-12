@@ -46,22 +46,13 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (e toolErrorRate) Descriptor() eval.Descriptor`
-- `func (e toolErrorRate) Evaluate(_ context.Context, s eval.Sample) (eval.Assessment, error)`
-- `func (e maxDuration) Descriptor() eval.Descriptor`
-- `func (e maxDuration) Evaluate(_ context.Context, s eval.Sample) (eval.Assessment, error)`
-- `func (e schemaResult) Descriptor() eval.Descriptor`
-- `func (e schemaResult) Evaluate(_ context.Context, s eval.Sample) (eval.Assessment, error)`
-- `func (e requiredText) Descriptor() eval.Descriptor`
-- `func (e requiredText) Evaluate(_ context.Context, s eval.Sample) (eval.Assessment, error)`
-- `func (e forbiddenText) Descriptor() eval.Descriptor`
-- `func (e forbiddenText) Evaluate(_ context.Context, s eval.Sample) (eval.Assessment, error)`
-- `func (e toolPresence) Descriptor() eval.Descriptor`
-- `func (e toolPresence) Evaluate(_ context.Context, s eval.Sample) (eval.Assessment, error)`
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-`RateOption`
+```go
+type RateOption func(*toolErrorRate)
+```
 
 ### Constants {#constants}
 

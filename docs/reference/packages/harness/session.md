@@ -65,7 +65,160 @@ No exported functions are declared in this package.
 
 ### Types {#types}
 
-`RestoreDecision`, `RestoreDecider`, `DefaultPolicyDecider`, `AcceptAllDecider`, `SessionErrorKind`, `SessionError`, `TurnRejectedError`, `ConfigMismatchError`, `RestoreRejectedError`, `AgentNameMismatchError`, `RestoreRuntimeMismatchError`, `RestoreDiscoveryErrorKind`, `RestoreDiscoveryError`, `RestoreErrorKind`, `RestoreError`, `GateErrorKind`, `GateError`, `WorkspaceNotConfiguredError`, `WorkspaceRootBusyError`, `WorkspaceRootLeaseLostError`, `WorkspaceRecoveryError`, `Session`, `GateHost`, `SessionController`
+```go
+type RestoreDecision struct {
+	Accept  bool
+	Source  event.DecisionSource
+	Actor   string
+	Message string
+}
+```
+
+```go
+type RestoreDecider interface {
+	DecideRestore(ctx context.Context, assessment event.DriftAssessment) (RestoreDecision, error)
+}
+```
+
+```go
+type DefaultPolicyDecider struct{}
+```
+
+```go
+type AcceptAllDecider struct{}
+```
+
+```go
+type SessionErrorKind string
+```
+
+```go
+type SessionError struct {
+	Kind  SessionErrorKind
+	Cause error
+}
+```
+
+```go
+type TurnRejectedError struct{ Reason event.RejectReason }
+```
+
+```go
+type ConfigMismatchError struct{ Persisted, Live event.ConfigFingerprint }
+```
+
+```go
+type RestoreRejectedError struct {
+	Assessment event.DriftAssessment
+	Source     event.DecisionSource
+	Cause      error
+}
+```
+
+```go
+type AgentNameMismatchError struct{ Persisted, Configured identity.AgentName }
+```
+
+```go
+type RestoreRuntimeMismatchError struct {
+	Kind  string
+	Cause error
+}
+```
+
+```go
+type RestoreDiscoveryErrorKind string
+```
+
+```go
+type RestoreDiscoveryError struct {
+	Kind      RestoreDiscoveryErrorKind
+	SessionID uuid.UUID
+}
+```
+
+```go
+type RestoreErrorKind string
+```
+
+```go
+type RestoreError struct {
+	Kind  RestoreErrorKind
+	Cause error
+}
+```
+
+```go
+type GateErrorKind string
+```
+
+```go
+type GateError struct {
+	GateID gate.ID
+	Kind   GateErrorKind
+	Cause  error
+}
+```
+
+```go
+type WorkspaceNotConfiguredError struct{}
+```
+
+```go
+type WorkspaceRootBusyError struct {
+	Root        string
+	HolderEpoch uint64
+	Cause       error
+}
+```
+
+```go
+type WorkspaceRootLeaseLostError struct{}
+```
+
+```go
+type WorkspaceRecoveryError struct {
+	Path   string
+	Reason string
+	Cause  error
+}
+```
+
+```go
+type Session interface {
+	SessionID() uuid.UUID
+	ActiveLoop() loop.Handle
+	Loop(uuid.UUID) (loop.Handle, bool)
+	Submit(context.Context, []content.Block) (uuid.UUID, error)
+	SubmitToLoop(context.Context, uuid.UUID, []content.Block) (uuid.UUID, error)
+	Compact(context.Context) (uuid.UUID, error)
+	CompactToLoop(context.Context, uuid.UUID) (uuid.UUID, error)
+	SubscribeEvents(event.EventFilter) (event.Subscription, error)
+	RespondGate(context.Context, gate.GateResponse) error
+	Interrupt(context.Context) (bool, error)
+}
+```
+
+```go
+type GateHost interface {
+	OpenHostGate(context.Context, uuid.UUID, gate.Gate, gate.Payload) (gate.ID, error)
+
+	AwaitGateAnswer(context.Context, gate.ID) (gate.Answer, error)
+
+	CloseGate(context.Context, gate.ID, gate.CloseReason) error
+}
+```
+
+```go
+type SessionController interface {
+	Session
+	SetActiveLoop(context.Context, uuid.UUID) error
+	LoopController(uuid.UUID) (loop.Controller, bool)
+	CheckpointWorkspace(context.Context) (workspacestore.Ref, error)
+	RestoreWorkspace(context.Context, workspacestore.Ref) error
+	Shutdown(context.Context) error
+}
+```
 
 ### Constants {#constants}
 
@@ -79,7 +232,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `SessionError`, `TurnRejectedError`, `ConfigMismatchError`, `RestoreRejectedError`, `AgentNameMismatchError`, `RestoreRuntimeMismatchError`, `RestoreDiscoveryError`, `RestoreError`, `GateError`, `WorkspaceNotConfiguredError`, `WorkspaceRootBusyError`, `WorkspaceRootLeaseLostError`, `WorkspaceRecoveryError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AgentNameMismatchError`, `ConfigMismatchError`, `GateError`, `RestoreDiscoveryError`, `RestoreError`, `RestoreRejectedError`, `RestoreRuntimeMismatchError`, `SessionError`, `TurnRejectedError`, `WorkspaceNotConfiguredError`, `WorkspaceRecoveryError`, `WorkspaceRootBusyError`, `WorkspaceRootLeaseLostError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

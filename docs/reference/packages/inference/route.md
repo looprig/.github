@@ -41,13 +41,27 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (s staticChat) BuildRoute(baseURL string, _ inference.Request, _ codec.RequestMode) (Route, error)`
 - `func (e *MissingModelError) Error() string`
-- `func (geminiGenerateContent) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (Route, error)`
 
 ### Types {#types}
 
-`Route`, `Router`, `MissingModelError`
+```go
+type Route struct {
+	Method string
+	URL    string
+	Header http.Header
+}
+```
+
+```go
+type Router interface {
+	BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (Route, error)
+}
+```
+
+```go
+type MissingModelError struct{}
+```
 
 ### Constants {#constants}
 

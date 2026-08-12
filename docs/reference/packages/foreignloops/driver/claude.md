@@ -40,10 +40,6 @@ The following surface is read from the pinned implementation files. Signatures a
 
 - `func (e *WrapError) Error() string`
 - `func (e *WrapError) Unwrap() error`
-- `func (a *agent) Spawn(_ context.Context, turn driver.Turn) (driver.Stream, error)`
-- `func (s *stream) Events() <-chan driver.Event`
-- `func (s *stream) History() (driver.History, error)`
-- `func (s *stream) Close() error`
 - `func (e *ConfigError) Error() string`
 - `func (e *SpawnConfigError) Error() string`
 - `func (e *PlatformError) Error() string`
@@ -51,7 +47,40 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`WrapError`, `CommandWrapper`, `Config`, `ConfigError`, `SpawnConfigError`, `PlatformError`, `PathError`
+```go
+type WrapError struct{ Cause error }
+```
+
+```go
+type CommandWrapper func(*exec.Cmd) (*exec.Cmd, error)
+```
+
+```go
+type Config struct {
+	ExecPath   string
+	Home       string
+	Model      string
+	EnvAllow   []string
+	Credential map[string]string
+	Wrap       CommandWrapper
+}
+```
+
+```go
+type ConfigError struct{ Field, Reason string }
+```
+
+```go
+type SpawnConfigError struct{ Field, Reason string }
+```
+
+```go
+type PlatformError struct{ GOOS string }
+```
+
+```go
+type PathError struct{ Reason string }
+```
 
 ### Constants {#constants}
 
@@ -65,7 +94,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `WrapError`, `ConfigError`, `SpawnConfigError`, `PlatformError`, `PathError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ConfigError`, `PathError`, `PlatformError`, `SpawnConfigError`, `WrapError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

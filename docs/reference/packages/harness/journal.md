@@ -61,7 +61,6 @@ The following surface is read from the pinned implementation files. Signatures a
 ### Methods {#methods}
 
 - `func (*NilJournalError) Error() string`
-- `func (nopCatalogUpdater) UpdateOnEvent(context.Context, event.Event, uint64) error`
 - `func (a *JournalEventAppender) AppendEvent(ctx context.Context, ev event.Event) (uint64, error)`
 - `func (a *JournalEventAppender) AppendEventResult(ctx context.Context, ev event.Event) (uint64, bool, error)`
 - `func (a *JournalCommandAppender) AppendCommand(ctx context.Context, rec CommandRecord) error`
@@ -80,8 +79,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *JournalNotReadyError) Error() string`
 - `func (e *JournalLeaseLostError) Error() string`
 - `func (e *JournalLeaseLostError) Unwrap() error`
-- `func (*appendPanicError) Error() string`
-- `func (j *appendFuncJournal) Append(ctx context.Context, record JournalRecord) (uint64, error)`
 - `func (e *IdempotencyCollisionError) Error() string`
 - `func (idx *IdempotencyIndex) Observe(id string, seq uint64, fp Fingerprint)`
 - `func (idx *IdempotencyIndex) Check(id string, fp Fingerprint) (seq uint64, duplicate bool, err error)`
@@ -119,7 +116,293 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`NilJournalError`, `JournalEventAppender`, `AppenderOption`, `JournalCommandAppender`, `JournalGateAppender`, `MarshalRecordError`, `RecordKindError`, `AppendError`, `AmbiguousAckError`, `RecordTooLargeError`, `JournalNotReadyError`, `JournalLeaseLostError`, `AppendFunc`, `AppendMiddleware`, `AppendResult`, `IdempotentJournal`, `IdempotencyCollisionError`, `Fingerprint`, `IdempotencyIndex`, `SessionJournal`, `Lease`, `LeaseHeldError`, `LeaseLostError`, `CommandRouteMismatchError`, `DeliveryTransitionError`, `JournalRecord`, `EventRecord`, `CommandRecord`, `CommandRecordID`, `LeaseFence`, `FenceRecord`, `GatePreparedRecord`, `FenceEncodeError`, `FenceDecodeError`, `GatePreparedEncodeError`, `GatePreparedDecodeError`, `RecordReplayer`, `RecordCursor`, `StartPos`, `ReplayRequest`, `EventReplayer`, `EventCursor`, `FollowUnsupportedError`
+```go
+type NilJournalError struct{}
+```
+
+```go
+type JournalEventAppender struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type AppenderOption func(*JournalEventAppender)
+```
+
+```go
+type JournalCommandAppender struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type JournalGateAppender struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type MarshalRecordError struct {
+	Subject string
+	Cause   error
+}
+```
+
+```go
+type RecordKindError struct {
+	Subject string
+}
+```
+
+```go
+type AppendError struct {
+	Subject  string
+	MsgID    string
+	Expected uint64
+	Cause    error
+}
+```
+
+```go
+type AmbiguousAckError struct {
+	Subject  string
+	MsgID    string
+	Expected uint64
+	Cause    error
+}
+```
+
+```go
+type RecordTooLargeError struct {
+	Subject string
+	MsgID   string
+	Length  int
+	Cause   error
+}
+```
+
+```go
+type JournalNotReadyError struct {
+	SessionID uuid.UUID
+}
+```
+
+```go
+type JournalLeaseLostError struct {
+	SessionID uuid.UUID
+	Epoch     uint64
+}
+```
+
+```go
+type AppendFunc func(context.Context, JournalRecord) (uint64, error)
+```
+
+```go
+type AppendMiddleware func(next AppendFunc) AppendFunc
+```
+
+```go
+type AppendResult struct {
+	Sequence uint64
+	Appended bool
+}
+```
+
+```go
+type IdempotentJournal interface {
+	SessionJournal
+
+	AppendIdempotent(ctx context.Context, rec JournalRecord) (AppendResult, error)
+}
+```
+
+```go
+type IdempotencyCollisionError struct {
+	ID  string
+	Seq uint64
+}
+```
+
+```go
+type Fingerprint struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type IdempotencyIndex struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SessionJournal interface {
+	Append(ctx context.Context, rec JournalRecord) (seq uint64, err error)
+}
+```
+
+```go
+type Lease interface {
+	ownershipToken
+
+	SessionID() uuid.UUID
+
+	Release(ctx context.Context) error
+}
+```
+
+```go
+type LeaseHeldError struct {
+	SessionID uuid.UUID
+	Epoch     uint64
+}
+```
+
+```go
+type LeaseLostError struct {
+	SessionID uuid.UUID
+	Epoch     uint64
+}
+```
+
+```go
+type CommandRouteMismatchError struct {
+	RecordLoopID uuid.UUID
+	TargetLoopID uuid.UUID
+}
+```
+
+```go
+type DeliveryTransitionError struct {
+	CommandID uuid.UUID
+	Phase     command.DelegateDeliveryPhase
+	Reason    string
+}
+```
+
+```go
+type JournalRecord interface {
+	isJournalRecord()
+
+	IdempotencyID() string
+}
+```
+
+```go
+type EventRecord struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CommandRecord struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CommandRecordID struct {
+	CommandID uuid.UUID
+	Phase     command.DelegateDeliveryPhase
+}
+```
+
+```go
+type LeaseFence struct {
+	Epoch uint64 `json:"epoch"`
+}
+```
+
+```go
+type FenceRecord struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type GatePreparedRecord struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type FenceEncodeError struct{ Cause error }
+```
+
+```go
+type FenceDecodeError struct {
+	Reason string
+	Cause  error
+}
+```
+
+```go
+type GatePreparedEncodeError struct {
+	Stage string
+	Cause error
+}
+```
+
+```go
+type GatePreparedDecodeError struct {
+	Stage string
+	Cause error
+}
+```
+
+```go
+type RecordReplayer interface {
+	Open(ctx context.Context, req ReplayRequest) (RecordCursor, error)
+}
+```
+
+```go
+type RecordCursor interface {
+	Next(ctx context.Context) (JournalRecord, uint64, error)
+
+	Close() error
+}
+```
+
+```go
+type StartPos struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ReplayRequest struct {
+	SessionID uuid.UUID
+
+	LoopID uuid.UUID
+
+	From StartPos
+
+	Follow bool
+}
+```
+
+```go
+type EventReplayer interface {
+	Open(ctx context.Context, req ReplayRequest) (EventCursor, error)
+}
+```
+
+```go
+type EventCursor interface {
+	Next(ctx context.Context) (event.Event, uint64, error)
+
+	Close() error
+}
+```
+
+```go
+type FollowUnsupportedError struct {
+	Stream string
+}
+```
 
 ### Constants {#constants}
 
@@ -133,7 +416,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `NilJournalError`, `MarshalRecordError`, `RecordKindError`, `AppendError`, `AmbiguousAckError`, `RecordTooLargeError`, `JournalNotReadyError`, `JournalLeaseLostError`, `IdempotencyCollisionError`, `LeaseHeldError`, `LeaseLostError`, `CommandRouteMismatchError`, `DeliveryTransitionError`, `FenceEncodeError`, `FenceDecodeError`, `GatePreparedEncodeError`, `GatePreparedDecodeError`, `FollowUnsupportedError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AmbiguousAckError`, `AppendError`, `CommandRouteMismatchError`, `DeliveryTransitionError`, `FenceDecodeError`, `FenceEncodeError`, `FollowUnsupportedError`, `GatePreparedDecodeError`, `GatePreparedEncodeError`, `IdempotencyCollisionError`, `JournalLeaseLostError`, `JournalNotReadyError`, `LeaseHeldError`, `LeaseLostError`, `MarshalRecordError`, `NilJournalError`, `RecordKindError`, `RecordTooLargeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

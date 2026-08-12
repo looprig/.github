@@ -56,7 +56,145 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`SessionNotFoundError`, `LoopNotFoundError`, `StoreReadError`, `NonPublicEventError`, `PublicBindWithoutAuthError`, `InvalidAddrError`, `Option`, `InvalidParamError`, `Page`, `JournalPage`, `Reader`, `SessionSummary`, `SessionList`, `StatusEvent`, `SessionStatus`, `EventJournalPage`, `LiveSession`, `Rig`, `ServerOption`
+```go
+type SessionNotFoundError struct {
+	SessionID uuid.UUID
+}
+```
+
+```go
+type LoopNotFoundError struct {
+	LoopID uuid.UUID
+}
+```
+
+```go
+type StoreReadError struct {
+	Op    string
+	Cause error
+}
+```
+
+```go
+type NonPublicEventError struct {
+	Visibility event.EventVisibility
+}
+```
+
+```go
+type PublicBindWithoutAuthError struct {
+	Addr string
+}
+```
+
+```go
+type InvalidAddrError struct {
+	Addr  string
+	Cause error
+}
+```
+
+```go
+type Option func(*config)
+```
+
+```go
+type InvalidParamError struct {
+	Param  string
+	Reason string
+}
+```
+
+```go
+type Page struct {
+	Skip  int
+	Limit int
+}
+```
+
+```go
+type JournalPage struct {
+	From  uint64
+	Limit int
+}
+```
+
+```go
+type Reader interface {
+	ListSessions(ctx context.Context, page Page) (SessionList, error)
+	ReadStatus(ctx context.Context, id uuid.UUID) (SessionStatus, error)
+	ReadJournal(ctx context.Context, id uuid.UUID, page JournalPage) (EventJournalPage, error)
+}
+```
+
+```go
+type SessionSummary struct {
+	SessionID    uuid.UUID `json:"session_id"`
+	State        string    `json:"state,omitempty"`
+	Title        string    `json:"title,omitempty"`
+	CreatedAt    time.Time `json:"created_at,omitzero"`
+	LastActiveAt time.Time `json:"last_active_at,omitzero"`
+}
+```
+
+```go
+type SessionList struct {
+	Sessions []SessionSummary `json:"sessions"`
+	Skip     int              `json:"skip"`
+	Limit    int              `json:"limit"`
+	NextSkip int              `json:"next_skip"`
+	Done     bool             `json:"done"`
+}
+```
+
+```go
+type StatusEvent struct {
+	JournalSeq uint64
+	Event      event.Event
+}
+```
+
+```go
+type SessionStatus struct {
+	SessionID      uuid.UUID    `json:"session_id"`
+	State          string       `json:"state,omitempty"`
+	LastJournalSeq uint64       `json:"last_journal_seq"`
+	ActiveTurnID   uuid.UUID    `json:"active_turn_id,omitzero"`
+	WaitingGateID  uuid.UUID    `json:"waiting_gate_id,omitzero"`
+	LastTurn       *StatusEvent `json:"last_turn,omitempty"`
+	LastStep       *StatusEvent `json:"last_step,omitempty"`
+	UpdatedAt      time.Time    `json:"updated_at,omitzero"`
+}
+```
+
+```go
+type EventJournalPage struct {
+	Events         []StatusEvent `json:"events"`
+	NextJournalSeq uint64        `json:"next_journal_seq"`
+	Done           bool          `json:"done"`
+}
+```
+
+```go
+type LiveSession interface {
+	SessionID() uuid.UUID
+	Submit(ctx context.Context, blocks []content.Block) (uuid.UUID, error)
+	SubscribeEvents(filter event.EventFilter) (event.Subscription, error)
+	RespondGate(ctx context.Context, response gate.GateResponse) error
+	Interrupt(ctx context.Context) (bool, error)
+}
+```
+
+```go
+type Rig[S LiveSession, O any] interface {
+	NewSession(ctx context.Context, opts ...O) (S, error)
+	RestoreSession(ctx context.Context, id uuid.UUID) (S, error)
+}
+```
+
+```go
+type ServerOption func(*serverConfig)
+```
 
 ### Constants {#constants}
 
@@ -70,7 +208,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `SessionNotFoundError`, `LoopNotFoundError`, `StoreReadError`, `NonPublicEventError`, `PublicBindWithoutAuthError`, `InvalidAddrError`, `InvalidParamError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `InvalidAddrError`, `InvalidParamError`, `LoopNotFoundError`, `NonPublicEventError`, `PublicBindWithoutAuthError`, `SessionNotFoundError`, `StoreReadError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

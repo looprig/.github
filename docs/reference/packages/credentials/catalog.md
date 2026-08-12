@@ -49,11 +49,38 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (l *Local) Create(ctx context.Context, record credentials.Record) error`
 - `func (l *Local) Delete(ctx context.Context, ref credentials.Reference) error`
 - `func (l *Local) Update(ctx context.Context, expected, next credentials.Record) error`
-- `func (errorUnsupported) Error() string`
 
 ### Types {#types}
 
-`Hooks`, `Options`, `Local`, `LocalCatalog`
+```go
+type Hooks struct {
+	BeforeRead  func() error
+	BeforeReady func() error
+	BeforeClose func() error
+
+	BeforeInitialize func() error
+	BeforeTempWrite  func() error
+	BeforeRename     func() error
+	AfterRename      func() error
+	BeforeUnlink     func() error
+	AfterUnlink      func() error
+	SyncDir          func() error
+}
+```
+
+```go
+type Options struct{ Hooks Hooks }
+```
+
+```go
+type Local struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type LocalCatalog = Local
+```
 
 ### Constants {#constants}
 

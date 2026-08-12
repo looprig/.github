@@ -59,14 +59,74 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *DuplicateKeyError) Error() string`
 - `func (e *StreamTerminatedError) Error() string`
 - `func (e *UnsupportedChunkError) Error() string`
-- `func (e *serverStreamEncoder) WriteChunk(chunk content.Chunk) error`
-- `func (e *serverStreamEncoder) Finish(result stream.StreamResult) error`
-- `func (e *serverStreamEncoder) Fail(err error) error`
 - `func (Codec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
 
 ### Types {#types}
 
-`Codec`, `EncodeError`, `UnsupportedBlockError`, `DecodeError`, `ServerDecodeError`, `DuplicateKeyError`, `StreamTerminatedError`, `UnsupportedChunkError`, `GenerateContentRequest`, `GenerateContentResponse`
+```go
+type Codec struct{}
+```
+
+```go
+type EncodeError struct {
+	Reason string
+	Err    error
+}
+```
+
+```go
+type UnsupportedBlockError struct {
+	Block string
+}
+```
+
+```go
+type DecodeError struct {
+	Reason string
+	Err    error
+}
+```
+
+```go
+type ServerDecodeError struct {
+	Reason string
+	Detail string
+}
+```
+
+```go
+type DuplicateKeyError struct {
+	Key string
+}
+```
+
+```go
+type StreamTerminatedError struct{}
+```
+
+```go
+type UnsupportedChunkError struct {
+	Chunk string
+}
+```
+
+```go
+type GenerateContentRequest struct {
+	Contents          []geminiContent   `json:"contents"`
+	SystemInstruction *geminiContent    `json:"systemInstruction,omitempty"`
+	Tools             []geminiTool      `json:"tools,omitempty"`
+	ToolConfig        *toolConfig       `json:"toolConfig,omitempty"`
+	GenerationConfig  *generationConfig `json:"generationConfig,omitempty"`
+}
+```
+
+```go
+type GenerateContentResponse struct {
+	Candidates    []candidate    `json:"candidates"`
+	UsageMetadata *usageMetadata `json:"usageMetadata"`
+	ModelVersion  string         `json:"modelVersion"`
+}
+```
 
 ### Constants {#constants}
 
@@ -80,7 +140,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `EncodeError`, `UnsupportedBlockError`, `DecodeError`, `ServerDecodeError`, `DuplicateKeyError`, `StreamTerminatedError`, `UnsupportedChunkError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DecodeError`, `DuplicateKeyError`, `EncodeError`, `ServerDecodeError`, `StreamTerminatedError`, `UnsupportedBlockError`, `UnsupportedChunkError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

@@ -38,17 +38,47 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (a *agent) Spawn(ctx context.Context, turn driver.Turn) (driver.Stream, error)`
-- `func (s *stream) Events() <-chan driver.Event`
-- `func (s *stream) History() (driver.History, error)`
-- `func (s *stream) Close() error`
 - `func (e *ConfigError) Error() string`
 - `func (e *SpawnConfigError) Error() string`
 - `func (e *PlatformError) Error() string`
 
 ### Types {#types}
 
-`SandboxMode`, `ApprovalPolicy`, `Config`, `ConfigError`, `SpawnConfigError`, `PlatformError`
+```go
+type SandboxMode uint8
+```
+
+```go
+type ApprovalPolicy uint8
+```
+
+```go
+type Config struct {
+	ExecPath         string
+	Model            string
+	Profile          string
+	AdditionalDirs   []string
+	Sandbox          SandboxMode
+	Approval         ApprovalPolicy
+	EnvAllow         []string
+	Credential       map[string]string
+	IgnoreUserConfig bool
+	IgnoreRules      bool
+	SkipGitRepoCheck bool
+}
+```
+
+```go
+type ConfigError struct{ Field, Reason string }
+```
+
+```go
+type SpawnConfigError struct{ Field, Reason string }
+```
+
+```go
+type PlatformError struct{ GOOS string }
+```
 
 ### Constants {#constants}
 
@@ -62,7 +92,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ConfigError`, `SpawnConfigError`, `PlatformError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ConfigError`, `PlatformError`, `SpawnConfigError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

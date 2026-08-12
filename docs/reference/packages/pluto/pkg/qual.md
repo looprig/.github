@@ -55,7 +55,120 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`ModelRole`, `EndpointClass`, `Capability`, `Manifest`, `ValidationError`, `Table`, `Pack`, `TablePlan`, `TableResult`, `Scorecard`, `DimensionScore`, `StatusRollup`, `StatSummary`
+```go
+type ModelRole string
+```
+
+```go
+type EndpointClass string
+```
+
+```go
+type Capability string
+```
+
+```go
+type Manifest struct {
+	TargetID      string
+	Role          ModelRole
+	Provider      string
+	Model         string
+	APIFormat     string
+	BaseURL       string
+	Effort        string
+	Revision      eval.Revision
+	EndpointClass EndpointClass
+	Capabilities  []Capability
+}
+```
+
+```go
+type ValidationError struct {
+	Field  string
+	Reason string
+}
+```
+
+```go
+type Table struct {
+	Name       eval.Name
+	Revision   eval.Revision
+	Dimension  eval.Name
+	Requires   []Capability
+	Scenarios  []eval.Scenario
+	Evaluators []eval.Evaluator
+}
+```
+
+```go
+type Pack struct {
+	Name     eval.Name
+	Revision eval.Revision
+	Tables   []Table
+}
+```
+
+```go
+type TablePlan struct {
+	Pack       eval.Name
+	Table      eval.Name
+	Dimension  eval.Name
+	Runnable   bool
+	Missing    []Capability
+	Suite      eval.Suite
+	Evaluators []eval.Evaluator
+}
+```
+
+```go
+type TableResult struct {
+	Pack      eval.Name
+	Table     eval.Name
+	Dimension eval.Name
+	Skipped   bool
+	Missing   []Capability
+	Report    eval.Report
+}
+```
+
+```go
+type Scorecard struct {
+	Manifest Manifest
+	Results  []TableResult
+}
+```
+
+```go
+type DimensionScore struct {
+	Dimension     eval.Name
+	Score         float64
+	Coverage      float64
+	Verdicts      int
+	Assessments   int
+	SkippedTables int
+	Undecided     bool
+}
+```
+
+```go
+type StatusRollup struct {
+	Samples      int
+	TargetErrors int
+	ByStatus     map[eval.AssessmentStatus]int
+}
+```
+
+```go
+type StatSummary struct {
+	Count    int
+	Mean     float64
+	Median   float64
+	Quantile float64
+	Min      float64
+	Max      float64
+	Variance float64
+}
+```
 
 ### Constants {#constants}
 

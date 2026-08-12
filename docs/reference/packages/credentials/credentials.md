@@ -144,12 +144,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *CanceledError) Format(state fmt.State, _ rune)`
 - `func (e *CanceledError) GoString() string`
 - `func (e *CanceledError) LogValue() slog.Value`
-- `func (e *canceledBoundaryError) Error() string`
-- `func (e *canceledBoundaryError) Unwrap() error`
-- `func (e *canceledBoundaryError) Is(target error) bool`
-- `func (e *canceledBoundaryError) Format(state fmt.State, _ rune)`
-- `func (e *canceledBoundaryError) GoString() string`
-- `func (e *canceledBoundaryError) LogValue() slog.Value`
 - `func (e *NilContextError) Error() string`
 - `func (e *NilContextError) Unwrap() error`
 - `func (e *NilContextError) Format(state fmt.State, _ rune)`
@@ -172,11 +166,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *StateDeletionError) Format(state fmt.State, _ rune)`
 - `func (e *StateDeletionError) GoString() string`
 - `func (e *StateDeletionError) LogValue() slog.Value`
-- `func (e *lifecycleOutcomeError) Error() string`
-- `func (e *lifecycleOutcomeError) Unwrap() []error`
-- `func (e *lifecycleOutcomeError) Format(state fmt.State, _ rune)`
-- `func (e *lifecycleOutcomeError) GoString() string`
-- `func (e *lifecycleOutcomeError) LogValue() slog.Value`
 - `func (p StatePublisher) Create(ctx context.Context, record Record, value secrets.Secret) error`
 - `func (p StatePublisher) Delete(ctx context.Context, supplied Record) error`
 - `func (b *Builder) Create(ctx context.Context, record Record, value secrets.Secret) error`
@@ -224,14 +213,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (s *NoneSource) Acquire(ctx context.Context) (Lease, error)`
 - `func (s *NoneSource) Invalidate(ctx context.Context, generation Generation, failure Failure) error`
 - `func (s *NoneSource) Close() error`
-- `func (l noneLease) Generation() Generation`
-- `func (l noneLease) Descriptor() Descriptor`
-- `func (l noneLease) ExpiresAt() time.Time`
-- `func (l noneLease) Authorizer() httpauth.Authorizer`
-- `func (l noneLease) String() string`
-- `func (l noneLease) Format(state fmt.State, _ rune)`
-- `func (l noneLease) GoString() string`
-- `func (l noneLease) LogValue() slog.Value`
 - `func (s *NoneSource) String() string`
 - `func (s *NoneSource) Format(state fmt.State, _ rune)`
 - `func (s *NoneSource) GoString() string`
@@ -239,7 +220,280 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`SharingScope`, `RefreshCoordinator`, `Clock`, `ClockFunc`, `CallbackListener`, `DescriptorBinding`, `FactoryInput`, `SourceFactory`, `ProviderFactories`, `Builder`, `Catalog`, `CatalogCAS`, `CatalogError`, `CatalogDurabilityUnknownError`, `Scheme`, `UsageClass`, `Descriptor`, `InvalidReferenceError`, `InvalidDescriptorError`, `InvalidGenerationError`, `InvalidFailureError`, `InvalidRecordError`, `SourceClosedError`, `CanceledError`, `NilContextError`, `OrphanState`, `StatePublicationError`, `StateDeletionError`, `StatePublisher`, `FindingKind`, `ReconcileFinding`, `Finding`, `Reference`, `Generation`, `Failure`, `FailureClass`, `Source`, `Lease`, `Record`, `NoneSource`
+```go
+type SharingScope uint8
+```
+
+```go
+type RefreshCoordinator interface {
+	Scope() SharingScope
+	WithLock(context.Context, Reference, func(context.Context) error) error
+}
+```
+
+```go
+type Clock interface{ Now() time.Time }
+```
+
+```go
+type ClockFunc func() time.Time
+```
+
+```go
+type CallbackListener interface{}
+```
+
+```go
+type DescriptorBinding struct {
+	Provider  string
+	Transport string
+	Scheme    Scheme
+	Usage     UsageClass
+	Issuer    string
+	Audience  string
+}
+```
+
+```go
+type FactoryInput struct {
+	Record             Record
+	Reference          Reference
+	Descriptor         Descriptor
+	State              secrets.Reference
+	Resolver           secrets.Resolver
+	Store              secrets.Store
+	Preconditions      secrets.PreconditionCapabilities
+	StateIndex         secrets.Lister
+	StateNamespace     secrets.Namespace
+	RefreshCoordinator RefreshCoordinator
+	StateSharing       SharingScope
+	HTTPClient         *http.Client
+	Clock              Clock
+	Callback           CallbackListener
+}
+```
+
+```go
+type SourceFactory func(context.Context, FactoryInput) (Source, error)
+```
+
+```go
+type ProviderFactories struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Builder struct {
+	Catalog        Catalog
+	Resolver       secrets.Resolver
+	Store          secrets.Store
+	Preconditions  secrets.PreconditionCapabilities
+	StateIndex     secrets.Lister
+	StateNamespace secrets.Namespace
+	RefreshLocks   RefreshCoordinator
+	StateSharing   SharingScope
+	HTTPClient     *http.Client
+	Clock          Clock
+	Callback       CallbackListener
+	Providers      ProviderFactories
+}
+```
+
+```go
+type Catalog interface {
+	Get(context.Context, Reference) (Record, error)
+	List(context.Context) ([]Record, error)
+	Create(context.Context, Record) error
+	Delete(context.Context, Reference) error
+}
+```
+
+```go
+type CatalogCAS interface {
+	Catalog
+	Update(context.Context, Record, Record) error
+}
+```
+
+```go
+type CatalogError struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CatalogDurabilityUnknownError = CatalogError
+```
+
+```go
+type Scheme string
+```
+
+```go
+type UsageClass string
+```
+
+```go
+type Descriptor struct {
+	Provider  string
+	Transport string
+	Scheme    Scheme
+	Usage     UsageClass
+	Issuer    string
+	Audience  string
+	Label     string
+}
+```
+
+```go
+type InvalidReferenceError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type InvalidDescriptorError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type InvalidGenerationError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type InvalidFailureError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type InvalidRecordError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SourceClosedError struct{}
+```
+
+```go
+type CanceledError struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type NilContextError struct{}
+```
+
+```go
+type OrphanState struct {
+	Credential Reference
+	State      secrets.Reference
+	Version    secrets.Version
+}
+```
+
+```go
+type StatePublicationError struct {
+	Orphan *OrphanState
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type StateDeletionError struct {
+	Credential Reference
+	State      secrets.Reference
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type StatePublisher struct {
+	Catalog       Catalog
+	Store         secrets.Store
+	Preconditions secrets.PreconditionCapabilities
+	Namespace     secrets.Namespace
+}
+```
+
+```go
+type FindingKind uint8
+```
+
+```go
+type ReconcileFinding struct {
+	Kind       FindingKind
+	State      secrets.Reference
+	Reference  secrets.Reference
+	Credential Reference
+}
+```
+
+```go
+type Finding = ReconcileFinding
+```
+
+```go
+type Reference struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Generation struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Failure string
+```
+
+```go
+type FailureClass = Failure
+```
+
+```go
+type Source interface {
+	Reference() Reference
+	Descriptor() Descriptor
+	Acquire(context.Context) (Lease, error)
+	Invalidate(context.Context, Generation, Failure) error
+	Close() error
+}
+```
+
+```go
+type Lease interface {
+	Generation() Generation
+	Descriptor() Descriptor
+	ExpiresAt() time.Time
+	Authorizer() httpauth.Authorizer
+}
+```
+
+```go
+type Record struct {
+	Schema     uint32
+	Reference  Reference
+	Descriptor Descriptor
+	State      secrets.Reference
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+}
+```
+
+```go
+type NoneSource struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -247,13 +501,13 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Variables {#variables}
 
-`ErrBuilderDependency`, `ErrCatalogCorrupt`, `ErrInvalidReference`, `ErrOrphanState`
+`ErrBuilderDependency`, `ErrFactoryUnsupported`, `ErrFactoryMismatch`, `ErrFactoryConstruction`, `ErrRefreshScope`, `ErrStateNamespace`, `ErrBuilderRecord`, `ErrCatalogCorrupt`, `ErrCatalogConflict`, `ErrCatalogNotFound`, `ErrCatalogUnavailable`, `ErrCatalogCanceled`, `ErrCatalogDurabilityUnknown`, `ErrCatalogUnsupported`, `ErrCatalogInvalidRecord`, `ErrCatalogInvalidDependency`, `ErrCatalogInsecurePath`, `ErrCatalogUnsupportedPlatform`, `ErrCatalogVisibleDurabilityUnknown`, `ErrCatalogUnknownSchema`, `ErrCatalogDuplicate`, `ErrInvalidReference`, `ErrInvalidDescriptor`, `ErrInvalidGeneration`, `ErrInvalidFailure`, `ErrInvalidRecord`, `ErrInvalidScheme`, `ErrInvalidUsage`, `ErrSourceClosed`, `ErrClosed`, `ErrNilContext`, `ErrCanceled`, `ErrOrphanState`, `ErrStateDeleteFailed`, `ErrStateUnavailable`, `ErrStateDurabilityUnknown`
 
 ## Ownership and errors {#ownership-and-errors}
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `CatalogError`, `InvalidReferenceError`, `InvalidDescriptorError`, `InvalidGenerationError`, `InvalidFailureError`, `InvalidRecordError`, `SourceClosedError`, `CanceledError`, `NilContextError`, `OrphanState`, `StatePublicationError`, `StateDeletionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CanceledError`, `CatalogError`, `InvalidDescriptorError`, `InvalidFailureError`, `InvalidGenerationError`, `InvalidRecordError`, `InvalidReferenceError`, `NilContextError`, `OrphanState`, `SourceClosedError`, `StateDeletionError`, `StatePublicationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

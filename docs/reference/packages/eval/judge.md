@@ -52,16 +52,80 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *QuoteNotFoundError) Error() string`
 - `func (e *RubricInvalidError) Error() string`
 - `func (e *RubricInvalidError) Unwrap() error`
-- `func (e *evaluator) Descriptor() eval.Descriptor`
-- `func (e *evaluator) Evaluate(ctx context.Context, s eval.Sample) (eval.Assessment, error)`
-- `func (s scoreSchema) Revision() eval.Revision`
-- `func (s scoreSchema) OutputSchema() inference.OutputSchema`
-- `func (s scoreSchema) Decode(raw []byte) (ScoreOutput, error)`
-- `func (s scoreSchema) Validate(out ScoreOutput, minScore, maxScore float64, conv content.AgenticMessages) error`
 
 ### Types {#types}
 
-`UnsupportedStructuredOutputError`, `RequestInvalidError`, `InferenceError`, `MalformedOutputError`, `ScoreRangeError`, `MessageIndexError`, `QuoteNotFoundError`, `RubricInvalidError`, `Option`, `QuotedEvidence`, `ScoreOutput`
+```go
+type UnsupportedStructuredOutputError struct {
+	Cause error
+}
+```
+
+```go
+type RequestInvalidError struct {
+	Cause error
+}
+```
+
+```go
+type InferenceError struct {
+	Cause error
+}
+```
+
+```go
+type MalformedOutputError struct {
+	Reason eval.StructuredErrorReason
+	Cause  error
+}
+```
+
+```go
+type ScoreRangeError struct {
+	Score    float64
+	Min      float64
+	Max      float64
+	HasScore bool
+}
+```
+
+```go
+type MessageIndexError struct {
+	Index int
+	Len   int
+}
+```
+
+```go
+type QuoteNotFoundError struct {
+	Index int
+}
+```
+
+```go
+type RubricInvalidError struct {
+	Cause error
+}
+```
+
+```go
+type Option func(*options)
+```
+
+```go
+type QuotedEvidence struct {
+	MessageIndex int    `json:"message_index"`
+	Quote        string `json:"quote"`
+}
+```
+
+```go
+type ScoreOutput struct {
+	Score    float64          `json:"score"`
+	Reason   string           `json:"reason"`
+	Evidence []QuotedEvidence `json:"evidence"`
+}
+```
 
 ### Constants {#constants}
 
@@ -75,7 +139,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `UnsupportedStructuredOutputError`, `RequestInvalidError`, `InferenceError`, `MalformedOutputError`, `ScoreRangeError`, `MessageIndexError`, `QuoteNotFoundError`, `RubricInvalidError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `InferenceError`, `MalformedOutputError`, `MessageIndexError`, `QuoteNotFoundError`, `RequestInvalidError`, `RubricInvalidError`, `ScoreRangeError`, `UnsupportedStructuredOutputError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

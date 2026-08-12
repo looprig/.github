@@ -45,7 +45,84 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`CaseClass`, `CaseKey`, `TrialResult`, `Distribution`, `MeasurementDelta`, `CaseComparison`, `Comparison`, `ComparisonSide`, `InvalidReportError`, `NonFiniteMeasurementError`, `EvaluatorRevisionDriftError`
+```go
+type CaseClass string
+```
+
+```go
+type CaseKey struct {
+	ScenarioID string
+	Evaluator  eval.Name
+}
+```
+
+```go
+type TrialResult struct {
+	TrialIndex   int
+	Status       eval.AssessmentStatus
+	Measurements []eval.Measurement
+}
+```
+
+```go
+type Distribution struct {
+	Count int
+	Mean  float64
+	Min   float64
+	Max   float64
+}
+```
+
+```go
+type MeasurementDelta struct {
+	Name          eval.Name
+	Unit          eval.Unit
+	BaselineUnit  eval.Unit
+	CandidateUnit eval.Unit
+	UnitMismatch  bool
+	Baseline      Distribution
+	Candidate     Distribution
+}
+```
+
+```go
+type CaseComparison struct {
+	Key               CaseKey
+	Class             CaseClass
+	Compatible        bool
+	BaselineRevision  eval.Revision
+	CandidateRevision eval.Revision
+	Baseline          []TrialResult
+	Candidate         []TrialResult
+	Distributions     []MeasurementDelta
+}
+```
+
+```go
+type Comparison struct {
+	Cases []CaseComparison
+}
+```
+
+```go
+type ComparisonSide string
+```
+
+```go
+type InvalidReportError struct {
+	Side ComparisonSide
+
+	Cause error
+}
+```
+
+```go
+type NonFiniteMeasurementError struct{}
+```
+
+```go
+type EvaluatorRevisionDriftError struct{}
+```
 
 ### Constants {#constants}
 
@@ -59,7 +136,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `InvalidReportError`, `NonFiniteMeasurementError`, `EvaluatorRevisionDriftError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `EvaluatorRevisionDriftError`, `InvalidReportError`, `NonFiniteMeasurementError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

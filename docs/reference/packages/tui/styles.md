@@ -48,7 +48,9 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`NodeStatus`
+```go
+type NodeStatus uint8
+```
 
 ### Constants {#constants}
 
@@ -56,7 +58,7 @@ No exported methods are declared in this package.
 
 ### Variables {#variables}
 
-`CardBorderColor`, `CardPanelBg`, `CardSelectedBg`, `TraySelectedBg`, `CardRailStyle`, `WorkflowActivityStyle`, `CardTitleStyle`, `CardKeyStyle`, `CardHintStyle`, `CardSelectedStyle`, `DotColor`, `MarkdownHeadingColor`, `MarkdownInlineCodeColor`, `MarkdownCodeNeutralColor`, `LitDot`, `FailColor`, `UserStyle`, `HeadlineStyle`, `NoticeInfoStyle`, `ToolCallStyle`, `AccentBarStyle`, `InputAccent`, `PanelBg`, `UserBgStyle`, `BoxStyle`, `PromptHeaderStyle`, `PromptHintStyle`, `PromptCursorStyle`, `SubagentStyle`, `ThinkingStyle`, `RailStyle`
+`CardBorderColor`, `CardPanelBg`, `CardSelectedBg`, `TraySelectedBg`, `CardRailStyle`, `WorkflowActivityStyle`, `CardTitleStyle`, `CardKeyStyle`, `CardHintStyle`, `CardSelectedStyle`, `DotColor`, `MarkdownHeadingColor`, `MarkdownInlineCodeColor`, `MarkdownCodeNeutralColor`, `LitDot`, `FailColor`, `UserStyle`, `InterruptedStyle`, `StatusStyle`, `StatusWorkingStyle`, `StatusWorkingAltStyle`, `QueuedStyle`, `QueuedLabelStyle`, `HeadlineStyle`, `NoticeInfoStyle`, `NoticeWarnStyle`, `NoticeErrorStyle`, `ToolCallStyle`, `ToolResultStyle`, `AccentBarStyle`, `InputAccent`, `PanelBg`, `UserBgStyle`, `BoxStyle`, `PromptHeaderStyle`, `PromptHintStyle`, `PromptCursorStyle`, `SubagentStyle`, `ThinkingStyle`, `RailStyle`
 
 ## Ownership and errors {#ownership-and-errors}
 

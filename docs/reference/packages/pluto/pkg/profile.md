@@ -44,7 +44,75 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Card`, `Outcome`, `RequirementResult`, `RestrictionResult`, `Result`, `Disposition`, `Requirement`, `Restriction`, `Profile`
+```go
+type Card interface {
+	Dimensions() ([]qual.DimensionScore, error)
+	FindingCount(code eval.FindingCode) int
+	SeverityCount(s eval.Severity) int
+}
+```
+
+```go
+type Outcome string
+```
+
+```go
+type RequirementResult struct {
+	Requirement Requirement
+	Outcome     Outcome
+}
+```
+
+```go
+type RestrictionResult struct {
+	Restriction Restriction
+	Applied     bool
+}
+```
+
+```go
+type Result struct {
+	Profile      eval.Name
+	Revision     eval.Revision
+	Disposition  Disposition
+	Requirements []RequirementResult
+	Restrictions []RestrictionResult
+}
+```
+
+```go
+type Disposition string
+```
+
+```go
+type Requirement struct {
+	Dimension   eval.Name
+	MinScore    *float64
+	MinCoverage *float64
+
+	FindingCode     eval.FindingCode
+	MaxFindingCount *int
+
+	Severity         eval.Severity
+	MaxSeverityCount *int
+}
+```
+
+```go
+type Restriction struct {
+	Description string
+	Requirement Requirement
+}
+```
+
+```go
+type Profile struct {
+	Name         eval.Name
+	Revision     eval.Revision
+	Requirements []Requirement
+	Restrictions []Restriction
+}
+```
 
 ### Constants {#constants}
 

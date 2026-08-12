@@ -52,7 +52,58 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`FinishReason`, `StreamFrame`, `StreamResult`, `StreamResultProducer`, `StreamOperation`, `StreamReaderFailure`, `StreamReaderError`, `StreamResultError`, `StreamReader`
+```go
+type FinishReason string
+```
+
+```go
+type StreamFrame struct {
+	Name     string
+	Metadata map[string]string
+	Data     []byte
+}
+```
+
+```go
+type StreamResult struct {
+	Usage        *content.Usage
+	Model        string
+	FinishReason FinishReason
+
+	Attempts int
+}
+```
+
+```go
+type StreamResultProducer func() (StreamResult, bool, error)
+```
+
+```go
+type StreamOperation string
+```
+
+```go
+type StreamReaderFailure string
+```
+
+```go
+type StreamReaderError struct {
+	Operation StreamOperation
+	Failure   StreamReaderFailure
+}
+```
+
+```go
+type StreamResultError struct {
+	Cause error
+}
+```
+
+```go
+type StreamReader[T any] struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

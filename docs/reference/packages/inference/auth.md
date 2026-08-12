@@ -42,17 +42,6 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (a failedAuthorizer) Authorize(context.Context, *http.Request) error`
-- `func (a failedAuthorizer) String() string`
-- `func (a failedAuthorizer) GoString() string`
-- `func (a failedAuthorizer) Format(state fmt.State, _ rune)`
-- `func (a failedAuthorizer) LogValue() slog.Value`
-- `func (a legacyHeaderAuth) Authorize(ctx context.Context, request *http.Request) error`
-- `func (legacyNoneAuth) Authorize(context.Context, *http.Request) error`
-- `func (a legacyHeaderAuth) String() string`
-- `func (a legacyHeaderAuth) GoString() string`
-- `func (a legacyHeaderAuth) Format(state fmt.State, _ rune)`
-- `func (a legacyHeaderAuth) LogValue() slog.Value`
 - `func (e *MissingCredentialsError) Error() string`
 - `func (e *MissingCredentialsError) Format(state fmt.State, _ rune)`
 - `func (e *MissingCredentialsError) GoString() string`
@@ -60,7 +49,27 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`APIKey`, `Authorizer`, `Authenticator`, `AuthKind`, `MissingCredentialsError`
+```go
+type APIKey string
+```
+
+```go
+type Authorizer = httpauth.Authorizer
+```
+
+```go
+type Authenticator = httpauth.Authorizer
+```
+
+```go
+type AuthKind string
+```
+
+```go
+type MissingCredentialsError struct {
+	Credential string
+}
+```
 
 ### Constants {#constants}
 

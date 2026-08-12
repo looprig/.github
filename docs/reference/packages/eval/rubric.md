@@ -47,7 +47,45 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`ValidationError`, `DuplicateCriterionError`, `Criterion`, `Anchor`, `Rubric`
+```go
+type ValidationError struct {
+	Field string
+
+	Reason string
+}
+```
+
+```go
+type DuplicateCriterionError struct{}
+```
+
+```go
+type Criterion struct {
+	ID          eval.Name
+	Description string
+	MinScore    float64
+	MaxScore    float64
+}
+```
+
+```go
+type Anchor struct {
+	Score       float64
+	Label       eval.Name
+	Description string
+}
+```
+
+```go
+type Rubric struct {
+	Name       eval.Name
+	Revision   eval.Revision
+	Scope      eval.Scope
+	Definition string
+	Criteria   []Criterion
+	Anchors    []Anchor
+}
+```
 
 ### Constants {#constants}
 
@@ -61,7 +99,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ValidationError`, `DuplicateCriterionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DuplicateCriterionError`, `ValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

@@ -60,7 +60,53 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`PageTokenExpiredError`, `Hooks`, `Options`, `Store`, `DurabilityUnknownError`, `CommitVisibleDurabilityUnknownError`, `UnsupportedPlatformError`
+```go
+type PageTokenExpiredError struct {
+	Reason string
+}
+```
+
+```go
+type Hooks struct {
+	BeforeRead         func() error
+	BeforeExistingRead func() error
+	BeforeVersion      func() error
+	BeforeTempWrite    func() error
+	BeforeWrite        func() error
+	BeforeRename       func() error
+	AfterRename        func() error
+	BeforeUnlink       func() error
+	AfterUnlink        func() error
+	SyncDir            func() error
+	NewVersion         func() (secrets.Version, error)
+}
+```
+
+```go
+type Options struct {
+	Hooks Hooks
+}
+```
+
+```go
+type Store struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type DurabilityUnknownError = CommitVisibleDurabilityUnknownError
+```
+
+```go
+type CommitVisibleDurabilityUnknownError struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type UnsupportedPlatformError struct{}
+```
 
 ### Constants {#constants}
 
@@ -74,7 +120,7 @@ No exported constants are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `PageTokenExpiredError`, `CommitVisibleDurabilityUnknownError`, `UnsupportedPlatformError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CommitVisibleDurabilityUnknownError`, `PageTokenExpiredError`, `UnsupportedPlatformError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

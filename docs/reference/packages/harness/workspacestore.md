@@ -42,8 +42,6 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (e *fileChangedError) Error() string`
-- `func (c *ctxReader) Read(p []byte) (int, error)`
 - `func (s *Store) GC(ctx context.Context, live map[Ref]struct{}) (deleted []Ref, err error)`
 - `func (s *Store) Materialize(ctx context.Context, ref Ref, dest string) error`
 - `func (s *Store) Delete(ctx context.Context, ref Ref) error`
@@ -67,7 +65,110 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Ref`, `InvalidRefError`, `DestNotEmptyError`, `SnapshotError`, `MaterializeError`, `IntegrityError`, `ArchiveEntryError`, `ArchiveLimit`, `ArchiveLimitError`, `GCError`, `NotDirError`, `Store`, `Options`, `Option`, `PersistencePathError`, `NilBlobsError`
+```go
+type Ref string
+```
+
+```go
+type InvalidRefError struct {
+	Value  string
+	Reason string
+}
+```
+
+```go
+type DestNotEmptyError struct {
+	Dest      string
+	Want      Ref
+	GotDigest string
+}
+```
+
+```go
+type SnapshotError struct {
+	Root  string
+	Cause error
+}
+```
+
+```go
+type MaterializeError struct {
+	Ref   Ref
+	Dest  string
+	Cause error
+}
+```
+
+```go
+type IntegrityError struct {
+	Ref Ref
+	Got string
+}
+```
+
+```go
+type ArchiveEntryError struct {
+	Name   string
+	Reason string
+}
+```
+
+```go
+type ArchiveLimit string
+```
+
+```go
+type ArchiveLimitError struct {
+	Limit    ArchiveLimit
+	Cap      int64
+	Observed int64
+}
+```
+
+```go
+type GCError struct {
+	Op    string
+	Ref   Ref
+	Cause error
+}
+```
+
+```go
+type NotDirError struct {
+	Path string
+}
+```
+
+```go
+type Store struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Options struct {
+	SpoolDir string
+
+	MaxEntries int64
+
+	MaxBytes int64
+}
+```
+
+```go
+type Option func(*Options)
+```
+
+```go
+type PersistencePathError struct {
+	Path  string
+	Cause error
+}
+```
+
+```go
+type NilBlobsError struct{}
+```
 
 ### Constants {#constants}
 
@@ -81,7 +182,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `InvalidRefError`, `DestNotEmptyError`, `SnapshotError`, `MaterializeError`, `IntegrityError`, `ArchiveEntryError`, `ArchiveLimitError`, `GCError`, `NotDirError`, `PersistencePathError`, `NilBlobsError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ArchiveEntryError`, `ArchiveLimitError`, `DestNotEmptyError`, `GCError`, `IntegrityError`, `InvalidRefError`, `MaterializeError`, `NilBlobsError`, `NotDirError`, `PersistencePathError`, `SnapshotError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

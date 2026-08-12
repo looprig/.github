@@ -52,8 +52,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (t *TaskList) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
 - `func (t *TaskList) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
 - `func (*TaskList) Sequential() bool`
-- `func (*prepareError) Error() string`
-- `func (b toolBase) AuditSummary(string) string`
 - `func (t *TaskUpdate) Info(context.Context) (*tool.ToolInfo, error)`
 - `func (t *TaskUpdate) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
 - `func (t *TaskUpdate) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
@@ -61,7 +59,46 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`TaskCreate`, `TaskGet`, `TaskList`, `Status`, `Task`, `TaskUpdate`
+```go
+type TaskCreate struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TaskGet struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TaskList struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Status string
+```
+
+```go
+type Task struct {
+	ID          string          `json:"id"`
+	Subject     string          `json:"subject"`
+	Description string          `json:"description"`
+	ActiveForm  string          `json:"activeForm,omitempty"`
+	Status      Status          `json:"status"`
+	BlockedBy   []string        `json:"blockedBy,omitempty"`
+	Blocks      []string        `json:"blocks,omitempty"`
+	Metadata    json.RawMessage `json:"metadata,omitempty"`
+}
+```
+
+```go
+type TaskUpdate struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

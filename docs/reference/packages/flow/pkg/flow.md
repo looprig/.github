@@ -58,18 +58,15 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func WithErrorRoute[S any](handler VertexID, record Reducer[S, error]) VertexOption[S]`
 - `func WithErrorPause[S any]() VertexOption[S]`
 - `func WithTimeout[S any](d time.Duration) VertexOption[S]`
-- `func AddVertex[I, O, S any]( g *Graph[S], id VertexID, task Task[I, O], selector Selector[S, I], reducer Reducer[S, O], opts ...VertexOption[S],) error`
+- `func AddVertex[I, O, S any](g *Graph[S], id VertexID, task Task[I, O], selector Selector[S, I], reducer Reducer[S, O], opts ...VertexOption[S]) error`
 
 ### Methods {#methods}
 
-- `func (e *codecError) Error() string`
-- `func (e *codecError) Unwrap() error`
 - `func (g *Graph[S]) Compile(entry, finish VertexID, opts ...CompileOption) (*Runner[S], error)`
 - `func (r *Runner[S]) Status(ctx context.Context, id GraphRunID) (GraphRunState, error)`
 - `func (r *Runner[S]) Get(ctx context.Context, id GraphRunID) (*Result[S], error)`
 - `func (r *Runner[S]) Cancel(ctx context.Context, id GraphRunID, reason string, opts ...RunOption) error`
 - `func (o WorkOp) String() string`
-- `func (e *errObservedCancellation) Error() string`
 - `func (e *DuplicateVertexError) Error() string`
 - `func (e *DuplicateConditionalEdgeError) Error() string`
 - `func (e *UnknownVertexError) Error() string`
@@ -77,7 +74,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *AmbiguousRoutingError) Error() string`
 - `func (e *MissingEntryError) Error() string`
 - `func (e *BuildError) Error() string`
-- `func (e *internalTypeError) Error() string`
 - `func (e *MaxStepsExceededError) Error() string`
 - `func (e *UndeclaredTargetError) Error() string`
 - `func (e *DeadEndError) Error() string`
@@ -87,7 +83,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *VertexError) Unwrap() error`
 - `func (e *CheckpointDecodeError) Error() string`
 - `func (e *CheckpointDecodeError) Unwrap() error`
-- `func (e *phaseComboError) Error() string`
 - `func (e *CheckpointNotFoundError) Error() string`
 - `func (e *ResumeTerminalError) Error() string`
 - `func (e *GraphMismatchError) Error() string`
@@ -97,16 +92,8 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *RevisionConflictError) Error() string`
 - `func (e *StoreError) Error() string`
 - `func (e *StoreError) Unwrap() error`
-- `func (e *interruptSignal) Error() string`
 - `func (g *Graph[S]) AddEdge(from, to VertexID) error`
 - `func (g *Graph[S]) AddConditionalEdge(from VertexID, c Condition[S]) error`
-- `func (h *runnerHandle[S]) GraphID() GraphID`
-- `func (h *runnerHandle[S]) GraphVersion() string`
-- `func (h *runnerHandle[S]) Run(ctx context.Context, stateJSON json.RawMessage, opts ...RunOption) (*RunResult, error)`
-- `func (h *runnerHandle[S]) Resume(ctx context.Context, id GraphRunID, payloadJSON json.RawMessage, opts ...RunOption) (*RunResult, error)`
-- `func (h *runnerHandle[S]) Status(ctx context.Context, id GraphRunID) (GraphRunState, error)`
-- `func (h *runnerHandle[S]) Get(ctx context.Context, id GraphRunID) (*RunResult, error)`
-- `func (h *runnerHandle[S]) Cancel(ctx context.Context, id GraphRunID, reason string, opts ...RunOption) error`
 - `func (id GraphID) String() string`
 - `func (id GraphID) MarshalText() ([]byte, error)`
 - `func (id *GraphID) UnmarshalText(b []byte) error`
@@ -135,7 +122,462 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`StepPhase`, `Checkpoint`, `RouteRecord`, `InterruptKind`, `InterruptRecord`, `HaltKind`, `HaltRecord`, `CompileOption`, `WorkOp`, `GraphVersionKey`, `Work`, `Delivery`, `ControlPlane`, `DuplicateVertexError`, `DuplicateConditionalEdgeError`, `UnknownVertexError`, `UnreachableVertexError`, `AmbiguousRoutingError`, `MissingEntryError`, `BuildError`, `MaxStepsExceededError`, `UndeclaredTargetError`, `DeadEndError`, `ConditionError`, `VertexError`, `CheckpointDecodeError`, `CheckpointNotFoundError`, `ResumeTerminalError`, `GraphMismatchError`, `GraphVersionMismatchError`, `GraphRunMismatchError`, `GraphRunExistsError`, `RevisionConflictError`, `StoreError`, `Condition`, `Graph`, `GraphOption`, `RunResult`, `RunnerHandle`, `Hooks`, `Interruption`, `Halt`, `RetryPolicy`, `Runner`, `Result`, `CheckpointGranularity`, `RunOption`, `Resolver`, `UnknownWorkOpError`, `RunStatus`, `GraphRunState`, `VertexStatus`, `VertexState`, `RunInfo`, `IdempotencyKey`, `CheckpointStore`, `MemStore`, `TaskFunc`, `Task`, `FuncTask`, `Selector`, `Reducer`, `VertexOption`
+```go
+type StepPhase int
+```
+
+```go
+type Checkpoint struct {
+	Run        GraphRunState
+	StepBase   json.RawMessage `json:",omitempty"`
+	State      json.RawMessage `json:",omitempty"`
+	Vertices   []VertexState
+	Frontier   []VertexID
+	Routes     []RouteRecord
+	Phase      StepPhase
+	Interrupts []InterruptRecord
+	Halt       *HaltRecord
+}
+```
+
+```go
+type RouteRecord struct {
+	From        VertexID
+	To          []VertexID
+	Conditional bool
+}
+```
+
+```go
+type InterruptKind int
+```
+
+```go
+type InterruptRecord struct {
+	Vertex       VertexID
+	Kind         InterruptKind
+	Info         json.RawMessage `json:",omitempty"`
+	Cause        string
+	Continuation json.RawMessage `json:",omitempty"`
+}
+```
+
+```go
+type HaltKind int
+```
+
+```go
+type HaltRecord struct {
+	Kind  HaltKind
+	Step  StepID
+	Cause string
+}
+```
+
+```go
+type CompileOption func(*compileConfig)
+```
+
+```go
+type WorkOp uint8
+```
+
+```go
+type GraphVersionKey struct {
+	GraphID      GraphID
+	GraphVersion string
+}
+```
+
+```go
+type Work struct {
+	Key        GraphVersionKey
+	GraphRunID GraphRunID
+	Op         WorkOp
+	Input      json.RawMessage
+}
+```
+
+```go
+type Delivery struct {
+	Work Work
+	Ack  func() error
+	Nack func() error
+}
+```
+
+```go
+type ControlPlane interface {
+	Submit(ctx context.Context, w Work) error
+
+	Consume(ctx context.Context, serves []GraphVersionKey) (<-chan Delivery, error)
+}
+```
+
+```go
+type DuplicateVertexError struct{ VertexID VertexID }
+```
+
+```go
+type DuplicateConditionalEdgeError struct{ From VertexID }
+```
+
+```go
+type UnknownVertexError struct{ VertexID VertexID }
+```
+
+```go
+type UnreachableVertexError struct{ VertexID VertexID }
+```
+
+```go
+type AmbiguousRoutingError struct{ VertexID VertexID }
+```
+
+```go
+type MissingEntryError struct {
+	VertexID VertexID
+	Role     string
+}
+```
+
+```go
+type BuildError struct {
+	Op     string
+	Detail string
+}
+```
+
+```go
+type MaxStepsExceededError struct {
+	Max  int
+	Step StepID
+}
+```
+
+```go
+type UndeclaredTargetError struct {
+	From   VertexID
+	Target VertexID
+}
+```
+
+```go
+type DeadEndError struct{ Step StepID }
+```
+
+```go
+type ConditionError struct {
+	From VertexID
+	Err  error
+}
+```
+
+```go
+type VertexError struct {
+	VertexID    VertexID
+	VertexRunID VertexRunID
+	Attempt     int
+	Err         error
+}
+```
+
+```go
+type CheckpointDecodeError struct {
+	Field string
+	Err   error
+}
+```
+
+```go
+type CheckpointNotFoundError struct{ GraphRunID GraphRunID }
+```
+
+```go
+type ResumeTerminalError struct{ Status RunStatus }
+```
+
+```go
+type GraphMismatchError struct {
+	Expected GraphID
+	Actual   GraphID
+}
+```
+
+```go
+type GraphVersionMismatchError struct {
+	Expected string
+	Actual   string
+}
+```
+
+```go
+type GraphRunMismatchError struct {
+	Requested GraphRunID
+	Actual    GraphRunID
+}
+```
+
+```go
+type GraphRunExistsError struct{ GraphRunID GraphRunID }
+```
+
+```go
+type RevisionConflictError struct {
+	GraphRunID GraphRunID
+	Expected   uint64
+	Actual     uint64
+}
+```
+
+```go
+type StoreError struct {
+	Op  string
+	Err error
+}
+```
+
+```go
+type Condition[S any] struct {
+	Targets []VertexID
+	Pick    func(ctx context.Context, s S) ([]VertexID, error)
+}
+```
+
+```go
+type Graph[S any] struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type GraphOption func(*graphConfig)
+```
+
+```go
+type RunResult struct {
+	Run        GraphRunState
+	State      json.RawMessage
+	Interrupts []Interruption
+	Halt       *Halt
+}
+```
+
+```go
+type RunnerHandle interface {
+	GraphID() GraphID
+
+	GraphVersion() string
+
+	Run(ctx context.Context, stateJSON json.RawMessage, opts ...RunOption) (*RunResult, error)
+
+	Resume(ctx context.Context, id GraphRunID, payloadJSON json.RawMessage, opts ...RunOption) (*RunResult, error)
+
+	Status(ctx context.Context, id GraphRunID) (GraphRunState, error)
+
+	Get(ctx context.Context, id GraphRunID) (*RunResult, error)
+
+	Cancel(ctx context.Context, id GraphRunID, reason string, opts ...RunOption) error
+}
+```
+
+```go
+type Hooks struct {
+	OnRunStart     func(ctx context.Context, ev GraphRunState)
+	OnRunFinish    func(ctx context.Context, ev GraphRunState)
+	OnVertexStart  func(ctx context.Context, ev VertexState)
+	OnVertexFinish func(ctx context.Context, ev VertexState)
+	OnEdge         func(ctx context.Context, from, to VertexID, run GraphRunState)
+	OnStep         func(ctx context.Context, run GraphRunState, activated int)
+	OnCheckpoint   func(ctx context.Context, id GraphRunID, rev uint64, step StepID)
+	OnInterrupt    func(ctx context.Context, iv Interruption)
+	OnHalt         func(ctx context.Context, h Halt)
+}
+```
+
+```go
+type GraphID uuid.UUID
+```
+
+```go
+type VertexID uuid.UUID
+```
+
+```go
+type GraphRunID uuid.UUID
+```
+
+```go
+type VertexRunID uuid.UUID
+```
+
+```go
+type StepID int
+```
+
+```go
+type Interruption struct {
+	GraphRunID GraphRunID
+	Vertex     VertexID
+	Kind       InterruptKind
+	Info       any
+	Cause      error
+}
+```
+
+```go
+type Halt struct {
+	GraphRunID GraphRunID
+	Kind       HaltKind
+	Step       StepID
+	Cause      error
+}
+```
+
+```go
+type RetryPolicy struct {
+	MaxAttempts int
+
+	Backoff func(attempt int) time.Duration
+
+	Retryable func(err error) bool
+}
+```
+
+```go
+type Runner[S any] struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Result[S any] struct {
+	Run        GraphRunState
+	State      S
+	Interrupts []Interruption
+	Halt       *Halt
+}
+```
+
+```go
+type CheckpointGranularity int
+```
+
+```go
+type RunOption func(*runConfig)
+```
+
+```go
+type Resolver interface {
+	Resolve(id GraphID, version string) (RunnerHandle, bool)
+
+	Keys() []GraphVersionKey
+}
+```
+
+```go
+type UnknownWorkOpError struct{ Op WorkOp }
+```
+
+```go
+type RunStatus int
+```
+
+```go
+type GraphRunState struct {
+	GraphRunID    GraphRunID
+	GraphID       GraphID
+	GraphVersion  string
+	Status        RunStatus
+	Step          StepID
+	Revision      uint64
+	CreatedAt     time.Time
+	StartedAt     time.Time
+	UpdatedAt     time.Time
+	CompletedAt   time.Time
+	InterruptedAt time.Time
+	CancelledAt   time.Time
+	CancelReason  string
+}
+```
+
+```go
+type VertexStatus int
+```
+
+```go
+type VertexState struct {
+	VertexID      VertexID
+	VertexRunID   VertexRunID
+	Step          StepID
+	Status        VertexStatus
+	Attempt       int
+	CreatedAt     time.Time
+	StartedAt     time.Time
+	CompletedAt   time.Time
+	InterruptedAt time.Time
+	FailedAt      time.Time
+	Err           string
+}
+```
+
+```go
+type RunInfo struct {
+	GraphID     GraphID
+	GraphRunID  GraphRunID
+	VertexID    VertexID
+	VertexRunID VertexRunID
+	Step        StepID
+}
+```
+
+```go
+type IdempotencyKey string
+```
+
+```go
+type CheckpointStore interface {
+	Append(ctx context.Context, cp *Checkpoint) error
+
+	Latest(ctx context.Context, id GraphRunID) (*Checkpoint, error)
+
+	History(ctx context.Context, id GraphRunID) ([]*Checkpoint, error)
+}
+```
+
+```go
+type MemStore struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TaskFunc[I, O any] func(ctx context.Context, in I) (O, error)
+```
+
+```go
+type Task[I, O any] interface {
+	Execute(ctx context.Context, in I) (O, error)
+}
+```
+
+```go
+type FuncTask[I, O any] struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Selector[S, I any] func(s S) I
+```
+
+```go
+type Reducer[S, O any] func(s *S, out O) error
+```
+
+```go
+type VertexOption[S any] func(*vertexConfig[S])
+```
 
 ### Constants {#constants}
 
@@ -149,7 +591,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `DuplicateVertexError`, `DuplicateConditionalEdgeError`, `UnknownVertexError`, `UnreachableVertexError`, `AmbiguousRoutingError`, `MissingEntryError`, `BuildError`, `MaxStepsExceededError`, `UndeclaredTargetError`, `DeadEndError`, `ConditionError`, `VertexError`, `CheckpointDecodeError`, `CheckpointNotFoundError`, `ResumeTerminalError`, `GraphMismatchError`, `GraphVersionMismatchError`, `GraphRunMismatchError`, `GraphRunExistsError`, `RevisionConflictError`, `StoreError`, `UnknownWorkOpError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AmbiguousRoutingError`, `BuildError`, `CheckpointDecodeError`, `CheckpointNotFoundError`, `ConditionError`, `DeadEndError`, `DuplicateConditionalEdgeError`, `DuplicateVertexError`, `GraphMismatchError`, `GraphRunExistsError`, `GraphRunMismatchError`, `GraphVersionMismatchError`, `MaxStepsExceededError`, `MissingEntryError`, `ResumeTerminalError`, `RevisionConflictError`, `StoreError`, `UndeclaredTargetError`, `UnknownVertexError`, `UnknownWorkOpError`, `UnreachableVertexError`, `VertexError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

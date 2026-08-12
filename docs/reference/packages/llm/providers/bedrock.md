@@ -48,7 +48,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (c *Client) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
 - `func (c *Client) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
 - `func (c *Counter) CountContext(ctx context.Context, req inference.Request) (contextcount.ContextCount, error)`
-- `func (c *countScalar) UnmarshalJSON(data []byte) error`
 - `func (c *Counter) CounterCapability() contextcount.CounterCapability`
 - `func (e *UnsupportedAPIFormatError) Error() string`
 - `func (e *RequestBuildError) Error() string`
@@ -68,7 +67,130 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Client`, `Counter`, `UnsupportedAPIFormatError`, `RequestBuildError`, `ConfigError`, `BodyTransformError`, `StreamingNotSupportedError`, `CounterStateReason`, `CounterStateError`, `CounterEndpointReason`, `CounterEndpointError`, `CounterRequestReason`, `CounterRequestError`, `CounterResponseReason`, `CounterResponseError`, `ReasoningOptions`, `ServiceTier`, `PerformanceLatency`, `GuardrailOptions`, `CachePointOptions`, `Option`, `OptionError`
+```go
+type Client struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Counter struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type UnsupportedAPIFormatError struct {
+	APIFormat model.APIFormat
+}
+```
+
+```go
+type RequestBuildError struct {
+	Err error
+}
+```
+
+```go
+type ConfigError struct {
+	Field  string
+	Reason string
+}
+```
+
+```go
+type BodyTransformError struct {
+	Err error
+}
+```
+
+```go
+type StreamingNotSupportedError struct{}
+```
+
+```go
+type CounterStateReason string
+```
+
+```go
+type CounterStateError struct {
+	Reason CounterStateReason
+}
+```
+
+```go
+type CounterEndpointReason string
+```
+
+```go
+type CounterEndpointError struct {
+	Reason CounterEndpointReason
+}
+```
+
+```go
+type CounterRequestReason string
+```
+
+```go
+type CounterRequestError struct {
+	Reason CounterRequestReason
+	Err    error
+}
+```
+
+```go
+type CounterResponseReason string
+```
+
+```go
+type CounterResponseError struct {
+	Reason CounterResponseReason
+	Err    error
+}
+```
+
+```go
+type ReasoningOptions struct {
+	Type         string
+	BudgetTokens *int
+}
+```
+
+```go
+type ServiceTier string
+```
+
+```go
+type PerformanceLatency string
+```
+
+```go
+type GuardrailOptions struct {
+	Identifier           string
+	Version              string
+	Trace                string
+	StreamProcessingMode string
+}
+```
+
+```go
+type CachePointOptions struct {
+	Type string
+	TTL  string
+}
+```
+
+```go
+type Option func(*config)
+```
+
+```go
+type OptionError struct {
+	Reason string
+	Err    error
+}
+```
 
 ### Constants {#constants}
 
@@ -82,7 +204,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `UnsupportedAPIFormatError`, `RequestBuildError`, `ConfigError`, `BodyTransformError`, `StreamingNotSupportedError`, `CounterStateError`, `CounterEndpointError`, `CounterRequestError`, `CounterResponseError`, `OptionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BodyTransformError`, `ConfigError`, `CounterEndpointError`, `CounterRequestError`, `CounterResponseError`, `CounterStateError`, `OptionError`, `RequestBuildError`, `StreamingNotSupportedError`, `UnsupportedAPIFormatError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

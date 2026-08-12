@@ -57,15 +57,66 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *UnsupportedChoiceCountError) Error() string`
 - `func (e *StreamTerminatedError) Error() string`
 - `func (e *UnsupportedChunkError) Error() string`
-- `func (c *wireChatContent) UnmarshalJSON(data []byte) error`
-- `func (e *serverStreamEncoder) WriteChunk(chunk content.Chunk) error`
-- `func (e *serverStreamEncoder) Finish(result stream.StreamResult) error`
-- `func (e *serverStreamEncoder) Fail(err error) error`
 - `func (Codec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
 
 ### Types {#types}
 
-`Codec`, `UnsupportedBlockError`, `ServerDecodeError`, `DuplicateKeyError`, `UnsupportedChoiceCountError`, `StreamTerminatedError`, `UnsupportedChunkError`, `ChatRequest`
+```go
+type Codec struct{}
+```
+
+```go
+type UnsupportedBlockError struct {
+	Block string
+}
+```
+
+```go
+type ServerDecodeError struct {
+	Reason string
+	Detail string
+}
+```
+
+```go
+type DuplicateKeyError struct {
+	Key string
+}
+```
+
+```go
+type UnsupportedChoiceCountError struct {
+	N int
+}
+```
+
+```go
+type StreamTerminatedError struct{}
+```
+
+```go
+type UnsupportedChunkError struct {
+	Chunk string
+}
+```
+
+```go
+type ChatRequest struct {
+	Model          string             `json:"model"`
+	Messages       []chatMessage      `json:"messages"`
+	Tools          []chatTool         `json:"tools,omitempty"`
+	ResponseFormat *responseFormat    `json:"response_format,omitempty"`
+	ToolChoice     string             `json:"tool_choice,omitempty"`
+	Temperature    *float64           `json:"temperature,omitempty"`
+	TopP           *float64           `json:"top_p,omitempty"`
+	MaxTokens      *int               `json:"max_tokens,omitempty"`
+	Stop           []string           `json:"stop,omitempty"`
+	Stream         bool               `json:"stream,omitempty"`
+	StreamOptions  *chatStreamOptions `json:"stream_options,omitempty"`
+
+	ReasoningEffort string `json:"reasoning_effort,omitempty"`
+}
+```
 
 ### Constants {#constants}
 
@@ -79,7 +130,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `UnsupportedBlockError`, `ServerDecodeError`, `DuplicateKeyError`, `UnsupportedChoiceCountError`, `StreamTerminatedError`, `UnsupportedChunkError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DuplicateKeyError`, `ServerDecodeError`, `StreamTerminatedError`, `UnsupportedBlockError`, `UnsupportedChoiceCountError`, `UnsupportedChunkError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

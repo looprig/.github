@@ -47,7 +47,149 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-No exported types are declared in this package.
+```go
+type EventStream = presentation.EventStream
+```
+
+```go
+type Agent = presentation.Agent
+```
+
+```go
+type OpenAgent = presentation.OpenAgent
+```
+
+```go
+type AgentBanner = presentation.AgentBanner
+```
+
+```go
+type AgentHolder = presentation.AgentHolder
+```
+
+```go
+type TerminalErrorHolder = presentation.TerminalErrorHolder
+```
+
+```go
+type HandoffFinalizer = presentation.HandoffFinalizer
+```
+
+```go
+type Screen = presentation.Screen
+```
+
+```go
+type DisplayProjection = presentation.DisplayProjection
+```
+
+```go
+type RestoreBacklogError = presentation.RestoreBacklogError
+```
+
+```go
+type RuntimeCatalog = presentation.RuntimeCatalog
+```
+
+```go
+type RuntimeController = presentation.RuntimeController
+```
+
+```go
+type ModeID = presentation.ModeID
+```
+
+```go
+type ModelID = presentation.ModelID
+```
+
+```go
+type EffortID = presentation.EffortID
+```
+
+```go
+type ModeOption = presentation.ModeOption
+```
+
+```go
+type ModelOption = presentation.ModelOption
+```
+
+```go
+type EffortOption = presentation.EffortOption
+```
+
+```go
+type LoopRuntimeOptions = presentation.LoopRuntimeOptions
+```
+
+```go
+type SessionPresentation = presentation.SessionPresentation
+```
+
+```go
+type SessionPresenter = presentation.SessionPresenter
+```
+
+```go
+type SessionID = presentation.SessionID
+```
+
+```go
+type SessionSummary = presentation.SessionSummary
+```
+
+```go
+type SessionBrowser = presentation.SessionBrowser
+```
+
+```go
+type Option = presentation.Option
+```
+
+```go
+type Status = presentation.Status
+```
+
+```go
+type ToolStatus = presentation.ToolStatus
+```
+
+```go
+type ToolCallView = presentation.ToolCallView
+```
+
+```go
+type EmptyInputError = input.EmptyInputError
+```
+
+```go
+type UnsupportedAttachmentError = input.UnsupportedAttachmentError
+```
+
+```go
+type BinaryAttachmentError = input.BinaryAttachmentError
+```
+
+```go
+type ImageUnsupportedError = input.ImageUnsupportedError
+```
+
+```go
+type DeniedAttachmentError = input.DeniedAttachmentError
+```
+
+```go
+type AttachmentTooLargeError = input.AttachmentTooLargeError
+```
+
+```go
+type AttachmentNotFoundError = input.AttachmentNotFoundError
+```
+
+```go
+type AttachmentReadError = input.AttachmentReadError
+```
 
 ### Constants {#constants}
 

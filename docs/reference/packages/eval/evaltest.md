@@ -45,7 +45,15 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`TB`
+```go
+type TB interface {
+	Helper()
+
+	Logf(format string, args ...any)
+
+	Errorf(format string, args ...any)
+}
+```
 
 ### Constants {#constants}
 

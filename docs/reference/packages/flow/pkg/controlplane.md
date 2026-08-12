@@ -46,7 +46,19 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`ClosedError`, `MemOption`, `MemControlPlane`
+```go
+type ClosedError struct{}
+```
+
+```go
+type MemOption func(*MemControlPlane)
+```
+
+```go
+type MemControlPlane struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

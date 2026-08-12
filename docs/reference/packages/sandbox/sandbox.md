@@ -59,7 +59,133 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-No exported types are declared in this package.
+```go
+type Access = profile.Access
+```
+
+```go
+type Home = profile.Home
+```
+
+```go
+type Isolation = profile.Isolation
+```
+
+```go
+type RootAccess = profile.RootAccess
+```
+
+```go
+type ProfileConfig = profile.ProfileConfig
+```
+
+```go
+type Profile = profile.Profile
+```
+
+```go
+type ReportEntry = profile.ReportEntry
+```
+
+```go
+type CompileReport = profile.CompileReport
+```
+
+```go
+type Guarantees = profile.Guarantees
+```
+
+```go
+type NetworkTarget = network.Target
+```
+
+```go
+type EgressRoute = network.Route
+```
+
+```go
+type EgressRouteResolver = network.RouteResolver
+```
+
+```go
+type NetworkTargetDeniedError = network.TargetDeniedError
+```
+
+```go
+type WindowsSandboxMode = windows.SandboxMode
+```
+
+```go
+type WindowsSetupConfig = windows.SetupConfig
+```
+
+```go
+type WindowsSetupProblemCode = windows.WindowsSetupProblemCode
+```
+
+```go
+type WindowsSetupProblem = windows.SetupProblem
+```
+
+```go
+type WindowsSetupStatus = windows.SetupStatus
+```
+
+```go
+type Executor = exec.Executor
+```
+
+```go
+type ExecutorSet = exec.ExecutorSet
+```
+
+```go
+type ExecutorSetOption = exec.ExecutorSetOption
+```
+
+```go
+type ProcessOptions = exec.ProcessOptions
+```
+
+```go
+type PreparedProcess = exec.PreparedProcess
+```
+
+```go
+type Process = exec.Process
+```
+
+```go
+type ProcessResult = exec.ProcessResult
+```
+
+```go
+type ProcessAccess = exec.ProcessAccess
+```
+
+```go
+type ProcessAccessKind = exec.ProcessAccessKind
+```
+
+```go
+type ProcessActivity = exec.ProcessActivity
+```
+
+```go
+type ProcessActivityKind = exec.ProcessActivityKind
+```
+
+```go
+type ProcessStreamMode = exec.ProcessStreamMode
+```
+
+```go
+type ProcessSignal = exec.ProcessSignal
+```
+
+```go
+type LifetimeContainment = exec.LifetimeContainment
+```
 
 ### Constants {#constants}
 

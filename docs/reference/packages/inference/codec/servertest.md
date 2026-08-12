@@ -44,7 +44,40 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`Factory`, `Config`
+```go
+type Factory func() codec.ServerCodec
+```
+
+```go
+type Config struct {
+	NewCodec Factory
+
+	Method string
+	Path   string
+
+	ContentType string
+
+	ValidBody []byte
+
+	UnmatchedMethod string
+	UnmatchedPath   string
+
+	WrongContentType string
+
+	MalformedBody []byte
+
+	SampleResponse *inference.Response
+
+	SampleChunks []content.Chunk
+
+	SampleResult stream.StreamResult
+
+	SampleError error
+
+	ForeignProviderStateResponse *inference.Response
+	ForeignProviderStateMarker   string
+}
+```
 
 ### Constants {#constants}
 

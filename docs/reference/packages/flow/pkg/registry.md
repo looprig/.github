@@ -46,7 +46,25 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Registry`, `GraphManifest`, `DuplicateRegistrationError`
+```go
+type Registry struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type GraphManifest struct {
+	GraphID  flow.GraphID
+	Versions []string
+}
+```
+
+```go
+type DuplicateRegistrationError struct {
+	GraphID flow.GraphID
+	Version string
+}
+```
 
 ### Constants {#constants}
 

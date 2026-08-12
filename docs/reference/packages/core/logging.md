@@ -44,7 +44,19 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Config`, `LevelError`
+```go
+type Config struct {
+	Writer io.Writer
+
+	Level slog.Level
+}
+```
+
+```go
+type LevelError struct {
+	Value string
+}
+```
 
 ### Constants {#constants}
 

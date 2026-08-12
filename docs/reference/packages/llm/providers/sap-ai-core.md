@@ -47,11 +47,6 @@ The following surface is read from the pinned implementation files. Signatures a
 
 - `func (c *Client) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
 - `func (c *Client) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
-- `func (c modelParamsCodec) EncodeRequest(req inference.Request, mode codec.RequestMode) (codec.EncodedRequest, error)`
-- `func (c modelParamsCodec) DecodeResponse(body []byte) (*inference.Response, error)`
-- `func (c modelParamsCodec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
-- `func (r headerRoute) BuildRoute(baseURL string, _ inference.Request, _ codec.RequestMode) (route.Route, error)`
-- `func (a *serviceKeyAuthenticator) Authorize(ctx context.Context, req *http.Request) error`
 - `func (e *ConfigurationError) Error() string`
 - `func (e *ConfigurationError) Unwrap() error`
 - `func (e *AuthError) Error() string`
@@ -61,7 +56,55 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`ServiceKey`, `Option`, `Client`, `ConfigurationReason`, `ConfigurationError`, `AuthError`, `RequestError`, `CounterSupportError`
+```go
+type ServiceKey struct {
+	ClientID     string `json:"clientid"`
+	ClientSecret string `json:"clientsecret"`
+	TokenURL     string `json:"url"`
+	ServiceURLs  struct {
+		AIAPIURL string `json:"AI_API_URL"`
+	} `json:"serviceurls"`
+}
+```
+
+```go
+type Option func(*config)
+```
+
+```go
+type Client struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ConfigurationReason string
+```
+
+```go
+type ConfigurationError struct {
+	Reason ConfigurationReason
+	Err    error
+}
+```
+
+```go
+type AuthError struct {
+	Status int
+	Err    error
+}
+```
+
+```go
+type RequestError struct {
+	Status int
+	Err    error
+}
+```
+
+```go
+type CounterSupportError = llm.CounterSupportError
+```
 
 ### Constants {#constants}
 
@@ -75,7 +118,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ConfigurationError`, `AuthError`, `RequestError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AuthError`, `ConfigurationError`, `RequestError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

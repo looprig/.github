@@ -41,13 +41,39 @@ The following surface is read from the pinned implementation files. Signatures a
 
 - `func (e *Error) Error() string`
 - `func (e *Error) Unwrap() error`
-- `func (e *getterError) Error() string`
-- `func (e *getterError) Unwrap() error`
-- `func (g *boundedGetter) Get(rawURL string) (map[string][]string, []byte, error)`
 
 ### Types {#types}
 
-`Reason`, `Error`, `Options`, `GPUEvidence`
+```go
+type Reason string
+```
+
+```go
+type Error struct {
+	Reason Reason
+	Err    error
+}
+```
+
+```go
+type Options struct {
+	GetCollateral bool
+
+	CheckRevocations bool
+
+	Getter trust.HTTPSGetter
+
+	Now func() time.Time
+}
+```
+
+```go
+type GPUEvidence struct {
+	Certificate string `json:"certificate"`
+	Evidence    string `json:"evidence"`
+	Arch        string `json:"arch"`
+}
+```
 
 ### Constants {#constants}
 

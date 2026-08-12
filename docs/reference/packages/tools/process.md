@@ -69,7 +69,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *GenerateError) Error() string`
 - `func (e *GenerateError) Unwrap() error`
 - `func (e *CollisionError) Error() string`
-- `func (e *processInputPrepareError) Error() string`
 - `func (t *ProcessInputTool) Info(context.Context) (*tool.ToolInfo, error)`
 - `func (t *ProcessInputTool) PrepareCall(_ context.Context, _ uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
 - `func (t *ProcessInputTool) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
@@ -83,7 +82,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (s *ManifestStore) Load(h Handle) (Manifest, error)`
 - `func (s *ManifestStore) Save(m Manifest) error`
 - `func (s *ManifestStore) Delete(h Handle) error`
-- `func (e *processOutputPrepareError) Error() string`
 - `func (t *ProcessOutputTool) Info(context.Context) (*tool.ToolInfo, error)`
 - `func (t *ProcessOutputTool) PrepareCall(_ context.Context, _ uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
 - `func (t *ProcessOutputTool) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
@@ -101,22 +99,350 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (s State) Valid() bool`
 - `func (s State) Terminal() bool`
 - `func (e *TransitionError) Error() string`
-- `func (e *processStopPrepareError) Error() string`
 - `func (t *ProcessStopTool) Info(context.Context) (*tool.ToolInfo, error)`
 - `func (t *ProcessStopTool) PrepareCall(_ context.Context, _ uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
 - `func (t *ProcessStopTool) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
 - `func (s *Supervisor) Shutdown(ctx context.Context) error`
-- `func (s *Supervisor) Start( ctx context.Context, owner Owner, origin Origin, prepared tool.PreparedProcess, lease Lease, sink lifecycleSink, observations observationInvalidator, ceiling StorageCeiling, yield YieldSettings,) (Handle, error)`
+- `func (s *Supervisor) Start(ctx context.Context, owner Owner, origin Origin, prepared tool.PreparedProcess, lease Lease, sink lifecycleSink, observations observationInvalidator, ceiling StorageCeiling, yield YieldSettings) (Handle, error)`
 - `func (k WaitKind) Valid() bool`
 - `func (s *Supervisor) Wait(ctx context.Context, owner Owner, kind WaitKind, targets []WaitTarget) ([]WaitStatus, error)`
 
 ### Types {#types}
 
-`Buffer`, `Config`, `Code`, `Error`, `Owner`, `Origin`, `Handle`, `HandleExists`, `GenerateError`, `CollisionError`, `ProcessInputTool`, `AccessMode`, `CommandMetadata`, `SpoolCursors`, `Result`, `LifecycleEventIDs`, `Manifest`, `TerminalResultChangedError`, `LifecycleEventIDChangedError`, `NonMonotonicUpdateError`, `ImmutableIdentityChangedError`, `ManifestStore`, `ProcessOutputTool`, `Reader`, `Artifact`, `SafeTextResult`, `Base64Result`, `RestoreError`, `RestoreReport`, `SupervisorResource`, `Spool`, `State`, `TransitionError`, `ProcessStopTool`, `Lease`, `StorageCeiling`, `YieldSettings`, `Supervisor`, `Identity`, `WaitKind`, `WaitTarget`, `WaitStatus`
+```go
+type Buffer struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Config struct {
+	MaxRunningProcessesPerLoop int
+
+	MaxRunningProcessesPerSession int
+
+	MaxRetainedCompletedProcessesPerSession int
+
+	MaxProcessInMemoryBytes int64
+
+	MaxAggregateInMemoryBytes int64
+
+	MaxProcessSpoolBytes int64
+
+	MaxAggregateSpoolBytes int64
+
+	MaxInlineResultBytes int64
+
+	MaxPendingWaiters int
+
+	MaxPendingInputBytes int64
+
+	GracefulShutdownPeriod time.Duration
+}
+```
+
+```go
+type Code string
+```
+
+```go
+type Error struct {
+	Code  Code
+	Cause error
+}
+```
+
+```go
+type Owner struct {
+	SessionID uuid.UUID
+	LoopID    uuid.UUID
+}
+```
+
+```go
+type Origin struct {
+	ToolExecutionID uuid.UUID
+}
+```
+
+```go
+type Handle string
+```
+
+```go
+type HandleExists func(Handle) bool
+```
+
+```go
+type GenerateError struct{ Err error }
+```
+
+```go
+type CollisionError struct{ Attempts int }
+```
+
+```go
+type ProcessInputTool struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type AccessMode string
+```
+
+```go
+type CommandMetadata struct {
+	Command string
+
+	WorkDir string
+}
+```
+
+```go
+type SpoolCursors struct {
+	TotalBytes int64
+
+	RetainedFrom int64
+}
+```
+
+```go
+type Result struct {
+	ExitCode *int
+
+	Reason string
+}
+```
+
+```go
+type LifecycleEventIDs struct {
+	Started      uuid.UUID
+	Backgrounded uuid.UUID
+	Completed    uuid.UUID
+	Lost         uuid.UUID
+	CommandID    uuid.UUID
+}
+```
+
+```go
+type Manifest struct {
+	Identity
+
+	Command CommandMetadata
+	Access  AccessMode
+	TTY     bool
+
+	State State
+
+	CreatedAt  time.Time
+	StartedAt  *time.Time
+	FinishedAt *time.Time
+	Deadline   *time.Time
+
+	Cursors SpoolCursors
+	Result  Result
+
+	Events LifecycleEventIDs
+
+	CompletionPublished int64
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TerminalResultChangedError struct {
+	Handle Handle
+	State  State
+	Had    Result
+	Got    Result
+}
+```
+
+```go
+type LifecycleEventIDChangedError struct {
+	Handle Handle
+	Field  string
+	Had    uuid.UUID
+	Got    uuid.UUID
+}
+```
+
+```go
+type NonMonotonicUpdateError struct {
+	Handle Handle
+	Field  string
+	Had    int64
+	Got    int64
+}
+```
+
+```go
+type ImmutableIdentityChangedError struct {
+	Handle Handle
+}
+```
+
+```go
+type ManifestStore struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ProcessOutputTool struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Reader interface {
+	Read(cursor int64, maxBytes int) (data []byte, nextCursor int64, gap bool, err error)
+}
+```
+
+```go
+type Artifact struct {
+	ProcessID   Handle
+	StartCursor int64
+	EndCursor   int64
+	Encoding    string
+}
+```
+
+```go
+type SafeTextResult struct {
+	Output string
+
+	StartCursor int64
+
+	NextCursor int64
+
+	Gap bool
+
+	Normalized bool
+
+	Binary bool
+
+	Artifact Artifact
+}
+```
+
+```go
+type Base64Result struct {
+	Data string
+
+	StartCursor int64
+
+	NextCursor int64
+
+	Gap bool
+}
+```
+
+```go
+type RestoreError struct {
+	Handle Handle
+	Err    error
+}
+```
+
+```go
+type RestoreReport struct {
+	Reconciled []Handle
+	Errors     []RestoreError
+}
+```
+
+```go
+type SupervisorResource struct {
+	Supervisor *Supervisor
+	Manifests  *ManifestStore
+}
+```
+
+```go
+type Spool struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type State string
+```
+
+```go
+type TransitionError struct {
+	From State
+	To   State
+}
+```
+
+```go
+type ProcessStopTool struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Lease interface {
+	Release() error
+}
+```
+
+```go
+type StorageCeiling struct {
+	InMemoryBytes int64
+	SpoolBytes    int64
+}
+```
+
+```go
+type YieldSettings struct {
+	Yield bool
+}
+```
+
+```go
+type Supervisor struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Identity struct {
+	Handle Handle
+	Owner  Owner
+	Origin Origin
+}
+```
+
+```go
+type WaitKind string
+```
+
+```go
+type WaitTarget struct {
+	Handle     Handle
+	Generation uint64
+}
+```
+
+```go
+type WaitStatus struct {
+	Handle Handle
+
+	Generation uint64
+
+	Terminal bool
+
+	Found bool
+}
+```
 
 ### Constants {#constants}
 
-`DefaultMaxRunningProcessesPerLoop`, `DefaultMaxRunningProcessesPerSession`, `DefaultMaxRetainedCompletedProcessesPerSession`, `DefaultMaxProcessInMemoryBytes`, `DefaultMaxAggregateInMemoryBytes`, `CodeInvalidArguments`, `CodeInvalidSettings`, `CodeProcessQuotaExceeded`, `CodeOutputQuotaExceeded`, `CodeLifetimeEnforcementUnavailable`, `CodeProcessNotificationsUnsupported`, `CodeSpawnFailed`, `CodeProcessSetupFailed`, `CodePTYUnavailable`, `CodeNotFound`, `CodeStdinClosed`, `CodeInputBackpressure`, `CodeCursorGap`, `CodeCursorAhead`, `CodeTimedOut`, `CodeInterrupted`, `CodeTerminated`, `CodeKilled`, `CodeSupervisorShuttingDown`, `CodeManifestCorrupt`, `CodeSpoolCorrupt`, `CodeLostOnRestore`, `CodeTeardownFailed`, `HandleEntropyBytes`, `AccessReadOnly`, `AccessScopedWrite`, `AccessBroadWrite`, `ArtifactEncodingBase64`, `SupervisorResourceKey`, `StateStarting`, `StateRunning`, `StateExited`, `StateFailed`, `StateTimedOut`, `StateInterrupted`, `StateTerminated`, `StateKilled`, `StateLostOnRestore`, `WaitPoll`, `WaitAny`, `WaitAll`
+`DefaultMaxRunningProcessesPerLoop`, `DefaultMaxRunningProcessesPerSession`, `DefaultMaxRetainedCompletedProcessesPerSession`, `DefaultMaxProcessInMemoryBytes`, `DefaultMaxAggregateInMemoryBytes`, `DefaultMaxProcessSpoolBytes`, `DefaultMaxAggregateSpoolBytes`, `DefaultMaxInlineResultBytes`, `DefaultMaxPendingWaiters`, `DefaultMaxPendingInputBytes`, `DefaultGracefulShutdownPeriod`, `CodeInvalidArguments`, `CodeInvalidSettings`, `CodeProcessQuotaExceeded`, `CodeOutputQuotaExceeded`, `CodeLifetimeEnforcementUnavailable`, `CodeProcessNotificationsUnsupported`, `CodeSpawnFailed`, `CodeProcessSetupFailed`, `CodePTYUnavailable`, `CodeNotFound`, `CodeStdinClosed`, `CodeInputBackpressure`, `CodeCursorGap`, `CodeCursorAhead`, `CodeTimedOut`, `CodeInterrupted`, `CodeTerminated`, `CodeKilled`, `CodeSupervisorShuttingDown`, `CodeManifestCorrupt`, `CodeSpoolCorrupt`, `CodeLostOnRestore`, `CodeTeardownFailed`, `HandleEntropyBytes`, `AccessReadOnly`, `AccessScopedWrite`, `AccessBroadWrite`, `ArtifactEncodingBase64`, `SupervisorResourceKey`, `StateStarting`, `StateRunning`, `StateExited`, `StateFailed`, `StateTimedOut`, `StateInterrupted`, `StateTerminated`, `StateKilled`, `StateLostOnRestore`, `WaitPoll`, `WaitAny`, `WaitAll`
 
 ### Variables {#variables}
 
@@ -126,7 +452,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `Error`, `GenerateError`, `CollisionError`, `TerminalResultChangedError`, `LifecycleEventIDChangedError`, `NonMonotonicUpdateError`, `ImmutableIdentityChangedError`, `RestoreError`, `TransitionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CollisionError`, `Error`, `GenerateError`, `ImmutableIdentityChangedError`, `LifecycleEventIDChangedError`, `NonMonotonicUpdateError`, `RestoreError`, `TerminalResultChangedError`, `TransitionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

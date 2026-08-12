@@ -40,18 +40,22 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (stopWalkError) Error() string`
-- `func (ctxCancelledError) Error() string`
 - `func (g *Grep) Info(context.Context) (*tool.ToolInfo, error)`
 - `func (g *Grep) AuditSummary(argsJSON string) string`
 - `func (g *Grep) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
 - `func (g *Grep) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
-- `func (e *grepError) Error() string`
-- `func (e *grepError) Unwrap() error`
 
 ### Types {#types}
 
-`Grep`, `GrepOption`
+```go
+type Grep struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type GrepOption func(*Grep)
+```
 
 ### Constants {#constants}
 

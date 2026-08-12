@@ -56,7 +56,150 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`AppendVerifyError`, `ConflictError`, `AmbiguousError`, `RecordNotFoundError`, `KeyNotFoundError`, `BlobNotFoundError`, `BlobConflictError`, `LeaseHeldError`, `LeaseLostError`, `InvalidNameError`, `PathReporter`, `Ledger`, `Record`, `Cursor`, `Leaser`, `Lease`, `KV`, `Blobs`, `Composite`, `IncompleteCompositeError`
+```go
+type AppendVerifyError struct {
+	Name  string
+	Seq   uint64
+	Cause error
+}
+```
+
+```go
+type ConflictError struct {
+	Name     string
+	Expected uint64
+}
+```
+
+```go
+type AmbiguousError struct {
+	Name     string
+	Expected uint64
+	Cause    error
+}
+```
+
+```go
+type RecordNotFoundError struct {
+	Name string
+	Seq  uint64
+}
+```
+
+```go
+type KeyNotFoundError struct {
+	Key string
+}
+```
+
+```go
+type BlobNotFoundError struct {
+	Key string
+}
+```
+
+```go
+type BlobConflictError struct {
+	Key string
+}
+```
+
+```go
+type LeaseHeldError struct {
+	Name        string
+	HolderEpoch uint64
+}
+```
+
+```go
+type LeaseLostError struct {
+	Name  string
+	Epoch uint64
+}
+```
+
+```go
+type InvalidNameError struct {
+	Name string
+	Rule string
+}
+```
+
+```go
+type PathReporter interface {
+	StoragePaths() []string
+}
+```
+
+```go
+type Ledger interface {
+	Append(ctx context.Context, name string, expected uint64, payload []byte) error
+	Read(ctx context.Context, name string, from uint64) (Cursor, error)
+	Tip(ctx context.Context, name string) (uint64, error)
+	Delete(ctx context.Context, name string) error
+}
+```
+
+```go
+type Record struct {
+	Seq     uint64
+	Payload []byte
+}
+```
+
+```go
+type Cursor interface {
+	Next(ctx context.Context) (Record, error)
+	Close() error
+}
+```
+
+```go
+type Leaser interface {
+	Acquire(ctx context.Context, name string) (Lease, error)
+}
+```
+
+```go
+type Lease interface {
+	Epoch() uint64
+	Lost() <-chan struct{}
+	Release(ctx context.Context) error
+}
+```
+
+```go
+type KV interface {
+	Get(ctx context.Context, key string) (val []byte, rev uint64, err error)
+	Put(ctx context.Context, key string, expectedRev uint64, val []byte) (rev uint64, err error)
+	Keys(ctx context.Context, prefix string) ([]string, error)
+	Delete(ctx context.Context, key string) error
+}
+```
+
+```go
+type Blobs interface {
+	Put(ctx context.Context, key string, r io.Reader) error
+	Get(ctx context.Context, key string) (io.ReadCloser, error)
+	Delete(ctx context.Context, key string) error
+	List(ctx context.Context, prefix string) ([]string, error)
+}
+```
+
+```go
+type Composite struct {
+	Ledger
+	Leaser
+	KV
+	Blobs
+}
+```
+
+```go
+type IncompleteCompositeError struct {
+	Missing []string
+}
+```
 
 ### Constants {#constants}
 
@@ -70,7 +213,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `AppendVerifyError`, `ConflictError`, `AmbiguousError`, `RecordNotFoundError`, `KeyNotFoundError`, `BlobNotFoundError`, `BlobConflictError`, `LeaseHeldError`, `LeaseLostError`, `InvalidNameError`, `IncompleteCompositeError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AmbiguousError`, `AppendVerifyError`, `BlobConflictError`, `BlobNotFoundError`, `ConflictError`, `IncompleteCompositeError`, `InvalidNameError`, `KeyNotFoundError`, `LeaseHeldError`, `LeaseLostError`, `RecordNotFoundError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

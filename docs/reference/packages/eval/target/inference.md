@@ -49,12 +49,40 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *IdentityError) Unwrap() error`
 - `func (e *ObservationInvalidError) Error() string`
 - `func (e *ObservationInvalidError) Unwrap() error`
-- `func (t *target) Name() string`
-- `func (t *target) Observe(ctx context.Context, sc eval.Scenario) (eval.Observation, error)`
 
 ### Types {#types}
 
-`InferenceError`, `EmptyResponseReason`, `EmptyResponseError`, `IdentityError`, `ObservationInvalidError`, `Option`
+```go
+type InferenceError struct {
+	Cause error
+}
+```
+
+```go
+type EmptyResponseReason string
+```
+
+```go
+type EmptyResponseError struct {
+	Reason EmptyResponseReason
+}
+```
+
+```go
+type IdentityError struct {
+	Cause error
+}
+```
+
+```go
+type ObservationInvalidError struct {
+	Cause error
+}
+```
+
+```go
+type Option func(*options)
+```
 
 ### Constants {#constants}
 
@@ -68,7 +96,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `InferenceError`, `EmptyResponseError`, `IdentityError`, `ObservationInvalidError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `EmptyResponseError`, `IdentityError`, `InferenceError`, `ObservationInvalidError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

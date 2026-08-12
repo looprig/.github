@@ -64,17 +64,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (d Definition) RetryPolicy() RetryPolicy`
 - `func (d Definition) EvidenceToolPolicy() (EvidenceToolPolicy, bool)`
 - `func (d Definition) Bind(ctx context.Context, bindings Bindings) (BoundDefinition, error)`
-- `func (b *boundDefinitionState) Name() Name`
-- `func (b *boundDefinitionState) Participation() Participation`
-- `func (b *boundDefinitionState) Timeout() time.Duration`
-- `func (b *boundDefinitionState) Limits() Limits`
-- `func (b *boundDefinitionState) Descriptor() DefinitionDescriptor`
-- `func (b *boundDefinitionState) SystemPrompt() string`
-- `func (b *boundDefinitionState) EvidenceToolPolicy() (EvidenceToolPolicy, bool)`
-- `func (b *boundDefinitionState) RetryPolicy() RetryPolicy`
-- `func (b *boundDefinitionState) BindEvidenceTools( ctx context.Context, bindings EvidenceBindings,) ([]BoundEvidenceTool, error)`
-- `func (b *boundDefinitionState) OutputSchema() (*inference.OutputSchema, bool)`
-- `func (b *boundDefinitionState) ResolveInference(ctx context.Context, loopID uuid.UUID) (InferenceBinding, error)`
 - `func (e *DefinitionError) Error() string`
 - `func (e *DefinitionError) Unwrap() error`
 - `func (e *BindError) Error() string`
@@ -93,11 +82,213 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (r ReasonCode) Valid() bool`
 - `func (s TerminalStatus) Valid() bool`
 - `func (p RetryPolicy) Valid() bool`
-- `func (*recoverableTerminalValidationError) Error() string`
 
 ### Types {#types}
 
-`Name`, `Participation`, `ModelSource`, `Limits`, `ToolLoopLimits`, `EvidenceToolPolicy`, `InferenceBinding`, `ModelResolver`, `Bindings`, `EvidenceBindings`, `DefinitionDescriptor`, `Option`, `Definition`, `BoundDefinition`, `DefinitionErrorKind`, `DefinitionError`, `BindErrorKind`, `BindError`, `ResolveErrorKind`, `ResolveError`, `RevisionError`, `BoundEvidenceTool`, `RunID`, `Stage`, `ReasonCode`, `TerminalStatus`, `RetryPolicy`, `Request`, `Result`, `Outcome`
+```go
+type Name string
+```
+
+```go
+type Participation uint8
+```
+
+```go
+type ModelSource uint8
+```
+
+```go
+type Limits struct {
+	InputBytes  int
+	OutputBytes int
+}
+```
+
+```go
+type ToolLoopLimits struct {
+	MaxRounds        int
+	MaxCalls         int
+	MaxCallsPerRound int
+	MaxResultBytes   int
+	MaxEvidenceBytes int
+}
+```
+
+```go
+type EvidenceToolPolicy struct {
+	Revision    string
+	Limits      ToolLoopLimits
+	Definitions []tool.Definition
+}
+```
+
+```go
+type InferenceBinding struct {
+	Client inference.Client
+	Model  model.Model
+}
+```
+
+```go
+type ModelResolver interface {
+	ResolveHustleModel(context.Context, uuid.UUID) (InferenceBinding, error)
+}
+```
+
+```go
+type Bindings struct {
+	Models ModelResolver
+}
+```
+
+```go
+type EvidenceBindings struct {
+	SessionID     uuid.UUID
+	LoopID        uuid.UUID
+	ReadWorkspace *tool.ReadWorkspaceBinding
+}
+```
+
+```go
+type DefinitionDescriptor struct {
+	Name                     Name
+	Participation            Participation
+	ModelSource              ModelSource
+	NamedModelKey            model.ModelKey
+	NamedModelPolicyRevision string
+	PromptRevision           string
+	PromptSHA256             [sha256.Size]byte
+	OutputSchemaName         string `json:",omitzero"`
+
+	OutputSchemaSHA256              [sha256.Size]byte `json:",omitzero"`
+	StructuredOutputRevision        string            `json:",omitzero"`
+	PolicyRevision                  string
+	TimeoutNanos                    int64
+	Limits                          Limits
+	EvidenceToolPolicyRevision      string            `json:",omitzero"`
+	EvidenceToolDefinitionsSHA256   [sha256.Size]byte `json:",omitzero"`
+	EvidenceProducedToolNamesSHA256 [sha256.Size]byte `json:",omitzero"`
+	EvidenceToolLimits              ToolLoopLimits    `json:",omitzero"`
+	EvidenceToolDefinitionCount     int               `json:",omitzero"`
+	StructuredOutputWithTools       bool              `json:",omitzero"`
+	RetryPolicy                     RetryPolicy       `json:",omitzero"`
+}
+```
+
+```go
+type Option func(*definitionOptions) error
+```
+
+```go
+type Definition struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type BoundDefinition interface {
+	Name() Name
+	Participation() Participation
+	Timeout() time.Duration
+	Limits() Limits
+	Descriptor() DefinitionDescriptor
+	ResolveInference(context.Context, uuid.UUID) (InferenceBinding, error)
+	SystemPrompt() string
+	OutputSchema() (*inference.OutputSchema, bool)
+	EvidenceToolPolicy() (EvidenceToolPolicy, bool)
+	RetryPolicy() RetryPolicy
+	BindEvidenceTools(context.Context, EvidenceBindings) ([]BoundEvidenceTool, error)
+	boundDefinition()
+}
+```
+
+```go
+type DefinitionErrorKind string
+```
+
+```go
+type DefinitionError struct {
+	Kind  DefinitionErrorKind
+	Field string
+	Cause error
+}
+```
+
+```go
+type BindErrorKind string
+```
+
+```go
+type BindError struct {
+	Kind  BindErrorKind
+	Cause error
+}
+```
+
+```go
+type ResolveErrorKind string
+```
+
+```go
+type ResolveError struct {
+	Kind  ResolveErrorKind
+	Cause error
+}
+```
+
+```go
+type RevisionError struct{ Cause error }
+```
+
+```go
+type BoundEvidenceTool struct{
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type RunID uuid.UUID
+```
+
+```go
+type Stage uint8
+```
+
+```go
+type ReasonCode uint8
+```
+
+```go
+type TerminalStatus uint8
+```
+
+```go
+type RetryPolicy uint8
+```
+
+```go
+type Request struct {
+	Name  Name
+	Cause identity.Cause
+	Input json.RawMessage
+
+	SecurityCeiling string
+}
+```
+
+```go
+type Result struct {
+	Output json.RawMessage
+	Usage  *content.Usage
+}
+```
+
+```go
+type Outcome struct {
+	Result *Result
+	Err    error
+}
+```
 
 ### Constants {#constants}
 
@@ -111,7 +302,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `DefinitionError`, `BindError`, `ResolveError`, `RevisionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BindError`, `DefinitionError`, `ResolveError`, `RevisionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

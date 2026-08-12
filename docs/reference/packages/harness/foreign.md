@@ -53,7 +53,134 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`EventPublisher`, `Builder`, `ServicesBuilder`, `UnknownProfileError`, `BuilderRegistry`, `RestoredForeign`, `RestoredBuilder`, `ServicesRestoredBuilder`, `BrokerDescriptor`, `DeliveryIntent`, `DeliveryReservation`, `DeliveryFallback`, `DeliveryResolutionState`, `DeliveryResolution`, `DeliveryHook`, `Services`
+```go
+type EventPublisher interface {
+	PublishEvent(context.Context, event.Event) error
+	PublishEventChecked(context.Context, event.Event) error
+}
+```
+
+```go
+type Builder func(
+	loopCtx context.Context,
+	sessionID, loopID uuid.UUID,
+	parent loop.Provenance,
+	pub EventPublisher,
+	cfg loop.BoundDefinition,
+	idGen func() (uuid.UUID, error),
+	fac *event.Factory,
+) (loop.Backend, string, error)
+```
+
+```go
+type ServicesBuilder func(
+	loopCtx context.Context,
+	sessionID, loopID uuid.UUID,
+	parent loop.Provenance,
+	pub EventPublisher,
+	cfg loop.BoundDefinition,
+	idGen func() (uuid.UUID, error),
+	fac *event.Factory,
+	services Services,
+) (loop.Backend, string, error)
+```
+
+```go
+type UnknownProfileError struct{}
+```
+
+```go
+type BuilderRegistry struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type RestoredForeign struct {
+	ForeignSID string
+
+	AgentSessionID string
+	TurnIndex      event.TurnIndex
+	Msgs           content.AgenticMessages
+}
+```
+
+```go
+type RestoredBuilder func(
+	loopCtx context.Context,
+	sessionID, loopID uuid.UUID,
+	parent loop.Provenance,
+	pub EventPublisher,
+	cfg loop.BoundDefinition,
+	idGen func() (uuid.UUID, error),
+	fac *event.Factory,
+	seed RestoredForeign,
+) (loop.Backend, error)
+```
+
+```go
+type ServicesRestoredBuilder func(
+	loopCtx context.Context,
+	sessionID, loopID uuid.UUID,
+	parent loop.Provenance,
+	pub EventPublisher,
+	cfg loop.BoundDefinition,
+	idGen func() (uuid.UUID, error),
+	fac *event.Factory,
+	seed RestoredForeign,
+	services Services,
+) (loop.Backend, error)
+```
+
+```go
+type BrokerDescriptor struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type DeliveryIntent struct {
+	LoopID    uuid.UUID
+	RequestID uuid.UUID
+}
+```
+
+```go
+type DeliveryReservation = DeliveryIntent
+```
+
+```go
+type DeliveryFallback = DeliveryIntent
+```
+
+```go
+type DeliveryResolutionState string
+```
+
+```go
+type DeliveryResolution struct {
+	LoopID    uuid.UUID
+	RequestID uuid.UUID
+	TurnID    uuid.UUID
+	State     DeliveryResolutionState
+}
+```
+
+```go
+type DeliveryHook interface {
+	CreateIntent(context.Context, DeliveryIntent) error
+	Reserve(context.Context, DeliveryReservation) error
+	QueueFallback(context.Context, DeliveryFallback) error
+	Resolve(context.Context, DeliveryResolution) error
+}
+```
+
+```go
+type Services struct {
+	Broker   BrokerDescriptor
+	Delivery DeliveryHook
+}
+```
 
 ### Constants {#constants}
 

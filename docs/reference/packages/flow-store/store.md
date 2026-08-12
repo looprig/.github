@@ -36,9 +36,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (s *checkpointStore) Append(ctx context.Context, cp *flow.Checkpoint) error`
-- `func (s *checkpointStore) Latest(ctx context.Context, id flow.GraphRunID) (*flow.Checkpoint, error)`
-- `func (s *checkpointStore) History(ctx context.Context, id flow.GraphRunID) ([]*flow.Checkpoint, error)`
+No exported methods are declared in this package.
 
 ### Types {#types}
 

@@ -41,15 +41,27 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (c *client) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
-- `func (c *client) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
-- `func (b *emptyRoleStreamBody) Read(p []byte) (int, error)`
-- `func (b *emptyRoleStreamBody) Close() error`
 - `func (e *ConfigurationError) Error() string`
 
 ### Types {#types}
 
-`Option`, `CounterSupportError`, `ConfigurationReason`, `ConfigurationError`
+```go
+type Option func(*config)
+```
+
+```go
+type CounterSupportError = llm.CounterSupportError
+```
+
+```go
+type ConfigurationReason string
+```
+
+```go
+type ConfigurationError struct {
+	Reason ConfigurationReason
+}
+```
 
 ### Constants {#constants}
 

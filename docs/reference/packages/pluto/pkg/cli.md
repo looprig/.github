@@ -38,12 +38,33 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (s *stringList) String() string`
-- `func (s *stringList) Set(v string) error`
+No exported methods are declared in this package.
 
 ### Types {#types}
 
-`App`, `LLMConfig`
+```go
+type App struct {
+	Registry       *packfile.Registry
+	NewClient      func(model.Model) (inference.Client, error)
+	NewCounter     func(model.Model) (pricing.Counter, error)
+	LookupEnv      func(string) (string, bool)
+	Stdout, Stderr io.Writer
+	Now            func() time.Time
+
+	RateLimit ratelimit.Config
+}
+```
+
+```go
+type LLMConfig struct {
+	LLM struct {
+		Provider  string `yaml:"provider"`
+		Model     string `yaml:"model"`
+		APIFormat string `yaml:"api-format"`
+		BaseURL   string `yaml:"base-url"`
+	} `yaml:"llm"`
+}
+```
 
 ### Constants {#constants}
 

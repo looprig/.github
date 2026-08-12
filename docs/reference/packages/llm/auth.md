@@ -39,14 +39,32 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *MissingSigV4CredentialsError) Error() string`
 - `func (e *BodyReadError) Error() string`
 - `func (e *BodyReadError) Unwrap() error`
-- `func (s *sigV4Auth) Authorize(_ context.Context, r *http.Request) error`
 - `func (SigV4Credentials) String() string`
 - `func (SigV4Credentials) LogValue() slog.Value`
 - `func (SigV4Credentials) GoString() string`
 
 ### Types {#types}
 
-`SigV4Credentials`, `MissingSigV4CredentialsError`, `BodyReadError`
+```go
+type SigV4Credentials struct {
+	AccessKeyID     string
+	SecretAccessKey string
+	SessionToken    string
+}
+```
+
+```go
+type MissingSigV4CredentialsError struct {
+	Region  string
+	Service string
+}
+```
+
+```go
+type BodyReadError struct {
+	Err error
+}
+```
 
 ### Constants {#constants}
 
@@ -60,7 +78,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `MissingSigV4CredentialsError`, `BodyReadError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BodyReadError`, `MissingSigV4CredentialsError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

@@ -103,7 +103,511 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`FindingCode`, `Measurement`, `Finding`, `Assessment`, `ValidationError`, `InvalidEnumError`, `IndexRangeError`, `DuplicateEvidenceError`, `UnknownEvidenceError`, `EvidencePayloadError`, `DuplicateLabelError`, `DuplicateEvidenceKindError`, `DuplicateMeasurementError`, `DuplicateFindingError`, `StatusConsistencyError`, `DuplicateScenarioError`, `NilTargetError`, `NilEvaluatorError`, `DuplicateEvaluatorNameError`, `TargetError`, `ReportValidationError`, `SampleSubjectMismatchError`, `Descriptor`, `Evaluator`, `RedactedExcerpt`, `ContentHash`, `EvidenceID`, `EvidenceKind`, `Evidence`, `ConversationExcerpt`, `MessageIndexRef`, `TimingEvidence`, `UsageEvidence`, `ToolOperationEvidence`, `StructuredErrorReason`, `StructuredOutputError`, `StructuredOutput`, `DiagnosticEvidence`, `EvidenceRef`, `Fact`, `ActionName`, `ReferenceAnswer`, `ToolCallExpectation`, `StructuredOutputExpectation`, `Expectation`, `Observation`, `SubjectKind`, `Subject`, `MessageRange`, `Trace`, `OperationKind`, `OperationStatus`, `ErrorClass`, `Attribute`, `Operation`, `Sink`, `Report`, `SampleReport`, `Summary`, `EvaluatorRevision`, `Provenance`, `Label`, `Scenario`, `Sample`, `Suite`, `RunConfig`, `Target`, `Name`, `Revision`, `Scope`, `Method`, `AssessmentStatus`, `Severity`, `Unit`
+```go
+type FindingCode string
+```
+
+```go
+type Measurement struct {
+	Name  Name
+	Value float64
+	Unit  Unit
+}
+```
+
+```go
+type Finding struct {
+	Code     FindingCode
+	Severity Severity
+	Message  string
+	Evidence []EvidenceRef
+}
+```
+
+```go
+type Assessment struct {
+	Evaluator    Name
+	Revision     Revision
+	Status       AssessmentStatus
+	Measurements []Measurement
+	Findings     []Finding
+	Evidence     []Evidence
+	Duration     time.Duration
+}
+```
+
+```go
+type ValidationError struct {
+	Field string
+
+	Reason string
+}
+```
+
+```go
+type InvalidEnumError struct {
+	Enum string
+
+	Value string
+}
+```
+
+```go
+type IndexRangeError struct {
+	Field string
+
+	Index int
+
+	Len int
+}
+```
+
+```go
+type DuplicateEvidenceError struct{}
+```
+
+```go
+type UnknownEvidenceError struct{}
+```
+
+```go
+type EvidencePayloadError struct {
+	Reason string
+}
+```
+
+```go
+type DuplicateLabelError struct{}
+```
+
+```go
+type DuplicateEvidenceKindError struct{}
+```
+
+```go
+type DuplicateMeasurementError struct{}
+```
+
+```go
+type DuplicateFindingError struct{}
+```
+
+```go
+type StatusConsistencyError struct {
+	Status AssessmentStatus
+
+	Reason string
+}
+```
+
+```go
+type DuplicateScenarioError struct{}
+```
+
+```go
+type NilTargetError struct{}
+```
+
+```go
+type NilEvaluatorError struct{}
+```
+
+```go
+type DuplicateEvaluatorNameError struct{}
+```
+
+```go
+type TargetError struct {
+	Cause error
+}
+```
+
+```go
+type ReportValidationError struct {
+	Reason string
+}
+```
+
+```go
+type SampleSubjectMismatchError struct{}
+```
+
+```go
+type Descriptor struct {
+	Name        Name
+	Revision    Revision
+	Method      Method
+	Description string
+	Requires    []EvidenceKind
+}
+```
+
+```go
+type Evaluator interface {
+	Descriptor() Descriptor
+	Evaluate(context.Context, Sample) (Assessment, error)
+}
+```
+
+```go
+type RedactedExcerpt string
+```
+
+```go
+type ContentHash string
+```
+
+```go
+type EvidenceID string
+```
+
+```go
+type EvidenceKind string
+```
+
+```go
+type Evidence struct {
+	ID   EvidenceID
+	Kind EvidenceKind
+
+	ConversationExcerpt *ConversationExcerpt
+	MessageIndex        *MessageIndexRef
+	Timing              *TimingEvidence
+	Usage               *UsageEvidence
+	ToolOperation       *ToolOperationEvidence
+	StructuredError     *StructuredOutputError
+	StructuredOutput    *StructuredOutput
+	Diagnostic          *DiagnosticEvidence
+}
+```
+
+```go
+type ConversationExcerpt struct {
+	MessageIndex int
+	Role         content.Role
+	Hash         ContentHash
+	Redacted     RedactedExcerpt
+}
+```
+
+```go
+type MessageIndexRef struct {
+	Index int
+}
+```
+
+```go
+type TimingEvidence struct {
+	Label    Name
+	Duration time.Duration
+}
+```
+
+```go
+type UsageEvidence struct {
+	Model Revision
+	Usage content.Usage
+}
+```
+
+```go
+type ToolOperationEvidence struct {
+	ToolName    Name
+	ToolUseID   string
+	ArgsHash    ContentHash
+	ArgsBytes   int
+	ResultBytes int
+	IsError     bool
+}
+```
+
+```go
+type StructuredErrorReason string
+```
+
+```go
+type StructuredOutputError struct {
+	Schema     Revision
+	Reason     StructuredErrorReason
+	DetailHash ContentHash
+}
+```
+
+```go
+type StructuredOutput struct {
+	SchemaName     Name
+	SchemaRevision Revision
+}
+```
+
+```go
+type DiagnosticEvidence struct {
+	Code     Name
+	Severity Severity
+	Message  RedactedExcerpt
+}
+```
+
+```go
+type EvidenceRef struct {
+	Evidence     EvidenceID
+	MessageIndex *int
+}
+```
+
+```go
+type Fact string
+```
+
+```go
+type ActionName string
+```
+
+```go
+type ReferenceAnswer string
+```
+
+```go
+type ToolCallExpectation struct {
+	Tool     Name
+	MinCount int
+	MaxCount *int
+}
+```
+
+```go
+type StructuredOutputExpectation struct {
+	Schema Revision
+	Strict bool
+}
+```
+
+```go
+type Expectation struct {
+	RequiredFacts []Fact
+
+	ForbiddenActions []ActionName
+
+	ExpectedToolCalls []ToolCallExpectation
+
+	StructuredOutput *StructuredOutputExpectation
+
+	ReferenceAnswers []ReferenceAnswer
+
+	PolicyRef Revision
+}
+```
+
+```go
+type Observation struct {
+	Conversation content.AgenticMessages
+	Scope        Scope
+	Subject      Subject
+	Trace        Trace
+	Expectation  *Expectation
+}
+```
+
+```go
+type SubjectKind string
+```
+
+```go
+type Subject struct {
+	ID       string
+	Kind     SubjectKind
+	Name     Name
+	Revision Revision
+}
+```
+
+```go
+type MessageRange struct {
+	Start int
+	Len   int
+}
+```
+
+```go
+type Trace struct {
+	TraceID       string
+	SessionID     string
+	TurnID        string
+	StartedAt     time.Time
+	EndedAt       time.Time
+	Model         Revision
+	Prompt        Revision
+	MessageRanges []MessageRange
+	Operations    []Operation
+	Evidence      []Evidence
+}
+```
+
+```go
+type OperationKind string
+```
+
+```go
+type OperationStatus string
+```
+
+```go
+type ErrorClass string
+```
+
+```go
+type Attribute struct {
+	Key   Name
+	Value string
+}
+```
+
+```go
+type Operation struct {
+	ID         string
+	ParentID   string
+	Kind       OperationKind
+	Status     OperationStatus
+	StartedAt  time.Time
+	EndedAt    time.Time
+	Attributes []Attribute
+	ErrorClass ErrorClass
+	Evidence   []EvidenceRef
+}
+```
+
+```go
+type Sink interface {
+	WriteReport(context.Context, Report) error
+}
+```
+
+```go
+type Report struct {
+	ID         string
+	Suite      Revision
+	Target     Revision
+	StartedAt  time.Time
+	EndedAt    time.Time
+	Samples    []SampleReport
+	Summary    Summary
+	Provenance Provenance
+}
+```
+
+```go
+type SampleReport struct {
+	ScenarioID  string
+	TrialIndex  int
+	Observation Observation
+	TargetErr   *TargetError
+	Assessments []Assessment
+}
+```
+
+```go
+type Summary struct {
+	Samples      int
+	TargetErrors int
+	Assessments  map[AssessmentStatus]int
+}
+```
+
+```go
+type EvaluatorRevision struct {
+	Name     Name
+	Revision Revision
+}
+```
+
+```go
+type Provenance struct {
+	Suite      Revision
+	Target     Revision
+	Evaluators []EvaluatorRevision
+}
+```
+
+```go
+type Label struct {
+	Key   Name
+	Value string
+}
+```
+
+```go
+type Scenario struct {
+	ID          string
+	Name        Name
+	Revision    Revision
+	Input       content.AgenticMessages
+	Expectation *Expectation
+	Labels      []Label
+}
+```
+
+```go
+type Sample struct {
+	Scenario    *Scenario
+	Observation Observation
+}
+```
+
+```go
+type Suite struct {
+	Name      Name
+	Revision  Revision
+	Scenarios []Scenario
+}
+```
+
+```go
+type RunConfig struct {
+	Trials int
+
+	Concurrency int
+
+	TargetTimeout time.Duration
+
+	EvaluatorTimeout time.Duration
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Target interface {
+	Name() string
+	Observe(context.Context, Scenario) (Observation, error)
+}
+```
+
+```go
+type Name string
+```
+
+```go
+type Revision string
+```
+
+```go
+type Scope uint8
+```
+
+```go
+type Method uint8
+```
+
+```go
+type AssessmentStatus string
+```
+
+```go
+type Severity string
+```
+
+```go
+type Unit string
+```
 
 ### Constants {#constants}
 
@@ -117,7 +621,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ValidationError`, `InvalidEnumError`, `IndexRangeError`, `DuplicateEvidenceError`, `UnknownEvidenceError`, `EvidencePayloadError`, `DuplicateLabelError`, `DuplicateEvidenceKindError`, `DuplicateMeasurementError`, `DuplicateFindingError`, `StatusConsistencyError`, `DuplicateScenarioError`, `NilTargetError`, `NilEvaluatorError`, `DuplicateEvaluatorNameError`, `TargetError`, `ReportValidationError`, `SampleSubjectMismatchError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DuplicateEvaluatorNameError`, `DuplicateEvidenceError`, `DuplicateEvidenceKindError`, `DuplicateFindingError`, `DuplicateLabelError`, `DuplicateMeasurementError`, `DuplicateScenarioError`, `EvidencePayloadError`, `IndexRangeError`, `InvalidEnumError`, `NilEvaluatorError`, `NilTargetError`, `ReportValidationError`, `SampleSubjectMismatchError`, `StatusConsistencyError`, `TargetError`, `UnknownEvidenceError`, `ValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

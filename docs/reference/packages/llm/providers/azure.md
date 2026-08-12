@@ -41,15 +41,30 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (responsesRouter) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (route.Route, error)`
-- `func (c requestCodec) EncodeRequest(req inference.Request, mode codec.RequestMode) (codec.EncodedRequest, error)`
-- `func (requestCodec) DecodeResponse(body []byte) (*inference.Response, error)`
-- `func (requestCodec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
 - `func (e *ResourceConfigurationError) Error() string`
 
 ### Types {#types}
 
-`ResourceConfigurationReason`, `ResourceConfigurationError`, `Option`, `ReasoningOptions`
+```go
+type ResourceConfigurationReason string
+```
+
+```go
+type ResourceConfigurationError struct {
+	Reason ResourceConfigurationReason
+}
+```
+
+```go
+type Option func(*config)
+```
+
+```go
+type ReasoningOptions struct {
+	Effort  string `json:"effort,omitempty"`
+	Summary string `json:"summary,omitempty"`
+}
+```
 
 ### Constants {#constants}
 

@@ -43,7 +43,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (a *Agent) Register(conn *protocol.Conn)`
 - `func (a *Agent) AuthorizeSessionCreation() error`
 - `func (e *UnofferedPermissionOptionError) Error() string`
-- `func (t *gateTracker) CancelSession(sessionID SessionID)`
 - `func (e *InvalidCursorError) Error() string`
 - `func (e *InvalidCursorError) Unwrap() error`
 - `func (e *SessionMetaObservationError) Error() string`
@@ -54,11 +53,231 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *SessionIDError) Unwrap() error`
 - `func (e *CwdError) Error() string`
 - `func (e *MCPNotAcceptedError) Error() string`
-- `func (t *liveTranslator) Translate(ev event.Event) (protocol.SessionNotification, bool)`
 
 ### Types {#types}
 
-`Options`, `Agent`, `UnofferedPermissionOptionError`, `SessionID`, `SessionHost`, `LiveSession`, `LoadedSession`, `SessionCloser`, `EventReplayer`, `SessionCatalogEntry`, `SessionCatalog`, `RuntimeConfigValue`, `RuntimeConfigOption`, `RuntimeConfigCatalog`, `RuntimeConfigChange`, `RuntimeConfigController`, `Compactor`, `SessionDeleter`, `Authenticator`, `LogoutHandler`, `CursorErrorReason`, `InvalidCursorError`, `SessionMetaObservationError`, `UnsupportedContentBlockError`, `TooManyLiveSessionsError`, `SessionIDReason`, `SessionIDError`, `Setup`, `CwdErrorReason`, `CwdError`, `MCPNotAcceptedError`
+```go
+type Options struct {
+	Host SessionHost
+
+	Replayer EventReplayer
+
+	Catalog SessionCatalog
+
+	ConfigCatalog RuntimeConfigCatalog
+
+	ConfigController RuntimeConfigController
+
+	Compactor Compactor
+
+	Deleter SessionDeleter
+
+	Authenticator Authenticator
+
+	AuthMethods []protocol.AuthMethod
+
+	Logout LogoutHandler
+}
+```
+
+```go
+type Agent struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type UnofferedPermissionOptionError struct {
+	GateID   gate.ID
+	OptionID protocol.PermissionOptionID
+}
+```
+
+```go
+type SessionID = uuid.UUID
+```
+
+```go
+type SessionHost interface {
+	NewSession(context.Context, Setup) (LiveSession, error)
+	LoadSession(context.Context, SessionID, Setup) (LoadedSession, error)
+	ResumeSession(context.Context, SessionID, Setup) (LiveSession, error)
+}
+```
+
+```go
+type LiveSession interface {
+	SessionID() uuid.UUID
+	Submit(context.Context, []content.Block) (uuid.UUID, error)
+	SubscribeEvents(event.EventFilter) (event.Subscription, error)
+	RespondGate(context.Context, gate.GateResponse) error
+	Interrupt(context.Context) (bool, error)
+}
+```
+
+```go
+type LoadedSession struct {
+	Live LiveSession
+
+	ReplayedThrough event.TurnIndex
+}
+```
+
+```go
+type SessionCloser interface {
+	Shutdown(context.Context) error
+}
+```
+
+```go
+type EventReplayer interface {
+	OpenEventReplayer(SessionID) (journal.EventReplayer, error)
+}
+```
+
+```go
+type SessionCatalogEntry struct {
+	Meta sessionstore.SessionMeta
+
+	Cwd string
+}
+```
+
+```go
+type SessionCatalog interface {
+	ListSessions(context.Context) ([]SessionCatalogEntry, error)
+}
+```
+
+```go
+type RuntimeConfigValue struct {
+	ID          protocol.SessionConfigValueID
+	Name        string
+	Description string
+}
+```
+
+```go
+type RuntimeConfigOption struct {
+	ID           protocol.SessionConfigID
+	Category     protocol.SessionConfigOptionCategory
+	Name         string
+	Description  string
+	Values       []RuntimeConfigValue
+	CurrentValue protocol.SessionConfigValueID
+}
+```
+
+```go
+type RuntimeConfigCatalog interface {
+	RuntimeConfigOptions(context.Context, SessionID) ([]RuntimeConfigOption, error)
+}
+```
+
+```go
+type RuntimeConfigChange struct {
+	OptionID protocol.SessionConfigID
+	ValueID  protocol.SessionConfigValueID
+}
+```
+
+```go
+type RuntimeConfigController interface {
+	SetRuntimeConfigOption(context.Context, SessionID, RuntimeConfigChange) ([]RuntimeConfigOption, error)
+}
+```
+
+```go
+type Compactor interface {
+	Compact(context.Context) (uuid.UUID, error)
+}
+```
+
+```go
+type SessionDeleter interface {
+	DeleteSession(context.Context, SessionID) error
+}
+```
+
+```go
+type Authenticator interface {
+	Authenticate(context.Context, protocol.AuthMethodID) error
+}
+```
+
+```go
+type LogoutHandler interface {
+	Logout(context.Context) error
+}
+```
+
+```go
+type CursorErrorReason string
+```
+
+```go
+type InvalidCursorError struct {
+	Reason CursorErrorReason
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SessionMetaObservationError struct {
+	Reason string
+}
+```
+
+```go
+type UnsupportedContentBlockError struct {
+	Index int
+}
+```
+
+```go
+type TooManyLiveSessionsError struct {
+	Max int
+}
+```
+
+```go
+type SessionIDReason string
+```
+
+```go
+type SessionIDError struct {
+	Input  string
+	Reason SessionIDReason
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Setup struct {
+	Cwd string
+
+	ClientCapabilities protocol.ClientCapabilities
+
+	MCPServers []protocol.McpServer
+}
+```
+
+```go
+type CwdErrorReason string
+```
+
+```go
+type CwdError struct {
+	Cwd    string
+	Reason CwdErrorReason
+}
+```
+
+```go
+type MCPNotAcceptedError struct {
+	Count int
+}
+```
 
 ### Constants {#constants}
 
@@ -72,7 +291,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `UnofferedPermissionOptionError`, `InvalidCursorError`, `SessionMetaObservationError`, `UnsupportedContentBlockError`, `TooManyLiveSessionsError`, `SessionIDError`, `CwdError`, `MCPNotAcceptedError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CwdError`, `InvalidCursorError`, `MCPNotAcceptedError`, `SessionIDError`, `SessionMetaObservationError`, `TooManyLiveSessionsError`, `UnofferedPermissionOptionError`, `UnsupportedContentBlockError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

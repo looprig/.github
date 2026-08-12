@@ -52,7 +52,93 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Access`, `Home`, `Isolation`, `RootAccess`, `ProfileConfig`, `Profile`, `ReportEntry`, `CompileReport`, `Guarantees`, `Settings`
+```go
+type Access uint8
+```
+
+```go
+type Home uint8
+```
+
+```go
+type Isolation uint8
+```
+
+```go
+type RootAccess struct {
+	Path  string
+	Read  Access
+	Write Access
+}
+```
+
+```go
+type ProfileConfig struct {
+	WorkspaceRoot   string
+	WorkspaceRead   Access
+	WorkspaceWrite  Access
+	HostRead        Access
+	HostWrite       Access
+	Network         Access
+	Command         Access
+	Home            Home
+	Isolation       Isolation
+	AdditionalRoots []RootAccess
+	AckUnconfined   bool
+}
+```
+
+```go
+type Profile struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ReportEntry struct {
+	Feature string
+	Status  string
+	Detail  string
+}
+```
+
+```go
+type CompileReport struct {
+	Entries []ReportEntry
+}
+```
+
+```go
+type Guarantees struct {
+	ProcessBoundary bool
+	WriteBoundary   bool
+	ReadBoundary    bool
+	EnvScrub        bool
+	NetworkBoundary bool
+	AddressNetwork  bool
+	ResourceLimits  bool
+	TargetNetwork   bool
+}
+```
+
+```go
+type Settings struct {
+	Version            uint16
+	WorkspaceRoot      string
+	WorkspaceRead      Access
+	WorkspaceWrite     Access
+	HostRead           Access
+	HostWrite          Access
+	Network            Access
+	Command            Access
+	Home               Home
+	Isolation          Isolation
+	AdditionalRoots    []RootAccess
+	AckUnconfined      bool
+	RequiredGuarantees uint64
+	Fingerprint        string
+}
+```
 
 ### Constants {#constants}
 

@@ -46,7 +46,13 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`Option`, `ServerOption`
+```go
+type Option func(*config)
+```
+
+```go
+type ServerOption func(*http.Server)
+```
 
 ### Constants {#constants}
 

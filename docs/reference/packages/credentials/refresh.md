@@ -63,7 +63,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (l *Lease) Format(state fmt.State, _ rune)`
 - `func (l *Lease) GoString() string`
 - `func (s *Source) CanRecover(failure credentials.Failure) bool`
-- `func (wallClock) Now() time.Time`
 - `func (s *Source) Reference() credentials.Reference`
 - `func (s *Source) Descriptor() credentials.Descriptor`
 - `func (s *Source) Acquire(ctx context.Context) (credentials.Lease, error)`
@@ -98,7 +97,161 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`RefreshCoordinator`, `Coordinator`, `ProcessCoordinator`, `FileCoordinator`, `Clock`, `ClockFunc`, `Options`, `SourceOptions`, `Config`, `Source`, `Lease`, `ExchangeError`, `AmbiguousRotationError`, `State`, `RefreshState`, `TokenResponse`, `ExchangeResult`, `Token`, `RefreshResponse`, `ExchangeFunc`, `InvalidStateError`
+```go
+type RefreshCoordinator = credentials.RefreshCoordinator
+```
+
+```go
+type Coordinator = credentials.RefreshCoordinator
+```
+
+```go
+type ProcessCoordinator struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type FileCoordinator struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Clock = credentials.Clock
+```
+
+```go
+type ClockFunc = credentials.ClockFunc
+```
+
+```go
+type Options struct {
+	Reference  credentials.Reference
+	Descriptor credentials.Descriptor
+	State      secrets.Reference
+
+	StateReference secrets.Reference
+
+	Resolver      secrets.Resolver
+	Store         secrets.Store
+	Preconditions secrets.PreconditionCapabilities
+
+	Coordinator        credentials.RefreshCoordinator
+	RefreshCoordinator credentials.RefreshCoordinator
+	StateSharing       credentials.SharingScope
+	Sharing            credentials.SharingScope
+
+	Clock Clock
+	Now   func() time.Time
+
+	ExpirySkew time.Duration
+
+	Skew time.Duration
+
+	RefreshTimeout       time.Duration
+	SourceRefreshTimeout time.Duration
+
+	Exchange  any
+	Refresh   any
+	Refresher any
+
+	InitialState State
+
+	PersistAccessToken bool
+
+	Context context.Context
+}
+```
+
+```go
+type SourceOptions = Options
+```
+
+```go
+type Config = Options
+```
+
+```go
+type Source struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Lease struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ExchangeError struct{}
+```
+
+```go
+type AmbiguousRotationError struct {
+	Reference  credentials.Reference
+	Generation credentials.Generation
+}
+```
+
+```go
+type State struct {
+	Schema       uint32
+	Generation   credentials.Generation
+	RefreshToken secrets.Secret
+	ProviderData []byte
+
+	Continuity  []byte
+	AccessToken secrets.Secret
+	ExpiresAt   time.Time
+
+	Expiry             time.Time
+	PersistAccessToken bool
+}
+```
+
+```go
+type RefreshState = State
+```
+
+```go
+type TokenResponse struct {
+	AccessToken     secrets.Secret
+	RefreshToken    secrets.Secret
+	RefreshTokenSet bool
+	Generation      credentials.Generation
+	ExpiresAt       time.Time
+	ExpiresIn       time.Duration
+
+	ExpiresInSeconds   int64
+	ProviderData       []byte
+	Continuity         []byte
+	PersistAccessToken bool
+}
+```
+
+```go
+type ExchangeResult = TokenResponse
+```
+
+```go
+type Token = TokenResponse
+```
+
+```go
+type RefreshResponse = TokenResponse
+```
+
+```go
+type ExchangeFunc func(context.Context, State) (TokenResponse, error)
+```
+
+```go
+type InvalidStateError struct{
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -106,13 +259,13 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Variables {#variables}
 
-`ErrInvalidState`
+`ErrInvalidState`, `ErrInvalidOptions`, `ErrExchange`, `ErrRefresh`, `ErrAmbiguousRotation`, `ErrAmbiguousRefresh`, `ErrRefreshAmbiguous`, `ErrAdoptionUnavailable`, `ErrCoordinator`, `ErrUnsupportedPlatform`, `ErrDurabilityUnknown`, `ErrClosed`, `ErrCanceled`
 
 ## Ownership and errors {#ownership-and-errors}
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ExchangeError`, `AmbiguousRotationError`, `InvalidStateError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AmbiguousRotationError`, `ExchangeError`, `InvalidStateError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

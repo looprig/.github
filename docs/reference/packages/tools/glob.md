@@ -43,14 +43,18 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (g *Glob) AuditSummary(argsJSON string) string`
 - `func (g *Glob) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
 - `func (g *Glob) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
-- `func (e *globError) Error() string`
-- `func (e *globError) Unwrap() error`
-- `func (stopWalkError) Error() string`
-- `func (ctxCancelledError) Error() string`
 
 ### Types {#types}
 
-`Glob`, `GlobOption`
+```go
+type Glob struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type GlobOption func(*Glob)
+```
 
 ### Constants {#constants}
 

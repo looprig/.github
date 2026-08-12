@@ -56,16 +56,25 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (a *sessionAdapter) RespondGate(ctx context.Context, gateID gate.ID, action string, values map[string]json.RawMessage) error`
 - `func (a *sessionAdapter) Close(ctx context.Context) error`
 - `func (a *sessionAdapter) CompactToLoop(ctx context.Context, loopID uuid.UUID) (uuid.UUID, error)`
-- `func (s *gateFoldingSubscription) Events() <-chan event.Delivery`
-- `func (s *gateFoldingSubscription) Close() error`
-- `func (s *gateFoldingSubscription) Err() error`
-- `func (s *replayingSubscription) Events() <-chan event.Delivery`
-- `func (s *replayingSubscription) Close() error`
-- `func (s *replayingSubscription) Err() error`
 
 ### Types {#types}
 
-`Adapter`, `ReplayOpener`, `GateNotOpenError`
+```go
+type Adapter = sessionAdapter
+```
+
+```go
+type ReplayOpener interface {
+	OpenEventReplayer(uuid.UUID, sessionstore.ReplayRequest) (journal.EventReplayer, error)
+}
+```
+
+```go
+type GateNotOpenError struct {
+	LoopID          uuid.UUID
+	ToolExecutionID uuid.UUID
+}
+```
 
 ### Constants {#constants}
 

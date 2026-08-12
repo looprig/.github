@@ -40,7 +40,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (c *Client) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
 - `func (c *Client) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
 - `func (c *Counter) CountContext(ctx context.Context, req inference.Request) (contextcount.ContextCount, error)`
-- `func (c *countScalar) UnmarshalJSON(data []byte) error`
 - `func (c *Counter) CounterCapability() contextcount.CounterCapability`
 - `func (e *CounterStateError) Error() string`
 - `func (e *CounterRequestError) Error() string`
@@ -55,7 +54,86 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Client`, `Counter`, `CounterStateReason`, `CounterStateError`, `CounterRequestReason`, `CounterRequestError`, `CounterEndpointReason`, `CounterEndpointError`, `CounterResponseReason`, `CounterResponseField`, `CounterResponseFieldReason`, `CounterResponseFieldError`, `CounterResponseError`, `UnsupportedAPIFormatError`, `RequestBuildError`
+```go
+type Client struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Counter struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CounterStateReason string
+```
+
+```go
+type CounterStateError struct {
+	Reason CounterStateReason
+}
+```
+
+```go
+type CounterRequestReason string
+```
+
+```go
+type CounterRequestError struct {
+	Reason CounterRequestReason
+	Err    error
+}
+```
+
+```go
+type CounterEndpointReason string
+```
+
+```go
+type CounterEndpointError struct {
+	Reason CounterEndpointReason
+}
+```
+
+```go
+type CounterResponseReason string
+```
+
+```go
+type CounterResponseField string
+```
+
+```go
+type CounterResponseFieldReason string
+```
+
+```go
+type CounterResponseFieldError struct {
+	Field  CounterResponseField
+	Reason CounterResponseFieldReason
+}
+```
+
+```go
+type CounterResponseError struct {
+	Reason CounterResponseReason
+	Err    error
+}
+```
+
+```go
+type UnsupportedAPIFormatError struct {
+	APIFormat model.APIFormat
+}
+```
+
+```go
+type RequestBuildError struct {
+	Err error
+}
+```
 
 ### Constants {#constants}
 
@@ -69,7 +147,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `CounterStateError`, `CounterRequestError`, `CounterEndpointError`, `CounterResponseFieldError`, `CounterResponseError`, `UnsupportedAPIFormatError`, `RequestBuildError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CounterEndpointError`, `CounterRequestError`, `CounterResponseError`, `CounterResponseFieldError`, `CounterStateError`, `RequestBuildError`, `UnsupportedAPIFormatError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

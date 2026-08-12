@@ -72,7 +72,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *DefinitionError) Unwrap() error`
 - `func (e *LifecycleError) Error() string`
 - `func (e *LifecycleError) Unwrap() error`
-- `func (*permissionReviewFingerprintError) Error() string`
 - `func (r *Rig) NewSession(ctx context.Context, opts ...SessionOption) (session.SessionController, error)`
 - `func (r *Rig) RestoreSession(ctx context.Context, id uuid.UUID) (session.SessionController, error)`
 - `func (e *InvalidOffloadGCIntervalError) Error() string`
@@ -85,7 +84,217 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Rig`, `DefinitionErrorKind`, `DefinitionError`, `LifecycleErrorKind`, `LifecycleError`, `ConfigFingerprintFields`, `OffloadGCPolicy`, `InvalidOffloadGCIntervalError`, `InvalidOffloadGCTimeoutError`, `Option`, `PermissionReviewLimits`, `PermissionReviewSessionLimits`, `DelegationLimits`, `GateCaps`, `HustleLimits`, `SessionOption`, `SessionResourceStorage`, `SessionResourceStorageProvider`, `SnapshotTrigger`, `SnapshotPriority`, `SnapshotPolicy`, `SnapshotPolicyErrorKind`, `SnapshotPolicyError`, `WorkspaceRootBusyError`, `WorkspaceRootLeaseLostError`, `WorkspaceRecoveryError`, `WorkspacePlacementErrorKind`, `WorkspacePlacementError`, `PersistenceOverlapError`, `SessionOptionErrorKind`, `SessionOptionError`
+```go
+type Rig struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type DefinitionErrorKind string
+```
+
+```go
+type DefinitionError struct {
+	Kind  DefinitionErrorKind
+	Name  string
+	Cause error
+}
+```
+
+```go
+type LifecycleErrorKind string
+```
+
+```go
+type LifecycleError struct {
+	Kind  LifecycleErrorKind
+	Cause error
+}
+```
+
+```go
+type ConfigFingerprintFields struct {
+	AgentKind     string
+	RuntimeSkills bool
+	WorkspaceRoot string
+
+	AdapterID string
+
+	Posture string
+
+	NativePermissionPolicyRev string
+
+	ExternalCapabilityRev string
+
+	WorkspaceTrust string
+
+	PermissionStrictness event.StrictnessLevel
+
+	ConfinementRev string
+
+	ConfinementStrictness event.StrictnessLevel
+
+	AppFields          map[string]string
+	RuntimeProfile     string
+	RuntimeCatalogRev  string
+	RuntimeIdentityRev string
+}
+```
+
+```go
+type OffloadGCPolicy struct {
+	Interval time.Duration
+	Timeout  time.Duration
+}
+```
+
+```go
+type InvalidOffloadGCIntervalError struct {
+	Interval time.Duration
+}
+```
+
+```go
+type InvalidOffloadGCTimeoutError struct {
+	Timeout time.Duration
+}
+```
+
+```go
+type Option func(*definitionState) error
+```
+
+```go
+type PermissionReviewLimits struct {
+	MaxConsecutiveNeedsHuman int
+	MaxInvalidOrFailed       int
+	MaxIdenticalSubjects     int
+	MaxStaleResponses        int
+	InterruptOnTrip          bool
+	Session                  PermissionReviewSessionLimits
+}
+```
+
+```go
+type PermissionReviewSessionLimits struct {
+	MaxConsecutiveNeedsHuman int
+	MaxInvalidOrFailed       int
+	MaxIdenticalSubjects     int
+	MaxStaleResponses        int
+}
+```
+
+```go
+type DelegationLimits struct {
+	Depth int
+	Quota int
+}
+```
+
+```go
+type GateCaps struct {
+	MaxOpen    int
+	MaxTimeout time.Duration
+}
+```
+
+```go
+type HustleLimits struct {
+	BlockingConcurrent   int
+	BlockingQueued       int
+	BackgroundConcurrent int
+	BackgroundQueued     int
+	AuditTimeout         time.Duration
+	FinalizationTimeout  time.Duration
+	WorkerDrainTimeout   time.Duration
+}
+```
+
+```go
+type SessionOption func(*sessionOptions) error
+```
+
+```go
+type SessionResourceStorage struct {
+	Path     string
+	Identity string
+}
+```
+
+```go
+type SessionResourceStorageProvider interface {
+	StorageForSession(context.Context, uuid.UUID) (SessionResourceStorage, error)
+}
+```
+
+```go
+type SnapshotTrigger uint8
+```
+
+```go
+type SnapshotPriority uint8
+```
+
+```go
+type SnapshotPolicy struct {
+	Trigger  SnapshotTrigger
+	Priority SnapshotPriority
+	Timeout  time.Duration
+}
+```
+
+```go
+type SnapshotPolicyErrorKind string
+```
+
+```go
+type SnapshotPolicyError struct {
+	Kind  SnapshotPolicyErrorKind
+	Value int
+}
+```
+
+```go
+type WorkspaceRootBusyError = session.WorkspaceRootBusyError
+```
+
+```go
+type WorkspaceRootLeaseLostError = session.WorkspaceRootLeaseLostError
+```
+
+```go
+type WorkspaceRecoveryError = session.WorkspaceRecoveryError
+```
+
+```go
+type WorkspacePlacementErrorKind string
+```
+
+```go
+type WorkspacePlacementError struct {
+	Kind  WorkspacePlacementErrorKind
+	Name  string
+	Cause error
+}
+```
+
+```go
+type PersistenceOverlapError struct {
+	PersistencePath string
+	Root            string
+}
+```
+
+```go
+type SessionOptionErrorKind string
+```
+
+```go
+type SessionOptionError struct {
+	Kind SessionOptionErrorKind
+}
+```
 
 ### Constants {#constants}
 
@@ -99,7 +308,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `DefinitionError`, `LifecycleError`, `InvalidOffloadGCIntervalError`, `InvalidOffloadGCTimeoutError`, `SnapshotPolicyError`, `WorkspacePlacementError`, `PersistenceOverlapError`, `SessionOptionError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `DefinitionError`, `InvalidOffloadGCIntervalError`, `InvalidOffloadGCTimeoutError`, `LifecycleError`, `PersistenceOverlapError`, `SessionOptionError`, `SnapshotPolicyError`, `WorkspacePlacementError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

@@ -52,13 +52,66 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *SkillNotFoundError) Error() string`
 - `func (e *SkillNotFoundError) Unwrap() error`
 - `func (e *SkillContainmentError) Error() string`
-- `func (l *embeddedSkillLoader) Load(ctx context.Context, agent identity.AgentName, name string) (string, error)`
-- `func (l *embeddedSkillLoader) Describe(ctx context.Context, agent identity.AgentName, name string) (SkillMeta, error)`
-- `func (l *embeddedSkillLoader) Allowed(agent identity.AgentName, name string) bool`
 
 ### Types {#types}
 
-`Skill`, `SkillOption`, `UnknownSkillError`, `MalformedSkillError`, `SkillNotFoundError`, `SkillContainmentError`, `SkillMeta`, `SkillLoader`, `SkillDescriber`
+```go
+type Skill struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SkillOption func(*Skill)
+```
+
+```go
+type UnknownSkillError struct {
+	Agent identity.AgentName
+	Name  string
+}
+```
+
+```go
+type MalformedSkillError struct {
+	Name   string
+	Reason string
+}
+```
+
+```go
+type SkillNotFoundError struct {
+	Name string
+	Err  error
+}
+```
+
+```go
+type SkillContainmentError struct {
+	Name   string
+	Reason string
+}
+```
+
+```go
+type SkillMeta struct {
+	Name        string
+	Description string
+}
+```
+
+```go
+type SkillLoader interface {
+	Load(ctx context.Context, agent identity.AgentName, name string) (string, error)
+	Allowed(agent identity.AgentName, name string) bool
+}
+```
+
+```go
+type SkillDescriber interface {
+	Describe(ctx context.Context, agent identity.AgentName, name string) (SkillMeta, error)
+}
+```
 
 ### Constants {#constants}
 
@@ -72,7 +125,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `UnknownSkillError`, `MalformedSkillError`, `SkillNotFoundError`, `SkillContainmentError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `MalformedSkillError`, `SkillContainmentError`, `SkillNotFoundError`, `UnknownSkillError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

@@ -46,7 +46,29 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`Spec`, `Result`
+```go
+type Spec struct {
+	Manifest       qual.Manifest
+	Packs          []qual.Pack
+	Target         eval.Target
+	TargetForTable func(qual.TablePlan) (eval.Target, error)
+	Config         eval.RunConfig
+
+	Progress func(qual.TablePlan)
+
+	OnResult func(qual.TablePlan, eval.Report)
+
+	TableConcurrency int
+}
+```
+
+```go
+type Result struct {
+	Scorecard qual.Scorecard
+	Reports   []eval.Report
+	Skipped   []qual.TablePlan
+}
+```
 
 ### Constants {#constants}
 

@@ -41,13 +41,22 @@ The following surface is read from the pinned implementation files. Signatures a
 
 - `func (c *Client) Invoke(ctx context.Context, req inference.Request) (*inference.Response, error)`
 - `func (c *Client) Stream(ctx context.Context, req inference.Request) (*stream.StreamReader[content.Chunk], error)`
-- `func (s *sseEventReader) Close() error`
-- `func (c *cancelReadCloser) Close() error`
-- `func (c *onceReadCloser) Close() error`
 
 ### Types {#types}
 
-`Client`, `Option`, `AttestReason`
+```go
+type Client struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Option func(*Client)
+```
+
+```go
+type AttestReason string
+```
 
 ### Constants {#constants}
 

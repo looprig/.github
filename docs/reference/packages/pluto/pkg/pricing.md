@@ -45,7 +45,52 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`Usage`, `Amount`, `Counter`, `Plan`, `Snapshot`, `Rates`
+```go
+type Usage struct {
+	Input, Output, Reasoning, CacheRead, CacheWrite int
+	Complete                                        bool
+}
+```
+
+```go
+type Amount struct {
+	USD    float64
+	Known  bool
+	Reason string
+}
+```
+
+```go
+type Counter interface {
+	Count(ctx context.Context, req inference.Request) (tokens int, quality string, err error)
+}
+```
+
+```go
+type Plan struct {
+	TargetCalls, JudgeCalls int
+	InputTokens             [2]int
+	OutputTokens            [2]int
+	Expected, Max           Amount
+	CounterQuality          string
+	Unknowns                []string
+}
+```
+
+```go
+type Snapshot struct {
+	SourceURL string
+	FetchedAt time.Time
+	Digest    string
+	Rows      map[string]Rates
+}
+```
+
+```go
+type Rates struct {
+	Input, Output, Reasoning, CacheRead, CacheWrite *float64
+}
+```
 
 ### Constants {#constants}
 

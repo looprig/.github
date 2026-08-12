@@ -44,7 +44,57 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`SUT`, `ArgvSUT`, `ImplicationResult`, `ImplicationProbe`, `ImplicationProbes`, `Factory`, `LiveGate`
+```go
+type SUT interface {
+	RunCommand(ctx context.Context, dir, command string) ([]byte, int, error)
+
+	Level() uint8
+
+	GuaranteeBits() uint64
+}
+```
+
+```go
+type ArgvSUT interface {
+	RunArgv(ctx context.Context, dir string, argv []string) ([]byte, int, error)
+}
+```
+
+```go
+type ImplicationResult struct {
+	PositiveControl bool
+	GuaranteeHeld   bool
+	Detail          string
+}
+```
+
+```go
+type ImplicationProbe func(context.Context, SUT) (ImplicationResult, error)
+```
+
+```go
+type ImplicationProbes struct {
+	Read           ImplicationProbe
+	Process        ImplicationProbe
+	Network        ImplicationProbe
+	AddressNetwork ImplicationProbe
+	TargetNetwork  ImplicationProbe
+	Resource       ImplicationProbe
+}
+```
+
+```go
+type Factory func(t *testing.T, workspace string) SUT
+```
+
+```go
+type LiveGate struct {
+	OptInEnv    string
+	Description string
+	Supported   func() (bool, string)
+	Evidence    func() (bool, string)
+}
+```
 
 ### Constants {#constants}
 

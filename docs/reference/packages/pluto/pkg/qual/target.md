@@ -44,7 +44,48 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`ToolCall`, `Structured`, `StructuredErr`, `Script`, `Scripted`, `UnscriptedScenarioError`
+```go
+type ToolCall struct {
+	Name    eval.Name
+	ID      string
+	IsError bool
+}
+```
+
+```go
+type Structured struct {
+	SchemaName     eval.Name
+	SchemaRevision eval.Revision
+}
+```
+
+```go
+type StructuredErr struct {
+	Schema eval.Revision
+	Reason eval.StructuredErrorReason
+}
+```
+
+```go
+type Script struct {
+	Reply         string
+	Duration      time.Duration
+	ToolCalls     []ToolCall
+	Structured    *Structured
+	StructuredErr *StructuredErr
+	Err           error
+}
+```
+
+```go
+type Scripted struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type UnscriptedScenarioError struct{}
+```
 
 ### Constants {#constants}
 

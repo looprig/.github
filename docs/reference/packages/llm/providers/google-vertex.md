@@ -41,17 +41,27 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (r headerRoute) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (route.Route, error)`
-- `func (c requestCodec) EncodeRequest(req inference.Request, mode codec.RequestMode) (codec.EncodedRequest, error)`
-- `func (c requestCodec) DecodeResponse(body []byte) (*inference.Response, error)`
-- `func (c requestCodec) DecodeStream(resp *http.Response) (*stream.StreamReader[content.Chunk], error)`
-- `func (r vertexGeminiRoute) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (route.Route, error)`
-- `func (r vertexAnthropicRoute) BuildRoute(baseURL string, req inference.Request, mode codec.RequestMode) (route.Route, error)`
 - `func (e *ConfigurationError) Error() string`
 
 ### Types {#types}
 
-`Option`, `ConfigurationReason`, `ConfigurationError`, `CounterSupportError`
+```go
+type Option func(*config)
+```
+
+```go
+type ConfigurationReason string
+```
+
+```go
+type ConfigurationError struct {
+	Reason ConfigurationReason
+}
+```
+
+```go
+type CounterSupportError = llm.CounterSupportError
+```
 
 ### Constants {#constants}
 

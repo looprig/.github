@@ -42,13 +42,14 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (f *Fetch) AuditSummary(argsJSON string) string`
 - `func (f *Fetch) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
 - `func (f *Fetch) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
-- `func (e *redirectBlockedError) Error() string`
-- `func (e *fetchError) Error() string`
-- `func (e *fetchError) Unwrap() error`
 
 ### Types {#types}
 
-`Fetch`
+```go
+type Fetch struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

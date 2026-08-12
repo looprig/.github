@@ -47,7 +47,6 @@ The following surface is read from the pinned implementation files. Signatures a
 ### Methods {#methods}
 
 - `func (e *AuthenticationError) Error() string`
-- `func (a *staticTokenAuthenticator) Authenticate(req *http.Request) error`
 - `func (e *ConfigError) Error() string`
 - `func (e *ConfigError) Unwrap() error`
 - `func (e *RouteNotFoundError) Error() string`
@@ -67,10 +66,8 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (m *Mux) ResolveExact(ctx context.Context, ingress model.APIFormat, requestedModel string) (Target, error)`
 - `func (e *UnknownRouteError) Error() string`
 - `func (e *UnknownRouteError) Is(target error) bool`
-- `func (s *strictResolver) Resolve(ctx context.Context, ingress model.APIFormat, requestedModel string) (Target, error)`
 - `func (f *FixedResolver) Resolve(ctx context.Context, ingress model.APIFormat, requestedModel string) (Target, error)`
 - `func (f *FixedResolver) ResolveExact(ctx context.Context, ingress model.APIFormat, requestedModel string) (Target, error)`
-- `func (s serverState) String() string`
 - `func (e *ServerStateError) Error() string`
 - `func (e *ShutdownTimeoutError) Error() string`
 - `func (s *Server) Start(ctx context.Context) error`
@@ -79,7 +76,182 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`Authenticator`, `AuthenticationError`, `Config`, `ConfigError`, `RouteNotFoundError`, `Handler`, `MethodNotAllowedError`, `UnsupportedContentTypeError`, `RequestTooLargeError`, `NoMatchingCodecError`, `AmbiguousCodecMatchError`, `ConcurrencyLimitExceededError`, `CountTokensUnavailableError`, `UpstreamInvocationError`, `ResponseEncodeError`, `RouteKey`, `Mux`, `UnknownRouteError`, `FixedResolver`, `Resolver`, `ExactResolver`, `ServerConfig`, `Binding`, `ServerStateError`, `ShutdownTimeoutError`, `Server`, `Target`
+```go
+type Authenticator interface {
+	Authenticate(req *http.Request) error
+}
+```
+
+```go
+type AuthenticationError struct{}
+```
+
+```go
+type Config struct {
+	Resolver Resolver
+
+	Codecs map[model.APIFormat]codec.ServerCodec
+
+	Authenticate Authenticator
+
+	ContextCounter contextcount.ContextCounter
+
+	MaxRequestBody int64
+
+	MaxConcurrent int
+}
+```
+
+```go
+type ConfigError struct {
+	Location string
+	Reason   string
+	Err      error
+}
+```
+
+```go
+type RouteNotFoundError struct {
+	Ingress model.APIFormat
+	Model   string
+}
+```
+
+```go
+type Handler struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type MethodNotAllowedError struct{ Method string }
+```
+
+```go
+type UnsupportedContentTypeError struct{ ContentType string }
+```
+
+```go
+type RequestTooLargeError struct{ Limit int64 }
+```
+
+```go
+type NoMatchingCodecError struct {
+	Method string
+	Path   string
+}
+```
+
+```go
+type AmbiguousCodecMatchError struct {
+	Method string
+	Path   string
+	Count  int
+}
+```
+
+```go
+type ConcurrencyLimitExceededError struct{}
+```
+
+```go
+type CountTokensUnavailableError struct{}
+```
+
+```go
+type UpstreamInvocationError struct {
+	Err              error
+	DeadlineExceeded bool
+}
+```
+
+```go
+type ResponseEncodeError struct{ Err error }
+```
+
+```go
+type RouteKey struct {
+	Ingress model.APIFormat
+	Model   string
+}
+```
+
+```go
+type Mux struct {
+	Routes         map[RouteKey]Target
+	FormatDefaults map[model.APIFormat]Target
+	Default        *Target
+}
+```
+
+```go
+type UnknownRouteError struct {
+	Ingress model.APIFormat
+	Alias   string
+}
+```
+
+```go
+type FixedResolver struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Resolver interface {
+	Resolve(ctx context.Context, ingress model.APIFormat, requestedModel string) (Target, error)
+}
+```
+
+```go
+type ExactResolver interface {
+	ResolveExact(ctx context.Context, ingress model.APIFormat, requestedModel string) (Target, error)
+}
+```
+
+```go
+type ServerConfig struct {
+	Handler http.Handler
+
+	ShutdownTimeout time.Duration
+}
+```
+
+```go
+type Binding struct {
+	BaseURL string
+	Token   string
+}
+```
+
+```go
+type ServerStateError struct {
+	Op    string
+	State string
+}
+```
+
+```go
+type ShutdownTimeoutError struct {
+	Timeout time.Duration
+}
+```
+
+```go
+type Server struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Target struct {
+	ID     string
+	Client inference.Client
+	Model  model.Model
+
+	AuthoritativeEffort bool
+}
+```
 
 ### Constants {#constants}
 
@@ -93,7 +265,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `AuthenticationError`, `ConfigError`, `RouteNotFoundError`, `MethodNotAllowedError`, `UnsupportedContentTypeError`, `RequestTooLargeError`, `NoMatchingCodecError`, `AmbiguousCodecMatchError`, `ConcurrencyLimitExceededError`, `CountTokensUnavailableError`, `UpstreamInvocationError`, `ResponseEncodeError`, `UnknownRouteError`, `ServerStateError`, `ShutdownTimeoutError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `AmbiguousCodecMatchError`, `AuthenticationError`, `ConcurrencyLimitExceededError`, `ConfigError`, `CountTokensUnavailableError`, `MethodNotAllowedError`, `NoMatchingCodecError`, `RequestTooLargeError`, `ResponseEncodeError`, `RouteNotFoundError`, `ServerStateError`, `ShutdownTimeoutError`, `UnknownRouteError`, `UnsupportedContentTypeError`, `UpstreamInvocationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

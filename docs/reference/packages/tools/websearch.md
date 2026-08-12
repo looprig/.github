@@ -41,18 +41,46 @@ The following surface is read from the pinned implementation files. Signatures a
 
 - `func (p *DuckDuckGoProvider) Endpoints() []Endpoint`
 - `func (p *DuckDuckGoProvider) Search(ctx context.Context, query string, max int) ([]SearchResult, error)`
-- `func (e *searchProviderError) Error() string`
-- `func (e *searchProviderError) Unwrap() error`
 - `func (w *WebSearch) Info(context.Context) (*tool.ToolInfo, error)`
 - `func (w *WebSearch) AuditSummary(argsJSON string) string`
 - `func (w *WebSearch) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
 - `func (w *WebSearch) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
-- `func (e *webSearchError) Error() string`
-- `func (e *webSearchError) Unwrap() error`
 
 ### Types {#types}
 
-`DuckDuckGoProvider`, `SearchResult`, `Endpoint`, `SearchProvider`, `WebSearch`
+```go
+type DuckDuckGoProvider struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SearchResult struct {
+	Title   string
+	URL     string
+	Snippet string
+}
+```
+
+```go
+type Endpoint struct {
+	Host string
+	Port int
+}
+```
+
+```go
+type SearchProvider interface {
+	Search(ctx context.Context, query string, max int) ([]SearchResult, error)
+	Endpoints() []Endpoint
+}
+```
+
+```go
+type WebSearch struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

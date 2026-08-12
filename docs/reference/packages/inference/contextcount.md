@@ -61,7 +61,154 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`ProviderID`, `TokenizerRevision`, `SecurityIdentity`, `CountQuality`, `ContextCount`, `ContextCounter`, `ContextCountFunc`, `ContextCounterFunc`, `CounterTransport`, `RetentionPosture`, `CounterCapability`, `InferenceTransport`, `InferenceCapability`, `ContextCountError`, `CapabilityKind`, `CapabilityField`, `CapabilityValidationReason`, `CapabilityValidationError`, `CounterCompatibilityReason`, `CounterCompatibilityError`, `EstimatorStateReason`, `EstimatorStateError`, `ModelIdentityError`, `UnsupportedAPIFormatError`, `RequestEncodingError`, `Estimator`
+```go
+type ProviderID string
+```
+
+```go
+type TokenizerRevision string
+```
+
+```go
+type SecurityIdentity [32]byte
+```
+
+```go
+type CountQuality uint8
+```
+
+```go
+type ContextCount struct {
+	Model       model.ModelKey
+	InputTokens content.TokenCount
+	Quality     CountQuality
+}
+```
+
+```go
+type ContextCounter interface {
+	CountContext(context.Context, inference.Request) (ContextCount, error)
+	CounterCapability() CounterCapability
+}
+```
+
+```go
+type ContextCountFunc func(context.Context, inference.Request) (ContextCount, error)
+```
+
+```go
+type ContextCounterFunc struct {
+	Count      ContextCountFunc
+	Capability CounterCapability
+}
+```
+
+```go
+type CounterTransport uint8
+```
+
+```go
+type RetentionPosture uint8
+```
+
+```go
+type CounterCapability struct {
+	Provider         ProviderID
+	Transport        CounterTransport
+	SecurityIdentity SecurityIdentity
+	Retention        RetentionPosture
+	TokenizerRev     TokenizerRevision
+	Quality          CountQuality
+}
+```
+
+```go
+type InferenceTransport uint8
+```
+
+```go
+type InferenceCapability struct {
+	Provider         ProviderID
+	Transport        InferenceTransport
+	SecurityIdentity SecurityIdentity
+	Retention        RetentionPosture
+}
+```
+
+```go
+type ContextCountError struct {
+	Model   model.ModelKey
+	Quality CountQuality
+	Cause   error
+}
+```
+
+```go
+type CapabilityKind string
+```
+
+```go
+type CapabilityField string
+```
+
+```go
+type CapabilityValidationReason string
+```
+
+```go
+type CapabilityValidationError struct {
+	Capability CapabilityKind
+	Field      CapabilityField
+	Reason     CapabilityValidationReason
+}
+```
+
+```go
+type CounterCompatibilityReason string
+```
+
+```go
+type CounterCompatibilityError struct {
+	Inference InferenceCapability
+	Counter   CounterCapability
+	Reason    CounterCompatibilityReason
+	Cause     error
+}
+```
+
+```go
+type EstimatorStateReason string
+```
+
+```go
+type EstimatorStateError struct {
+	Reason EstimatorStateReason
+}
+```
+
+```go
+type ModelIdentityError struct {
+	Model model.ModelKey
+	Err   error
+}
+```
+
+```go
+type UnsupportedAPIFormatError struct {
+	APIFormat model.APIFormat
+}
+```
+
+```go
+type RequestEncodingError struct {
+	APIFormat model.APIFormat
+	Err       error
+}
+```
+
+```go
+type Estimator struct{}
+```
 
 ### Constants {#constants}
 
@@ -69,13 +216,13 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Variables {#variables}
 
-`ErrContextCountFunctionMissing`
+`ErrContextCountFunctionMissing`, `ErrContextCountQualityInvalid`, `ErrContextCountModelMismatch`, `ErrContextCountCapabilityQualityMismatch`
 
 ## Ownership and errors {#ownership-and-errors}
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ContextCountError`, `CapabilityValidationError`, `CounterCompatibilityError`, `EstimatorStateError`, `ModelIdentityError`, `UnsupportedAPIFormatError`, `RequestEncodingError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CapabilityValidationError`, `ContextCountError`, `CounterCompatibilityError`, `EstimatorStateError`, `ModelIdentityError`, `RequestEncodingError`, `UnsupportedAPIFormatError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

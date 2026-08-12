@@ -43,12 +43,18 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (r *ReadFile) AuditSummary(argsJSON string) string`
 - `func (r *ReadFile) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
 - `func (r *ReadFile) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
-- `func (e *readFileError) Error() string`
-- `func (e *readFileError) Unwrap() error`
 
 ### Types {#types}
 
-`ReadFile`, `ReadFileOption`
+```go
+type ReadFile struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ReadFileOption func(*ReadFile)
+```
 
 ### Constants {#constants}
 

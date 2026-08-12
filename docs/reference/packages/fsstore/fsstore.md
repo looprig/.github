@@ -43,10 +43,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *BlobPathError) Error() string`
 - `func (e *BlobIOError) Error() string`
 - `func (e *BlobIOError) Unwrap() error`
-- `func (s *blobStore) Put(ctx context.Context, key string, r io.Reader) error`
-- `func (s *blobStore) Get(ctx context.Context, key string) (io.ReadCloser, error)`
-- `func (s *blobStore) Delete(ctx context.Context, key string) error`
-- `func (s *blobStore) List(ctx context.Context, prefix string) ([]string, error)`
 - `func (e *FlockError) Error() string`
 - `func (e *FlockError) Unwrap() error`
 - `func (e *FrameError) IsTorn() bool`
@@ -56,10 +52,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *OptionsError) Unwrap() error`
 - `func (s *Store) Backend() *storage.Composite`
 - `func (s *Store) StoragePaths() []string`
-- `func (s *ledgerStore) StoragePaths() []string`
-- `func (s *leaserStore) StoragePaths() []string`
-- `func (s *kvStore) StoragePaths() []string`
-- `func (s *blobStore) StoragePaths() []string`
 - `func (s *Store) Close() error`
 - `func (e *KVRootError) Error() string`
 - `func (e *KVPathError) Error() string`
@@ -67,39 +59,175 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *KVIOError) Unwrap() error`
 - `func (e *KVCorruptError) Error() string`
 - `func (e *KVCorruptError) Unwrap() error`
-- `func (s *kvStore) Get(ctx context.Context, key string) ([]byte, uint64, error)`
-- `func (s *kvStore) Put(ctx context.Context, key string, expectedRev uint64, val []byte) (uint64, error)`
-- `func (s *kvStore) Keys(ctx context.Context, prefix string) ([]string, error)`
-- `func (s *kvStore) Delete(ctx context.Context, key string) error`
 - `func (e *LeaseRootError) Error() string`
 - `func (e *LeasePathError) Error() string`
 - `func (e *LeaseIOError) Error() string`
 - `func (e *LeaseIOError) Unwrap() error`
 - `func (e *LeaseCorruptError) Error() string`
 - `func (e *LeaseCorruptError) Unwrap() error`
-- `func (s *leaserStore) Acquire(ctx context.Context, name string) (storage.Lease, error)`
-- `func (l *fsLease) Epoch() uint64`
-- `func (l *fsLease) Lost() <-chan struct{}`
-- `func (l *fsLease) Release(ctx context.Context) error`
 - `func (e *LedgerCorruptError) Error() string`
 - `func (e *LedgerCorruptError) Unwrap() error`
 - `func (e *LedgerPathError) Error() string`
 - `func (e *LedgerRootError) Error() string`
 - `func (e *LedgerIOError) Error() string`
 - `func (e *LedgerIOError) Unwrap() error`
-- `func (s *ledgerStore) Close() error`
-- `func (s *ledgerStore) Append(ctx context.Context, name string, expected uint64, payload []byte) (err error)`
-- `func (s *ledgerStore) Read(ctx context.Context, name string, from uint64) (storage.Cursor, error)`
-- `func (s *ledgerStore) Tip(ctx context.Context, name string) (uint64, error)`
-- `func (s *ledgerStore) Delete(ctx context.Context, name string) (err error)`
-- `func (drainedCursor) Next(ctx context.Context) (storage.Record, error)`
-- `func (drainedCursor) Close() error`
-- `func (c *recordCursor) Next(ctx context.Context) (storage.Record, error)`
-- `func (c *recordCursor) Close() error`
 
 ### Types {#types}
 
-`BlobRootError`, `BlobPathError`, `BlobIOError`, `FlockError`, `FrameFault`, `FrameError`, `Options`, `OptionsError`, `Store`, `KVRootError`, `KVPathError`, `KVIOError`, `KVCorruptError`, `LeaseRootError`, `LeasePathError`, `LeaseIOError`, `LeaseCorruptError`, `LedgerCorruptError`, `LedgerPathError`, `LedgerRootError`, `LedgerIOError`
+```go
+type BlobRootError struct {
+	Root   string
+	Reason string
+}
+```
+
+```go
+type BlobPathError struct {
+	Key  string
+	Path string
+}
+```
+
+```go
+type BlobIOError struct {
+	Op    string
+	Path  string
+	Cause error
+}
+```
+
+```go
+type FlockError struct {
+	Op    string
+	Path  string
+	Cause error
+}
+```
+
+```go
+type FrameFault uint8
+```
+
+```go
+type FrameError struct {
+	Fault FrameFault
+
+	Have int
+
+	Need int
+
+	Length uint64
+}
+```
+
+```go
+type Options struct {
+	Root string
+}
+```
+
+```go
+type OptionsError struct {
+	Field  string
+	Reason string
+	Cause  error
+}
+```
+
+```go
+type Store struct {
+	*storage.Composite
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type KVRootError struct {
+	Root   string
+	Reason string
+}
+```
+
+```go
+type KVPathError struct {
+	Key  string
+	Path string
+}
+```
+
+```go
+type KVIOError struct {
+	Op    string
+	Path  string
+	Cause error
+}
+```
+
+```go
+type KVCorruptError struct {
+	Path  string
+	Cause error
+}
+```
+
+```go
+type LeaseRootError struct {
+	Root   string
+	Reason string
+}
+```
+
+```go
+type LeasePathError struct {
+	Name string
+	Path string
+}
+```
+
+```go
+type LeaseIOError struct {
+	Op    string
+	Path  string
+	Cause error
+}
+```
+
+```go
+type LeaseCorruptError struct {
+	Path  string
+	Cause error
+}
+```
+
+```go
+type LedgerCorruptError struct {
+	Path  string
+	Seq   uint64
+	Cause error
+}
+```
+
+```go
+type LedgerPathError struct {
+	Name string
+	Path string
+}
+```
+
+```go
+type LedgerRootError struct {
+	Root   string
+	Reason string
+}
+```
+
+```go
+type LedgerIOError struct {
+	Op    string
+	Path  string
+	Cause error
+}
+```
 
 ### Constants {#constants}
 
@@ -113,7 +241,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `BlobRootError`, `BlobPathError`, `BlobIOError`, `FlockError`, `FrameError`, `OptionsError`, `KVRootError`, `KVPathError`, `KVIOError`, `KVCorruptError`, `LeaseRootError`, `LeasePathError`, `LeaseIOError`, `LeaseCorruptError`, `LedgerCorruptError`, `LedgerPathError`, `LedgerRootError`, `LedgerIOError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BlobIOError`, `BlobPathError`, `BlobRootError`, `FlockError`, `FrameError`, `KVCorruptError`, `KVIOError`, `KVPathError`, `KVRootError`, `LeaseCorruptError`, `LeaseIOError`, `LeasePathError`, `LeaseRootError`, `LedgerCorruptError`, `LedgerIOError`, `LedgerPathError`, `LedgerRootError`, `OptionsError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

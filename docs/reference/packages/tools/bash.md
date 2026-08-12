@@ -44,18 +44,30 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (noPermit) Release()`
 - `func (b *BashTool) Info(context.Context) (*tool.ToolInfo, error)`
 - `func (b *BashTool) AuditSummary(argsJSON string) string`
 - `func (b *BashTool) InvokableRun(ctx context.Context, _ string) (*tool.ToolResult, error)`
-- `func (c *cappedBuffer) Write(p []byte) (int, error)`
-- `func (e *bashPrepareError) Error() string`
 - `func (b *BashTool) PrepareCall(_ context.Context, executionID uuid.UUID, argsJSON string) (tool.Request, tool.PreparedArtifact, error)`
-- `func (l leaseFromPermit) Release() error`
 
 ### Types {#types}
 
-`BashTool`, `BashOption`, `Factory`, `SupervisedFactory`
+```go
+type BashTool struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type BashOption func(*BashTool)
+```
+
+```go
+type Factory func(root string, coordinator tool.WorkspaceCoordinator, observations tool.WorkspaceObservations) *BashTool
+```
+
+```go
+type SupervisedFactory func(bindings tool.Bindings, runner tool.AsyncProcessRunner) (*BashTool, error)
+```
 
 ### Constants {#constants}
 

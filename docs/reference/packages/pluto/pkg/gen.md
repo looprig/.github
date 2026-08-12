@@ -43,7 +43,31 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`Request`, `Result`, `Rejection`
+```go
+type Request struct {
+	Doc    *packfile.Document
+	Table  string
+	N      int
+	Focus  string
+	Intent string
+	Model  model.Model
+}
+```
+
+```go
+type Result struct {
+	Accepted  []packfile.ScenarioSpec
+	Rejected  []Rejection
+	InputText string
+}
+```
+
+```go
+type Rejection struct {
+	ID     string
+	Reason string
+}
+```
 
 ### Constants {#constants}
 

@@ -42,51 +42,58 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Methods {#methods}
 
-- `func (a *initAgent) Spawn(ctx context.Context, turn driver.Turn) (driver.Stream, error)`
-- `func (a *initAgent) Close() error`
-- `func (a *initAgent) Steer(ctx context.Context, request driver.SteerRequest) (driver.SteerResult, error)`
-- `func (s *initStream) Events() <-chan driver.Event`
-- `func (s *initStream) Observations() <-chan driver.Observation`
-- `func (s *orderedInitStream) Events() <-chan driver.Event`
-- `func (s *orderedInitStream) Observations() <-chan driver.Observation`
-- `func (s *orderedInitStream) History() (driver.History, error)`
-- `func (s *orderedInitStream) Close() error`
-- `func (s *legacyInitStream) Events() <-chan driver.Event`
-- `func (s *legacyInitStream) History() (driver.History, error)`
-- `func (s *legacyInitStream) Close() error`
-- `func (s *initStream) History() (driver.History, error)`
-- `func (s *initStream) Close() error`
 - `func (e *ConfigError) Error() string`
-- `func (a steerAdmission) String() string`
-- `func (d *steerDispatcher) Events() <-chan dispatcherEvent`
 - `func (d *Driver) AgentSessionID() string`
 - `func (d *Driver) Steer(ctx context.Context, request driver.SteerRequest) (driver.SteerResult, error)`
 - `func (d *Driver) Close() error`
-- `func (c *realClient) InitializeMetadata() (client.InitializeMetadata, error)`
-- `func (c *realClient) NewSession(ctx context.Context, p client.NewSessionParams) (session, error)`
-- `func (c *realClient) LoadSession(ctx context.Context, p client.LoadSessionParams) (session, error)`
-- `func (c *realCodexConnector) SelectModel(ctx context.Context, sess session) error`
-- `func (c *realCodexConnector) SelectEffort(ctx context.Context, sess session) error`
-- `func (c *realClaudeConnector) SelectDefaultModel(ctx context.Context, sess session) error`
-- `func (c *realClaudeConnector) SelectSmallModel(ctx context.Context, sess session) error`
-- `func (c *realClaudeConnector) SelectEffort(ctx context.Context, sess session) error`
-- `func (c *realClaudeConnector) ApplyPermissionMode(ctx context.Context, sess session, modeID protocol.SessionModeID) error`
-- `func (h *permissionHandler) RequestPermission(_ context.Context, req protocol.RequestPermissionRequest) (protocol.RequestPermissionResponse, error)`
-- `func (s steerReservationStatus) String() string`
-- `func (legacyTurnSession) WaitForUpdates(context.Context) error`
-- `func (r steerSendResult) String() string`
-- `func (s *stream) Events() <-chan driver.Event`
-- `func (s *stream) History() (driver.History, error)`
-- `func (s *stream) Close() error`
-- `func (s *orderedStream) Events() <-chan driver.Event`
-- `func (s *orderedStream) Observations() <-chan driver.Observation`
-- `func (s *orderedStream) History() (driver.History, error)`
-- `func (s *orderedStream) Close() error`
 - `func (d *Driver) Spawn(ctx context.Context, turn driver.Turn) (driver.Stream, error)`
 
 ### Types {#types}
 
-`Harness`, `Config`, `ConfigError`, `Driver`
+```go
+type Harness string
+```
+
+```go
+type Config struct {
+	Harness Harness
+
+	Executable string
+
+	Env []string
+
+	Credential loop.CredentialMode
+
+	Binding launch.ProxyBinding
+
+	ModelAlias string
+
+	Effort string
+
+	SmallModelAlias string
+
+	Posture driver.Posture
+
+	AgentSessionID string
+
+	WorkspaceRoot string
+
+	McpServers []protocol.McpServer
+}
+```
+
+```go
+type ConfigError struct {
+	Field  string
+	Reason string
+}
+```
+
+```go
+type Driver struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

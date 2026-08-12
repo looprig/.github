@@ -57,13 +57,58 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (c *Client) Send(ctx context.Context, request MessageAgentRequest) (DelegateResult, error)`
 - `func (c *Client) CallJSON(ctx context.Context, request MessageAgentRequest) (json.RawMessage, error)`
 - `func (c *Client) CallRaw(ctx context.Context, request MessageAgentRequest) (json.RawMessage, error)`
-- `func (e *wireError) Error() string`
-- `func (e *wireError) Unwrap() error`
-- `func (e *wireError) Is(target error) bool`
 
 ### Types {#types}
 
-`DialFunc`, `Client`, `MessageAgentRequest`, `PreparedMessageAgent`, `DelegateResult`, `ClientConfig`, `Config`
+```go
+type DialFunc func(context.Context, string) (net.Conn, error)
+```
+
+```go
+type Client struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type MessageAgentRequest struct {
+	AgentID         string `json:"agent_id"`
+	Message         string `json:"message"`
+	WaitForResponse bool   `json:"wait_for_response"`
+	TimeoutSeconds  *int   `json:"timeout_seconds,omitempty"`
+}
+```
+
+```go
+type PreparedMessageAgent = MessageAgentRequest
+```
+
+```go
+type DelegateResult struct {
+	AgentID        string `json:"agent_id"`
+	Name           string `json:"name"`
+	State          string `json:"state"`
+	DeliveryStatus string `json:"delivery_status,omitempty"`
+	ResponseStatus string `json:"response_status,omitempty"`
+	Response       string `json:"response,omitempty"`
+}
+```
+
+```go
+type ClientConfig struct {
+	Endpoint   string
+	Capability []byte
+	Token      []byte
+
+	ConnectTimeout   time.Duration
+	AdmissionTimeout time.Duration
+	MaxFrameBytes    int
+}
+```
+
+```go
+type Config = ClientConfig
+```
 
 ### Constants {#constants}
 
@@ -71,7 +116,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Variables {#variables}
 
-`ErrInvalidRequest`
+`ErrInvalidRequest`, `ErrInvalidArguments`, `ErrInputLimit`, `ErrInvalidCapability`, `ErrInvalidConfig`, `ErrFrameLimit`, `ErrFrameTooLarge`, `ErrFrame`, `ErrAuthentication`, `ErrAuth`, `ErrConnection`, `ErrAdmission`, `ErrResponse`, `ErrDeadline`, `ErrUnsupportedPlatform`
 
 ## Ownership and errors {#ownership-and-errors}
 

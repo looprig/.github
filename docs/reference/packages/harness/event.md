@@ -68,14 +68,6 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (v EventVisibility) Valid() bool`
 - `func (h Header) EventHeader() Header`
 - `func (h Header) Visibility() EventVisibility`
-- `func (ephemeral) Class() Class`
-- `func (ephemeral) EndsTurn() bool`
-- `func (enduring) Class() Class`
-- `func (enduring) EndsTurn() bool`
-- `func (terminal) Class() Class`
-- `func (terminal) EndsTurn() bool`
-- `func (sessionScoped) Scope() Scope`
-- `func (loopScoped) Scope() Scope`
 - `func (s DecisionSource) Valid() bool`
 - `func (f *Factory) Stamp(h Header) (Header, error)`
 - `func (f *Factory) StampWorkflowActivity(ev WorkflowActivity, deterministicID uuid.UUID) (WorkflowActivity, error)`
@@ -104,7 +96,1011 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`CompactAttemptID`, `CompactionReason`, `CompactRejectReason`, `CompactionStarted`, `CompactionCommitted`, `CompactionRejected`, `CompactWaiterResolved`, `CompactWaiterRejected`, `ConfigFingerprint`, `ConfigEpoch`, `StrictnessLevel`, `ToolManifestEntry`, `ConfigManifest`, `ContextRevision`, `ContextBasis`, `ContextMeasurement`, `ContextField`, `ContextValidationError`, `BasisPoints`, `PressureLevel`, `ContextMeasured`, `ContextPressure`, `DelegateDeliveryState`, `DelegateDeliveryStateChanged`, `DriftSeverity`, `DriftCategory`, `DriftChange`, `DriftAssessment`, `EmptyResponseError`, `ToolLimitError`, `TurnPanicError`, `Event`, `Reply`, `Class`, `Scope`, `EventVisibility`, `CancelReason`, `Header`, `Subscription`, `Delivery`, `HustleRunDescriptor`, `HustleStarted`, `HustleCompleted`, `HustleFailed`, `TurnIndex`, `SessionStarted`, `SessionActive`, `SessionIdle`, `SessionStopped`, `RestoreStarted`, `RestoreDone`, `RestoreErrored`, `DecisionSource`, `ConfigurationAdopted`, `WorkspaceCheckpointed`, `SnapshotConsistency`, `SnapshotTriggerKind`, `WorkspaceRestored`, `ActiveLoopChanged`, `LoopRestoreTombstoned`, `LoopIdle`, `LoopStarted`, `AgentRuntime`, `DelegateRequestAccepted`, `ForeignSessionBound`, `LoopAgentSessionBound`, `Clock`, `IDGen`, `Factory`, `EventFilter`, `LoopScope`, `GatePrepared`, `GateOpened`, `GateResolved`, `IntegrationState`, `IntegrationStatus`, `EphemeralNotPersistableError`, `UnknownEventTypeError`, `UnsupportedSchemaError`, `EventEncodeError`, `EventDecodeError`, `LegacyRuntimeMigrationError`, `EventLimitError`, `UnknownMessageRoleError`, `PermissionReviewStarted`, `PermissionReviewCompleted`, `ProcessStarted`, `ProcessBackgrounded`, `ProcessCompleted`, `ProcessStopRequested`, `ProcessLost`, `RestoredError`, `RestoredModelFacingError`, `PermissionDecisionEffect`, `PermissionRequested`, `PermissionDecided`, `UserInputRequested`, `ToolCallStarted`, `ToolCallCompleted`, `ModelRuntime`, `LoopInferenceChanged`, `LoopModeChanged`, `ExternalToolIdentity`, `LoopExternalToolsetChanged`, `TurnStarted`, `StepDone`, `TurnFoldedInto`, `InputCancelled`, `RejectReason`, `InputQueued`, `TurnRejected`, `TokenDelta`, `TurnDone`, `TurnFailed`, `TurnInterrupted`, `EventName`, `FieldName`, `Rule`, `InvalidEventError`, `WorkflowActivityKind`, `WorkflowRunStatus`, `WorkflowActivity`
+```go
+type CompactAttemptID uuid.UUID
+```
+
+```go
+type CompactionReason uint8
+```
+
+```go
+type CompactRejectReason uint8
+```
+
+```go
+type CompactionStarted struct {
+	Header
+	AttemptID CompactAttemptID `json:"attempt_id"`
+	Reason    CompactionReason `json:"reason"`
+	Basis     ContextBasis     `json:"basis"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CompactionCommitted struct {
+	Header
+	AttemptID        CompactAttemptID     `json:"attempt_id"`
+	WaiterCommandIDs []uuid.UUID          `json:"waiter_command_ids"`
+	Reason           CompactionReason     `json:"reason"`
+	Basis            ContextBasis         `json:"basis"`
+	Summary          *content.UserMessage `json:"summary"`
+	PostContext      ContextMeasurement   `json:"post_context"`
+	Duration         time.Duration        `json:"duration,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CompactionRejected struct {
+	Header
+	AttemptID        CompactAttemptID    `json:"attempt_id"`
+	WaiterCommandIDs []uuid.UUID         `json:"waiter_command_ids"`
+	Reason           CompactionReason    `json:"reason"`
+	Basis            ContextBasis        `json:"basis"`
+	RejectReason     CompactRejectReason `json:"reject_reason"`
+	Duration         time.Duration       `json:"duration,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CompactWaiterResolved struct {
+	Header
+	AttemptID        CompactAttemptID `json:"attempt_id"`
+	CommittedEventID uuid.UUID        `json:"committed_event_id"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CompactWaiterRejected struct {
+	Header
+	AttemptID CompactAttemptID    `json:"attempt_id"`
+	Reason    CompactRejectReason `json:"reason"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ConfigFingerprint struct {
+	TopologyRev string `json:"topology_rev,omitzero"`
+
+	AgentKind string `json:"agent_kind,omitzero"`
+
+	ModelID string `json:"model_id,omitzero"`
+
+	SystemPromptRev string `json:"system_prompt_rev,omitzero"`
+
+	ToolPolicyRev string `json:"tool_policy_rev,omitzero"`
+
+	RuntimeSkills bool `json:"runtime_skills,omitzero"`
+
+	WorkspaceRoot string `json:"workspace_root,omitzero"`
+
+	AgentAdapter string `json:"agent_adapter,omitzero"`
+
+	PermissionPosture string `json:"permission_posture,omitzero"`
+
+	NativePermissionPolicyRev string `json:"native_permission_policy_rev,omitzero"`
+
+	ExternalCapabilityRev string `json:"external_capability_rev,omitzero"`
+
+	RuntimeProfile string `json:"runtime_profile,omitzero"`
+
+	RuntimeCatalogRev string `json:"runtime_catalog_rev,omitzero"`
+
+	RuntimeIdentityRev string `json:"runtime_identity_rev,omitzero"`
+}
+```
+
+```go
+type ConfigEpoch uint64
+```
+
+```go
+type StrictnessLevel uint8
+```
+
+```go
+type ToolManifestEntry struct {
+	Name            string `json:"name"`
+	InputSchemaRev  string `json:"input_schema_rev,omitzero"`
+	OutputSchemaRev string `json:"output_schema_rev,omitzero"`
+}
+```
+
+```go
+type ConfigManifest struct {
+	SchemaVersion   uint32              `json:"schema_version"`
+	AgentKind       string              `json:"agent_kind,omitzero"`
+	TopologyRev     string              `json:"topology_rev,omitzero"`
+	ModelID         string              `json:"model_id,omitzero"`
+	SystemPromptRev string              `json:"system_prompt_rev,omitzero"`
+	Tools           []ToolManifestEntry `json:"tools,omitzero"`
+	RuntimeSkills   bool                `json:"runtime_skills,omitzero"`
+	WorkspaceRoot   string              `json:"workspace_root,omitzero"`
+	WorkspaceTrust  string              `json:"workspace_trust,omitzero"`
+	AgentAdapter    string              `json:"agent_adapter,omitzero"`
+
+	PermissionPosture         string          `json:"permission_posture,omitzero"`
+	NativePermissionPolicyRev string          `json:"native_permission_policy_rev,omitzero"`
+	PermissionStrictness      StrictnessLevel `json:"permission_strictness,omitzero"`
+
+	PermissionReviewConfigured bool `json:"permission_review_configured,omitzero"`
+
+	PermissionReviewPolicyRev string          `json:"permission_review_policy_rev,omitzero"`
+	ConfinementRev            string          `json:"confinement_rev,omitzero"`
+	ConfinementStrictness     StrictnessLevel `json:"confinement_strictness,omitzero"`
+	ExternalCapabilityRev     string          `json:"external_capability_rev,omitzero"`
+	HookPolicyRev             string          `json:"hook_policy_rev,omitzero"`
+	RuntimeProfile            string          `json:"runtime_profile,omitzero"`
+	RuntimeCatalogRev         string          `json:"runtime_catalog_rev,omitzero"`
+
+	RuntimeIdentityRev string `json:"runtime_identity_rev,omitzero"`
+
+	AppFields map[string]string `json:"app_fields,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ContextRevision uint64
+```
+
+```go
+type ContextBasis struct {
+	Revision       ContextRevision `json:"revision"`
+	ThroughEventID uuid.UUID       `json:"through_event_id"`
+}
+```
+
+```go
+type ContextMeasurement struct {
+	Basis              ContextBasis              `json:"basis"`
+	Model              model.ModelKey            `json:"model"`
+	RequestFingerprint [32]byte                  `json:"request_fingerprint"`
+	InputTokens        content.TokenCount        `json:"input_tokens"`
+	InputLimit         content.TokenCount        `json:"input_limit"`
+	Quality            contextcount.CountQuality `json:"quality"`
+}
+```
+
+```go
+type ContextField string
+```
+
+```go
+type ContextValidationError struct {
+	Field ContextField
+	Cause error
+}
+```
+
+```go
+type BasisPoints uint16
+```
+
+```go
+type PressureLevel uint8
+```
+
+```go
+type ContextMeasured struct {
+	Header
+	Measurement ContextMeasurement `json:"measurement"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ContextPressure struct {
+	Header
+	Measurement ContextMeasurement `json:"measurement"`
+	Occupancy   BasisPoints        `json:"occupancy"`
+	Previous    PressureLevel      `json:"previous"`
+	Current     PressureLevel      `json:"current"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type DelegateDeliveryState string
+```
+
+```go
+type DelegateDeliveryStateChanged struct {
+	Header
+	RequestID    uuid.UUID             `json:"request_id"`
+	TargetLoopID uuid.UUID             `json:"target_loop_id"`
+	State        DelegateDeliveryState `json:"state"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type DriftSeverity string
+```
+
+```go
+type DriftCategory string
+```
+
+```go
+type DriftChange struct {
+	Category DriftCategory `json:"category"`
+	Field    string        `json:"field,omitzero"`
+	Old      string        `json:"old,omitzero"`
+	New      string        `json:"new,omitzero"`
+	Severity DriftSeverity `json:"severity"`
+}
+```
+
+```go
+type DriftAssessment struct {
+	Changes         []DriftChange `json:"changes,omitzero"`
+	BaselineUpgrade bool          `json:"baseline_upgrade,omitzero"`
+}
+```
+
+```go
+type EmptyResponseError struct{}
+```
+
+```go
+type ToolLimitError struct {
+	Iterations    int
+	MaxIterations int
+	Calls         int
+	MaxCalls      int
+}
+```
+
+```go
+type TurnPanicError struct{ Detail string }
+```
+
+```go
+type Event interface {
+	isEvent()
+	Class() Class
+	Scope() Scope
+	EndsTurn() bool
+	EventHeader() Header
+	Visibility() EventVisibility
+}
+```
+
+```go
+type Reply interface {
+	Event
+	isReply()
+	ReplyTo() uuid.UUID
+}
+```
+
+```go
+type Class uint8
+```
+
+```go
+type Scope uint8
+```
+
+```go
+type EventVisibility uint8
+```
+
+```go
+type CancelReason uint8
+```
+
+```go
+type Header struct {
+	identity.Coordinates
+
+	AgentName identity.AgentName `json:"agent_name,omitzero"`
+
+	EventID uuid.UUID `json:"event_id,omitzero"`
+
+	CreatedAt time.Time `json:"created_at,omitzero"`
+
+	Cause identity.Cause `json:"cause,omitzero"`
+
+	EventVisibility EventVisibility `json:"visibility,omitzero"`
+}
+```
+
+```go
+type Subscription interface {
+	Events() <-chan Delivery
+	Close() error
+	Err() error
+}
+```
+
+```go
+type Delivery struct {
+	Event      Event
+	JournalSeq uint64
+}
+```
+
+```go
+type HustleRunDescriptor struct {
+	Definition hustle.DefinitionDescriptor `json:"definition"`
+	RunID      hustle.RunID                `json:"run_id"`
+	Runtime    ModelRuntime                `json:"runtime,omitzero"`
+}
+```
+
+```go
+type HustleStarted struct {
+	Header
+	Run HustleRunDescriptor `json:"run"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type HustleCompleted struct {
+	Header
+	Run      HustleRunDescriptor `json:"run"`
+	Duration time.Duration       `json:"duration,omitzero"`
+	Usage    *content.Usage      `json:"usage,omitempty"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type HustleFailed struct {
+	Header
+	Run        HustleRunDescriptor `json:"run"`
+	Duration   time.Duration       `json:"duration,omitzero"`
+	Stage      hustle.Stage        `json:"stage"`
+	ReasonCode hustle.ReasonCode   `json:"reason_code"`
+	Usage      *content.Usage      `json:"usage,omitempty"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TurnIndex int
+```
+
+```go
+type SessionStarted struct {
+	Header
+	Config   ConfigFingerprint `json:"config,omitzero"`
+	Manifest ConfigManifest    `json:"manifest,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SessionActive struct {
+	Header
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SessionIdle struct {
+	Header
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SessionStopped struct {
+	Header
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type RestoreStarted struct {
+	Header
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type RestoreDone struct {
+	Header
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type RestoreErrored struct {
+	Header
+
+	Err error `json:"-"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type DecisionSource string
+```
+
+```go
+type ConfigurationAdopted struct {
+	Header
+	Epoch               ConfigEpoch    `json:"epoch"`
+	PreviousFingerprint string         `json:"previous_fingerprint,omitzero"`
+	AdoptedFingerprint  string         `json:"adopted_fingerprint"`
+	Manifest            ConfigManifest `json:"manifest"`
+	Drift               []DriftChange  `json:"drift,omitzero"`
+	Source              DecisionSource `json:"source"`
+	Actor               string         `json:"actor,omitzero"`
+	AppVersion          string         `json:"app_version,omitzero"`
+
+	Message string `json:"message,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type WorkspaceCheckpointed struct {
+	Header
+	Ref         string              `json:"ref"`
+	Consistency SnapshotConsistency `json:"consistency"`
+	Trigger     SnapshotTriggerKind `json:"trigger"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type SnapshotConsistency uint8
+```
+
+```go
+type SnapshotTriggerKind uint8
+```
+
+```go
+type WorkspaceRestored struct {
+	Header
+	Ref string `json:"ref"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ActiveLoopChanged struct {
+	Header
+	PreviousLoopID uuid.UUID `json:"previous_loop_id,omitzero"`
+	ActiveLoopID   uuid.UUID `json:"active_loop_id"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type LoopRestoreTombstoned struct {
+	Header
+	Category string `json:"category"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type LoopIdle struct {
+	Header
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type LoopStarted struct {
+	Header
+
+	Runtime      ModelRuntime  `json:"runtime,omitzero"`
+	AgentRuntime *AgentRuntime `json:"agent_runtime,omitempty"`
+
+	ParentToolUseID string `json:"parent_tool_use_id,omitzero"`
+
+	ForeignSID string `json:"foreign_sid,omitzero"`
+
+	InitialMode string `json:"initial_mode,omitzero"`
+
+	InitialRequestID uuid.UUID `json:"initial_request_id,omitzero"`
+
+	DisplayName string `json:"display_name,omitzero"`
+
+	Description string `json:"description,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type AgentRuntime struct {
+	Harness         string `json:"harness"`
+	Profile         string `json:"profile"`
+	CredentialMode  string `json:"credential_mode"`
+	Source          string `json:"source,omitempty"`
+	SelectionKind   string `json:"selection_kind,omitempty"`
+	ModelAlias      string `json:"model_alias"`
+	SmallModelAlias string `json:"small_model_alias,omitempty"`
+	ACPSessionID    string `json:"acp_session_id,omitempty"`
+}
+```
+
+```go
+type DelegateRequestAccepted struct {
+	Header
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ForeignSessionBound struct {
+	Header
+	ForeignSID string `json:"foreign_sid"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type LoopAgentSessionBound struct {
+	Header
+	ACPSessionID string `json:"acp_session_id"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Clock func() time.Time
+```
+
+```go
+type IDGen func() (uuid.UUID, error)
+```
+
+```go
+type Factory struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type EventFilter struct {
+	Ephemeral LoopScope
+	Enduring  LoopScope
+}
+```
+
+```go
+type LoopScope struct {
+	All   bool
+	Loops map[uuid.UUID]struct{}
+}
+```
+
+```go
+type GatePrepared struct {
+	Header
+	Gate gate.Gate `json:"gate,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type GateOpened struct {
+	Header
+	Gate gate.Gate `json:"gate,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type GateResolved struct {
+	Header
+	GateID gate.ID `json:"gate_id,omitzero"`
+
+	Resolver gate.ResolverKind   `json:"resolver,omitempty"`
+	Reason   gate.CloseReason    `json:"reason,omitempty"`
+	Action   string              `json:"action,omitempty"`
+	Source   gate.ResponseSource `json:"source,omitzero"`
+
+	Audit gate.ResponseAudit `json:"-"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type IntegrationState uint8
+```
+
+```go
+type IntegrationStatus struct {
+	Header
+
+	Source string `json:"source"`
+
+	Name string `json:"name"`
+
+	State IntegrationState `json:"state"`
+
+	Detail string `json:"detail,omitempty"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type EphemeralNotPersistableError struct{ Type string }
+```
+
+```go
+type UnknownEventTypeError struct{ Type string }
+```
+
+```go
+type UnsupportedSchemaError struct {
+	Kind    string
+	Version uint32
+}
+```
+
+```go
+type EventEncodeError struct {
+	Type  string
+	Cause error
+}
+```
+
+```go
+type EventDecodeError struct {
+	Type  string
+	Cause error
+}
+```
+
+```go
+type LegacyRuntimeMigrationError struct {
+	Type   string
+	Field  string
+	Reason string
+}
+```
+
+```go
+type EventLimitError struct {
+	Got int
+	Max int
+}
+```
+
+```go
+type UnknownMessageRoleError struct{ Role string }
+```
+
+```go
+type PermissionReviewStarted struct {
+	Header
+	GateID             gate.ID     `json:"gate_id,omitzero"`
+	ToolExecutionID    uuid.UUID   `json:"tool_execution_id,omitzero"`
+	Classifier         hustle.Name `json:"classifier,omitzero"`
+	ClassifierRevision string      `json:"classifier_revision,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type PermissionReviewCompleted struct {
+	Header
+	GateID             gate.ID                   `json:"gate_id,omitzero"`
+	ToolExecutionID    uuid.UUID                 `json:"tool_execution_id,omitzero"`
+	Classifier         hustle.Name               `json:"classifier,omitzero"`
+	ClassifierRevision string                    `json:"classifier_revision,omitzero"`
+	Status             gate.ReviewStatus         `json:"status,omitzero"`
+	Risk               gate.ReviewRisk           `json:"risk,omitzero"`
+	Authorization      gate.ReviewAuthorization  `json:"authorization,omitzero"`
+	Categories         []gate.ReviewRiskCategory `json:"categories,omitzero"`
+	AutoApproved       bool                      `json:"auto_approved,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ProcessStarted struct {
+	Header
+	Process tool.ProcessLifecycleMetadata `json:"process"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ProcessBackgrounded struct {
+	Header
+	Process tool.ProcessLifecycleMetadata `json:"process"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ProcessCompleted struct {
+	Header
+	Process tool.ProcessLifecycleMetadata `json:"process"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ProcessStopRequested struct {
+	Header
+	Process tool.ProcessLifecycleMetadata `json:"process"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ProcessLost struct {
+	Header
+	Process tool.ProcessLifecycleMetadata `json:"process"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type RestoredError struct {
+	Kind    string `json:"kind"`
+	Message string `json:"message"`
+}
+```
+
+```go
+type RestoredModelFacingError struct {
+	Kind    string `json:"kind"`
+	Message string `json:"message"`
+	Detail  string `json:"-"`
+}
+```
+
+```go
+type PermissionDecisionEffect string
+```
+
+```go
+type PermissionRequested struct {
+	Header
+	ToolExecutionID uuid.UUID `json:"tool_execution_id,omitzero"`
+
+	Request tool.Request `json:"-"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type PermissionDecided struct {
+	Header
+	ToolExecutionID uuid.UUID                `json:"tool_execution_id,omitzero"`
+	Effect          PermissionDecisionEffect `json:"effect,omitempty"`
+	Reason          string                   `json:"reason,omitempty"`
+	Subject         string                   `json:"subject,omitempty"`
+	Audit           string                   `json:"audit,omitempty"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type UserInputRequested struct {
+	Header
+	ToolExecutionID uuid.UUID `json:"tool_execution_id,omitzero"`
+	Question        string    `json:"question,omitempty"`
+	Choices         []string  `json:"choices,omitempty"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ToolCallStarted struct {
+	Header
+	ToolExecutionID uuid.UUID `json:"tool_execution_id,omitzero"`
+	ToolName        string    `json:"tool_name,omitempty"`
+	Summary         string    `json:"summary,omitempty"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ToolCallCompleted struct {
+	Header
+	ToolExecutionID uuid.UUID `json:"tool_execution_id,omitzero"`
+	IsError         bool      `json:"is_error,omitzero"`
+	ResultPreview   string    `json:"result_preview,omitempty"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ModelRuntime struct {
+	Key       model.ModelKey      `json:"key"`
+	Limits    model.ContextLimits `json:"limits"`
+	Effort    model.Effort        `json:"effort,omitzero"`
+	APIFormat model.APIFormat     `json:"api_format,omitzero"`
+	BaseURL   string              `json:"base_url,omitzero"`
+}
+```
+
+```go
+type LoopInferenceChanged struct {
+	Header
+	Runtime ModelRuntime `json:"runtime,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type LoopModeChanged struct {
+	Header
+	PreviousMode string       `json:"previous_mode,omitzero"`
+	Mode         string       `json:"mode,omitzero"`
+	Runtime      ModelRuntime `json:"runtime,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ExternalToolIdentity struct {
+	Name         string `json:"name"`
+	SchemaDigest string `json:"schema_digest"`
+}
+```
+
+```go
+type LoopExternalToolsetChanged struct {
+	Header
+	Source     string                 `json:"source"`
+	Generation string                 `json:"generation"`
+	Tools      []ExternalToolIdentity `json:"tools,omitempty"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TurnStarted struct {
+	Header
+	TurnIndex TurnIndex            `json:"turn_index,omitzero"`
+	Message   *content.UserMessage `json:"message,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type StepDone struct {
+	Header
+	Messages content.AgenticMessages `json:"messages,omitempty"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TurnFoldedInto struct {
+	Header
+	TurnIndex TurnIndex            `json:"turn_index,omitzero"`
+	Message   *content.UserMessage `json:"message,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type InputCancelled struct {
+	Header
+	TurnIndex TurnIndex            `json:"turn_index,omitzero"`
+	Reason    CancelReason         `json:"reason,omitzero"`
+	Message   *content.UserMessage `json:"message,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type RejectReason uint8
+```
+
+```go
+type InputQueued struct {
+	Header
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TurnRejected struct {
+	Header
+	Reason RejectReason `json:"reason,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TokenDelta struct {
+	Header
+	TurnIndex TurnIndex `json:"turn_index,omitzero"`
+
+	Chunk content.Chunk `json:"-"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TurnDone struct {
+	Header
+	TurnIndex TurnIndex `json:"turn_index,omitzero"`
+
+	Message *content.AIMessage `json:"message,omitzero"`
+
+	Usage content.Usage `json:"usage,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TurnFailed struct {
+	Header
+	TurnIndex TurnIndex `json:"turn_index,omitzero"`
+
+	Err error `json:"-"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TurnInterrupted struct {
+	Header
+	TurnIndex TurnIndex `json:"turn_index,omitzero"`
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type EventName string
+```
+
+```go
+type FieldName string
+```
+
+```go
+type Rule string
+```
+
+```go
+type InvalidEventError struct {
+	Event EventName
+	Field FieldName
+	Rule  Rule
+}
+```
+
+```go
+type WorkflowActivityKind string
+```
+
+```go
+type WorkflowRunStatus string
+```
+
+```go
+type WorkflowActivity struct {
+	Header
+
+	RunID             uuid.UUID            `json:"run_id"`
+	WorkflowName      string               `json:"workflow_name"`
+	WorkflowVersion   string               `json:"workflow_version"`
+	Kind              WorkflowActivityKind `json:"kind"`
+	Status            WorkflowRunStatus    `json:"status"`
+	VertexID          uuid.UUID            `json:"vertex_id,omitzero"`
+	VertexLabel       string               `json:"vertex_label,omitempty"`
+	CompletedVertices uint32               `json:"completed_vertices,omitzero"`
+	TotalVertices     uint32               `json:"total_vertices,omitzero"`
+	Message           string               `json:"message,omitempty"`
+	OccurredAt        time.Time            `json:"occurred_at"`
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -118,7 +1114,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ContextValidationError`, `EmptyResponseError`, `ToolLimitError`, `TurnPanicError`, `EphemeralNotPersistableError`, `UnknownEventTypeError`, `UnsupportedSchemaError`, `EventEncodeError`, `EventDecodeError`, `LegacyRuntimeMigrationError`, `EventLimitError`, `UnknownMessageRoleError`, `RestoredError`, `RestoredModelFacingError`, `InvalidEventError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ContextValidationError`, `EmptyResponseError`, `EphemeralNotPersistableError`, `EventDecodeError`, `EventEncodeError`, `EventLimitError`, `InvalidEventError`, `LegacyRuntimeMigrationError`, `RestoredError`, `RestoredModelFacingError`, `ToolLimitError`, `TurnPanicError`, `UnknownEventTypeError`, `UnknownMessageRoleError`, `UnsupportedSchemaError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

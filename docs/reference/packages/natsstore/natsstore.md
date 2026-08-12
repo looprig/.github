@@ -41,10 +41,6 @@ The following surface is read from the pinned implementation files. Signatures a
 
 - `func (e *BlobOpError) Error() string`
 - `func (e *BlobOpError) Unwrap() error`
-- `func (s *blobStore) Put(ctx context.Context, key string, r io.Reader) error`
-- `func (s *blobStore) Get(ctx context.Context, key string) (io.ReadCloser, error)`
-- `func (s *blobStore) Delete(ctx context.Context, key string) error`
-- `func (s *blobStore) List(ctx context.Context, prefix string) ([]string, error)`
 - `func (e *StoreDirError) Error() string`
 - `func (e *StoreDirError) Unwrap() error`
 - `func (e *ServerStartError) Error() string`
@@ -54,26 +50,12 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (e *Engine) Close() error`
 - `func (e *KVOpError) Error() string`
 - `func (e *KVOpError) Unwrap() error`
-- `func (s *kvStore) Get(ctx context.Context, key string) ([]byte, uint64, error)`
-- `func (s *kvStore) Put(ctx context.Context, key string, expectedRev uint64, val []byte) (uint64, error)`
-- `func (s *kvStore) Keys(ctx context.Context, prefix string) ([]string, error)`
-- `func (s *kvStore) Delete(ctx context.Context, key string) error`
 - `func (e *LeaseOpError) Error() string`
 - `func (e *LeaseOpError) Unwrap() error`
-- `func (s *leaserStore) Acquire(ctx context.Context, name string) (storage.Lease, error)`
-- `func (l *kvLease) Epoch() uint64`
-- `func (l *kvLease) Lost() <-chan struct{}`
-- `func (l *kvLease) Release(ctx context.Context) error`
 - `func (e *LeaseEncodeError) Error() string`
 - `func (e *LeaseEncodeError) Unwrap() error`
 - `func (e *RecordReadError) Error() string`
 - `func (e *RecordReadError) Unwrap() error`
-- `func (s *ledgerStore) Append(ctx context.Context, name string, expected uint64, payload []byte) error`
-- `func (s *ledgerStore) Read(ctx context.Context, name string, from uint64) (storage.Cursor, error)`
-- `func (s *ledgerStore) Tip(ctx context.Context, name string) (uint64, error)`
-- `func (s *ledgerStore) Delete(ctx context.Context, name string) error`
-- `func (c *ledgerCursor) Next(ctx context.Context) (storage.Record, error)`
-- `func (c *ledgerCursor) Close() error`
 - `func (e *LockedEngine) JetStream() nats.JetStreamContext`
 - `func (e *LockedEngine) Close() error`
 - `func (e *OptionsError) Error() string`
@@ -84,18 +66,148 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (s *Store) StoragePaths() []string`
 - `func (s *Store) Backend() *storage.Composite`
 - `func (s *Store) Close(ctx context.Context) error`
-- `func (r localPathReporter) StoragePaths() []string`
 - `func (e *StreamOpError) Error() string`
 - `func (e *StreamOpError) Unwrap() error`
 - `func (e *StoreLockedError) Error() string`
 - `func (e *StoreLockError) Error() string`
 - `func (e *StoreLockError) Unwrap() error`
-- `func (l *flockStoreLock) Unlock() error`
 - `func (e *NameEncodingError) Error() string`
 
 ### Types {#types}
 
-`BlobOpError`, `StoreDirError`, `ServerStartError`, `EngineOptions`, `Engine`, `KVOpError`, `LeaseOpError`, `LeaseEncodeError`, `RecordReadError`, `LockedEngine`, `OptionsError`, `ConnectError`, `WiringError`, `Options`, `Store`, `StreamOpError`, `StoreLockedError`, `StoreLockError`, `NameEncodingError`
+```go
+type BlobOpError struct {
+	Key   string
+	Op    string
+	Cause error
+}
+```
+
+```go
+type StoreDirError struct {
+	Path  string
+	Cause error
+}
+```
+
+```go
+type ServerStartError struct{ Cause error }
+```
+
+```go
+type EngineOptions struct {
+	DataDir      string
+	SyncInterval time.Duration
+
+	MaxPayload int32
+}
+```
+
+```go
+type Engine struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type KVOpError struct {
+	Key   string
+	Op    string
+	Cause error
+}
+```
+
+```go
+type LeaseOpError struct {
+	Name  string
+	Op    string
+	Cause error
+}
+```
+
+```go
+type LeaseEncodeError struct{ Cause error }
+```
+
+```go
+type RecordReadError struct {
+	Name  string
+	Seq   uint64
+	Cause error
+}
+```
+
+```go
+type LockedEngine struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type OptionsError struct {
+	Field  string
+	Reason string
+}
+```
+
+```go
+type ConnectError struct {
+	URL   string
+	Cause error
+}
+```
+
+```go
+type WiringError struct {
+	Component string
+	Cause     error
+}
+```
+
+```go
+type Options struct {
+	URL string
+
+	EmbeddedDir string
+
+	MaxPayload int32
+}
+```
+
+```go
+type Store struct {
+	*storage.Composite
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type StreamOpError struct {
+	Stream string
+	Op     string
+	Cause  error
+}
+```
+
+```go
+type StoreLockedError struct {
+	Path string
+}
+```
+
+```go
+type StoreLockError struct {
+	Path  string
+	Cause error
+}
+```
+
+```go
+type NameEncodingError struct {
+	Value  string
+	Reason string
+}
+```
 
 ### Constants {#constants}
 
@@ -109,7 +221,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `BlobOpError`, `StoreDirError`, `ServerStartError`, `KVOpError`, `LeaseOpError`, `LeaseEncodeError`, `RecordReadError`, `OptionsError`, `ConnectError`, `WiringError`, `StreamOpError`, `StoreLockedError`, `StoreLockError`, `NameEncodingError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `BlobOpError`, `ConnectError`, `KVOpError`, `LeaseEncodeError`, `LeaseOpError`, `NameEncodingError`, `OptionsError`, `RecordReadError`, `ServerStartError`, `StoreDirError`, `StoreLockError`, `StoreLockedError`, `StreamOpError`, `WiringError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

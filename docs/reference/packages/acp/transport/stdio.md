@@ -46,12 +46,44 @@ The following surface is read from the pinned implementation files. Signatures a
 - `func (p *Proc) Wait() error`
 - `func (p *Proc) Signal(sig os.Signal) error`
 - `func (p *Proc) Kill() error`
-- `func (r *stderrRing) Write(p []byte) (int, error)`
-- `func (r *stderrRing) Bytes() []byte`
 
 ### Types {#types}
 
-`Command`, `CommandError`, `PlatformError`, `ExitError`, `Proc`
+```go
+type Command struct {
+	Path string
+
+	Args []string
+
+	Env []string
+
+	Dir string
+}
+```
+
+```go
+type CommandError struct{ Field, Reason string }
+```
+
+```go
+type PlatformError struct{ GOOS string }
+```
+
+```go
+type ExitError struct {
+	Err error
+
+	Stderr []byte
+}
+```
+
+```go
+type Proc struct {
+	Stdin  io.WriteCloser
+	Stdout io.Reader
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 
@@ -65,7 +97,7 @@ No exported variables are declared in this package.
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `CommandError`, `PlatformError`, `ExitError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `CommandError`, `ExitError`, `PlatformError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

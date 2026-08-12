@@ -39,34 +39,82 @@ The following surface is read from the pinned implementation files. Signatures a
 ### Methods {#methods}
 
 - `func (s ExitStatus) String() string`
-- `func (osLauncher) Start(ctx context.Context, spec ProcessSpec) (Process, error)`
-- `func (p *osProcess) Pid() int`
-- `func (p *osProcess) Terminate() error`
-- `func (p *osProcess) Kill() error`
-- `func (p *osProcess) Wait() (ExitStatus, error)`
-- `func (r *ring) Write(p []byte) (int, error)`
-- `func (r *ring) Tail(n int) []byte`
-- `func (r *ring) Len() int`
-- `func (r *ring) Dropped() int64`
-- `func (f *factory) Kind() string`
-- `func (f *factory) RedactedOrigin() string`
-- `func (f *factory) Connect(ctx context.Context, cfg protocol.ConnectConfig) (protocol.Conn, error)`
-- `func (c *conn) Initialize(ctx context.Context) (protocol.InitializeResult, error)`
-- `func (c *conn) ListTools(ctx context.Context, cursor string) (protocol.ToolPage, error)`
-- `func (c *conn) ListPrompts(ctx context.Context, cursor string) (protocol.PromptPage, error)`
-- `func (c *conn) ListResources(ctx context.Context, cursor string) (protocol.ResourcePage, error)`
-- `func (c *conn) ListResourceTemplates(ctx context.Context, cursor string) (protocol.ResourceTemplatePage, error)`
-- `func (c *conn) CallTool(ctx context.Context, rawName string, args json.RawMessage, opts protocol.CallOptions) (protocol.ToolResult, error)`
-- `func (c *conn) GetPrompt(ctx context.Context, name string, args map[string]string) (protocol.PromptResult, error)`
-- `func (c *conn) ReadResource(ctx context.Context, uri string) (protocol.ResourceResult, error)`
-- `func (c *conn) Subscribe(ctx context.Context, uri string) error`
-- `func (c *conn) Unsubscribe(ctx context.Context, uri string) error`
-- `func (c *conn) SetLogLevel(ctx context.Context, level string) error`
-- `func (c *conn) Close(ctx context.Context) error`
 
 ### Types {#types}
 
-`ProcessSpec`, `ExitStatus`, `Process`, `ProcessLauncher`, `Var`, `EnvAllowlist`, `Config`
+```go
+type ProcessSpec struct {
+	Path string
+
+	Args []string
+
+	Dir string
+
+	Env []string
+
+	Stdin  *os.File
+	Stdout *os.File
+	Stderr *os.File
+}
+```
+
+```go
+type ExitStatus struct {
+	Code int
+
+	Signal string
+}
+```
+
+```go
+type Process interface {
+	Pid() int
+
+	Terminate() error
+
+	Kill() error
+
+	Wait() (ExitStatus, error)
+}
+```
+
+```go
+type ProcessLauncher interface {
+	Start(ctx context.Context, spec ProcessSpec) (Process, error)
+}
+```
+
+```go
+type Var struct {
+	Name string
+
+	Value string
+}
+```
+
+```go
+type EnvAllowlist struct {
+	Vars []Var
+
+	PassThrough []string
+}
+```
+
+```go
+type Config struct {
+	Command string
+
+	Args []string
+
+	Dir string
+
+	Env EnvAllowlist
+
+	Launcher ProcessLauncher
+
+	StderrLimit int
+}
+```
 
 ### Constants {#constants}
 

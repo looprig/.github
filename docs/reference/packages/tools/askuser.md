@@ -45,7 +45,11 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`AskUser`
+```go
+type AskUser struct {
+	// contains filtered or unexported fields
+}
+```
 
 ### Constants {#constants}
 

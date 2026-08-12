@@ -42,7 +42,12 @@ No exported methods are declared in this package.
 
 ### Types {#types}
 
-`Banner`
+```go
+type Banner struct {
+	Name        string
+	Description string
+}
+```
 
 ### Constants {#constants}
 

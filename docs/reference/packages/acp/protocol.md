@@ -162,7 +162,1424 @@ The following surface is read from the pinned implementation files. Signatures a
 
 ### Types {#types}
 
-`AgentConn`, `ClientConn`, `TerminalHandle`, `HandlerFunc`, `NotifyFunc`, `NotifyWithSequenceFunc`, `ConnOptions`, `ConnClosedError`, `CallResult`, `AsyncCallResult`, `CallHandle`, `ReceiveSequenceOverflowError`, `Conn`, `Error`, `Fault`, `FrameTooLargeError`, `TruncatedFrameError`, `InvalidFrameError`, `FrameReader`, `WriterClosedError`, `WriteResult`, `SendResult`, `Writer`, `Kind`, `ID`, `Request`, `Response`, `Notification`, `Envelope`, `IssueKind`, `Issue`, `ValidationError`, `Method`, `AgentAuthCapabilities`, `AgentCapabilities`, `Annotations`, `AudioContent`, `AuthMethod`, `AuthMethodAgent`, `AuthMethodID`, `AuthenticateRequest`, `AuthenticateResponse`, `AvailableCommand`, `AvailableCommandInput`, `AvailableCommandsUpdate`, `BlobResourceContents`, `BooleanConfigOptionCapabilities`, `CancelNotification`, `ClientCapabilities`, `ClientSessionCapabilities`, `CloseSessionRequest`, `CloseSessionResponse`, `ConfigOptionUpdate`, `Content`, `ContentBlock`, `ContentChunk`, `Cost`, `CreateTerminalRequest`, `CreateTerminalResponse`, `CurrentModeUpdate`, `DeleteSessionRequest`, `DeleteSessionResponse`, `Diff`, `EmbeddedResource`, `EmbeddedResourceResource`, `EnvVariable`, `ErrorCode`, `FileSystemCapabilities`, `HTTPHeader`, `ImageContent`, `Implementation`, `InitializeRequest`, `InitializeResponse`, `KillTerminalRequest`, `KillTerminalResponse`, `ListSessionsRequest`, `ListSessionsResponse`, `LoadSessionRequest`, `LoadSessionResponse`, `LogoutCapabilities`, `LogoutRequest`, `LogoutResponse`, `McpCapabilities`, `McpServer`, `McpServerHTTP`, `McpServerSse`, `McpServerStdio`, `MessageID`, `NewSessionRequest`, `NewSessionResponse`, `PermissionOption`, `PermissionOptionID`, `PermissionOptionKind`, `Plan`, `PlanEntry`, `PlanEntryPriority`, `PlanEntryStatus`, `PromptCapabilities`, `PromptRequest`, `PromptResponse`, `ProtocolVersion`, `ReadTextFileRequest`, `ReadTextFileResponse`, `ReleaseTerminalRequest`, `ReleaseTerminalResponse`, `RequestPermissionOutcome`, `RequestPermissionRequest`, `RequestPermissionResponse`, `ResourceLink`, `ResumeSessionRequest`, `ResumeSessionResponse`, `Role`, `SelectedPermissionOutcome`, `SessionAdditionalDirectoriesCapabilities`, `SessionCapabilities`, `SessionCloseCapabilities`, `SessionConfigBoolean`, `SessionConfigGroupID`, `SessionConfigID`, `SessionConfigOption`, `SessionConfigOptionCategory`, `SessionConfigOptionsCapabilities`, `SessionConfigSelect`, `SessionConfigSelectGroup`, `SessionConfigSelectOption`, `SessionConfigSelectOptions`, `SessionConfigValueID`, `SessionDeleteCapabilities`, `SessionID`, `SessionInfo`, `SessionInfoUpdate`, `SessionListCapabilities`, `SessionMode`, `SessionModeID`, `SessionModeState`, `SessionNotification`, `SessionResumeCapabilities`, `SessionUpdate`, `SetSessionConfigOptionRequest`, `SetSessionConfigOptionResponse`, `SetSessionModeRequest`, `SetSessionModeResponse`, `StopReason`, `Terminal`, `TerminalExitStatus`, `TerminalID`, `TerminalOutputRequest`, `TerminalOutputResponse`, `TextContent`, `TextResourceContents`, `ToolCall`, `ToolCallContent`, `ToolCallID`, `ToolCallLocation`, `ToolCallStatus`, `ToolCallUpdate`, `ToolKind`, `UnstructuredCommandInput`, `UsageUpdate`, `WaitForTerminalExitRequest`, `WaitForTerminalExitResponse`, `WriteTextFileRequest`, `WriteTextFileResponse`
+```go
+type AgentConn struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ClientConn struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type TerminalHandle struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type HandlerFunc func(ctx context.Context, method string, params json.RawMessage) (any, error)
+```
+
+```go
+type NotifyFunc func(ctx context.Context, method string, params json.RawMessage)
+```
+
+```go
+type NotifyWithSequenceFunc func(ctx context.Context, method string, params json.RawMessage, receiveSequence uint64)
+```
+
+```go
+type ConnOptions struct {
+	ExtIDBase int64
+}
+```
+
+```go
+type ConnClosedError struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type CallResult struct {
+	WriteAdmitted    bool
+	ResponseSequence uint64
+	ReceiveSequence  uint64
+}
+```
+
+```go
+type AsyncCallResult struct {
+	Facts CallResult
+	Err   error
+}
+```
+
+```go
+type CallHandle struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type ReceiveSequenceOverflowError struct{}
+```
+
+```go
+type Conn struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Error struct {
+	Code ErrorCode `json:"code"`
+
+	Message string `json:"message"`
+
+	Data json.RawMessage `json:"data,omitempty"`
+}
+```
+
+```go
+type Fault struct {
+	Code    ErrorCode
+	Message string
+	Data    json.RawMessage
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type FrameTooLargeError struct {
+	Limit int
+}
+```
+
+```go
+type TruncatedFrameError struct {
+	Read int
+}
+```
+
+```go
+type InvalidFrameError struct {
+	Reason string
+}
+```
+
+```go
+type FrameReader struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type WriterClosedError struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type WriteResult struct {
+	WriteAdmitted bool
+}
+```
+
+```go
+type SendResult = WriteResult
+```
+
+```go
+type Writer struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Kind uint8
+```
+
+```go
+type ID struct {
+	// contains filtered or unexported fields
+}
+```
+
+```go
+type Request struct {
+	ID     ID
+	Method string
+	Params json.RawMessage
+}
+```
+
+```go
+type Response struct {
+	ID     ID
+	Result json.RawMessage
+	Error  *Error
+
+	ReceiveSequence uint64
+}
+```
+
+```go
+type Notification struct {
+	Method string
+	Params json.RawMessage
+
+	ReceiveSequence uint64
+}
+```
+
+```go
+type Envelope struct {
+	Request      *Request
+	Response     *Response
+	Notification *Notification
+}
+```
+
+```go
+type IssueKind string
+```
+
+```go
+type Issue struct {
+	Kind IssueKind
+}
+```
+
+```go
+type ValidationError struct {
+	Issues []Issue
+}
+```
+
+```go
+type Method string
+```
+
+```go
+type AgentAuthCapabilities struct {
+	Logout *LogoutCapabilities `json:"logout,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type AgentCapabilities struct {
+	Auth *AgentAuthCapabilities `json:"auth,omitempty"`
+
+	LoadSession bool `json:"loadSession,omitempty"`
+
+	McpCapabilities *McpCapabilities `json:"mcpCapabilities,omitempty"`
+
+	PromptCapabilities *PromptCapabilities `json:"promptCapabilities,omitempty"`
+
+	SessionCapabilities *SessionCapabilities `json:"sessionCapabilities,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type Annotations struct {
+	Audience []Role `json:"audience,omitempty"`
+
+	LastModified *string `json:"lastModified,omitempty"`
+
+	Priority *float64 `json:"priority,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type AudioContent struct {
+	Annotations *Annotations `json:"annotations,omitempty"`
+
+	Data string `json:"data"`
+
+	MimeType string `json:"mimeType"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type AuthMethod = AuthMethodAgent
+```
+
+```go
+type AuthMethodAgent struct {
+	Description *string `json:"description,omitempty"`
+
+	ID AuthMethodID `json:"id"`
+
+	Name string `json:"name"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type AuthMethodID string
+```
+
+```go
+type AuthenticateRequest struct {
+	MethodID AuthMethodID `json:"methodId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type AuthenticateResponse struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type AvailableCommand struct {
+	Description string `json:"description"`
+
+	Input *AvailableCommandInput `json:"input,omitempty"`
+
+	Name string `json:"name"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type AvailableCommandInput = UnstructuredCommandInput
+```
+
+```go
+type AvailableCommandsUpdate struct {
+	AvailableCommands []AvailableCommand `json:"availableCommands"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type BlobResourceContents struct {
+	Blob string `json:"blob"`
+
+	MimeType *string `json:"mimeType,omitempty"`
+
+	URI string `json:"uri"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type BooleanConfigOptionCapabilities struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type CancelNotification struct {
+	SessionID SessionID `json:"sessionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ClientCapabilities struct {
+	Fs *FileSystemCapabilities `json:"fs,omitempty"`
+
+	Session *ClientSessionCapabilities `json:"session,omitempty"`
+
+	Terminal bool `json:"terminal,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ClientSessionCapabilities struct {
+	ConfigOptions *SessionConfigOptionsCapabilities `json:"configOptions,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type CloseSessionRequest struct {
+	SessionID SessionID `json:"sessionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type CloseSessionResponse struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ConfigOptionUpdate struct {
+	ConfigOptions []SessionConfigOption `json:"configOptions"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type Content struct {
+	Content ContentBlock `json:"content"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ContentBlock struct {
+	Text *TextContent `json:"-"`
+
+	Image *ImageContent `json:"-"`
+
+	Audio *AudioContent `json:"-"`
+
+	ResourceLink *ResourceLink `json:"-"`
+
+	Resource *EmbeddedResource `json:"-"`
+}
+```
+
+```go
+type ContentChunk struct {
+	Content ContentBlock `json:"content"`
+
+	MessageID *MessageID `json:"messageId,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type Cost struct {
+	Amount float64 `json:"amount"`
+
+	Currency string `json:"currency"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type CreateTerminalRequest struct {
+	Args []string `json:"args,omitempty"`
+
+	Command string `json:"command"`
+
+	Cwd *string `json:"cwd,omitempty"`
+
+	Env []EnvVariable `json:"env,omitempty"`
+
+	OutputByteLimit *uint64 `json:"outputByteLimit,omitempty"`
+
+	SessionID SessionID `json:"sessionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type CreateTerminalResponse struct {
+	TerminalID TerminalID `json:"terminalId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type CurrentModeUpdate struct {
+	CurrentModeID SessionModeID `json:"currentModeId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type DeleteSessionRequest struct {
+	SessionID SessionID `json:"sessionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type DeleteSessionResponse struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type Diff struct {
+	NewText string `json:"newText"`
+
+	OldText *string `json:"oldText,omitempty"`
+
+	Path string `json:"path"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type EmbeddedResource struct {
+	Annotations *Annotations `json:"annotations,omitempty"`
+
+	Resource EmbeddedResourceResource `json:"resource"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type EmbeddedResourceResource struct {
+	TextResourceContents *TextResourceContents `json:"-"`
+
+	BlobResourceContents *BlobResourceContents `json:"-"`
+}
+```
+
+```go
+type EnvVariable struct {
+	Name string `json:"name"`
+
+	Value string `json:"value"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ErrorCode int32
+```
+
+```go
+type FileSystemCapabilities struct {
+	ReadTextFile bool `json:"readTextFile,omitempty"`
+
+	WriteTextFile bool `json:"writeTextFile,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type HTTPHeader struct {
+	Name string `json:"name"`
+
+	Value string `json:"value"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ImageContent struct {
+	Annotations *Annotations `json:"annotations,omitempty"`
+
+	Data string `json:"data"`
+
+	MimeType string `json:"mimeType"`
+
+	URI *string `json:"uri,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type Implementation struct {
+	Name string `json:"name"`
+
+	Title *string `json:"title,omitempty"`
+
+	Version string `json:"version"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type InitializeRequest struct {
+	ClientCapabilities *ClientCapabilities `json:"clientCapabilities,omitempty"`
+
+	ClientInfo *Implementation `json:"clientInfo,omitempty"`
+
+	ProtocolVersion ProtocolVersion `json:"protocolVersion"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type InitializeResponse struct {
+	AgentCapabilities *AgentCapabilities `json:"agentCapabilities,omitempty"`
+
+	AgentInfo *Implementation `json:"agentInfo,omitempty"`
+
+	AuthMethods []AuthMethod `json:"authMethods,omitempty"`
+
+	ProtocolVersion ProtocolVersion `json:"protocolVersion"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type KillTerminalRequest struct {
+	SessionID SessionID `json:"sessionId"`
+
+	TerminalID TerminalID `json:"terminalId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type KillTerminalResponse struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ListSessionsRequest struct {
+	Cursor *string `json:"cursor,omitempty"`
+
+	Cwd *string `json:"cwd,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ListSessionsResponse struct {
+	NextCursor *string `json:"nextCursor,omitempty"`
+
+	Sessions []SessionInfo `json:"sessions"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type LoadSessionRequest struct {
+	AdditionalDirectories []string `json:"additionalDirectories,omitempty"`
+
+	Cwd string `json:"cwd"`
+
+	McpServers []McpServer `json:"mcpServers"`
+
+	SessionID SessionID `json:"sessionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type LoadSessionResponse struct {
+	ConfigOptions []SessionConfigOption `json:"configOptions,omitempty"`
+
+	Modes *SessionModeState `json:"modes,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type LogoutCapabilities struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type LogoutRequest struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type LogoutResponse struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type McpCapabilities struct {
+	HTTP bool `json:"http,omitempty"`
+
+	Sse bool `json:"sse,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type McpServer struct {
+	HTTP *McpServerHTTP `json:"-"`
+
+	Sse *McpServerSse `json:"-"`
+
+	Stdio *McpServerStdio `json:"-"`
+}
+```
+
+```go
+type McpServerHTTP struct {
+	Headers []HTTPHeader `json:"headers"`
+
+	Name string `json:"name"`
+
+	URL string `json:"url"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type McpServerSse struct {
+	Headers []HTTPHeader `json:"headers"`
+
+	Name string `json:"name"`
+
+	URL string `json:"url"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type McpServerStdio struct {
+	Args []string `json:"args"`
+
+	Command string `json:"command"`
+
+	Env []EnvVariable `json:"env"`
+
+	Name string `json:"name"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type MessageID string
+```
+
+```go
+type NewSessionRequest struct {
+	AdditionalDirectories []string `json:"additionalDirectories,omitempty"`
+
+	Cwd string `json:"cwd"`
+
+	McpServers []McpServer `json:"mcpServers"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type NewSessionResponse struct {
+	ConfigOptions []SessionConfigOption `json:"configOptions,omitempty"`
+
+	Modes *SessionModeState `json:"modes,omitempty"`
+
+	SessionID SessionID `json:"sessionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type PermissionOption struct {
+	Kind PermissionOptionKind `json:"kind"`
+
+	Name string `json:"name"`
+
+	OptionID PermissionOptionID `json:"optionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type PermissionOptionID string
+```
+
+```go
+type PermissionOptionKind string
+```
+
+```go
+type Plan struct {
+	Entries []PlanEntry `json:"entries"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type PlanEntry struct {
+	Content string `json:"content"`
+
+	Priority PlanEntryPriority `json:"priority"`
+
+	Status PlanEntryStatus `json:"status"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type PlanEntryPriority string
+```
+
+```go
+type PlanEntryStatus string
+```
+
+```go
+type PromptCapabilities struct {
+	Audio bool `json:"audio,omitempty"`
+
+	EmbeddedContext bool `json:"embeddedContext,omitempty"`
+
+	Image bool `json:"image,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type PromptRequest struct {
+	Prompt []ContentBlock `json:"prompt"`
+
+	SessionID SessionID `json:"sessionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type PromptResponse struct {
+	StopReason StopReason `json:"stopReason"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ProtocolVersion uint16
+```
+
+```go
+type ReadTextFileRequest struct {
+	Limit *uint32 `json:"limit,omitempty"`
+
+	Line *uint32 `json:"line,omitempty"`
+
+	Path string `json:"path"`
+
+	SessionID SessionID `json:"sessionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ReadTextFileResponse struct {
+	Content string `json:"content"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ReleaseTerminalRequest struct {
+	SessionID SessionID `json:"sessionId"`
+
+	TerminalID TerminalID `json:"terminalId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ReleaseTerminalResponse struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type RequestPermissionOutcome struct {
+	Cancelled *struct{} `json:"-"`
+
+	Selected *SelectedPermissionOutcome `json:"-"`
+}
+```
+
+```go
+type RequestPermissionRequest struct {
+	Options []PermissionOption `json:"options"`
+
+	SessionID SessionID `json:"sessionId"`
+
+	ToolCall ToolCallUpdate `json:"toolCall"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type RequestPermissionResponse struct {
+	Outcome RequestPermissionOutcome `json:"outcome"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ResourceLink struct {
+	Annotations *Annotations `json:"annotations,omitempty"`
+
+	Description *string `json:"description,omitempty"`
+
+	MimeType *string `json:"mimeType,omitempty"`
+
+	Name string `json:"name"`
+
+	Size *int64 `json:"size,omitempty"`
+
+	Title *string `json:"title,omitempty"`
+
+	URI string `json:"uri"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ResumeSessionRequest struct {
+	AdditionalDirectories []string `json:"additionalDirectories,omitempty"`
+
+	Cwd string `json:"cwd"`
+
+	McpServers []McpServer `json:"mcpServers,omitempty"`
+
+	SessionID SessionID `json:"sessionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ResumeSessionResponse struct {
+	ConfigOptions []SessionConfigOption `json:"configOptions,omitempty"`
+
+	Modes *SessionModeState `json:"modes,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type Role string
+```
+
+```go
+type SelectedPermissionOutcome struct {
+	OptionID PermissionOptionID `json:"optionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionAdditionalDirectoriesCapabilities struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionCapabilities struct {
+	AdditionalDirectories *SessionAdditionalDirectoriesCapabilities `json:"additionalDirectories,omitempty"`
+
+	Close *SessionCloseCapabilities `json:"close,omitempty"`
+
+	Delete *SessionDeleteCapabilities `json:"delete,omitempty"`
+
+	List *SessionListCapabilities `json:"list,omitempty"`
+
+	Resume *SessionResumeCapabilities `json:"resume,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionCloseCapabilities struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionConfigBoolean struct {
+	CurrentValue bool `json:"currentValue"`
+}
+```
+
+```go
+type SessionConfigGroupID string
+```
+
+```go
+type SessionConfigID string
+```
+
+```go
+type SessionConfigOption struct {
+	Category *SessionConfigOptionCategory `json:"category,omitempty"`
+
+	Description *string `json:"description,omitempty"`
+
+	ID SessionConfigID `json:"id"`
+
+	Name string `json:"name"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+
+	Select *SessionConfigSelect `json:"-"`
+
+	Boolean *SessionConfigBoolean `json:"-"`
+}
+```
+
+```go
+type SessionConfigOptionCategory string
+```
+
+```go
+type SessionConfigOptionsCapabilities struct {
+	Boolean *BooleanConfigOptionCapabilities `json:"boolean,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionConfigSelect struct {
+	CurrentValue SessionConfigValueID `json:"currentValue"`
+
+	Options SessionConfigSelectOptions `json:"options"`
+}
+```
+
+```go
+type SessionConfigSelectGroup struct {
+	Group SessionConfigGroupID `json:"group"`
+
+	Name string `json:"name"`
+
+	Options []SessionConfigSelectOption `json:"options"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionConfigSelectOption struct {
+	Description *string `json:"description,omitempty"`
+
+	Name string `json:"name"`
+
+	Value SessionConfigValueID `json:"value"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionConfigSelectOptions struct {
+	Ungrouped []SessionConfigSelectOption `json:"-"`
+
+	Grouped []SessionConfigSelectGroup `json:"-"`
+}
+```
+
+```go
+type SessionConfigValueID string
+```
+
+```go
+type SessionDeleteCapabilities struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionID string
+```
+
+```go
+type SessionInfo struct {
+	AdditionalDirectories []string `json:"additionalDirectories,omitempty"`
+
+	Cwd string `json:"cwd"`
+
+	SessionID SessionID `json:"sessionId"`
+
+	Title *string `json:"title,omitempty"`
+
+	UpdatedAt *string `json:"updatedAt,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionInfoUpdate struct {
+	Title *string `json:"title,omitempty"`
+
+	UpdatedAt *string `json:"updatedAt,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionListCapabilities struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionMode struct {
+	Description *string `json:"description,omitempty"`
+
+	ID SessionModeID `json:"id"`
+
+	Name string `json:"name"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionModeID string
+```
+
+```go
+type SessionModeState struct {
+	AvailableModes []SessionMode `json:"availableModes"`
+
+	CurrentModeID SessionModeID `json:"currentModeId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionNotification struct {
+	SessionID SessionID `json:"sessionId"`
+
+	Update SessionUpdate `json:"update"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionResumeCapabilities struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SessionUpdate struct {
+	UserMessageChunk *ContentChunk `json:"-"`
+
+	AgentMessageChunk *ContentChunk `json:"-"`
+
+	AgentThoughtChunk *ContentChunk `json:"-"`
+
+	ToolCall *ToolCall `json:"-"`
+
+	ToolCallUpdate *ToolCallUpdate `json:"-"`
+
+	Plan *Plan `json:"-"`
+
+	AvailableCommandsUpdate *AvailableCommandsUpdate `json:"-"`
+
+	CurrentModeUpdate *CurrentModeUpdate `json:"-"`
+
+	ConfigOptionUpdate *ConfigOptionUpdate `json:"-"`
+
+	SessionInfoUpdate *SessionInfoUpdate `json:"-"`
+
+	UsageUpdate *UsageUpdate `json:"-"`
+}
+```
+
+```go
+type SetSessionConfigOptionRequest struct {
+	ConfigID SessionConfigID `json:"configId"`
+
+	SessionID SessionID `json:"sessionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+
+	Boolean *bool `json:"-"`
+
+	ValueID *SessionConfigValueID `json:"-"`
+}
+```
+
+```go
+type SetSessionConfigOptionResponse struct {
+	ConfigOptions []SessionConfigOption `json:"configOptions"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SetSessionModeRequest struct {
+	ModeID SessionModeID `json:"modeId"`
+
+	SessionID SessionID `json:"sessionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type SetSessionModeResponse struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type StopReason string
+```
+
+```go
+type Terminal struct {
+	TerminalID TerminalID `json:"terminalId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type TerminalExitStatus struct {
+	ExitCode *uint32 `json:"exitCode,omitempty"`
+
+	Signal *string `json:"signal,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type TerminalID string
+```
+
+```go
+type TerminalOutputRequest struct {
+	SessionID SessionID `json:"sessionId"`
+
+	TerminalID TerminalID `json:"terminalId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type TerminalOutputResponse struct {
+	ExitStatus *TerminalExitStatus `json:"exitStatus,omitempty"`
+
+	Output string `json:"output"`
+
+	Truncated bool `json:"truncated"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type TextContent struct {
+	Annotations *Annotations `json:"annotations,omitempty"`
+
+	Text string `json:"text"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type TextResourceContents struct {
+	MimeType *string `json:"mimeType,omitempty"`
+
+	Text string `json:"text"`
+
+	URI string `json:"uri"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ToolCall struct {
+	Content []ToolCallContent `json:"content,omitempty"`
+
+	Kind *ToolKind `json:"kind,omitempty"`
+
+	Locations []ToolCallLocation `json:"locations,omitempty"`
+
+	RawInput json.RawMessage `json:"rawInput,omitempty"`
+
+	RawOutput json.RawMessage `json:"rawOutput,omitempty"`
+
+	Status *ToolCallStatus `json:"status,omitempty"`
+
+	Title string `json:"title"`
+
+	ToolCallID ToolCallID `json:"toolCallId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ToolCallContent struct {
+	Content *Content `json:"-"`
+
+	Diff *Diff `json:"-"`
+
+	Terminal *Terminal `json:"-"`
+}
+```
+
+```go
+type ToolCallID string
+```
+
+```go
+type ToolCallLocation struct {
+	Line *uint32 `json:"line,omitempty"`
+
+	Path string `json:"path"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ToolCallStatus string
+```
+
+```go
+type ToolCallUpdate struct {
+	Content []ToolCallContent `json:"content,omitempty"`
+
+	Kind *ToolKind `json:"kind,omitempty"`
+
+	Locations []ToolCallLocation `json:"locations,omitempty"`
+
+	RawInput json.RawMessage `json:"rawInput,omitempty"`
+
+	RawOutput json.RawMessage `json:"rawOutput,omitempty"`
+
+	Status *ToolCallStatus `json:"status,omitempty"`
+
+	Title *string `json:"title,omitempty"`
+
+	ToolCallID ToolCallID `json:"toolCallId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type ToolKind string
+```
+
+```go
+type UnstructuredCommandInput struct {
+	Hint string `json:"hint"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type UsageUpdate struct {
+	Cost *Cost `json:"cost,omitempty"`
+
+	Size uint64 `json:"size"`
+
+	Used uint64 `json:"used"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type WaitForTerminalExitRequest struct {
+	SessionID SessionID `json:"sessionId"`
+
+	TerminalID TerminalID `json:"terminalId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type WaitForTerminalExitResponse struct {
+	ExitCode *uint32 `json:"exitCode,omitempty"`
+
+	Signal *string `json:"signal,omitempty"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type WriteTextFileRequest struct {
+	Content string `json:"content"`
+
+	Path string `json:"path"`
+
+	SessionID SessionID `json:"sessionId"`
+
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
+
+```go
+type WriteTextFileResponse struct {
+	Meta json.RawMessage `json:"_meta,omitempty"`
+}
+```
 
 ### Constants {#constants}
 
@@ -176,7 +1593,7 @@ The following surface is read from the pinned implementation files. Signatures a
 
 The signatures above define the package boundary. The linked source and adjacent tests are the authority for value lifetime and error handling; no ownership, lifecycle, or retry behavior is inferred from declaration names alone.
 
-Exported named types with an explicit `Error() string` method are `ConnClosedError`, `ReceiveSequenceOverflowError`, `Error`, `Fault`, `FrameTooLargeError`, `TruncatedFrameError`, `InvalidFrameError`, `WriterClosedError`, `ValidationError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
+Exported named types with an explicit `Error() string` method are `ConnClosedError`, `Error`, `Fault`, `FrameTooLargeError`, `InvalidFrameError`, `ReceiveSequenceOverflowError`, `TruncatedFrameError`, `ValidationError`, `WriterClosedError`. Use `errors.Is` or `errors.As` only when the relevant function or method returns one of these errors or wraps it. No lifecycle or retry guarantee is inferred from a name alone.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 
