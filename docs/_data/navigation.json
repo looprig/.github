@@ -17,29 +17,44 @@
       "order": 2
     },
     {
-      "path": "start/first-run.md",
+      "path": "start/model-call.md",
       "audience": "human",
       "order": 3
     },
     {
-      "path": "start/tools-and-gates.md",
+      "path": "start/first-run.md",
       "audience": "human",
       "order": 4
     },
     {
-      "path": "start/sessions.md",
+      "path": "start/tools-and-gates.md",
       "audience": "human",
       "order": 5
     },
     {
-      "path": "start/workspaces.md",
+      "path": "start/sessions.md",
       "audience": "human",
       "order": 6
     },
     {
+      "path": "start/workspaces.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
       "path": "start/sandbox-and-interfaces.md",
       "audience": "human",
-      "order": 6
+      "order": 8
+    },
+    {
+      "path": "start/run-cli.md",
+      "audience": "human",
+      "order": 9
+    },
+    {
+      "path": "start/next-steps.md",
+      "audience": "human",
+      "order": 10
     },
     {
       "path": "contributing/verification.md",

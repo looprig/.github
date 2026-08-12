@@ -1,28 +1,63 @@
 ---
 id: start/choose-a-path
-title: Start building with Looprig
-description: Follow the consumer path from one model call to a durable, tool-using agent with confined effects and your choice of interface.
+title: Build a coding assistant
+description: Build a useful coding assistant from one model call to a durable, tool-using Harness session with a workspace, sandboxed processes, and your choice of interface.
 audience: developer
 section: start
 order: 1
 publication: released
 proofs:
-  path:
-    - release-github-com-looprig-inference
-    - release-github-com-looprig-harness
+  what-you-will-build: [release-github-com-looprig-inference, release-github-com-looprig-harness, release-github-com-looprig-tools]
+  how-the-pieces-fit: [release-github-com-looprig-harness, release-github-com-looprig-fsstore, release-github-com-looprig-sandbox]
+  tutorial-path: [release-github-com-looprig-harness]
 ---
 
-# Start building with Looprig
+# Build a coding assistant
 
-Looprig is a set of composable Go modules. You can stop after Inference if your application only needs model calls, or continue into Harness when you need sessions, events, tools, gates, workspaces, delegation, and controlled shutdown.
+This tutorial builds a coding assistant that can answer a question, inspect files through declared tools, keep a resumable session, work inside a session-owned directory, and confine process tools. The final runtime is independent of its presentation, so you can keep the CLI or attach the TUI, Web UI, ACP, or MCP later.
 
-## Recommended path {#path}
+## What you will build
 
-1. **[Use Inference](/docs/start/installation).** Construct provider-neutral messages and call an `inference.Client`.
-2. **[Build an agent with Harness](/docs/start/first-run).** Bind the client to a Loop, assemble a Rig, and run a Session.
-3. **[Add tools and gates](/docs/start/tools-and-gates).** Expose application actions and authorize prepared effects.
-4. **[Persist sessions](/docs/start/sessions).** Replace memory storage and restore a session by ID.
-5. **[Add a workspace](/docs/start/workspaces).** Manage session-owned files and snapshots independently from history.
-6. **[Confine processes and attach an interface](/docs/start/sandbox-and-interfaces).** Add Sandbox for effectful process tools, then connect a browser client or TUI.
+```mermaid
+%%{init: {"theme":"dark"}}%%
+flowchart LR
+  U[CLI input] --> S[Harness Session]
+  S --> L[Loop]
+  L --> I[Inference Client]
+  L --> T[Read-only Tools]
+  S --> J[Session Store]
+  S --> W[Workspace]
+  T --> X[Sandboxed Process]
+  S --> E[Events]
+  E --> U
+```
 
-You do not need every module. Add a boundary only when your application needs the responsibility it owns.
+The tutorial uses one project named `looprig-coding-assistant`. Each page adds one boundary without changing the responsibilities added earlier.
+
+## How the pieces fit
+
+| Module | Responsibility in the assistant | Added when |
+| --- | --- | --- |
+| Core and Inference | Messages, model identity, requests, responses, and streaming | First model call |
+| LLM | OpenAI, Anthropic, Ollama, and other provider clients | Model configuration |
+| Harness | Loop, Rig, Session, commands, events, tools, and shutdown | Agent runtime |
+| Tools | Read, search, edit, process, interaction, and delegation definitions | Tool registration |
+| Fsstore and Storage | Durable session history and workspace snapshots | Persistence |
+| Sandbox | Native confinement for child processes | Process execution |
+| TUI or Client | Terminal and framework-neutral browser presentation | Interface selection |
+
+You do not need to adopt the full stack at once. Inference is useful by itself. Harness becomes useful when you need a live agent runtime. Storage, Sandbox, protocols, workflows, and interfaces remain optional composition boundaries.
+
+## Tutorial path
+
+1. [Create the Go project](/docs/start/installation/).
+2. [Connect a model with Inference](/docs/start/model-call/).
+3. [Run the agent with Harness](/docs/start/first-run/).
+4. [Add read-only tools and gates](/docs/start/tools-and-gates/).
+5. [Persist and restore sessions](/docs/start/sessions/).
+6. [Add a session workspace](/docs/start/workspaces/).
+7. [Sandbox process tools](/docs/start/sandbox-and-interfaces/).
+8. [Run the coding assistant CLI](/docs/start/run-cli/).
+9. [Choose an interface and extend the agent](/docs/start/next-steps/).
+
+Start with the project directory. You will have a working model call before introducing Harness.

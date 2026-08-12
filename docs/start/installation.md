@@ -1,81 +1,72 @@
 ---
 id: start/installation
-title: Use Inference
-description: Construct one provider-neutral request, call an inference client, read the assistant message, and understand where production provider clients enter.
+title: Create the Go project
+description: Create the looprig-coding-assistant module, install the consumer dependencies, and establish a small project layout for the rest of the tutorial.
 audience: developer
 section: start
 order: 2
 publication: released
 proofs:
-  invoke:
-    - release-github-com-looprig-core
-    - release-github-com-looprig-inference
-  production:
-    - release-github-com-looprig-llm
+  prerequisites: [release-github-com-looprig-core]
+  create-the-module: [release-github-com-looprig-inference, release-github-com-looprig-harness]
+  project-layout: [release-github-com-looprig-harness]
+  runnable-checkpoint: [release-github-com-looprig-core, release-github-com-looprig-inference]
 ---
 
-# Use Inference
+# Create the Go project
 
-Inference is the provider-neutral boundary used by the rest of Looprig:
+Create a normal Go module for the coding assistant. Looprig does not require a generator, monorepo checkout, or a specific application framework.
 
-```go
-type Client interface {
-	Invoke(context.Context, inference.Request) (*inference.Response, error)
-	Stream(context.Context, inference.Request) (*stream.StreamReader[content.Chunk], error)
-}
-```
+## Prerequisites
 
-Install the message and inference contracts:
+- Go 1.26 or newer
+- A terminal
+- An API key for a hosted model, or a local model server such as Ollama
+
+You can complete the structural steps with the deterministic example client before choosing a hosted provider.
+
+## Create the module
+
+Run these commands in a new directory of your choice:
 
 ```sh
-go mod init example.com/model-call
-go get github.com/looprig/core@v0.5.1 github.com/looprig/inference@v0.9.2
+mkdir looprig-coding-assistant
+cd looprig-coding-assistant
+go mod init example.com/looprig-coding-assistant
+
+# Install only the boundaries used by the first model call.
+go get github.com/looprig/core github.com/looprig/inference github.com/looprig/llm
 ```
 
-## Invoke a client {#invoke}
+As the tutorial adds capabilities, install their modules from the same project directory:
 
-Construct messages with Core and pass them through `Client.Invoke`:
-
-```go
-request := inference.Request{
-	Model: selectedModel,
-	System: "Answer briefly.",
-	Messages: content.AgenticMessages{
-		&content.UserMessage{Message: content.Message{
-			Role: content.RoleUser,
-			Blocks: []content.Block{
-				&content.TextBlock{Text: "Say hello."},
-			},
-		}},
-	},
-}
-
-response, err := client.Invoke(context.Background(), request)
-if err != nil {
-	return err
-}
-text := response.Message.Blocks[0].(*content.TextBlock).Text
-fmt.Println(text)
+```sh
+# Harness supplies the runtime. Tools, Fsstore, and Sandbox remain optional.
+go get github.com/looprig/harness github.com/looprig/tools
+go get github.com/looprig/fsstore github.com/looprig/storage
+go get github.com/looprig/sandbox
 ```
 
-Expected output depends on the model. A deterministic test client can return:
+`go get` resolves compatible module versions into your `go.mod`. Applications can apply their own upgrade and dependency-review policy.
+
+## Project layout
+
+Use a small layout while learning the boundaries:
 
 ```text
-Hello from Looprig.
+looprig-coding-assistant/
+├── go.mod
+├── go.sum
+├── main.go          # CLI entry point and sandbox.Init
+├── model.go         # Model selection and inference.Client construction
+├── agent.go         # Loop, Rig, Session, and event handling
+└── workspace/       # Files the tutorial assistant may inspect
 ```
 
-## Use a production provider {#production}
+The file split is for readability, not a framework requirement. All files use package `main` and compile into one application binary.
 
-Inference does not choose credentials or construct hosted clients. LLM provides OpenAI, Anthropic, Ollama, and other provider adapters that implement `inference.Client`:
+## Runnable checkpoint
 
-```go
-selected := model.CustomModel(
-	model.ProviderName(llm.ProviderOpenAI),
-	model.APIFormatOpenAIResponses,
-	"https://api.openai.com/v1",
-	"your-model-id",
-)
-client, err := auto.New(selected, auth.APIKey(os.Getenv("OPENAI_API_KEY")))
-```
+Open the [complete first Inference example](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage01_inference/main.go). It uses a deterministic client so the request and response path runs without credentials. The next page replaces that client boundary with OpenAI, Anthropic, or a local model.
 
-Call `Invoke` for a complete response or `Stream` for text, thinking, and tool-call chunks. Continue with [Messages and content blocks](/docs/modules/core) or [build an agent with Harness](/docs/start/first-run).
+Continue to [connect a model with Inference](/docs/start/model-call/).
