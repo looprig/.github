@@ -28,9 +28,10 @@ proofs:
 Carbon reads an optional `mcp.json` from the Carbon home. The top-level object
 is `mcpServers`; each name maps to one binding. A server with `command` is
 stdio. A server with `url` is streamable HTTP when `type` is omitted or set to
-`streamable-http`. SSE uses the explicit `type: "sse"` because its URL shape is
-otherwise indistinguishable from streamable HTTP. Explicit types must agree
-with the fields present.
+`http`. SSE uses the explicit `type: "sse"` because its URL shape is otherwise
+indistinguishable from streamable HTTP. Carbon's wire value is `http`, even
+though the transport is commonly called streamable HTTP. Explicit types must
+agree with the fields present.
 
 The strict decoder rejects unknown fields, duplicate keys, trailing JSON,
 invalid UTF-8, unsafe files, and files over 1 MiB. HTTP URLs must be loopback;
@@ -42,9 +43,103 @@ Because MCP configuration can carry environment and authorization headers,
 write it as an owner-only regular file. Do not paste those values into a
 support ticket. The source test fixture
 `validMCPConfigJSON` in `internal/app/mcpconfig_test.go` is the canonical shape
-for a multi-transport configuration; it contains secret sentinels, so use the
-fixture in tests and replace values locally rather than copying it into a
-guide.
+for a multi-transport configuration. The examples below keep the same tested
+field shapes while using safe placeholder values.
+
+## Create a file safely
+
+Carbon has no separate MCP configuration-validation command. `--list` reads
+the session listing catalog and does not decode `mcp.json`. Decoding and
+transport normalization happen while Carbon opens a normal session. Create the
+file with an owner-only umask, then start Carbon with the read-only profile to
+exercise the configuration boundary.
+
+```sh
+carbon_home="${HOME}/.looprig/carbon"
+umask 077
+mkdir -p "$carbon_home"
+cat > "$carbon_home/mcp.json" <<'JSON'
+{
+  "mcpServers": {
+    "local-tools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": {"MCP_MODE": "readonly"},
+      "roles": ["carbon"]
+    },
+    "remote-tools": {
+      "type": "http",
+      "url": "https://mcp.example.test/mcp",
+      "headers": {"Authorization": "Bearer REPLACE_WITH_MCP_TOKEN"},
+      "roles": ["carbon"]
+    },
+    "events": {
+      "type": "sse",
+      "url": "https://mcp.example.test/sse",
+      "roles": ["carbon"]
+    }
+  }
+}
+JSON
+chmod 600 "$carbon_home/mcp.json"
+carbon --access-profile readonly
+```
+
+The same complete file as a JSON value is:
+
+```json
+{
+  "mcpServers": {
+    "local-tools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": {"MCP_MODE": "readonly"},
+      "roles": ["carbon"]
+    },
+    "remote-tools": {
+      "type": "http",
+      "url": "https://mcp.example.test/mcp",
+      "headers": {"Authorization": "Bearer REPLACE_WITH_MCP_TOKEN"},
+      "roles": ["carbon"]
+    },
+    "events": {
+      "type": "sse",
+      "url": "https://mcp.example.test/sse",
+      "roles": ["carbon"]
+    }
+  }
+}
+```
+
+The file above is complete and valid JSON. The stdio command and its npm
+package are external dependencies. The HTTPS endpoints are placeholders for
+services you operate or have permission to use. Carbon does not bundle an MCP
+server, a remote MCP service, or a local model server.
+
+## Three transport shapes
+
+The `local-tools` entry is stdio. Carbon starts the configured command with the
+listed arguments and the listed environment map. Its environment is an
+allowlist, not a copy of the parent process environment.
+
+The `remote-tools` entry is streamable HTTP. Use `type: "http"` or omit
+`type` when `url` is the only transport field. HTTPS can point to a remote
+service. Plain HTTP is accepted only for a loopback host, such as a local
+development server. Keep authorization in `headers`, and treat it like a
+credential.
+
+The `events` entry is SSE. It must say `type: "sse"`; Carbon cannot infer SSE
+from a URL because the same URL shape is used for streamable HTTP. It must not
+also contain `command` or stdio fields.
+
+The complete three-entry shape is based on `validMCPConfigJSON` and the
+transport assertions in `TestNormalizeMCPConfigHappyPath`,
+`TestNormalizeMCPConfigSSEExplicitType`, and `TestLoadMCPConfig` in
+[`internal/app/mcpconfig_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/mcpconfig_test.go).
+Those tests also cover Carbon's default role, deterministic binding order, and
+the disk-to-decoder-to-normalizer path.
 
 ## Start and adopt tools
 

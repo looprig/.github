@@ -43,6 +43,345 @@ endpoint, `qwen3-coder`, an empty API key, tool support, and the `none` effort.
 Use that test fixture as the starting point for a local installation rather
 than copying an untested configuration from a different provider.
 
+## Create a file safely
+
+Carbon has no separate configuration-validation command. `--list` reads the
+session listing catalog and does not read `models.json` or `mcp.json`. Model and
+MCP decoding happens while Carbon opens a normal session. The safest check is
+therefore to write the file with owner-only permissions and start a read-only
+session. That checks the file's location, permissions, JSON shape, and model
+normalization before you grant a session write access.
+
+The following POSIX commands create the default file without exposing a key in
+the shell command itself. Run the same pattern for any example below.
+
+```sh
+carbon_home="${HOME}/.looprig/carbon"
+umask 077
+mkdir -p "$carbon_home"
+cat > "$carbon_home/models.json" <<'JSON'
+{
+  "version": 2,
+  "primer_default": "local",
+  "models": [{
+    "alias": "local",
+    "description": "Local LM Studio coding model.",
+    "provider": "lmstudio",
+    "api_format": "openai",
+    "base_url": "http://localhost:1234/v1",
+    "model": "qwen3-coder",
+    "api_key": "",
+    "uses": ["primer", "delegate"],
+    "capabilities": {
+      "tools": true,
+      "thinking": false,
+      "images": false,
+      "prompt_caching": false,
+      "structured_output": false,
+      "structured_output_with_tools": false
+    },
+    "efforts": ["none"],
+    "default_effort": "none"
+  }]
+}
+JSON
+chmod 600 "$carbon_home/models.json"
+carbon --access-profile readonly
+```
+
+The JSON body is also shown on its own when you need to inspect or generate it
+from another tool:
+
+```json
+{
+  "version": 2,
+  "primer_default": "local",
+  "models": [{
+    "alias": "local",
+    "description": "Local LM Studio coding model.",
+    "provider": "lmstudio",
+    "api_format": "openai",
+    "base_url": "http://localhost:1234/v1",
+    "model": "qwen3-coder",
+    "api_key": "",
+    "uses": ["primer", "delegate"],
+    "capabilities": {
+      "tools": true,
+      "thinking": false,
+      "images": false,
+      "prompt_caching": false,
+      "structured_output": false,
+      "structured_output_with_tools": false
+    },
+    "efforts": ["none"],
+    "default_effort": "none"
+  }]
+}
+```
+
+This is a complete version-2 file, not a template fragment. It is the
+`validLMStudioModelConfig` fixture used by `TestModelConfigWithoutDelegateDefaultsIsValid`
+and the `valid no-auth LM Studio file` case in `TestDecodeModelConfig` in
+[`internal/app/modelconfig_decode_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_decode_test.go).
+The LM Studio server and the `qwen3-coder` model are not bundled with Carbon;
+start and configure that local server separately.
+
+## Version 3 with a credential reference
+
+Version 3 makes authentication explicit. The following is the complete shape
+from Carbon's schema-v3 credential-reference test. The reference must already
+name a credential source in Carbon's local catalog. The string is an identity,
+not an API key, and is safe to keep in the file.
+
+```json
+{
+  "version": 3,
+  "primer_default": "local",
+  "models": [{
+    "alias": "local",
+    "description": "OpenAI Responses coding model.",
+    "provider": "openai",
+    "api_format": "openai-responses",
+    "base_url": "https://api.openai.com/v1",
+    "model": "qwen3-coder",
+    "credential_ref": "credential://openai/personal",
+    "uses": ["primer", "delegate"],
+    "capabilities": {
+      "tools": true,
+      "thinking": false,
+      "images": false,
+      "prompt_caching": false,
+      "structured_output": false,
+      "structured_output_with_tools": false
+    },
+    "efforts": ["none"],
+    "default_effort": "none"
+  }]
+}
+```
+
+This exact shape is exercised by `TestDecodeModelConfigAcceptsSchemaV3CredentialReference`
+and the credential branch of `TestNormalizeModelConfigV3AuthModes` in
+[`internal/app/modelconfig_decode_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_decode_test.go)
+and [`internal/app/modelconfig_validate_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_validate_test.go).
+Do not add `api_key` alongside `credential_ref`. Version 3 accepts exactly one
+credential binding for an authenticated provider.
+
+## Native ACP with harness-managed model selection
+
+`native_acp` selects a supported native harness. Omitting `models`, or writing
+it as `null`, means the harness chooses its own model. Carbon still validates
+the profile name and enabled flag. This example keeps the local primer from
+the first fixture and enables managed selection for Codex.
+
+```json
+{
+  "version": 2,
+  "primer_default": "local",
+  "models": [{
+    "alias": "local",
+    "description": "Local LM Studio coding model.",
+    "provider": "lmstudio",
+    "api_format": "openai",
+    "base_url": "http://localhost:1234/v1",
+    "model": "qwen3-coder",
+    "api_key": "",
+    "uses": ["primer", "delegate"],
+    "capabilities": {
+      "tools": true,
+      "thinking": false,
+      "images": false,
+      "prompt_caching": false,
+      "structured_output": false,
+      "structured_output_with_tools": false
+    },
+    "efforts": ["none"],
+    "default_effort": "none"
+  }],
+  "native_acp": {
+    "codex": {
+      "enabled": true,
+      "models": null
+    }
+  }
+}
+```
+
+The managed distinction is covered by `TestModelConfigNativeACPProfilesDistinguishAbsentManagedAndExplicit`
+and `TestDecodeModelConfigAcceptsNullNativeACPModelsAsManaged` in
+[`internal/app/modelconfig_native_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_native_test.go).
+Native ACP uses the installed Codex harness and its own authentication. Carbon
+does not install that harness or choose a remote service for it.
+
+## Native ACP with a structured allowlist
+
+Use a non-empty `models` array when the parent configuration must constrain the
+native harness. Each structured entry needs a model ID, a non-empty effort
+allowlist, and a default that appears in that allowlist. The IDs below are
+native Codex model IDs, not aliases from Carbon's top-level `models` array.
+
+```json
+{
+  "version": 2,
+  "primer_default": "local",
+  "models": [{
+    "alias": "local",
+    "description": "Local LM Studio coding model.",
+    "provider": "lmstudio",
+    "api_format": "openai",
+    "base_url": "http://localhost:1234/v1",
+    "model": "qwen3-coder",
+    "api_key": "",
+    "uses": ["primer", "delegate"],
+    "capabilities": {
+      "tools": true,
+      "thinking": false,
+      "images": false,
+      "prompt_caching": false,
+      "structured_output": false,
+      "structured_output_with_tools": false
+    },
+    "efforts": ["none"],
+    "default_effort": "none"
+  }],
+  "native_acp": {
+    "codex": {
+      "enabled": true,
+      "models": [{
+        "model": "gpt-5.6-sol",
+        "efforts": ["medium", "high"],
+        "default_effort": "medium"
+      }]
+    }
+  }
+}
+```
+
+Carbon accepts legacy string entries too, but structured entries are the form
+that records effort policy in the file. The exact object form is covered by
+`TestModelConfigNativeACPModelsAcceptLegacyAndStructuredEntries` in
+[`internal/app/modelconfig_native_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_native_test.go).
+An empty array is rejected. A structured default outside `efforts`, duplicate
+model IDs, or duplicate efforts is rejected before a child starts.
+
+## Pin ACP launcher executables
+
+`acp_launchers` is machine-local executable configuration. Paths must be
+absolute and clean. Carbon checks the environment override first, then this
+map, then the fixed default executable name. The configured file must still be
+present and executable when a child starts.
+
+```json
+{
+  "version": 2,
+  "primer_default": "local",
+  "models": [{
+    "alias": "local",
+    "description": "Local LM Studio coding model.",
+    "provider": "lmstudio",
+    "api_format": "openai",
+    "base_url": "http://localhost:1234/v1",
+    "model": "qwen3-coder",
+    "api_key": "",
+    "uses": ["primer", "delegate"],
+    "capabilities": {
+      "tools": true,
+      "thinking": false,
+      "images": false,
+      "prompt_caching": false,
+      "structured_output": false,
+      "structured_output_with_tools": false
+    },
+    "efforts": ["none"],
+    "default_effort": "none"
+  }],
+  "acp_launchers": {
+    "claude-code": {
+      "executable": "/usr/local/bin/claude-code-acp"
+    },
+    "codex": {
+      "executable": "/usr/local/bin/codex-acp"
+    }
+  }
+}
+```
+
+This is the accepted block from `TestDecodeModelConfigACPLaunchers`, with the
+normalization checks in `TestNormalizeModelConfigACPLaunchers` and the
+production handoff covered by `TestCompileProductionModelsCarriesACPLaunchers`.
+Those tests live in
+[`internal/app/modelconfig_decode_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_decode_test.go),
+[`internal/app/modelconfig_validate_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_validate_test.go),
+and [`internal/app/productionmodels_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/productionmodels_test.go).
+The two adapter executables are not bundled with Carbon. Replace these paths
+with absolute paths to the adapters installed on the host.
+
+## Enable permission review with a structured-output model
+
+Permission review names a separate model row by alias. The row must advertise
+both `structured_output` and `structured_output_with_tools`; it does not need a
+`uses` entry, because `permission_review.model` is its binding. This complete
+version-2 example uses a safe placeholder string for the classifier key. Put a
+real value only in the owner-only file, or use a supported credential source in
+a version-3 row.
+
+```json
+{
+  "version": 2,
+  "primer_default": "local",
+  "models": [
+    {
+      "alias": "local",
+      "description": "Local LM Studio coding model.",
+      "provider": "lmstudio",
+      "api_format": "openai",
+      "base_url": "http://localhost:1234/v1",
+      "model": "qwen3-coder",
+      "api_key": "",
+      "uses": ["primer", "delegate"],
+      "capabilities": {
+        "tools": true,
+        "thinking": false,
+        "images": false,
+        "prompt_caching": false,
+        "structured_output": false,
+        "structured_output_with_tools": false
+      },
+      "efforts": ["none"],
+      "default_effort": "none"
+    },
+    {
+      "alias": "classifier",
+      "provider": "openai",
+      "api_format": "openai-responses",
+      "base_url": "https://api.openai.com/v1",
+      "model": "classifier-model",
+      "api_key": "REPLACE_WITH_YOUR_OPENAI_API_KEY",
+      "capabilities": {
+        "tools": true,
+        "structured_output": true,
+        "structured_output_with_tools": true
+      },
+      "efforts": ["none"],
+      "default_effort": "none"
+    }
+  ],
+  "permission_review": {
+    "model": "classifier",
+    "strict": true
+  }
+}
+```
+
+The classifier shape follows `modelConfigJSONWithUnusedClassifier` and is
+covered end to end by `TestNormalizeModelConfigPermissionReviewSection` and
+`TestProductionModelsResolvesUnusedClassifierPermissionReview` in
+[`internal/app/modelconfig_permission_review_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/modelconfig_permission_review_test.go)
+and [`internal/app/productionmodels_test.go`](https://github.com/looprig/carbon/blob/cac0608ae0bd873e35ee793bec5e4a56b02273bd/internal/app/productionmodels_test.go).
+Carbon applies this review path to the `trusted` profile. The OpenAI endpoint
+and classifier model are external dependencies, not part of the Carbon
+release.
+
 ## Local and provider models
 
 The row's `provider`, `api_format`, `base_url`, and `model` together identify a

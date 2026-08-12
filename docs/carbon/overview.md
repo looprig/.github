@@ -52,10 +52,12 @@ that session.
 
 ## A safe first path
 
-Start with the default `readonly` access profile and a local model. Confirm the
-model configuration with Carbon's strict decoder, run `carbon --list`, and open
-the TUI without asking it to write to the checkout. Move to `trusted` only when
-the workspace needs writes and you understand the command approval boundary.
+Start with the default `readonly` access profile and a local model. Run
+`carbon --list` to inspect sessions, then open a read-only TUI session to make
+Carbon decode and normalize the model configuration without asking it to write
+to the checkout. Carbon has no separate configuration-validation command.
+Move to `trusted` only when the workspace needs writes and you understand the
+command approval boundary.
 `unconfined` is an explicit escape hatch: it requires
 `--acknowledge-unconfined`, uses the real home directory, and gives the process
 full filesystem and network authority. It is not a default or a sandbox.

@@ -49,10 +49,12 @@ carbon --access-profile readonly
 ```
 
 `--list` reads the listing catalog scoped to the current workspace and exits;
-it does not acquire a session lease or replay a session. An empty store prints
-that there are no sessions yet. The second command opens the TUI with the
-default read-only boundary. Carbon creates the store lazily when it opens a
-session.
+it does not acquire a session lease or replay a session, and it does not
+validate `models.json` or `mcp.json`. An empty store prints that there are no
+sessions yet. The second command opens the TUI with the default read-only
+boundary and is the path that decodes and normalizes model and MCP
+configuration. Carbon creates the store lazily when it opens a session. There
+is no separate Carbon configuration-validation CLI.
 
 Use `--resume <uuid>` only with an ID printed by `--list`. A resume selects the
 session on the first open. The TUI's `/clear` closes that session and opens a
