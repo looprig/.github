@@ -5,7 +5,27 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 
 const cwd = path.resolve(import.meta.dirname, "../..");
-const workspace = path.resolve(cwd, "../../..");
+
+export function resolveWorkspaceRoot(repoRoot = cwd, { env = process.env } = {}) {
+  const configured = typeof env?.LOOPRIG_WORKSPACE_ROOT === "string"
+    ? env.LOOPRIG_WORKSPACE_ROOT.trim()
+    : "";
+  if (configured) return path.resolve(configured);
+
+  let current = path.resolve(repoRoot);
+  while (true) {
+    if (path.basename(current) === ".github") return path.dirname(current);
+    const parent = path.dirname(current);
+    if (parent === current) break;
+    current = parent;
+  }
+
+  throw new Error(
+    `unable to locate the outer Looprig workspace from ${path.resolve(repoRoot)}; ` +
+    "set LOOPRIG_WORKSPACE_ROOT for a standalone .github checkout",
+  );
+}
+
 const modules = JSON.parse(fs.readFileSync(path.join(cwd, "docs/_data/modules.json"), "utf8")).modules;
 const packages = JSON.parse(fs.readFileSync(path.join(cwd, "docs/_data/packages.json"), "utf8")).packages;
 
@@ -25,7 +45,7 @@ function relativePackagePath(item) {
   return item.path.slice(prefix.length);
 }
 
-function packageFiles(item) {
+function packageFiles(item, workspace) {
   const module = moduleFor(item);
   if (!module) throw new Error(`no module record for ${item.repository}:${item.path}`);
   const repo = path.join(workspace, item.repository);
@@ -35,7 +55,7 @@ function packageFiles(item) {
   return names.split(/\r?\n/).filter((name) => name.endsWith(".go") && !name.endsWith("_test.go") && path.posix.dirname(name) === (rel || "."));
 }
 
-function packageTests(item) {
+function packageTests(item, workspace) {
   const module = moduleFor(item);
   const repo = path.join(workspace, item.repository);
   const rel = relativePackagePath(item);
@@ -178,13 +198,14 @@ function parseSource(source, filename) {
   return { functions: uniq(functions), methods: uniq(methods), types: uniq(types), constants: uniq(constants), variables: uniq(variables), errors: [...errors].filter(exported) };
 }
 
-export function inventory() {
+export function inventory({ workspaceRoot } = {}) {
+  const workspace = workspaceRoot ? path.resolve(workspaceRoot) : resolveWorkspaceRoot();
   const result = [];
   for (const item of packages) {
     if (item.ecosystem === "npm") continue;
     const module = moduleFor(item);
     const repo = path.join(workspace, item.repository);
-    const files = packageFiles(item);
+    const files = packageFiles(item, workspace);
     const surface = files.map((file) => parseSource(show(repo, module.commit, file), file));
     result.push({
       repository: item.repository,
@@ -194,7 +215,7 @@ export function inventory() {
       commit: module.commit,
       tag: module.publication?.tag || null,
       files,
-      tests: packageTests(item),
+      tests: packageTests(item, workspace),
       functions: surface.flatMap((x) => x.functions),
       methods: surface.flatMap((x) => x.methods),
       types: surface.flatMap((x) => x.types).map((type) => ({ ...type, error: surface.some((x) => x.errors.includes(type.name)) })),
