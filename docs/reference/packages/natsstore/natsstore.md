@@ -9,9 +9,11 @@ publication: released
 proofs:
   package-role: release-github-com-looprig-natsstore
   exported-surface: release-github-com-looprig-natsstore
-  functions-and-methods: release-github-com-looprig-natsstore
+  functions: release-github-com-looprig-natsstore
+  methods: release-github-com-looprig-natsstore
   types: release-github-com-looprig-natsstore
-  constants-and-variables: release-github-com-looprig-natsstore
+  constants: release-github-com-looprig-natsstore
+  variables: release-github-com-looprig-natsstore
   ownership-and-errors: release-github-com-looprig-natsstore
   source-and-runnable-proof: release-github-com-looprig-natsstore
 ---

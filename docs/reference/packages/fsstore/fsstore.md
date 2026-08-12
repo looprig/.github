@@ -12,9 +12,11 @@ examples:
 proofs:
   package-role: release-github-com-looprig-fsstore
   exported-surface: release-github-com-looprig-fsstore
-  functions-and-methods: release-github-com-looprig-fsstore
+  functions: release-github-com-looprig-fsstore
+  methods: release-github-com-looprig-fsstore
   types: release-github-com-looprig-fsstore
-  constants-and-variables: release-github-com-looprig-fsstore
+  constants: release-github-com-looprig-fsstore
+  variables: release-github-com-looprig-fsstore
   ownership-and-errors: release-github-com-looprig-fsstore
   source-and-runnable-proof: release-github-com-looprig-fsstore
 ---

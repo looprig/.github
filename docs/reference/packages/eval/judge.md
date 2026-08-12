@@ -11,9 +11,11 @@ examples:
 proofs:
   package-role: release-github-com-looprig-eval
   exported-surface: release-github-com-looprig-eval
-  functions-and-methods: release-github-com-looprig-eval
+  functions: release-github-com-looprig-eval
+  methods: release-github-com-looprig-eval
   types: release-github-com-looprig-eval
-  constants-and-variables: release-github-com-looprig-eval
+  constants: release-github-com-looprig-eval
+  variables: release-github-com-looprig-eval
   ownership-and-errors: release-github-com-looprig-eval
   source-and-runnable-proof: release-github-com-looprig-eval
 ---

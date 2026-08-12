@@ -11,8 +11,13 @@ examples:
 proofs:
   package-role: release-github-com-looprig-client
   exported-surface: release-github-com-looprig-client
-  lifecycle-and-errors: release-github-com-looprig-client
-  source-proof: release-github-com-looprig-client
+  functions: release-github-com-looprig-client
+  methods: release-github-com-looprig-client
+  types: release-github-com-looprig-client
+  constants: release-github-com-looprig-client
+  variables: release-github-com-looprig-client
+  ownership-and-errors: release-github-com-looprig-client
+  source-and-runnable-proof: release-github-com-looprig-client
 ---
 
 # `github.com/looprig/client/pkg/webui`

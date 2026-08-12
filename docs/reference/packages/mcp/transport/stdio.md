@@ -11,9 +11,11 @@ examples:
 proofs:
   package-role: release-github-com-looprig-mcp
   exported-surface: release-github-com-looprig-mcp
-  functions-and-methods: release-github-com-looprig-mcp
+  functions: release-github-com-looprig-mcp
+  methods: release-github-com-looprig-mcp
   types: release-github-com-looprig-mcp
-  constants-and-variables: release-github-com-looprig-mcp
+  constants: release-github-com-looprig-mcp
+  variables: release-github-com-looprig-mcp
   ownership-and-errors: release-github-com-looprig-mcp
   source-and-runnable-proof: release-github-com-looprig-mcp
 ---

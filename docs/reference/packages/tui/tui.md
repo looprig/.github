@@ -11,8 +11,13 @@ examples:
 proofs:
   package-role: release-github-com-looprig-tui
   exported-surface: release-github-com-looprig-tui
-  lifecycle-and-errors: release-github-com-looprig-tui
-  source-proof: release-github-com-looprig-tui
+  functions: release-github-com-looprig-tui
+  methods: release-github-com-looprig-tui
+  types: release-github-com-looprig-tui
+  constants: release-github-com-looprig-tui
+  variables: release-github-com-looprig-tui
+  ownership-and-errors: release-github-com-looprig-tui
+  source-and-runnable-proof: release-github-com-looprig-tui
 ---
 
 # `github.com/looprig/tui`

@@ -11,8 +11,13 @@ examples:
 proofs:
   package-role: module-workflows
   exported-surface: [central-workflows-catalog-source, central-workflows-typed-definition-source]
-  lifecycle-and-errors: [central-workflows-recovery-test, central-workflows-artifacts-contract-test]
-  source-proof: central-workflows-stage18-output-test
+  functions: [central-workflows-catalog-source, central-workflows-typed-definition-source]
+  methods: [central-workflows-catalog-source, central-workflows-typed-definition-source]
+  types: [central-workflows-catalog-source, central-workflows-typed-definition-source]
+  constants: [central-workflows-catalog-source, central-workflows-typed-definition-source]
+  variables: [central-workflows-catalog-source, central-workflows-typed-definition-source]
+  ownership-and-errors: [central-workflows-catalog-source, central-workflows-typed-definition-source]
+  source-and-runnable-proof: central-workflows-stage18-output-test
 ---
 
 # `github.com/looprig/workflows`

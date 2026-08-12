@@ -13,9 +13,11 @@ examples:
 proofs:
   package-role: release-github-com-looprig-inference
   exported-surface: release-github-com-looprig-inference
-  functions-and-methods: release-github-com-looprig-inference
+  functions: release-github-com-looprig-inference
+  methods: release-github-com-looprig-inference
   types: release-github-com-looprig-inference
-  constants-and-variables: release-github-com-looprig-inference
+  constants: release-github-com-looprig-inference
+  variables: release-github-com-looprig-inference
   ownership-and-errors: release-github-com-looprig-inference
   source-and-runnable-proof: release-github-com-looprig-inference
 ---

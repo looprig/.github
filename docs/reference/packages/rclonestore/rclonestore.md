@@ -9,9 +9,11 @@ publication: released
 proofs:
   package-role: release-github-com-looprig-rclonestore
   exported-surface: release-github-com-looprig-rclonestore
-  functions-and-methods: release-github-com-looprig-rclonestore
+  functions: release-github-com-looprig-rclonestore
+  methods: release-github-com-looprig-rclonestore
   types: release-github-com-looprig-rclonestore
-  constants-and-variables: release-github-com-looprig-rclonestore
+  constants: release-github-com-looprig-rclonestore
+  variables: release-github-com-looprig-rclonestore
   ownership-and-errors: release-github-com-looprig-rclonestore
   source-and-runnable-proof: release-github-com-looprig-rclonestore
 ---

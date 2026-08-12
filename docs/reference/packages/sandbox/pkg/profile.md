@@ -11,9 +11,11 @@ examples:
 proofs:
   package-role: release-github-com-looprig-sandbox
   exported-surface: release-github-com-looprig-sandbox
-  functions-and-methods: release-github-com-looprig-sandbox
+  functions: release-github-com-looprig-sandbox
+  methods: release-github-com-looprig-sandbox
   types: release-github-com-looprig-sandbox
-  constants-and-variables: release-github-com-looprig-sandbox
+  constants: release-github-com-looprig-sandbox
+  variables: release-github-com-looprig-sandbox
   ownership-and-errors: release-github-com-looprig-sandbox
   source-and-runnable-proof: release-github-com-looprig-sandbox
 ---

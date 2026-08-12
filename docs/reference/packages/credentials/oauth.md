@@ -9,9 +9,11 @@ publication: released
 proofs:
   package-role: release-github-com-looprig-credentials
   exported-surface: release-github-com-looprig-credentials
-  functions-and-methods: release-github-com-looprig-credentials
+  functions: release-github-com-looprig-credentials
+  methods: release-github-com-looprig-credentials
   types: release-github-com-looprig-credentials
-  constants-and-variables: release-github-com-looprig-credentials
+  constants: release-github-com-looprig-credentials
+  variables: release-github-com-looprig-credentials
   ownership-and-errors: release-github-com-looprig-credentials
   source-and-runnable-proof: release-github-com-looprig-credentials
 ---

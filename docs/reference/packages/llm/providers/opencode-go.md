@@ -9,9 +9,11 @@ publication: released
 proofs:
   package-role: release-github-com-looprig-llm
   exported-surface: release-github-com-looprig-llm
-  functions-and-methods: release-github-com-looprig-llm
+  functions: release-github-com-looprig-llm
+  methods: release-github-com-looprig-llm
   types: release-github-com-looprig-llm
-  constants-and-variables: release-github-com-looprig-llm
+  constants: release-github-com-looprig-llm
+  variables: release-github-com-looprig-llm
   ownership-and-errors: release-github-com-looprig-llm
   source-and-runnable-proof: release-github-com-looprig-llm
 ---

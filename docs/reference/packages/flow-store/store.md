@@ -9,9 +9,11 @@ publication: source-workspace
 proofs:
   package-role: module-flow-store
   exported-surface: module-flow-store
-  functions-and-methods: module-flow-store
+  functions: module-flow-store
+  methods: module-flow-store
   types: module-flow-store
-  constants-and-variables: module-flow-store
+  constants: module-flow-store
+  variables: module-flow-store
   ownership-and-errors: module-flow-store
   source-and-runnable-proof: module-flow-store
 ---

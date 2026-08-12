@@ -11,9 +11,11 @@ examples:
 proofs:
   package-role: release-github-com-looprig-foreignloops
   exported-surface: release-github-com-looprig-foreignloops
-  functions-and-methods: release-github-com-looprig-foreignloops
+  functions: release-github-com-looprig-foreignloops
+  methods: release-github-com-looprig-foreignloops
   types: release-github-com-looprig-foreignloops
-  constants-and-variables: release-github-com-looprig-foreignloops
+  constants: release-github-com-looprig-foreignloops
+  variables: release-github-com-looprig-foreignloops
   ownership-and-errors: release-github-com-looprig-foreignloops
   source-and-runnable-proof: release-github-com-looprig-foreignloops
 ---

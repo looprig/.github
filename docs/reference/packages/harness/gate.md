@@ -12,9 +12,11 @@ examples:
 proofs:
   package-role: release-github-com-looprig-harness
   exported-surface: release-github-com-looprig-harness
-  functions-and-methods: release-github-com-looprig-harness
+  functions: release-github-com-looprig-harness
+  methods: release-github-com-looprig-harness
   types: release-github-com-looprig-harness
-  constants-and-variables: release-github-com-looprig-harness
+  constants: release-github-com-looprig-harness
+  variables: release-github-com-looprig-harness
   ownership-and-errors: release-github-com-looprig-harness
   source-and-runnable-proof: release-github-com-looprig-harness
 ---

@@ -2,12 +2,11 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { inventory } from "./package-surface.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const packageRoot = path.join(root, "docs/reference/packages");
-const pages = fs.readdirSync(packageRoot, { recursive: true }).filter((name) => name.endsWith(".md"));
-const surfaces = inventory();
 
 function pagePathFor(item) {
   const repository = item.repository === "flow/store" ? "flow-store" : item.repository;
@@ -18,6 +17,38 @@ function pagePathFor(item) {
 
 function pageId(content) {
   return content.match(/^id: ([^\n]+)/m)?.[1] || "";
+}
+
+export function normalizeProofMappings(text) {
+  const frontmatter = text.match(/^---\n([\s\S]*?)\n---\n/);
+  if (!frontmatter) return text;
+  const lines = frontmatter[1].split("\n");
+  const start = lines.indexOf("proofs:");
+  if (start < 0) return text;
+  let end = start + 1;
+  while (end < lines.length && (lines[end].startsWith("  ") || lines[end].trim() === "")) end += 1;
+  const existing = new Map();
+  for (const line of lines.slice(start + 1, end)) {
+    const match = line.match(/^  ([a-z0-9-]+):\s*(.+)$/);
+    if (match) existing.set(match[1], match[2]);
+  }
+  const fallback = existing.get("exported-surface") || existing.get("package-role") || existing.get("functions-and-methods") || existing.get("types") || existing.get("constants-and-variables");
+  if (!fallback) return text;
+  const proof = (key, ...fallbackKeys) => existing.get(key) || fallbackKeys.map((candidate) => existing.get(candidate)).find(Boolean) || fallback;
+  const mappings = [
+    ["package-role", proof("package-role")],
+    ["exported-surface", proof("exported-surface")],
+    ["functions", proof("functions", "functions-and-methods")],
+    ["methods", proof("methods", "functions-and-methods")],
+    ["types", proof("types")],
+    ["constants", proof("constants", "constants-and-variables")],
+    ["variables", proof("variables", "constants-and-variables")],
+    ["ownership-and-errors", proof("ownership-and-errors")],
+    ["source-and-runnable-proof", proof("source-and-runnable-proof", "source-proof")],
+  ];
+  const normalized = ["proofs:", ...mappings.map(([key, value]) => `  ${key}: ${value}`)];
+  lines.splice(start, end - start, ...normalized);
+  return text.replace(frontmatter[1], lines.join("\n"));
 }
 
 function sourcePathFor(id) {
@@ -114,6 +145,7 @@ function refreshPage(file, item) {
   const full = path.join(packageRoot, file);
   let text = fs.readFileSync(full, "utf8");
   const id = pageId(text);
+  text = normalizeProofMappings(text);
   text = text.replace(/^Import path: .*$/m, importParagraph(item, id));
   text = replaceBetween(text, /^## Exported surface .*$/m, /^## (?:Ownership and errors|Lifecycle and errors|Source proof|Source and runnable proof) .*$/m, surfaceSection(item));
   text = replaceBetween(text, /^## (?:Ownership and errors|Lifecycle and errors) .*$/m, /^## (?:Source proof|Source and runnable proof) .*$/m, ownershipSection(item));
@@ -123,12 +155,21 @@ function refreshPage(file, item) {
   fs.writeFileSync(full, text);
 }
 
-const byPage = new Map(surfaces.map((item) => [pagePathFor(item), item]));
-let changed = 0;
-for (const file of pages) {
-  const item = byPage.get(file);
-  if (!item) continue;
-  refreshPage(file, item);
-  changed += 1;
+export function refreshPackageReferences() {
+  const pages = fs.readdirSync(packageRoot, { recursive: true }).filter((name) => name.endsWith(".md"));
+  const surfaces = inventory();
+  const byPage = new Map(surfaces.map((item) => [pagePathFor(item), item]));
+  let changed = 0;
+  for (const file of pages) {
+    const item = byPage.get(file);
+    if (!item) continue;
+    refreshPage(file, item);
+    changed += 1;
+  }
+  return { changed, surfaces: surfaces.length };
 }
-console.error("refreshed " + changed + " package reference pages from " + surfaces.length + " pinned Go package surfaces");
+
+if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+  const { changed, surfaces } = refreshPackageReferences();
+  console.error("refreshed " + changed + " package reference pages from " + surfaces + " pinned Go package surfaces");
+}

@@ -12,9 +12,11 @@ examples:
 proofs:
   package-role: release-github-com-looprig-core
   exported-surface: release-github-com-looprig-core
-  functions-and-methods: release-github-com-looprig-core
+  functions: release-github-com-looprig-core
+  methods: release-github-com-looprig-core
   types: release-github-com-looprig-core
-  constants-and-variables: release-github-com-looprig-core
+  constants: release-github-com-looprig-core
+  variables: release-github-com-looprig-core
   ownership-and-errors: release-github-com-looprig-core
   source-and-runnable-proof: release-github-com-looprig-core
 ---

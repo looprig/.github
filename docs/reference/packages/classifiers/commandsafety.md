@@ -11,9 +11,11 @@ examples:
 proofs:
   package-role: release-github-com-looprig-classifiers
   exported-surface: release-github-com-looprig-classifiers
-  functions-and-methods: release-github-com-looprig-classifiers
+  functions: release-github-com-looprig-classifiers
+  methods: release-github-com-looprig-classifiers
   types: release-github-com-looprig-classifiers
-  constants-and-variables: release-github-com-looprig-classifiers
+  constants: release-github-com-looprig-classifiers
+  variables: release-github-com-looprig-classifiers
   ownership-and-errors: release-github-com-looprig-classifiers
   source-and-runnable-proof: release-github-com-looprig-classifiers
 ---

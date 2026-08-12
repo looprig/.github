@@ -11,9 +11,11 @@ examples:
 proofs:
   package-role: release-github-com-looprig-storage
   exported-surface: release-github-com-looprig-storage
-  functions-and-methods: release-github-com-looprig-storage
+  functions: release-github-com-looprig-storage
+  methods: release-github-com-looprig-storage
   types: release-github-com-looprig-storage
-  constants-and-variables: release-github-com-looprig-storage
+  constants: release-github-com-looprig-storage
+  variables: release-github-com-looprig-storage
   ownership-and-errors: release-github-com-looprig-storage
   source-and-runnable-proof: release-github-com-looprig-storage
 ---

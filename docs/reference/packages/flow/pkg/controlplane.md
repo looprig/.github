@@ -11,9 +11,11 @@ examples:
 proofs:
   package-role: release-github-com-looprig-flow
   exported-surface: release-github-com-looprig-flow
-  functions-and-methods: release-github-com-looprig-flow
+  functions: release-github-com-looprig-flow
+  methods: release-github-com-looprig-flow
   types: release-github-com-looprig-flow
-  constants-and-variables: release-github-com-looprig-flow
+  constants: release-github-com-looprig-flow
+  variables: release-github-com-looprig-flow
   ownership-and-errors: release-github-com-looprig-flow
   source-and-runnable-proof: release-github-com-looprig-flow
 ---

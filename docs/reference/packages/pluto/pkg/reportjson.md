@@ -11,8 +11,13 @@ examples:
 proofs:
   package-role: release-github-com-looprig-pluto
   exported-surface: release-github-com-looprig-pluto
-  lifecycle-and-errors: release-github-com-looprig-pluto
-  source-proof: release-github-com-looprig-pluto
+  functions: release-github-com-looprig-pluto
+  methods: release-github-com-looprig-pluto
+  types: release-github-com-looprig-pluto
+  constants: release-github-com-looprig-pluto
+  variables: release-github-com-looprig-pluto
+  ownership-and-errors: release-github-com-looprig-pluto
+  source-and-runnable-proof: release-github-com-looprig-pluto
 ---
 
 # `github.com/looprig/pluto/pkg/reportjson`

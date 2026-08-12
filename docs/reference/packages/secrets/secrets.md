@@ -9,9 +9,11 @@ publication: released
 proofs:
   package-role: release-github-com-looprig-secrets
   exported-surface: release-github-com-looprig-secrets
-  functions-and-methods: release-github-com-looprig-secrets
+  functions: release-github-com-looprig-secrets
+  methods: release-github-com-looprig-secrets
   types: release-github-com-looprig-secrets
-  constants-and-variables: release-github-com-looprig-secrets
+  constants: release-github-com-looprig-secrets
+  variables: release-github-com-looprig-secrets
   ownership-and-errors: release-github-com-looprig-secrets
   source-and-runnable-proof: release-github-com-looprig-secrets
 ---
