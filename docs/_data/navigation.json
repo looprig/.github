@@ -1530,6 +1530,206 @@
       "path": "agents/architecture.md",
       "audience": "agent",
       "order": 1
+    },
+    {
+      "path": "agents/composition/minimal-harness.md",
+      "audience": "agent",
+      "order": 1
+    },
+    {
+      "path": "agents/repositories/acp.md",
+      "audience": "agent",
+      "order": 1
+    },
+    {
+      "path": "agents/composition/tools.md",
+      "audience": "agent",
+      "order": 2
+    },
+    {
+      "path": "agents/repositories/classifiers.md",
+      "audience": "agent",
+      "order": 2
+    },
+    {
+      "path": "agents/task-routing.md",
+      "audience": "agent",
+      "order": 2
+    },
+    {
+      "path": "agents/composition/gates-sandbox.md",
+      "audience": "agent",
+      "order": 3
+    },
+    {
+      "path": "agents/repositories/client.md",
+      "audience": "agent",
+      "order": 3
+    },
+    {
+      "path": "agents/composition/persistence.md",
+      "audience": "agent",
+      "order": 4
+    },
+    {
+      "path": "agents/repositories/core.md",
+      "audience": "agent",
+      "order": 4
+    },
+    {
+      "path": "agents/composition/delegation.md",
+      "audience": "agent",
+      "order": 5
+    },
+    {
+      "path": "agents/repositories/credentials.md",
+      "audience": "agent",
+      "order": 5
+    },
+    {
+      "path": "agents/composition/acp.md",
+      "audience": "agent",
+      "order": 6
+    },
+    {
+      "path": "agents/repositories/eval.md",
+      "audience": "agent",
+      "order": 6
+    },
+    {
+      "path": "agents/composition/mcp.md",
+      "audience": "agent",
+      "order": 7
+    },
+    {
+      "path": "agents/repositories/flow.md",
+      "audience": "agent",
+      "order": 7
+    },
+    {
+      "path": "agents/composition/model-gateway.md",
+      "audience": "agent",
+      "order": 8
+    },
+    {
+      "path": "agents/repositories/flow-store.md",
+      "audience": "agent",
+      "order": 8
+    },
+    {
+      "path": "agents/composition/flow.md",
+      "audience": "agent",
+      "order": 9
+    },
+    {
+      "path": "agents/repositories/foreignloops.md",
+      "audience": "agent",
+      "order": 9
+    },
+    {
+      "path": "agents/composition/tui.md",
+      "audience": "agent",
+      "order": 10
+    },
+    {
+      "path": "agents/repositories/fsstore.md",
+      "audience": "agent",
+      "order": 10
+    },
+    {
+      "path": "agents/composition/client-ui.md",
+      "audience": "agent",
+      "order": 11
+    },
+    {
+      "path": "agents/repositories/harness.md",
+      "audience": "agent",
+      "order": 11
+    },
+    {
+      "path": "agents/composition/evals.md",
+      "audience": "agent",
+      "order": 12
+    },
+    {
+      "path": "agents/repositories/inference.md",
+      "audience": "agent",
+      "order": 12
+    },
+    {
+      "path": "agents/repositories/llm.md",
+      "audience": "agent",
+      "order": 13
+    },
+    {
+      "path": "agents/repositories/mcp.md",
+      "audience": "agent",
+      "order": 14
+    },
+    {
+      "path": "agents/repositories/natsstore.md",
+      "audience": "agent",
+      "order": 15
+    },
+    {
+      "path": "agents/repositories/pluto.md",
+      "audience": "agent",
+      "order": 16
+    },
+    {
+      "path": "agents/repositories/pluto-cmd-pluto.md",
+      "audience": "agent",
+      "order": 17
+    },
+    {
+      "path": "agents/repositories/rclonestore.md",
+      "audience": "agent",
+      "order": 18
+    },
+    {
+      "path": "agents/repositories/sandbox.md",
+      "audience": "agent",
+      "order": 19
+    },
+    {
+      "path": "agents/repositories/secrets.md",
+      "audience": "agent",
+      "order": 20
+    },
+    {
+      "path": "agents/repositories/storage.md",
+      "audience": "agent",
+      "order": 21
+    },
+    {
+      "path": "agents/repositories/tests.md",
+      "audience": "agent",
+      "order": 22
+    },
+    {
+      "path": "agents/repositories/tools.md",
+      "audience": "agent",
+      "order": 23
+    },
+    {
+      "path": "agents/repositories/tui.md",
+      "audience": "agent",
+      "order": 24
+    },
+    {
+      "path": "agents/repositories/workflows.md",
+      "audience": "agent",
+      "order": 25
+    },
+    {
+      "path": "agents/repositories/carbon.md",
+      "audience": "agent",
+      "order": 26
+    },
+    {
+      "path": "agents/repositories/kosa.md",
+      "audience": "agent",
+      "order": 27
     }
   ],
   "legacyPages": [

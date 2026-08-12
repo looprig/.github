@@ -1,6 +1,13 @@
 {
   "proofs": [
     {
+      "id": "module-tests",
+      "type": "test",
+      "repository": "tests",
+      "path": "dependency_boundary_test.go",
+      "commit": "db8982cc36f15c5da6285b2a160b6c772b1f82d8"
+    },
+    {
       "id": "module-flow-store",
       "type": "module-file",
       "repository": "flow/store",
