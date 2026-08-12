@@ -11,6 +11,7 @@ proofs:
   description: release-github-com-looprig-foreignloops
   dependencies: release-github-com-looprig-foreignloops
   dependents: release-github-com-looprig-foreignloops
+  where-it-fits: release-github-com-looprig-foreignloops
 ---
 
 # Foreign Loops
@@ -26,6 +27,10 @@ proofs:
 ## Description
 
 Adapt ACP, Claude, and Codex processes to Harness through neutral driver contracts and restorable builders.
+
+## Where it fits
+
+Foreign Loops is useful on its own when an application needs to supervise and restore an external agent process behind a neutral backend. Within Looprig, it adapts ACP, Claude, and Codex processes to [Harness](/docs/modules/harness) by using [ACP](/docs/modules/acp) and shared inference types. Foreign Loops owns the adapter lifecycle; the external process keeps its native behavior.
 
 ## Dependencies
 

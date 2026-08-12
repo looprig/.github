@@ -11,6 +11,7 @@ proofs:
   description: release-github-com-looprig-secrets
   dependencies: release-github-com-looprig-secrets
   dependents: release-github-com-looprig-secrets
+  where-it-fits: release-github-com-looprig-secrets
 ---
 
 # Secrets
@@ -26,6 +27,10 @@ proofs:
 ## Description
 
 Store secret values without making ordinary formatting or references disclose them.
+
+## Where it fits
+
+Secrets are useful on their own when an application needs opaque references, redaction-safe values, and a replaceable secret store. Within Looprig, [Credentials](/docs/modules/credentials), [Inference](/docs/modules/inference), and [LLM](/docs/modules/llm) pass references instead of copying secret material into model configuration. Secrets protect representation and lookup boundaries; callers still control authorization and rotation policy.
 
 ## Dependencies
 

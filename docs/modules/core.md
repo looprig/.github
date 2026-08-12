@@ -11,6 +11,7 @@ proofs:
   description: release-github-com-looprig-core
   dependencies: release-github-com-looprig-core
   dependents: release-github-com-looprig-core
+  where-it-fits: release-github-com-looprig-core
 ---
 
 # Core
@@ -26,6 +27,10 @@ proofs:
 ## Description
 
 Construct user, system, assistant, and tool-result messages; carry text, media, reasoning, and tool calls; consume streaming chunks; and serialize the closed content model.
+
+## Where it fits
+
+Core is the foundation for applications that need provider-neutral messages, content blocks, streaming chunks, usage values, logging, or UUIDs. Within Looprig, those types are shared by [Inference](/docs/modules/inference), [Harness](/docs/modules/harness), tools, stores, and user interfaces. Core defines common values without owning model transport or runtime lifecycle.
 
 ## Dependencies
 

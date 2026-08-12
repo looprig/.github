@@ -11,6 +11,7 @@ proofs:
   description: release-github-com-looprig-storage
   dependencies: release-github-com-looprig-storage
   dependents: release-github-com-looprig-storage
+  where-it-fits: release-github-com-looprig-storage
 ---
 
 # Storage
@@ -26,6 +27,12 @@ proofs:
 ## Description
 
 Compose append-only history, leases, revisioned metadata, and immutable blobs behind stable contracts.
+
+## Where it fits
+
+Storage is useful on its own. Use it when a Go application needs stable interfaces for append-only records, leases, revisioned key-value data, and immutable blobs without committing to a particular backend.
+
+Within Looprig, Storage provides the persistence contracts used by [Harness](/docs/modules/harness), [Workflows](/docs/modules/workflows), [Client](/docs/modules/client), and [Flow Store](/docs/modules/flow-store). Backend modules such as [FSStore](/docs/modules/fsstore), [NATSStore](/docs/modules/natsstore), and [RcloneStore](/docs/modules/rclonestore) implement selected parts of those contracts. Storage defines durable operations; higher-level runtimes decide what to persist.
 
 ## Dependencies
 

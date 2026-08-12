@@ -11,6 +11,7 @@ proofs:
   description: module-workflows
   dependencies: module-workflows
   dependents: module-workflows
+  where-it-fits: module-workflows
 ---
 
 # Workflows
@@ -26,6 +27,10 @@ proofs:
 ## Description
 
 Define typed workflows, persist durable run records, supervise runs inside sessions, and expose workflow tools.
+
+## Where it fits
+
+Workflows are useful on their own when an application needs typed, durable workflow definitions with interruption, recovery, supervision, and tool-facing controls. Within Looprig, the module combines [Flow](/docs/modules/flow), [Harness](/docs/modules/harness), [Inference](/docs/modules/inference), and [Storage](/docs/modules/storage). Workflows coordinate long-running business processes; Harness continues to own agent sessions and Flow continues to execute graphs.
 
 ## Dependencies
 

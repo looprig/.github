@@ -38,7 +38,7 @@ function directDependents(record) {
     .sort();
 }
 
-test("every Module page contains only repository details, description, dependencies, and dependents", () => {
+test("every Module page contains the compact repository and ecosystem sections", () => {
   assert.equal(pages.length, 22);
   for (const name of pages) {
     const slug = name.slice(0, -3);
@@ -46,9 +46,19 @@ test("every Module page contains only repository details, description, dependenc
     const body = page.split("---\n").slice(2).join("---\n");
     const headings = [...body.matchAll(/^## (.+)$/gm)].map((match) => match[1]);
 
-    assert.deepEqual(headings, ["Repository", "Description", "Dependencies", "Dependents"], slug);
+    assert.deepEqual(headings, ["Repository", "Description", "Where it fits", "Dependencies", "Dependents"], slug);
     assert.doesNotMatch(body, /^### /m, slug);
     assert.doesNotMatch(body, /```|\bgo get\b|runnable|example:/i, slug);
+  }
+});
+
+test("every Where it fits section explains standalone use and linked Looprig integration", () => {
+  for (const name of pages) {
+    const slug = name.slice(0, -3);
+    const page = readFileSync(path.join(modulesRoot, name), "utf8");
+    const section = page.match(/^## Where it fits\n\n([\s\S]*?)(?=\n## Dependencies$)/m)?.[1] ?? "";
+    assert.match(section, /useful on its own|within Looprig|Looprig's|foundation for/i, slug);
+    assert.match(section, /\/docs\/modules\//, `${slug} must link an ecosystem neighbor`);
   }
 });
 

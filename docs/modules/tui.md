@@ -11,6 +11,7 @@ proofs:
   description: release-github-com-looprig-tui
   dependencies: release-github-com-looprig-tui
   dependents: release-github-com-looprig-tui
+  where-it-fits: release-github-com-looprig-tui
 ---
 
 # TUI
@@ -26,6 +27,10 @@ proofs:
 ## Description
 
 Build terminal screens for session events, replay, restore decisions, runtime teardown, widgets, and rendering styles.
+
+## Where it fits
+
+TUI is useful on its own when a terminal application needs reusable session views, event rendering, input, completion, restore decisions, and teardown coordination. Within Looprig, it presents [Harness](/docs/modules/harness) sessions and [Inference](/docs/modules/inference) content in a ready terminal interface. TUI owns presentation and interaction; the runtime remains the source of session state.
 
 ## Dependencies
 

@@ -11,6 +11,7 @@ proofs:
   description: release-github-com-looprig-harness
   dependencies: release-github-com-looprig-harness
   dependents: release-github-com-looprig-harness
+  where-it-fits: release-github-com-looprig-harness
 ---
 
 # Harness
@@ -26,6 +27,10 @@ proofs:
 ## Description
 
 Define a loop, assemble a Rig, run a session, observe its events, and shut it down cleanly with the Harness runtime.
+
+## Where it fits
+
+Harness is useful on its own when an application needs to turn model calls and tools into a session-oriented agent runtime. Within Looprig, it composes [Inference](/docs/modules/inference), [Storage](/docs/modules/storage), gates, workspaces, delegation, and tools behind Loops and Rigs. Harness owns runtime coordination; applications still choose models, authority, persistence, and interfaces.
 
 ## Dependencies
 

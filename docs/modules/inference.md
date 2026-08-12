@@ -11,6 +11,7 @@ proofs:
   description: release-github-com-looprig-inference
   dependencies: release-github-com-looprig-inference
   dependents: release-github-com-looprig-inference
+  where-it-fits: release-github-com-looprig-inference
 ---
 
 # Inference
@@ -26,6 +27,10 @@ proofs:
 ## Description
 
 Invoke and stream model requests through explicit descriptors, codecs, retries, and a local gateway.
+
+## Where it fits
+
+Inference is useful on its own when a Go application needs provider-neutral model requests, streaming, codecs, retries, routing, or a local model gateway. Within Looprig, it supplies the model boundary for [Harness](/docs/modules/harness), [Eval](/docs/modules/eval), [Tools](/docs/modules/tools), and [Workflows](/docs/modules/workflows). Inference moves model data; it does not own agent sessions or provider credential catalogs.
 
 ## Dependencies
 

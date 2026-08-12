@@ -11,6 +11,7 @@ proofs:
   description: release-github-com-looprig-classifiers
   dependencies: release-github-com-looprig-classifiers
   dependents: release-github-com-looprig-classifiers
+  where-it-fits: release-github-com-looprig-classifiers
 ---
 
 # Classifiers
@@ -26,6 +27,10 @@ proofs:
 ## Description
 
 Use deterministic command-safety review as bounded evidence inside Harness gate policy.
+
+## Where it fits
+
+Classifiers are useful on their own when an application needs deterministic command-safety evidence. Within Looprig, they support permission decisions around [Harness](/docs/modules/harness) and prepared [Tools](/docs/modules/tools). A classifier reports bounded evidence; it does not grant authority or replace the gate that makes the final decision.
 
 ## Dependencies
 

@@ -11,6 +11,7 @@ proofs:
   description: release-github-com-looprig-rclonestore
   dependencies: release-github-com-looprig-rclonestore
   dependents: release-github-com-looprig-rclonestore
+  where-it-fits: release-github-com-looprig-rclonestore
 ---
 
 # RcloneStore
@@ -26,6 +27,10 @@ proofs:
 ## Description
 
 Implement the neutral Blobs contract by driving rclone as a bounded subprocess.
+
+## Where it fits
+
+RcloneStore is useful on its own when an application needs immutable blob storage through an existing rclone remote. Within Looprig, it provides the blob portion of [Storage](/docs/modules/storage) for runtimes that keep large objects outside their ledger or metadata backend. RcloneStore owns bounded subprocess calls; deployment configuration owns the remote and credentials.
 
 ## Dependencies
 

@@ -11,6 +11,7 @@ proofs:
   description: release-github-com-looprig-acp
   dependencies: release-github-com-looprig-acp
   dependents: release-github-com-looprig-acp
+  where-it-fits: release-github-com-looprig-acp
 ---
 
 # ACP
@@ -26,6 +27,10 @@ proofs:
 ## Description
 
 Drive foreign ACP children or expose a Harness host through typed protocol, client, agent, launch, and stdio packages.
+
+## Where it fits
+
+ACP is useful on its own when a Go application needs to drive an Agent Client Protocol process or expose its own host through ACP. Within Looprig, it connects [Foreign Loops](/docs/modules/foreignloops) and [Harness](/docs/modules/harness) to editors, coding agents, and other ACP-compatible clients. ACP owns the protocol and process boundary; the host still owns sessions, permissions, and model access.
 
 ## Dependencies
 
