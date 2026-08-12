@@ -122,7 +122,7 @@ sequenceDiagram
     S->>S: release root lease, then session lease
 ```
 
-The source contract is [`pkg/rig/workspace.go`](https://github.com/looprig/harness/blob/main/pkg/rig/workspace.go), [`pkg/rig/snapshot_policy.go`](https://github.com/looprig/harness/blob/main/pkg/rig/snapshot_policy.go), and [`pkg/session/session.go`](https://github.com/looprig/harness/blob/main/pkg/session/session.go). The placement and policy matrix is proved by [`pkg/rig/workspace_test.go`](https://github.com/looprig/harness/blob/main/pkg/rig/workspace_test.go) and [`pkg/rig/snapshot_policy_test.go`](https://github.com/looprig/harness/blob/main/pkg/rig/snapshot_policy_test.go). For the lower-level archive API, see the [workspace store reference](/docs/reference/packages/harness/workspacestore).
+The source contract is [`pkg/rig/workspace.go`](https://github.com/looprig/harness/blob/main/pkg/rig/workspace.go), [`pkg/rig/snapshot_policy.go`](https://github.com/looprig/harness/blob/main/pkg/rig/snapshot_policy.go), [`pkg/session/session.go`](https://github.com/looprig/harness/blob/main/pkg/session/session.go), and the lower-level [`pkg/workspacestore`](https://github.com/looprig/harness/tree/main/pkg/workspacestore) package. The placement and policy matrix is proved by [`pkg/rig/workspace_test.go`](https://github.com/looprig/harness/blob/main/pkg/rig/workspace_test.go) and [`pkg/rig/snapshot_policy_test.go`](https://github.com/looprig/harness/blob/main/pkg/rig/snapshot_policy_test.go).
 
 ## Source and proof
 

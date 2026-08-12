@@ -94,4 +94,4 @@ if err != nil { return err }
 restored, err := runtime.RestoreSession(ctx, savedSessionID)
 ```
 
-Start with [Create and restore](/docs/guides/harness/session-runtime/create-and-restore), then read [Session persistence](/docs/guides/harness/session-persistence) and the [Harness session contract](/docs/reference/packages/harness/session).
+Start with [Create and restore](/docs/guides/harness/session-runtime/create-and-restore), then read [Session persistence](/docs/guides/harness/session-persistence) and the [`pkg/session` source](https://github.com/looprig/harness/tree/main/pkg/session).

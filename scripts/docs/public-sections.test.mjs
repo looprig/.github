@@ -12,6 +12,7 @@ const removedRoots = [
   "integrations",
   "guides/protocols",
   "examples",
+  "reference",
 ];
 
 test("internal and hidden sections are outside the published documentation tree", () => {
