@@ -14,11 +14,12 @@ test("the documentation landing page is labeled Overview", () => {
 
 test("the landing page leads consumers into the product without publication mechanics", () => {
   assert.doesNotMatch(overview, /Publication labels|source-workspace|unavailable|immutable tag|coordinated source workspace|Kosa/i);
+  assert.doesNotMatch(overview, /\]\(\/docs\/[^)#]+\/\)/, "overview links must use emitted canonical routes");
   for (const destination of [
-    "/docs/start/choose-a-path/",
-    "/docs/guides/inference/",
-    "/docs/guides/harness/",
-    "/docs/guides/tools/",
-    "/docs/guides/sandboxing/",
+    "/docs/start/choose-a-path",
+    "/docs/guides/inference",
+    "/docs/guides/harness",
+    "/docs/guides/tools",
+    "/docs/guides/sandboxing",
   ]) assert.match(overview, new RegExp(destination.replaceAll("/", "\\/")));
 });

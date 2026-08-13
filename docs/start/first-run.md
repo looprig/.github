@@ -115,10 +115,10 @@ sequenceDiagram
   CLI->>Session: Shutdown
 ```
 
-Read [Harness commands](/docs/guides/harness/commands/), [events](/docs/guides/harness/events/), [Step](/docs/guides/harness/step/), [Turn](/docs/guides/harness/turn/), [Loop](/docs/guides/harness/loop/), and [Rig](/docs/guides/harness/rig/) for the full lifecycle.
+Read [Harness commands](/docs/guides/harness/commands), [events](/docs/guides/harness/events), [Step](/docs/guides/harness/step), [Turn](/docs/guides/harness/turn), [Loop](/docs/guides/harness/loop), and [Rig](/docs/guides/harness/rig) for the full lifecycle.
 
 ## Runnable checkpoint
 
 Run or copy the [complete commented Harness quickstart](https://github.com/looprig/.github/blob/main/examples/go/guides/harness-quickstart/main.go). Its [exact-output test](https://github.com/looprig/.github/blob/main/examples/go/guides/harness-quickstart/main_test.go) proves the session reaches `TurnDone` and shuts down. The fixture uses a deterministic client; your coding assistant supplies the production client from `model.go`.
 
-Continue to [add read-only tools and gates](/docs/start/tools-and-gates/).
+Continue to [add read-only tools and gates](/docs/start/tools-and-gates).

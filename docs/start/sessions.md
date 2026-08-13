@@ -84,10 +84,10 @@ Restore can reject configuration drift. That is deliberate: changing models, too
 
 ## What is persisted
 
-Session history is an append-only journal of commands and events. It is not the same thing as the model context, filesystem workspace, workflow checkpoint, or UI state. Read [Session runtime](/docs/guides/harness/session-runtime/), [Session persistence](/docs/guides/harness/session-persistence/), and [Journal replay](/docs/guides/harness/session-persistence/journal/replay/) before implementing retention or garbage collection.
+Session history is an append-only journal of commands and events. It is not the same thing as the model context, filesystem workspace, workflow checkpoint, or UI state. Read [Session runtime](/docs/guides/harness/session-runtime), [Session persistence](/docs/guides/harness/session-persistence), and [Journal replay](/docs/guides/harness/session-persistence/journal/replay) before implementing retention or garbage collection.
 
 ## Runnable checkpoint
 
 The [restore checkpoint](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage09_restore/main.go) creates a session, closes Fsstore, reopens it, restores the same ID, and asserts identity. The preceding [session-store checkpoint](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage08_session_store/main.go) shows the durable path boundary by itself.
 
-Continue to [add a session workspace](/docs/start/workspaces/).
+Continue to [add a session workspace](/docs/start/workspaces).

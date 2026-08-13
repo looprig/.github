@@ -52,7 +52,7 @@ call := &content.ToolUseBlock{
 }
 ```
 
-You normally do not construct this block yourself. It is shown here to make the model-to-tool boundary explicit. See [tool calls and results](/docs/guides/harness/step/tool-calls-and-results/) and the [built-in tool catalog](/docs/guides/tools/built-in-tools/).
+You normally do not construct this block yourself. It is shown here to make the model-to-tool boundary explicit. See [tool calls and results](/docs/guides/harness/step/tool-calls-and-results) and the [built-in tool catalog](/docs/guides/tools/built-in-tools).
 
 ## Gate effectful tools
 
@@ -83,10 +83,10 @@ _, err = effectful.InvokableRun(loop.WithPreparedCall(ctx, prepared), inputJSON)
 return err
 ```
 
-The application chooses interactive approval, saved rules, or a headless fail-closed evaluator. A gate answers whether a prepared effect is authorized. [Sandboxing](/docs/guides/sandboxing/) separately constrains a process at the operating-system boundary.
+The application chooses interactive approval, saved rules, or a headless fail-closed evaluator. A gate answers whether a prepared effect is authorized. [Sandboxing](/docs/guides/sandboxing) separately constrains a process at the operating-system boundary.
 
 ## Runnable checkpoint
 
 The [prepared tool example](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage04_prepared_tool/main.go) runs `PrepareCall`, authorizes the request, preserves the artifact, and returns the exact result. Compare it with the [pure tool checkpoint](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage03_pure_tool/main.go), which needs no external authority.
 
-Continue to [persist and restore sessions](/docs/start/sessions/).
+Continue to [persist and restore sessions](/docs/start/sessions).

@@ -69,4 +69,4 @@ The file split is for readability, not a framework requirement. All files use pa
 
 Open the [complete first Inference example](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage01_inference/main.go). It uses a deterministic client so the request and response path runs without credentials. The next page replaces that client boundary with OpenAI, Anthropic, or a local model.
 
-Continue to [connect a model with Inference](/docs/start/model-call/).
+Continue to [connect a model with Inference](/docs/start/model-call).

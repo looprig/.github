@@ -50,14 +50,14 @@ You do not need to adopt the full stack at once. Inference is useful by itself. 
 
 ## Tutorial path
 
-1. [Create the Go project](/docs/start/installation/).
-2. [Connect a model with Inference](/docs/start/model-call/).
-3. [Run the agent with Harness](/docs/start/first-run/).
-4. [Add read-only tools and gates](/docs/start/tools-and-gates/).
-5. [Persist and restore sessions](/docs/start/sessions/).
-6. [Add a session workspace](/docs/start/workspaces/).
-7. [Sandbox process tools](/docs/start/sandbox-and-interfaces/).
-8. [Run the coding assistant CLI](/docs/start/run-cli/).
-9. [Choose an interface and extend the agent](/docs/start/next-steps/).
+1. [Create the Go project](/docs/start/installation).
+2. [Connect a model with Inference](/docs/start/model-call).
+3. [Run the agent with Harness](/docs/start/first-run).
+4. [Add read-only tools and gates](/docs/start/tools-and-gates).
+5. [Persist and restore sessions](/docs/start/sessions).
+6. [Add a session workspace](/docs/start/workspaces).
+7. [Sandbox process tools](/docs/start/sandbox-and-interfaces).
+8. [Run the coding assistant CLI](/docs/start/run-cli).
+9. [Choose an interface and extend the agent](/docs/start/next-steps).
 
 Start with the project directory. You will have a working model call before introducing Harness.

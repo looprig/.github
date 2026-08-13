@@ -84,7 +84,7 @@ assistant, err := loop.Define(
 )
 ```
 
-For multiple live Loops, resolve one executor per validated Loop identity rather than sharing a mutable global runner. Supervised process tools add a process registry and lifecycle services; see [Tools process ownership](/docs/guides/tools/processes/).
+For multiple live Loops, resolve one executor per validated Loop identity rather than sharing a mutable global runner. Supervised process tools add a process registry and lifecycle services; see [Tools process ownership](/docs/guides/tools/processes).
 
 ## Verify achieved enforcement
 
@@ -100,10 +100,10 @@ if !guarantees.ProcessBoundary || !guarantees.WriteBoundary {
 }
 ```
 
-The concrete type returned by `Executor.Report` is `CompileReport`; `Executor.Guarantees` returns `Guarantees`. Verify them on the deployed host. Docker, a microVM, a virtual machine, and a managed sandbox form an outer boundary but do not prove which inner features succeeded. See [deployment environments](/docs/guides/sandboxing/deployment-environments/).
+The concrete type returned by `Executor.Report` is `CompileReport`; `Executor.Guarantees` returns `Guarantees`. Verify them on the deployed host. Docker, a microVM, a virtual machine, and a managed sandbox form an outer boundary but do not prove which inner features succeeded. See [deployment environments](/docs/guides/sandboxing/deployment-environments).
 
 ## Runnable checkpoint
 
 The [sandboxed process checkpoint](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage11_sandbox_process/main.go) calls `sandbox.Init`, constructs a profile and ExecutorSet, runs a real confined command, checks the exit code, and rejects `LevelNone`.
 
-Continue to [run the coding assistant CLI](/docs/start/run-cli/).
+Continue to [run the coding assistant CLI](/docs/start/run-cli).

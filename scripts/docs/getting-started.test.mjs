@@ -46,6 +46,14 @@ test("Getting Started is one ordered coding-assistant tutorial", () => {
   }
 });
 
+test("the tutorial path uses canonical routes emitted by the website", () => {
+  const page = read("choose-a-path.md");
+  const links = [...page.matchAll(/\]\((\/docs\/start\/[^)]+)\)/g)].map((match) => match[1]);
+
+  assert.deepEqual(links, inventory.slice(1).map(([file]) => `/docs/start/${file.slice(0, -3)}`));
+  assert.equal(links.every((href) => !href.endsWith("/")), true);
+});
+
 test("the tutorial crosses every runtime boundary in the approved order", () => {
   const corpus = inventory.map(([file]) => read(file)).join("\n");
   for (const term of [
@@ -72,17 +80,18 @@ test("every implementation page has commented code and a runnable checkpoint", (
 test("Getting Started uses consumer commands and canonical deep-guide links", () => {
   const corpus = inventory.map(([file]) => read(file)).join("\n");
   assert.doesNotMatch(corpus, /GOWORK=off|source-workspace|proof IDs?|workflow job|release commit|replace directive|central manifest|@v\d/i);
+  assert.doesNotMatch(corpus, /\]\(\/docs\/[^)#]+\/\)/, "Getting Started links must use emitted canonical routes");
   for (const destination of [
-    "/docs/guides/inference/",
-    "/docs/guides/harness/",
-    "/docs/guides/tools/",
-    "/docs/guides/sandboxing/",
-    "/docs/guides/tui/",
-    "/docs/guides/web-ui/",
-    "/docs/modules/acp/",
-    "/docs/modules/mcp/",
-    "/docs/guides/workflows/",
-    "/docs/guides/evals/",
+    "/docs/guides/inference",
+    "/docs/guides/harness",
+    "/docs/guides/tools",
+    "/docs/guides/sandboxing",
+    "/docs/guides/tui",
+    "/docs/guides/web-ui",
+    "/docs/modules/acp",
+    "/docs/modules/mcp",
+    "/docs/guides/workflows",
+    "/docs/guides/evals",
   ]) assert.match(corpus, new RegExp(destination.replaceAll("/", "\\/")), `tutorial omits ${destination}`);
 });
 

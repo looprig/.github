@@ -66,7 +66,7 @@ export LOOPRIG_MODEL="your-model-name"
 export OPENAI_API_KEY="your-api-key"
 ```
 
-See [models and capabilities](/docs/guides/inference/models/), [secrets](/docs/guides/inference/secrets/), and [provider details](/docs/guides/inference/providers/) before adding another provider or API format.
+See [models and capabilities](/docs/guides/inference/models), [secrets](/docs/guides/inference/secrets), and [provider details](/docs/guides/inference/providers) before adding another provider or API format.
 
 ## Send the first message
 
@@ -109,10 +109,10 @@ func responseText(response *inference.Response) string {
 }
 ```
 
-Use [content blocks](/docs/guides/inference/content-blocks/) and [message construction](/docs/guides/inference/messages/construct/) for the full type set. Use [streaming](/docs/guides/inference/streaming/) when the interface should render partial output.
+Use [content blocks](/docs/guides/inference/content-blocks) and [message construction](/docs/guides/inference/messages/construct) for the full type set. Use [streaming](/docs/guides/inference/streaming) when the interface should render partial output.
 
 ## Runnable checkpoint
 
 The [stage 1 Inference source](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage01_inference/main.go) constructs the same `inference.Request` and asserts the returned assistant text. Its scripted client makes the checkpoint deterministic; swapping the client does not change the request contract.
 
-Continue to [run the agent with Harness](/docs/start/first-run/).
+Continue to [run the agent with Harness](/docs/start/first-run).

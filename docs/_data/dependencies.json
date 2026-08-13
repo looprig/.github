@@ -8050,6 +8050,12 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "production-import",
+      "path": "codec/geminiapi/media.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
       "path": "codec/geminiapi/server_decode.go"
     },
     {
@@ -8344,6 +8350,12 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/anthropicapi/encode_document_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/anthropicapi/encode_redacted_required_test.go"
     },
     {
@@ -8357,6 +8369,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "codec/anthropicapi/encode_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/anthropicapi/server_decode_document_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -8392,7 +8410,19 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/bedrockconverse/decode_audio_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/bedrockconverse/decode_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/bedrockconverse/encode_audio_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -8423,6 +8453,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "codec/geminiapi/decode_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/geminiapi/encode_media_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -8494,6 +8530,12 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/openaiapi/encode_media_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/openaiapi/encode_test.go"
     },
     {
@@ -8507,6 +8549,18 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "codec/openaiapi/encode_unsupported_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/openaiapi/refusal_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/openaiapi/server_decode_media_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -8548,7 +8602,25 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/openairesponses/encode_media_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/openairesponses/encode_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/openairesponses/refusal_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/openairesponses/server_decode_media_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -10085,6 +10157,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "providers/openai/request_encode_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/openai/responses_fixture_test.go"
     },
     {
       "from": "github.com/looprig/llm",

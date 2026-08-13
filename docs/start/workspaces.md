@@ -84,10 +84,10 @@ if err := live.RestoreWorkspace(ctx, ref); err != nil {
 }
 ```
 
-Checkpoint metadata is recorded with the session, but snapshot contents live in the workspace store. Read [workspace bindings and roots](/docs/guides/harness/workspaces/bindings-and-roots/), [snapshots](/docs/guides/harness/workspaces/snapshots/), and [restore and cleanup](/docs/guides/harness/workspaces/restore-and-cleanup/) for placement and lifetime details.
+Checkpoint metadata is recorded with the session, but snapshot contents live in the workspace store. Read [workspace bindings and roots](/docs/guides/harness/workspaces/bindings-and-roots), [snapshots](/docs/guides/harness/workspaces/snapshots), and [restore and cleanup](/docs/guides/harness/workspaces/restore-and-cleanup) for placement and lifetime details.
 
 ## Runnable checkpoint
 
 The [workspace checkpoint](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage10_workspace/main.go) snapshots a real file tree, materializes it into a new directory, and asserts the bytes are identical.
 
-Continue to [sandbox process tools](/docs/start/sandbox-and-interfaces/).
+Continue to [sandbox process tools](/docs/start/sandbox-and-interfaces).

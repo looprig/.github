@@ -87,4 +87,4 @@ Handle SIGINT and SIGTERM through a context, but use an independent bounded clea
 
 The [complete Harness quickstart](https://github.com/looprig/.github/blob/main/examples/go/guides/harness-quickstart/main.go) is a runnable CLI-shaped application with a model client, Loop, Rig, Session, subscription, submission, terminal event, and shutdown. Its deterministic model lets the exact-output test run without a provider key. Replace that boundary with `openAI` or your chosen provider to run the coding assistant.
 
-Continue to [choose an interface and extend the agent](/docs/start/next-steps/).
+Continue to [choose an interface and extend the agent](/docs/start/next-steps).
