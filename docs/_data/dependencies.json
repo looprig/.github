@@ -1816,6 +1816,12 @@
       "from": "github.com/looprig/carbon",
       "to": "github.com/looprig/inference",
       "kind": "test-import",
+      "path": "internal/app/compaction_restore_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/carbon",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
       "path": "internal/app/compaction_test.go"
     },
     {
@@ -2063,6 +2069,12 @@
       "to": "github.com/looprig/sandbox",
       "kind": "test-import",
       "path": "internal/app/process_tools_test.go"
+    },
+    {
+      "from": "github.com/looprig/carbon",
+      "to": "github.com/looprig/sandbox",
+      "kind": "test-import",
+      "path": "internal/app/subagent_acp_peer_test.go"
     },
     {
       "from": "github.com/looprig/carbon",
@@ -4264,7 +4276,19 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/core",
       "kind": "production-import",
+      "path": "internal/loopruntime/compaction_projection.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
       "path": "internal/loopruntime/compaction_publication.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "internal/loopruntime/compaction_tail.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -5476,7 +5500,19 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "internal/loopruntime/compaction_projection_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "internal/loopruntime/compaction_publication_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "internal/loopruntime/compaction_tail_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -7001,6 +7037,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "internal/loopruntime/compaction_hooks_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "internal/loopruntime/compaction_tail_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -9796,6 +9838,12 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "providers/anthropic/cache_internal_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "providers/anthropic/client_test.go"
     },
     {
@@ -9833,6 +9881,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "providers/bedrock/counter_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/bedrock/options_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -9923,6 +9977,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "providers/openrouter/openrouter_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/openrouter/reasoning_state_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10042,6 +10102,12 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/inference",
       "kind": "test-import",
+      "path": "providers/anthropic/cache_internal_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
       "path": "providers/anthropic/client_test.go"
     },
     {
@@ -10121,6 +10187,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "providers/bedrock/counter_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/bedrock/options_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10523,6 +10595,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "providers/openrouter/openrouter_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/openrouter/reasoning_state_test.go"
     },
     {
       "from": "github.com/looprig/llm",

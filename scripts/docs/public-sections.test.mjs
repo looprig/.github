@@ -11,7 +11,6 @@ const removedRoots = [
   "contributing",
   "integrations",
   "guides/protocols",
-  "examples",
   "reference",
 ];
 
@@ -30,4 +29,8 @@ test("navigation contains only retained public sections", () => {
       `${pagePath} belongs to a hidden section`,
     );
   }
+});
+
+test("Examples is a retained public section", () => {
+  assert.equal(existsSync(path.join(root, "docs/examples/index.md")), true);
 });

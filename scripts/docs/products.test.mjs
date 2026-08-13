@@ -6,14 +6,12 @@ import test from "node:test";
 const root = path.resolve(import.meta.dirname, "../..");
 const read = (name) => readFileSync(path.join(root, "docs/products", name), "utf8");
 
-test("Examples is not published and Products contains only Overview, Carbon, and Pluto", () => {
-  assert.equal(existsSync(path.join(root, "docs/examples")), false);
+test("Products contains only Overview, Carbon, and Pluto", () => {
   const navigation = JSON.parse(readFileSync(path.join(root, "docs/_data/navigation.json"), "utf8"));
   assert.deepEqual(
     navigation.pages.filter(({ path: page }) => page.startsWith("products/")).map(({ path: page }) => page),
     ["products/index.md", "products/carbon.md", "products/pluto.md"],
   );
-  assert.equal(navigation.pages.some(({ path: page }) => page.startsWith("examples/")), false);
 });
 
 test("Carbon is one practical coding-agent page with concise feature coverage", () => {

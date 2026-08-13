@@ -1392,6 +1392,46 @@
       "order": 15
     },
     {
+      "path": "guides/harness/skills/index.md",
+      "audience": "human",
+      "order": 1
+    },
+    {
+      "path": "guides/harness/skills/skill-md-format.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "guides/harness/skills/embedded-skills.md",
+      "audience": "human",
+      "order": 3
+    },
+    {
+      "path": "guides/harness/skills/workspace-skills.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "guides/harness/skills/catalog-and-runtime-context.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "guides/harness/skills/registering-the-skill-tool.md",
+      "audience": "human",
+      "order": 6
+    },
+    {
+      "path": "guides/harness/skills/gates-and-trust-boundaries.md",
+      "audience": "human",
+      "order": 7
+    },
+    {
+      "path": "guides/harness/skills/errors-and-auditing.md",
+      "audience": "human",
+      "order": 8
+    },
+    {
       "path": "guides/harness/delegation/index.md",
       "audience": "human",
       "order": 12
@@ -2220,6 +2260,21 @@
       "path": "build/25-evaluation.md",
       "audience": "human",
       "order": 25
+    },
+    {
+      "path": "examples/index.md",
+      "audience": "human",
+      "order": 1
+    },
+    {
+      "path": "examples/weather-assistant.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "examples/research-assistant.md",
+      "audience": "human",
+      "order": 3
     },
     {
       "path": "modules/core.md",

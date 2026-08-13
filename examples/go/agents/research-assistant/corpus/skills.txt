@@ -1,0 +1,3 @@
+TITLE: Looprig skill loading
+SOURCE: Looprig Tools source, skill/skill_loader.go
+TEXT: Skills are loaded on demand and authorized against a closed allow-set for one agent.

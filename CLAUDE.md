@@ -34,11 +34,12 @@ The public sidebar has these top-level sections:
 
 1. Overview
 2. Getting Started
-3. Guides
-4. Products
-5. Modules
+3. Examples
+4. Guides
+5. Products
+6. Modules
 
-Do not restore archived Concepts, Examples, API Reference, Agent Reference,
+Do not restore archived Concepts, API Reference, Agent Reference,
 Integrations, or Contributing sections without an explicit product decision.
 Move retired material to the workspace `zarchive` instead of leaving it in the
 published manifest.
@@ -47,8 +48,14 @@ Every guide category starts with a page labeled `Overview`. Current guide
 categories are Inference, Harness, Tools, Workflows, Sandboxing, Evals,
 Protocols, TUI, and Web UI. Keep each concept under its owning category. For
 example, commands, events, steps, turns, loops, Rigs, sessions, journals,
-workspaces, gates, hooks, hustles, compaction, and HTTP serving belong under
-Harness. Flow and workflow tools belong under Workflows.
+workspaces, gates, hooks, skills, hustles, compaction, and HTTP serving belong
+under Harness. Flow and workflow tools belong under Workflows.
+
+Examples contains complete runnable applications. Each example must have a
+recognizable user outcome, an architecture diagram, a source tree, exact run
+and test commands, expected interaction, immutable released dependencies, and
+clear extension paths. Default examples must be deterministic and
+credential-free; live provider or protocol adapters are optional additions.
 
 ## Human page conventions
 

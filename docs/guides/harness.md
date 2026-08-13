@@ -41,7 +41,8 @@ Follow the runtime from its public control surface into reusable configuration a
 5. [Loop](/docs/guides/harness/loop) freezes one agent's model, instructions, tools, limits, and delegation choices.
 6. [Rig](/docs/guides/harness/rig) assembles loops, storage, hooks, workspaces, gates, and Hustles.
 7. [Session runtime](/docs/guides/harness/session-runtime) owns the live controllers, queues, subscriptions, resources, and shutdown boundary.
-8. [Hustles](/docs/guides/harness/hustles) run bounded auxiliary inference for facilities such as compaction and permission review.
-9. [Compaction](/docs/guides/harness/compaction) replaces an older transcript prefix with a validated summary tied to the exact context basis.
+8. [Skills](/docs/guides/harness/skills) load reusable instructions on demand from curated embedded catalogs or gated project workspaces.
+9. [Hustles](/docs/guides/harness/hustles) run bounded auxiliary inference for facilities such as compaction and permission review.
+10. [Compaction](/docs/guides/harness/compaction) replaces an older transcript prefix with a validated summary tied to the exact context basis.
 
-Start with [Build an agent with Harness](/docs/start/first-run), then use the [complete Harness module guide](/docs/modules/harness) for events, errors, ownership, and shutdown.
+Start with [Build an agent with Harness](/docs/start/first-run), then build the [Weather Assistant](/docs/examples/weather-assistant) or [Research Assistant](/docs/examples/research-assistant). Use the [complete Harness module guide](/docs/modules/harness) for repository and dependency details.
