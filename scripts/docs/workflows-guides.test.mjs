@@ -3,8 +3,10 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
+import { resolveWorkspaceRoot } from "./package-surface.mjs";
+
 const root = path.resolve(import.meta.dirname, "../..");
-const workspaceRoot = path.resolve(root, "../..");
+const workspaceRoot = resolveWorkspaceRoot(root);
 const workflowsRoot = path.join(workspaceRoot, "workflows");
 
 const pages = [

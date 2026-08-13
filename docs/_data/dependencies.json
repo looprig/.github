@@ -4180,6 +4180,12 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/core",
       "kind": "production-import",
+      "path": "internal/blocktest/blocktest.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
       "path": "internal/delegationtool/list_agents.go"
     },
     {
@@ -5662,6 +5668,12 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "internal/loopruntime/message_clone_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "internal/loopruntime/nonfold_test.go"
     },
     {
@@ -5699,6 +5711,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "internal/loopruntime/prepared_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "internal/loopruntime/redacted_thinking_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -5753,6 +5771,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "internal/loopruntime/submit_decision_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "internal/loopruntime/thinking_replay_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -5867,6 +5891,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "internal/sessionruntime/compaction_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "internal/sessionruntime/compaction_provider_state_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -6509,6 +6539,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "pkg/gate/reviewer_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "pkg/hook/clone_field_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -8308,6 +8344,18 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/anthropicapi/encode_redacted_required_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/anthropicapi/encode_required_fields_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/anthropicapi/encode_test.go"
     },
     {
@@ -8417,6 +8465,18 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "codec/geminiapi/stream_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/geminiapi/streamintegrity_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/geminiapi/toolcallpairing_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -9856,7 +9916,31 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "providers/anthropic/decode_fixtures_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/anthropic/encode_request_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/azure-cognitive-services/delta_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "providers/azure/client_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/azure/delta_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -9881,6 +9965,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "providers/bedrock/counter_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/bedrock/encode_request_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -9911,6 +10001,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "providers/gemini/client_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/gemini/conformance_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -9964,6 +10060,12 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "providers/openai/chat_fixture_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "providers/openai/client_test.go"
     },
     {
@@ -9971,6 +10073,24 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "providers/openai/counter_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/openai/multimodal_request_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/openai/request_encode_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/openrouter/delta_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -9995,6 +10115,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "providers/sap-ai-core/client_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/snowflake-cortex/delta_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10120,6 +10246,18 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/inference",
       "kind": "test-import",
+      "path": "providers/anthropic/decode_fixtures_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/anthropic/encode_request_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
       "path": "providers/atomic-chat/client_test.go"
     },
     {
@@ -10144,6 +10282,12 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/inference",
       "kind": "test-import",
+      "path": "providers/azure-cognitive-services/delta_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
       "path": "providers/azure/client_test.go"
     },
     {
@@ -10151,6 +10295,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "providers/azure/counter_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/azure/delta_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10187,6 +10337,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "providers/bedrock/counter_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/bedrock/encode_request_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10325,6 +10481,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "providers/gemini/client_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/gemini/conformance_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10558,6 +10720,12 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/inference",
       "kind": "test-import",
+      "path": "providers/openai/chat_fixture_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
       "path": "providers/openai/client_test.go"
     },
     {
@@ -10565,6 +10733,24 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "providers/openai/counter_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/openai/multimodal_request_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/openai/request_encode_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/openai/responses_fixture_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10589,6 +10775,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "providers/opencode/counter_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/openrouter/delta_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10655,6 +10847,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "providers/snowflake-cortex/client_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/snowflake-cortex/delta_test.go"
     },
     {
       "from": "github.com/looprig/llm",

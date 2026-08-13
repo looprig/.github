@@ -3,7 +3,10 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
+import { resolveWorkspaceRoot } from "./package-surface.mjs";
+
 const root = path.resolve(import.meta.dirname, "../..");
+const workspaceRoot = resolveWorkspaceRoot(root);
 
 const pages = [
   "index",
@@ -118,7 +121,7 @@ test("Evals guides link every proof claim to existing eval or Pluto source", () 
     for (const file of files) {
       const sourceUrl = `https://github.com/looprig/${owner}/blob/main/${file}`;
       assert.match(markdown, new RegExp(sourceUrl.replaceAll("/", "\\/")), `${relative} does not link ${file}`);
-      const sourceRoot = owner === "pluto" ? path.resolve(root, "../../pluto") : path.resolve(root, "../../eval");
+      const sourceRoot = path.join(workspaceRoot, owner);
       assert.equal(fs.existsSync(path.join(sourceRoot, file)), true, `missing source ${owner}/${file}`);
     }
   }

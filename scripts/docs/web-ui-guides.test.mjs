@@ -3,8 +3,10 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
+import { resolveWorkspaceRoot } from "./package-surface.mjs";
+
 const root = path.resolve(import.meta.dirname, "../..");
-const clientRoot = path.resolve(root, "../..", "client");
+const clientRoot = path.join(resolveWorkspaceRoot(root), "client");
 
 const pages = [
   ["guides/web-ui/index", "Web UI"],

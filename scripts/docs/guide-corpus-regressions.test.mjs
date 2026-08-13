@@ -3,9 +3,12 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
+import { resolveWorkspaceRoot } from "./package-surface.mjs";
+
 const root = path.resolve(import.meta.dirname, "../..");
-const clientRoot = path.resolve(root, "../..", "client");
-const llmRoot = path.resolve(root, "../..", "llm");
+const workspaceRoot = resolveWorkspaceRoot(root);
+const clientRoot = path.join(workspaceRoot, "client");
+const llmRoot = path.join(workspaceRoot, "llm");
 
 const guideRoots = [
   "inference",
