@@ -1,6 +1,6 @@
 module example.com/looprig-research-assistant
 
-go 1.26.4
+go 1.26.6
 
 require (
 	github.com/looprig/core v0.5.1

@@ -1,6 +1,6 @@
 module example.com/looprig-harness-quickstart
 
-go 1.26.4
+go 1.26.6
 
 require (
 	github.com/looprig/core v0.5.1
