@@ -3,18 +3,10 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
+import { assertClaim, negated, refuteClaim } from "./claims.mjs";
+
 const root = path.resolve(import.meta.dirname, "../..");
 const topics = ["rig", "loop", "turn", "step", "hustles", "compaction"];
-
-function assertSemanticParagraph(markdown, patterns, message) {
-  const paragraphs = markdown
-    .split(/\n\s*\n/)
-    .map((paragraph) => paragraph.replace(/\s+/g, " ").trim());
-  assert.ok(
-    paragraphs.some((paragraph) => patterns.every((pattern) => pattern.test(paragraph))),
-    message,
-  );
-}
 
 test("Harness runtime concepts have dedicated consumer guides", () => {
   const landing = fs.readFileSync(path.join(root, "docs/guides/harness.md"), "utf8");
@@ -56,63 +48,147 @@ test("Hustles and compaction stay inside the Harness hierarchy", () => {
   assert.match(compaction, /context counter/i);
 });
 
-test("AgentTools runtime selection failures name the rejected field and value", () => {
-  const guide = fs.readFileSync(path.join(root, "docs/guides/harness/delegation/start-and-message.md"), "utf8");
+const delegationPage = () => fs.readFileSync(path.join(root, "docs/guides/harness/delegation/start-and-message.md"), "utf8");
+const toolResultsPage = () => fs.readFileSync(path.join(root, "docs/guides/harness/step/tool-calls-and-results.md"), "utf8");
 
-  assertSemanticParagraph(guide, [
-    /runtime selectors?/i,
-    /\binvalid\b/i,
-    /\bunavailable\b/i,
-    /\breject\w*\b/i,
-    /\bfield\b/i,
-    /\bvalue\b/i,
-  ], "runtime selector errors must identify the rejected field and value");
+test("AgentTools failures distinguish preparation from execution", () => {
+  const guides = `${delegationPage()}\n\n${toolResultsPage()}`;
+
+  for (const [phase, pattern] of [["preparation", /\bprepar\w*\b/i], ["execution", /\bexecut\w*\b|\bwhile running\b/i]]) {
+    assertClaim(guides, {
+      all: [/\bAgentTools\b|\bdelegat\w*\b/i, pattern, /\b(?:fail|error)\w*\b/i],
+      none: [negated("fail", "error")],
+    }, `AgentTools documentation must describe ${phase} failures`);
+  }
+});
+
+test("AgentTools preparation failures name the rejected field and value", () => {
+  const guide = delegationPage();
+
+  for (const [label, rejection, named] of [
+    ["invalid", /\binvalid\b|\bunknown\b|\bmalformed\b/i, /\bfield\b/i],
+    ["unavailable", /\bunavailable\b|\bnot configured\b|\bunconfigured\b/i, /\bselector\b/i],
+  ]) {
+    assertClaim(guide, {
+      all: [/\bruntime\b/i, /\bselect\w*\b/i, rejection, named, /\bvalue\b/i, /\b(?:reject|error|fail)\w*\b/i],
+      none: [negated("name", "identif", "report", "includ")],
+    }, `a ${label} runtime selector error must name what it rejected and its value`);
+  }
+
+  refuteClaim(guide, {
+    all: [/\bruntime\b/i, /\bselect\w*\b/i, /\b(?:field|value)\b/i, /\b(?:omit|hide|withhold|redact|suppress)\w*\b/i],
+    none: [negated("omit", "hide", "withhold", "redact", "suppress")],
+  }, "runtime selector errors must not be documented as hiding the field or value");
 });
 
 test("failed AgentTools calls return error-marked tool results to model history", () => {
-  const delegation = fs.readFileSync(path.join(root, "docs/guides/harness/delegation/start-and-message.md"), "utf8");
-  const results = fs.readFileSync(path.join(root, "docs/guides/harness/step/tool-calls-and-results.md"), "utf8");
+  const guides = `${delegationPage()}\n\n${toolResultsPage()}`;
 
-  assertSemanticParagraph(`${delegation}\n\n${results}`, [
-    /\bAgentTools\b/,
-    /\bfail\w*\b/i,
-    /\btool[- ]results?\b|\bToolResultMessage\b/i,
-    /\berror-marked\b|\bIsError\b/i,
-    /\bmodel history\b|\bnext model request\b/i,
-  ], "failed AgentTools calls must become error-marked results in model history");
+  assertClaim(guides, {
+    all: [
+      /\bAgentTools\b/,
+      /\b(?:fail|error)\w*\b/i,
+      /\btool results?\b|\bToolResultMessage\b/i,
+      /\berror-marked\b|\bIsError\b/i,
+      /\bmodel history\b|\bnext model request\b/i,
+    ],
+    none: [negated("deliver", "reach", "becom", "mark", "return", "carr")],
+  }, "failed AgentTools calls must become error-marked tool results in model history");
+
+  refuteClaim(guides, {
+    all: [
+      /\bAgentTools\b|\bdelegat\w*\b/i,
+      /\b(?:fail|error)\w*\b/i,
+      /\bmodel history\b|\bmodel request\b|\bmodel\b/i,
+      /\b(?:drop|dropped|discard|discarded|swallow|swallowed|hidden|hide|suppress|suppressed|lost)\w*\b/i,
+    ],
+    none: [negated("drop", "discard", "swallow", "hide", "suppress", "lose", "lost"), /\bnever reaches\b/i],
+  }, "failed AgentTools calls must not be documented as dropped before model history");
+
+  refuteClaim(guides, {
+    all: [/\bAgentTools\b|\bdelegat\w*\b/i, /\b(?:fail|error)\w*\b/i, /\bnever reaches\b|\bdoes not reach\b/i, /\bmodel history\b/i],
+  }, "a failed AgentTools call must not be documented as never reaching model history");
 });
 
-test("child failure causes survive foreground, background, foreign, ACP, and restore paths", () => {
-  const guide = fs.readFileSync(path.join(root, "docs/guides/harness/delegation/start-and-message.md"), "utf8");
+test("child failure causes survive foreground, background, native, foreign, ACP, and restore paths", () => {
+  const guide = delegationPage();
 
-  assertSemanticParagraph(guide, [
-    /\bchild\b/i,
-    /\b(?:failure )?(?:cause|reason|detail)s?\b/i,
-    /\bforeground\b/i,
-    /\bbackground\b/i,
-    /\bforeign\b/i,
-    /\bACP\b/,
-    /\brestor\w*\b/i,
-    /\b(?:surviv|preserv)\w*\b/i,
-  ], "child failure causes must survive every documented delivery and restore path");
+  assertClaim(guide, {
+    all: [
+      /\bchild\b/i,
+      /\b(?:failure|cause|reason|detail)s?\b/i,
+      /\bforeground\b/i,
+      /\bbackground\b/i,
+      /\bnative\b/i,
+      /\bforeign\b/i,
+      /\brestor\w*\b/i,
+      /\b(?:surviv|preserv|retain|carr|reach)\w*\b/i,
+    ],
+    none: [negated("surviv", "preserv", "retain", "carr", "reach")],
+  }, "child failure causes must survive every documented delivery and restore path");
+
+  refuteClaim(guide, {
+    all: [
+      /\bchild\b/i,
+      /\b(?:failure|cause|reason|detail)s?\b/i,
+      new RegExp(String.raw`\b(?:is|are|was|were|gets?|becomes?)\b(?:(?!\b(?:not|never|no)\b)[^.;!?]){0,30}\b(?:lost|dropped|discarded|cleared|erased|truncated away|omitted|suppressed)\b|${negated("surviv", "preserv", "retain", "carr", "reach").source}`, "i"),
+    ],
+    none: [/\btombston\w*\b/i],
+  }, "child failure causes must not be documented as lost on any path");
+
+  // An ACP child is a foreign loop; Harness has no separate ACP failure route.
+  assertClaim(guide, {
+    all: [/\bACP\b[^.;!?]{0,40}\bchild\b[^.;!?]{0,80}\bforeign\b/i,
+      /\bis a foreign\b|\bis the foreign\b|\buses the foreign\b|\btakes the foreign\b|\bruns as a foreign\b/i],
+    none: [negated("use", "take"), /\bunlike\b|\bneither\b|\bdifferent\b|\bnot the same\b|\bown\b/i],
+  }, "an ACP child must be documented as using the foreign path");
+
+  // The one documented gap: a tombstoned child restores as failed with no cause.
+  assertClaim(guide, {
+    all: [/\btombston\w*\b/i, /\brestor\w*\b/i, /\bfailed\b/i, /\bno (?:cause|detail|reason)\b/i],
+  }, "the tombstoned-child exception must be documented");
+});
+
+test("background delegation hands back a failure without an error marker", () => {
+  const guide = delegationPage();
+
+  assertClaim(guide, {
+    all: [
+      /\bbackground\b/i,
+      /\bhand-?back\b|\bresult\b/i,
+      /\barrives as a user(?:-| )(?:role )?message\b|\bis a user(?:-| )(?:role )?message\b/i,
+      /\b(?:is not|never)\b[^.;!?]{0,40}\berror-marked\b|\bno `?IsError`?\b|\bcarries no\b[^.;!?]{0,20}\bIsError\b/i,
+    ],
+  }, "background delegation must be documented as handing back a user message rather than an error-marked tool result");
+
+  refuteClaim(guide, {
+    all: [/\bbackground\b/i, /\bhand-?back\b|\bresult\b/i, /\barrives as an error-marked\b|\bis an error-marked\b/i],
+  }, "a background hand-back must not be documented as error-marked");
 });
 
 test("failure details are bounded, UTF-8 normalized, and not classification-filtered", () => {
-  const delegation = fs.readFileSync(path.join(root, "docs/guides/harness/delegation/start-and-message.md"), "utf8");
-  const results = fs.readFileSync(path.join(root, "docs/guides/harness/step/tool-calls-and-results.md"), "utf8");
-  const guides = `${delegation}\n\n${results}`;
+  const guides = `${delegationPage()}\n\n${toolResultsPage()}`;
 
-  assertSemanticParagraph(guides, [
-    /\b(?:detail|cause|reason)s?\b/i,
-    /\bbound\w*\b/i,
-    /UTF-?8/i,
-    /\bnormaliz\w*\b/i,
-  ], "failure details must be bounded and UTF-8 normalized");
-  assertSemanticParagraph(guides, [
-    /\b(?:detail|cause|reason)s?\b/i,
-    /\bcredential\w*\b/i,
-    /\bmodel-facing\b/i,
-    /\b(?:not|never|without|rather than)\b/i,
-    /\b(?:filter|classif)\w*\b/i,
-  ], "failure details must not depend on credential or model-facing classification");
+  assertClaim(guides, {
+    all: [/\b(?:detail|cause|reason)s?\b/i, /\bbound\w*\b/i, /UTF-?8/i, /\bnormaliz\w*\b/i],
+    none: [negated("bound", "normaliz")],
+  }, "failure details must be bounded and UTF-8 normalized");
+
+  assertClaim(guides, {
+    all: [
+      /\b(?:detail|cause|reason)s?\b/i,
+      /\b(?:preserv|pass|reach|surviv|kept|keeps|deliver)\w*\b/i,
+      /\bcredential\w*\b|\bmodel-facing\b/i,
+      new RegExp(String.raw`\b(?:regardless of|independent of|without regard to)\b[^.;!?]{0,40}\b(?:filter|classif)\w*|${negated("filter", "classif", "redact", "suppress").source}`, "i"),
+    ],
+  }, "failure details must not depend on credential or model-facing classification");
+
+  refuteClaim(guides, {
+    all: [
+      /\b(?:detail|cause|reason)s?\b/i,
+      /\b(?:filter|classif)\w*\b/i,
+      /\bcredential\w*\b|\bmodel-facing\b/i,
+    ],
+    none: [/\bregardless\b|\bindependent\b/i, negated("filter", "classif", "redact", "suppress")],
+  }, "failure details must not be documented as credential- or model-facing-classified");
 });

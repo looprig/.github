@@ -3,17 +3,25 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
+import {
+  assertClaim,
+  assertNoPrivateDetails,
+  fencedBlocks,
+  orderedListItems,
+  negated,
+  refuteClaim,
+  section,
+} from "./claims.mjs";
+
 const root = path.resolve(import.meta.dirname, "../..");
 const read = (name) => readFileSync(path.join(root, "docs/products", name), "utf8");
 
-function assertSemanticParagraph(markdown, patterns, message) {
-  const paragraphs = markdown
-    .split(/\n\s*\n/)
-    .map((paragraph) => paragraph.replace(/\s+/g, " ").trim());
-  assert.ok(
-    paragraphs.some((paragraph) => patterns.every((pattern) => pattern.test(paragraph))),
-    message,
-  );
+const TROUBLESHOOTING = "ACP launcher troubleshooting";
+
+function troubleshooting() {
+  const body = section(read("carbon.md"), TROUBLESHOOTING);
+  assert.ok(body, `Carbon is missing its "${TROUBLESHOOTING}" section`);
+  return body;
 }
 
 test("Products contains only Overview, Carbon, and Pluto", () => {
@@ -33,74 +41,111 @@ test("Carbon is one practical coding-agent page with concise feature coverage", 
   }
 });
 
-test("Carbon installation pins v0.23.0", () => {
-  const page = read("carbon.md");
-  assert.ok(
-    /go install github\.com\/looprig\/carbon\/cmd\/carbon@v0\.23\.0/.test(page),
-    "Carbon install must pin github.com/looprig/carbon/cmd/carbon@v0.23.0",
-  );
+test("the Carbon Install command pins v0.23.0", () => {
+  const install = section(read("carbon.md"), "Install");
+  assert.ok(install, "Carbon is missing its Install section");
+  const [command] = fencedBlocks(install, ["sh", "bash", "shell"]);
+  assert.ok(command, "Carbon Install needs a shell block");
+
+  const pins = [...command.matchAll(/go install (\S+?)@(v\S+)/g)].map(([, module, version]) => [module, version]);
+  assert.deepEqual(pins, [["github.com/looprig/carbon/cmd/carbon", "v0.23.0"]]);
 });
 
-test("Carbon documents ACP launcher resolution precedence", () => {
-  const page = read("carbon.md");
-  const environmentOverride = page.search(/(?:\bnon-?empty\b[\s\S]{0,100}(?:harness(?:-specific)? environment override|[A-Z][A-Z0-9_]*_ACP_EXECUTABLE)|(?:harness(?:-specific)? environment override|[A-Z][A-Z0-9_]*_ACP_EXECUTABLE)[\s\S]{0,100}\bnon-?empty\b)/i);
-  const configuredLauncher = page.search(/(?:\bconfigured\b[\s\S]{0,100}\bacp_launchers\b|\bacp_launchers\b[\s\S]{0,100}\bconfigured\b)/i);
-  const pathDiscovery = page.search(/\bPATH\b/);
+test("Carbon resolves ACP launchers as an ordered override, configuration, PATH list", () => {
+  const body = troubleshooting();
+  const steps = orderedListItems(body);
+  assert.ok(steps.length >= 3, "launcher resolution must be an ordered list");
 
-  assert.notEqual(environmentOverride, -1, "Carbon must document a nonempty harness environment override");
-  assert.notEqual(configuredLauncher, -1, "Carbon must document configured acp_launchers");
-  assert.notEqual(pathDiscovery, -1, "Carbon must document PATH discovery");
-  assert.ok(
-    environmentOverride < configuredLauncher && configuredLauncher < pathDiscovery,
-    "Carbon launcher precedence must be environment override, configured acp_launchers, then PATH",
-  );
+  const [override, configured, discovered] = steps;
+  assert.match(override, /\bnon-?empty\b/i, "the first launcher source must require a nonempty value");
+  assert.match(override, /\benvironment\b/i, "the first launcher source must be an environment override");
+  assert.match(override, /\bharness\b|_ACP_[A-Z_]*\b/, "the environment override must be harness-specific");
+  assert.match(configured, /\bacp_launchers\b/, "the second launcher source must be configured acp_launchers");
+  assert.match(configured, /\bconfigur\w*\b/i, "the second launcher source must be configuration");
+  assert.match(discovered, /\bPATH\b/, "the third launcher source must be PATH");
+
+  assert.match(override, /\bfirst\b/i, "the environment override must be named as the first source");
+  assert.match(discovered, /\blast\b|\bfinally\b|\bfall(?:s|ing)?[ -]?back\b|\bfallback\b/i, "PATH must be named as the last source");
+
+  assertClaim(body, {
+    all: [
+      /\blauncher\b/i,
+      /\bresolv\w*\b/i,
+      /\b(?:fixed|this|the following) order\b|\bin order\b|\bfirst source\b/i,
+    ],
+    none: [negated("resolv", "decid", "yield")],
+  }, "the troubleshooting section must state that launcher sources are tried in a fixed order");
 });
 
-test("Carbon documents strict ACP executable verification", () => {
-  const page = read("carbon.md");
+test("Carbon never claims PATH outranks the override or configured launchers", () => {
+  const body = troubleshooting();
+  // The precedence verb must follow its subject: co-occurrence alone cannot tell
+  // "PATH wins over the override" from "the override wins over PATH".
+  const OUTRANKS = String.raw`[^.;!?]{0,60}\b(?:wins|outranks|shadows|supersedes|overrides|beats|takes precedence|takes priority|has priority|is preferred|is used instead|comes first|is checked first|is consulted first|is searched first|is consulted before|is checked before)\b`;
 
-  assertSemanticParagraph(page, [
-    /\bclean(?:ed)?\b/i,
-    /\babsolute\b/i,
-    /\bregular\b/i,
-    /\bexecutable\b/i,
-    /\b(?:verif|require|admit)\w*\b/i,
-  ], "Carbon must verify a clean absolute regular executable");
-  assertSemanticParagraph(page, [
-    /\bsymlinks?\b/i,
-    /\b(?:reject|refus)\w*\b/i,
-  ], "Carbon must document symlink rejection");
+  refuteClaim(body, {
+    all: [new RegExp(String.raw`\bPATH\b${OUTRANKS}`, "i")],
+  }, "PATH must not be documented as outranking an earlier launcher source");
+  refuteClaim(body, {
+    all: [new RegExp(String.raw`\bacp_launchers\b${OUTRANKS}[^.;!?]{0,60}\benvironment\b`, "i")],
+  }, "configured acp_launchers must not be documented as outranking the environment override");
+  // The same inversion stated as a condition rather than a verb.
+  refuteClaim(body, {
+    all: [/\b(?:environment override|acp_launchers)\b[^.;!?]{0,80}\bonly\b[^.;!?]{0,80}\bPATH\b/i],
+  }, "an earlier launcher source must not be documented as conditional on PATH");
 });
 
-test("Carbon requires restart or reopen after launcher changes", () => {
-  const page = read("carbon.md");
+test("Carbon admits only a clean absolute path to a regular executable file", () => {
+  const body = troubleshooting();
 
-  assertSemanticParagraph(page, [
-    /\b(?:restart|reopen)\w*\b/i,
-    /\b(?:configuration|launcher)\b/i,
-    /\bchang\w*\b/i,
-  ], "Carbon must be restarted or reopened after launcher configuration changes");
+  assertClaim(body, {
+    all: [/\babsolute\b/i, /\bregular\b/i, /\bexecutable\b/i, /\b(?:requir|verif|admit|accept|must)\w*\b/i],
+    none: [negated("requir", "verif", "admit", "accept", "must")],
+  }, "Carbon must require an absolute path to a regular executable file");
+
+  assertClaim(body, {
+    all: [
+      /\bsymlink\w*\b/i,
+      /\b(?:reject|refus|decline)\w*\b/i,
+      /\bpath component\b|\bpath segment\b|\bparent director\w*\b|\bancestor\b|\bevery (?:position|element)\b|\bany (?:part|element|position)\b/i,
+    ],
+    none: [/\bonly the executable\b/i, negated("reject", "refus", "decline")],
+  }, "Carbon must reject symlinked path components, not merely a symlinked executable");
+
+  refuteClaim(body, {
+    all: [/\bsymlink\w*\b/i, /\b(?:allow|permit|accept|support|tolerat)\w*\b|\b(?:fine|okay|harmless|unaffected)\b/i],
+    none: [negated("allow", "permit", "accept", "support", "tolerat")],
+  }, "Carbon must not document any accepted symlink");
+});
+
+test("Carbon requires a restart or reopen after launcher changes", () => {
+  assertClaim(troubleshooting(), {
+    all: [/\b(?:restart|reopen)\w*\b/i, /\b(?:launcher|configuration)\b/i, /\bchang\w*\b/i],
+    none: [negated("restart", "reopen", "need")],
+  }, "Carbon must be restarted or reopened after launcher configuration changes");
+});
+
+test("Carbon explains that an unavailable launcher withdraws its harness", () => {
+  assertClaim(troubleshooting(), {
+    all: [
+      /\bunavailable\b|\bunresolv\w*\b|\bmissing\b/i,
+      /\blauncher\b/i,
+      /\bharness\b/i,
+      /\b(?:remov|withdraw|omit|exclud|drop|disappear)\w*\b/i,
+      /\bruntime\b/i,
+      /\bchoices?\b|\boptions?\b|\bcatalog\b|\badvertis\w*\b/i,
+    ],
+    none: [negated("remov", "withdraw", "omit", "exclud", "drop", "disappear")],
+  }, "an unavailable launcher must be documented as removing its harness from the advertised runtime choices");
 });
 
 test("Carbon launcher examples use a neutral absolute-path placeholder", () => {
-  const page = read("carbon.md");
-
-  assert.ok(/<absolute-path-to-launcher>/.test(page), "Carbon needs a neutral launcher path placeholder");
+  assert.match(troubleshooting(), /<absolute-path-to-launcher>/, "Carbon needs a neutral launcher path placeholder");
 });
 
-test("Carbon launcher guidance contains no personal machine details", () => {
-  const page = read("carbon.md");
-  const forbidden = [
-    ["macOS home directory", /\/Users\//i],
-    ["observed username", /\bipotter\b/i],
-    ["UUID session ID", /\b[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\b/i],
-    ["named session ID", /\bsession[_-](?:id[_-])?[a-z0-9][a-z0-9_-]{7,}\b/i],
-    ["concrete nvm version path", /\.nvm\/versions\/(?:node\/)?v?\d+(?:\.\d+){0,2}(?:\/|$)/i],
-  ];
-
-  for (const [label, pattern] of forbidden) {
-    assert.doesNotMatch(page, pattern, `Carbon exposes a ${label}`);
-  }
+test("Carbon carries no personal machine details", () => {
+  assertNoPrivateDetails(read("carbon.md"), "Carbon");
+  assert.doesNotMatch(read("carbon.md"), /\bipotter\b/i, "Carbon exposes an observed username");
 });
 
 test("Pluto is one practical evaluation-product page", () => {

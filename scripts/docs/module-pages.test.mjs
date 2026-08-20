@@ -31,8 +31,16 @@ function repositoryFields(slug) {
   const page = readFileSync(path.join(modulesRoot, `${slug}.md`), "utf8");
   const section = page.match(/^## Repository\n([\s\S]*?)(?=^## )/m)?.[1];
   assert.ok(section, `${slug} is missing its Repository section`);
-  return new Map([...section.matchAll(/^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|$/gm)]
-    .map(([, field, value]) => [field.trim(), value.trim()]));
+  const fields = new Map();
+  for (const [, field, value] of section.matchAll(/^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|$/gm)) {
+    const key = field.trim();
+    // Skip the header row and its delimiter so a second table reports a real
+    // duplicate field rather than a repeated "---".
+    if (key === "Field" || /^:?-{3,}:?$/.test(key)) continue;
+    assert.equal(fields.has(key), false, `${slug} repeats the Repository row "${key}"`);
+    fields.set(key, value.trim());
+  }
+  return fields;
 }
 
 function directDependencies(record) {

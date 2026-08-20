@@ -3,6 +3,8 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
+import { assertClaim, fencedBlocks, negated, refuteClaim, section } from "./claims.mjs";
+
 const root = path.resolve(import.meta.dirname, "../..");
 const pages = [
   "content-blocks/index",
@@ -135,24 +137,70 @@ test("Content blocks precede messages in the checked navigation manifest", () =>
   assert.ok(blocks < messages);
 });
 
-test("Reasoning effort documents the complete released API range", () => {
+function effortConstants() {
   const page = fs.readFileSync(path.join(root, "docs/guides/inference/models/reasoning-effort.md"), "utf8");
-  const apiSection = page.split(/^## API surface\n/m)[1]?.split(/^## /m)[0];
-  assert.ok(apiSection, "reasoning effort needs an API surface section");
-  const goBlocks = [...apiSection.matchAll(/```go\n([\s\S]*?)```/g)].map((match) => match[1]).join("\n");
+  const api = section(page, "API surface");
+  assert.ok(api, "reasoning effort needs an API surface section");
 
-  assert.match(goBlocks, /\bEffortMinimal\b/, "reasoning effort API omits EffortMinimal");
-  assert.match(goBlocks, /\bEffortXHigh\b/, "reasoning effort API omits EffortXHigh");
+  const declarations = new Map();
+  for (const block of fencedBlocks(api, "go")) {
+    for (const group of block.matchAll(/\bconst\s*\(([\s\S]*?)^\)/gm)) {
+      let grouped = null;
+      for (const line of group[1].split("\n")) {
+        if (line.trim() === "" || line.trim().startsWith("//")) continue;
+        // Strip a trailing line comment only outside the value's quotes.
+        const declaration = line.replace(/(^(?:[^"`]|"[^"]*"|`[^`]*`)*?)\s*\/\/.*$/, "$1").trim();
+        if (declaration === "") continue;
+        const parsed = declaration.match(/^([A-Za-z_]\w*)(?:\s+([A-Za-z_][\w.]*))?\s*=\s*(.+?)\s*$/);
+        assert.ok(parsed, `reasoning effort has an unparsable const declaration: ${declaration}`);
+        grouped = parsed[2] ?? grouped;
+        assert.ok(grouped, `reasoning effort declares ${parsed[1]} without a type`);
+        assert.equal(declarations.has(parsed[1]), false, `reasoning effort redeclares ${parsed[1]}`);
+        declarations.set(parsed[1], `${parsed[1]} ${grouped} = ${parsed[3]}`);
+      }
+    }
+  }
+  assert.ok(declarations.size > 0, "reasoning effort needs a Go const block");
+  return declarations;
+}
+
+test("Reasoning effort declares the complete released Effort range", () => {
+  const declarations = effortConstants();
+
+  assert.deepEqual([...declarations.values()], [
+    'EffortNone Effort = ""',
+    'EffortMinimal Effort = "minimal"',
+    'EffortLow Effort = "low"',
+    'EffortMedium Effort = "medium"',
+    'EffortHigh Effort = "high"',
+    'EffortXHigh Effort = "xhigh"',
+    'EffortMax Effort = "max"',
+  ]);
 });
 
 test("Reasoning effort warns that support varies by provider and model", () => {
   const page = fs.readFileSync(path.join(root, "docs/guides/inference/models/reasoning-effort.md"), "utf8");
-  const paragraphs = page.split(/\n\s*\n/).map((paragraph) => paragraph.replace(/\s+/g, " "));
 
-  assert.ok(paragraphs.some((paragraph) => [
-    /\bproviders?\b/i,
-    /\bmodels?\b/i,
-    /\bsupport\w*\b/i,
-    /\b(?:specific|var|differ|only|unsupported)\w*\b/i,
-  ].every((pattern) => pattern.test(paragraph))), "reasoning effort needs a provider/model support caveat");
+  assertClaim(page, {
+    all: [
+      /\bproviders?\b/i,
+      /\bmodels?\b/i,
+      /\b(?:effort|level|value)s?\b/i,
+      /\bnot\b[^.;!?]{0,40}\bevery\b|\bvar(?:y|ies)\b|\bdiffer\w*\b|\bdepends?\b|\bsubset\b|\bunsupported\b|\breject\w*\b/i,
+    ],
+    none: [negated("vary", "varies", "differ", "depend", "reject"), /\bnothing differs\b|\bthe same effort\b/i],
+  }, "reasoning effort needs a provider/model support caveat");
+
+  refuteClaim(page, {
+    all: [
+      /\b(?:every|all|any|each|both)\b/i,
+      /\bproviders?\b|\bmodels?\b/i,
+      /\b(?:support|accept|allow|implement|expose|carr)\w*\b/i,
+      /\b(?:complete|full|whole|entire|every|all|any)\b/i,
+    ],
+    none: [
+      negated("support", "accept", "allow", "implement", "expose", "carr"),
+      /\bnot every\b|\bnot all\b|\bonly some\b|\bsome\b|\bno provider\b|\bno model\b/i,
+    ],
+  }, "reasoning effort must not claim universal provider support");
 });

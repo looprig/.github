@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
+import { assertClaim, negated, refuteClaim } from "./claims.mjs";
 import { resolveWorkspaceRoot } from "./package-surface.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
@@ -73,16 +74,6 @@ function pageMarkdown(relative) {
 
 function sourceUrl(relative) {
   return `https://github.com/looprig/tui/blob/main/${relative}`;
-}
-
-function assertSemanticParagraph(markdown, patterns, message) {
-  const paragraphs = markdown
-    .split(/\n\s*\n/)
-    .map((paragraph) => paragraph.replace(/\s+/g, " ").trim());
-  assert.ok(
-    paragraphs.some((paragraph) => patterns.every((pattern) => pattern.test(paragraph))),
-    message,
-  );
 }
 
 function proofMappings(markdown) {
@@ -183,40 +174,82 @@ test("public component and integration pages cover the source-backed seams", () 
   assert.match(all, /```mermaid[\s\S]*sequenceDiagram/);
 });
 
-test("failed child cards show a bounded failure reason", () => {
+test("every TUI page cites the released TUI tag", () => {
+  const inventory = JSON.parse(fs.readFileSync(path.join(root, "docs/_data/modules.json"), "utf8"));
+  const release = inventory.modules.find((record) => record.module === "github.com/looprig/tui");
+  assert.equal(release?.publication?.status, "released");
+
+  for (const [relative] of pages) {
+    const markdown = pageMarkdown(relative);
+    const tags = [...markdown.matchAll(/looprig\/tui\/releases\/tag\/(\S+?)\)/g)].map((match) => match[1]);
+    assert.notDeepEqual(tags, [], `${relative} omits the TUI release record`);
+    for (const tag of tags) {
+      assert.equal(tag, release.publication.tag, `${relative} cites a stale TUI release record`);
+    }
+  }
+});
+
+test("failed child cards show a bounded terminal failure reason", () => {
   const events = pageMarkdown("runtime/events");
 
-  assertSemanticParagraph(events, [
-    /\bfailed\b/i,
-    /\bchild\b/i,
-    /\bcard\b/i,
-    /\b(?:failure|terminal) reason\b/i,
-    /\b(?:bound|truncat)\w*\b/i,
-  ], "failed child cards must document their bounded failure reason");
+  assertClaim(events, {
+    all: [
+      /\bfail(?:ed|ure)\b/i,
+      /\bchild\b/i,
+      /\bcard\b/i,
+      /\breason\b\s+(?:is|are|gets?|stays?|remains?)\s+(?:\w+\s+){0,2}(?:bound|truncat|capp|limit)\w*|\b(?:bounded|truncated|capped|limited)\s+(?:\w+\s+){0,1}reason\b/i,
+    ],
+    none: [negated("bound", "truncat", "cap", "limit")],
+  }, "failed child cards must document a bounded failure reason");
+
+  refuteClaim(events, {
+    all: [/\breason\b[^.;!?]{0,60}\b(?:unbounded|unlimited|untruncated)\b|\b(?:unbounded|unlimited|untruncated)\b[^.;!?]{0,60}\breason\b/i],
+  }, "a child failure reason must not be documented as unbounded");
 });
 
 test("a nil child failure reason preserves the parent fallback", () => {
   const events = pageMarkdown("runtime/events");
 
-  assertSemanticParagraph(events, [
-    /\bnil\b/i,
-    /\breason\b/i,
-    /\b(?:preserv|retain|keep)\w*\b/i,
-    /\bparent\b/i,
-    /\bfallback\b/i,
-  ], "nil child reasons must preserve the parent fallback");
+  const NIL = /(?<![\w-])nil\b/i;
+
+  assertClaim(events, {
+    all: [NIL, /\breason\b/i, /\bparent\b/i, /\bfallback\b/i, /\b(?:preserv|retain|keep|unchanged)\w*\b/i],
+    none: [negated("preserv", "retain", "keep")],
+  }, "a nil child failure reason must preserve the parent fallback");
+
+  const OVERWRITES = String.raw`(?:overwrit|replac|clear|blank|erase|discard|drop|remov)\w*`;
+  refuteClaim(events, {
+    all: [new RegExp(String.raw`(?<![\w-])nil\b[^.;!?]{0,80}\b${OVERWRITES}|\b${OVERWRITES}[^.;!?]{0,80}(?<![\w-])nil\b`, "i")],
+    none: [negated("overwrit", "replac", "clear", "blank", "erase", "discard", "drop", "remov")],
+  }, "a nil child failure reason must not be documented as overwriting the parent fallback");
 });
 
-test("live and restored child cards use the same persisted message without a codec prefix", () => {
+test("live and restored child cards render the same persisted message", () => {
   const events = pageMarkdown("runtime/events");
 
-  assertSemanticParagraph(events, [
-    /\blive\b/i,
-    /\brestor\w*\b/i,
-    /\bsame\b/i,
-    /\bpersisted message\b/i,
-    /\bcodec\b/i,
-    /\bprefix\w*\b/i,
-    /\b(?:no|not|never|without)\b/i,
-  ], "live and restored cards must share the persisted message without codec-added prefixes");
+  assertClaim(events, {
+    all: [/\blive\b/i, /\brestor\w*\b/i, /\bsame\b/i, /\bpersisted\b/i, /\bmessage\b/i],
+    none: [
+      negated("use", "render", "show", "share", "displa", "replay"),
+      /\bwould\b|\bonly if\b|\bunless\b|\bdiffer\w*\b|\binstead of\b|\brather than\b/i,
+    ],
+  }, "live and restored child cards must render the same persisted message");
+
+  assertClaim(events, {
+    all: [/\bcodec\b\s+(?:itself\s+)?(?:adds no|add no|does not add|do not add|never adds?|adds nothing|writes no)\b[^.;!?]{0,40}\bprefix/i],
+    none: [/\bsuffix\b/i, /\bthough\b|\bbut it does\b/i, /\bunlike\b|\bexcept\b/i],
+  }, "the codec must be documented as adding no prefix to the persisted message");
+
+  refuteClaim(events, {
+    all: [/\b(?:codec|restore|replay)\b[^.;!?]{0,60}\b(?:adds|prepends|inserts|attaches|wraps)\b\s+(?:an?|the|its|another)\b[^.;!?]{0,30}\bprefix/i],
+  }, "the codec must not be documented as adding a prefix");
+
+  refuteClaim(events, {
+    all: [/\b(?:codec|restore|replay)\b[^.;!?]{0,60}\b(?:prefixes|prepends)\b/i],
+    none: [negated("prefix", "prepend")],
+  }, "the codec must not be documented as prefixing the persisted message");
+
+  refuteClaim(events, {
+    all: [/\bin front of\b[^.;!?]{0,60}\b(?:persisted )?message\b/i],
+  }, "nothing may be documented as placed in front of the persisted message");
 });
