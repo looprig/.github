@@ -54,11 +54,16 @@ const toolResultsPage = () => fs.readFileSync(path.join(root, "docs/guides/harne
 test("AgentTools failures distinguish preparation from execution", () => {
   const guides = `${delegationPage()}\n\n${toolResultsPage()}`;
 
-  for (const [phase, pattern] of [["preparation", /\bprepar\w*\b/i], ["execution", /\bexecut\w*\b|\bwhile running\b/i]]) {
+  // Each phase needs its own sentence: a sentence about execution that merely
+  // mentions the word "preparation" must not satisfy the preparation contract.
+  for (const [phase, pattern, exclude] of [
+    ["preparation", /\bpreparation failure\b|\bprepar\w*\b/i, /\bexecution\b/i],
+    ["execution", /\bexecution failure\b|\bwhile running\b/i, /\bpreparation failure\b/i],
+  ]) {
     assertClaim(guides, {
       all: [/\bAgentTools\b|\bdelegat\w*\b/i, pattern, /\b(?:fail|error)\w*\b/i],
-      none: [negated("fail", "error")],
-    }, `AgentTools documentation must describe ${phase} failures`);
+      none: [negated("fail", "error"), exclude],
+    }, `AgentTools documentation must describe ${phase} failures in their own statement`);
   }
 });
 
@@ -77,7 +82,7 @@ test("AgentTools preparation failures name the rejected field and value", () => 
 
   refuteClaim(guide, {
     all: [/\bruntime\b/i, /\bselect\w*\b/i, /\b(?:field|value)\b/i, /\b(?:omit|hide|withhold|redact|suppress)\w*\b/i],
-    none: [negated("omit", "hide", "withhold", "redact", "suppress")],
+    none: [/\bdoes not\b[^.;!?]{0,20}\b(?:omit|hide|withhold|redact|suppress)\w*|\bnever\b[^.;!?]{0,20}\b(?:omit|hide|withhold|redact|suppress)\w*/i],
   }, "runtime selector errors must not be documented as hiding the field or value");
 });
 
@@ -102,7 +107,7 @@ test("failed AgentTools calls return error-marked tool results to model history"
       /\bmodel history\b|\bmodel request\b|\bmodel\b/i,
       /\b(?:drop|dropped|discard|discarded|swallow|swallowed|hidden|hide|suppress|suppressed|lost)\w*\b/i,
     ],
-    none: [negated("drop", "discard", "swallow", "hide", "suppress", "lose", "lost"), /\bnever reaches\b/i],
+    none: [/\b(?:does not|never|is not|are not)\b[^.;!?]{0,20}\b(?:drop|discard|swallow|hide|suppress|lose|lost)\w*/i, /\bnever reaches\b/i],
   }, "failed AgentTools calls must not be documented as dropped before model history");
 
   refuteClaim(guides, {
@@ -131,7 +136,15 @@ test("child failure causes survive foreground, background, native, foreign, ACP,
     all: [
       /\bchild\b/i,
       /\b(?:failure|cause|reason|detail)s?\b/i,
-      new RegExp(String.raw`\b(?:is|are|was|were|gets?|becomes?)\b(?:(?!\b(?:not|never|no)\b)[^.;!?]){0,30}\b(?:lost|dropped|discarded|cleared|erased|truncated away|omitted|suppressed)\b|${negated("surviv", "preserv", "retain", "carr", "reach").source}`, "i"),
+      new RegExp([
+        // passive: "the cause is ... lost"
+        String.raw`\b(?:is|are|was|were|gets?|becomes?)\b(?:(?!\b(?:not|never|no|nothing)\b)[^.;!?]){0,60}\b(?:lost|dropped|discarded|cleared|erased|omitted|suppressed|truncated away|gone|missing|disappears?)\b`,
+        // active: "Harness discards the child failure cause"
+        String.raw`\b(?:discard|drop|lose|loses|clear|erase|omit|suppress|forget)\w*\b(?:(?!\b(?:not|never|no|nothing)\b)[^.;!?]){0,40}\b(?:cause|reason|detail|failure)s?\b`,
+        // intransitive: "the cause disappears after restore"
+        String.raw`\b(?:cause|reason|detail|failure)s?\b(?:(?!\b(?:not|never|no|nothing)\b)[^.;!?]){0,40}\b(?:disappears?|vanish\w*|goes missing|is gone)\b`,
+        negated("surviv", "preserv", "retain", "carr", "reach").source,
+      ].join("|"), "i"),
     ],
     none: [/\btombston\w*\b/i],
   }, "child failure causes must not be documented as lost on any path");

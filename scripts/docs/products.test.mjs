@@ -148,10 +148,25 @@ test("Carbon carries no personal machine details", () => {
   assert.doesNotMatch(read("carbon.md"), /\bipotter\b/i, "Carbon exposes an observed username");
 });
 
+test("the Pluto Install command pins the released nested command version", () => {
+  const inventory = JSON.parse(readFileSync(path.join(root, "docs/_data/modules.json"), "utf8"));
+  const record = inventory.modules.find((candidate) => candidate.module === "github.com/looprig/pluto/cmd/pluto");
+  assert.equal(record?.publication?.status, "released");
+  // A nested module is tagged <dir>/vX.Y.Z but installed at @vX.Y.Z.
+  const version = record.publication.tag.split("/").at(-1);
+
+  const install = section(read("pluto.md"), "Install");
+  assert.ok(install, "Pluto is missing its Install section");
+  const [command] = fencedBlocks(install, ["sh", "bash", "shell"]);
+  assert.ok(command, "Pluto Install needs a shell block");
+
+  const pins = [...command.matchAll(/go install (\S+?)@(v\S+)/g)].map(([, module, pinned]) => [module, pinned]);
+  assert.deepEqual(pins, [["github.com/looprig/pluto/cmd/pluto", version]]);
+});
+
 test("Pluto is one practical evaluation-product page", () => {
   const page = read("pluto.md");
   assert.match(page, /evaluation and qualification/i);
-  assert.match(page, /go install github\.com\/looprig\/pluto\/cmd\/pluto@v0\.1\.2/);
   for (const feature of ["Capability packs", "Evaluation runs", "Qualification profiles", "Pricing and comparison", "Reports", "CI qualification"]) {
     assert.match(page, new RegExp(`^### ${feature}`, "m"), `Pluto omits ${feature}`);
   }

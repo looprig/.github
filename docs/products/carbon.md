@@ -124,7 +124,7 @@ Carbon resolves the launcher for each ACP harness in a fixed order, and the firs
 
 Carbon then verifies the resolved launcher, and it must be a clean absolute path to a regular executable file.
 
-Carbon rejects a symlink at every position of that path, including each symlinked parent directory component, so a launcher reached through a symlinked directory is refused.
+Carbon rejects a symlink at any position of that path, including each symlinked parent directory component, so a launcher reached through a symlinked directory is refused. On macOS a leading `/var` prefix is canonicalized to `/private/var` before that walk, so the operating system's own `/var` symlink is the single exception.
 
 Reopen a session after you change a launcher entry in `acp_launchers`, and restart Carbon after you change an environment override.
 

@@ -112,33 +112,19 @@ sequenceDiagram
 
 Proof: [start and send implementation](https://github.com/looprig/harness/blob/main/internal/sessionruntime/delegation.go) and [message delivery tests](https://github.com/looprig/harness/blob/main/internal/sessionruntime/message_agent_native_test.go).
 
+## Delegation failures
+
+An AgentTools preparation failure is rejected before any child starts, and the runner turns it into an error-marked tool result. An AgentTools execution failure happens after preparation, either because the delegate controller refused the operation before any child existed or because a started child reached a failure terminal, and the tool itself returns the error-marked result. Either way a failed AgentTools call reaches model history as an error-marked tool result, a `content.ToolResultMessage` whose `IsError` field is set.
+
+An invalid runtime selector fails preparation with an error that names the rejected field and its value. An unavailable runtime selector fails preparation with an error that names the rejected selector and the value that matched no configured runtime.
+
+A child failure cause survives foreground and background delegation, native and foreign child loops, and session restore, so every reader preserves the same cause. An ACP child is a foreign loop, so it takes the foreign path rather than a separate ACP route. Background delegation is the other shape to know: its hand-back arrives as a user-role message carrying the same cause, so it is not an error-marked tool result and carries no `IsError` field. A tombstoned child is the single documented gap: restore reports it as failed with no cause text.
+
+Each failure detail is bounded and normalized to valid UTF-8 before it is stored. A preparation diagnostic is capped at 1 KiB and its detail at 512 bytes, while a child failure cause and an agent result are each capped at 256 KiB. The detail is preserved regardless of credential or model-facing classification, so no classifier filters it before the model sees it.
+
 ## Source and proof
 
 - [DelegateController and data types](https://github.com/looprig/harness/blob/main/pkg/tool/definition.go)
 - [Runtime metadata](https://github.com/looprig/harness/blob/main/pkg/tool/delegate_artifact.go)
 - [AgentTools bundle](https://github.com/looprig/harness/blob/main/internal/delegationtool/definition.go)
 - [Delegation runtime](https://github.com/looprig/harness/blob/main/internal/sessionruntime/delegation.go)
-
-## Delegation failures
-
-An AgentTools preparation failure is rejected before any child starts, and the runner turns it into an error-marked tool result.
-
-An AgentTools execution failure ends a child that has already started, and the tool itself returns the error-marked result.
-
-A failed AgentTools call reaches model history as an error-marked tool result, a `content.ToolResultMessage` whose `IsError` field is set.
-
-An invalid runtime selector fails preparation with an error that names the rejected field and its value.
-
-An unavailable runtime selector fails preparation with an error that names the rejected selector and the value that matched no configured runtime.
-
-A child failure cause survives foreground and background delegation, native and foreign child loops, and session restore, so every reader preserves the same cause.
-
-An ACP child is a foreign loop, so it takes the foreign path rather than a separate ACP route.
-
-A tombstoned child is the single documented gap: restore reports it as failed with no cause text.
-
-Background delegation is the other shape to know: its hand-back arrives as a user-role message carrying the same cause, so it is not an error-marked tool result and carries no `IsError` field.
-
-Each failure detail is bounded and normalized to valid UTF-8 before it is stored.
-
-The detail is preserved regardless of credential or model-facing classification, so no classifier filters it before the model sees it.

@@ -17,7 +17,7 @@ proofs:
 
 # Evaluation and qualification
 
-The released [eval module v0.1.2](https://github.com/looprig/eval/tree/ba758feb51fc22f009acf67dadfa692750e3cdd1) defines scenarios, targets, evaluators, assessments, and reports. The released [Pluto module v0.1.2](https://github.com/looprig/pluto/tree/a558d9006ba74559668d9929fb6d872cea0599b4) turns those measurements into capability scorecards and profile dispositions. Evaluation output is an artifact of a run; it is not session state, a checkpoint, or model context.
+This stage pins [eval module v0.1.2](https://github.com/looprig/eval/tree/ba758feb51fc22f009acf67dadfa692750e3cdd1) defines scenarios, targets, evaluators, assessments, and reports. This stage pins [Pluto module v0.1.2](https://github.com/looprig/pluto/tree/a558d9006ba74559668d9929fb6d872cea0599b4) turns those measurements into capability scorecards and profile dispositions. Evaluation output is an artifact of a run; it is not session state, a checkpoint, or model context.
 
 ## Evaluation model {#evaluation-model}
 

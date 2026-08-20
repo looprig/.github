@@ -115,6 +115,18 @@ for (const [repository, slug, title, version] of [
   });
 }
 
+test("Module page publication frontmatter matches the generated record", () => {
+  for (const name of pages) {
+    const slug = name.slice(0, -3);
+    const record = recordFor(slug);
+    assert.ok(record, `missing inventory record for ${slug}`);
+    const page = readFileSync(path.join(modulesRoot, name), "utf8");
+    const declared = page.match(/^publication: (.+)$/m)?.[1];
+    const expected = record.publication.status === "released" ? "released" : record.availability;
+    assert.equal(declared, expected, `${slug} frontmatter publication disagrees with its record`);
+  }
+});
+
 test("Flow Store is released from the Flow repository at its own nested tag", () => {
   const record = inventory.modules.find((candidate) => candidate.module === "github.com/looprig/flow/store");
   assert.ok(record, "missing flow/store inventory record");

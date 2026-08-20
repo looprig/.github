@@ -17,7 +17,7 @@ proofs:
 
 # Terminal session interfaces
 
-The released [tui module v0.15.1](https://github.com/looprig/tui/tree/6b362dda04b086c8a94146320e9faad38dac9b6c) supplies presentation, a session adapter, restore decisions, runtime plumbing, completion widgets, and styles. It does not make a second durable store. The session owns event history and shutdown; the adapter owns its live subscription, replay dependencies, and gate index.
+This stage pins [tui module v0.15.1](https://github.com/looprig/tui/tree/6b362dda04b086c8a94146320e9faad38dac9b6c) supplies presentation, a session adapter, restore decisions, runtime plumbing, completion widgets, and styles. It does not make a second durable store. The session owns event history and shutdown; the adapter owns its live subscription, replay dependencies, and gate index.
 
 ## Screen and projection {#screen-and-projection}
 

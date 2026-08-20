@@ -46,7 +46,7 @@ Create a Runner from a compiled graph and run one execution with its input and c
 
 ## Checkpoint storage {#checkpoint-storage}
 
-The nested `flow/store` module provides `store.New(ledger storage.Ledger)`, which adapts a Storage ledger to the Flow checkpoint contract. It is a separate Go module under `flow/store`, with its own module file and current local replacement in the coordinated workspace. It has no published tag in this snapshot. Do not add it as a released version or leave a local filesystem `replace` in a published module.
+The nested `flow/store` module provides `store.New(ledger storage.Ledger)`, which adapts a Storage ledger to the Flow checkpoint contract. It is a nested Go module under `flow/store` with its own module file, published from the Flow repository at its own `store/v0.1.0` tag and on its own cadence, so its version is independent of the parent Flow version. Pin that tag rather than leaving a local filesystem `replace` in a published module.
 
 ## Control plane and ingress {#control-plane-and-ingress}
 
@@ -58,4 +58,4 @@ Handle compile errors before starting a run. During execution, distinguish task 
 
 ## Runnable proof {#runnable-proof}
 
-`stage-17-flow` runs the released Flow graph, pauses at an interrupt, and resumes with the recorded approval state. Run it with `node scripts/docs/run-examples.mjs`. The Flow implementation is pinned in the [Flow release tree](https://github.com/looprig/flow/tree/v0.3.0/) that this stage records; the checkpoint adapter is the nested `flow/store` module at commit `c89d0eb101158996bd278578c0b93d55d67a8d8a`, tracked by the `module-flow-store` proof. That module is now published from the Flow repository at [`store/v0.1.0`](https://github.com/looprig/flow/tree/d192f2b0271bd6010122be827bf88f44078e806d/store), and this stage is re-pinned when its example manifest is refreshed. The referenced package pages list the pinned source files and adjacent tests used for this boundary.
+`stage-17-flow` runs the released Flow graph, pauses at an interrupt, and resumes with the recorded approval state. Run it with `node scripts/docs/run-examples.mjs`. The Flow implementation is pinned in the [Flow release tree](https://github.com/looprig/flow/tree/v0.3.0/) that this stage records; the checkpoint adapter is the nested `flow/store` module, which the Flow repository now publishes at [`store/v0.1.0`](https://github.com/looprig/flow/tree/d192f2b0271bd6010122be827bf88f44078e806d/store), and this stage is re-pinned when its example manifest is refreshed. The referenced package pages list the pinned source files and adjacent tests used for this boundary.

@@ -50,16 +50,27 @@ test("Build 08 describes counters as preflight ContextCounters", () => {
 });
 
 test("guide, product, and module pages cite the current released tag of every module they link", () => {
+  // Scope note: docs/build is deliberately excluded. Build pages cite the
+  // versions their example stage pins in docs/_data/examples.json, which are
+  // intentionally older than the current release, so sweeping them here would
+  // report a legitimate pin as staleness. docs/build freshness is owned by the
+  // example manifest, not by this test.
   const pattern = /https:\/\/github\.com\/looprig\/([a-z]+)\/(?:blob|tree)\/(v[0-9.]+)\//g;
   const stale = [];
+  const unknown = [];
 
   for (const file of markdownFiles("guides", "products", "modules")) {
     for (const [, repository, tag] of fs.readFileSync(file, "utf8").matchAll(pattern)) {
       const released = releasedTags.get(repository);
-      if (!released || released === tag) continue;
+      if (!released) {
+        unknown.push(`${path.relative(root, file)}: ${repository} is not a released module in the inventory`);
+        continue;
+      }
+      if (released === tag) continue;
       stale.push(`${path.relative(root, file)}: ${repository} ${tag} (released ${released})`);
     }
   }
 
+  assert.deepEqual([...new Set(unknown)], [], "pages must only pin repositories the inventory records as released");
   assert.deepEqual([...new Set(stale)], [], "pages must cite the current released tag");
 });

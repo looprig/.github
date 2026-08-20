@@ -9,7 +9,7 @@ publication: released
 proofs:
   choose-an-interface: [release-github-com-looprig-tui, release-github-com-looprig-client]
   expose-a-protocol: [release-github-com-looprig-acp, release-github-com-looprig-mcp]
-  add-durable-workflows: [module-workflows, release-github-com-looprig-flow]
+  add-durable-workflows: [release-github-com-looprig-workflows, release-github-com-looprig-flow]
   evaluate-the-agent: [release-github-com-looprig-eval, release-github-com-looprig-pluto]
   runnable-checkpoint: [release-github-com-looprig-eval, release-github-com-looprig-pluto]
 ---

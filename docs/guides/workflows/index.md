@@ -9,9 +9,9 @@ publication: released
 proofs:
   the-boundary-at-a-glance: [central-workflows-typed-definition-source]
   a-workflow-is-a-definition-plus-a-run: [central-workflows-catalog-source]
-  choose-the-page-for-the-job: [module-workflows]
+  choose-the-page-for-the-job: [release-github-com-looprig-workflows]
   minimal-composition: [central-workflows-stage18-lifecycle-fixture]
-  source: [module-workflows]
+  source: [release-github-com-looprig-workflows]
   proof: [central-workflows-artifacts-contract-test]
 ---
 

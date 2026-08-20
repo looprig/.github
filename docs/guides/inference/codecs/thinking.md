@@ -21,11 +21,11 @@ model advertises `Caps.Thinking`.
 
 | Dialect | Enabled request fields | `EffortMax` behavior | Response block |
 | --- | --- | --- | --- |
-| OpenAI Chat | `reasoning_effort` | `high` | `reasoning_content` to `ThinkingBlock` |
-| OpenAI Responses | `reasoning.effort`, `summary: auto` | `high` | reasoning item summary |
+| OpenAI Chat | `reasoning_effort` | `max` | `reasoning_content` to `ThinkingBlock` |
+| OpenAI Responses | `reasoning.effort`, `summary: auto` | `max` | reasoning item summary |
 | Anthropic | `thinking: {type: adaptive}`, `output_config.effort` | `max` | `thinking` block with signature |
-| Gemini | `thinkingConfig.thinkingBudget`, `includeThoughts` | codec-specific budget | `thought: true` part |
-| Bedrock | reasoning content text | provider wire value | `reasoningContent` |
+| Gemini | `thinkingConfig.thinkingBudget`, `includeThoughts` | `UnsupportedEffortError` | `thought: true` part |
+| Bedrock | reasoning content text | `UnsupportedEffortError` | `reasoningContent` |
 
 When capability or effort is unset, request-side reasoning fields are omitted.
 Anthropic also omits `temperature` and `top_p` while adaptive thinking is

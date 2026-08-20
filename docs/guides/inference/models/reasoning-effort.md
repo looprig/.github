@@ -1,7 +1,7 @@
 ---
 id: guides/inference/models/reasoning-effort
 title: Reasoning effort
-description: Express low-to-maximum reasoning intent without binding to one provider.
+description: Express minimal-to-maximum reasoning intent without binding to one provider.
 audience: developer
 section: guides
 order: 25
@@ -42,11 +42,11 @@ if !sampling.Effort.Valid() {
 }
 ```
 
-The OpenAI codec maps effort to `reasoning_effort`; the Anthropic codec maps it to its adaptive-thinking and effort fields. Not every provider and model supports every effort level, and an unsupported level is rejected with a typed error or omitted from the request rather than remapped to a nearby level.
+The OpenAI codec maps effort to `reasoning_effort`; the Anthropic codec maps it to its adaptive-thinking and effort fields. Not every provider and model supports every effort level. The Anthropic, Bedrock Converse, and Gemini codecs reject a level they cannot express with a typed `UnsupportedEffortError` rather than remapping it to a neighbour, while the OpenAI Chat Completions and Responses codecs forward the whole ladder without a per-model gate.
 
 ## Proof
 
-- Source: [`inference/model/effort.go`](https://github.com/looprig/inference/blob/main/model/effort.go), [`inference/model/sampling.go`](https://github.com/looprig/inference/blob/main/model/sampling.go)
-- Tests: [`inference/model/effort_test.go`](https://github.com/looprig/inference/blob/main/model/effort_test.go)
+- Source: [`inference/model/effort.go`](https://github.com/looprig/inference/blob/v0.12.0/model/effort.go), [`inference/model/sampling.go`](https://github.com/looprig/inference/blob/v0.12.0/model/sampling.go)
+- Tests: [`inference/model/effort_test.go`](https://github.com/looprig/inference/blob/v0.12.0/model/effort_test.go)
 
 Related: [Sampling](/docs/guides/inference/models/sampling/), [Capabilities](/docs/guides/inference/models/capabilities/).

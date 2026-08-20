@@ -17,7 +17,7 @@ proofs:
 
 # Session serving and live events
 
-The released [harness module v0.24.2](https://github.com/looprig/harness/tree/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb) keeps HTTP composition at a narrow boundary. `serve.Handler` receives a `Rig[S,O]` for live creation/restoration and a `Reader` for durable projections. It does not import a session implementation, an LLM client, or a storage backend. `serve.ReadHandler` builds only the read plane when the process has no live rig.
+This stage pins [harness module v0.24.2](https://github.com/looprig/harness/tree/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb) keeps HTTP composition at a narrow boundary. `serve.Handler` receives a `Rig[S,O]` for live creation/restoration and a `Reader` for durable projections. It does not import a session implementation, an LLM client, or a storage backend. `serve.ReadHandler` builds only the read plane when the process has no live rig.
 
 ## Narrow serving seams {#narrow-serving-seams}
 

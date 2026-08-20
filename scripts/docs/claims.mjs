@@ -43,30 +43,35 @@ function scan(markdown) {
 // YAML frontmatter, HTML comments, fenced and indented code, table rows,
 // headings and their setext rules, and blockquoted excerpts. Each of these
 // otherwise reintroduces the keyword co-occurrence this module prevents.
-function prose(markdown) {
+function prose(markdown, { published = false } = {}) {
   const body = markdown.replace(/\r\n/g, "\n").replace(FRONTMATTER, "").replace(HTML_COMMENT, "");
   return scan(body).filter((line) => line.kind === "text"
-    && !TABLE_ROW.test(line.raw)
-    && !HEADING.test(line.raw)
-    && !SETEXT_RULE.test(line.raw)
-    && !BLOCKQUOTE.test(line.raw)
-    && !INDENTED_CODE.test(line.raw));
+    && (published || (!TABLE_ROW.test(line.raw)
+      && !HEADING.test(line.raw)
+      && !SETEXT_RULE.test(line.raw)
+      && !BLOCKQUOTE.test(line.raw)
+      && !INDENTED_CODE.test(line.raw))));
 }
 
-const ABBREVIATION = /(?:^|\s)(?:e\.g|i\.e|cf|vs|etc|approx|Fig|No)\.$/i;
+const LOWER_ABBREVIATION = /(?:^|\s)(?:e\.g|i\.e|cf|vs|etc|approx)\.$/i;
+const CASED_ABBREVIATION = /(?:^|\s)(?:Fig|No|Nos|Ref|Sec)\.$/;
+
+function endsWithAbbreviation(text) {
+  return LOWER_ABBREVIATION.test(text) || CASED_ABBREVIATION.test(text);
+}
 
 // statements returns prose statements. Wrapped source lines are rejoined first,
 // so a hard-wrapped sentence is still one statement; a list item, a blank line,
 // and any excluded block each end the current statement.
-export function statements(markdown) {
+export function statements(markdown, options) {
   const logical = [];
   let joining = false;
-  for (const line of prose(markdown)) {
+  for (const line of prose(markdown, options)) {
     if (line.raw.trim() === "") {
       joining = false;
       continue;
     }
-    const text = line.raw.replace(LIST_MARKER, "").trim();
+    const text = line.raw.replace(LIST_MARKER, "").replace(/^\s*>+\s?/, "").replace(/^\|/, "").replace(/\|$/, "").replace(/^#{1,6}\s+/, "").trim();
     if (LIST_MARKER.test(line.raw) || !joining) {
       logical.push(text);
       joining = true;
@@ -80,7 +85,7 @@ export function statements(markdown) {
     let current = "";
     for (const piece of line.split(/(?<=[.!?;])\s+/)) {
       current = current ? `${current} ${piece}` : piece;
-      if (ABBREVIATION.test(current)) continue;
+      if (endsWithAbbreviation(current)) continue;
       split.push(current);
       current = "";
     }
@@ -107,13 +112,20 @@ export function negated(...stems) {
 
 const CLAIM_KEYS = new Set(["all", "none"]);
 
-export function matchingStatements(markdown, claim) {
+// publishedStatements is the reader's view: nothing is excluded except
+// frontmatter, HTML comments and fenced code, so a claim smuggled into a table
+// cell or a blockquote is still visible to a refutation.
+export function publishedStatements(markdown) {
+  return statements(markdown, { published: true });
+}
+
+export function matchingStatements(markdown, claim, options) {
   for (const key of Object.keys(claim)) {
     assert.ok(CLAIM_KEYS.has(key), `unknown claim key "${key}"; use all and none`);
   }
   const { all = [], none = [] } = claim;
   assert.ok(all.length > 0, "a claim needs at least one required pattern");
-  return statements(markdown).filter((statement) =>
+  return statements(markdown, options).filter((statement) =>
     all.every((pattern) => pattern.test(statement))
     && none.every((pattern) => !pattern.test(statement)));
 }
@@ -142,7 +154,7 @@ export function assertClaim(markdown, claim, message) {
 }
 
 export function refuteClaim(markdown, claim, message) {
-  const [counter] = matchingStatements(markdown, claim);
+  const [counter] = matchingStatements(markdown, claim, { published: true });
   assert.equal(counter, undefined, counter ? `${message}: ${counter}` : message);
 }
 
