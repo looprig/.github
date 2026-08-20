@@ -56,8 +56,8 @@ if err := capability.Validate(); err != nil {
 
 ## Source and proof
 
-- [`contextcount/contracts.go`](https://github.com/looprig/inference/blob/v0.9.2/contextcount/contracts.go)
-- [`contextcount/contracts_errors.go`](https://github.com/looprig/inference/blob/v0.9.2/contextcount/contracts_errors.go)
-- [`contextcount/contracts_test.go`](https://github.com/looprig/inference/blob/v0.9.2/contextcount/contracts_test.go)
+- [`contextcount/contracts.go`](https://github.com/looprig/inference/blob/v0.12.0/contextcount/contracts.go)
+- [`contextcount/contracts_errors.go`](https://github.com/looprig/inference/blob/v0.12.0/contextcount/contracts_errors.go)
+- [`contextcount/contracts_test.go`](https://github.com/looprig/inference/blob/v0.12.0/contextcount/contracts_test.go)
 
 Run `go test ./contextcount`.

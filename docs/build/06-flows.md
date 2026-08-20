@@ -5,27 +5,27 @@ description: Compile explicit Flow graphs, run them with interruptible tasks, an
 audience: developer
 section: build
 order: 6
-publication: source-workspace
+publication: released
 examples:
   - stage-17-flow
 proofs:
   boundary:
     - release-github-com-looprig-flow
-    - module-flow-store
+    - release-github-com-looprig-flow-store
   composition:
     - release-github-com-looprig-flow
-    - module-flow-store
+    - release-github-com-looprig-flow-store
   graph-boundary:
     - release-github-com-looprig-flow
   runner-lifecycle:
     - release-github-com-looprig-flow
   checkpoint-storage:
-    - module-flow-store
+    - release-github-com-looprig-flow-store
   control-plane-and-ingress:
     - release-github-com-looprig-flow
   lifecycle:
     - release-github-com-looprig-flow
-    - module-flow-store
+    - release-github-com-looprig-flow-store
   errors-and-limits:
     - release-github-com-looprig-flow
   runnable-proof:
@@ -34,7 +34,7 @@ proofs:
 
 # Build 06: flows and checkpoints
 
-Use released Flow for graph execution and treat the nested `flow/store` package as a separate source-workspace adapter. A Flow graph describes the allowed transitions; a Runner owns one execution; a checkpoint store owns the durable state that makes interruption and resume possible.
+Use released Flow for graph execution and the released nested `flow/store` module as the checkpoint adapter. A Flow graph describes the allowed transitions; a Runner owns one execution; a checkpoint store owns the durable state that makes interruption and resume possible.
 
 ## Graph boundary {#graph-boundary}
 
@@ -58,4 +58,4 @@ Handle compile errors before starting a run. During execution, distinguish task 
 
 ## Runnable proof {#runnable-proof}
 
-`stage-17-flow` runs the released Flow graph, pauses at an interrupt, and resumes with the recorded approval state. Run it with `node scripts/docs/run-examples.mjs`. The Flow implementation is pinned in the [Flow release tree](https://github.com/looprig/flow/tree/v0.3.0/); the checkpoint adapter is source-workspace code at local path `flow/store`, commit `c89d0eb101158996bd278578c0b93d55d67a8d8a`, and is tracked by the `module-flow-store` proof. The referenced package pages list the pinned source files and adjacent tests used for this boundary.
+`stage-17-flow` runs the released Flow graph, pauses at an interrupt, and resumes with the recorded approval state. Run it with `node scripts/docs/run-examples.mjs`. The Flow implementation is pinned in the [Flow release tree](https://github.com/looprig/flow/tree/v0.3.0/) that this stage records; the checkpoint adapter is the nested `flow/store` module at commit `c89d0eb101158996bd278578c0b93d55d67a8d8a`, tracked by the `module-flow-store` proof. That module is now published from the Flow repository at [`store/v0.1.0`](https://github.com/looprig/flow/tree/d192f2b0271bd6010122be827bf88f44078e806d/store), and this stage is re-pinned when its example manifest is refreshed. The referenced package pages list the pinned source files and adjacent tests used for this boundary.

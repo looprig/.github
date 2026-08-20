@@ -57,9 +57,9 @@ fmt.Println(contextTokens)
 
 ## Source and proof
 
-- [`client.go`](https://github.com/looprig/inference/blob/v0.9.2/client.go)
-- [`openaiapi/decode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openaiapi/decode.go)
-- [`openairesponses/decode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openairesponses/decode.go)
-- [`geminiapi/decode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/geminiapi/decode.go)
+- [`client.go`](https://github.com/looprig/inference/blob/v0.12.0/client.go)
+- [`openaiapi/decode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/decode.go)
+- [`openairesponses/decode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openairesponses/decode.go)
+- [`geminiapi/decode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/geminiapi/decode.go)
 
 Run `go test ./codec/...`.

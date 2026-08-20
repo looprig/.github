@@ -5,13 +5,13 @@ description: Define typed workflows, persist durable run records, supervise runs
 audience: developer
 section: modules
 order: 21
-publication: source-workspace
+publication: released
 proofs:
-  repository: module-workflows
-  description: module-workflows
-  dependencies: module-workflows
-  dependents: module-workflows
-  where-it-fits: module-workflows
+  repository: release-github-com-looprig-workflows
+  description: release-github-com-looprig-workflows
+  dependencies: release-github-com-looprig-workflows
+  dependents: release-github-com-looprig-workflows
+  where-it-fits: release-github-com-looprig-workflows
 ---
 
 # Workflows

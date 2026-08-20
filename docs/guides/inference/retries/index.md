@@ -75,10 +75,10 @@ Related Harness consumer: [Hustle retries](/docs/guides/harness/hustles/retries/
 
 ## Source and proof
 
-- [`retry/retry.go`](https://github.com/looprig/inference/blob/v0.9.2/retry/retry.go)
-- [`retry/classify.go`](https://github.com/looprig/inference/blob/v0.9.2/retry/classify.go)
-- [`retry/delay.go`](https://github.com/looprig/inference/blob/v0.9.2/retry/delay.go)
-- [`retry/invoke_test.go`](https://github.com/looprig/inference/blob/v0.9.2/retry/invoke_test.go)
-- [`retry/stream_test.go`](https://github.com/looprig/inference/blob/v0.9.2/retry/stream_test.go)
+- [`retry/retry.go`](https://github.com/looprig/inference/blob/v0.12.0/retry/retry.go)
+- [`retry/classify.go`](https://github.com/looprig/inference/blob/v0.12.0/retry/classify.go)
+- [`retry/delay.go`](https://github.com/looprig/inference/blob/v0.12.0/retry/delay.go)
+- [`retry/invoke_test.go`](https://github.com/looprig/inference/blob/v0.12.0/retry/invoke_test.go)
+- [`retry/stream_test.go`](https://github.com/looprig/inference/blob/v0.12.0/retry/stream_test.go)
 
 Run `go test ./retry`.

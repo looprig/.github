@@ -90,12 +90,12 @@ flowchart LR
 
 ## Source and proof
 
-- [`secrets/reference.go`](https://github.com/looprig/secrets/blob/v0.1.0/reference.go)
-- [`secrets/secret.go`](https://github.com/looprig/secrets/blob/v0.1.0/secret.go)
-- [`secrets/store.go`](https://github.com/looprig/secrets/blob/v0.1.0/store.go)
-- [`credentials/reference.go`](https://github.com/looprig/credentials/blob/v0.1.0/reference.go)
-- [`credentials/source.go`](https://github.com/looprig/credentials/blob/v0.1.0/source.go)
-- [`credentials/httpauth/httpauth.go`](https://github.com/looprig/credentials/blob/v0.1.0/httpauth/httpauth.go)
-- [`inference/transport/client.go`](https://github.com/looprig/inference/blob/v0.9.2/transport/client.go)
+- [`secrets/reference.go`](https://github.com/looprig/secrets/blob/v0.2.0/reference.go)
+- [`secrets/secret.go`](https://github.com/looprig/secrets/blob/v0.2.0/secret.go)
+- [`secrets/store.go`](https://github.com/looprig/secrets/blob/v0.2.0/store.go)
+- [`credentials/reference.go`](https://github.com/looprig/credentials/blob/v0.2.0/reference.go)
+- [`credentials/source.go`](https://github.com/looprig/credentials/blob/v0.2.0/source.go)
+- [`credentials/httpauth/httpauth.go`](https://github.com/looprig/credentials/blob/v0.2.0/httpauth/httpauth.go)
+- [`inference/transport/client.go`](https://github.com/looprig/inference/blob/v0.12.0/transport/client.go)
 
 Run `go test ./...` in each of the secrets, credentials, and inference modules.

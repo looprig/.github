@@ -17,7 +17,7 @@ proofs:
 
 # Durable Flow execution
 
-Flow is the lower-level graph engine. A compiled `flow.Runner[S]` executes typed vertices over state `S`, writes durable checkpoints through `flow.CheckpointStore`, and exposes `Run`, `Resume`, `Get`, `Status`, and `Cancel`. The released module is [github.com/looprig/flow v0.3.0](https://github.com/looprig/flow/tree/133cff01d483f368cdcef59f6d4d791e22120a1e).
+Flow is the lower-level graph engine. A compiled `flow.Runner[S]` executes typed vertices over state `S`, writes durable checkpoints through `flow.CheckpointStore`, and exposes `Run`, `Resume`, `Get`, `Status`, and `Cancel`. The released module is [github.com/looprig/flow v0.4.0](https://github.com/looprig/flow/tree/28eae18a98916cbb7ccb59e90e78fc328c65671b).
 
 ## Graph and runner {#graph-and-runner}
 
@@ -39,4 +39,4 @@ The store contract requires every operation to honor `context.Context`, compare-
 
 ## Runnable proof {#runnable-proof}
 
-The reviewed Flow fixture starts a graph, interrupts it, resumes from the growing checkpoint history, and prints both outcomes. Review the [Flow source at the release commit](https://github.com/looprig/flow/tree/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/flow) and the [runner declarations](https://github.com/looprig/flow/blob/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/flow/runner.go) when choosing between `Run`, `Resume`, and `Get`.
+The reviewed Flow fixture starts a graph, interrupts it, resumes from the growing checkpoint history, and prints both outcomes. Review the [Flow source at the pinned example commit](https://github.com/looprig/flow/tree/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/flow) and the [runner declarations](https://github.com/looprig/flow/blob/133cff01d483f368cdcef59f6d4d791e22120a1e/pkg/flow/runner.go) when choosing between `Run`, `Resume`, and `Get`.

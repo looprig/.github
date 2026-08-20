@@ -18,7 +18,7 @@ proofs:
 
 # Framework-neutral web clients
 
-The Go web handler is released with [client v0.1.0](https://github.com/looprig/client/tree/9941c8da1308d0a01562f17bdbbec963ce2a26ca). The browser SDK is source-workspace: `sdk/core` is the private `@looprig/client` transport/folding library, and `sdk/svelte` is the private `@looprig/svelte` adapter. The [module packages](https://github.com/looprig/client/tree/9941c8da1308d0a01562f17bdbbec963ce2a26ca/sdk) are evidence for the current source, not installable release claims.
+The Go web handler is released with [client v0.3.0](https://github.com/looprig/client/tree/252f92b5eb3b961a95177fedc9dd869be9bc2382). The browser SDK is source-workspace: `sdk/core` is the private `@looprig/client` transport/folding library, and `sdk/svelte` is the private `@looprig/svelte` adapter. The [module packages](https://github.com/looprig/client/tree/252f92b5eb3b961a95177fedc9dd869be9bc2382/sdk) are evidence for the current source, not installable release claims.
 
 ## Transport and contract {#transport-and-contract}
 

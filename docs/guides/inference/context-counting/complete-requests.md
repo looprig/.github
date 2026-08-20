@@ -45,8 +45,8 @@ postflight accounting wrapper and would misstate the model's context window.
 
 ## Source and proof
 
-- [`contextcount/estimator.go`](https://github.com/looprig/inference/blob/v0.9.2/contextcount/estimator.go)
-- [`contextcount/estimator_test.go`](https://github.com/looprig/inference/blob/v0.9.2/contextcount/estimator_test.go)
-- [`client.go`](https://github.com/looprig/inference/blob/v0.9.2/client.go)
+- [`contextcount/estimator.go`](https://github.com/looprig/inference/blob/v0.12.0/contextcount/estimator.go)
+- [`contextcount/estimator_test.go`](https://github.com/looprig/inference/blob/v0.12.0/contextcount/estimator_test.go)
+- [`client.go`](https://github.com/looprig/inference/blob/v0.12.0/client.go)
 
 Run `go test ./contextcount`.

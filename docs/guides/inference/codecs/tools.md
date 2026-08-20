@@ -52,10 +52,10 @@ _ = message // replay this block in the next Request to preserve the call.
 
 ## Source and proof
 
-- [`client.go`](https://github.com/looprig/inference/blob/v0.9.2/client.go)
-- [`openaiapi/encode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openaiapi/encode.go)
-- [`openairesponses/encode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openairesponses/encode.go)
-- [`geminiapi/encode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/geminiapi/encode.go)
-- [`bedrockconverse/encode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/bedrockconverse/encode.go)
+- [`client.go`](https://github.com/looprig/inference/blob/v0.12.0/client.go)
+- [`openaiapi/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/encode.go)
+- [`openairesponses/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openairesponses/encode.go)
+- [`geminiapi/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/geminiapi/encode.go)
+- [`bedrockconverse/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/bedrockconverse/encode.go)
 
 Run `go test ./codec/openaiapi ./codec/openairesponses ./codec/anthropicapi ./codec/geminiapi ./codec/bedrockconverse`.

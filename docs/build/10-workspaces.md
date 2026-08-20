@@ -41,11 +41,11 @@ The Looprig checkout can coordinate many modules, but a released module must rem
 
 ## Released modules {#released-modules}
 
-A released module has a versioned `go.mod` dependency and an immutable tag. Core, Secrets, Credentials, Storage, Fsstore, Natsstore, Rclonestore, Sandbox, Flow, Inference, LLM, and Eval each have release records in this corpus. A consumer should use those versions and run its checks with `GOWORK=off` so a local checkout cannot mask a missing or incompatible dependency.
+A released module has a versioned `go.mod` dependency and an immutable tag. Core, Secrets, Credentials, Storage, Fsstore, Natsstore, Rclonestore, Sandbox, Flow, `flow/store`, Inference, LLM, Eval, Workflows, and Client each have release records in this corpus. A consumer should use those versions and run its checks with `GOWORK=off` so a local checkout cannot mask a missing or incompatible dependency.
 
 ## Source-workspace modules {#source-workspace-modules}
 
-`flow/store` is the important exception in this foundation set. It is a nested module with its own `go.mod`, currently developed through a local replacement in the coordinated workspace, and has no published tag in this snapshot. It is useful for local Flow checkpoint experiments, but it must be labelled `source-workspace` and must not be copied into a published module file as a filesystem replacement.
+The browser SDK packages under `client/sdk` are the remaining exception in this set. `@looprig/client` and `@looprig/svelte` are private npm packages with no published version, so they must be labelled `source-workspace` and must not be presented as installable. A nested Go module is not an exception: `flow/store` has its own `go.mod` and is published from the Flow repository at its own `store/` tag, on its own cadence, so a consumer pins that tag rather than a filesystem replacement.
 
 ## Verification boundary {#verification-boundary}
 

@@ -51,9 +51,9 @@ accepted only because the response DTO and normalization code implement them.
 
 ## Source and proof
 
-- [`openaiapi/codec.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openaiapi/codec.go)
-- [`openaiapi/encode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openaiapi/encode.go)
-- [`openaiapi/decode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openaiapi/decode.go)
-- [`openaiapi/stream_test.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openaiapi/stream_test.go)
+- [`openaiapi/codec.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/codec.go)
+- [`openaiapi/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/encode.go)
+- [`openaiapi/decode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/decode.go)
+- [`openaiapi/stream_test.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/stream_test.go)
 
 Run `go test ./codec/openaiapi`.

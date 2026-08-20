@@ -49,9 +49,9 @@ if errors.As(err, &blockErr) {
 
 ## Source and proof
 
-- [`core/content/block.go`](https://github.com/looprig/core/blob/v0.5.1/content/block.go)
-- [`openaiapi/encode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openaiapi/encode.go)
-- [`anthropicapi/encode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/anthropicapi/encode.go)
-- [`bedrockconverse/encode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/bedrockconverse/encode.go)
+- [`core/content/block.go`](https://github.com/looprig/core/blob/v0.6.0/content/block.go)
+- [`openaiapi/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/encode.go)
+- [`anthropicapi/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/anthropicapi/encode.go)
+- [`bedrockconverse/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/bedrockconverse/encode.go)
 
 Run `go test ./codec/...`.

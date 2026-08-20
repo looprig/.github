@@ -46,9 +46,9 @@ no marker is emitted. The response decoder normalizes separate
 
 ## Source and proof
 
-- [`anthropicapi/types.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/anthropicapi/types.go)
-- [`anthropicapi/encode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/anthropicapi/encode.go)
-- [`anthropicapi/encode_cache_test.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/anthropicapi/encode_cache_test.go)
-- [`anthropicapi/decode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/anthropicapi/decode.go)
+- [`anthropicapi/types.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/anthropicapi/types.go)
+- [`anthropicapi/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/anthropicapi/encode.go)
+- [`anthropicapi/encode_cache_test.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/anthropicapi/encode_cache_test.go)
+- [`anthropicapi/decode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/anthropicapi/decode.go)
 
 Run `go test ./codec/anthropicapi`.

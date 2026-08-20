@@ -5,7 +5,7 @@ description: Provide a Go web handler, framework-neutral browser transport and s
 audience: developer
 section: modules
 order: 23
-publication: source-workspace
+publication: released
 proofs:
   repository: release-github-com-looprig-client
   description: release-github-com-looprig-client

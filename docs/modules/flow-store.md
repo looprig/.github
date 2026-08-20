@@ -1,17 +1,17 @@
 ---
 id: modules/flow-store
 title: Flow Store
-description: Adapt a neutral Ledger to Flow checkpoints through the separate nested flow/store module.
+description: Adapt a neutral Ledger to Flow checkpoints through the nested flow/store module.
 audience: developer
 section: modules
 order: 10
-publication: source-workspace
+publication: released
 proofs:
-  repository: module-flow-store
-  description: module-flow-store
-  dependencies: module-flow-store
-  dependents: module-flow-store
-  where-it-fits: module-flow-store
+  repository: release-github-com-looprig-flow-store
+  description: release-github-com-looprig-flow-store
+  dependencies: release-github-com-looprig-flow-store
+  dependents: release-github-com-looprig-flow-store
+  where-it-fits: release-github-com-looprig-flow-store
 ---
 
 # Flow Store
@@ -26,7 +26,7 @@ proofs:
 
 ## Description
 
-Adapt a neutral Ledger to Flow checkpoints through the separate nested flow/store module.
+Adapt a neutral Ledger to Flow checkpoints through the nested flow/store module.
 
 ## Where it fits
 

@@ -58,9 +58,9 @@ _ = contextTokens
 
 ## Source and proof
 
-- [`usage/usage.go`](https://github.com/looprig/inference/blob/v0.9.2/usage/usage.go)
-- [`usage/errors.go`](https://github.com/looprig/inference/blob/v0.9.2/usage/errors.go)
-- [`core/content/usage.go`](https://github.com/looprig/core/blob/v0.5.1/content/usage.go)
-- [`internal/usagenorm`](https://github.com/looprig/inference/tree/v0.9.2/internal/usagenorm)
+- [`usage/usage.go`](https://github.com/looprig/inference/blob/v0.12.0/usage/usage.go)
+- [`usage/errors.go`](https://github.com/looprig/inference/blob/v0.12.0/usage/errors.go)
+- [`core/content/usage.go`](https://github.com/looprig/core/blob/v0.6.0/content/usage.go)
+- [`internal/usagenorm`](https://github.com/looprig/inference/tree/v0.12.0/internal/usagenorm)
 
 Run `go test ./usage ./codec/...`.

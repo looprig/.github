@@ -47,9 +47,9 @@ error envelopes are converted to `failure.APIError` or a stream API error.
 
 ## Source and proof
 
-- [`openaiapi/errors.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openaiapi/errors.go)
-- [`openairesponses/errors.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openairesponses/errors.go)
-- [`anthropicapi/errors.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/anthropicapi/errors.go)
-- [`bedrockconverse/errors.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/bedrockconverse/errors.go)
+- [`openaiapi/errors.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/errors.go)
+- [`openairesponses/errors.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openairesponses/errors.go)
+- [`anthropicapi/errors.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/anthropicapi/errors.go)
+- [`bedrockconverse/errors.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/bedrockconverse/errors.go)
 
 Run `go test ./codec/...`.

@@ -48,8 +48,8 @@ allowlisted code and request ID; the body is closed and not retained.
 
 ## Source and proof
 
-- [`transport/client.go`](https://github.com/looprig/inference/blob/v0.9.2/transport/client.go)
-- [`failure/errors.go`](https://github.com/looprig/inference/blob/v0.9.2/failure/errors.go)
-- [`transport/client_test.go`](https://github.com/looprig/inference/blob/v0.9.2/transport/client_test.go)
+- [`transport/client.go`](https://github.com/looprig/inference/blob/v0.12.0/transport/client.go)
+- [`failure/errors.go`](https://github.com/looprig/inference/blob/v0.12.0/failure/errors.go)
+- [`transport/client_test.go`](https://github.com/looprig/inference/blob/v0.12.0/transport/client_test.go)
 
 Run `go test ./transport ./failure`.

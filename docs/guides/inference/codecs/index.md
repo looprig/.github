@@ -54,8 +54,8 @@ guess a path or replay a body.
 
 ## Source and proof
 
-- [`codec/contracts.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/contracts.go)
-- [`codec/requestmode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/requestmode.go)
-- [`codec` contract tests](https://github.com/looprig/inference/blob/v0.9.2/codec/contracts_test.go)
+- [`codec/contracts.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/contracts.go)
+- [`codec/requestmode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/requestmode.go)
+- [`codec` contract tests](https://github.com/looprig/inference/blob/v0.12.0/codec/contracts_test.go)
 
 Run the contract tests with `go test ./codec/...`.

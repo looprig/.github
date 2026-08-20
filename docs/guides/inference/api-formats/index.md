@@ -48,8 +48,8 @@ label to a codec, router, and credential source.
 
 ## Source and proof
 
-- [`model/apiformat.go`](https://github.com/looprig/inference/blob/v0.9.2/model/apiformat.go)
-- [`model/model.go`](https://github.com/looprig/inference/blob/v0.9.2/model/model.go)
-- [`route/route.go`](https://github.com/looprig/inference/blob/v0.9.2/route/route.go)
+- [`model/apiformat.go`](https://github.com/looprig/inference/blob/v0.12.0/model/apiformat.go)
+- [`model/model.go`](https://github.com/looprig/inference/blob/v0.12.0/model/model.go)
+- [`route/route.go`](https://github.com/looprig/inference/blob/v0.12.0/route/route.go)
 
 Run `go test ./model ./route`.

@@ -5,19 +5,19 @@ description: Add a durable workflow catalog, typed input and resume validation, 
 audience: developer
 section: build
 order: 21
-publication: source-workspace
+publication: released
 examples:
   - stage-18-workflows
 proofs:
   definition-and-catalog: [central-workflows-catalog-source, central-workflows-typed-definition-source]
   durable-records-and-inputs: central-workflows-artifacts-contract-test
   supervisor-lifecycle: [central-workflows-recovery-test, central-workflows-stage18-output-test]
-  source-workspace-proof: [module-workflows, central-workflows-stage18-lifecycle-fixture]
+  release-proof: [release-github-com-looprig-workflows, central-workflows-stage18-lifecycle-fixture]
 ---
 
 # Typed workflow orchestration
 
-`github.com/looprig/workflows` is a source-workspace module in this corpus. It is the orchestration layer above Flow: definitions describe a named, versioned workflow; a catalog resolves those definitions; a supervisor owns the session lease and lifecycle; and registries project bounded run metadata. It is not a released import yet. The [module file](https://github.com/looprig/workflows/blob/89059af7dded45b8f57678e17c66e528549ce78a/go.mod) and [implementation source](https://github.com/looprig/workflows/tree/f241ecbd6299a00d52fc6755b5be946a41b3a73f) are the current source-workspace boundary.
+`github.com/looprig/workflows` is a released module in this corpus. It is the orchestration layer above Flow: definitions describe a named, versioned workflow; a catalog resolves those definitions; a supervisor owns the session lease and lifecycle; and registries project bounded run metadata. The [module file](https://github.com/looprig/workflows/blob/c28c40bb4543eff2c68f52f26f9abde0146a45dd/go.mod) and [implementation source](https://github.com/looprig/workflows/tree/c28c40bb4543eff2c68f52f26f9abde0146a45dd) are the released `v0.1.0` boundary.
 
 ## Definition and catalog {#definition-and-catalog}
 
@@ -37,6 +37,6 @@ A workflow `Run` is bounded metadata for one session: workflow identity, status,
 
 The lifecycle is deliberately session-owned. `ErrSupervisorActive`, `ErrSupervisorClosed`, `ErrSessionOwned`, and `ErrAdoption` distinguish state-machine misuse from `ErrConflict`, `ErrNotFound`, `ErrCorruptRecord`, and `ErrReconciliation`. `ErrShutdownTimeout` reports a bounded teardown that did not settle. Callers should use `errors.Is` and `errors.As` rather than matching error strings.
 
-## Source-workspace proof {#source-workspace-proof}
+## Release proof {#release-proof}
 
-The reviewed workflow fixture validates typed input, interrupts a Flow run, recovers the checkpoint, resumes with typed input, cancels another run, and asserts append-only history. Its expected output is `started: Interrupted`, `recovered: Interrupted`, `resumed: Completed count=3`, `cancelled: Cancelled`, and `history: append-only`. The fixture remains source-workspace until a module release is recorded.
+The reviewed workflow fixture validates typed input, interrupts a Flow run, recovers the checkpoint, resumes with typed input, cancels another run, and asserts append-only history. Its expected output is `started: Interrupted`, `recovered: Interrupted`, `resumed: Completed count=3`, `cancelled: Cancelled`, and `history: append-only`. The fixture runs from the module's own repository rather than from a pinned release import.

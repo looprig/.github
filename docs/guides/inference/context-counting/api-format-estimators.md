@@ -51,7 +51,7 @@ revision so stored measurements remain attributable.
 
 ## Source and proof
 
-- [`contextcount/estimator.go`](https://github.com/looprig/inference/blob/v0.9.2/contextcount/estimator.go)
-- [`contextcount/estimator_test.go`](https://github.com/looprig/inference/blob/v0.9.2/contextcount/estimator_test.go)
+- [`contextcount/estimator.go`](https://github.com/looprig/inference/blob/v0.12.0/contextcount/estimator.go)
+- [`contextcount/estimator_test.go`](https://github.com/looprig/inference/blob/v0.12.0/contextcount/estimator_test.go)
 
 Run `go test ./contextcount`.

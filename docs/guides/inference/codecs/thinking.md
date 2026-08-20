@@ -50,10 +50,10 @@ _ = body // includes reasoning and encrypted-content inclusion only when support
 
 ## Source and proof
 
-- [`model/effort.go`](https://github.com/looprig/inference/blob/v0.9.2/model/effort.go)
-- [`model/capabilities.go`](https://github.com/looprig/inference/blob/v0.9.2/model/capabilities.go)
-- [`anthropicapi/encode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/anthropicapi/encode.go)
-- [`openairesponses/encode.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openairesponses/encode.go)
-- [`geminiapi/types.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/geminiapi/types.go)
+- [`model/effort.go`](https://github.com/looprig/inference/blob/v0.12.0/model/effort.go)
+- [`model/capabilities.go`](https://github.com/looprig/inference/blob/v0.12.0/model/capabilities.go)
+- [`anthropicapi/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/anthropicapi/encode.go)
+- [`openairesponses/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openairesponses/encode.go)
+- [`geminiapi/types.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/geminiapi/types.go)
 
 Run `go test ./codec/...`.

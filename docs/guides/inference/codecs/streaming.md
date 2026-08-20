@@ -69,9 +69,9 @@ if ok {
 
 ## Source and proof
 
-- [`codec/contracts.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/contracts.go)
-- [`stream/chunkstream.go`](https://github.com/looprig/inference/blob/v0.9.2/stream/chunkstream.go)
-- [`openaiapi/stream.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openaiapi/stream.go)
-- [`anthropicapi/stream.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/anthropicapi/stream.go)
+- [`codec/contracts.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/contracts.go)
+- [`stream/chunkstream.go`](https://github.com/looprig/inference/blob/v0.12.0/stream/chunkstream.go)
+- [`openaiapi/stream.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/stream.go)
+- [`anthropicapi/stream.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/anthropicapi/stream.go)
 
 Run `go test ./codec/... ./stream/...`.

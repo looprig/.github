@@ -51,9 +51,9 @@ without changing mid-stream failure semantics.
 
 ## Source and proof
 
-- [`stream/result.go`](https://github.com/looprig/inference/blob/v0.9.2/stream/result.go)
-- [`stream/stream.go`](https://github.com/looprig/inference/blob/v0.9.2/stream/stream.go)
-- [`stream/chunkstream.go`](https://github.com/looprig/inference/blob/v0.9.2/stream/chunkstream.go)
-- [`anthropicapi/stream.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/anthropicapi/stream.go)
+- [`stream/result.go`](https://github.com/looprig/inference/blob/v0.12.0/stream/result.go)
+- [`stream/stream.go`](https://github.com/looprig/inference/blob/v0.12.0/stream/stream.go)
+- [`stream/chunkstream.go`](https://github.com/looprig/inference/blob/v0.12.0/stream/chunkstream.go)
+- [`anthropicapi/stream.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/anthropicapi/stream.go)
 
 Run `go test ./stream ./codec/...`.

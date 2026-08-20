@@ -47,9 +47,9 @@ promise it beyond these fields and tests.
 
 ## Source and proof
 
-- [`model/capabilities.go`](https://github.com/looprig/inference/blob/v0.9.2/model/capabilities.go)
-- [`openaiapi/types.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openaiapi/types.go)
-- [`openairesponses/types.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/openairesponses/types.go)
-- [`anthropicapi/encode_cache_test.go`](https://github.com/looprig/inference/blob/v0.9.2/codec/anthropicapi/encode_cache_test.go)
+- [`model/capabilities.go`](https://github.com/looprig/inference/blob/v0.12.0/model/capabilities.go)
+- [`openaiapi/types.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/types.go)
+- [`openairesponses/types.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openairesponses/types.go)
+- [`anthropicapi/encode_cache_test.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/anthropicapi/encode_cache_test.go)
 
 Run `go test ./codec/...`.
