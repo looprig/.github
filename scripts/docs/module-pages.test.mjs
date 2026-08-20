@@ -6,6 +6,7 @@ import test from "node:test";
 const root = path.resolve(import.meta.dirname, "../..");
 const modulesRoot = path.join(root, "docs/modules");
 const inventory = JSON.parse(readFileSync(path.join(root, "docs/_data/modules.json"), "utf8"));
+const evidence = JSON.parse(readFileSync(path.join(root, "docs/_data/evidence.json"), "utf8"));
 const pages = readdirSync(modulesRoot).filter((name) => name.endsWith(".md")).sort();
 
 const repositoryBySlug = new Map(pages.map((name) => {
@@ -24,6 +25,14 @@ function recordFor(slug) {
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function repositoryFields(slug) {
+  const page = readFileSync(path.join(modulesRoot, `${slug}.md`), "utf8");
+  const section = page.match(/^## Repository\n([\s\S]*?)(?=^## )/m)?.[1];
+  assert.ok(section, `${slug} is missing its Repository section`);
+  return new Map([...section.matchAll(/^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|$/gm)]
+    .map(([, field, value]) => [field.trim(), value.trim()]));
 }
 
 function directDependencies(record) {
@@ -78,4 +87,41 @@ test("Module page versions and graph links match the checked code inventory", ()
       assert.match(page, new RegExp(`\\[[^\\]]+\\]\\(\\/docs\\/modules\\/${dependent}\\/?\\)`), `${slug} must link dependent ${dependent}`);
     }
   }
+});
+
+for (const [repository, slug, title, version] of [
+  ["harness", "harness", "Harness", "v0.28.0"],
+  ["inference", "inference", "Inference", "v0.12.0"],
+  ["tui", "tui", "TUI", "v0.16.1"],
+]) {
+  test(`${title} generated inventory and module page use ${version}`, () => {
+    const record = inventory.modules.find((candidate) => candidate.repository === repository);
+    assert.ok(record, `missing ${repository} inventory record`);
+    assert.equal(record.module, `github.com/looprig/${repository}`);
+    assert.equal(record.disposition, "reusable");
+    assert.equal(record.publication?.status, "released");
+    assert.equal(record.publication?.tag, version, `${repository} inventory release is stale`);
+
+    assert.ok(pages.includes(`${slug}.md`), `missing generated page for ${repository}`);
+    const fields = repositoryFields(slug);
+    assert.equal(fields.get("Repository"), `\`github.com/looprig/${repository}\``);
+    assert.equal(fields.get("Version"), `\`${version}\``, `${repository} module page release is stale`);
+  });
+}
+
+test("Carbon v0.23.0 stays product-only in generated inventory and release evidence", () => {
+  const record = inventory.modules.find((candidate) => candidate.repository === "carbon");
+  assert.ok(record, "missing Carbon inventory record");
+  assert.equal(record.module, "github.com/looprig/carbon");
+  assert.equal(record.disposition, "product-only");
+  assert.equal(record.publication?.status, "released");
+  assert.equal(record.publication?.tag, "v0.23.0", "Carbon inventory release is stale");
+  assert.equal(pages.includes("carbon.md"), false, "Carbon must not have a reusable module page");
+
+  const proof = evidence.proofs.find((candidate) => candidate.id === "release-github-com-looprig-carbon");
+  assert.ok(proof, "missing Carbon release evidence");
+  assert.equal(proof.type, "release-record");
+  assert.equal(proof.repository, "carbon");
+  assert.equal(proof.tag, "v0.23.0", "Carbon release evidence is stale");
+  assert.equal(proof.commit, record.commit, "Carbon inventory and release evidence commits differ");
 });

@@ -134,3 +134,25 @@ test("Content blocks precede messages in the checked navigation manifest", () =>
   assert.notEqual(messages, -1);
   assert.ok(blocks < messages);
 });
+
+test("Reasoning effort documents the complete released API range", () => {
+  const page = fs.readFileSync(path.join(root, "docs/guides/inference/models/reasoning-effort.md"), "utf8");
+  const apiSection = page.split(/^## API surface\n/m)[1]?.split(/^## /m)[0];
+  assert.ok(apiSection, "reasoning effort needs an API surface section");
+  const goBlocks = [...apiSection.matchAll(/```go\n([\s\S]*?)```/g)].map((match) => match[1]).join("\n");
+
+  assert.match(goBlocks, /\bEffortMinimal\b/, "reasoning effort API omits EffortMinimal");
+  assert.match(goBlocks, /\bEffortXHigh\b/, "reasoning effort API omits EffortXHigh");
+});
+
+test("Reasoning effort warns that support varies by provider and model", () => {
+  const page = fs.readFileSync(path.join(root, "docs/guides/inference/models/reasoning-effort.md"), "utf8");
+  const paragraphs = page.split(/\n\s*\n/).map((paragraph) => paragraph.replace(/\s+/g, " "));
+
+  assert.ok(paragraphs.some((paragraph) => [
+    /\bproviders?\b/i,
+    /\bmodels?\b/i,
+    /\bsupport\w*\b/i,
+    /\b(?:specific|var|differ|only|unsupported)\w*\b/i,
+  ].every((pattern) => pattern.test(paragraph))), "reasoning effort needs a provider/model support caveat");
+});

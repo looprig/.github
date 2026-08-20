@@ -75,6 +75,16 @@ function sourceUrl(relative) {
   return `https://github.com/looprig/tui/blob/main/${relative}`;
 }
 
+function assertSemanticParagraph(markdown, patterns, message) {
+  const paragraphs = markdown
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.replace(/\s+/g, " ").trim());
+  assert.ok(
+    paragraphs.some((paragraph) => patterns.every((pattern) => pattern.test(paragraph))),
+    message,
+  );
+}
+
 function proofMappings(markdown) {
   const frontmatter = markdown.match(/^---\n([\s\S]*?)\n---\n/);
   assert.ok(frontmatter, "TUI page must have frontmatter");
@@ -171,4 +181,42 @@ test("public component and integration pages cover the source-backed seams", () 
   }
   assert.match(all, /StatusIdle[\s\S]*StatusRunning[\s\S]*StatusInterrupting[\s\S]*StatusResetting/);
   assert.match(all, /```mermaid[\s\S]*sequenceDiagram/);
+});
+
+test("failed child cards show a bounded failure reason", () => {
+  const events = pageMarkdown("runtime/events");
+
+  assertSemanticParagraph(events, [
+    /\bfailed\b/i,
+    /\bchild\b/i,
+    /\bcard\b/i,
+    /\b(?:failure|terminal) reason\b/i,
+    /\b(?:bound|truncat)\w*\b/i,
+  ], "failed child cards must document their bounded failure reason");
+});
+
+test("a nil child failure reason preserves the parent fallback", () => {
+  const events = pageMarkdown("runtime/events");
+
+  assertSemanticParagraph(events, [
+    /\bnil\b/i,
+    /\breason\b/i,
+    /\b(?:preserv|retain|keep)\w*\b/i,
+    /\bparent\b/i,
+    /\bfallback\b/i,
+  ], "nil child reasons must preserve the parent fallback");
+});
+
+test("live and restored child cards use the same persisted message without a codec prefix", () => {
+  const events = pageMarkdown("runtime/events");
+
+  assertSemanticParagraph(events, [
+    /\blive\b/i,
+    /\brestor\w*\b/i,
+    /\bsame\b/i,
+    /\bpersisted message\b/i,
+    /\bcodec\b/i,
+    /\bprefix\w*\b/i,
+    /\b(?:no|not|never|without)\b/i,
+  ], "live and restored cards must share the persisted message without codec-added prefixes");
 });
