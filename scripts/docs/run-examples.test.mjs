@@ -106,6 +106,23 @@ test('buildGoMod contains only immutable requirements and no replace directive',
   assert.doesNotMatch(goMod, /^replace\b/m);
 });
 
+test('every released stage pins the shared helper module graph', () => {
+  const manifest = loadManifest(join(repositoryRoot, 'docs/_data/examples.json'), {
+    schemaPath: join(repositoryRoot, 'docs/_schema/examples.schema.json'),
+  });
+  const baseline = manifest.examples.find(({ stage }) => stage === 1).versions;
+  const shared = [
+    ['github.com/looprig/core', 'release-github-com-looprig-core'],
+    ['github.com/looprig/inference', 'release-github-com-looprig-inference'],
+  ];
+  for (const example of manifest.examples.filter(({ availability }) => availability === 'released')) {
+    for (const [module, proofId] of shared) {
+      assert.equal(example.versions[module], baseline[module], `stage ${example.stage} must pin ${module}`);
+      assert.equal(example.proofIds.includes(proofId), true, `stage ${example.stage} must cite ${proofId}`);
+    }
+  }
+});
+
 test('released stages require a directory before a clean-module run is planned', () => {
   const root = mkdtempSync(join(tmpdir(), 'looprig-progressive-source-'));
 
@@ -280,7 +297,7 @@ test('cache recreation during gomod cleanup cannot recreate the removed module r
   assert.equal(existsSync(cacheRoot), false);
 });
 
-test('released Go execution verifies dependencies, tests, then runs with a public checksum policy', () => {
+test('released Go execution tidies, verifies dependencies, tests, then runs with a public checksum policy', () => {
   withTemporaryRoots('looprig-go-command-plan-', (moduleRoot, cacheRoot) => {
     const goMod = buildGoMod(fixture());
     writeFileSync(join(moduleRoot, 'go.mod'), goMod);
@@ -301,12 +318,13 @@ test('released Go execution verifies dependencies, tests, then runs with a publi
     });
 
     assert.deepEqual(calls.map(({ command, args }) => [command, args]), [
+      ['go', ['mod', 'tidy']],
       ['go', ['mod', 'download', 'all']],
       ['go', ['mod', 'verify']],
       ['go', ['test', '-mod=readonly', '-race', './...']],
       ['go', ['run', '-mod=readonly', '.']],
     ]);
-    assert.equal(calls.length, 4);
+    assert.equal(calls.length, 5);
     for (const { cwd, environment } of calls) {
       assert.equal(cwd, moduleRoot);
       assert.equal(environment.GOWORK, 'off');
@@ -318,7 +336,7 @@ test('released Go execution verifies dependencies, tests, then runs with a publi
       assert.equal(environment.GOCACHE.startsWith(moduleRoot), false);
       assert.equal(environment.GOTOOLCHAIN, 'local');
       assert.equal(environment.GOENV, 'off');
-      assert.equal(environment.GOFLAGS, '');
+      assert.equal(environment.GOFLAGS, '-modcacherw');
       assert.equal(environment.GOPROXY, 'https://proxy.golang.org');
       assert.equal(environment.GOSUMDB, 'sum.golang.org');
       assert.equal(environment.GOPRIVATE, '');
@@ -331,7 +349,24 @@ test('released Go execution verifies dependencies, tests, then runs with a publi
   });
 });
 
-test('released Go execution rejects command mutation of go.mod before continuing', () => {
+test('released Go execution permits tidy normalization and freezes go.mod afterward', () => {
+  withTemporaryRoots('looprig-go-mod-tidy-', (moduleRoot, cacheRoot) => {
+    const goModPath = join(moduleRoot, 'go.mod');
+    writeFileSync(goModPath, buildGoMod(fixture()));
+    let calls = 0;
+    executeReleasedGoModule(moduleRoot, cacheRoot, {
+      executeCommand: () => {
+        calls += 1;
+        if (calls === 1) {
+          writeFileSync(goModPath, `${readFileSync(goModPath, 'utf8')}\nrequire example.com/indirect v1.0.0 // indirect\n`);
+        }
+      },
+    });
+    assert.equal(calls, 5);
+  });
+});
+
+test('released Go execution rejects command mutation of go.mod after tidy', () => {
   withTemporaryRoots('looprig-go-mod-immutability-', (moduleRoot, cacheRoot) => {
     const goModPath = join(moduleRoot, 'go.mod');
     writeFileSync(goModPath, buildGoMod(fixture()));
@@ -340,11 +375,13 @@ test('released Go execution rejects command mutation of go.mod before continuing
       () => executeReleasedGoModule(moduleRoot, cacheRoot, {
         executeCommand: () => {
           calls += 1;
-          writeFileSync(goModPath, `${readFileSync(goModPath, 'utf8')}\nreplace example.com/changed => ../changed\n`);
+          if (calls === 2) {
+            writeFileSync(goModPath, `${readFileSync(goModPath, 'utf8')}\nreplace example.com/changed => ../changed\n`);
+          }
         },
       }),
       /go\.mod.*changed|replace directive/i,
     );
-    assert.equal(calls, 1);
+    assert.equal(calls, 2);
   });
 });

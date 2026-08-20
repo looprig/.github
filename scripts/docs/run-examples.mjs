@@ -220,8 +220,8 @@ export function executeReleasedGoModule(moduleRoot, cacheRoot, {
   baseEnvironment = process.env,
 } = {}) {
   const goModPath = join(moduleRoot, 'go.mod');
-  const expectedGoMod = readFileSync(goModPath, 'utf8');
-  assertImmutableGoMod(expectedGoMod, expectedGoMod);
+  const generatedGoMod = readFileSync(goModPath, 'utf8');
+  assertImmutableGoMod(generatedGoMod, generatedGoMod);
   const environment = {
     ...baseEnvironment,
     GOWORK: 'off',
@@ -229,7 +229,10 @@ export function executeReleasedGoModule(moduleRoot, cacheRoot, {
     GOCACHE: join(cacheRoot, 'gobuild'),
     GOTOOLCHAIN: 'local',
     GOENV: 'off',
-    GOFLAGS: '',
+    // Go module-cache directories are read-only by default. This cache lives
+    // under our disposable root, so make downloaded modules writable and let
+    // the ordinary recursive cleanup remove the complete tree reliably.
+    GOFLAGS: '-modcacherw',
     GOPROXY: 'https://proxy.golang.org',
     GOSUMDB: 'sum.golang.org',
     GOPRIVATE: '',
@@ -237,6 +240,14 @@ export function executeReleasedGoModule(moduleRoot, cacheRoot, {
     GONOSUMDB: '',
     GOINSECURE: '',
   };
+  // Normalize the generated consumer module once before freezing it. Modern Go
+  // versions require explicit indirect requirements for several released
+  // dependency graphs; tidy derives those versions from the immutable direct
+  // requirements above. Every subsequent command must leave go.mod unchanged.
+  executeCommand('go', ['mod', 'tidy'], moduleRoot, environment);
+  const expectedGoMod = readFileSync(goModPath, 'utf8');
+  assertImmutableGoMod(expectedGoMod, expectedGoMod);
+
   const commands = [
     ['go', ['mod', 'download', 'all']],
     ['go', ['mod', 'verify']],
