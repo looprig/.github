@@ -76,4 +76,4 @@ At process exit, `runtime.Run` promotes a `TerminalErrorHolder` error when Bubbl
 - [Screen lifecycle tests](https://github.com/looprig/tui/blob/main/internal/presentation/screen_test.go)
 - [Runtime teardown tests](https://github.com/looprig/tui/blob/main/runtime/run_test.go)
 - [Command lifecycle tests](https://github.com/looprig/tui/blob/main/internal/presentation/commands_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)

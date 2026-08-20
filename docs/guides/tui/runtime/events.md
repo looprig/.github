@@ -10,6 +10,7 @@ proofs:
   agent-contract: release-github-com-looprig-tui
   all-loop-delivery: release-github-com-looprig-tui
   fold-and-compare: release-github-com-looprig-tui
+  failed-child-cards: release-github-com-looprig-tui
   source: release-github-com-looprig-tui
   proof: release-github-com-looprig-tui
 ---
@@ -82,4 +83,14 @@ Use this fold when asserting that a restored session paints the same committed c
 - [Agent contract tests](https://github.com/looprig/tui/blob/main/internal/presentation/agent_test.go)
 - [Restore projection tests](https://github.com/looprig/tui/blob/main/internal/presentation/restore_test.go)
 - [Command and subscription tests](https://github.com/looprig/tui/blob/main/internal/presentation/commands_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
+
+## Failed child cards
+
+A failed child card shows the child's own terminal failure reason, and that reason is truncated to a single line of eighty display runes, ellipsis included.
+
+When a child's failure reason is nil or empty, the card retains the parent's tool-result fallback unchanged.
+
+Live and restored child cards render the same persisted message, because the codec stores the failure text verbatim and restore replays it through the same fold.
+
+The codec adds no prefix to that message; the restored error keeps its stable kind in a separate field, and the card reads the stored message.

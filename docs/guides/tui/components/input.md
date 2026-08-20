@@ -61,4 +61,4 @@ The `View` result is a string. It can be embedded in a `tea.View` or composed wi
 ## Proof
 
 - [InputBox behavior tests](https://github.com/looprig/tui/blob/main/components/input_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)

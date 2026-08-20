@@ -65,4 +65,4 @@ The adapter retains the highest consumed journal sequence. If the live subscript
 - [Restore projection tests](https://github.com/looprig/tui/blob/main/internal/presentation/restore_test.go)
 - [Adapter tests](https://github.com/looprig/tui/blob/main/sessionadapter/adapter_test.go)
 - [Restore and replay example](https://github.com/looprig/tui/blob/main/examples/restore/example_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)

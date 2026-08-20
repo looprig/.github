@@ -71,4 +71,4 @@ For the event contract that drives the screen, read [Events and Projections](/do
 
 - [Runtime behavior tests](https://github.com/looprig/tui/blob/main/runtime/run_test.go)
 - [Runtime host example](https://github.com/looprig/tui/blob/main/examples/runtimehost/example_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)

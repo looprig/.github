@@ -11,6 +11,7 @@ proofs:
   operations-and-exact-fields: [release-github-com-looprig-harness]
   tool-bundle-and-modes: [release-github-com-looprig-harness]
   start-and-message-flow: [release-github-com-looprig-harness]
+  delegation-failures: [release-github-com-looprig-harness]
   source-and-proof: [release-github-com-looprig-harness]
 ---
 
@@ -117,3 +118,27 @@ Proof: [start and send implementation](https://github.com/looprig/harness/blob/m
 - [Runtime metadata](https://github.com/looprig/harness/blob/main/pkg/tool/delegate_artifact.go)
 - [AgentTools bundle](https://github.com/looprig/harness/blob/main/internal/delegationtool/definition.go)
 - [Delegation runtime](https://github.com/looprig/harness/blob/main/internal/sessionruntime/delegation.go)
+
+## Delegation failures
+
+An AgentTools preparation failure is rejected before any child starts, and the runner turns it into an error-marked tool result.
+
+An AgentTools execution failure ends a child that has already started, and the tool itself returns the error-marked result.
+
+A failed AgentTools call reaches model history as an error-marked tool result, a `content.ToolResultMessage` whose `IsError` field is set.
+
+An invalid runtime selector fails preparation with an error that names the rejected field and its value.
+
+An unavailable runtime selector fails preparation with an error that names the rejected selector and the value that matched no configured runtime.
+
+A child failure cause survives foreground and background delegation, native and foreign child loops, and session restore, so every reader preserves the same cause.
+
+An ACP child is a foreign loop, so it takes the foreign path rather than a separate ACP route.
+
+A tombstoned child is the single documented gap: restore reports it as failed with no cause text.
+
+Background delegation is the other shape to know: its hand-back arrives as a user-role message carrying the same cause, so it is not an error-marked tool result and carries no `IsError` field.
+
+Each failure detail is bounded and normalized to valid UTF-8 before it is stored.
+
+The detail is preserved regardless of credential or model-facing classification, so no classifier filters it before the model sees it.

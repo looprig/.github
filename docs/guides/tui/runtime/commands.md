@@ -95,4 +95,4 @@ The access profile has no setter. It is fixed session metadata supplied through 
 - [Command tests](https://github.com/looprig/tui/blob/main/internal/presentation/commands_test.go)
 - [Interaction tests](https://github.com/looprig/tui/blob/main/internal/presentation/interaction_test.go)
 - [Agent contract tests](https://github.com/looprig/tui/blob/main/internal/presentation/agent_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)

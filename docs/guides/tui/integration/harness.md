@@ -76,4 +76,4 @@ The application owns the Rig and session store. The adapter owns the wrapper and
 - [Restore decision tests](https://github.com/looprig/tui/blob/main/restore/decider_test.go)
 - [Restore UI tests](https://github.com/looprig/tui/blob/main/restore/confirm_test.go)
 - [Session adapter example](https://github.com/looprig/tui/blob/main/examples/sessionadapter/example_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)

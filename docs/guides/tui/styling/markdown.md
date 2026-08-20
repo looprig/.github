@@ -70,4 +70,4 @@ The helper returns a string and an error. It does not write to a terminal, own a
 
 - [Markdown table tests](https://github.com/looprig/tui/blob/main/styles/markdown_tables_test.go)
 - [Styles behavior tests](https://github.com/looprig/tui/blob/main/styles/styles_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)

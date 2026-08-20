@@ -56,4 +56,4 @@ When a pointer or keyboard event names a rendered row, pass the row and maximum 
 ## Proof
 
 - [Session completion tests](https://github.com/looprig/tui/blob/main/components/sessioncomplete_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)

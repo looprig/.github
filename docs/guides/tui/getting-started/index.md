@@ -54,4 +54,4 @@ For a durable session, prefer `sessionadapter.NewWithReplay` for a new session w
 ## Proof
 
 - [Root API compile-time proof](https://github.com/looprig/tui/blob/main/api_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)

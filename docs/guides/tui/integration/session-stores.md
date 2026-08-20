@@ -72,4 +72,4 @@ The store owns its file or remote persistence and the session controller owns th
 
 - [Adapter replay tests](https://github.com/looprig/tui/blob/main/sessionadapter/adapter_test.go)
 - [Gap-repair tests](https://github.com/looprig/tui/blob/main/sessionadapter/replaying_subscription_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)

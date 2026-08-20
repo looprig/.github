@@ -21,11 +21,13 @@ proofs:
 type Effort string
 
 const (
-	EffortNone   Effort = ""
-	EffortLow    Effort = "low"
-	EffortMedium Effort = "medium"
-	EffortHigh   Effort = "high"
-	EffortMax    Effort = "max"
+	EffortNone    Effort = ""
+	EffortMinimal Effort = "minimal"
+	EffortLow     Effort = "low"
+	EffortMedium  Effort = "medium"
+	EffortHigh    Effort = "high"
+	EffortXHigh   Effort = "xhigh"
+	EffortMax     Effort = "max"
 )
 
 func (e Effort) Valid() bool
@@ -40,7 +42,7 @@ if !sampling.Effort.Valid() {
 }
 ```
 
-The OpenAI codec maps effort to `reasoning_effort`; the Anthropic codec maps it to its adaptive-thinking and effort fields. The model package does not claim that every model supports every level.
+The OpenAI codec maps effort to `reasoning_effort`; the Anthropic codec maps it to its adaptive-thinking and effort fields. Not every provider and model supports every effort level, and an unsupported level is rejected with a typed error or omitted from the request rather than remapped to a nearby level.
 
 ## Proof
 

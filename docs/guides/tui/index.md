@@ -63,4 +63,4 @@ There are no separate public TUI pages for keymaps or layout engines. Those deta
 ## Proof
 
 - [Root API compile-time proof](https://github.com/looprig/tui/blob/main/api_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)

@@ -82,4 +82,4 @@ if tray != nil {
 - [Slash completion tests](https://github.com/looprig/tui/blob/main/components/slashcomplete_test.go)
 - [File completion tests](https://github.com/looprig/tui/blob/main/components/filecomplete_test.go)
 - [Value completion tests](https://github.com/looprig/tui/blob/main/components/valuecomplete_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.15.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
