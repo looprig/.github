@@ -23,7 +23,9 @@ order and returns typed errors for a block it cannot represent.
 | --- | --- | --- | --- | --- | --- |
 | `TextBlock` | string or `text` part | `output_text` or `input_text` | `text` | text part | `text` |
 | `ImageBlock` | `image_url` | `input_image` URL/data URI | `image` URL/base64 | `inlineData` or `fileData` | inline bytes only |
-| `DocumentBlock` | unsupported | unsupported | unsupported | unsupported | document bytes/text |
+| `DocumentBlock` | `file` part with a base64 data URI | `input_file` part | `document` block with a title | `inlineData` part plus a text part | document bytes/text |
+| `AudioBlock` | `input_audio` part | unsupported; the input union has no audio member | `UnsupportedAudioError` | `inlineData` part | Converse audio block |
+| `RefusalBlock` | assistant `refusal` member | `refusal` part on the response direction; request replay is `UnsupportedBlockError` | `UnsupportedRefusalError` | unsupported | unsupported |
 | `ThinkingBlock` | omitted on request | reasoning item | `thinking` | thought text part | `reasoningContent` text |
 | `ToolUseBlock` | assistant `tool_calls` | `function_call` item | `tool_use` | `functionCall` | `toolUse` |
 | `ToolResultBlock` | text-only tool message | text-only `function_call_output` | `tool_result` | `functionResponse` | `toolResult` |
@@ -46,6 +48,13 @@ if errors.As(err, &blockErr) {
 	log.Printf("choose a representable block: %s", blockErr.Block)
 }
 ```
+
+Anthropic splits the representation boundary across several typed errors.
+`UnsupportedBlockError` is the fallback for a block the dialect does not model
+at all, while audio yields `UnsupportedAudioError`, a refusal
+`UnsupportedRefusalError`, an unrepresentable document
+`UnsupportedDocumentError`, and an out-of-enum image media type
+`UnsupportedImageMediaTypeError`.
 
 ## Source and proof
 

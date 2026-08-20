@@ -14,17 +14,18 @@ proofs:
 
 # Usage Validation
 
-Usage normalization rejects invalid provider values before a response or
-terminal stream result is published.
+Usage normalization rejects unrepresentable provider values before a response
+or terminal stream result is published.
 
 ## Rules
 
 `usagenorm.Count` accepts bounded nonnegative integer values and distinguishes
-missing/null fields from zero. Normalization rejects negative, fractional,
-out-of-range, and inconsistent values. Cache-read and cache-creation subsets
-must not exceed gross input. `content.Usage.Validate` requires
-`ReasoningTokens <= OutputTokens`; `ContextTokens`, `TotalTokens`, and `Add`
-use checked addition.
+missing/null fields from zero. Normalization rejects negative, fractional, and
+out-of-range values. Cache-read and cache-creation subsets must not exceed
+gross input. `content.Usage.Validate` is deprecated and no decoder calls it:
+the reasoning-within-output relationship is now the predicate
+`content.Usage.ReasoningWithinOutput`, and nothing gates on it.
+`ContextTokens`, `TotalTokens`, and `Add` use checked addition.
 
 ## Errors
 
@@ -33,10 +34,6 @@ var err error // set by a codec decoder
 var normalizeErr *inferenceusage.UsageNormalizationError
 if errors.As(err, &normalizeErr) {
 	fmt.Println(normalizeErr.Field, normalizeErr.Reason)
-}
-var domainErr *content.UsageValidationError
-if errors.As(err, &domainErr) {
-	fmt.Println(domainErr.Field, domainErr.Reason)
 }
 ```
 

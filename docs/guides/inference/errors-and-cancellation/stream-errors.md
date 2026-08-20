@@ -21,9 +21,12 @@ and consumption, returned by `StreamReader.Next`.
 
 `StreamReader` returns `StreamReaderError` for a nil reader, missing `Next`, or
 invalid framing adapter. A non-EOF error from the underlying reader moves it
-to a failed terminal state; later `Next` calls return that same error. A
-`StreamResultError` means terminal metadata could not be validated, so it is
-not clean EOF and `Result` is unavailable.
+to a failed terminal state after draining what was already decoded: chunks
+buffered from an earlier frame, or returned alongside the error itself, are
+delivered first, and every later `Next` then returns that same latched error
+without reading another frame. A `StreamResultError` means the codec's
+terminal-metadata producer itself failed, so the stream did not reach clean EOF
+and `Result` is unavailable. Terminal usage is not validated.
 
 ```go
 chunk, err := reader.Next()

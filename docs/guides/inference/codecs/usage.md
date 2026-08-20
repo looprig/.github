@@ -42,10 +42,11 @@ components. Missing usage remains `nil`, not a fabricated zero measurement.
 
 ## Invariants
 
-`usagenorm` rejects negative, null-invalid, fractional, out-of-range, or
-inconsistent counts. `content.Usage.Validate` rejects reasoning greater than
-output. Cache subsets cannot exceed the provider's gross input count, and
-addition uses checked arithmetic.
+`usagenorm` rejects negative, null-invalid, fractional, or out-of-range counts.
+Cache subsets cannot exceed the provider's gross input count, and addition uses
+checked arithmetic. Reasoning greater than output is not an invariant: it is
+reported as received and observable through
+`content.Usage.ReasoningWithinOutput`.
 
 ```go
 u := content.Usage{InputTokens: 10, CacheReadTokens: 2, OutputTokens: 4}

@@ -21,7 +21,9 @@ body limits, so a decoder sees only the bytes for a successful response.
 ## Normalization
 
 Every bundled decoder preserves ordered text, thinking, tool-use, and tool
-result blocks where the dialect has a representation. Provider token fields
+result blocks where the dialect has a representation. The two OpenAI dialects
+additionally decode a refusal into a `content.RefusalBlock` rather than into
+text, including when the refusal carries no explanation. Provider token fields
 are normalized into `usage.Usage`, which is an alias for `content.Usage`:
 
 | Neutral field | Meaning |
@@ -32,8 +34,9 @@ are normalized into `usage.Usage`, which is an alias for `content.Usage`:
 | `CacheCreationTokens` | input tokens written to a provider cache |
 | `ReasoningTokens` | reasoning or thought tokens when reported |
 
-Decoders validate nonnegative counts, subset relationships, overflow, and the
-domain rule that reasoning cannot exceed output.
+Decoders validate nonnegative counts, subset relationships, and overflow. They
+do not gate on the reasoning-within-output convention; use
+`content.Usage.ReasoningWithinOutput()` to observe a divergence.
 
 ```go
 response, err := (openaiapi.Codec{}).DecodeResponse(body)

@@ -31,17 +31,23 @@ type Response struct {
 ```
 
 `Usage == nil` means the provider did not report usage. It does not mean zero
-tokens. A malformed or inconsistent usage payload returns a typed normalization
-error instead of a partial response.
+tokens. A malformed or unrepresentable usage payload — a null where a count is
+required, a fraction, a negative, an out-of-range value, or a subset larger
+than its gross total — returns a typed normalization error instead of a partial
+response.
 
 ## Normalization
 
 OpenAI Chat subtracts cached and cache-write subsets from gross prompt tokens.
-Responses subtracts cached input tokens and has no creation field. Anthropic
+Responses subtracts both cached input tokens and cache-write tokens. Anthropic
 and Bedrock report cache subsets as separate fields. Gemini subtracts cached
-content, adds candidate and thought output counts, and checks the reported
-total. All paths call `usagenorm.ValidateUsage` and then the core usage
-validation.
+content, adds the separately reported tool-use prompt tokens, and adds candidate
+and thought output counts; its reported total is validated as a well-formed
+count but is deliberately not reconciled against those components. No decode
+path gates on the reasoning-within-output convention: a provider that reports
+more reasoning tokens than output tokens has an accounting bug, not an invalid
+response, so both counts are carried as reported. Test the convention with
+`content.Usage.ReasoningWithinOutput()`.
 
 ```go
 if response.Usage == nil {

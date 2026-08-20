@@ -26,24 +26,29 @@ terminal usage.
 flowchart TD
     B["HTTP response body"] --> F["wire/sse framer"]
     F --> E["dialect event decoder"]
-    E --> C["TextChunk / ThinkingChunk / ToolUseChunk"]
+    E --> C["TextChunk / ThinkingChunk / ToolUseChunk / RefusalChunk / ImageChunk"]
     C --> A["FramesToChunksWithResult"]
     A --> R["StreamReader.Result after EOF"]
 ```
 
-OpenAI uses `[DONE]` as the terminal SSE data payload. Anthropic authorizes a
-terminal result on `message_stop`. Responses uses typed `response.completed`,
-and Gemini receives a final SSE chunk. Bedrock uses event-stream frames and a
-metadata/message-stop sequence. Malformed or uninteresting events are skipped
-by the tolerant per-event decoders; typed stream/provider errors still fail the
+OpenAI accepts either end-of-generation signal: the `[DONE]` terminal SSE data
+payload or a reported finish reason. Anthropic authorizes a terminal result on
+`message_stop`. Responses uses typed `response.completed`, and Gemini
+authorizes on a candidate that reports a `finishReason`. Bedrock uses
+event-stream frames and a metadata/message-stop sequence. A stream that ends
+before its dialect's terminal marker is a typed `StreamDecodeError`, not a
+clean end. Uninteresting or unknown-but-well-formed events are skipped, while a
+frame whose JSON does not parse aborts the stream with a typed
+`StreamEventDecodeError`; typed stream and provider errors still fail the
 reader.
 
 ## Accumulation
 
 `ToolUseChunk.Index` is the join key. OpenAI and Anthropic send argument
 fragments, so the accumulator concatenates fragments by index. Gemini emits a
-complete function call per part and uses that event's positional function-call
-index. The decoder itself is stateless and must not retain cross-event input.
+complete function call per part, and the stream-scoped collector rebases that
+event's positional index onto a stream-wide sequence. `Codec.DecodeEvent` is
+stateless; the rebasing state belongs to the stream collector.
 
 ```go
 reader, err := client.Stream(ctx, req)

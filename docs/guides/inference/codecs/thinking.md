@@ -15,7 +15,10 @@ proofs:
 # Thinking Translation
 
 `model.Effort` is intent, not a wire field. Each codec maps it only when the
-model advertises `Caps.Thinking`.
+model advertises `Caps.Thinking`, except OpenAI Chat Completions, which sends
+`reasoning_effort` whenever an effort is set. The Anthropic codec additionally
+requires a declared `Caps.ThinkingDialect` and fails closed with
+`UndeclaredThinkingDialectError` without one.
 
 ## Mapping
 
@@ -23,20 +26,23 @@ model advertises `Caps.Thinking`.
 | --- | --- | --- | --- |
 | OpenAI Chat | `reasoning_effort` | `max` | `reasoning_content` to `ThinkingBlock` |
 | OpenAI Responses | `reasoning.effort`, `summary: auto` | `max` | reasoning item summary |
-| Anthropic | `thinking: {type: adaptive}`, `output_config.effort` | `max` | `thinking` block with signature |
+| Anthropic | `thinking: {type: adaptive}` plus `output_config.effort` under the adaptive dialect; `thinking: {type: enabled, budget_tokens: N}` and no effort field under the budget dialect | `max` under the adaptive dialect; a token budget under the budget dialect | `thinking` block with signature |
 | Gemini | `thinkingConfig.thinkingBudget`, `includeThoughts` | `UnsupportedEffortError` | `thought: true` part |
-| Bedrock | reasoning content text | `UnsupportedEffortError` | `reasoningContent` |
+| Bedrock | none; any non-empty effort is rejected | `UnsupportedEffortError` | `reasoningContent` |
 
 When capability or effort is unset, request-side reasoning fields are omitted.
-Anthropic also omits `temperature` and `top_p` while adaptive thinking is
-enabled because its current request shape rejects those fields together.
+Anthropic also omits `temperature` and `top_p` while thinking is enabled under
+either dialect, because both request shapes reject those fields alongside
+thinking.
 
 ## Replay
 
 Responses encrypted reasoning and Gemini thought signatures are opaque provider
 state. They are carried only for a same-dialect replay; the codecs do not
 interpret or cross-replay them. Anthropic signatures remain on the neutral
-`ThinkingBlock.Signature`.
+`ThinkingBlock.Signature`, labelled `SignatureFormat: "anthropic"`. Replaying a
+signature minted by another dialect — Bedrock Converse serves the same Claude
+models — is a fatal `ForeignThinkingSignatureError`, not a dropped field.
 
 ```go
 req.Model.Caps.Thinking = true

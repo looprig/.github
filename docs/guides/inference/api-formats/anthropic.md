@@ -24,8 +24,12 @@ The encoder requires `max_tokens`, defaulting to `4096` when effective sampling
 does not provide a positive value. User and assistant blocks map to the native
 tagged union. Tool results are a user message containing `tool_result`, and
 `IsError` is preserved. Required tool choice becomes `tool_choice: {type:"any"}`.
-Adaptive thinking is enabled only for a model with `Caps.Thinking`; while it is
-enabled, `temperature` and `top_p` are omitted.
+Thinking is requested only for a model with `Caps.Thinking` and a non-empty
+effort, and its shape comes from `Caps.ThinkingDialect`: `adaptive` emits
+`thinking: {type:"adaptive"}` plus `output_config.effort`, and `budget` emits
+`thinking: {type:"enabled", budget_tokens:N}`. An undeclared dialect is an
+`UndeclaredThinkingDialectError`, never a guess. Whichever variant is emitted,
+`temperature` and `top_p` are omitted.
 
 ```go
 body, err := anthropicapi.EncodeRequest(req, false)

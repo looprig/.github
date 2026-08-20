@@ -21,7 +21,9 @@ it in the URL path.
 ## Request
 
 `converseContentBlock` is a tagged union with exactly one of `Text`, `Image`,
-`Document`, `ReasoningContent`, `ToolUse`, or `ToolResult` set. System content
+`Document`, `Audio`, `ReasoningContent`, `ToolUse`, or `ToolResult` set. Audio
+requires inline bytes and a media type naming an `AudioFormat` member; an S3
+source is decode-direction only. System content
 supports text only. Images require inline bytes and one of jpeg, png, gif, or
 webp. Documents can be bytes or text, require a valid name, and require a text
 block in the same message. Tool schemas are validated as JSON objects and

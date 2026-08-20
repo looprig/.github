@@ -15,7 +15,10 @@ proofs:
 # Unsupported Capabilities
 
 Capabilities are local gating data on `model.Model`; they are not sent to a
-provider. The request gate reports unsupported features before encoding.
+provider. The request gate reports unsupported features before encoding. Dialect-specific
+rejections stay in the codec: the Anthropic encoder returns
+`UndeclaredThinkingDialectError` when a thinking-capable model declares no
+`Caps.ThinkingDialect`.
 
 ## Model
 
@@ -24,6 +27,7 @@ type Capabilities struct {
 	AcceptsImages             bool
 	Tools                     bool
 	Thinking                  bool
+	ThinkingDialect           ThinkingDialect
 	StructuredOutput          bool
 	StructuredOutputWithTools bool
 	PromptCaching             bool
@@ -31,7 +35,10 @@ type Capabilities struct {
 ```
 
 `StructuredOutputWithTools` requires both `StructuredOutput` and `Tools` in
-`Model.Validate`. `PromptCaching` is an opt-in hint used by the Anthropic
+`Model.Validate`, which also rejects an unknown `ThinkingDialect` and a declared
+dialect on a model that is not `Thinking`-capable, both as a `ValidationError`
+on field `Caps.ThinkingDialect`. `ThinkingDialect` is `""` when undeclared, or
+`"adaptive"` or `"budget"`. `PromptCaching` is an opt-in hint used by the Anthropic
 encoder only; other bundled encoders ignore it for request construction.
 
 ## Behavior

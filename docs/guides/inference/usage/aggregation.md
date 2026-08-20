@@ -14,17 +14,19 @@ proofs:
 
 # Aggregate Usage
 
-`content.Usage.Add` combines token fields without mutating either operand. It
-validates both inputs first and uses checked addition for every field.
+`content.Usage.Add` combines token fields without mutating either operand and
+uses checked addition for every field. It performs no relationship validation:
+an operand whose reasoning exceeds its output is summed like any other, because
+refusing it would invalidate every later aggregate that folds it in.
 
 ## Add
 
 ```go
 total, err := first.Add(second)
 if err != nil {
-	var validation *content.UsageValidationError
-	if errors.As(err, &validation) {
-		return validation
+	var overflow *content.UsageOverflowError
+	if errors.As(err, &overflow) {
+		return overflow
 	}
 	return err
 }
