@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/fsstore` |
-| Version | `v0.3.2` |
+| Version | `v0.4.0` |
 | GitHub | [looprig/fsstore](https://github.com/looprig/fsstore) |
 
 ## Description

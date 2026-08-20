@@ -718,6 +718,12 @@
       "from": "github.com/looprig/carbon",
       "to": "github.com/looprig/harness",
       "kind": "production-import",
+      "path": "internal/app/restore_policy.go"
+    },
+    {
+      "from": "github.com/looprig/carbon",
+      "to": "github.com/looprig/harness",
+      "kind": "production-import",
       "path": "internal/app/runtime_context.go"
     },
     {
@@ -1577,12 +1583,6 @@
       "to": "github.com/looprig/harness",
       "kind": "test-import",
       "path": "internal/app/managed_delegation_test.go"
-    },
-    {
-      "from": "github.com/looprig/carbon",
-      "to": "github.com/looprig/harness",
-      "kind": "test-import",
-      "path": "internal/app/mcp_fingerprint_test.go"
     },
     {
       "from": "github.com/looprig/carbon",
@@ -4180,7 +4180,7 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/core",
       "kind": "production-import",
-      "path": "internal/blocktest/blocktest.go"
+      "path": "internal/delegationtool/agent.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -4373,6 +4373,12 @@
       "to": "github.com/looprig/core",
       "kind": "production-import",
       "path": "internal/loopruntime/step.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "internal/loopruntime/truncation.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -5212,6 +5218,18 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/inference",
       "kind": "production-import",
+      "path": "pkg/rig/restore_failure_policy.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/inference",
+      "kind": "production-import",
+      "path": "pkg/session/decider.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/inference",
+      "kind": "production-import",
       "path": "pkg/sessionstore/catalog.go"
     },
     {
@@ -5608,6 +5626,12 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "internal/loopruntime/fold_bedrock_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "internal/loopruntime/fold_test.go"
     },
     {
@@ -5722,6 +5746,12 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "internal/loopruntime/refusal_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "internal/loopruntime/restored_test.go"
     },
     {
@@ -5783,6 +5813,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "internal/loopruntime/tool_hooks_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "internal/loopruntime/truncation_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -6754,6 +6790,12 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "pkg/serve/ephemeral_variant_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "pkg/serve/errors_test.go"
     },
     {
@@ -7156,6 +7198,12 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/inference",
       "kind": "test-import",
+      "path": "internal/loopruntime/fold_bedrock_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
       "path": "internal/loopruntime/fold_test.go"
     },
     {
@@ -7210,6 +7258,12 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/inference",
       "kind": "test-import",
+      "path": "internal/loopruntime/refusal_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
       "path": "internal/loopruntime/restored_test.go"
     },
     {
@@ -7229,6 +7283,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "internal/loopruntime/step_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "internal/loopruntime/truncation_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -7589,6 +7649,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "pkg/rig/lifecycle_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "pkg/rig/restore_failure_policy_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -8224,12 +8290,6 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "production-import",
-      "path": "internal/usagenorm/validation.go"
-    },
-    {
-      "from": "github.com/looprig/inference",
-      "to": "github.com/looprig/core",
-      "kind": "production-import",
       "path": "model/contextlimits.go"
     },
     {
@@ -8350,6 +8410,12 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/anthropicapi/encode_conformance_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/anthropicapi/encode_document_test.go"
     },
     {
@@ -8374,6 +8440,12 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/anthropicapi/encode_thinking_dialect_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/anthropicapi/server_decode_document_test.go"
     },
     {
@@ -8392,6 +8464,12 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/anthropicapi/server_redacted_roundtrip_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/anthropicapi/server_roundtrip_test.go"
     },
     {
@@ -8404,7 +8482,25 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/anthropicapi/stream_multiblock_reasoning_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/anthropicapi/stream_nullable_usage_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/anthropicapi/stream_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/anthropicapi/thinking_signature_scope_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -8428,13 +8524,43 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/bedrockconverse/encode_conformance_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/bedrockconverse/encode_test.go"
     },
     {
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/bedrockconverse/stream_multiblock_reasoning_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/bedrockconverse/stream_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/bedrockconverse/thinking_signature_scope_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/blockvariant_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/conformance/gateway_egress_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -8458,6 +8584,12 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/geminiapi/encode_conformance_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/geminiapi/encode_media_test.go"
     },
     {
@@ -8471,6 +8603,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "codec/geminiapi/encode_toolresult_unsupported_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/geminiapi/encode_validation_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -8495,6 +8633,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "codec/geminiapi/server_stream_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/geminiapi/stream_multiblock_reasoning_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -8530,6 +8674,18 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/openaiapi/decode_toolargs_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/openaiapi/encode_conformance_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/openaiapi/encode_media_test.go"
     },
     {
@@ -8549,6 +8705,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "codec/openaiapi/encode_unsupported_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/openaiapi/encode_validation_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -8590,7 +8752,19 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/openaiapi/stream_multiblock_reasoning_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/openaiapi/stream_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/openairesponses/content_part_strictness_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -8609,6 +8783,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "codec/openairesponses/encode_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/openairesponses/encode_validation_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -8644,7 +8824,31 @@
       "from": "github.com/looprig/inference",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "codec/openairesponses/server_stream_frame_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/openairesponses/server_stream_reasoning_id_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/openairesponses/server_stream_terminal_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "codec/openairesponses/server_stream_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "codec/openairesponses/stream_multiblock_reasoning_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -9059,6 +9263,36 @@
       "to": "github.com/looprig/core",
       "kind": "production-import",
       "path": "providers/internal/contracttest/provider.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "providers/internal/livetest/fixtures.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "providers/internal/livetest/probe.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "providers/internal/livetest/redact.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "providers/internal/livetest/retry.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "providers/internal/livetest/usecases.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -9569,6 +9803,42 @@
       "to": "github.com/looprig/inference",
       "kind": "production-import",
       "path": "providers/internal/contracttest/provider.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "production-import",
+      "path": "providers/internal/livetest/catalog.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "production-import",
+      "path": "providers/internal/livetest/envcatalog.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "production-import",
+      "path": "providers/internal/livetest/fixtures.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "production-import",
+      "path": "providers/internal/livetest/probe.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "production-import",
+      "path": "providers/internal/livetest/retry.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "production-import",
+      "path": "providers/internal/livetest/usecases.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10120,6 +10390,30 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "providers/internal/livetest/anthropicorigin_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/internal/livetest/gemini_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/internal/livetest/openaichat_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/internal/simple/thinking_budget_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "providers/llama/client_test.go"
     },
     {
@@ -10156,6 +10450,12 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "providers/openai/refusal_request_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "providers/openai/request_encode_test.go"
     },
     {
@@ -10180,7 +10480,25 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "providers/openrouter/reasoning_single_block_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "providers/openrouter/reasoning_state_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/openrouter/stream_terminal_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "providers/openrouter/usage_reasoning_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10318,6 +10636,12 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/inference",
       "kind": "test-import",
+      "path": "providers/anthropic/conformance_fixtures_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
       "path": "providers/anthropic/counter_test.go"
     },
     {
@@ -10331,6 +10655,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "providers/anthropic/encode_request_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/anthropic/request_gate_internal_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10408,6 +10738,12 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/inference",
       "kind": "test-import",
+      "path": "providers/bedrock/conformance_fixtures_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
       "path": "providers/bedrock/converse_test.go"
     },
     {
@@ -10427,6 +10763,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "providers/bedrock/options_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/bedrock/request_gate_internal_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10457,6 +10799,18 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "providers/chutes/encode_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/chutes/stream_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/chutes/stream_wrapped_eof_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10684,6 +11038,48 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/inference",
       "kind": "test-import",
+      "path": "providers/internal/livetest/anthropic_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/internal/livetest/anthropicorigin_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/internal/livetest/chutes_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/internal/livetest/gemini_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/internal/livetest/openaichat_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/internal/livetest/openairesponses_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/internal/simple/thinking_budget_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
       "path": "providers/internal/subscription/contract_test.go"
     },
     {
@@ -10816,7 +11212,19 @@
       "from": "github.com/looprig/llm",
       "to": "github.com/looprig/inference",
       "kind": "test-import",
+      "path": "providers/openai/fixture_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
       "path": "providers/openai/multimodal_request_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/openai/refusal_request_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -10871,6 +11279,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "providers/openrouter/reasoning_state_test.go"
+    },
+    {
+      "from": "github.com/looprig/llm",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "providers/openrouter/usage_reasoning_test.go"
     },
     {
       "from": "github.com/looprig/llm",
@@ -12334,6 +12748,12 @@
       "from": "github.com/looprig/tests",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "foreignloop_fifo_assertion_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "foreignloop_fixtures_test.go"
     },
     {
@@ -12401,6 +12821,12 @@
       "to": "github.com/looprig/harness",
       "kind": "test-import",
       "path": "fixtures_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "foreignloop_fifo_assertion_test.go"
     },
     {
       "from": "github.com/looprig/tests",

@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/flow/store` |
-| Version | `Not released` |
+| Version | `store/v0.1.0` |
 | GitHub | [looprig/flow](https://github.com/looprig/flow) |
 
 ## Description

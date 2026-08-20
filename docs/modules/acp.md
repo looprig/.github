@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/acp` |
-| Version | `v0.2.2` |
+| Version | `v0.3.0` |
 | GitHub | [looprig/acp](https://github.com/looprig/acp) |
 
 ## Description

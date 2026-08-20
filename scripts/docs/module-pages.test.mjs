@@ -9,18 +9,16 @@ const inventory = JSON.parse(readFileSync(path.join(root, "docs/_data/modules.js
 const evidence = JSON.parse(readFileSync(path.join(root, "docs/_data/evidence.json"), "utf8"));
 const pages = readdirSync(modulesRoot).filter((name) => name.endsWith(".md")).sort();
 
-const repositoryBySlug = new Map(pages.map((name) => {
+// Records are keyed by module path, not by repository: a nested module such as
+// flow/store shares its parent repository, so `repository` is not unique.
+const moduleBySlug = new Map(pages.map((name) => {
   const slug = name.slice(0, -3);
-  return [slug, slug === "flow-store" ? "flow/store" : slug];
+  return [slug, `github.com/looprig/${slug === "flow-store" ? "flow/store" : slug}`];
 }));
-const slugByModule = new Map([...repositoryBySlug].map(([slug, repository]) => [
-  inventory.modules.find((record) => record.repository === repository)?.module,
-  slug,
-]));
+const slugByModule = new Map([...moduleBySlug].map(([slug, module]) => [module, slug]));
 
 function recordFor(slug) {
-  const repository = repositoryBySlug.get(slug);
-  return inventory.modules.find((record) => record.repository === repository);
+  return inventory.modules.find((record) => record.module === moduleBySlug.get(slug));
 }
 
 function escapeRegExp(value) {
@@ -116,6 +114,22 @@ for (const [repository, slug, title, version] of [
     assert.equal(fields.get("Version"), `\`${version}\``, `${repository} module page release is stale`);
   });
 }
+
+test("Flow Store is released from the Flow repository at its own nested tag", () => {
+  const record = inventory.modules.find((candidate) => candidate.module === "github.com/looprig/flow/store");
+  assert.ok(record, "missing flow/store inventory record");
+  assert.equal(record.repository, "flow", "flow/store is published from the Flow repository");
+  assert.equal(record.nested, true);
+  assert.deepEqual(record.publication, { status: "released", tag: "store/v0.1.0" });
+
+  const flow = inventory.modules.find((candidate) => candidate.module === "github.com/looprig/flow");
+  assert.deepEqual(flow.publication, { status: "released", tag: "v0.4.0" });
+  assert.notEqual(record.commit, flow.commit, "a nested module releases on its own commit");
+
+  const fields = repositoryFields("flow-store");
+  assert.equal(fields.get("Repository"), "`github.com/looprig/flow/store`");
+  assert.equal(fields.get("Version"), "`store/v0.1.0`");
+});
 
 test("Carbon v0.23.0 stays product-only in generated inventory and release evidence", () => {
   const record = inventory.modules.find((candidate) => candidate.repository === "carbon");

@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/eval` |
-| Version | `v0.1.2` |
+| Version | `v0.2.0` |
 | GitHub | [looprig/eval](https://github.com/looprig/eval) |
 
 ## Description

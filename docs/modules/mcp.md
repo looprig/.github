@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/mcp` |
-| Version | `v0.6.2` |
+| Version | `v0.7.0` |
 | GitHub | [looprig/mcp](https://github.com/looprig/mcp) |
 
 ## Description

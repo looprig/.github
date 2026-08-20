@@ -57,10 +57,15 @@ const ecosystem = new Map([
 
 const pages = readdirSync(modulesRoot).filter((name) => name.endsWith(".md")).sort();
 const slugs = pages.map((name) => name.slice(0, -3));
-const repositoryBySlug = new Map(slugs.map((slug) => [slug, slug === "flow-store" ? "flow/store" : slug]));
+// Records are keyed by module path, not by repository: a nested module such as
+// flow/store shares its parent repository, so `repository` is not unique.
+const moduleBySlug = new Map(slugs.map((slug) => [
+  slug,
+  `github.com/looprig/${slug === "flow-store" ? "flow/store" : slug}`,
+]));
 const recordBySlug = new Map(slugs.map((slug) => [
   slug,
-  inventory.modules.find((record) => record.repository === repositoryBySlug.get(slug)),
+  inventory.modules.find((record) => record.module === moduleBySlug.get(slug)),
 ]));
 const slugByModule = new Map([...recordBySlug].map(([slug, record]) => [record.module, slug]));
 

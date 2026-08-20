@@ -48,6 +48,11 @@
     {
       "repository": "core",
       "module": "github.com/looprig/core",
+      "path": "github.com/looprig/core/content/blocktest"
+    },
+    {
+      "repository": "core",
+      "module": "github.com/looprig/core",
       "path": "github.com/looprig/core/content/streamaccumulator"
     },
     {
@@ -151,7 +156,7 @@
       "path": "github.com/looprig/flow/pkg/registry"
     },
     {
-      "repository": "flow/store",
+      "repository": "flow",
       "module": "github.com/looprig/flow/store",
       "path": "github.com/looprig/flow/store"
     },
@@ -294,6 +299,11 @@
       "repository": "inference",
       "module": "github.com/looprig/inference",
       "path": "github.com/looprig/inference/codec/bedrockconverse"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/codec/conformance"
     },
     {
       "repository": "inference",

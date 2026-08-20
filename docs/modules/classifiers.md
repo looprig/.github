@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/classifiers` |
-| Version | `v0.1.4` |
+| Version | `v0.2.0` |
 | GitHub | [looprig/classifiers](https://github.com/looprig/classifiers) |
 
 ## Description
