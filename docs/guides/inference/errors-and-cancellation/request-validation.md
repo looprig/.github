@@ -19,7 +19,9 @@ feature combinations against the model's declared capabilities.
 
 ## Rules
 
-The function rejects required tool choice with no tools, image blocks when
+The function rejects a transient-message count outside the message slice, a
+named tool choice whose name matches no declared tool, required tool choice
+with no tools, image blocks when
 `Caps.AcceptsImages` is false, invalid output schemas, duplicate tool names,
 the reserved structured-output tool name, structured output without
 `Caps.StructuredOutput`, and structured output with tools without
@@ -38,9 +40,9 @@ if err := inference.ValidateRequestFeatures(req); err != nil {
 
 ## Errors
 
-Errors are `StructuredOutputConflictError`, `ImageInputUnsupportedError`,
-`StructuredOutputUnsupportedError`, `StructuredOutputWithToolsUnsupportedError`,
-and `SchemaValidationError`. Model diagnostics are bounded; schema bytes,
+Errors are `InvalidTransientMessagesError`, `StructuredOutputConflictError`,
+`ImageInputUnsupportedError`, `StructuredOutputUnsupportedError`,
+`StructuredOutputWithToolsUnsupportedError`, and `SchemaValidationError`. Model diagnostics are bounded; schema bytes,
 tool payloads, and raw model names beyond the documented bound are not retained.
 
 ## Source and proof

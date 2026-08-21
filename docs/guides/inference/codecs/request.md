@@ -42,9 +42,10 @@ response framing select streaming. Every bundled encoder returns
 ## Validation
 
 Encoders call `inference.ValidateRequestFeatures` before marshaling. That check
-rejects required tool choice without tools, unsupported image input, invalid
-structured-output schemas, duplicate tool names, and capabilities the model
-does not advertise. Dialect encoders then reject blocks they cannot represent,
+rejects a transient-message count outside the message slice, a named tool
+choice whose name matches no declared tool, required tool choice without tools,
+unsupported image input, invalid structured-output schemas, duplicate tool
+names, and capabilities the model does not advertise. Dialect encoders then reject blocks they cannot represent,
 returning a typed `UnsupportedBlockError` or equivalent rather than dropping
 data.
 

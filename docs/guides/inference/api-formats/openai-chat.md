@@ -20,7 +20,8 @@ both the client `codec.Codec` and ingress `codec.ServerCodec` contracts.
 ## Request
 
 `BuildChatRequest` maps the model name, effective sampling, system prompt,
-messages, function tools, JSON-schema output, and required tool choice. Stream
+messages, function tools, JSON-schema output, and tool choice, required or
+named. Stream
 mode adds `stream: true` and `stream_options.include_usage: true`; invoke mode
 omits both. Text-only user content is a string; mixed text and images become
 `[{type:"text"}, {type:"image_url"}]`. Inline image bytes become a data URI.

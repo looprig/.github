@@ -20,7 +20,7 @@ not a `messages` array. It implements both client and server codec contracts.
 ## Items
 
 System text becomes top-level `instructions`. User turns become `message`
-items with `input_text` and `input_image` parts. Assistant tool calls become
+items with `input_text`, `input_image`, and `input_file` parts. Assistant tool calls become
 `function_call` items; tool results become `function_call_output`. Consecutive
 assistant text blocks are grouped into one message item. `store` is always
 explicitly `false`, and the neutral `Stop` sampling field is omitted because

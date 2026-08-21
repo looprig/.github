@@ -39,9 +39,10 @@ fmt.Println(string(body))
 `POST {base}/models/{name}:generateContent` for invoke and
 `POST {base}/models/{name}:streamGenerateContent?alt=sse` for stream. The
 codec does not add a `stream` JSON flag. `DecodeResponse` reads
-`candidates[0]`. `promptTokenCount` is split from
-`cachedContentTokenCount`; output is candidates plus thoughts, and the
-reported total is checked. The codec does not emit a request cache marker; the
+`candidates[0]`. Input is `promptTokenCount` less
+`cachedContentTokenCount`, plus `toolUsePromptTokenCount`, which Gemini reports
+separately; output is candidates plus thoughts. `totalTokenCount` is validated
+as a well-formed count but is not reconciled against those components. The codec does not emit a request cache marker; the
 only cache evidence it consumes is the response usage field.
 
 ## Source and proof

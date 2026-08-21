@@ -22,8 +22,13 @@ block, union variant, or response field is valid.
 Encoders return typed unsupported-block or unsupported-conversation errors.
 Bedrock additionally exposes `ToolSchemaError`, `ToolInputError`, and
 `EncodeError`; OpenAI Responses exposes `ServerDecodeError` and
-`UnsupportedBlockError`; Anthropic exposes `UnsupportedBlockError` and
-`StreamAPIError`. Use `errors.As` and retain the original error chain.
+`UnsupportedBlockError`; Anthropic exposes a large typed set in its own
+`errors.go`, including `UnsupportedBlockError`, `UnsupportedEffortError`,
+`UnsupportedAudioError`, `UnsupportedRefusalError`,
+`UndeclaredThinkingDialectError`, `ThinkingBudgetError`,
+`UnsupportedConversationError`, `StreamEventDecodeError`, and `StreamAPIError`.
+Read each dialect's `errors.go` for its full set rather than treating any list
+here as exhaustive. Use `errors.As` and retain the original error chain.
 
 ```go
 body, err := anthropicapi.EncodeRequest(req, false)
@@ -42,7 +47,10 @@ _ = body
 Malformed JSON is returned by the decoder or wrapped in the dialect's decode
 error. Unknown response block/item types are skipped where the package
 documents tolerant decoding; required structure such as an absent OpenAI
-choice, Gemini candidate, or Bedrock `output.message` fails instead. Provider
+choice or Bedrock `output.message` fails instead. A candidate-less Gemini body
+becomes a `PromptBlockedError` carrying an allowlisted block reason, safety
+ratings, and the charged usage when `promptFeedback` explains itself, and a bare
+`failure.APIError` otherwise. Provider
 error envelopes are converted to `failure.APIError` or a stream API error.
 
 ## Source and proof

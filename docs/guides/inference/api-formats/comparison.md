@@ -37,7 +37,7 @@ Only behavior implemented by these codecs is documented here:
 | Format | Request-side cache hint | Response usage evidence |
 | --- | --- | --- |
 | OpenAI Chat | none emitted | `cached_tokens`, optional `cache_write_tokens` |
-| OpenAI Responses | none emitted; `store` is always false | `input_tokens_details.cached_tokens`; no creation field |
+| OpenAI Responses | none emitted; `store` is always false | `input_tokens_details.cached_tokens` and `cache_write_tokens` |
 | Anthropic | opt-in `PromptCaching` emits up to two `cache_control: ephemeral` breakpoints | separate read and creation counts |
 | Gemini | no request cache hint | `cachedContentTokenCount` |
 | Bedrock | no cache marker in the request DTO | `cacheReadInputTokens` and `cacheWriteInputTokens` |

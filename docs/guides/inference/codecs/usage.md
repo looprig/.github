@@ -31,14 +31,14 @@ type Usage struct {
 | Provider field | Normalized field | Rule |
 | --- | --- | --- |
 | OpenAI `prompt_tokens` | input plus cache subsets | subtract `cached_tokens` and `cache_write_tokens` |
-| Responses `input_tokens` | input plus cache read | subtract `input_tokens_details.cached_tokens` |
+| Responses `input_tokens` | input plus cache read and cache write | subtract `input_tokens_details.cached_tokens` and `cache_write_tokens` |
 | Anthropic `input_tokens` | input | cache fields are separate |
-| Gemini `promptTokenCount` | input | subtract `cachedContentTokenCount` |
+| Gemini `promptTokenCount` | input | subtract `cachedContentTokenCount`, then add `toolUsePromptTokenCount` |
 | Bedrock `inputTokens` | input | cache fields are separate |
 
 Output and reasoning are normalized similarly. Gemini adds candidate and thought
-counts for `OutputTokens`; its reported total is checked against the gross
-components. Missing usage remains `nil`, not a fabricated zero measurement.
+counts for `OutputTokens`; its `totalTokenCount` is validated as a well-formed
+count but is deliberately not reconciled against those components. Missing usage remains `nil`, not a fabricated zero measurement.
 
 ## Invariants
 

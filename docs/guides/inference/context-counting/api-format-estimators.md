@@ -29,13 +29,16 @@ case model.APIFormatAnthropic:
 	body, err = anthropicapi.EncodeRequest(req, false)
 case model.APIFormatGemini:
 	body, err = geminiapi.EncodeRequest(req)
+case model.APIFormatBedrockConverse:
+	body, err = bedrockconverse.EncodeRequest(req)
 default:
-	return contextcount.UnsupportedAPIFormatError{}
+	return nil, &contextcount.UnsupportedAPIFormatError{APIFormat: req.Model.APIFormat}
 }
 ```
 
-Bedrock Converse is not in the bundled estimator switch because its exact
-provider CountTokens shape is separate. Unsupported formats return a typed
+Bedrock Converse is in the bundle: Converse and ConverseStream share one
+request body, so the encoder takes no mode and the estimator counts exactly what
+inference sends. A format with no bundled encoder returns a typed
 `UnsupportedAPIFormatError`, not a guessed count.
 
 ## Formula
@@ -45,7 +48,8 @@ The estimator counts encoded bytes with a ceiling division by four:
 `estimatedTokens = ceil(len(encodedRequest) / 4)`.
 
 The revision constant
-`bundled-openai-responses-anthropic-gemini-request-bytes-div4-v1` identifies
+`bundled-openai-responses-anthropic-gemini-bedrock-request-bytes-div4-v3`
+identifies
 the encoder suite and formula. A count-affecting codec change requires a new
 revision so stored measurements remain attributable.
 
