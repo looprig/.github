@@ -19,13 +19,14 @@ proofs:
 
 ```go
 type Request struct {
-	Model      model.Model
-	System     string
-	Messages   content.AgenticMessages
-	Tools      []Tool
-	Output     *OutputSchema
-	ToolChoice ToolChoice
-	Override   *model.Sampling
+	Model             model.Model
+	System            string
+	Messages          content.AgenticMessages
+	TransientMessages int
+	Tools             []Tool
+	Output            *OutputSchema
+	ToolChoice        ToolChoice
+	Override          *model.Sampling
 }
 ```
 
@@ -36,7 +37,8 @@ type Request struct {
 | `Messages` | Ordered sealed conversation turns |
 | `Tools` | Tool definitions exposed to the model |
 | `Output` | Optional portable JSON object contract |
-| `ToolChoice` | Automatic or required tool behavior |
+| `TransientMessages` | Count of trailing messages excluded from cache breakpoints |
+| `ToolChoice` | Automatic, required, or named tool behavior |
 | `Override` | Optional per-call replacement for model sampling |
 
 ```go

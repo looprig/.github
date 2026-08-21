@@ -29,13 +29,14 @@ The request and response types are also provider-neutral:
 
 ```go
 type Request struct {
-	Model      model.Model
-	System     string
-	Messages   content.AgenticMessages
-	Tools      []Tool
-	Output     *OutputSchema
-	ToolChoice ToolChoice
-	Override   *model.Sampling
+	Model             model.Model
+	System            string
+	Messages          content.AgenticMessages
+	TransientMessages int
+	Tools             []Tool
+	Output            *OutputSchema
+	ToolChoice        ToolChoice
+	Override          *model.Sampling
 }
 
 type Tool struct {

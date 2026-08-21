@@ -28,8 +28,10 @@ proofs:
 
 Same-endpoint counters must match provider and `SecurityIdentity`. Separate
 endpoint counters must match provider and are admitted only for TLS inference.
-Retention cannot be weaker than the inference retention claim. An unknown
-inference retention posture fails closed.
+Retention cannot be weaker than the inference retention claim, and an unknown
+inference retention posture fails closed. A provider-neutral counter is exempt:
+it is admitted before the transport, identity, and retention comparisons run, so
+it is compatible with an unknown retention posture.
 
 ## Errors
 

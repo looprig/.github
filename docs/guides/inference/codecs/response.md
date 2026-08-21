@@ -29,7 +29,7 @@ are normalized into `usage.Usage`, which is an alias for `content.Usage`:
 | Neutral field | Meaning |
 | --- | --- |
 | `InputTokens` | uncached input tokens after subtracting cache-read and cache-creation subsets when the provider reports gross input |
-| `OutputTokens` | generated tokens, including dialect-specific reasoning when the provider reports it as part of output |
+| `OutputTokens` | generated tokens, including dialect-specific reasoning, which the neutral contract treats as a subset of output |
 | `CacheReadTokens` | input tokens served from a provider cache |
 | `CacheCreationTokens` | input tokens written to a provider cache |
 | `ReasoningTokens` | reasoning or thought tokens when reported |

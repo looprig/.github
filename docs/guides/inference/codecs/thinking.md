@@ -30,7 +30,8 @@ requires a declared `Caps.ThinkingDialect` and fails closed with
 | Gemini | `thinkingConfig.thinkingBudget`, `includeThoughts` | `UnsupportedEffortError` | `thought: true` part |
 | Bedrock | none; any non-empty effort is rejected | `UnsupportedEffortError` | `reasoningContent` |
 
-When capability or effort is unset, request-side reasoning fields are omitted.
+When capability or effort is unset, request-side reasoning fields are omitted,
+except in OpenAI Chat Completions, which consults the effort alone.
 Anthropic also omits `temperature` and `top_p` while thinking is enabled under
 either dialect, because both request shapes reject those fields alongside
 thinking.

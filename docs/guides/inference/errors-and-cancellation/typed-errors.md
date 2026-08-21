@@ -22,14 +22,15 @@ output are not retained in the shared failure values.
 
 | Family | Types |
 | --- | --- |
-| request | `ModelMismatchError`, structured-output validation/conflict errors |
+| request | `ModelMismatchError`, `InvalidTransientMessagesError`, structured-output validation/conflict errors |
 | transport | `RequestBuildError`, `NetworkError`, `APIError`, `ResponseBodyTooLargeError` |
 | codec | `UnsupportedBlockError`, `UnsupportedConversationError`, dialect decode errors |
 | stream | `StreamReaderError`, `StreamResultError`, dialect `StreamAPIError` |
 | gateway | route, authentication, concurrency, and upstream invocation errors |
 
-`failure.APIError` retains only a valid status, allowlisted provider code,
-bounded request ID, and integer-second retry delay. `NetworkError` wraps the
+`failure.APIError` retains only a valid status, a bounded gateway-owned status
+text, an allowlisted provider code, a bounded request ID, and an
+integer-second retry delay. `NetworkError` wraps the
 underlying network cause. Gateway HTTP writers classify recognized gateway
 errors and pass native codec errors to the codec that produced them.
 

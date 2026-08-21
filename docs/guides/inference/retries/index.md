@@ -58,7 +58,7 @@ errors. The final typed cause remains discoverable through `ExhaustedError.Unwra
 
 For each failed attempt, the schedule uses `StableDelay` for the stable leg,
 then doubles from `2*StableDelay`, capped at `MaxDelay`. Jitter multiplies the
-slot by a factor from 0.9 through 1.1. A positive provider `Retry-After` wins
+slot by a factor in `[0.9, 1.1)`, an inclusive lower and exclusive upper bound. A positive provider `Retry-After` wins
 when larger, capped at five minutes. Waiting selects the caller context, so
 cancellation returns immediately without another call.
 

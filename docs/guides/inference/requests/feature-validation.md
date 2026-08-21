@@ -18,7 +18,8 @@ proofs:
 
 ## Validation order
 
-1. `ToolChoice` must be `ToolChoiceAuto` or `ToolChoiceRequired`; required choice needs at least one tool.
+1. `TransientMessages` must fall within the message slice.
+2. `ToolChoice` must be a value built by `ToolAuto`, `ToolRequired`, or `ToolNamed`; a required choice needs at least one tool, and a named choice must name a declared tool.
 2. If the message thread contains images, `Model.Caps.AcceptsImages` must be true. The scan descends into `ToolResultBlock.Content`.
 3. If `Output` is nil, validation ends successfully here.
 4. The output schema is validated.
