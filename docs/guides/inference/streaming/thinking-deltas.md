@@ -48,4 +48,4 @@ Provider-opaque replay state is a separate `ThinkingBlock` concern. Do not manuf
 - Tests: [`core/content/streamaccumulator/streamaccumulator_test.go`](https://github.com/looprig/core/blob/main/content/streamaccumulator/streamaccumulator_test.go)
 - Example: [`core/examples/streaming/example_test.go`](https://github.com/looprig/core/blob/main/examples/streaming/example_test.go)
 
-Related: [ThinkingBlock](/docs/guides/inference/content-blocks/thinking/), [AIMessage](/docs/guides/inference/messages/message-types/ai-message/).
+Related: [ThinkingBlock](/docs/guides/inference/content-blocks/thinking), [AIMessage](/docs/guides/inference/messages/message-types/ai-message).

@@ -17,7 +17,7 @@ proofs:
 # Models and Inference
 
 `WithInference` stores an `inference.Client` and a provider-neutral
-[`model.Model`](/docs/guides/inference/models/) in the immutable definition:
+[`model.Model`](/docs/guides/inference/models) in the immutable definition:
 
 ```go
 func WithInference(client inference.Client, model model.Model) Option

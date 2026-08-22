@@ -111,10 +111,10 @@ test("Overview explains the Workflows boundary and contextual module links", () 
     assert.match(content, new RegExp(phrase, "i"), `overview omits ${phrase}`);
   }
   for (const destination of [
-    "/docs/modules/flow/",
-    "/docs/modules/harness/",
-    "/docs/modules/inference/",
-    "/docs/modules/tools/",
+    "/docs/modules/flow",
+    "/docs/modules/harness",
+    "/docs/modules/inference",
+    "/docs/modules/tools",
   ]) {
     assert.match(content, new RegExp(destination.replaceAll("/", "\\/")), `overview omits ${destination}`);
   }
@@ -159,7 +159,7 @@ test("Workflow tools and Harness integration stay in the Workflows guide", () =>
   for (const phrase of ["SessionResource", "SessionResourceServices", "WorkflowActivityPublisher", "run_started", "vertex_completed", "run_interrupted", "run_resumed", "run_completed", "run_cancelled", "run_failed", "ActivityCursor"]) {
     assert.match(integration, new RegExp(phrase.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&"), "i"), `integration omits ${phrase}`);
   }
-  assert.match(tools, /\/docs\/guides\/harness\/step\/tool-calls-and-results\//);
-  assert.match(integration, /\/docs\/guides\/harness\/events\/process-and-workflow\//);
-  assert.match(integration, /\/docs\/modules\/tools\//);
+  assert.match(tools, /\/docs\/guides\/harness\/step\/tool-calls-and-results/);
+  assert.match(integration, /\/docs\/guides\/harness\/events\/process-and-workflow/);
+  assert.match(integration, /\/docs\/modules\/tools/);
 });

@@ -81,4 +81,4 @@ flowchart LR
 - Tests: [`core/content/block_test.go`](https://github.com/looprig/core/blob/main/content/block_test.go), [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/main/content/block_json_test.go)
 - Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/main/examples/content/example_test.go)
 
-Related: [Messages](/docs/guides/inference/messages/), [Streaming](/docs/guides/inference/streaming/), [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use/).
+Related: [Messages](/docs/guides/inference/messages), [Streaming](/docs/guides/inference/streaming), [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use).

@@ -42,28 +42,28 @@ sequenceDiagram
     R-->>P: ordered SampleReports + summary
 ```
 
-Use [Cases and runs](/docs/guides/evals/cases-and-runs/) for the case-to-report
-lifecycle, [Evaluator contracts](/docs/guides/evals/evaluators/) for quality
-gates, [Reporting](/docs/guides/evals/reporting/) for durable output, and
-[Integration](/docs/guides/evals/integration/) when an application supplies a
+Use [Cases and runs](/docs/guides/evals/cases-and-runs) for the case-to-report
+lifecycle, [Evaluator contracts](/docs/guides/evals/evaluators) for quality
+gates, [Reporting](/docs/guides/evals/reporting) for durable output, and
+[Integration](/docs/guides/evals/integration) when an application supplies a
 model, agent, or qualification rollup.
 
 ## Choose the layer you need
 
 | Need | Start here | Contract to keep in mind |
 | --- | --- | --- |
-| Describe cases and expected behavior | [Cases and suites](/docs/guides/evals/cases-and-runs/cases-and-suites/) | IDs, revisions, typed input, and optional expectations are validated before work starts. |
-| Execute cases repeatedly or concurrently | [Runs and results](/docs/guides/evals/cases-and-runs/runs-and-results/) | Results stay in scenario-major, trial-minor order. Cancellation returns completed work with its context error. |
-| Write a gate or quality check | [Evaluator contracts](/docs/guides/evals/evaluators/) | A quality miss is `fail`; evaluator infrastructure trouble is `error`; missing evidence is `unverified`. |
-| Match or forbid exact output | [Exact evaluators](/docs/guides/evals/evaluators/exact/) | Text checks inspect assistant text blocks only, while tool checks inspect typed tool-use blocks. |
-| Score ambiguous behavior | [Model judges](/docs/guides/evals/evaluators/judge/) | The judge asks for strict structured output and validates score and quote provenance locally. |
-| Persist a safe result | [Reporting](/docs/guides/evals/reporting/) | `report/v1` is canonical and redacted; `FileSink` makes the final rename atomic. |
-| Feed a live model or agent | [Composition and testing](/docs/guides/evals/integration/composition-and-testing/) | Supply an `eval.Target` at the composition boundary, then keep deterministic fixtures beside opt-in live tests. |
-| Roll up qualification dimensions | [Pluto tooling](/docs/guides/evals/integration/pluto/) | Pluto composes `eval.Run` into capability-aware tables, scorecards, and profile dispositions. |
+| Describe cases and expected behavior | [Cases and suites](/docs/guides/evals/cases-and-runs/cases-and-suites) | IDs, revisions, typed input, and optional expectations are validated before work starts. |
+| Execute cases repeatedly or concurrently | [Runs and results](/docs/guides/evals/cases-and-runs/runs-and-results) | Results stay in scenario-major, trial-minor order. Cancellation returns completed work with its context error. |
+| Write a gate or quality check | [Evaluator contracts](/docs/guides/evals/evaluators) | A quality miss is `fail`; evaluator infrastructure trouble is `error`; missing evidence is `unverified`. |
+| Match or forbid exact output | [Exact evaluators](/docs/guides/evals/evaluators/exact) | Text checks inspect assistant text blocks only, while tool checks inspect typed tool-use blocks. |
+| Score ambiguous behavior | [Model judges](/docs/guides/evals/evaluators/judge) | The judge asks for strict structured output and validates score and quote provenance locally. |
+| Persist a safe result | [Reporting](/docs/guides/evals/reporting) | `report/v1` is canonical and redacted; `FileSink` makes the final rename atomic. |
+| Feed a live model or agent | [Composition and testing](/docs/guides/evals/integration/composition-and-testing) | Supply an `eval.Target` at the composition boundary, then keep deterministic fixtures beside opt-in live tests. |
+| Roll up qualification dimensions | [Pluto tooling](/docs/guides/evals/integration/pluto) | Pluto composes `eval.Run` into capability-aware tables, scorecards, and profile dispositions. |
 
 For model identity and request construction, pair this guide with Inference's
-[model selection reference](/docs/guides/inference/requests/model-selection/).
-When a request uses a schema, the [structured output reference](/docs/guides/inference/structured-output/)
+[model selection reference](/docs/guides/inference/requests/model-selection).
+When a request uses a schema, the [structured output reference](/docs/guides/inference/structured-output)
 explains the provider-facing feature that the Evals target records as evidence.
 
 ## A first complete run

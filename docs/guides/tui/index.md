@@ -39,9 +39,9 @@ flowchart LR
 
 ## Choose an entry point
 
-Start with [Create a TUI Screen](/docs/guides/tui/getting-started/create/) when another process already owns Bubble Tea and needs a model. Start with [Run a TUI Entry Point](/docs/guides/tui/getting-started/run/) when your command is the process owner and should get logging, signal handling, stdout capture, and bounded teardown from `runtime.Run`.
+Start with [Create a TUI Screen](/docs/guides/tui/getting-started/create) when another process already owns Bubble Tea and needs a model. Start with [Run a TUI Entry Point](/docs/guides/tui/getting-started/run) when your command is the process owner and should get logging, signal handling, stdout capture, and bounded teardown from `runtime.Run`.
 
-The [Runtime](/docs/guides/tui/runtime/) section explains the event and lifecycle contracts shared by both entry points. [Session Adapter](/docs/guides/tui/runtime/session-adapter/) is the bridge from Harness sessions to `tui.Agent`; it is the normal choice for a durable session. [Restore and Replay](/docs/guides/tui/runtime/restore/) covers cold repaint after a restored session.
+The [Runtime](/docs/guides/tui/runtime) section explains the event and lifecycle contracts shared by both entry points. [Session Adapter](/docs/guides/tui/runtime/session-adapter) is the bridge from Harness sessions to `tui.Agent`; it is the normal choice for a durable session. [Restore and Replay](/docs/guides/tui/runtime/restore) covers cold repaint after a restored session.
 
 ## How data moves
 
@@ -51,7 +51,7 @@ User input travels in the opposite direction. The screen calls `Agent.Submit` or
 
 ## Related Looprig contracts
 
-The screen is a consumer of [Harness sessions and events](/docs/guides/harness/), not a replacement for them. Use [Tools](/docs/guides/tools/) to understand preparation, permission requirements, and tool results that become TUI gate cards and tool summaries. The TUI only renders the resulting session contract.
+The screen is a consumer of [Harness sessions and events](/docs/guides/harness), not a replacement for them. Use [Tools](/docs/guides/tools) to understand preparation, permission requirements, and tool results that become TUI gate cards and tool summaries. The TUI only renders the resulting session contract.
 
 There are no separate public TUI pages for keymaps or layout engines. Those details belong to the internal presentation implementation and Bubble Tea integration. The public surfaces are the `Screen`, `Agent`, components, styles, and adapters documented here.
 

@@ -62,7 +62,7 @@ The store uses an explicit absolute path. It never discovers `HOME` or another i
 
 The store refuses ambiguous candidate syntax. It will not persist a literal command that collides with the `Bash(...)` display namespace as a wildcard or family rule, and it refuses a bare wildcard candidate. This keeps an exact approval from becoming a broad command approval after reload.
 
-Pair this page with [Safety, Permissions, and Gates](/docs/guides/tools/safety/) and the separate [Sandboxing and Interfaces](/docs/start/sandbox-and-interfaces/) guide. A permission rule is the durable approval record; the sandbox grant remains the runtime enforcement boundary.
+Pair this page with [Safety, Permissions, and Gates](/docs/guides/tools/safety) and the separate [Sandboxing and Interfaces](/docs/start/sandbox-and-interfaces) guide. A permission rule is the durable approval record; the sandbox grant remains the runtime enforcement boundary.
 
 ## Source
 

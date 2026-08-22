@@ -53,7 +53,7 @@ prepared := loop.WithPreparedCall(ctx, tool.PreparedCall{
 result, err := b.InvokableRun(prepared, `{"command":"printf changed"}`)
 ```
 
-Read [Safety, Permissions, and Gates](/docs/guides/tools/safety/) before allowing shell access. For supervised follow-ups, see [Process Supervision](/docs/guides/tools/processes/) and [Process Output, Input, and Stop Tools](/docs/guides/tools/processes/tools/). The model request and stream envelope live in Inference's [tool requests](/docs/guides/inference/requests/tools/) and [tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas/).
+Read [Safety, Permissions, and Gates](/docs/guides/tools/safety) before allowing shell access. For supervised follow-ups, see [Process Supervision](/docs/guides/tools/processes) and [Process Output, Input, and Stop Tools](/docs/guides/tools/processes/tools). The model request and stream envelope live in Inference's [tool requests](/docs/guides/inference/requests/tools) and [tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas).
 
 ## Source
 

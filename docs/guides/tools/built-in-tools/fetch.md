@@ -46,7 +46,7 @@ prepared := loop.WithPreparedCall(ctx, tool.PreparedCall{
 result, err := fetcher.InvokableRun(prepared, `{}`)
 ```
 
-Pair Fetch with [Safety, Permissions, and Gates](/docs/guides/tools/safety/) and the Inference [tool request](/docs/guides/inference/requests/tools/) and [tool-result](/docs/guides/inference/content-blocks/tool-result/) pages. `Fetch` is distinct from [WebSearch](/docs/guides/tools/built-in-tools/websearch/): Fetch accepts one model-selected URL, while WebSearch accepts a provider with a declared endpoint set.
+Pair Fetch with [Safety, Permissions, and Gates](/docs/guides/tools/safety) and the Inference [tool request](/docs/guides/inference/requests/tools) and [tool-result](/docs/guides/inference/content-blocks/tool-result) pages. `Fetch` is distinct from [WebSearch](/docs/guides/tools/built-in-tools/websearch): Fetch accepts one model-selected URL, while WebSearch accepts a provider with a declared endpoint set.
 
 ## Source
 

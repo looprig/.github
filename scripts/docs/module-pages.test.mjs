@@ -73,7 +73,7 @@ test("every Where it fits section explains standalone use and linked Looprig int
     const page = readFileSync(path.join(modulesRoot, name), "utf8");
     const section = page.match(/^## Where it fits\n\n([\s\S]*?)(?=\n## Dependencies$)/m)?.[1] ?? "";
     assert.match(section, /useful on its own|within Looprig|Looprig's|foundation for/i, slug);
-    assert.match(section, /\/docs\/modules\//, `${slug} must link an ecosystem neighbor`);
+    assert.match(section, /\/docs\/modules/, `${slug} must link an ecosystem neighbor`);
   }
 });
 

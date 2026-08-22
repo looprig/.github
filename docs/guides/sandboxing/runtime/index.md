@@ -38,11 +38,11 @@ func run(executor *sandbox.Executor, workspace string) error {
 
 ## Start here
 
-- [Executors and ExecutorSets](/docs/guides/sandboxing/runtime/executors/) explains ownership and memoization.
-- [RunArgv and confinement](/docs/guides/sandboxing/runtime/argv-and-confinement/) explains shell and argv choices.
-- [Prepared processes and lifetime](/docs/guides/sandboxing/runtime/processes/) explains streaming and teardown.
-- [Typed errors and recovery](/docs/guides/sandboxing/runtime/errors/) explains fail-closed handling.
-- [Harness gates and prepared Tools](/docs/guides/sandboxing/integration/) explains how approved effects reach this runtime.
+- [Executors and ExecutorSets](/docs/guides/sandboxing/runtime/executors) explains ownership and memoization.
+- [RunArgv and confinement](/docs/guides/sandboxing/runtime/argv-and-confinement) explains shell and argv choices.
+- [Prepared processes and lifetime](/docs/guides/sandboxing/runtime/processes) explains streaming and teardown.
+- [Typed errors and recovery](/docs/guides/sandboxing/runtime/errors) explains fail-closed handling.
+- [Harness gates and prepared Tools](/docs/guides/sandboxing/integration) explains how approved effects reach this runtime.
 
 ## Source
 

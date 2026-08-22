@@ -41,4 +41,4 @@ The request-side `Model` is the full descriptor and stable identity source. The 
 - Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go)
 - Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go), [`inference/stream/result.go`](https://github.com/looprig/inference/blob/main/stream/result.go)
 
-Related: [Model identity](/docs/guides/inference/models/identity/), [Model selection](/docs/guides/inference/requests/model-selection/).
+Related: [Model identity](/docs/guides/inference/models/identity), [Model selection](/docs/guides/inference/requests/model-selection).

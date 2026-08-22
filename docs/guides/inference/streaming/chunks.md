@@ -52,11 +52,11 @@ case *content.ToolUseChunk:
 }
 ```
 
-Complete blocks have different ownership and fields. Use [streamaccumulator](/docs/guides/inference/streaming/accumulation/) to fold chunks into `TextBlock`, `ThinkingBlock`, and `ToolUseBlock` values.
+Complete blocks have different ownership and fields. Use [streamaccumulator](/docs/guides/inference/streaming/accumulation) to fold chunks into `TextBlock`, `ThinkingBlock`, and `ToolUseBlock` values.
 
 ## Proof
 
 - Source: [`core/content/chunk.go`](https://github.com/looprig/core/blob/main/content/chunk.go)
 - Tests: [`core/content/streamaccumulator/streamaccumulator_test.go`](https://github.com/looprig/core/blob/main/content/streamaccumulator/streamaccumulator_test.go), [`inference/stream/chunkstream_test.go`](https://github.com/looprig/inference/blob/main/stream/chunkstream_test.go)
 
-Related: [Text deltas](/docs/guides/inference/streaming/text-deltas/), [Thinking deltas](/docs/guides/inference/streaming/thinking-deltas/), [Tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas/).
+Related: [Text deltas](/docs/guides/inference/streaming/text-deltas), [Thinking deltas](/docs/guides/inference/streaming/thinking-deltas), [Tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas).

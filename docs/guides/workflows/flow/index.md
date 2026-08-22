@@ -128,7 +128,7 @@ Flow accepts per-run options without mutating the compiled runner:
 
 The `flow.CheckpointStore` is fixed when the graph is compiled. The same store must be supplied to the runner used after a process restart. `Resume` loads the latest checkpoint, validates run identity, graph identity, graph version, state decoding, vertex records, and phase before executing a task. This is the lower-level guarantee behind Workflows `Adopt` and `Resume`.
 
-Flow's [module reference](/docs/modules/flow/) covers graph routing and checkpoint internals. Workflows' [interruption and recovery guide](/docs/guides/workflows/workflow-runtime/interruption-and-resume/) covers the additional JSON resume schema and session lifecycle. If a graph task needs a model, it can call the separate [Inference model selection contracts](/docs/guides/inference/requests/model-selection/) rather than making Workflows itself a model client.
+Flow's [module reference](/docs/modules/flow) covers graph routing and checkpoint internals. Workflows' [interruption and recovery guide](/docs/guides/workflows/workflow-runtime/interruption-and-resume) covers the additional JSON resume schema and session lifecycle. If a graph task needs a model, it can call the separate [Inference model selection contracts](/docs/guides/inference/requests/model-selection) rather than making Workflows itself a model client.
 
 ## Source
 

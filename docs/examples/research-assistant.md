@@ -159,6 +159,6 @@ The example intentionally keeps live search optional. CI should continue running
 
 ## Source and proof
 
-- [Runnable Research Assistant](https://github.com/looprig/.github/tree/docs/rich-developer-guides/examples/go/agents/research-assistant)
+- [Runnable Research Assistant](https://github.com/looprig/.github/tree/main/examples/go/agents/research-assistant)
 - [Harness delegation contracts](https://github.com/looprig/harness/blob/main/pkg/loop/definition.go)
 - [Looprig Skill tool](https://github.com/looprig/tools/blob/main/skill/skill.go)

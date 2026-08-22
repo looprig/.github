@@ -39,17 +39,17 @@ The adapter does not instantiate the Rig or call restore by itself. The composit
 
 ## Harness and restore
 
-[Harness Sessions and Gates](/docs/guides/tui/integration/harness/) shows `sessionadapter.NewWithReplay`, `sessionadapter.Restore`, and the `restore.Decider` wiring used before Bubble Tea starts. It also explains the gate coordinates that keep permission replies on the correct loop.
+[Harness Sessions and Gates](/docs/guides/tui/integration/harness) shows `sessionadapter.NewWithReplay`, `sessionadapter.Restore`, and the `restore.Decider` wiring used before Bubble Tea starts. It also explains the gate coordinates that keep permission replies on the correct loop.
 
 ## Workspace metadata
 
-[Workspaces and Session Presentation](/docs/guides/tui/integration/workspaces/) documents `SessionPresentation`, the fixed profile badge, pre-gate diagnostics, and resumed-session refresh. The TUI displays workspace context. It does not grant access or mutate the active profile.
+[Workspaces and Session Presentation](/docs/guides/tui/integration/workspaces) documents `SessionPresentation`, the fixed profile badge, pre-gate diagnostics, and resumed-session refresh. The TUI displays workspace context. It does not grant access or mutate the active profile.
 
 ## Durable replay
 
-[Session Stores and Durable Replay](/docs/guides/tui/integration/session-stores/) documents the `ReplayOpener` interface, journal sequence recovery, and the difference between `New`, `NewWithReplay`, and `Restore`.
+[Session Stores and Durable Replay](/docs/guides/tui/integration/session-stores) documents the `ReplayOpener` interface, journal sequence recovery, and the difference between `New`, `NewWithReplay`, and `Restore`.
 
-For the capabilities being rendered, read [Tools](/docs/guides/tools/) and [Harness](/docs/guides/harness/).
+For the capabilities being rendered, read [Tools](/docs/guides/tools) and [Harness](/docs/guides/harness).
 
 ## Source
 

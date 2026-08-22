@@ -58,7 +58,7 @@ flowchart LR
 
 The zero `process.Config` is valid and normalizes to bounded defaults: 8 running processes per loop, 32 per session, 1 MiB in-memory retention per process, 64 MiB spool retention per process, a 32 KiB inline result cap, 64 pending waiters, 1 MiB pending input, and a 5 second graceful shutdown period. Explicit negative or inconsistent limits fail with `invalid_settings`.
 
-Use [Process Lifecycle, Storage, and Restore](/docs/guides/tools/processes/lifecycle/) for terminalization and restart behavior, and [Process Output, Input, and Stop Tools](/docs/guides/tools/processes/tools/) for the model-facing follow-up calls. Harness's [tool-call lifecycle](/docs/guides/harness/step/tool-calls-and-results/) and Inference's [streaming tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas/) carry the surrounding model exchange.
+Use [Process Lifecycle, Storage, and Restore](/docs/guides/tools/processes/lifecycle) for terminalization and restart behavior, and [Process Output, Input, and Stop Tools](/docs/guides/tools/processes/tools) for the model-facing follow-up calls. Harness's [tool-call lifecycle](/docs/guides/harness/step/tool-calls-and-results) and Inference's [streaming tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas) carry the surrounding model exchange.
 
 ## Runnable Example
 

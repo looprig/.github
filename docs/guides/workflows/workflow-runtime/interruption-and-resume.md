@@ -127,7 +127,7 @@ Before Flow runs a task during `Resume`, it validates the loaded checkpoint agai
 
 A changed graph returns `*flow.GraphVersionMismatchError`. A checkpoint belonging to another run returns `*flow.GraphRunMismatchError`. A completed or cancelled Flow run returns `*flow.ResumeTerminalError`. Workflows wraps definite checkpoint read problems as a failed run when the supervisor can still own the session. These checks happen before business tasks execute.
 
-The repository's stage example demonstrates the full lifecycle: start into an interrupt, rebuild the definition against the same checkpoint store, call `Get`, validate a typed resume payload, resume to completion, cancel another run, and inspect contiguous history. See [Flow graph composition](/docs/guides/workflows/flow/) for the graph and [Workflow state, checkpoints, and history](/docs/guides/workflows/workflow-runtime/state-and-history/) for the storage split.
+The repository's stage example demonstrates the full lifecycle: start into an interrupt, rebuild the definition against the same checkpoint store, call `Get`, validate a typed resume payload, resume to completion, cancel another run, and inspect contiguous history. See [Flow graph composition](/docs/guides/workflows/flow) for the graph and [Workflow state, checkpoints, and history](/docs/guides/workflows/workflow-runtime/state-and-history) for the storage split.
 
 ## Source
 

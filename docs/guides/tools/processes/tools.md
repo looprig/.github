@@ -57,7 +57,7 @@ for _, definition := range []tool.Definition{output, input, stop} {
 }
 ```
 
-For the shared supervisor and ownership model, read [Process Supervision](/docs/guides/tools/processes/). For restore and shutdown, read [Process Lifecycle, Storage, and Restore](/docs/guides/tools/processes/lifecycle/). The surrounding model exchange is described by Harness's [tool calls and results](/docs/guides/harness/step/tool-calls-and-results/) and Inference's [tool-result blocks](/docs/guides/inference/content-blocks/tool-result/).
+For the shared supervisor and ownership model, read [Process Supervision](/docs/guides/tools/processes). For restore and shutdown, read [Process Lifecycle, Storage, and Restore](/docs/guides/tools/processes/lifecycle). The surrounding model exchange is described by Harness's [tool calls and results](/docs/guides/harness/step/tool-calls-and-results) and Inference's [tool-result blocks](/docs/guides/inference/content-blocks/tool-result).
 
 ## Source
 

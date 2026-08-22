@@ -29,7 +29,7 @@ This guide is the developer reference for the standard Tools category. It covers
 - the Task tools bundle, exposed as `TaskCreate`, `TaskUpdate`, `TaskGet`, and `TaskList`, and
 - the supervised process companion tools `ProcessOutput`, `ProcessInput`, and `ProcessStop`.
 
-Tools are separate from the [Sandboxing and Interfaces](/docs/start/sandbox-and-interfaces/) guide. A tool prepares a request and names the capability it needs. The sandbox or another consumer-owned access source enforces the resulting decision. Tools do not invent grants, discover an implicit permission file, or expose host paths as model data.
+Tools are separate from the [Sandboxing and Interfaces](/docs/start/sandbox-and-interfaces) guide. A tool prepares a request and names the capability it needs. The sandbox or another consumer-owned access source enforces the resulting decision. Tools do not invent grants, discover an implicit permission file, or expose host paths as model data.
 
 ## The Tool Boundary
 
@@ -50,9 +50,9 @@ flowchart LR
 
 ## Start Here
 
-Read [Definitions, Preparation, and Results](/docs/guides/tools/core-concepts/) for the common contract, then [Registering Tools With Harness](/docs/guides/tools/core-concepts/registration/) for composition. [Safety, Permissions, and Gates](/docs/guides/tools/safety/) explains how requirements, candidates, grants, path containment, and workspace coordination fit together. The [Permission Rules and Stores](/docs/guides/tools/safety/permissions/) page documents durable approvals. Browse the standard constructors in [Built-in tools](/docs/guides/tools/built-in-tools/).
+Read [Definitions, Preparation, and Results](/docs/guides/tools/core-concepts) for the common contract, then [Registering Tools With Harness](/docs/guides/tools/core-concepts/registration) for composition. [Safety, Permissions, and Gates](/docs/guides/tools/safety) explains how requirements, candidates, grants, path containment, and workspace coordination fit together. The [Permission Rules and Stores](/docs/guides/tools/safety/permissions) page documents durable approvals. Browse the standard constructors in [Built-in tools](/docs/guides/tools/built-in-tools).
 
-For the runtime that consumes these calls, see Harness's [tool calls and results step](/docs/guides/harness/step/tool-calls-and-results/). For the model request that carries tools, see Inference's [tool request model](/docs/guides/inference/requests/tools/) and [tool-use content blocks](/docs/guides/inference/content-blocks/tool-use/). Model selection still belongs to Inference, so pair the Harness [model request step](/docs/guides/harness/step/model-request/) with Inference's [model selection](/docs/guides/inference/requests/model-selection/) when composing a turn.
+For the runtime that consumes these calls, see Harness's [tool calls and results step](/docs/guides/harness/step/tool-calls-and-results). For the model request that carries tools, see Inference's [tool request model](/docs/guides/inference/requests/tools) and [tool-use content blocks](/docs/guides/inference/content-blocks/tool-use). Model selection still belongs to Inference, so pair the Harness [model request step](/docs/guides/harness/step/model-request) with Inference's [model selection](/docs/guides/inference/requests/model-selection) when composing a turn.
 
 ## A Minimal Definition Example
 

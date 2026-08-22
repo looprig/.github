@@ -175,7 +175,7 @@ Run this check in the deployed container, guest, or managed runtime. A laptop re
 | Virtual machine | Guest kernel plus hypervisor boundary | Similar to a physical host from the application perspective, but images still need tools, users, and filesystem policy. |
 | Managed code sandbox | Provider-defined process or machine boundary | Confirm supported binaries, networking, persistence, timeouts, and whether nested OS enforcement is permitted. |
 
-Use [profiles and access dimensions](/docs/guides/sandboxing/profiles/), [platform levels and guarantees](/docs/guides/sandboxing/enforcement/platforms/), and [compilation reports](/docs/guides/sandboxing/enforcement/reports/) to define and verify the inner boundary. Use [Harness gates and prepared tools](/docs/guides/sandboxing/integration/) when approved tool calls cross into the executor.
+Use [profiles and access dimensions](/docs/guides/sandboxing/profiles), [platform levels and guarantees](/docs/guides/sandboxing/enforcement/platforms), and [compilation reports](/docs/guides/sandboxing/enforcement/reports) to define and verify the inner boundary. Use [Harness gates and prepared tools](/docs/guides/sandboxing/integration) when approved tool calls cross into the executor.
 
 ## Source
 

@@ -59,4 +59,4 @@ Unknown provider and API-format labels are intentionally accepted by structural 
 - Source: [`inference/model/model.go`](https://github.com/looprig/inference/blob/main/model/model.go), [`inference/model/capabilities.go`](https://github.com/looprig/inference/blob/main/model/capabilities.go)
 - Tests: [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/main/model/model_test.go), [`inference/model/apiformat_test.go`](https://github.com/looprig/inference/blob/main/model/apiformat_test.go)
 
-Related: [Model](/docs/guides/inference/models/model/), [Model validation](/docs/guides/inference/models/validation/), [Model selection](/docs/guides/inference/requests/model-selection/), and the Harness [models and inference loop guide](/docs/guides/harness/loop/models-and-inference/).
+Related: [Model](/docs/guides/inference/models/model), [Model validation](/docs/guides/inference/models/validation), [Model selection](/docs/guides/inference/requests/model-selection), and the Harness [models and inference loop guide](/docs/guides/harness/loop/models-and-inference).

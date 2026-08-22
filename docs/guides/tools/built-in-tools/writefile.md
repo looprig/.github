@@ -41,7 +41,7 @@ prepared := loop.WithPreparedCall(ctx, tool.PreparedCall{
 result, err := writer.InvokableRun(prepared, `{}`)
 ```
 
-See [ReadFile](/docs/guides/tools/built-in-tools/readfile/) for observations, [EditFile](/docs/guides/tools/built-in-tools/editfile/) for exact replacements, and [Safety, Permissions, and Gates](/docs/guides/tools/safety/) for permits and gate decisions.
+See [ReadFile](/docs/guides/tools/built-in-tools/readfile) for observations, [EditFile](/docs/guides/tools/built-in-tools/editfile) for exact replacements, and [Safety, Permissions, and Gates](/docs/guides/tools/safety) for permits and gate decisions.
 
 ## Source
 

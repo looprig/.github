@@ -41,7 +41,7 @@ response into an observation with:
 | Evidence | Timing and usage, plus structured-output success or a closed error reason when a schema was requested. |
 
 The caller still owns model identity and provider choices. Start with
-Inference's [model selection reference](/docs/guides/inference/requests/model-selection/)
+Inference's [model selection reference](/docs/guides/inference/requests/model-selection)
 for the request template, then connect it to Evals:
 
 ```go
@@ -93,10 +93,10 @@ reasons `invalid_json`, `schema_mismatch`, `missing_field`, `out_of_range`, or
 
 `exact.SchemaResult()` consumes those signals. A generic usage entry is never
 treated as proof of structured output. See Inference's [structured output
-guide](/docs/guides/inference/structured-output/) for request-side schema
-features, the [exact evaluator contract](/docs/guides/evals/evaluators/exact/)
+guide](/docs/guides/inference/structured-output) for request-side schema
+features, the [exact evaluator contract](/docs/guides/evals/evaluators/exact)
 for the three-way pass, fail, and unverified result, and the [model-judge
-evaluator](/docs/guides/evals/evaluators/judge/) when a rubric needs a
+evaluator](/docs/guides/evals/evaluators/judge) when a rubric needs a
 structured decision.
 
 ## Harness is a composition seam
@@ -114,8 +114,8 @@ type Target interface {
 That wrapper should translate a Harness run's assistant messages, tool blocks,
 timings, and safe operational facts into one `Observation`. It should preserve
 the target read-only rule and stamp a subject revision that matches the cases
-it executes. Then the wrapper can use the same [run and result contract](/docs/guides/evals/cases-and-runs/runs-and-results/)
-and the Harness runtime's [composition guide](/docs/guides/harness/).
+it executes. Then the wrapper can use the same [run and result contract](/docs/guides/evals/cases-and-runs/runs-and-results)
+and the Harness runtime's [composition guide](/docs/guides/harness).
 
 This is an adapter seam, not a claim that Evals starts or supervises a Harness
 run itself. Keeping ownership explicit prevents a test helper from silently

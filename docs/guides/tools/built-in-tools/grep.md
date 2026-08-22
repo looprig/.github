@@ -40,7 +40,7 @@ prepared := loop.WithPreparedCall(ctx, tool.PreparedCall{
 result, err := search.InvokableRun(prepared, `{}`)
 ```
 
-Use [Glob](/docs/guides/tools/built-in-tools/glob/) to discover filenames first and [ReadFile](/docs/guides/tools/built-in-tools/readfile/) when the model needs a bounded file view. For the request envelope, see Inference's [tool requests](/docs/guides/inference/requests/tools/).
+Use [Glob](/docs/guides/tools/built-in-tools/glob) to discover filenames first and [ReadFile](/docs/guides/tools/built-in-tools/readfile) when the model needs a bounded file view. For the request envelope, see Inference's [tool requests](/docs/guides/inference/requests/tools).
 
 ## Source
 

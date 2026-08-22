@@ -52,4 +52,4 @@ Errors intentionally carry bounded classifications, not raw schema or tool paylo
 - Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go), [`inference/structured_errors.go`](https://github.com/looprig/inference/blob/main/structured_errors.go)
 - Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go) covers ordering, nested images, duplicates, reserved names, and bounded diagnostics.
 
-Related: [Structured output requests](/docs/guides/inference/requests/structured-output/), [Model capabilities](/docs/guides/inference/models/capabilities/).
+Related: [Structured output requests](/docs/guides/inference/requests/structured-output), [Model capabilities](/docs/guides/inference/models/capabilities).

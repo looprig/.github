@@ -43,7 +43,7 @@ fmt.Println(tray.ViewWindowBackground(72, 6, styles.TraySelectedBg))
 
 `NewSessionComplete` copies the input slice and returns `nil` for an empty list. The tray provides `Selected`, `Cursor`, `Up`, `Down`, and `SelectWindowRow`, plus a bounded `ViewWindowBackground`. A row with `row % 3 == 2` is the spacer and is intentionally inert.
 
-The browser owns sorting, filtering, and the call to `ResumeSession`. This component only paints the list and reports a selected record. See [Session Adapter](/docs/guides/tui/runtime/session-adapter/) for the agent that receives the resumed session.
+The browser owns sorting, filtering, and the call to `ResumeSession`. This component only paints the list and reports a selected record. See [Session Adapter](/docs/guides/tui/runtime/session-adapter) for the agent that receives the resumed session.
 
 ## Row selection
 

@@ -61,4 +61,4 @@ Use `WithSampling(defaults)` for model defaults and `Request.Override` for a per
 - Source: [`inference/model/sampling.go`](https://github.com/looprig/inference/blob/main/model/sampling.go)
 - Tests: [`inference/model/sampling_test.go`](https://github.com/looprig/inference/blob/main/model/sampling_test.go), [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/main/model/model_test.go)
 
-Related: [Reasoning effort](/docs/guides/inference/models/reasoning-effort/), [Sampling overrides](/docs/guides/inference/requests/sampling-overrides/).
+Related: [Reasoning effort](/docs/guides/inference/models/reasoning-effort), [Sampling overrides](/docs/guides/inference/requests/sampling-overrides).

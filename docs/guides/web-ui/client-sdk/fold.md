@@ -54,7 +54,7 @@ for await (const frame of parseSseStream(response.body)) {
 }
 ```
 
-The [Events and live streams](/docs/guides/web-ui/client-sdk/events/) page covers frame parsing. [Reconnect and exact joins](/docs/guides/web-ui/sessions/reconnect/) explains how `joinSessionView` orders the two segments before folding them.
+The [Events and live streams](/docs/guides/web-ui/client-sdk/events) page covers frame parsing. [Reconnect and exact joins](/docs/guides/web-ui/sessions/reconnect) explains how `joinSessionView` orders the two segments before folding them.
 
 ## Source
 

@@ -52,11 +52,11 @@ for {
 }
 ```
 
-The Harness [streaming response step](/docs/guides/harness/step/streaming-response/) is the canonical consumer when a Harness loop renders these chunks.
+The Harness [streaming response step](/docs/guides/harness/step/streaming-response) is the canonical consumer when a Harness loop renders these chunks.
 
 ## Proof
 
 - Source: [`inference/stream/stream.go`](https://github.com/looprig/inference/blob/main/stream/stream.go), [`inference/stream/chunkstream.go`](https://github.com/looprig/inference/blob/main/stream/chunkstream.go), [`core/content/chunk.go`](https://github.com/looprig/core/blob/main/content/chunk.go)
 - Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/main/stream/stream_test.go), [`inference/stream/chunkstream_test.go`](https://github.com/looprig/inference/blob/main/stream/chunkstream_test.go)
 
-Related: [StreamReader](/docs/guides/inference/streaming/stream-reader/), [Chunks](/docs/guides/inference/streaming/chunks/), [Terminal stream results](/docs/guides/inference/streaming/terminal-results/).
+Related: [StreamReader](/docs/guides/inference/streaming/stream-reader), [Chunks](/docs/guides/inference/streaming/chunks), [Terminal stream results](/docs/guides/inference/streaming/terminal-results).

@@ -107,7 +107,7 @@ object whose quote names a different message or text that never occurred. That
 result returns `MessageIndexError` or `QuoteNotFoundError`, and the caller must
 not infer a quality verdict from it.
 
-The [Inference structured output guide](/docs/guides/inference/structured-output/)
+The [Inference structured output guide](/docs/guides/inference/structured-output)
 describes the provider-facing schema capability. This page describes the extra
 local validation that makes a judge assessment trustworthy.
 
@@ -132,7 +132,7 @@ Failures remain typed and fail-secure:
 
 When the judge runs inside `eval.Run`, those evaluator errors are contained as
 an `error` assessment under the judge descriptor. The report still keeps sibling
-exact assessments, and the [result guide](/docs/guides/evals/cases-and-runs/runs-and-results/) shows the
+exact assessments, and the [result guide](/docs/guides/evals/cases-and-runs/runs-and-results) shows the
 stage distinction.
 
 ## A deterministic judge fixture
@@ -175,7 +175,7 @@ func TestJudge(t *testing.T) {
 
 For the complete test fixture and model helper, see
 [examples/judge/example_test.go](https://github.com/looprig/eval/blob/main/examples/judge/example_test.go). Store the resulting report with the
-[redacted report sink](/docs/guides/evals/reporting/) when the score needs to leave the process.
+[redacted report sink](/docs/guides/evals/reporting) when the score needs to leave the process.
 
 ## Source
 

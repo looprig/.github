@@ -105,5 +105,5 @@ restore and maintenance; product readers should use the public event replayer.
 ## Source and proof
 
 - [`Store.Open`, options, and paths](https://github.com/looprig/harness/blob/main/pkg/sessionstore/sessionstore.go)
-- [`storage.Composite`](https://github.com/looprig/harness/blob/main/vendor/github.com/looprig/storage/storage.go)
+- [`storage.Composite`](https://github.com/looprig/storage/blob/main/storage.go)
 - [`sessionstore construction tests`](https://github.com/looprig/harness/blob/main/pkg/sessionstore/sessionstore_test.go)

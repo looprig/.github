@@ -90,10 +90,10 @@ test("Tools overview explains composition and links canonical guides", () => {
     assert.match(content, new RegExp(phrase, "i"), `overview omits ${phrase}`);
   }
   for (const destination of [
-    "/docs/guides/harness/step/tool-calls-and-results/",
-    "/docs/guides/inference/requests/tools/",
-    "/docs/guides/inference/content-blocks/tool-use/",
-    "/docs/start/sandbox-and-interfaces/",
+    "/docs/guides/harness/step/tool-calls-and-results",
+    "/docs/guides/inference/requests/tools",
+    "/docs/guides/inference/content-blocks/tool-use",
+    "/docs/start/sandbox-and-interfaces",
   ]) {
     assert.match(content, new RegExp(destination.replaceAll("/", "\\/")), `overview omits ${destination}`);
   }
@@ -111,8 +111,8 @@ test("Concept and safety pages cover prepare-before-effect and gates", () => {
   for (const phrase of ["Deny", "Gated", "Allow", "requirement", "candidate", "grant", "symlink", "lease", "read-only"]) {
     assert.match(safety, new RegExp(phrase, "i"), `safety omits ${phrase}`);
   }
-  assert.match(safety, /\/docs\/start\/sandbox-and-interfaces\//);
-  assert.match(safety, /\/docs\/guides\/harness\/gates\//);
+  assert.match(safety, /\/docs\/start\/sandbox-and-interfaces/);
+  assert.match(safety, /\/docs\/guides\/harness\/gates/);
 });
 
 test("Every Tools page has source and proof links to real Tools files", () => {
@@ -171,7 +171,7 @@ test("Permission page explains strict rules, stores, and candidate matches", () 
     assert.match(content, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), `permissions omits ${phrase}`);
   }
   assert.match(content, /examples\/permissions\/example_test\.go/);
-  assert.match(content, /\/docs\/start\/sandbox-and-interfaces\//);
+  assert.match(content, /\/docs\/start\/sandbox-and-interfaces/);
 });
 
 test("Cross-guide interlinks use canonical Harness and Inference destinations", () => {
@@ -187,12 +187,12 @@ test("Cross-guide interlinks use canonical Harness and Inference destinations", 
     "guides/tools/processes/tools",
   ];
   const destinations = [
-    "/docs/guides/harness/step/model-request/",
-    "/docs/guides/harness/step/tool-calls-and-results/",
-    "/docs/guides/inference/requests/model-selection/",
-    "/docs/guides/inference/requests/tools/",
-    "/docs/guides/inference/content-blocks/tool-result/",
-    "/docs/guides/inference/streaming/tool-call-deltas/",
+    "/docs/guides/harness/step/model-request",
+    "/docs/guides/harness/step/tool-calls-and-results",
+    "/docs/guides/inference/requests/model-selection",
+    "/docs/guides/inference/requests/tools",
+    "/docs/guides/inference/content-blocks/tool-result",
+    "/docs/guides/inference/streaming/tool-call-deltas",
   ];
   for (const id of pagesToCheck) {
     const content = pageMarkdown(id);

@@ -69,7 +69,7 @@ func operationProfile(base, workspace string) (*sandbox.Profile, error) {
 }
 ```
 
-This pattern keeps a ceiling in the caller that knows the operation. A Tool can derive a request-specific ceiling from its prepared target, then the Harness gate can decide whether to issue a grant. The sandbox still checks the final grant binding against the profile fingerprint, route fingerprint, command, execution ID, and canonical working directory. See [Harness gates and prepared Tools](/docs/guides/sandboxing/integration/) and [Tools safety and gates](/docs/guides/tools/safety/) for the division of responsibility.
+This pattern keeps a ceiling in the caller that knows the operation. A Tool can derive a request-specific ceiling from its prepared target, then the Harness gate can decide whether to issue a grant. The sandbox still checks the final grant binding against the profile fingerprint, route fingerprint, command, execution ID, and canonical working directory. See [Harness gates and prepared Tools](/docs/guides/sandboxing/integration) and [Tools safety and gates](/docs/guides/tools/safety) for the division of responsibility.
 
 ## Restrictions are not grants
 

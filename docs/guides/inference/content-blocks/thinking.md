@@ -58,11 +58,11 @@ func main() {
 }
 ```
 
-The zero signature is not an error during streaming. Use [Thinking deltas](/docs/guides/inference/streaming/thinking-deltas/) and the core stream accumulator to produce a completed block.
+The zero signature is not an error during streaming. Use [Thinking deltas](/docs/guides/inference/streaming/thinking-deltas) and the core stream accumulator to produce a completed block.
 
 ## Proof
 
 - Source: [`core/content/block.go`](https://github.com/looprig/core/blob/main/content/block.go)
 - Tests: [`core/content/block_test.go`](https://github.com/looprig/core/blob/main/content/block_test.go), [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/main/content/block_json_test.go)
 
-Related: [Thinking deltas](/docs/guides/inference/streaming/thinking-deltas/), [AIMessage](/docs/guides/inference/messages/message-types/ai-message/).
+Related: [Thinking deltas](/docs/guides/inference/streaming/thinking-deltas), [AIMessage](/docs/guides/inference/messages/message-types/ai-message).

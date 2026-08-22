@@ -61,7 +61,7 @@ The factory above is intentionally small and deterministic for an embedding exam
 
 The `Agent` interface is the dependency inversion point. The screen calls `Submit` for the active loop and `SubmitToLoop` for the focused loop, `Subscribe` once for the whole session, and `ReplayBacklog` before live repaint when restoring. Gate replies include the loop or gate ID that produced the prompt. `OpenAgent` honors cancellation so runtime shutdown can finish a handoff without leaking a replacement.
 
-For the process-level lifecycle, continue to [Run a TUI Entry Point](/docs/guides/tui/getting-started/run/). For the full method surface, see [Events and Projections](/docs/guides/tui/runtime/events/) and [Commands and Gates](/docs/guides/tui/runtime/commands/).
+For the process-level lifecycle, continue to [Run a TUI Entry Point](/docs/guides/tui/getting-started/run). For the full method surface, see [Events and Projections](/docs/guides/tui/runtime/events) and [Commands and Gates](/docs/guides/tui/runtime/commands).
 
 ## Source
 

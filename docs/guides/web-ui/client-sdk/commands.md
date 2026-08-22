@@ -59,7 +59,7 @@ async function answer(sessionId: string, gateId: string, choice: GateChoice) {
 }
 ```
 
-Every response goes through the matching validator and a non-success response becomes a typed error. See [Validation and errors](/docs/guides/web-ui/client-sdk/validation/) and [Transport and ownership](/docs/guides/web-ui/client-sdk/ownership/) before adding a retry policy.
+Every response goes through the matching validator and a non-success response becomes a typed error. See [Validation and errors](/docs/guides/web-ui/client-sdk/validation) and [Transport and ownership](/docs/guides/web-ui/client-sdk/ownership) before adding a retry policy.
 
 ## Source
 

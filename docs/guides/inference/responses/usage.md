@@ -58,4 +58,4 @@ if response.Usage != nil {
 - Source: [`core/content/usage.go`](https://github.com/looprig/core/blob/main/content/usage.go), [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go)
 - Tests: [`core/content/usage_test.go`](https://github.com/looprig/core/blob/main/content/usage_test.go), [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/main/stream/stream_test.go)
 
-Related: [Terminal stream results](/docs/guides/inference/streaming/terminal-results/), [AIMessage](/docs/guides/inference/messages/message-types/ai-message/).
+Related: [Terminal stream results](/docs/guides/inference/streaming/terminal-results), [AIMessage](/docs/guides/inference/messages/message-types/ai-message).

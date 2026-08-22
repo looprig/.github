@@ -35,7 +35,7 @@ answer, err := built[0].InvokableRun(ctx, `{"question":"Continue?","choices":["y
 
 Parsing, a missing question, an answer outside the choice list, a canceled turn, or a provider failure becomes a tool-result error string. `AuditSummary` includes the question because the user sees it directly. It does not expose hidden gate state.
 
-See [Tool Definitions, Preparation, and Results](/docs/guides/tools/core-concepts/) for the common lifecycle and Harness's [tool calls and results](/docs/guides/harness/step/tool-calls-and-results/) for the surrounding turn.
+See [Tool Definitions, Preparation, and Results](/docs/guides/tools/core-concepts) for the common lifecycle and Harness's [tool calls and results](/docs/guides/harness/step/tool-calls-and-results) for the surrounding turn.
 
 ## Source
 

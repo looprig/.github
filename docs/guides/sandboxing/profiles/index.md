@@ -33,7 +33,7 @@ proofs:
 | `Home` | `IsolatedHome`, `RealHome` | The child `HOME`. Isolated homes are owned below the ExecutorSet scratch child. |
 | `Isolation` | `Sandboxed`, `Unconfined` | Whether the OS boundary is required. `Unconfined` needs an explicit acknowledgement. |
 
-The access enum is deliberately ordered as `Deny < Gated < Allow`. That ordering is used by [restriction](/docs/guides/sandboxing/profiles/restriction/) to take the narrower value. It is not a claim that `Gated` itself is an operating-system restriction. It is an application admission state.
+The access enum is deliberately ordered as `Deny < Gated < Allow`. That ordering is used by [restriction](/docs/guides/sandboxing/profiles/restriction) to take the narrower value. It is not a claim that `Gated` itself is an operating-system restriction. It is an application admission state.
 
 ## Construct a profile
 
@@ -80,7 +80,7 @@ func profileFor(workspace, cache string) (*sandbox.Profile, error) {
 
 An `Unconfined` profile is not a fallback when a host lacks a backend. It requires `AckUnconfined: true`, `Allow` on filesystem and network axes, and `Allow` for every additional root. The null backend is selected only for that acknowledged shape. A `Sandboxed` profile remains a required OS boundary and fails with `ErrSandboxUnavailable` or another typed setup error if the host cannot compile it.
 
-The `Home` choice is independent from the authority axes. `RealHome` gives the child the real user home, while `IsolatedHome` gives each Executor key a separate directory and adds it to the compiled writable policy. See [filesystem and environment](/docs/guides/sandboxing/enforcement/filesystem/) for the practical implications.
+The `Home` choice is independent from the authority axes. `RealHome` gives the child the real user home, while `IsolatedHome` gives each Executor key a separate directory and adds it to the compiled writable policy. See [filesystem and environment](/docs/guides/sandboxing/enforcement/filesystem) for the practical implications.
 
 ## Source
 

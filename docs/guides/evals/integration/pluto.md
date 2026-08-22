@@ -23,7 +23,7 @@ Pluto is the code-backed evaluation tooling that composes Evals into a larger
 qualification result. It does not replace `eval.Run`: each runnable table
 expands to one `eval.Suite`, uses the table's evaluator set, and retains the raw
 per-table `eval.Report` behind the rollup. The underlying lifecycle is the Evals
-[run and result contract](/docs/guides/evals/cases-and-runs/runs-and-results/).
+[run and result contract](/docs/guides/evals/cases-and-runs/runs-and-results).
 
 ## Pluto adds capability-aware qualification
 
@@ -160,7 +160,7 @@ scorecard := result.Scorecard
 
 For live tables, `run.BuildTarget` combines a caller-supplied inference client,
 the table environment template, the manifest model, and the table revision into
-the Evals [Inference target](/docs/guides/evals/integration/composition-and-testing/). For
+the Evals [Inference target](/docs/guides/evals/integration/composition-and-testing). For
 Go tests, `plutotest.Run` wraps the same execution core and
 `plutotest.RequireDisposition` gates an allowed set of profile outcomes.
 
@@ -170,7 +170,7 @@ Go tests, `plutotest.Run` wraps the same execution core and
 fingerprint, dimension scores and coverage, status rollup, each table's
 skipped/runnable state, optional profile result, and the embedded bytes from
 Evals' own redacted `report/v1` codec. Decoding a table report therefore keeps
-the same redaction behavior described in [Evals reporting](/docs/guides/evals/reporting/).
+the same redaction behavior described in [Evals reporting](/docs/guides/evals/reporting).
 
 ## Source
 

@@ -105,15 +105,15 @@ test("Sandboxing overview and pages cover the public authority boundaries", () =
     assert.match(overview, new RegExp(phrase, "i"), `overview omits ${phrase}`);
   }
   for (const destination of [
-    "/docs/guides/sandboxing/profiles/",
-    "/docs/guides/sandboxing/profiles/restriction/",
-    "/docs/guides/sandboxing/enforcement/",
-    "/docs/guides/sandboxing/enforcement/platforms/",
-    "/docs/guides/sandboxing/runtime/",
-    "/docs/guides/sandboxing/runtime/executors/",
-    "/docs/guides/sandboxing/runtime/processes/",
-    "/docs/guides/tools/safety/",
-    "/docs/guides/harness/step/tool-calls-and-results/",
+    "/docs/guides/sandboxing/profiles",
+    "/docs/guides/sandboxing/profiles/restriction",
+    "/docs/guides/sandboxing/enforcement",
+    "/docs/guides/sandboxing/enforcement/platforms",
+    "/docs/guides/sandboxing/runtime",
+    "/docs/guides/sandboxing/runtime/executors",
+    "/docs/guides/sandboxing/runtime/processes",
+    "/docs/guides/tools/safety",
+    "/docs/guides/harness/step/tool-calls-and-results",
   ]) {
     assert.match(overview, new RegExp(destination.replaceAll("/", "\\/")), `overview omits ${destination}`);
   }

@@ -34,11 +34,11 @@ The field is a plain string with no inference-layer constructor or validation be
 
 ## Separation from history
 
-Use `Request.System` for request-scoped behavior. Use [SystemMessage](/docs/guides/inference/messages/message-types/system-message/) when a system turn is part of the ordered `AgenticMessages` conversation and must survive as history. This distinction matters for caching and provider codecs that treat system content specially.
+Use `Request.System` for request-scoped behavior. Use [SystemMessage](/docs/guides/inference/messages/message-types/system-message) when a system turn is part of the ordered `AgenticMessages` conversation and must survive as history. This distinction matters for caching and provider codecs that treat system content specially.
 
 ## Proof
 
 - Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go), [`core/content/message.go`](https://github.com/looprig/core/blob/main/content/message.go)
 - Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go), [`core/content/message_test.go`](https://github.com/looprig/core/blob/main/content/message_test.go)
 
-Related: [Conversation input](/docs/guides/inference/requests/messages/), [SystemMessage](/docs/guides/inference/messages/message-types/system-message/).
+Related: [Conversation input](/docs/guides/inference/requests/messages), [SystemMessage](/docs/guides/inference/messages/message-types/system-message).

@@ -57,4 +57,4 @@ Use `Invoke` when the caller needs one `*Response` and does not need incremental
 - Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go)
 - Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go) includes a compile-time client implementation and request field coverage.
 
-Related: [Complete inference](/docs/guides/inference/client/invoke/), [Streaming inference](/docs/guides/inference/client/stream/), [Requests](/docs/guides/inference/requests/), and the Harness [models and inference loop guide](/docs/guides/harness/loop/models-and-inference/).
+Related: [Complete inference](/docs/guides/inference/client/invoke), [Streaming inference](/docs/guides/inference/client/stream), [Requests](/docs/guides/inference/requests), and the Harness [models and inference loop guide](/docs/guides/harness/loop/models-and-inference).

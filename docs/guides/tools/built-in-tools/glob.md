@@ -40,7 +40,7 @@ prepared := loop.WithPreparedCall(ctx, tool.PreparedCall{
 result, err := finder.InvokableRun(prepared, `{}`)
 ```
 
-See [ReadFile](/docs/guides/tools/built-in-tools/readfile/) for reading one file and [Grep](/docs/guides/tools/built-in-tools/grep/) for content search. The shared gate boundary is described in [Safety, Permissions, and Gates](/docs/guides/tools/safety/).
+See [ReadFile](/docs/guides/tools/built-in-tools/readfile) for reading one file and [Grep](/docs/guides/tools/built-in-tools/grep) for content search. The shared gate boundary is described in [Safety, Permissions, and Gates](/docs/guides/tools/safety).
 
 ## Source
 

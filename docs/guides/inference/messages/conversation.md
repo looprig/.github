@@ -52,4 +52,4 @@ Do not use the role string as the only discriminator. A role is a field and can 
 - Source: [`core/content/message.go`](https://github.com/looprig/core/blob/main/content/message.go)
 - Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/main/content/message_test.go) includes compile-time interface assertions for all four variants.
 
-Related: [Messages](/docs/guides/inference/messages/), [Traverse content safely](/docs/guides/inference/messages/traverse/).
+Related: [Messages](/docs/guides/inference/messages), [Traverse content safely](/docs/guides/inference/messages/traverse).

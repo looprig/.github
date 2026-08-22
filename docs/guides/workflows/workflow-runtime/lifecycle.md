@@ -87,7 +87,7 @@ Workflows calls a run failed when it has a definite, durable reason that normal 
 
 Transient context cancellation or a lost session lease is not converted into a new failure write. The owner stops writing and the next owner can reconcile from durable state. This distinction is why `LastError` is an operational observation, not a new lifecycle status by itself.
 
-For the lower-level checkpoint failure taxonomy, see [Interruption, resume, and recovery](/docs/guides/workflows/workflow-runtime/interruption-and-resume/) and the [Flow module reference](/docs/modules/flow/).
+For the lower-level checkpoint failure taxonomy, see [Interruption, resume, and recovery](/docs/guides/workflows/workflow-runtime/interruption-and-resume) and the [Flow module reference](/docs/modules/flow).
 
 ## Source
 

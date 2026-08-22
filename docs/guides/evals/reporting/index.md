@@ -147,8 +147,8 @@ Run-level failures and sink-level failures remain different. A cancelled
 that partial report if the caller chooses. A sink error does not rewrite any
 assessment status.
 
-The [run contract](/docs/guides/evals/cases-and-runs/runs-and-results/) explains how `Summary` and
-`Provenance` are produced. The [model judge guide](/docs/guides/evals/evaluators/judge/) calls
+The [run contract](/docs/guides/evals/cases-and-runs/runs-and-results) explains how `Summary` and
+`Provenance` are produced. The [model judge guide](/docs/guides/evals/evaluators/judge) calls
 out why raw judge reasons are not safe wire fields.
 
 ## Source

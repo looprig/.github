@@ -66,5 +66,5 @@ The complete data-attribute binding, rendering callback, submit and interrupt ha
 
 ## Proof
 
-The binding source shows one connection, two DOM listeners, and one symmetric cleanup path. The session client tests cover listener delivery and disconnect behavior. For a reactive wrapper, see [Svelte 5](/docs/guides/web-ui/framework-adapters/svelte/).
+The binding source shows one connection, two DOM listeners, and one symmetric cleanup path. The session client tests cover listener delivery and disconnect behavior. For a reactive wrapper, see [Svelte 5](/docs/guides/web-ui/framework-adapters/svelte).
 

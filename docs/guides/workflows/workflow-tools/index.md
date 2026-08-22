@@ -20,7 +20,7 @@ proofs:
 
 The `github.com/looprig/workflows/tools` package is the Workflows-facing tool surface. It returns `[]tool.InvokableTool`, so Harness can register the bundle with the same `tool.BaseTool` and `tool.InvokableTool` contracts used by other tools. The bundle is session-bound. Every run lookup includes the configured session ID, and a caller cannot use a run ID from another session through these tools.
 
-For the caller-side lifecycle, see [Harness tool calls and results](/docs/guides/harness/step/tool-calls-and-results/). For how tool definitions become model request tools, see [Inference tool requests](/docs/guides/inference/requests/tools/) and [Harness model requests](/docs/guides/harness/step/model-request/).
+For the caller-side lifecycle, see [Harness tool calls and results](/docs/guides/harness/step/tool-calls-and-results). For how tool definitions become model request tools, see [Inference tool requests](/docs/guides/inference/requests/tools) and [Harness model requests](/docs/guides/harness/step/model-request).
 
 ## Bundle configuration
 

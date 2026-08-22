@@ -79,14 +79,14 @@ Use the nested guides as the canonical developer path:
 
 | Need | Continue with |
 | --- | --- |
-| Construct content and message threads | [Content blocks](/docs/guides/inference/content-blocks/) and [Messages](/docs/guides/inference/messages/) |
-| Describe and validate a model | [Models](/docs/guides/inference/models/) |
-| Build a request | [Requests](/docs/guides/inference/requests/) |
-| Read complete or incremental output | [Responses](/docs/guides/inference/responses/) and [Streaming](/docs/guides/inference/streaming/) |
-| Enforce structured output | [Structured output](/docs/guides/inference/structured-output/) |
-| Select a released provider adapter | [Providers](/docs/guides/inference/providers/) |
-| Translate a wire format | [Codecs](/docs/guides/inference/codecs/) and [API formats](/docs/guides/inference/api-formats/) |
-| Bound context and recover failures | [Context counting](/docs/guides/inference/context-counting/) and [Errors and cancellation](/docs/guides/inference/errors-and-cancellation/) |
+| Construct content and message threads | [Content blocks](/docs/guides/inference/content-blocks) and [Messages](/docs/guides/inference/messages) |
+| Describe and validate a model | [Models](/docs/guides/inference/models) |
+| Build a request | [Requests](/docs/guides/inference/requests) |
+| Read complete or incremental output | [Responses](/docs/guides/inference/responses) and [Streaming](/docs/guides/inference/streaming) |
+| Enforce structured output | [Structured output](/docs/guides/inference/structured-output) |
+| Select a released provider adapter | [Providers](/docs/guides/inference/providers) |
+| Translate a wire format | [Codecs](/docs/guides/inference/codecs) and [API formats](/docs/guides/inference/api-formats) |
+| Bound context and recover failures | [Context counting](/docs/guides/inference/context-counting) and [Errors and cancellation](/docs/guides/inference/errors-and-cancellation) |
 
 Keep the client lifecycle separate from the Harness lifecycle: Inference owns model requests, provider codecs, responses, and streams; Harness owns turns, steps, tool execution, gates, and durable session events.
 

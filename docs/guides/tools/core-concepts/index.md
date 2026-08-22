@@ -74,7 +74,7 @@ prepared := loop.WithPreparedCall(ctx, tool.PreparedCall{
 result, err := bashTool.InvokableRun(prepared, `{"command":"printf changed"}`)
 ```
 
-The full runnable version is [the prepared Bash example](https://github.com/looprig/tools/blob/main/examples/preparation/example_test.go). Connect this lifecycle to Harness's [tool calls and results](/docs/guides/harness/step/tool-calls-and-results/) and Inference's [tool-result content](/docs/guides/inference/content-blocks/tool-result/).
+The full runnable version is [the prepared Bash example](https://github.com/looprig/tools/blob/main/examples/preparation/example_test.go). Connect this lifecycle to Harness's [tool calls and results](/docs/guides/harness/step/tool-calls-and-results) and Inference's [tool-result content](/docs/guides/inference/content-blocks/tool-result).
 
 ## Result Shapes
 
@@ -91,7 +91,7 @@ Errors from execution are model-facing strings or fields. They do not expose fil
 
 ## Fresh Instances and Shared State
 
-Definition builds are fresh. Concurrent builds must not return the same mutable tool instance. The exception is deliberate shared state inside a bundle or session resource: the four task tools share one task graph, and supervised process definitions resolve one session-scoped `SupervisorResourceKey` entry. Read the [registration guide](/docs/guides/tools/core-concepts/registration/) before adding a definition to a composition root.
+Definition builds are fresh. Concurrent builds must not return the same mutable tool instance. The exception is deliberate shared state inside a bundle or session resource: the four task tools share one task graph, and supervised process definitions resolve one session-scoped `SupervisorResourceKey` entry. Read the [registration guide](/docs/guides/tools/core-concepts/registration) before adding a definition to a composition root.
 
 ## Source
 

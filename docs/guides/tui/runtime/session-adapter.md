@@ -63,7 +63,7 @@ If no matching gate is open, the adapter returns `*GateNotOpenError` with the lo
 
 ## Ownership
 
-`Adapter.Close` calls the wrapped session controller's shutdown exactly once. Subscription readers stop with the adapter. The Harness session owns workspace leases, snapshots, the event journal, and garbage collection. Read [Workspaces and Session Presentation](/docs/guides/tui/integration/workspaces/) for what the screen displays and [Session Stores and Durable Replay](/docs/guides/tui/integration/session-stores/) for the storage seam.
+`Adapter.Close` calls the wrapped session controller's shutdown exactly once. Subscription readers stop with the adapter. The Harness session owns workspace leases, snapshots, the event journal, and garbage collection. Read [Workspaces and Session Presentation](/docs/guides/tui/integration/workspaces) for what the screen displays and [Session Stores and Durable Replay](/docs/guides/tui/integration/session-stores) for the storage seam.
 
 ## Source
 

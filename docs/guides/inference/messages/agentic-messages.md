@@ -53,4 +53,4 @@ Do not mutate a thread concurrently with a client that is encoding it. The slice
 - Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/main/content/message_test.go) covers nil, empty, and mixed four-type threads.
 - Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/main/examples/content/example_test.go)
 
-Related: [Conversation](/docs/guides/inference/messages/conversation/), [Request messages](/docs/guides/inference/requests/messages/).
+Related: [Conversation](/docs/guides/inference/messages/conversation), [Request messages](/docs/guides/inference/requests/messages).

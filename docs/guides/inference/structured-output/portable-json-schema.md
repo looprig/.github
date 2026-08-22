@@ -57,4 +57,4 @@ The validator bounds schema bytes at 1 MiB, nesting depth at 64, and the total p
 - Source: [`inference/output.go`](https://github.com/looprig/inference/blob/main/output.go)
 - Tests: [`inference/output_test.go`](https://github.com/looprig/inference/blob/main/output_test.go) covers supported shapes, unknown keywords, duplicate members, depth, property count, and enum type matching.
 
-Related: [Schema validation](/docs/guides/inference/structured-output/validation/), [OutputSchema](/docs/guides/inference/structured-output/output-schema/).
+Related: [Schema validation](/docs/guides/inference/structured-output/validation), [OutputSchema](/docs/guides/inference/structured-output/output-schema).

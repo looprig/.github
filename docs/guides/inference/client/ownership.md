@@ -51,4 +51,4 @@ defer func() {
 - Source: [`inference/stream/stream.go`](https://github.com/looprig/inference/blob/main/stream/stream.go), [`inference/model/model.go`](https://github.com/looprig/inference/blob/main/model/model.go), [`inference/model/sampling.go`](https://github.com/looprig/inference/blob/main/model/sampling.go)
 - Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/main/stream/stream_test.go), [`inference/model/sampling_test.go`](https://github.com/looprig/inference/blob/main/model/sampling_test.go), [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/main/model/model_test.go)
 
-Related: [Streaming inference](/docs/guides/inference/client/stream/), [Close streams](/docs/guides/inference/streaming/close/).
+Related: [Streaming inference](/docs/guides/inference/client/stream), [Close streams](/docs/guides/inference/streaming/close).

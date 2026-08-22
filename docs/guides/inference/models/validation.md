@@ -43,4 +43,4 @@ Always use `errors.As` instead of matching the human-readable error string. A ca
 - Source: [`inference/model/model.go`](https://github.com/looprig/inference/blob/main/model/model.go), [`inference/model/errors.go`](https://github.com/looprig/inference/blob/main/model/errors.go), [`inference/model/contextlimits.go`](https://github.com/looprig/inference/blob/main/model/contextlimits.go)
 - Tests: [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/main/model/model_test.go), [`inference/model/contextlimits_test.go`](https://github.com/looprig/inference/blob/main/model/contextlimits_test.go), [`inference/model/apiformat_test.go`](https://github.com/looprig/inference/blob/main/model/apiformat_test.go)
 
-Related: [Custom models](/docs/guides/inference/models/custom-models/), [Model identity](/docs/guides/inference/models/identity/).
+Related: [Custom models](/docs/guides/inference/models/custom-models), [Model identity](/docs/guides/inference/models/identity).

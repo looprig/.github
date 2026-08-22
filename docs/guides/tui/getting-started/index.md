@@ -41,10 +41,10 @@ For a durable session, prefer `sessionadapter.NewWithReplay` for a new session w
 
 ## Next pages
 
-- [Create a TUI Screen](/docs/guides/tui/getting-started/create/) shows the screen constructor and option seams.
-- [Run a TUI Entry Point](/docs/guides/tui/getting-started/run/) shows the process-level runner.
-- [Events and Projections](/docs/guides/tui/runtime/events/) explains the whole-session stream.
-- [Harness Sessions and Gates](/docs/guides/tui/integration/harness/) wires the adapter to Harness.
+- [Create a TUI Screen](/docs/guides/tui/getting-started/create) shows the screen constructor and option seams.
+- [Run a TUI Entry Point](/docs/guides/tui/getting-started/run) shows the process-level runner.
+- [Events and Projections](/docs/guides/tui/runtime/events) explains the whole-session stream.
+- [Harness Sessions and Gates](/docs/guides/tui/integration/harness) wires the adapter to Harness.
 
 ## Source
 

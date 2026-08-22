@@ -113,7 +113,7 @@ if page.NextRevision != nil {
 }
 ```
 
-The matching model-facing operation is `workflow_run_history`, documented in [Workflow tools](/docs/guides/workflows/workflow-tools/). For the event consumer, see [Harness workflow events](/docs/guides/harness/events/process-and-workflow/).
+The matching model-facing operation is `workflow_run_history`, documented in [Workflow tools](/docs/guides/workflows/workflow-tools). For the event consumer, see [Harness workflow events](/docs/guides/harness/events/process-and-workflow).
 
 ## Source
 

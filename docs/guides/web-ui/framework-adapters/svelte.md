@@ -57,7 +57,7 @@ The store defaults `autoReconnect` to `true`, clears stale errors at a new start
 {/if}
 ```
 
-The package also provides cold read stores with `refresh` methods and last-started-wins guards. Keep protocol parsing and folding in `@looprig/client`; use the Svelte layer for reactivity and component ownership. The [Client SDK](/docs/guides/web-ui/client-sdk/) remains the framework-neutral contract.
+The package also provides cold read stores with `refresh` methods and last-started-wins guards. Keep protocol parsing and folding in `@looprig/client`; use the Svelte layer for reactivity and component ownership. The [Client SDK](/docs/guides/web-ui/client-sdk) remains the framework-neutral contract.
 
 ## Source
 

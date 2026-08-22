@@ -48,4 +48,4 @@ fmt.Println(result.Answer)
 - Source: [`inference/output.go`](https://github.com/looprig/inference/blob/main/output.go), [`inference/structured_result.go`](https://github.com/looprig/inference/blob/main/structured_result.go), [`inference/structured_errors.go`](https://github.com/looprig/inference/blob/main/structured_errors.go)
 - Tests: [`inference/output_test.go`](https://github.com/looprig/inference/blob/main/output_test.go), [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/main/structured_result_test.go)
 
-Related: [OutputSchema](/docs/guides/inference/structured-output/output-schema/), [Schema validation](/docs/guides/inference/structured-output/validation/), [Typed decoding](/docs/guides/inference/structured-output/decoding/).
+Related: [OutputSchema](/docs/guides/inference/structured-output/output-schema), [Schema validation](/docs/guides/inference/structured-output/validation), [Typed decoding](/docs/guides/inference/structured-output/decoding).

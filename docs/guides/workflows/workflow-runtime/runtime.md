@@ -66,7 +66,7 @@ if err := supervisor.Activate(ctx, services); err != nil {
 defer supervisor.Shutdown(context.Background())
 ```
 
-The service set is described in [Harness integration](/docs/guides/workflows/workflow-tools/harness-integration/). The surrounding session lifecycle and tool registration are documented in the [Harness module reference](/docs/modules/harness/).
+The service set is described in [Harness integration](/docs/guides/workflows/workflow-tools/harness-integration). The surrounding session lifecycle and tool registration are documented in the [Harness module reference](/docs/modules/harness).
 
 ## Start is durable before it is asynchronous
 

@@ -53,4 +53,4 @@ Use `WithContextLimits(limits)` when constructing a custom model.
 - Source: [`inference/model/contextlimits.go`](https://github.com/looprig/inference/blob/main/model/contextlimits.go)
 - Tests: [`inference/model/contextlimits_test.go`](https://github.com/looprig/inference/blob/main/model/contextlimits_test.go), [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/main/model/model_test.go)
 
-Related: [Model](/docs/guides/inference/models/model/), [Model validation](/docs/guides/inference/models/validation/).
+Related: [Model](/docs/guides/inference/models/model), [Model validation](/docs/guides/inference/models/validation).

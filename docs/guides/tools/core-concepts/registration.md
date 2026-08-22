@@ -68,7 +68,7 @@ The three process companion definitions are workspace-free. Their build closure 
 
 ## Add Tools to a Turn
 
-After Build, register the resulting `tool.InvokableTool` values with the Harness loop that will execute model tool calls. The tool list belongs in the model request, while tool-call and tool-result content belongs in the call lifecycle. Inference documents the [tool request format](/docs/guides/inference/requests/tools/), [model selection](/docs/guides/inference/requests/model-selection/), and [tool-use blocks](/docs/guides/inference/content-blocks/tool-use/). Harness documents the [model request step](/docs/guides/harness/step/model-request/) and [tool-call/result step](/docs/guides/harness/step/tool-calls-and-results/).
+After Build, register the resulting `tool.InvokableTool` values with the Harness loop that will execute model tool calls. The tool list belongs in the model request, while tool-call and tool-result content belongs in the call lifecycle. Inference documents the [tool request format](/docs/guides/inference/requests/tools), [model selection](/docs/guides/inference/requests/model-selection), and [tool-use blocks](/docs/guides/inference/content-blocks/tool-use). Harness documents the [model request step](/docs/guides/harness/step/model-request) and [tool-call/result step](/docs/guides/harness/step/tool-calls-and-results).
 
 Keep this registration boundary explicit. The Tools package does not discover a model, construct a network client, choose a sandbox profile, or create a process runner. Those choices remain in the product composition root.
 

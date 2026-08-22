@@ -23,9 +23,9 @@ of observations and assessments.
 
 | Need | Continue with | What you will learn |
 | --- | --- | --- |
-| Define input, identity, revision, and expectations | [Cases and suites](/docs/guides/evals/cases-and-runs/cases-and-suites/) | How validation keeps fixtures stable before a target runs. |
-| Execute trials with cancellation and bounded workers | [Runs and results](/docs/guides/evals/cases-and-runs/runs-and-results/) | How target errors, evaluator errors, and quality outcomes remain distinct. |
-| Persist a safe canonical report | [Reporting](/docs/guides/evals/reporting/) | How `report/v1` and `FileSink` preserve evidence without raw payloads. |
+| Define input, identity, revision, and expectations | [Cases and suites](/docs/guides/evals/cases-and-runs/cases-and-suites) | How validation keeps fixtures stable before a target runs. |
+| Execute trials with cancellation and bounded workers | [Runs and results](/docs/guides/evals/cases-and-runs/runs-and-results) | How target errors, evaluator errors, and quality outcomes remain distinct. |
+| Persist a safe canonical report | [Reporting](/docs/guides/evals/reporting) | How `report/v1` and `FileSink` preserve evidence without raw payloads. |
 
 Keep the suite revision and target subject revision aligned. A mismatch is a
 target-stage error, so a run cannot quietly evaluate evidence under the wrong

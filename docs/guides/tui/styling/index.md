@@ -40,8 +40,8 @@ The package exposes the `AccentBar`, `Dot`, `SubagentCursor`, and workflow marke
 
 ## Styling pages
 
-- [Styles and Layout Tokens](/docs/guides/tui/styling/styles/) catalogs the semantic styles and background helpers.
-- [Markdown Rendering](/docs/guides/tui/styling/markdown/) covers Glamour configuration and responsive table rendering.
+- [Styles and Layout Tokens](/docs/guides/tui/styling/styles) catalogs the semantic styles and background helpers.
+- [Markdown Rendering](/docs/guides/tui/styling/markdown) covers Glamour configuration and responsive table rendering.
 
 There is no public keymap or layout package in the TUI module. Key bindings and frame layout are internal presentation policy. Compose public style values around a `Screen` or component instead of depending on internal view structs.
 

@@ -69,4 +69,4 @@ Nested document blocks inside a tool result are found by the same recursive bloc
 - Tests: [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/main/content/block_json_test.go)
 - Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/main/examples/content/example_test.go)
 
-Related: [Content blocks](/docs/guides/inference/content-blocks/), [ToolResultBlock](/docs/guides/inference/content-blocks/tool-result/).
+Related: [Content blocks](/docs/guides/inference/content-blocks), [ToolResultBlock](/docs/guides/inference/content-blocks/tool-result).

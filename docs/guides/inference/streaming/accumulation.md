@@ -66,4 +66,4 @@ The zero value of each accumulator is ready to use. `Block` and `Blocks` return 
 - Tests: [`core/content/streamaccumulator/streamaccumulator_test.go`](https://github.com/looprig/core/blob/main/content/streamaccumulator/streamaccumulator_test.go)
 - Example: [`core/examples/streaming/example_test.go`](https://github.com/looprig/core/blob/main/examples/streaming/example_test.go)
 
-Related: [Chunks](/docs/guides/inference/streaming/chunks/), [Assistant messages](/docs/guides/inference/responses/assistant-message/).
+Related: [Chunks](/docs/guides/inference/streaming/chunks), [Assistant messages](/docs/guides/inference/responses/assistant-message).

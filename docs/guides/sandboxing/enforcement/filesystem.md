@@ -61,7 +61,7 @@ func inspectChild(executor *sandbox.Executor, workspace string) error {
 
 A gated exact path is not just a string. Grant issuance can capture a path binding and a native handle. Redemption reacquires and compares identity before compiling the transient policy. A path replacement, symlink shape change, or target drift produces `ErrGrantTargetChanged` rather than widening authority. Exact Landlock file grants also require a safe pre-existing regular file shape.
 
-The [network page](/docs/guides/sandboxing/enforcement/network/) describes the analogous target binding for egress. [Tools permissions](/docs/guides/tools/safety/permissions/) explains how a Tool's candidate requirement becomes a grant request; the sandbox remains the final enforcement layer.
+The [network page](/docs/guides/sandboxing/enforcement/network) describes the analogous target binding for egress. [Tools permissions](/docs/guides/tools/safety/permissions) explains how a Tool's candidate requirement becomes a grant request; the sandbox remains the final enforcement layer.
 
 ## Source
 

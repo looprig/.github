@@ -47,11 +47,11 @@ The focused loop is a view choice. `AllLoopsEventFilter` delivers every loop, an
 
 ## Runtime pages
 
-- [Events and Projections](/docs/guides/tui/runtime/events/) covers `Agent`, `EventStream`, filters, and `FoldDisplay`.
-- [Commands and Gates](/docs/guides/tui/runtime/commands/) covers input, compaction, interrupt, runtime controls, and gate replies.
-- [Restore and Replay](/docs/guides/tui/runtime/restore/) covers the cold-restore barrier and durable backlog.
-- [Lifecycle and Handoffs](/docs/guides/tui/runtime/lifecycle/) covers statuses, close ownership, and `/clear` replacement.
-- [Session Adapter](/docs/guides/tui/runtime/session-adapter/) covers the Harness implementation of the agent seam.
+- [Events and Projections](/docs/guides/tui/runtime/events) covers `Agent`, `EventStream`, filters, and `FoldDisplay`.
+- [Commands and Gates](/docs/guides/tui/runtime/commands) covers input, compaction, interrupt, runtime controls, and gate replies.
+- [Restore and Replay](/docs/guides/tui/runtime/restore) covers the cold-restore barrier and durable backlog.
+- [Lifecycle and Handoffs](/docs/guides/tui/runtime/lifecycle) covers statuses, close ownership, and `/clear` replacement.
+- [Session Adapter](/docs/guides/tui/runtime/session-adapter) covers the Harness implementation of the agent seam.
 
 ## Source
 

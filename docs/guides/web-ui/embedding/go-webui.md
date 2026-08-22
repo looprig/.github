@@ -48,7 +48,7 @@ The path helper cleans the request under a rooted slash, joins it below `dist`, 
 /../../etc/passwd    -> confined dist/...  -> index.html fallback
 ```
 
-For the guarded API and SPA mount, continue to [Application integration](/docs/guides/web-ui/embedding/app-integration/).
+For the guarded API and SPA mount, continue to [Application integration](/docs/guides/web-ui/embedding/app-integration).
 
 ## Source
 

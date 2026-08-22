@@ -34,9 +34,9 @@ Bind only after restore has resolved when the UI needs the target process to be 
 
 ## Restore and ownership
 
-Restore is a control-plane request, so a browser `BFFTransport` obtains its CSRF header lazily. `ServeTransport` sends the direct `/v1` request without BFF CSRF handling. Pass an `AbortSignal` when the route may disappear during restoration, and treat `RequestAbortedError` as cancellation rather than a server failure. See [Transport and ownership](/docs/guides/web-ui/client-sdk/ownership/).
+Restore is a control-plane request, so a browser `BFFTransport` obtains its CSRF header lazily. `ServeTransport` sends the direct `/v1` request without BFF CSRF handling. Pass an `AbortSignal` when the route may disappear during restoration, and treat `RequestAbortedError` as cancellation rather than a server failure. See [Transport and ownership](/docs/guides/web-ui/client-sdk/ownership).
 
-After restore, use the same [Reconnect and exact joins](/docs/guides/web-ui/sessions/reconnect/) path as a newly created session. The durable journal remains the source for catch-up, while the live source supplies new frames.
+After restore, use the same [Reconnect and exact joins](/docs/guides/web-ui/sessions/reconnect) path as a newly created session. The durable journal remains the source for catch-up, while the live source supplies new frames.
 
 ## Source
 

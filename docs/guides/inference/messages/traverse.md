@@ -64,4 +64,4 @@ Always guard typed pointers before dereferencing. A typed-nil payload can inhabi
 - Source: [`core/content/message.go`](https://github.com/looprig/core/blob/main/content/message.go), [`core/content/block.go`](https://github.com/looprig/core/blob/main/content/block.go), [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go)
 - Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/main/content/message_test.go), [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go)
 
-Related: [Conversation](/docs/guides/inference/messages/conversation/), [ImageBlock](/docs/guides/inference/content-blocks/image/), [Feature validation](/docs/guides/inference/requests/feature-validation/).
+Related: [Conversation](/docs/guides/inference/messages/conversation), [ImageBlock](/docs/guides/inference/content-blocks/image), [Feature validation](/docs/guides/inference/requests/feature-validation).

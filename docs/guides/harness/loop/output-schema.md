@@ -15,7 +15,7 @@ proofs:
 
 # Output Schema
 
-`WithOutputSchema` freezes one optional provider-neutral final-output policy. See [Structured Output](/docs/guides/inference/structured-output/) for the portable schema contract, request behavior, decoding, and validation:
+`WithOutputSchema` freezes one optional provider-neutral final-output policy. See [Structured Output](/docs/guides/inference/structured-output) for the portable schema contract, request behavior, decoding, and validation:
 
 ```go
 func WithOutputSchema(output inference.OutputSchema) Option

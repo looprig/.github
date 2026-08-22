@@ -29,7 +29,7 @@ func Handler(mux http.Handler, spa http.Handler, guard *bff.HostOriginGuard) htt
 }
 ```
 
-The SPA can therefore call `/api/v1/...` through `createBFFClient` without CORS or a separate origin. The [Static bundle](/docs/guides/web-ui/embedding/static-bundle/) and [Go webui package](/docs/guides/web-ui/embedding/go-webui/) provide the two handlers being composed.
+The SPA can therefore call `/api/v1/...` through `createBFFClient` without CORS or a separate origin. The [Static bundle](/docs/guides/web-ui/embedding/static-bundle) and [Go webui package](/docs/guides/web-ui/embedding/go-webui) provide the two handlers being composed.
 
 ## Guard the whole surface
 
@@ -42,7 +42,7 @@ request
   -> everything  -> embedded SPA handler
 ```
 
-This guard covers the shell as well as API requests. That keeps future HTML additions behind the same origin policy as the control plane. The adjacent [Harness guide](/docs/guides/harness/) describes the server surface the BFF forwards to.
+This guard covers the shell as well as API requests. That keeps future HTML additions behind the same origin policy as the control plane. The adjacent [Harness guide](/docs/guides/harness) describes the server surface the BFF forwards to.
 
 ## Source
 

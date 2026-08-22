@@ -52,11 +52,11 @@ if err := inference.ValidateRequestFeatures(request); err != nil {
 
 ## Tool result loop
 
-Required choice does not execute a tool for you. Read the assistant's `ToolUseBlock`, validate its raw input, run the tool, then append a matching [ToolResultMessage](/docs/guides/inference/messages/message-types/tool-result-message/) before the next request.
+Required choice does not execute a tool for you. Read the assistant's `ToolUseBlock`, validate its raw input, run the tool, then append a matching [ToolResultMessage](/docs/guides/inference/messages/message-types/tool-result-message) before the next request.
 
 ## Proof
 
 - Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go)
 - Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go) covers the required-without-tools and unknown-value cases.
 
-Related: [Tool definitions](/docs/guides/inference/requests/tools/), [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use/).
+Related: [Tool definitions](/docs/guides/inference/requests/tools), [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use).

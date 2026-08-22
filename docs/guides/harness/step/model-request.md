@@ -17,7 +17,7 @@ proofs:
 
 # Model Request
 
-The model request is the inference part of a conceptual Step. Its concrete fields and validation rules are defined by the [Inference request contract](/docs/guides/inference/requests/). Harness does not publish a `Step` object or a request event. In-process consumers can inspect the request through `hook.OperationInference`; Step-level policy and timing use `hook.OperationStep`.
+The model request is the inference part of a conceptual Step. Its concrete fields and validation rules are defined by the [Inference request contract](/docs/guides/inference/requests). Harness does not publish a `Step` object or a request event. In-process consumers can inspect the request through `hook.OperationInference`; Step-level policy and timing use `hook.OperationStep`.
 
 ## Request construction
 

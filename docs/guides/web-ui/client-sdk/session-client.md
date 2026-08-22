@@ -65,7 +65,7 @@ await session.approveGate("session-id", gateId);
 await session.interrupt("session-id");
 ```
 
-For the lower-level request details, see [Commands and gates](/docs/guides/web-ui/client-sdk/commands/). For the view fold and event ordering, continue to [Folding session state](/docs/guides/web-ui/client-sdk/fold/).
+For the lower-level request details, see [Commands and gates](/docs/guides/web-ui/client-sdk/commands). For the view fold and event ordering, continue to [Folding session state](/docs/guides/web-ui/client-sdk/fold).
 
 ## Source
 

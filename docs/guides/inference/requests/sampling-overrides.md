@@ -42,4 +42,4 @@ Numeric ranges, stop-sequence limits, and provider-specific combinations are cod
 - Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go), [`inference/model/sampling.go`](https://github.com/looprig/inference/blob/main/model/sampling.go), [`inference/model/model.go`](https://github.com/looprig/inference/blob/main/model/model.go)
 - Tests: [`inference/model/sampling_test.go`](https://github.com/looprig/inference/blob/main/model/sampling_test.go), [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/main/model/model_test.go)
 
-Related: [Sampling](/docs/guides/inference/models/sampling/), [Model selection](/docs/guides/inference/requests/model-selection/).
+Related: [Sampling](/docs/guides/inference/models/sampling), [Model selection](/docs/guides/inference/requests/model-selection).

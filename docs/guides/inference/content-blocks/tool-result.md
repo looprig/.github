@@ -63,7 +63,7 @@ func main() {
 }
 ```
 
-At the message level, [ToolResultMessage](/docs/guides/inference/messages/message-types/tool-result-message/) repeats `ToolUseID` and `IsError` while carrying top-level blocks. Use one or the other according to the provider codec's message model; do not silently discard the correlation ID.
+At the message level, [ToolResultMessage](/docs/guides/inference/messages/message-types/tool-result-message) repeats `ToolUseID` and `IsError` while carrying top-level blocks. Use one or the other according to the provider codec's message model; do not silently discard the correlation ID.
 
 ## Proof
 
@@ -71,4 +71,4 @@ At the message level, [ToolResultMessage](/docs/guides/inference/messages/messag
 - Tests: [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/main/content/block_json_test.go)
 - Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/main/examples/content/example_test.go)
 
-Related: [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use/), [ToolResultMessage](/docs/guides/inference/messages/message-types/tool-result-message/).
+Related: [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use), [ToolResultMessage](/docs/guides/inference/messages/message-types/tool-result-message).

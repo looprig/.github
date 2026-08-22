@@ -17,7 +17,7 @@ proofs:
 
 # Workflows
 
-The `github.com/looprig/workflows` module is the storage-neutral bridge between a versioned developer definition and a session-owned execution. A definition supplies metadata, strict JSON input boundaries, and a typed [Flow](/docs/modules/flow/) runner. A `Catalog` resolves the definition by name and version. A `Supervisor` owns the session lease, durable run records, checkpoint adoption, cancellation, and projected activity. The optional workflow tool bundle exposes that runtime to a model or another Harness tool caller.
+The `github.com/looprig/workflows` module is the storage-neutral bridge between a versioned developer definition and a session-owned execution. A definition supplies metadata, strict JSON input boundaries, and a typed [Flow](/docs/modules/flow) runner. A `Catalog` resolves the definition by name and version. A `Supervisor` owns the session lease, durable run records, checkpoint adoption, cancellation, and projected activity. The optional workflow tool bundle exposes that runtime to a model or another Harness tool caller.
 
 This guide is for the developer who needs to answer four questions:
 
@@ -32,11 +32,11 @@ Workflows composes several contracts. It does not replace the graph engine, the 
 
 | Concern | Workflows owns | Neighboring module |
 | --- | --- | --- |
-| Definition identity | `Metadata`, strict input and resume schemas, `Catalog` | The graph implementation is supplied by [Flow](/docs/modules/flow/) |
+| Definition identity | `Metadata`, strict input and resume schemas, `Catalog` | The graph implementation is supplied by [Flow](/docs/modules/flow) |
 | Graph execution | Delegation through `Definition.Start`, `Resume`, `Get`, and `Cancel` | Flow's `Runner[S]`, tasks, vertices, and checkpoint store |
-| Session execution | `RunRegistry`, `InputStore`, `Supervisor`, leases, CAS transitions | [Harness](/docs/modules/harness/) supplies session services |
-| Model-facing surface | `workflow_*` invokable tools and bounded JSON results | [Tools](/docs/modules/tools/) and the Harness tool call path |
-| Model access inside a task | Not assumed by this package | [Inference](/docs/modules/inference/) request and response contracts |
+| Session execution | `RunRegistry`, `InputStore`, `Supervisor`, leases, CAS transitions | [Harness](/docs/modules/harness) supplies session services |
+| Model-facing surface | `workflow_*` invokable tools and bounded JSON results | [Tools](/docs/modules/tools) and the Harness tool call path |
+| Model access inside a task | Not assumed by this package | [Inference](/docs/modules/inference) request and response contracts |
 | User-visible progress | Projected `WorkflowActivityMetadata` only | Harness converts it to its workflow activity event |
 
 The useful mental model is a wrapper, not two competing runtimes:
@@ -71,20 +71,20 @@ The run is session-owned durable metadata. It records the workflow name and vers
 
 | If you are trying to... | Read |
 | --- | --- |
-| Define schemas, typed state, decoders, and registration | [Workflow definitions and schemas](/docs/guides/workflows/workflow-runtime/definitions/) |
-| Start a session owner and understand adoption | [Workflow runtime and supervisors](/docs/guides/workflows/workflow-runtime/runtime/) |
-| Inspect checkpoints, registry records, and activity cursors | [State, checkpoints, and history](/docs/guides/workflows/workflow-runtime/state-and-history/) |
-| Pause a vertex, resume with user input, or recover after restart | [Interruption, resume, and recovery](/docs/guides/workflows/workflow-runtime/interruption-and-resume/) |
-| Reason about statuses, CAS transitions, cancellation, and failure | [Statuses, cancellation, and failure](/docs/guides/workflows/workflow-runtime/lifecycle/) |
-| Expose runs through the seven `workflow_*` tools | [Workflow tools](/docs/guides/workflows/workflow-tools/) |
-| Bind a supervisor to Harness services and activity publication | [Harness integration](/docs/guides/workflows/workflow-tools/harness-integration/) |
-| Build the underlying graph and understand Flow's role | [Flow graph composition](/docs/guides/workflows/flow/) |
+| Define schemas, typed state, decoders, and registration | [Workflow definitions and schemas](/docs/guides/workflows/workflow-runtime/definitions) |
+| Start a session owner and understand adoption | [Workflow runtime and supervisors](/docs/guides/workflows/workflow-runtime/runtime) |
+| Inspect checkpoints, registry records, and activity cursors | [State, checkpoints, and history](/docs/guides/workflows/workflow-runtime/state-and-history) |
+| Pause a vertex, resume with user input, or recover after restart | [Interruption, resume, and recovery](/docs/guides/workflows/workflow-runtime/interruption-and-resume) |
+| Reason about statuses, CAS transitions, cancellation, and failure | [Statuses, cancellation, and failure](/docs/guides/workflows/workflow-runtime/lifecycle) |
+| Expose runs through the seven `workflow_*` tools | [Workflow tools](/docs/guides/workflows/workflow-tools) |
+| Bind a supervisor to Harness services and activity publication | [Harness integration](/docs/guides/workflows/workflow-tools/harness-integration) |
+| Build the underlying graph and understand Flow's role | [Flow graph composition](/docs/guides/workflows/flow) |
 
-For the surrounding call path, compare [Harness model requests](/docs/guides/harness/step/model-request/), [Harness tool calls and results](/docs/guides/harness/step/tool-calls-and-results/), [Inference model selection](/docs/guides/inference/requests/model-selection/), and [Inference tools](/docs/guides/inference/requests/tools/). Those pages explain the caller and provider boundaries. The Workflows pages explain what happens after a workflow tool call has been admitted.
+For the surrounding call path, compare [Harness model requests](/docs/guides/harness/step/model-request), [Harness tool calls and results](/docs/guides/harness/step/tool-calls-and-results), [Inference model selection](/docs/guides/inference/requests/model-selection), and [Inference tools](/docs/guides/inference/requests/tools). Those pages explain the caller and provider boundaries. The Workflows pages explain what happens after a workflow tool call has been admitted.
 
 ## Minimal composition
 
-The following is the shape of a definition before it is put behind a session supervisor. The graph construction itself is covered in [Flow graph composition](/docs/guides/workflows/flow/).
+The following is the shape of a definition before it is put behind a session supervisor. The graph construction itself is covered in [Flow graph composition](/docs/guides/workflows/flow).
 
 ```go
 package main

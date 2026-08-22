@@ -57,4 +57,4 @@ The bounded `MalformedStructuredOutputReason` values include nil response/messag
 - Source: [`inference/structured_errors.go`](https://github.com/looprig/inference/blob/main/structured_errors.go), [`inference/structured_result.go`](https://github.com/looprig/inference/blob/main/structured_result.go)
 - Tests: [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/main/structured_result_test.go), [`inference/output_test.go`](https://github.com/looprig/inference/blob/main/output_test.go)
 
-Related: [Schema validation](/docs/guides/inference/structured-output/validation/), [Typed decoding](/docs/guides/inference/structured-output/decoding/), [Finish reasons](/docs/guides/inference/responses/finish-reasons/).
+Related: [Schema validation](/docs/guides/inference/structured-output/validation), [Typed decoding](/docs/guides/inference/structured-output/decoding), [Finish reasons](/docs/guides/inference/responses/finish-reasons).

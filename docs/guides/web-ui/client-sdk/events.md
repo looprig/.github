@@ -64,5 +64,5 @@ Line framing, UTF-8 streaming, frame validation, heartbeat behavior, and the `Ss
 
 ## Proof
 
-The focused tests split input at arbitrary byte and line boundaries, check enduring and ephemeral dispatch, preserve heartbeats, and verify that malformed frames do not poison later frames. Use [Folding session state](/docs/guides/web-ui/client-sdk/fold/) to turn these frames and journal events into one `SessionView`.
+The focused tests split input at arbitrary byte and line boundaries, check enduring and ephemeral dispatch, preserve heartbeats, and verify that malformed frames do not poison later frames. Use [Folding session state](/docs/guides/web-ui/client-sdk/fold) to turn these frames and journal events into one `SessionView`.
 

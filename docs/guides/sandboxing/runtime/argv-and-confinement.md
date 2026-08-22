@@ -80,7 +80,7 @@ The backend receives the normalized argv and applies its own spawn transform. On
 
 The executor compiles the effective policy once, then each spawn applies a fresh wrapper/configuration closure. Linux may re-exec the current binary into a stage-2 helper. macOS may prepend `sandbox-exec`. Windows may use a backend-owned launch where the OS authority must be assigned before control returns. The executor still owns the working directory, environment, output, result normalization, and cleanup.
 
-See [platform levels and guarantees](/docs/guides/sandboxing/enforcement/platforms/) for what the wrapper can truthfully claim and [prepared processes](/docs/guides/sandboxing/runtime/processes/) when output must be streamed instead of collected.
+See [platform levels and guarantees](/docs/guides/sandboxing/enforcement/platforms) for what the wrapper can truthfully claim and [prepared processes](/docs/guides/sandboxing/runtime/processes) when output must be streamed instead of collected.
 
 ## Source
 

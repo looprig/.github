@@ -17,7 +17,7 @@ proofs:
 # Context Thresholds
 
 Automatic compaction uses occupancy of the complete counted request, not a
-message-length guess. The count comes from the configured [Inference context counter](/docs/guides/inference/context-counting/). Occupancy is compared with explicit policy thresholds
+message-length guess. The count comes from the configured [Inference context counter](/docs/guides/inference/context-counting). Occupancy is compared with explicit policy thresholds
 and the context tracker remembers the automatic basis that already triggered.
 
 ## Occupancy and pressure

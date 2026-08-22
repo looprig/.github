@@ -37,7 +37,7 @@ listed := invoke(bundle[3], executionID, `{}`)
 fmt.Println(created, listed)
 ```
 
-The [task bundle fixture](https://github.com/looprig/tools/blob/main/examples/tasks/example_test.go) creates a task through `TaskCreate` and lists it through the same bundle. Link its result into Harness's [tool-call/result step](/docs/guides/harness/step/tool-calls-and-results/) when documenting how task state appears in a turn.
+The [task bundle fixture](https://github.com/looprig/tools/blob/main/examples/tasks/example_test.go) creates a task through `TaskCreate` and lists it through the same bundle. Link its result into Harness's [tool-call/result step](/docs/guides/harness/step/tool-calls-and-results) when documenting how task state appears in a turn.
 
 ## Source
 

@@ -58,7 +58,7 @@ On a cross-session browser resume, the screen refreshes the footer and pre-gate 
 
 The Harness session, not the TUI, owns the workspace root lease, snapshots, and garbage collection. `sessionadapter.Adapter` delegates session close and workspace checkpoint methods to the controller. The screen displays the root and routes events; it does not mount, mutate, or recover a workspace itself.
 
-For the actual workspace capabilities and tool permits, read [Tools](/docs/guides/tools/) and [Harness](/docs/guides/harness/). For durable workspace recovery during a session restore, use the Harness session APIs before constructing the adapter.
+For the actual workspace capabilities and tool permits, read [Tools](/docs/guides/tools) and [Harness](/docs/guides/harness). For durable workspace recovery during a session restore, use the Harness session APIs before constructing the adapter.
 
 ## Source
 

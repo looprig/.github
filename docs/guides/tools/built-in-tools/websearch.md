@@ -41,7 +41,7 @@ prepared := loop.WithPreparedCall(ctx, tool.PreparedCall{
 result, err := search.InvokableRun(prepared, `{}`)
 ```
 
-Compare [Fetch](/docs/guides/tools/built-in-tools/fetch/) when the model already knows the URL. Both use the shared network capability and target matching. See [Safety, Permissions, and Gates](/docs/guides/tools/safety/) and Inference's [tool requests](/docs/guides/inference/requests/tools/).
+Compare [Fetch](/docs/guides/tools/built-in-tools/fetch) when the model already knows the URL. Both use the shared network capability and target matching. See [Safety, Permissions, and Gates](/docs/guides/tools/safety) and Inference's [tool requests](/docs/guides/inference/requests/tools).
 
 ## Source
 

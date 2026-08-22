@@ -41,11 +41,11 @@ request := inference.Request{Tools: []inference.Tool{tool}}
 
 `Name` is the uniqueness key. When structured output is also requested, `_looprig_final_output` is reserved and duplicate tool names are rejected. A nil or malformed tool schema is preserved as input to the codec; `ValidateRequestFeatures` validates the structured output schema, not ordinary tool schemas.
 
-The Harness [tool calls and results guide](/docs/guides/harness/step/tool-calls-and-results/) shows the consumer lifecycle: expose a definition, inspect returned `ToolUseBlock` values, execute the selected tool, and append a correlated result.
+The Harness [tool calls and results guide](/docs/guides/harness/step/tool-calls-and-results) shows the consumer lifecycle: expose a definition, inspect returned `ToolUseBlock` values, execute the selected tool, and append a correlated result.
 
 ## Proof
 
 - Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go)
 - Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go) covers raw schema preservation and feature conflicts.
 
-Related: [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use/), [Tool choice](/docs/guides/inference/requests/tool-choice/), [Structured output with tools](/docs/guides/inference/structured-output/with-tools/).
+Related: [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use), [Tool choice](/docs/guides/inference/requests/tool-choice), [Structured output with tools](/docs/guides/inference/structured-output/with-tools).

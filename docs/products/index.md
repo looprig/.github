@@ -12,11 +12,11 @@ proofs:
 
 # Products
 
-Products are complete tools assembled from Looprig modules. Choose a product when you want a maintained application or framework. Choose [Modules](/docs/modules/core/) when you want reusable parts for a purpose-built solution.
+Products are complete tools assembled from Looprig modules. Choose a product when you want a maintained application or framework. Choose [Modules](/docs/modules/core) when you want reusable parts for a purpose-built solution.
 
 ## Choose a product
 
 | Product | Use it for |
 | --- | --- |
-| [Carbon](/docs/products/carbon/) | A ready coding agent with tools, permissions, subagents, sessions, workspaces, ACP, MCP, and model routing. |
-| [Pluto](/docs/products/pluto/) | Evaluation, capability qualification, pricing comparison, and release reports for models and agents. |
+| [Carbon](/docs/products/carbon) | A ready coding agent with tools, permissions, subagents, sessions, workspaces, ACP, MCP, and model routing. |
+| [Pluto](/docs/products/pluto) | Evaluation, capability qualification, pricing comparison, and release reports for models and agents. |

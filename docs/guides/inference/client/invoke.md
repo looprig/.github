@@ -62,4 +62,4 @@ The caller owns the context and decides whether an error is retryable. The clien
 - Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go), [`inference/transport/client_test.go`](https://github.com/looprig/inference/blob/main/transport/client_test.go)
 - Example: [`inference/examples/invoke/main.go`](https://github.com/looprig/inference/blob/main/examples/invoke/main.go)
 
-Related: [Responses](/docs/guides/inference/responses/), [Request feature validation](/docs/guides/inference/requests/feature-validation/).
+Related: [Responses](/docs/guides/inference/responses), [Request feature validation](/docs/guides/inference/requests/feature-validation).

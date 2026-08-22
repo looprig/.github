@@ -56,4 +56,4 @@ A nil message or unknown finish reason is representable and should be handled ex
 - Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go)
 - Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go), [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/main/structured_result_test.go)
 
-Related: [Assistant messages](/docs/guides/inference/responses/assistant-message/), [Finish reasons](/docs/guides/inference/responses/finish-reasons/), [Response usage](/docs/guides/inference/responses/usage/).
+Related: [Assistant messages](/docs/guides/inference/responses/assistant-message), [Finish reasons](/docs/guides/inference/responses/finish-reasons), [Response usage](/docs/guides/inference/responses/usage).

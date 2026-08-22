@@ -33,11 +33,11 @@ func enforcementFacts(executor *sandbox.Executor) (uint8, sandbox.Guarantees, sa
 
 ## Start here
 
-- [Platform levels and guarantees](/docs/guides/sandboxing/enforcement/platforms/) explains native capability differences.
-- [Compilation reports](/docs/guides/sandboxing/enforcement/reports/) explains `Enforced`, `narrowed`, and `unenforced` entries.
-- [Filesystem, HOME, and environment](/docs/guides/sandboxing/enforcement/filesystem/) explains root and environment boundaries.
-- [Network routes and target grants](/docs/guides/sandboxing/enforcement/network/) explains routes and proxy authorization.
-- [Runtime executors](/docs/guides/sandboxing/runtime/) shows how compiled enforcement is owned and consumed.
+- [Platform levels and guarantees](/docs/guides/sandboxing/enforcement/platforms) explains native capability differences.
+- [Compilation reports](/docs/guides/sandboxing/enforcement/reports) explains `Enforced`, `narrowed`, and `unenforced` entries.
+- [Filesystem, HOME, and environment](/docs/guides/sandboxing/enforcement/filesystem) explains root and environment boundaries.
+- [Network routes and target grants](/docs/guides/sandboxing/enforcement/network) explains routes and proxy authorization.
+- [Runtime executors](/docs/guides/sandboxing/runtime) shows how compiled enforcement is owned and consumed.
 
 ## Source
 

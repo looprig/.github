@@ -28,7 +28,7 @@ const disconnect = sessionClient.connect(sessionId, {
 return () => disconnect();
 ```
 
-The [Vanilla DOM](/docs/guides/web-ui/framework-adapters/vanilla/) adapter uses this shape directly. A different framework can use the same listener without importing any Svelte code.
+The [Vanilla DOM](/docs/guides/web-ui/framework-adapters/vanilla) adapter uses this shape directly. A different framework can use the same listener without importing any Svelte code.
 
 ## Reactive cold stores
 
@@ -43,7 +43,7 @@ if (!history.done) {
 }
 ```
 
-Use `LiveSessionViewStore` for the ongoing subscription rather than trying to turn a cold history store into a live stream. The [Svelte 5](/docs/guides/web-ui/framework-adapters/svelte/) guide covers its start and stop lifecycle.
+Use `LiveSessionViewStore` for the ongoing subscription rather than trying to turn a cold history store into a live stream. The [Svelte 5](/docs/guides/web-ui/framework-adapters/svelte) guide covers its start and stop lifecycle.
 
 ## Source
 

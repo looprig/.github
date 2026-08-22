@@ -100,7 +100,7 @@ if err := suite.Validate(); err != nil {
 
 `Suite.Validate` requires a non-empty scenario set and rejects duplicate
 scenario IDs. Scenario order is preserved by `Run`, which makes report order
-stable even when [runs use multiple trials or workers](/docs/guides/evals/cases-and-runs/runs-and-results/).
+stable even when [runs use multiple trials or workers](/docs/guides/evals/cases-and-runs/runs-and-results).
 The suite revision becomes `Report.Suite`, while each successful observation
 supplies the observed target revision.
 
@@ -141,8 +141,8 @@ concurrency.
 ## Keep case data and results separate
 
 `Scenario` says what to try. `Observation` says what happened. `Assessment` says
-what one evaluator can prove. The [run contract](/docs/guides/evals/cases-and-runs/runs-and-results/) keeps all
-three distinguishable in each `SampleReport`; the [reporting contract](/docs/guides/evals/reporting/)
+what one evaluator can prove. The [run contract](/docs/guides/evals/cases-and-runs/runs-and-results) keeps all
+three distinguishable in each `SampleReport`; the [reporting contract](/docs/guides/evals/reporting)
 then emits a deliberately redacted projection.
 
 ## Source

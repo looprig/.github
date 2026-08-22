@@ -44,4 +44,4 @@ message := &content.UserMessage{Message: content.Message{
 - Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/main/content/message_test.go), [`core/content/message_json_test.go`](https://github.com/looprig/core/blob/main/content/message_json_test.go)
 - Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/main/examples/content/example_test.go)
 
-Related: [SystemMessage](/docs/guides/inference/messages/message-types/system-message/), [Conversation input](/docs/guides/inference/requests/messages/).
+Related: [SystemMessage](/docs/guides/inference/messages/message-types/system-message), [Conversation input](/docs/guides/inference/requests/messages).

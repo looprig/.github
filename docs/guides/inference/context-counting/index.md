@@ -38,8 +38,8 @@ type ContextCounter interface {
 conversation, tools, structured-output schema, and dialect-specific encoding.
 `Quality` distinguishes provider-exact, local-exact, and heuristic estimates.
 
-Harness consumes this preflight result for [context limits](/docs/guides/harness/loop/context-limits/)
-and [automatic compaction thresholds](/docs/guides/harness/compaction/context-thresholds/).
+Harness consumes this preflight result for [context limits](/docs/guides/harness/loop/context-limits)
+and [automatic compaction thresholds](/docs/guides/harness/compaction/context-thresholds).
 
 ## Flow
 

@@ -68,4 +68,4 @@ for {
 - Source: [`inference/stream/stream.go`](https://github.com/looprig/inference/blob/main/stream/stream.go), [`inference/stream/result.go`](https://github.com/looprig/inference/blob/main/stream/result.go)
 - Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/main/stream/stream_test.go)
 
-Related: [Close streams](/docs/guides/inference/streaming/close/), [Streaming errors](/docs/guides/inference/streaming/errors/), [Terminal stream results](/docs/guides/inference/streaming/terminal-results/).
+Related: [Close streams](/docs/guides/inference/streaming/close), [Streaming errors](/docs/guides/inference/streaming/errors), [Terminal stream results](/docs/guides/inference/streaming/terminal-results).

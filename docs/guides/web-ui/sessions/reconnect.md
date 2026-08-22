@@ -38,7 +38,7 @@ Ephemeral frames, heartbeats, and error frames have no durable sequence and are 
 
 `autoReconnect` defaults to `false` in `joinSessionView`: a clean source end completes the generator and an error propagates. When enabled, a clean end immediately opens a fresh source; an error-triggered retry waits the fixed `reconnectDelayMs` default of 250 milliseconds. The next history walk starts at the highest applied durable cursor, so a retry reads only the possible gap.
 
-The framework-neutral `SessionClient` opts into `autoReconnect: true`, and `LiveSessionViewStore` does the same by default. Either can still pass an explicit false value when its owner wants to handle retries itself. See [Events and live streams](/docs/guides/web-ui/client-sdk/events/) for the frame union and [Folding session state](/docs/guides/web-ui/client-sdk/fold/) for the immutable view.
+The framework-neutral `SessionClient` opts into `autoReconnect: true`, and `LiveSessionViewStore` does the same by default. Either can still pass an explicit false value when its owner wants to handle retries itself. See [Events and live streams](/docs/guides/web-ui/client-sdk/events) for the frame union and [Folding session state](/docs/guides/web-ui/client-sdk/fold) for the immutable view.
 
 ## Source
 

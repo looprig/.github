@@ -52,13 +52,13 @@ The factory receives the signal-aware context. On a successful startup, `runtime
 
 The runner owns process plumbing that would otherwise be repeated by every CLI. It writes structured logs and redirected library output to `~/.looprig/looprig.log`, clears the terminal before the managed frame, asks Bubble Tea to run the `tui.Screen`, and restores standard streams before reporting an error. Signal cancellation asks Bubble Tea to quit cleanly.
 
-The runner does not create a Harness `Rig`, choose credentials, select a model, or decide workspace policy. Those remain in the factory. See [Harness Sessions and Gates](/docs/guides/tui/integration/harness/) for the adapter boundary.
+The runner does not create a Harness `Rig`, choose credentials, select a model, or decide workspace policy. Those remain in the factory. See [Harness Sessions and Gates](/docs/guides/tui/integration/harness) for the adapter boundary.
 
 ## Exit and teardown
 
 `Run` returns `0` after a clean run and teardown. Agent construction failure, a Bubble Tea run error, or a retained terminal handoff error returns the agent-error status. The final model is inspected through `AgentHolder`, `TerminalErrorHolder`, and `HandoffFinalizer` so `/clear` cannot leave a replacement session open or hide a fatal handoff failure.
 
-For the event contract that drives the screen, read [Events and Projections](/docs/guides/tui/runtime/events/). For the state transitions behind shutdown and `/clear`, read [Lifecycle and Handoffs](/docs/guides/tui/runtime/lifecycle/).
+For the event contract that drives the screen, read [Events and Projections](/docs/guides/tui/runtime/events). For the state transitions behind shutdown and `/clear`, read [Lifecycle and Handoffs](/docs/guides/tui/runtime/lifecycle).
 
 ## Source
 

@@ -55,11 +55,11 @@ if err := inference.ValidateRequestFeatures(request); err != nil {
 }
 ```
 
-The Harness [model request step](/docs/guides/harness/step/model-request/) is the canonical consumer path when a request is produced inside a Harness loop.
+The Harness [model request step](/docs/guides/harness/step/model-request) is the canonical consumer path when a request is produced inside a Harness loop.
 
 ## Proof
 
 - Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go), [`inference/output.go`](https://github.com/looprig/inference/blob/main/output.go)
 - Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go)
 
-Related: [Model selection](/docs/guides/inference/requests/model-selection/), [Conversation input](/docs/guides/inference/requests/messages/), [Feature validation](/docs/guides/inference/requests/feature-validation/).
+Related: [Model selection](/docs/guides/inference/requests/model-selection), [Conversation input](/docs/guides/inference/requests/messages), [Feature validation](/docs/guides/inference/requests/feature-validation).

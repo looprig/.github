@@ -50,4 +50,4 @@ Do not add a `Type` field to the struct. The codec owns the wire tag and rejects
 - Tests: [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/main/content/block_json_test.go), [`core/content/block_test.go`](https://github.com/looprig/core/blob/main/content/block_test.go)
 - Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/main/examples/content/example_test.go)
 
-Related: [Content blocks](/docs/guides/inference/content-blocks/), [Text deltas](/docs/guides/inference/streaming/text-deltas/).
+Related: [Content blocks](/docs/guides/inference/content-blocks), [Text deltas](/docs/guides/inference/streaming/text-deltas).

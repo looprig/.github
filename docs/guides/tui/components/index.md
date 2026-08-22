@@ -35,7 +35,7 @@ flowchart LR
 
 ## Input and completion
 
-[InputBox](/docs/guides/tui/components/input/) documents the auto-growing editor, its newline bindings, and the modern panel options. [Completion Trays](/docs/guides/tui/components/completion/) covers slash, file, and typed runtime choices. [Session Completion](/docs/guides/tui/components/sessions/) covers the two-line record renderer used by session browsing.
+[InputBox](/docs/guides/tui/components/input) documents the auto-growing editor, its newline bindings, and the modern panel options. [Completion Trays](/docs/guides/tui/components/completion) covers slash, file, and typed runtime choices. [Session Completion](/docs/guides/tui/components/sessions) covers the two-line record renderer used by session browsing.
 
 The widgets do not expose a public keymap or layout engine. A host should route Bubble Tea messages to the documented methods and let the main screen decide which action a selection means. This keeps completion display reusable without making the component package own command policy.
 
@@ -45,9 +45,9 @@ The widgets do not expose a public keymap or layout engine. A host should route 
 
 ## Component pages
 
-- [InputBox](/docs/guides/tui/components/input/)
-- [Completion Trays](/docs/guides/tui/components/completion/)
-- [Session Completion](/docs/guides/tui/components/sessions/)
+- [InputBox](/docs/guides/tui/components/input)
+- [Completion Trays](/docs/guides/tui/components/completion)
+- [Session Completion](/docs/guides/tui/components/sessions)
 
 ## Source
 

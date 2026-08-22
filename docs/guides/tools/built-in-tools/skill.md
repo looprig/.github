@@ -42,7 +42,7 @@ prepared := loop.WithPreparedCall(ctx, tool.PreparedCall{
 result, err := skills.InvokableRun(prepared, `{}`)
 ```
 
-The [embedded skill fixture](https://github.com/looprig/tools/blob/main/examples/skills/example_test.go) shows both a permitted load and an unknown-name error. For the general prepare-before-effect contract, see [Tool Definitions, Preparation, and Results](/docs/guides/tools/core-concepts/). For model tool content, see Inference's [tool-use blocks](/docs/guides/inference/content-blocks/tool-use/).
+The [embedded skill fixture](https://github.com/looprig/tools/blob/main/examples/skills/example_test.go) shows both a permitted load and an unknown-name error. For the general prepare-before-effect contract, see [Tool Definitions, Preparation, and Results](/docs/guides/tools/core-concepts). For model tool content, see Inference's [tool-use blocks](/docs/guides/inference/content-blocks/tool-use).
 
 ## Source
 

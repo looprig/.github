@@ -45,16 +45,16 @@ function read(relativePath) {
 
 const canonicalReplacements = {
   "docs/guides/sandboxing/enforcement/filesystem.md": [
-    ["/docs/guides/tools/permissions/", "/docs/guides/tools/safety/permissions/"],
+    ["/docs/guides/tools/permissions", "/docs/guides/tools/safety/permissions"],
   ],
   "docs/guides/sandboxing/index.md": [
-    ["/docs/guides/tools/safety-and-gates/", "/docs/guides/tools/safety/"],
+    ["/docs/guides/tools/safety-and-gates", "/docs/guides/tools/safety"],
   ],
   "docs/guides/sandboxing/integration/index.md": [
-    ["/docs/guides/tools/safety-and-gates/", "/docs/guides/tools/safety/"],
+    ["/docs/guides/tools/safety-and-gates", "/docs/guides/tools/safety"],
   ],
   "docs/guides/sandboxing/profiles/restriction.md": [
-    ["/docs/guides/tools/safety-and-gates/", "/docs/guides/tools/safety/"],
+    ["/docs/guides/tools/safety-and-gates", "/docs/guides/tools/safety"],
   ],
 };
 
@@ -97,16 +97,16 @@ test("the framework-neutral Web UI examples use the public live-source API", () 
 
 test("the Inference landing page is a source-backed developer overview", () => {
   const overview = read("docs/guides/inference.md");
-  assert.doesNotMatch(overview, /\/docs\/build\//);
+  assert.doesNotMatch(overview, /\/docs\/build/);
   assert.match(overview, /```go[\s\S]+?```/);
   assert.match(overview, /```mermaid[\s\S]*theme["']?\s*:\s*["']dark["']/i);
   for (const destination of [
-    "/docs/guides/inference/content-blocks/",
-    "/docs/guides/inference/models/",
-    "/docs/guides/inference/requests/",
-    "/docs/guides/inference/responses/",
-    "/docs/guides/inference/streaming/",
-    "/docs/guides/inference/providers/",
+    "/docs/guides/inference/content-blocks",
+    "/docs/guides/inference/models",
+    "/docs/guides/inference/requests",
+    "/docs/guides/inference/responses",
+    "/docs/guides/inference/streaming",
+    "/docs/guides/inference/providers",
   ]) assert.match(overview, new RegExp(escapeRegex(destination)), destination);
   for (const phrase of ["inference.Client", "inference.Request", "ValidateRequestFeatures", "Stream"]) {
     assert.match(overview, new RegExp(escapeRegex(phrase)), phrase);

@@ -156,7 +156,7 @@ if err != nil {
 fmt.Println(result.Run.Status, string(result.State), result.Summary)
 ```
 
-The Flow graph remains reusable and immutable after `Compile`. Changing graph behavior requires a new compatible version strategy. Flow's graph fingerprint protects checkpoint resume; the Workflows name and version protect definition lookup. See [Flow graph composition](/docs/guides/workflows/flow/) for how those two identities fit together.
+The Flow graph remains reusable and immutable after `Compile`. Changing graph behavior requires a new compatible version strategy. Flow's graph fingerprint protects checkpoint resume; the Workflows name and version protect definition lookup. See [Flow graph composition](/docs/guides/workflows/flow) for how those two identities fit together.
 
 ## Source
 

@@ -41,7 +41,7 @@ The facade owns subscription cleanup and forwards user intent to typed transport
 
 ## Guide map
 
-Use the [Client SDK guides](/docs/guides/web-ui/client-sdk/) for the transport, events, folding, validation, and ownership contracts. Choose [Framework adapters](/docs/guides/web-ui/framework-adapters/) when a DOM binding or Svelte 5 state wrapper is useful. Follow [Embedding](/docs/guides/web-ui/embedding/) to package the app as a static bundle and serve it from Go. The [Session lifecycle guides](/docs/guides/web-ui/sessions/) cover binding, exact reconnect joins, and restoring a durable session. The [Harness guide](/docs/guides/harness/) is the adjacent server contract that the browser client calls.
+Use the [Client SDK guides](/docs/guides/web-ui/client-sdk) for the transport, events, folding, validation, and ownership contracts. Choose [Framework adapters](/docs/guides/web-ui/framework-adapters) when a DOM binding or Svelte 5 state wrapper is useful. Follow [Embedding](/docs/guides/web-ui/embedding) to package the app as a static bundle and serve it from Go. The [Session lifecycle guides](/docs/guides/web-ui/sessions) cover binding, exact reconnect joins, and restoring a durable session. The [Harness guide](/docs/guides/harness) is the adjacent server contract that the browser client calls.
 
 The framework-neutral route is the primary API. A Svelte adapter is optional and should wrap this same client rather than replace its transport, event parser, or state fold.
 

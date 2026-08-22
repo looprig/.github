@@ -42,4 +42,4 @@ Close immediately after a successful `Stream`, before the loop starts. It should
 - Source: [`inference/stream/stream.go`](https://github.com/looprig/inference/blob/main/stream/stream.go)
 - Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/main/stream/stream_test.go) covers nil closers, error closers, and repeated calls.
 
-Related: [Streaming inference](/docs/guides/inference/client/stream/), [Ownership and concurrency](/docs/guides/inference/client/ownership/).
+Related: [Streaming inference](/docs/guides/inference/client/stream), [Ownership and concurrency](/docs/guides/inference/client/ownership).

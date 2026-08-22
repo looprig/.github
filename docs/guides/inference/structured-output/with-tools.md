@@ -48,4 +48,4 @@ With `FinishReasonToolUse`, structured extraction requires exactly one `ToolUseB
 - Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go), [`inference/structured_result.go`](https://github.com/looprig/inference/blob/main/structured_result.go), [`inference/output.go`](https://github.com/looprig/inference/blob/main/output.go)
 - Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go), [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/main/structured_result_test.go)
 
-Related: [Tool definitions](/docs/guides/inference/requests/tools/), [Tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas/), [Tool choice](/docs/guides/inference/requests/tool-choice/).
+Related: [Tool definitions](/docs/guides/inference/requests/tools), [Tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas), [Tool choice](/docs/guides/inference/requests/tool-choice).

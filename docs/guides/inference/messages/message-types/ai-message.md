@@ -50,11 +50,11 @@ func main() {
 
 ## Ordering and tool calls
 
-Provider codecs may emit thinking before text and tool calls after text. Preserve the `Blocks` order. A tool runner should execute each `ToolUseBlock`, then append a [ToolResultMessage](/docs/guides/inference/messages/message-types/tool-result-message/) that carries the matching ID.
+Provider codecs may emit thinking before text and tool calls after text. Preserve the `Blocks` order. A tool runner should execute each `ToolUseBlock`, then append a [ToolResultMessage](/docs/guides/inference/messages/message-types/tool-result-message) that carries the matching ID.
 
 ## Proof
 
 - Source: [`core/content/message.go`](https://github.com/looprig/core/blob/main/content/message.go), [`core/content/usage.go`](https://github.com/looprig/core/blob/main/content/usage.go)
 - Tests: [`core/content/message_json_test.go`](https://github.com/looprig/core/blob/main/content/message_json_test.go), [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/main/structured_result_test.go)
 
-Related: [ThinkingBlock](/docs/guides/inference/content-blocks/thinking/), [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use/), [Assistant messages](/docs/guides/inference/responses/assistant-message/).
+Related: [ThinkingBlock](/docs/guides/inference/content-blocks/thinking), [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use), [Assistant messages](/docs/guides/inference/responses/assistant-message).

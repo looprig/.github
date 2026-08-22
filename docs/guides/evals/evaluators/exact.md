@@ -96,9 +96,9 @@ the exact evaluator only exposes safe metadata in its evidence.
 3. No structured-output evidence means `unverified`. Generic usage evidence is
    not proof of schema conformance.
 
-The active [Inference target](/docs/guides/evals/integration/composition-and-testing/) emits those evidence
+The active [Inference target](/docs/guides/evals/integration/composition-and-testing) emits those evidence
 signals when its request carries an output schema. The provider-facing request
-contract is documented in Inference's [structured output guide](/docs/guides/inference/structured-output/).
+contract is documented in Inference's [structured output guide](/docs/guides/inference/structured-output).
 
 ## Operational measurements
 
@@ -134,9 +134,9 @@ for _, sample := range report.Samples {
 }
 ```
 
-Pair this with the [evaluator gates](/docs/guides/evals/evaluators/) and
+Pair this with the [evaluator gates](/docs/guides/evals/evaluators) and
 `evaltest.RequirePass` or `evaltest.RequireVerified` when choosing a gate, and
-with [reporting](/docs/guides/evals/reporting/) when
+with [reporting](/docs/guides/evals/reporting) when
 preserving evidence for later review.
 
 ## Source

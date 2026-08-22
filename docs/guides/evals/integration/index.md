@@ -23,9 +23,9 @@ evaluators, gates, and report format.
 
 | Integration need | Continue with | Boundary |
 | --- | --- | --- |
-| Call an Inference client and project typed evidence | [Composition and testing](/docs/guides/evals/integration/composition-and-testing/) | `target/inference.NewTarget` owns request projection and subject identity. |
-| Add capability-aware tables and scorecards | [Pluto qualification tooling](/docs/guides/evals/integration/pluto/) | Pluto plans tables, executes Evals runs, and derives dispositions. |
-| Choose the model request first | [Inference model selection](/docs/guides/inference/requests/model-selection/) | The caller owns provider and model identity before composing the target. |
+| Call an Inference client and project typed evidence | [Composition and testing](/docs/guides/evals/integration/composition-and-testing) | `target/inference.NewTarget` owns request projection and subject identity. |
+| Add capability-aware tables and scorecards | [Pluto qualification tooling](/docs/guides/evals/integration/pluto) | Pluto plans tables, executes Evals runs, and derives dispositions. |
+| Choose the model request first | [Inference model selection](/docs/guides/inference/requests/model-selection) | The caller owns provider and model identity before composing the target. |
 
 Deterministic scripted targets and fake clients should carry the contract tests.
 Credential-gated provider tests then verify the live adapter seam without making

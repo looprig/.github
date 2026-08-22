@@ -40,7 +40,7 @@ prepared := loop.WithPreparedCall(ctx, tool.PreparedCall{
 result, err := reader.InvokableRun(prepared, `{}`)
 ```
 
-ReadFile pairs naturally with [WriteFile](/docs/guides/tools/built-in-tools/writefile/) and [EditFile](/docs/guides/tools/built-in-tools/editfile/). The common prepare and gate behavior is in [Tool Definitions, Preparation, and Results](/docs/guides/tools/core-concepts/) and [Safety, Permissions, and Gates](/docs/guides/tools/safety/).
+ReadFile pairs naturally with [WriteFile](/docs/guides/tools/built-in-tools/writefile) and [EditFile](/docs/guides/tools/built-in-tools/editfile). The common prepare and gate behavior is in [Tool Definitions, Preparation, and Results](/docs/guides/tools/core-concepts) and [Safety, Permissions, and Gates](/docs/guides/tools/safety).
 
 ## Source
 

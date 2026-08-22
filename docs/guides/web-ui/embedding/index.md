@@ -34,11 +34,11 @@ func main() error {
 }
 ```
 
-Keep the [Client SDK](/docs/guides/web-ui/client-sdk/) framework-neutral inside the app, then choose [Static bundle](/docs/guides/web-ui/embedding/static-bundle/) for the build and [Go webui package](/docs/guides/web-ui/embedding/go-webui/) for serving.
+Keep the [Client SDK](/docs/guides/web-ui/client-sdk) framework-neutral inside the app, then choose [Static bundle](/docs/guides/web-ui/embedding/static-bundle) for the build and [Go webui package](/docs/guides/web-ui/embedding/go-webui) for serving.
 
 ## Build and serve flow
 
-The build produces one static shell, Go embeds the `dist` subtree, and the composed handler sends `/api/` to the BFF while the SPA handles every other path. [Application integration](/docs/guides/web-ui/embedding/app-integration/) documents the final guarded composition.
+The build produces one static shell, Go embeds the `dist` subtree, and the composed handler sends `/api/` to the BFF while the SPA handles every other path. [Application integration](/docs/guides/web-ui/embedding/app-integration) documents the final guarded composition.
 
 ```mermaid
 %%{init: {"theme": "dark"}}%%
@@ -58,4 +58,4 @@ The exported `embed.FS`, `Handler`, asset confinement, and SPA fallback are impl
 
 ## Proof
 
-The Go package and Vite configuration establish a direct build-to-embed path: both pages and assets target `pkg/webui/dist`, and the server reads that same subtree through `embed.FS`. Continue to [Go webui package](/docs/guides/web-ui/embedding/go-webui/) for request handling details.
+The Go package and Vite configuration establish a direct build-to-embed path: both pages and assets target `pkg/webui/dist`, and the server reads that same subtree through `embed.FS`. Continue to [Go webui package](/docs/guides/web-ui/embedding/go-webui) for request handling details.

@@ -51,4 +51,4 @@ The struct literal stores the slice header supplied by the caller. If the bytes 
 - Source: [`core/content/block.go`](https://github.com/looprig/core/blob/main/content/block.go), [`core/content/media_type.go`](https://github.com/looprig/core/blob/main/content/media_type.go)
 - Tests: [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/main/content/block_json_test.go)
 
-Related: [ImageBlock](/docs/guides/inference/content-blocks/image/), [DocumentBlock](/docs/guides/inference/content-blocks/document/).
+Related: [ImageBlock](/docs/guides/inference/content-blocks/image), [DocumentBlock](/docs/guides/inference/content-blocks/document).

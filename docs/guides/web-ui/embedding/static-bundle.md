@@ -42,7 +42,7 @@ The root layout exports `ssr = false`. SvelteKit remains the router and build ho
 export const ssr = false;
 ```
 
-In development, Vite proxies `/api` to the BFF at `http://127.0.0.1:8080`, preserving the same relative request paths used by `BFFTransport`. In production, the composed Go handler supplies the same-origin `/api/` route. See [Application integration](/docs/guides/web-ui/embedding/app-integration/).
+In development, Vite proxies `/api` to the BFF at `http://127.0.0.1:8080`, preserving the same relative request paths used by `BFFTransport`. In production, the composed Go handler supplies the same-origin `/api/` route. See [Application integration](/docs/guides/web-ui/embedding/app-integration).
 
 ## Source
 

@@ -52,4 +52,4 @@ The accumulator does not send events, validate output, or decide whether the tur
 - Tests: [`core/content/streamaccumulator/streamaccumulator_test.go`](https://github.com/looprig/core/blob/main/content/streamaccumulator/streamaccumulator_test.go)
 - Example: [`core/examples/streaming/example_test.go`](https://github.com/looprig/core/blob/main/examples/streaming/example_test.go)
 
-Related: [TextBlock](/docs/guides/inference/content-blocks/text/), [Accumulate a response](/docs/guides/inference/streaming/accumulation/).
+Related: [TextBlock](/docs/guides/inference/content-blocks/text), [Accumulate a response](/docs/guides/inference/streaming/accumulation).

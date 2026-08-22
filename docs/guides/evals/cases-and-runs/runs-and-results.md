@@ -49,7 +49,7 @@ The effective defaults are conservative:
 Preflight validates the config and suite, rejects a nil target, validates every
 evaluator descriptor, and rejects duplicate evaluator names. An empty evaluator
 list is allowed, but a successful sample with no assessments has not been
-verified. The [testing gates](/docs/guides/evals/evaluators/) treat that state as a failure.
+verified. The [testing gates](/docs/guides/evals/evaluators) treat that state as a failure.
 
 ## The result pipeline
 
@@ -112,8 +112,8 @@ summary counts, and provenance consistency before a report reaches a sink.
 The summary is intentionally small. It counts samples, target-stage errors, and
 assessment statuses. It is not a mean or a hidden pass rate. A downstream
 consumer can compute a distribution from the retained measurements and trial
-indices, or use the [Pluto scorecard](/docs/guides/evals/integration/pluto/) when it needs dimension-level
-rollups. Persist the resulting safe record with the [reporting guide](/docs/guides/evals/reporting/).
+indices, or use the [Pluto scorecard](/docs/guides/evals/integration/pluto) when it needs dimension-level
+rollups. Persist the resulting safe record with the [reporting guide](/docs/guides/evals/reporting).
 
 ## Assessment outcomes and gates
 

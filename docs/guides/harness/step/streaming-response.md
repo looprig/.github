@@ -17,7 +17,7 @@ proofs:
 
 # Streaming Response
 
-Harness exposes live provider chunks as `event.TokenDelta`. The [Inference streaming guide](/docs/guides/inference/streaming/) explains the underlying stream reader, chunk variants, accumulation, and terminal result. `TokenDelta` is an ephemeral event for rendering, not a durable transcript record. The enclosing Step later materializes the chunks into one assistant message and commits that message, with tool results when present, as `event.StepDone`.
+Harness exposes live provider chunks as `event.TokenDelta`. The [Inference streaming guide](/docs/guides/inference/streaming) explains the underlying stream reader, chunk variants, accumulation, and terminal result. `TokenDelta` is an ephemeral event for rendering, not a durable transcript record. The enclosing Step later materializes the chunks into one assistant message and commits that message, with tool results when present, as `event.StepDone`.
 
 ## Public shape
 

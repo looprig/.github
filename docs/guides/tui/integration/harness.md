@@ -37,7 +37,7 @@ func openAgent(ctx context.Context) (tui.Agent, error) {
 }
 ```
 
-The exact Rig options depend on the application. The adapter's stable contract is the `session.SessionController` plus `ReplayOpener` seam. See [Harness](/docs/guides/harness/) for the session lifecycle and [Session Stores and Durable Replay](/docs/guides/tui/integration/session-stores/) for the replay dependency.
+The exact Rig options depend on the application. The adapter's stable contract is the `session.SessionController` plus `ReplayOpener` seam. See [Harness](/docs/guides/harness) for the session lifecycle and [Session Stores and Durable Replay](/docs/guides/tui/integration/session-stores) for the replay dependency.
 
 ## Restore decisions
 
@@ -59,7 +59,7 @@ The public `Decider.DecideRestore` method is the one call Harness makes. It part
 
 The adapter indexes open permission gates by the loop ID and tool execution ID from the event header. `Approve`, `Deny`, and `ProvideAnswer` therefore route to the loop that opened the prompt, even when the user is focused on another loop. Form and open-URL gates carry a direct Harness gate ID and use `RespondGate`.
 
-This is the presentation side of the same boundary described by [Tools](/docs/guides/tools/). A tool declares and prepares a requirement, Harness evaluates it, and the TUI renders the resulting prompt. The TUI does not create grants or bypass a gate.
+This is the presentation side of the same boundary described by [Tools](/docs/guides/tools). A tool declares and prepares a requirement, Harness evaluates it, and the TUI renders the resulting prompt. The TUI does not create grants or bypass a gate.
 
 ## Ownership
 

@@ -38,7 +38,7 @@ Preparation rejects malformed JSON, empty required fields, unsupported URL schem
 
 For workspace paths, the implementation resolves the canonical target during preparation, then checks that the same resolution still holds at invocation. Final-component symlinks are opened with no-follow behavior. A changed parent symlink or an unapproved resolution fails closed instead of redirecting the effect.
 
-The [Sandboxing and Interfaces](/docs/start/sandbox-and-interfaces/) guide explains the runtime access boundary. Tools supply its request vocabulary. The Harness [gate guide](/docs/guides/harness/gates/) explains how a consumer applies the decision.
+The [Sandboxing and Interfaces](/docs/start/sandbox-and-interfaces) guide explains the runtime access boundary. Tools supply its request vocabulary. The Harness [gate guide](/docs/guides/harness/gates) explains how a consumer applies the decision.
 
 ## Workspace Coordination
 
@@ -52,7 +52,7 @@ The read, write, and edit tools use optimistic concurrency for contained paths. 
 
 Audit summaries are intentionally narrow. File tools include a path but not content, `Fetch` includes method and host but not query, headers, or body, `Bash` includes the command the user is already approving, and process handles remain opaque. Execution failures are safe tool-result strings or stable process error codes.
 
-For the model-facing request and response envelope, connect this page to Inference's [tool requests](/docs/guides/inference/requests/tools/), [tool-use blocks](/docs/guides/inference/content-blocks/tool-use/), and [streaming tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas/).
+For the model-facing request and response envelope, connect this page to Inference's [tool requests](/docs/guides/inference/requests/tools), [tool-use blocks](/docs/guides/inference/content-blocks/tool-use), and [streaming tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas).
 
 ## Source
 

@@ -21,7 +21,7 @@ Workflows integrates with Harness through two narrow seams:
 1. `Supervisor` implements `tool.SessionResource`, so a session owns activation, lease lifetime, run controllers, and shutdown.
 2. Harness supplies a `tool.WorkflowActivityPublisher`, so Workflows can publish a safe projection after a Flow checkpoint is durable.
 
-The supervisor does not import a concrete event hub, model provider, or tool runner. The service interfaces keep the runtime composable with the [Harness module](/docs/modules/harness/), [Tools module](/docs/modules/tools/), [Inference module](/docs/modules/inference/), and [Flow module](/docs/modules/flow/).
+The supervisor does not import a concrete event hub, model provider, or tool runner. The service interfaces keep the runtime composable with the [Harness module](/docs/modules/harness), [Tools module](/docs/modules/tools), [Inference module](/docs/modules/inference), and [Flow module](/docs/modules/flow).
 
 ## Session resource lifecycle
 
@@ -110,7 +110,7 @@ The activity kinds are `run_started`, `vertex_completed`, `run_interrupted`, `ru
 
 Harness converts the DTO into its sealed `WorkflowActivity` event. A consumer should use the activity event for a user-facing timeline and `workflow_run_get` for current metadata. It should not infer the full Flow frontier from activity count. Parallel vertices may finish in a different order, which is why stable vertex IDs in `NewVertexMetadataForID` matter.
 
-For event envelopes and workflow event visibility, read [Harness workflow events](/docs/guides/harness/events/process-and-workflow/). For how a model receives the workflow tools, read [Inference tool requests](/docs/guides/inference/requests/tools/). For model request selection inside a surrounding turn, read [Harness model requests](/docs/guides/harness/step/model-request/).
+For event envelopes and workflow event visibility, read [Harness workflow events](/docs/guides/harness/events/process-and-workflow). For how a model receives the workflow tools, read [Inference tool requests](/docs/guides/inference/requests/tools). For model request selection inside a surrounding turn, read [Harness model requests](/docs/guides/harness/step/model-request).
 
 ## Source
 

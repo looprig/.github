@@ -37,4 +37,4 @@ The type has no additional fields. A system turn can contain the same block slic
 - Source: [`core/content/message.go`](https://github.com/looprig/core/blob/main/content/message.go)
 - Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/main/content/message_test.go), [`core/content/message_json_test.go`](https://github.com/looprig/core/blob/main/content/message_json_test.go)
 
-Related: [System instructions](/docs/guides/inference/requests/system-instructions/), [UserMessage](/docs/guides/inference/messages/message-types/user-message/).
+Related: [System instructions](/docs/guides/inference/requests/system-instructions), [UserMessage](/docs/guides/inference/messages/message-types/user-message).

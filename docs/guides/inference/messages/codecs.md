@@ -67,4 +67,4 @@ The codec uses `MarshalBlocks` and `UnmarshalBlocks`, so nested tool-result cont
 - Source: [`core/content/message.go`](https://github.com/looprig/core/blob/main/content/message.go), [`core/content/block_json.go`](https://github.com/looprig/core/blob/main/content/block_json.go)
 - Tests: [`core/content/message_json_test.go`](https://github.com/looprig/core/blob/main/content/message_json_test.go) covers fixed points, usage presence, nested blocks, and preservation of tool IDs.
 
-Related: [Content blocks](/docs/guides/inference/content-blocks/), [ToolResultMessage](/docs/guides/inference/messages/message-types/tool-result-message/).
+Related: [Content blocks](/docs/guides/inference/content-blocks), [ToolResultMessage](/docs/guides/inference/messages/message-types/tool-result-message).

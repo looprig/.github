@@ -62,5 +62,5 @@ The public client composition and its `createBFFClient` default are implemented 
 
 ## Proof
 
-The transport implementation shows that both concrete classes satisfy `LooprigTransport` and share the response-validation path. The client module shows that `createClient` is a thin composition and that `createBFFClient` is the ergonomic same-origin entry point. Continue with [SessionClient](/docs/guides/web-ui/client-sdk/session-client/) for a framework-neutral live facade or [Events and live streams](/docs/guides/web-ui/client-sdk/events/) for the raw event plane.
+The transport implementation shows that both concrete classes satisfy `LooprigTransport` and share the response-validation path. The client module shows that `createClient` is a thin composition and that `createBFFClient` is the ergonomic same-origin entry point. Continue with [SessionClient](/docs/guides/web-ui/client-sdk/session-client) for a framework-neutral live facade or [Events and live streams](/docs/guides/web-ui/client-sdk/events) for the raw event plane.
 

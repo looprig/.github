@@ -17,7 +17,7 @@ proofs:
 # Context Limits
 
 Harness resolves a hard input-token limit from model metadata and an explicit
-output reservation plus safety margin. The [Inference context-counting guide](/docs/guides/inference/context-counting/) explains the exact, provider-backed, and conservative counters that supply request token counts. The pure limit helper is:
+output reservation plus safety margin. The [Inference context-counting guide](/docs/guides/inference/context-counting) explains the exact, provider-backed, and conservative counters that supply request token counts. The pure limit helper is:
 
 ```go
 func ResolveContextLimits(

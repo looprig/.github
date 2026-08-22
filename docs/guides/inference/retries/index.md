@@ -71,7 +71,7 @@ and an error during establishment, the wrapper closes that reader before the
 next attempt. Credential refresh belongs in the call-scoped authorizer supplied
 to each attempt, not in this generic decorator.
 
-Related Harness consumer: [Hustle retries](/docs/guides/harness/hustles/retries/).
+Related Harness consumer: [Hustle retries](/docs/guides/harness/hustles/retries).
 
 ## Source and proof
 

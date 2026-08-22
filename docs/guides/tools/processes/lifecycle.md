@@ -75,7 +75,7 @@ if err != nil {
 fmt.Println(len(report.Reconciled), manifest.State) // 1 lost_on_restore
 ```
 
-See [Process Supervision](/docs/guides/tools/processes/) for composition and [Process Output, Input, and Stop Tools](/docs/guides/tools/processes/tools/) for cursor and stop calls.
+See [Process Supervision](/docs/guides/tools/processes) for composition and [Process Output, Input, and Stop Tools](/docs/guides/tools/processes/tools) for cursor and stop calls.
 
 ## Source
 

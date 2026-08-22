@@ -68,4 +68,4 @@ if err := inference.ValidateOutputSchema(output); err != nil {
 - Source: [`inference/output.go`](https://github.com/looprig/inference/blob/main/output.go)
 - Tests: [`inference/output_test.go`](https://github.com/looprig/inference/blob/main/output_test.go) covers clone non-aliasing, metadata bounds, and portable schema acceptance.
 
-Related: [Portable JSON Schema](/docs/guides/inference/structured-output/portable-json-schema/), [Structured output requests](/docs/guides/inference/requests/structured-output/).
+Related: [Portable JSON Schema](/docs/guides/inference/structured-output/portable-json-schema), [Structured output requests](/docs/guides/inference/requests/structured-output).

@@ -58,4 +58,4 @@ if result, ok := reader.Result(); ok {
 - Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/main/stream/stream_test.go), [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go)
 - Example: [`inference/examples/stream/main.go`](https://github.com/looprig/inference/blob/main/examples/stream/main.go)
 
-Related: [StreamReader](/docs/guides/inference/streaming/stream-reader/), [Terminal stream results](/docs/guides/inference/streaming/terminal-results/), [Close streams](/docs/guides/inference/streaming/close/).
+Related: [StreamReader](/docs/guides/inference/streaming/stream-reader), [Terminal stream results](/docs/guides/inference/streaming/terminal-results), [Close streams](/docs/guides/inference/streaming/close).

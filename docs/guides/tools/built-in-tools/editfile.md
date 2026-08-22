@@ -40,7 +40,7 @@ prepared := loop.WithPreparedCall(ctx, tool.PreparedCall{
 result, err := editor.InvokableRun(prepared, `{}`)
 ```
 
-When the file changed since the complete read, the result uses `StaleFileError`. A missing file, irregular node, bad anchor, lease failure, or changed resolution is also surfaced as a bounded error string. See [WriteFile](/docs/guides/tools/built-in-tools/writefile/) for full-file replacement and [Safety, Permissions, and Gates](/docs/guides/tools/safety/) for coordinator behavior.
+When the file changed since the complete read, the result uses `StaleFileError`. A missing file, irregular node, bad anchor, lease failure, or changed resolution is also surfaced as a bounded error string. See [WriteFile](/docs/guides/tools/built-in-tools/writefile) for full-file replacement and [Safety, Permissions, and Gates](/docs/guides/tools/safety) for coordinator behavior.
 
 ## Source
 

@@ -75,7 +75,7 @@ func target() error {
 
 The canonical class is `network.proxy-target.v1`. Its requirement includes both `GuaranteeNetworkBoundary` and `GuaranteeTargetNetwork`. The proxy authenticates the execution ID and credential, compares the requested target to the authorized set, and records a denial. If a process exits normally after a target denial, the executor surfaces a `*NetworkTargetDeniedError` that preserves the exit code while allowing `errors.Is(err, sandbox.ErrNetworkTargetDenied)`.
 
-Linux Rung 2's native network restriction is a TCP-port allowlist. It cannot claim address scoping for loopback, private, or metadata destinations. If the operation requires address-level isolation, require `GuaranteeAddressNetwork` and select a backend that reports it, such as the Linux Rung 1 in-namespace nftables path. See [platform levels](/docs/guides/sandboxing/enforcement/platforms/) and [typed errors](/docs/guides/sandboxing/runtime/errors/).
+Linux Rung 2's native network restriction is a TCP-port allowlist. It cannot claim address scoping for loopback, private, or metadata destinations. If the operation requires address-level isolation, require `GuaranteeAddressNetwork` and select a backend that reports it, such as the Linux Rung 1 in-namespace nftables path. See [platform levels](/docs/guides/sandboxing/enforcement/platforms) and [typed errors](/docs/guides/sandboxing/runtime/errors).
 
 ## Source
 

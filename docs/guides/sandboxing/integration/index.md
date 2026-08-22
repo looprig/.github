@@ -40,7 +40,7 @@ A Tool's requirement is not a process. Harness can render a gate, collect an app
 5. compile the transient backend spec and verify required guarantee bits; and
 6. only then call the native spawn or backend-owned launch.
 
-The gate is not a substitute for OS enforcement. An approved Tool call can still fail because the host cannot provide a required guarantee. OS enforcement is not a substitute for a gate either. A `Sandboxed` executor with `Command: Gated` still refuses a command without a grant. This is why [Tools safety and gates](/docs/guides/tools/safety/) and [Harness tool calls and results](/docs/guides/harness/step/tool-calls-and-results/) are useful companion pages.
+The gate is not a substitute for OS enforcement. An approved Tool call can still fail because the host cannot provide a required guarantee. OS enforcement is not a substitute for a gate either. A `Sandboxed` executor with `Command: Gated` still refuses a command without a grant. This is why [Tools safety and gates](/docs/guides/tools/safety) and [Harness tool calls and results](/docs/guides/harness/step/tool-calls-and-results) are useful companion pages.
 
 ## Prepared requirement to sandbox process
 
@@ -81,7 +81,7 @@ func admitApprovedCommand(executor *sandbox.Executor, workspace, command string,
 
 ## Model requests are adjacent, not interchangeable
 
-The model request can contain tool definitions and later tool-use blocks, but it does not itself carry a host grant. Use the Harness [model request step](/docs/guides/harness/step/model-request/), Inference's [model selection contract](/docs/guides/inference/requests/model-selection/), and Inference's [tool request contract](/docs/guides/inference/requests/tools/) to understand that content. Use this page when the approved tool call crosses into a process or network effect.
+The model request can contain tool definitions and later tool-use blocks, but it does not itself carry a host grant. Use the Harness [model request step](/docs/guides/harness/step/model-request), Inference's [model selection contract](/docs/guides/inference/requests/model-selection), and Inference's [tool request contract](/docs/guides/inference/requests/tools) to understand that content. Use this page when the approved tool call crosses into a process or network effect.
 
 ## Source
 

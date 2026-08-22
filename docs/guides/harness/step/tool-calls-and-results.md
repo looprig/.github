@@ -17,7 +17,7 @@ proofs:
 
 # Tool Calls and Results
 
-Tool work belongs to the conceptual Step that produced the model's [tool-use blocks](/docs/guides/inference/content-blocks/tool-use/). The Step's durable message group is one assistant message followed by the tool-result messages for that batch. There is no public `Step` runtime type and no separate Step completion event.
+Tool work belongs to the conceptual Step that produced the model's [tool-use blocks](/docs/guides/inference/content-blocks/tool-use). The Step's durable message group is one assistant message followed by the tool-result messages for that batch. There is no public `Step` runtime type and no separate Step completion event.
 
 ## The message group
 

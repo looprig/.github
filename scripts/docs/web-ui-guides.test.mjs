@@ -106,24 +106,24 @@ test("Web UI guide inventory is complete, ordered, and fully evidenced", () => {
 
 test("Web UI guides interlink SDK, adapters, embedding, sessions, and Harness", () => {
   const all = Object.fromEntries(pages.map(([id]) => [id, readPage(id)]));
-  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/web-ui\/client-sdk\//);
-  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/web-ui\/framework-adapters\//);
-  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/web-ui\/embedding\//);
-  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/web-ui\/sessions\//);
-  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/harness\//);
-  assert.match(all["guides/web-ui/client-sdk/index"], /\/docs\/guides\/web-ui\/client-sdk\/session-client\//);
-  assert.match(all["guides/web-ui/client-sdk/index"], /\/docs\/guides\/web-ui\/client-sdk\/events\//);
-  assert.match(all["guides/web-ui/client-sdk/session-client"], /\/docs\/guides\/web-ui\/client-sdk\/commands\//);
-  assert.match(all["guides/web-ui/client-sdk/events"], /\/docs\/guides\/web-ui\/client-sdk\/fold\//);
-  assert.match(all["guides/web-ui/client-sdk/commands"], /\/docs\/guides\/web-ui\/client-sdk\/ownership\//);
-  assert.match(all["guides/web-ui/framework-adapters/index"], /\/docs\/guides\/web-ui\/framework-adapters\/(vanilla|svelte)\//);
-  assert.match(all["guides/web-ui/framework-adapters/svelte"], /\/docs\/guides\/web-ui\/client-sdk\//);
-  assert.match(all["guides/web-ui/embedding/index"], /\/docs\/guides\/web-ui\/embedding\/static-bundle\//);
-  assert.match(all["guides/web-ui/embedding/index"], /\/docs\/guides\/web-ui\/embedding\/go-webui\//);
-  assert.match(all["guides/web-ui/embedding/app-integration"], /\/docs\/guides\/harness\//);
-  assert.match(all["guides/web-ui/sessions/index"], /\/docs\/guides\/web-ui\/sessions\/(binding|reconnect|restore)\//);
-  assert.match(all["guides/web-ui/sessions/reconnect"], /\/docs\/guides\/web-ui\/client-sdk\/events\//);
-  assert.match(all["guides/web-ui/sessions/restore"], /\/docs\/guides\/web-ui\/client-sdk\/ownership\//);
+  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/web-ui\/client-sdk/);
+  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/web-ui\/framework-adapters/);
+  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/web-ui\/embedding/);
+  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/web-ui\/sessions/);
+  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/harness/);
+  assert.match(all["guides/web-ui/client-sdk/index"], /\/docs\/guides\/web-ui\/client-sdk\/session-client/);
+  assert.match(all["guides/web-ui/client-sdk/index"], /\/docs\/guides\/web-ui\/client-sdk\/events/);
+  assert.match(all["guides/web-ui/client-sdk/session-client"], /\/docs\/guides\/web-ui\/client-sdk\/commands/);
+  assert.match(all["guides/web-ui/client-sdk/events"], /\/docs\/guides\/web-ui\/client-sdk\/fold/);
+  assert.match(all["guides/web-ui/client-sdk/commands"], /\/docs\/guides\/web-ui\/client-sdk\/ownership/);
+  assert.match(all["guides/web-ui/framework-adapters/index"], /\/docs\/guides\/web-ui\/framework-adapters\/(vanilla|svelte)/);
+  assert.match(all["guides/web-ui/framework-adapters/svelte"], /\/docs\/guides\/web-ui\/client-sdk/);
+  assert.match(all["guides/web-ui/embedding/index"], /\/docs\/guides\/web-ui\/embedding\/static-bundle/);
+  assert.match(all["guides/web-ui/embedding/index"], /\/docs\/guides\/web-ui\/embedding\/go-webui/);
+  assert.match(all["guides/web-ui/embedding/app-integration"], /\/docs\/guides\/harness/);
+  assert.match(all["guides/web-ui/sessions/index"], /\/docs\/guides\/web-ui\/sessions\/(binding|reconnect|restore)/);
+  assert.match(all["guides/web-ui/sessions/reconnect"], /\/docs\/guides\/web-ui\/client-sdk\/events/);
+  assert.match(all["guides/web-ui/sessions/restore"], /\/docs\/guides\/web-ui\/client-sdk\/ownership/);
 });
 
 test("Web UI guides link every proof claim to existing client source", () => {

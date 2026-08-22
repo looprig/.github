@@ -59,7 +59,7 @@ func (d eval.Descriptor) CheckRequires(s eval.Sample) (eval.Assessment, bool)
 This is useful for operational measurements. For example, the exact tool error
 rate evaluator requires `EvidenceToolOperation`; a sample with no tool
 operation has no defined denominator, so it is unverified rather than a
-zero-error pass. The [exact evaluator page](/docs/guides/evals/evaluators/exact/) lists the built-in
+zero-error pass. The [exact evaluator page](/docs/guides/evals/evaluators/exact) lists the built-in
 requirements.
 
 ## Keep error and quality semantics distinct
@@ -108,7 +108,7 @@ enter a report. The evidence union supports bounded, typed facts:
 | `structured_output` / `structured_output_error` | Schema success or a closed failure reason | Raw model JSON |
 | `evaluator_diagnostic` | A bounded safe diagnostic | Unredacted judge or provider prose |
 
-The [reporting guide](/docs/guides/evals/reporting/) explains how these fields survive the
+The [reporting guide](/docs/guides/evals/reporting) explains how these fields survive the
 redacted wire projection.
 
 ## Test gates at the report level
@@ -159,10 +159,10 @@ The descriptor and returned assessment carry the same identity. The runner
 checks that identity after `Assessment.Validate`, so a buggy evaluator cannot
 masquerade as another evaluator in provenance or comparison.
 
-Continue with [exact programmatic checks](/docs/guides/evals/evaluators/exact/)
-or the [structured model judge](/docs/guides/evals/evaluators/judge/). For
+Continue with [exact programmatic checks](/docs/guides/evals/evaluators/exact)
+or the [structured model judge](/docs/guides/evals/evaluators/judge). For
 active model execution, connect a target as described in [composition and
-testing](/docs/guides/evals/integration/composition-and-testing/).
+testing](/docs/guides/evals/integration/composition-and-testing).
 
 ## Source
 
