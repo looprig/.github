@@ -147,7 +147,7 @@ export function buildGoMod(example) {
     .sort(([left], [right]) => left.localeCompare(right))
     .map(([module, version]) => `\t${module} ${version}`)
     .join('\n');
-  const goMod = `module ${MODULE_PATH}\n\ngo 1.26.4\n\nrequire (\n${requirements}\n)\n`;
+  const goMod = `module ${MODULE_PATH}\n\ngo 1.26.8\n\nrequire (\n${requirements}\n)\n`;
   if (/^\s*replace\b/m.test(goMod)) throw new Error('generated go.mod contains a forbidden replace directive');
   return goMod;
 }
