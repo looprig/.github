@@ -9,7 +9,7 @@ You can use looprig to build a personal agent for your own work, a specialized
 agent shaped around a workflow, or a production system for a team or an
 organization. The same harness supports all three.
 
-Start with the [consumer guide](../docs/consumers/README.md) to build one agent,
+Start with the [documentation](https://looprig.com/docs) to build one agent,
 then add the models, tools, storage, interfaces, and deployment choices your
 system needs.
 
@@ -20,9 +20,9 @@ and repeatable. A **loop** is the agent loop. So a *looprig* is **the rig that
 runs the loop**: the harness, plumbing, confinement, storage, and presentation
 layer that turns model intelligence into a useful agent.
 
-We build looprig as a set of small, independently versioned, stdlib-first Go
-modules. Each module is the embodiment of a design **spec**; collectively they
-form the rig.
+We build looprig as a set of small, independently versioned Go modules. Each
+repository is its own module with its own tags; a module depends only on the
+lower layers it needs.
 
 ## Build an agent that is yours
 
@@ -44,176 +44,99 @@ act without approval when consequences matter, or hide what it did. Those
 properties matter whether one person runs one agent on a laptop or an
 organization runs thousands.
 
-```
-─── the rig ───────────────────────────────────────────────────────────────────
-    ┌────────────────────────────────────────────────────────────────────────┐
-    │                          harness is the heart                          │
-    │  agent loop · session · gates · journal · tool contracts · transcript │
-    │ pkg/serve HTTP/SSE session API (the backend stability point)           │
-    └───────────────┬───────────────────────────────────────┬────────────────┘
-                 │ versioned /v1 HTTP/SSE wire contract  │ in-process SDK
-                 ▼                                       ▼
-    ┌─────────────────────────────────┐    ┌─────────────────────────────────────────────┐
-    │ client (planned module)         │    │ in-process consumers (Carbon, embeds, ...)  │
-    │ one Go binary: BFF + embedded   │    │ compose harness + storage + sandbox         │
-    │ SPA + framework-neutral SDK     │    │ directly into a single binary               │
-    │ · read:  serve.NewReader        │    └─────────────────────────────────────────────┘
-    │ · live:  SSE reverse-proxy      │
-    │ · ctrl:  POST reverse-proxy     │
-    └───────┬─────────────────┬───────┘
-    ┌────────────────────────────────────────────────────────────────────────┐
-    │   user-facing surfaces the rig, as the human sees it                   │
-    ├───────────────┬────────────────────────────────────────────────────────┤
-    │ tui           │ @looprig/client core: DTO/zod + transports +           │
-    │ Bubble Tea    │ state machine + exact history→live join;               │
-    │ v2 (today)    │ consumed by thin framework adapters:                   │
-    │               │ svelte (ref) · react · vue · angular · solid           │
-    │               │ · plain TS · Tauri v2 (desktop + mobile)               │
-    └───────────────┴────────────────────────────────────────────────────────┘
-    ┌────────────────────────────────────────────────────────────────────────┐
-    │ serve projects these primitives over HTTP/SSE invents none:            │
-    │ submit · gate-response · interrupt · live events (enduring+ephem)      │
-    │ · cold journal · status · session listing · idempotent create          │
-    └────────────────────────────────────────────────────────────────────────┘
-
-
-─── harness rig partners ───────────────────────────────────────────────────────────────────
-    ┌──────────────┐        ┌──────────────────┐          ┌───────────────────────┐
-    │  inference   │        │       llm        │          │        storage        │
-    │  the neutral │◄───────│  provider policy │          │   the contract hub    │
-    │   contract   │        │  & batteries     │          │   (ledger/lease/kv/   │
-    └──────┬───────┘        └──────────────────┘          │    blobs + tests)     │
-           │                                              └───────────┬───────────┘
-           ▼                                                          │ implemented by
-    ┌──────────────┐                                                  ▼
-    │    core      │                                    ┌──────────┬────────────┬──────────────┐
-    │ content/uuid/│                                    │ fsstore  │ natsstore  │ rclonestore  │
-    │   logging    │                                    │  (disk)  │ (JetStream)│   (rclone)   │
-    └──────────────┘                                    └──────────┴────────────┴──────────────┘
-                                                         durable    scalable     cloud
-                                                         single-host  hybrid       blobs
-
-
-─── more rig components ───────────────────────────────────────────────────────────────────
-
-    ┌──────────────┐  OS confinement: Seatbelt · namespaces · Landlock · seccomp · nft · cgroups
-    │    sandbox   │  (structurally coupled no import; harness never imports sandbox)
-    └──────────────┘
-    ┌──────────────┐  Optional standard tools, selected one definition at a time
-    │    tools     │
-    └──────────────┘
-    ┌──────────────┐  Carbon's explicit access policy over tools and OS sandboxing
-    │ access policy│
-    └──────────────┘
-    ┌──────────────┐
-    │    flow      │  sibling durable-workflow engine (Pregel-style): agent tasks as flow kinds
-    └──────────────┘
-    ┌──────────────┐
-    │     tests    │  cross-repo e2e: harness durability proven against a real fsstore backend
-    └──────────────┘
-```
-
-<br/>
-
 ## The heart: harness
 
-At the center sits [harness](https://github.com/looprig/harness), the multi-agent runtime SDK.
+[harness](https://github.com/looprig/harness) is the agent runtime SDK. It turns
+an `inference.Client` and a set of tools into a durable, observable,
+permissioned agent loop, and owns composition (`rig`), sessions, loops, turns,
+events, commands, gates, the journal, and restore.
 
-- The **actor-based engine** that owns agent loops, turns, tool execution, permission gates, sessions, and durable event history.
-- It drives the model-inference loop, dispatches tool calls, enforces human-in-the-loop approval, persists everything, and exposes hooks/events for embedders.
-- It depends only on `core` + `inference` + `storage`, **never** on `llm`. It is the contract consumer; concrete providers are wired at the composition root.
+It is a library, not a binary. Leaf capabilities — model providers, storage
+backends, tool implementations, OS confinement, foreign agents, and user
+interfaces — live in sibling modules and are wired at the consumer's
+composition root. Harness never imports `llm`, `tools`, or `sandbox`.
 
-Every other repo in the tree is either a foundation the Harness stands on (`core`, `inference`, `storage`, `fsstore`, `natsstore`, `rclonestore`), a sibling engine with which it composes (`flow`), an optional capability (`llm`, `tools`, `sandbox`), a presentation layer over it (`tui`), or a product built from it (`carbon`). Cross-repo durability is proven externally by `tests`.
+## Modules
 
-<br/>
+Every module is published at `github.com/looprig/<name>` and installed with
+`go get`. Each repository's tags are its releases.
 
-## The rig: capability pillars and the repos that deliver them
+### Foundations
 
-| Pillar | What it gives you | Repos |
-| --- | --- | --- |
-| **Foundational vocabulary** | Shared typed content blocks, UUIDs, structured logging: one canonical definition, zero dependencies. | [core](https://github.com/looprig/core) |
-| **Agent runtime (the heart)** | Loop, Session, tool contracts, three-state access gate, journal, transcript, optional HTTP API. | [harness](https://github.com/looprig/harness) |
-| **Standard tools** | Optional file, shell, search, web, loop-scoped task tracking, planning, permission, and skill implementations are exported independently. Consumers select each definition independently; the related Tasks capability is selected once through `tools.TaskDefinitions()`. | [tools](https://github.com/looprig/tools) |
-| **Model inference contract** | Provider-neutral `Client`/`Request`/`Response`/`Tool`/`Usage`, streaming, codecs, sampling knobs. No provider policy. | [inference](https://github.com/looprig/inference) |
-| **Provider batteries** | Known-provider registry, truth tables, SigV4 + API key + attestation auth, `auto.New` composition root, fail-closed model validation. | [llm](https://github.com/looprig/llm) |
-| **Access profiles & OS enforcement** | Explicit `Deny`/`Gated`/`Allow` access profiles compiled to Seatbelt (macOS) + namespaces/Landlock/seccomp/nftables/cgroups (Linux). Unforgeable HMAC grant tokens; a loopback egress proxy; honest per-property guarantees. The same `Profile` is the gate's access source. | [sandbox](https://github.com/looprig/sandbox) |
-| **Durable storage contracts** | `Ledger`/`Leaser`/`KV`/`Blobs` interfaces, typed errors, name grammar, `AppendDefinite` ambiguity resolver, in-memory oracle + conformance suites. | [storage](https://github.com/looprig/storage) |
-| **Storage backends** | Concrete implementations of the storage contracts: single-host disk, NATS JetStream (embedded or remote), and a cloud-agnostic rclone-driven blobs adapter. | [fsstore](https://github.com/looprig/fsstore), [natsstore](https://github.com/looprig/natsstore), [rclonestore](https://github.com/looprig/rclonestore) |
-| **User-facing surfaces** | One `pkg/serve` `/v1` contract, many UI runtimes. Terminal TUI today (`tui`/Bubble Tea v2); a planned `client` module brings a BFF + embedded SPA + framework-neutral TS SDK (`@looprig/client`) to the browser, desktop (Tauri v2), and mobile, with thin adapters for Svelte (reference)/React/Vue/Angular/Solid. | [tui](https://github.com/looprig/tui), [bubbletea-fork](https://github.com/looprig/bubbletea-fork), `client` *(planned)* |
-| **Durable workflows** | Pregel-style resumable workflow engine. Events, approvals, external systems: agents become first-class task kinds. | [flow](https://github.com/looprig/flow) |
-| **Reference product** | Carbon: a depth-1 coding system assembled from Loops, standard tools, sandbox access policy, storage, inference, and the TUI. | [carbon](https://github.com/looprig/carbon) |
-| **External proof** | Cross-repo integration suite that drives the harness's public durability APIs against a *new* fsstore instance, proving a genuine process-death/resume. | [tests](https://github.com/looprig/tests) |
+- **[core](https://github.com/looprig/core)** - Shared vocabulary: the closed content model (messages, blocks, streaming chunks), UUIDs, injected logging, and the transport-neutral session wire contract (`sessionwire/v1`). No Looprig dependencies.
+- **[storage](https://github.com/looprig/storage)** - Neutral, stdlib-only storage contracts: `Ledger`, `Leaser`, `KV`, `Blobs`, and `OrderedIndex`, with typed errors, an in-memory reference implementation, and conformance suites every backend runs.
+- **[secrets](https://github.com/looprig/secrets)** - Opaque secret values and references that ordinary formatting cannot disclose.
+- **[credentials](https://github.com/looprig/credentials)** - Outbound provider credentials: a secret-free catalog plus acquisition, refresh, and invalidation of time-bounded authority.
+- **[sandbox](https://github.com/looprig/sandbox)** - Explicit access profiles enforced around spawned commands: Seatbelt on macOS; namespaces, Landlock, seccomp, nftables, and cgroups on Linux. Imports no Looprig module.
+- **[drain](https://github.com/looprig/drain)** - Graceful termination for long-lived Go workloads: counted holds on in-flight work and a drain that decides when it is safe to exit. Standard library only.
 
-<br/>
+### Storage backends
 
-## Repository catalog
+- **[fsstore](https://github.com/looprig/fsstore)** - All storage primitives over one owner-only local directory; the single-host default.
+- **[natsstore](https://github.com/looprig/natsstore)** - All storage primitives over NATS JetStream, remote or embedded.
+- **[pgstore](https://github.com/looprig/pgstore)** - PostgreSQL provider for `Ledger`, `Leaser`, `KV`, and `OrderedIndex`.
+- **[s3store](https://github.com/looprig/s3store)** - S3-compatible provider for `Blobs`, including bounded reader lifecycle.
+- **[rclonestore](https://github.com/looprig/rclonestore)** - `Blobs` over any rclone remote, driving the `rclone` binary as a bounded subprocess.
+- **[sessionstore](https://github.com/looprig/sessionstore)** - The durable session aggregate over the storage contracts: catalog, journal, command admission and settlement, gates, and residency.
 
-### Foundation
+### Models
 
-- **[core](https://github.com/looprig/core)** - Shared primitives. `content` (sealed `Block` interface over Text/Image/Audio/Document/Thinking/ToolUse/ToolResult; `Message`/`Conversation`/`Chunk` streaming deltas; JSON codec), `uuid` (crypto/rand v4), `logging` (injected `*slog.Logger`, no globals). Stdlib only. Nothing depends downward from it.
+- **[inference](https://github.com/looprig/inference)** - The provider-neutral model-call contract: requests, responses, streaming, tools, usage, codecs, retries, and a local gateway. Carries no provider policy.
+- **[llm](https://github.com/looprig/llm)** - Provider policy on top of `inference`: the known-provider registry, auth requirements, fail-closed model validation, and concrete provider clients.
 
-### The heart
+### Runtime and capabilities
 
-- **[harness](https://github.com/looprig/harness)** - The runtime SDK. Key packages: `loop` (the single-flight actor: `StartTurn`/`Interrupt`/`Shutdown`), `session` (multi-loop orchestration with depth/quota caps and restore), `hub` (session pub/sub with federated quiescence / headless `WaitIdle`), `command`/`event` (the typed command protocol and event stream), `identity` (attribution), `gate` (the generic three-state access evaluator and durable human/policy approval gates surviving restore), `tool` (tool definitions, bindings, prepared requests, capability requirements, and audit contracts), `journal`/`sessionstore`/`workspacestore` (persistence facades over `storage` contracts), `foreignloop` adapters, `eval`, and an optional HTTP session API.
-- **[tools](https://github.com/looprig/tools)** - Optional standard tool implementations. File, search, shell, web, loop-scoped task tracking, planning, permission, and skill capabilities are exported independently. `tools.TaskDefinitions()` is one selected definition that exposes the four model-facing names `TaskCreate`, `TaskUpdate`, `TaskGet`, and `TaskList`. Each bound Loop, including each Subagent, receives an independent task graph; modes within one Loop share it. Subagent is a Harness-injected control tool, not a tool consumers add manually, and agents coordinate through Subagent messages rather than shared task memory. A consumer can select only the tools a Loop needs or replace any of them with its own implementation.
+- **[harness](https://github.com/looprig/harness)** - The agent runtime SDK described above.
+- **[tools](https://github.com/looprig/tools)** - Optional standard tools (file read/write/edit, glob, grep, shell and processes, web fetch and search, tasks, skills, ask-user, permission, and tool-result reading), each selected individually.
+- **[mcp](https://github.com/looprig/mcp)** - Model Context Protocol client: consume MCP servers' tools from a Harness agent.
+- **[acp](https://github.com/looprig/acp)** - Agent Client Protocol: drive ACP agents as children, or expose a Harness host over ACP.
+- **[foreignloops](https://github.com/looprig/foreignloops)** - Run ACP, Claude, and Codex processes as Harness loops through neutral driver contracts.
+- **[classifiers](https://github.com/looprig/classifiers)** - Classifiers for Harness's permission auto-review, used as bounded evidence inside gate policy.
+- **[eval](https://github.com/looprig/eval)** - Application-neutral evaluation framework for agentic systems, run under `go test`.
 
-### Inference
+### Workflows
 
-- **[inference](https://github.com/looprig/inference)** - The neutral model-call contract: `Client` (`Invoke`/`Stream`), secret-free `Model`, `Request`/`Response`/`Tool`/`Usage`, `APIFormat` (open-label: `openai`/`anthropic`/`gemini`), sampling/effort/mode knobs, codec (`openaiapi`/`anthropicapi`/`geminiapi`), `transport`, `wire` (jsonbody/ndjson/sse). No provider constants. Fail-safe-by-design.
-- **[llm](https://github.com/looprig/llm)** - Provider **policy** layered on `inference`: known-provider registry (LMStudio/Phala/Chutes/OpenRouter/Bedrock/Google), `Provider↔APIFormat` truth tables, `RequiredAuth` (`AuthNone`/`AuthAPIKey`/`AuthSigV4`), `ValidateModel` (fail-closed), `auto.New` composition root, and concrete per-provider clients. TDX-guest attestation crypto for Phala/TEE; SigV4 for Bedrock. `inference never imports llm`.
+- **[flow](https://github.com/looprig/flow)** - Durable, replayable workflow engine with Pregel-style super-step execution and append-only checkpoints. The nested module `github.com/looprig/flow/store` adapts a storage `Ledger` to Flow checkpoints.
+- **[workflows](https://github.com/looprig/workflows)** - The bridge between Flow and Harness: typed workflows, durable run records, supervision inside sessions, and workflow tools.
 
-### Storage
+### Interfaces
 
-- **[storage](https://github.com/looprig/storage)** - The neutral contract hub. Four primitive contracts: `Ledger` (append-only, CAS-on-tip), `Leaser` (single-writer epoch-fenced ownership), `KV` (per-key revision-CAS), `Blobs` (content-addressed immutable bytes), plus a typed error taxonomy, `ValidateName`, `AppendDefinite` (turns any `Append` into a definite outcome on lost ack / lossy networks), `memstore` reference oracle, and `storetest` conformance suites called from each backend's tests.
-- **[fsstore](https://github.com/looprig/fsstore)** - Filesystem backend. Length-prefixed CRC-32C frame log with torn-tail self-healing on reopen; `flock`+epoch-file leases; atomic-rename per-key KV; content-addressed disk blobs. Single-host durable default.
-- **[natsstore](https://github.com/looprig/natsstore)** - JetStream backend, embedded **or** remote. The *only* module sanctioned to depend on NATS. Lease reclaim via KV TTL; cross-process flock on the embedded engine; secure-by-default dial; credentials redacted from all errors.
-- **[rclonestore](https://github.com/looprig/rclonestore)** - Blobs-only backend over the external `rclone` binary. Cloud-agnostic reach (S3, GCS, Azure, local, ...) via argv-only exec, no cgo, no librclone linkage. Config referenced by path only; credentials never in errors/logs.
+- **[tui](https://github.com/looprig/tui)** - Reusable terminal user interface (Bubble Tea v2) for Harness sessions.
+- **[wui](https://github.com/looprig/wui)** - Reusable web user interface: a React SPA embedded as a static bundle, served by a Go handler.
+- **[client](https://github.com/looprig/client)** - A Go backend-for-frontend and a framework-neutral TypeScript session SDK, with a reference Svelte app.
 
-### OS confinement
+### Orchestration
 
-- **[sandbox](https://github.com/looprig/sandbox)** - Real OS enforcement of what a spawned command can touch: Seatbelt on macOS, namespaces + Landlock + seccomp + nftables + cgroups on Linux. Consumers build explicit `Profile` values from per-capability `Deny`/`Gated`/`Allow` states (no reusable named modes or presets), with zero-value-most-restrictive defaults, `Restrict` for role ceilings, `ExecutorSet` for per-key isolated executors, rung-1 vs rung-2 Linux probe, re-exec stage-2 helper, unforgeable HMAC grant tokens (`lrsx1.<payload>.<sig>`) minted only after approval, a loopback egress proxy for target-scoped network, and metadata-endpoint hard-deny. Coupling to the harness is **structural only**: `*sandbox.Profile` satisfies the gate's `AccessSource` and `*sandbox.Executor` its `GrantIssuer` without any import; `harness` must never import `sandbox`.
+- **[factory](https://github.com/looprig/factory)** - The public-facing orchestration service: HTTP and WebSocket API, authorization seams, command admission, and placement of sessions onto Hosts. Ships no UI; products mount their own.
+- **[host](https://github.com/looprig/host)** - The runtime host process that keeps sessions resident, applies commands, serves the HostLink surface, and drains on release.
+- **[controller](https://github.com/looprig/controller)** - Optional Kubernetes controller for dedicated Host placement.
 
-### Presentation & clients
+### Products
 
-- **[tui](https://github.com/looprig/tui)** - The reusable interactive terminal surface. The root package owns Bubble Tea presentation, `runtime` owns process and terminal lifecycle, and `sessionadapter` adapts a Harness Session to the TUI contract. `components` and `styles` remain reusable leaf packages. Dependencies stay one-directional: TUI imports Harness, never the reverse.
-- **`client` *(planned)*** - A future standalone module that brings the same session experience to the browser, desktop, and mobile. One Go binary = a backend-for-frontend (BFF) + embedded static SPA + a framework-neutral TypeScript SDK (`@looprig/client`). Three planes over the same `pkg/serve` `/v1` contract: a **read plane** (mounts `serve.NewReader` over `sessionstore`: list sessions, cold journal, transcript; works with no host), a **live plane** (SSE reverse-proxy of the host's `.../events` for token-by-token streaming), and a **control plane** (POST reverse-proxy for input/gate-response/interrupt/create/restore). The TS core parses the generated `serve` wire schema (JSON Schema to zod), folds cold history + live `enduring`/`ephemeral` frames into one session state machine, and performs the exact sequence join for lossless resume. Thin framework adapters wrap one core: `@looprig/svelte` (the first-party reference app), then `@looprig/react`, vue, angular, solid, plain TS; desktop + iOS/Android via Tauri v2 wrapping the same SPA. The client hosts **no agent**: it never imports `carbon`; it browses history from the store and drives running sessions by proxying to a host. Same-origin by design: the SPA never holds the remote token or hits the host directly; no CORS surface. (`tui` and `client` are sibling consumers of `harness`; `carbon` may embed the client's BFF + SPA for an all-in-one local dev binary.)
-- **[bubbletea-fork](https://github.com/looprig/bubbletea-fork)** - A narrow, load-bearing fork of `charm.land/bubbletea/v2` (v2.0.7 baseline) for one fix: paging `insertAbove` so that streaming log/progress lines printed *above* the live TUI never corrupt output when a chunk is taller than the screen. Drops in via `replace` directive. Only four commits beyond the vendored baseline.
+- **[carbon](https://github.com/looprig/carbon)** - Carbon, the coding agent: an interactive TUI and headless CLI, plus a browser mode composed from Factory, a local Host, and `wui`.
+- **[pluto](https://github.com/looprig/pluto)** - Pluto, the model profiler: qualifies a new model or configuration under representative load, faults, and hostile inputs. The CLI is the nested module `github.com/looprig/pluto/cmd/pluto`.
 
-### Sibling engines
+### Integration
 
-- **[flow](https://github.com/looprig/flow)** - A durable, Pregel-style (Bulk Synchronous Parallel) workflow engine as a Go library, for long-running workflows that pause for a human, ticket, approval, or external event and resume from a checkpoint without losing the execution frontier. Deterministic replay from append-only checkpoints, idempotency keys, resumable interrupts. The engine itself is *not* an agent framework; agents are intended to be bound later as task kinds on this core. In-process `Mem` control plane by default; Tier-C distributed via a separate JetStream-backed nested module (`pkg/nats`).
+- **[tests](https://github.com/looprig/tests)** - Cross-module integration suite that wires the published modules together the way a real consumer would, pinned to released versions.
 
-### Reference product
+## Layering
 
-- **[carbon](https://github.com/looprig/carbon)** - Carbon is the reference coding Rig and its sole agent. It exposes three product access profiles (`ReadOnly` default, `Trusted`, `Unconfined`) selected with `--access-profile` and built directly from the `sandbox` API. Carbon can delegate to another Carbon instance for focused work while retaining one product identity, one explicit tool/access policy, and one durable session model. Session persistence, workspace snapshots, configuration fingerprints, and the TUI come from their owning modules.
+Modules release from the bottom up; a module depends only on layers below it.
 
-### External proof
+| Layer | Modules |
+| --- | --- |
+| Foundations | `core`, `storage`, `secrets`, `sandbox`, `drain` |
+| Foundation adapters | `credentials`, `fsstore`, `natsstore`, `pgstore`, `s3store`, `rclonestore`, `flow` |
+| Session state | `sessionstore` |
+| Models and workflow storage | `inference`, `flow/store` |
+| Shared runtime | `harness`, `llm`, `eval` |
+| Capabilities and interfaces | `tools`, `mcp`, `acp`, `classifiers`, `tui`, `wui`, `pluto` |
+| Orchestration | `foreignloops`, `workflows`, `host`, `factory`, `controller` |
+| Products and integration | `carbon`, `client`, `tests` |
 
-- **[tests](https://github.com/looprig/tests)** - A standalone cross-repo integration suite in its own repo, deliberately outside the harness so it can't reach into internals. It drives the harness's public durability APIs (suspend → durable record → resume on a *new* fsstore instance across a closed-and-reopened store, simulating process death) and asserts content-addressed tree equality including file modes and symlink targets. `GOWORK=off`-pinned to the `go.mod` versions: a credible e2e/acceptance gate, not a unit test.
-
-<br/>
-
-## Module dependency rules (enforced by spec)
-
-```
-core            ← no deps
-inference       ← core                     (never llm)
-storage         ← stdlib only              (no third-party)
-harness         ← core, inference, storage (never llm; never tools; never sandbox)
-tools           ← core, harness             (optional implementations)
-llm             ← core, inference          (provides provider policy)
-fsstore         ← storage
-natsstore       ← storage, nats-io/*
-rclonestore     ← storage                  (blobs only)
-sandbox         ← stdlib + x/sys + vetted  (no looprig imports)
-tui             ← harness, core, inference, bubbletea-fork
-client (planned) ← harness (serve, sessionstore), one storage backend, stdlib net/http (no carbon)
-flow            ← core                     (bundled nats in nested module)
-carbon          ← harness, tui, tools, inference, llm, fsstore, sandbox, core
-tests           ← harness, inference, core, fsstore, storage (no carbon)
-```
-
-<br/>
+This repository also holds the public documentation corpus, runnable examples,
+and the journal published at [looprig.com](https://looprig.com).
 
 ---
 
