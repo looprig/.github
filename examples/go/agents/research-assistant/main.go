@@ -280,7 +280,7 @@ func run(ctx context.Context, output io.Writer, workspace, question string) erro
 	if err != nil {
 		return fmt.Errorf("draft: %w", err)
 	}
-	if err := os.MkdirAll(workspace, 0o755); err != nil {
+	if err := os.MkdirAll(workspace, 0o750); err != nil {
 		return err
 	}
 	if err := os.WriteFile(filepath.Join(workspace, "research-report.md"), []byte(result), 0o600); err != nil {

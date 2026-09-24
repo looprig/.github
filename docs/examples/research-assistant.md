@@ -109,7 +109,7 @@ The full example waits for the child Loop's `TurnDone`, then submits its evidenc
 ## Save the artifact
 
 ```go
-if err := os.MkdirAll(workspace, 0o755); err != nil {
+if err := os.MkdirAll(workspace, 0o750); err != nil {
 	return err
 }
 if err := os.WriteFile(
