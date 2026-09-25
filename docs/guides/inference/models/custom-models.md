@@ -59,7 +59,7 @@ An HTTPS base URL is accepted. Plain HTTP is accepted only for `127.0.0.1`, `loc
 
 ## Proof
 
-- Source: [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.13.0/model/model.go)
-- Tests: [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/v0.13.0/model/model_test.go) covers defaults, options, deep-copy sampling, and endpoint rules.
+- Source: [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.14.0/model/model.go)
+- Tests: [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/v0.14.0/model/model_test.go) covers defaults, options, deep-copy sampling, and endpoint rules.
 
 Related: [Model](/docs/guides/inference/models/model), [Model validation](/docs/guides/inference/models/validation).

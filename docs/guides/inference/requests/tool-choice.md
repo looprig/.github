@@ -56,7 +56,7 @@ Required choice does not execute a tool for you. Read the assistant's `ToolUseBl
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go)
-- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/client_test.go) covers the required-without-tools and unknown-value cases.
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.14.0/client.go)
+- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.14.0/client_test.go) covers the required-without-tools and unknown-value cases.
 
 Related: [Tool definitions](/docs/guides/inference/requests/tools), [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use).

@@ -47,7 +47,7 @@ Validation runs `ValidateOutputSchema` first. The model must advertise `Caps.Str
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go), [`inference/output.go`](https://github.com/looprig/inference/blob/v0.13.0/output.go)
-- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/client_test.go), [`inference/output_test.go`](https://github.com/looprig/inference/blob/v0.13.0/output_test.go)
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.14.0/client.go), [`inference/output.go`](https://github.com/looprig/inference/blob/v0.14.0/output.go)
+- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.14.0/client_test.go), [`inference/output_test.go`](https://github.com/looprig/inference/blob/v0.14.0/output_test.go)
 
 Related: [OutputSchema](/docs/guides/inference/structured-output/output-schema), [Structured output with tools](/docs/guides/inference/structured-output/with-tools).

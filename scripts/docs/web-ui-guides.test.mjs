@@ -9,7 +9,7 @@ const root = path.resolve(import.meta.dirname, "../..");
 const clientRoot = path.join(resolveWorkspaceRoot(root), "client");
 const wuiRoot = path.join(resolveWorkspaceRoot(root), "wui");
 const clientTag = "v0.4.0";
-const wuiTag = "v0.3.0";
+const wuiTag = "v0.4.0";
 
 const pages = [
   ["guides/web-ui/index", "Web UI"],
@@ -159,7 +159,7 @@ test("Web UI wui page links its claims to wui source at the released tag", () =>
 
 test("Web UI guides cover the prebuilt wui bundle and its pin rule", () => {
   const page = readPage("guides/web-ui/embedding/wui");
-  for (const phrase of ["wui.Assets()", "factory.WithUIHandler", "BundleProtocolVersion", "ErrNoBundleManifest", "go get github.com/looprig/wui@v0.3.0"]) {
+  for (const phrase of ["wui.Assets()", "factory.WithUIHandler", "BundleProtocolVersion", "ErrNoBundleManifest", "go get github.com/looprig/wui@v0.4.0"]) {
     assert.match(page, new RegExp(regexEscape(phrase)), `wui page missing ${phrase}`);
   }
   assert.match(page, /`go mod tidy`[^.]*drop/, "wui page must warn that go mod tidy drops the Core pin");

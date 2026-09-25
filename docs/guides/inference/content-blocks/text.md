@@ -46,8 +46,8 @@ Do not add a `Type` field to the struct. The codec owns the wire tag and rejects
 
 ## Proof
 
-- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.11.0/content/block.go)
-- Tests: [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/block_json_test.go), [`core/content/block_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/block_test.go)
-- Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/v0.11.0/examples/content/example_test.go)
+- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.12.0/content/block.go)
+- Tests: [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.12.0/content/block_json_test.go), [`core/content/block_test.go`](https://github.com/looprig/core/blob/v0.12.0/content/block_test.go)
+- Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/v0.12.0/examples/content/example_test.go)
 
 Related: [Content blocks](/docs/guides/inference/content-blocks), [Text deltas](/docs/guides/inference/streaming/text-deltas).

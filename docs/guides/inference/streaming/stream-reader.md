@@ -65,7 +65,7 @@ for {
 
 ## Proof
 
-- Source: [`inference/stream/stream.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream.go), [`inference/stream/result.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/result.go)
-- Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream_test.go)
+- Source: [`inference/stream/stream.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/stream.go), [`inference/stream/result.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/result.go)
+- Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/stream_test.go)
 
 Related: [Close streams](/docs/guides/inference/streaming/close), [Streaming errors](/docs/guides/inference/streaming/errors), [Terminal stream results](/docs/guides/inference/streaming/terminal-results).

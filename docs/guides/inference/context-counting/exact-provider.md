@@ -49,8 +49,8 @@ or retention downgrades before policy uses the result.
 
 ## Source and proof
 
-- [`contextcount/contracts.go`](https://github.com/looprig/inference/blob/v0.13.0/contextcount/contracts.go)
-- [`contextcount/contracts_errors.go`](https://github.com/looprig/inference/blob/v0.13.0/contextcount/contracts_errors.go)
-- [`contextcount/contracts_test.go`](https://github.com/looprig/inference/blob/v0.13.0/contextcount/contracts_test.go)
+- [`contextcount/contracts.go`](https://github.com/looprig/inference/blob/v0.14.0/contextcount/contracts.go)
+- [`contextcount/contracts_errors.go`](https://github.com/looprig/inference/blob/v0.14.0/contextcount/contracts_errors.go)
+- [`contextcount/contracts_test.go`](https://github.com/looprig/inference/blob/v0.14.0/contextcount/contracts_test.go)
 
 Run `go test ./contextcount`.

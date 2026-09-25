@@ -45,7 +45,7 @@ Set `IsError` when the tool execution failed, and put a useful, non-secret expla
 
 ## Proof
 
-- Source: [`core/content/message.go`](https://github.com/looprig/core/blob/v0.11.0/content/message.go)
-- Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/message_test.go), [`core/content/message_json_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/message_json_test.go) pins the ID and error fields through a JSON round trip.
+- Source: [`core/content/message.go`](https://github.com/looprig/core/blob/v0.12.0/content/message.go)
+- Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/v0.12.0/content/message_test.go), [`core/content/message_json_test.go`](https://github.com/looprig/core/blob/v0.12.0/content/message_json_test.go) pins the ID and error fields through a JSON round trip.
 
 Related: [ToolResultBlock](/docs/guides/inference/content-blocks/tool-result), [Tool choice](/docs/guides/inference/requests/tool-choice).

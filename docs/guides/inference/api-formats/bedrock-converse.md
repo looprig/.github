@@ -52,9 +52,9 @@ to normalized usage; no request-side cache marker is emitted by this codec.
 
 ## Source and proof
 
-- [`bedrockconverse/types.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/bedrockconverse/types.go)
-- [`bedrockconverse/encode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/bedrockconverse/encode.go)
-- [`bedrockconverse/decode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/bedrockconverse/decode.go)
-- [`bedrockconverse/stream_test.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/bedrockconverse/stream_test.go)
+- [`bedrockconverse/types.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/bedrockconverse/types.go)
+- [`bedrockconverse/encode.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/bedrockconverse/encode.go)
+- [`bedrockconverse/decode.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/bedrockconverse/decode.go)
+- [`bedrockconverse/stream_test.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/bedrockconverse/stream_test.go)
 
 Run `go test ./codec/bedrockconverse`.

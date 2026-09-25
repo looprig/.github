@@ -43,8 +43,8 @@ other upstream API status is preserved when valid, network failures become
 
 ## Source and proof
 
-- [`transport/client.go`](https://github.com/looprig/inference/blob/v0.13.0/transport/client.go)
-- [`gateway/http_errors.go`](https://github.com/looprig/inference/blob/v0.13.0/gateway/http_errors.go)
-- [`gateway/handler_test.go`](https://github.com/looprig/inference/blob/v0.13.0/gateway/handler_test.go)
+- [`transport/client.go`](https://github.com/looprig/inference/blob/v0.14.0/transport/client.go)
+- [`gateway/http_errors.go`](https://github.com/looprig/inference/blob/v0.14.0/gateway/http_errors.go)
+- [`gateway/handler_test.go`](https://github.com/looprig/inference/blob/v0.14.0/gateway/handler_test.go)
 
 Run `go test ./transport ./gateway`.

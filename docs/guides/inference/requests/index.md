@@ -83,7 +83,7 @@ The Harness [model request step](/docs/guides/harness/step/model-request) is the
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go), [`inference/session_id.go`](https://github.com/looprig/inference/blob/v0.13.0/session_id.go), [`inference/output.go`](https://github.com/looprig/inference/blob/v0.13.0/output.go)
-- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/client_test.go), [`inference/session_id_test.go`](https://github.com/looprig/inference/blob/v0.13.0/session_id_test.go), [`inference/codec/session_id_test.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/session_id_test.go)
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.14.0/client.go), [`inference/session_id.go`](https://github.com/looprig/inference/blob/v0.14.0/session_id.go), [`inference/output.go`](https://github.com/looprig/inference/blob/v0.14.0/output.go)
+- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.14.0/client_test.go), [`inference/session_id_test.go`](https://github.com/looprig/inference/blob/v0.14.0/session_id_test.go), [`inference/codec/session_id_test.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/session_id_test.go)
 
 Related: [Model selection](/docs/guides/inference/requests/model-selection), [Conversation input](/docs/guides/inference/requests/messages), [Feature validation](/docs/guides/inference/requests/feature-validation).

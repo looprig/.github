@@ -49,9 +49,9 @@ tolerant event decoding; a missing terminal marker leaves `Result` unavailable.
 
 ## Source and proof
 
-- [`stream/result.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/result.go)
-- [`stream/stream.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream.go)
-- [`openairesponses/errors.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/openairesponses/errors.go)
-- [`anthropicapi/stream.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/anthropicapi/stream.go)
+- [`stream/result.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/result.go)
+- [`stream/stream.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/stream.go)
+- [`openairesponses/errors.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/openairesponses/errors.go)
+- [`anthropicapi/stream.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/anthropicapi/stream.go)
 
 Run `go test ./stream ./codec/...`.

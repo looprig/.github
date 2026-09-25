@@ -96,6 +96,6 @@ flowchart LR
 - [`credentials/reference.go`](https://github.com/looprig/credentials/blob/v0.2.1/reference.go)
 - [`credentials/source.go`](https://github.com/looprig/credentials/blob/v0.2.1/source.go)
 - [`credentials/httpauth/httpauth.go`](https://github.com/looprig/credentials/blob/v0.2.1/httpauth/httpauth.go)
-- [`inference/transport/client.go`](https://github.com/looprig/inference/blob/v0.13.0/transport/client.go)
+- [`inference/transport/client.go`](https://github.com/looprig/inference/blob/v0.14.0/transport/client.go)
 
 Run `go test ./...` in each of the secrets, credentials, and inference modules.

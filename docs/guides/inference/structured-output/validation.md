@@ -40,7 +40,7 @@ Tests assert that caller-provided secret strings do not appear in validation err
 
 ## Proof
 
-- Source: [`inference/output.go`](https://github.com/looprig/inference/blob/v0.13.0/output.go), [`inference/structured_errors.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_errors.go)
-- Tests: [`inference/output_test.go`](https://github.com/looprig/inference/blob/v0.13.0/output_test.go)
+- Source: [`inference/output.go`](https://github.com/looprig/inference/blob/v0.14.0/output.go), [`inference/structured_errors.go`](https://github.com/looprig/inference/blob/v0.14.0/structured_errors.go)
+- Tests: [`inference/output_test.go`](https://github.com/looprig/inference/blob/v0.14.0/output_test.go)
 
 Related: [Portable JSON Schema](/docs/guides/inference/structured-output/portable-json-schema), [Structured-output errors](/docs/guides/inference/structured-output/errors).

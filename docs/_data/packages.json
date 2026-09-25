@@ -303,6 +303,11 @@
     {
       "repository": "harness",
       "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/present"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
       "path": "github.com/looprig/harness/pkg/rig"
     },
     {

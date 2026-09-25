@@ -56,7 +56,7 @@ The Harness [streaming response step](/docs/guides/harness/step/streaming-respon
 
 ## Proof
 
-- Source: [`inference/stream/stream.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream.go), [`inference/stream/chunkstream.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/chunkstream.go), [`core/content/chunk.go`](https://github.com/looprig/core/blob/v0.11.0/content/chunk.go)
-- Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream_test.go), [`inference/stream/chunkstream_test.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/chunkstream_test.go)
+- Source: [`inference/stream/stream.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/stream.go), [`inference/stream/chunkstream.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/chunkstream.go), [`core/content/chunk.go`](https://github.com/looprig/core/blob/v0.12.0/content/chunk.go)
+- Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/stream_test.go), [`inference/stream/chunkstream_test.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/chunkstream_test.go)
 
 Related: [StreamReader](/docs/guides/inference/streaming/stream-reader), [Chunks](/docs/guides/inference/streaming/chunks), [Terminal stream results](/docs/guides/inference/streaming/terminal-results).

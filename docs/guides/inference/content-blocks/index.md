@@ -77,8 +77,8 @@ flowchart LR
 
 ## Proof
 
-- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.11.0/content/block.go), [`core/content/chunk.go`](https://github.com/looprig/core/blob/v0.11.0/content/chunk.go)
-- Tests: [`core/content/block_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/block_test.go), [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/block_json_test.go)
-- Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/v0.11.0/examples/content/example_test.go)
+- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.12.0/content/block.go), [`core/content/chunk.go`](https://github.com/looprig/core/blob/v0.12.0/content/chunk.go)
+- Tests: [`core/content/block_test.go`](https://github.com/looprig/core/blob/v0.12.0/content/block_test.go), [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.12.0/content/block_json_test.go)
+- Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/v0.12.0/examples/content/example_test.go)
 
 Related: [Messages](/docs/guides/inference/messages), [Streaming](/docs/guides/inference/streaming), [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use).

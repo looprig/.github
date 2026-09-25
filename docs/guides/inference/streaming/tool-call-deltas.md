@@ -47,7 +47,7 @@ Render fragments if desired, but execute only after the stream's representation 
 
 ## Proof
 
-- Source: [`core/content/chunk.go`](https://github.com/looprig/core/blob/v0.11.0/content/chunk.go), [`core/content/streamaccumulator/streamaccumulator.go`](https://github.com/looprig/core/blob/v0.11.0/content/streamaccumulator/streamaccumulator.go)
-- Tests: [`core/content/streamaccumulator/streamaccumulator_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/streamaccumulator/streamaccumulator_test.go) covers interleaving, late IDs, empty fragments, and hostile indexes.
+- Source: [`core/content/chunk.go`](https://github.com/looprig/core/blob/v0.12.0/content/chunk.go), [`core/content/streamaccumulator/streamaccumulator.go`](https://github.com/looprig/core/blob/v0.12.0/content/streamaccumulator/streamaccumulator.go)
+- Tests: [`core/content/streamaccumulator/streamaccumulator_test.go`](https://github.com/looprig/core/blob/v0.12.0/content/streamaccumulator/streamaccumulator_test.go) covers interleaving, late IDs, empty fragments, and hostile indexes.
 
 Related: [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use), [Tool definitions](/docs/guides/inference/requests/tools).

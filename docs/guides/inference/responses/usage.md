@@ -55,7 +55,7 @@ if response.Usage != nil {
 
 ## Proof
 
-- Source: [`core/content/usage.go`](https://github.com/looprig/core/blob/v0.11.0/content/usage.go), [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go)
-- Tests: [`core/content/usage_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/usage_test.go), [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream_test.go)
+- Source: [`core/content/usage.go`](https://github.com/looprig/core/blob/v0.12.0/content/usage.go), [`inference/client.go`](https://github.com/looprig/inference/blob/v0.14.0/client.go)
+- Tests: [`core/content/usage_test.go`](https://github.com/looprig/core/blob/v0.12.0/content/usage_test.go), [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/stream_test.go)
 
 Related: [Terminal stream results](/docs/guides/inference/streaming/terminal-results), [AIMessage](/docs/guides/inference/messages/message-types/ai-message).

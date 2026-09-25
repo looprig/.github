@@ -45,7 +45,7 @@ With `FinishReasonToolUse`, structured extraction requires exactly one `ToolUseB
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go), [`inference/structured_result.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_result.go), [`inference/output.go`](https://github.com/looprig/inference/blob/v0.13.0/output.go)
-- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/client_test.go), [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_result_test.go)
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.14.0/client.go), [`inference/structured_result.go`](https://github.com/looprig/inference/blob/v0.14.0/structured_result.go), [`inference/output.go`](https://github.com/looprig/inference/blob/v0.14.0/output.go)
+- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.14.0/client_test.go), [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/v0.14.0/structured_result_test.go)
 
 Related: [Tool definitions](/docs/guides/inference/requests/tools), [Tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas), [Tool choice](/docs/guides/inference/requests/tool-choice).

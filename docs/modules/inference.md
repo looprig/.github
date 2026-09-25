@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/inference` |
-| Version | `v0.13.0` |
+| Version | `v0.14.0` |
 | GitHub | [looprig/inference](https://github.com/looprig/inference) |
 
 ## Description
@@ -33,6 +33,8 @@ Invoke and stream model requests through explicit descriptors, codecs, retries, 
 Inference is useful on its own when a Go application needs provider-neutral model requests, streaming, codecs, retries, routing, or a local model gateway. Within Looprig, it supplies the model boundary for [Harness](/docs/modules/harness), [LLM](/docs/modules/llm), [Eval](/docs/modules/eval), [Classifiers](/docs/modules/classifiers), [TUI](/docs/modules/tui), and [Host](/docs/modules/host).
 
 `Request.SessionID` carries a stable conversation identity for providers that document a per-conversation header. It is validated for every provider, so an unsendable value fails the request locally instead of being altered in transit, and other providers ignore it. Inference moves model data; it does not own agent sessions or provider credential catalogs.
+
+`transport.WithoutExecutionTimeout(ctx)` opts an invocation or stream out of the transport's whole-request and response-header execution ceilings. Caller cancellation and deadlines, TLS settings, redirect refusal, authorization, and response-size limits still apply. Use it only when the caller provides its own lifecycle policy.
 
 ## Dependencies
 

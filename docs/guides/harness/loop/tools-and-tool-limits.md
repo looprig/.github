@@ -42,9 +42,13 @@ typed binding failure.
 
 ## Limits
 
-Zero limits receive the defaults shown below. Negative values, and a positive
-`ResultBytes` or `CaptureBytes` below 256, are rejected with
-`DefinitionInvalidToolLimits`; a mode may override only positive fields.
+Zero limits receive the defaults shown below. For `Iterations` and `Calls`, set
+`loop.Unlimited` (`-1`) to remove that per-turn cap; values below `-1` are
+invalid. Negative `Parallel`, `ResultBytes`, or `CaptureBytes` values, and a
+positive byte limit below 256, are rejected with
+`DefinitionInvalidToolLimits`. A mode may override `Iterations` and `Calls`
+with a positive value or `loop.Unlimited`; it may override the other fields
+only with positive values.
 
 | Field | Meaning | Default |
 | --- | --- | ---: |
@@ -53,6 +57,11 @@ Zero limits receive the defaults shown below. Negative values, and a positive
 | `Parallel` | maximum concurrent calls in one batch | 8 |
 | `ResultBytes` | maximum model-visible bytes of one tool result | unbounded |
 | `CaptureBytes` | maximum bytes of one tool result retained durably | 8 MiB (`loop.DefaultToolResultCaptureBytes`) |
+
+An unlimited turn still ends when the model stops, or on interrupt, shutdown,
+or context cancellation. A model that keeps calling tools has no other
+per-turn bound, so use the sentinel only with an application-level cancellation
+policy. It does not remove the parallel, result, or capture limits.
 
 When a result exceeds `ResultBytes`, the model sees a bounded preview plus a
 marker instead of the full text. Without capture, the preview keeps the head

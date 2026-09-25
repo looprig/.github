@@ -130,7 +130,7 @@ model-facing restore form), never an arbitrary live error implementation.
 
 The journal stores two bodies for a public event: the native body shown here,
 which restore reads, and a public body that
-[`pkg/sessionwire`](https://github.com/looprig/harness/blob/v0.40.2/pkg/sessionwire/privacy.go)
+[`pkg/sessionwire`](https://github.com/looprig/harness/blob/v0.41.0/pkg/sessionwire/privacy.go)
 projects for session viewers. The public projection removes Host configuration
 a viewer must not see:
 

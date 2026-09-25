@@ -52,7 +52,7 @@ then fails closed rather than guessing.
 
 ## Proof
 
-- Source: [`inference/model/effort.go`](https://github.com/looprig/inference/blob/v0.13.0/model/effort.go), [`inference/model/sampling.go`](https://github.com/looprig/inference/blob/v0.13.0/model/sampling.go)
-- Tests: [`inference/model/effort_test.go`](https://github.com/looprig/inference/blob/v0.13.0/model/effort_test.go)
+- Source: [`inference/model/effort.go`](https://github.com/looprig/inference/blob/v0.14.0/model/effort.go), [`inference/model/sampling.go`](https://github.com/looprig/inference/blob/v0.14.0/model/sampling.go)
+- Tests: [`inference/model/effort_test.go`](https://github.com/looprig/inference/blob/v0.14.0/model/effort_test.go)
 
 Related: [Sampling](/docs/guides/inference/models/sampling), [Capabilities](/docs/guides/inference/models/capabilities).

@@ -46,9 +46,9 @@ Streaming uses typed SSE events such as `response.output_text.delta` and
 
 ## Source and proof
 
-- [`openairesponses/types.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/openairesponses/types.go)
-- [`openairesponses/encode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/openairesponses/encode.go)
-- [`openairesponses/decode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/openairesponses/decode.go)
-- [`openairesponses/stream.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/openairesponses/stream.go)
+- [`openairesponses/types.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/openairesponses/types.go)
+- [`openairesponses/encode.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/openairesponses/encode.go)
+- [`openairesponses/decode.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/openairesponses/decode.go)
+- [`openairesponses/stream.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/openairesponses/stream.go)
 
 Run `go test ./codec/openairesponses`.

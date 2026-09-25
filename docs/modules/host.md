@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/host` |
-| Version | `v0.10.3` |
+| Version | `v0.11.0` |
 | GitHub | [looprig/host](https://github.com/looprig/host) |
 
 ## Description
@@ -35,6 +35,8 @@ Host is useful on its own when you need a long-lived process that keeps agent ru
 Within Looprig, Host is the runtime side of [Factory](/docs/modules/factory). Factory dials each tenant's HostLink address, derived from the base endpoint Host advertises, to attach, bind, deliver commands, and drain, and it admits a gate response only when the Host advertises that capability. Host runs [Harness](/docs/modules/harness) rigs and records claims, attempts, gates, and residency through [SessionStore](/docs/modules/sessionstore) over a [Storage](/docs/modules/storage) backend, using wire types from [Core](/docs/modules/core) and requests from [Inference](/docs/modules/inference). [Controller](/docs/modules/controller) starts dedicated Host Pods and ends them drain-before-delete. A product runtime should implement `department.AttemptCloser`; without it, Host cannot close a predecessor's stranded attempt after a failover, and that session's command stream stays blocked.
 
 Host owns residency, command consumption, the HostLink surface, and drain. Callers own the Department, the storage backend, the harness journal stores used as settlement evidence, credential verification, and deployment.
+
+Host v0.11.0 advertises `hostlink.attribution.principal` only when it carries `Principal` on all five command kinds and `Metadata` on create and input into the product runtime. A product's field-by-field `runtimecommand.Admitted` adapter must copy both fields; dropping either loses attribution silently. Upgrade Hosts before enabling Factory's principal stamping.
 
 ## Dependencies
 

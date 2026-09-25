@@ -43,7 +43,7 @@ The target must be a non-nil pointer to a struct. The decoder uses `DisallowUnkn
 
 ## Proof
 
-- Source: [`inference/structured_result.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_result.go)
-- Tests: [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_result_test.go), [`inference/structured_result_internal_test.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_result_internal_test.go)
+- Source: [`inference/structured_result.go`](https://github.com/looprig/inference/blob/v0.14.0/structured_result.go)
+- Tests: [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/v0.14.0/structured_result_test.go), [`inference/structured_result_internal_test.go`](https://github.com/looprig/inference/blob/v0.14.0/structured_result_internal_test.go)
 
 Related: [OutputSchema](/docs/guides/inference/structured-output/output-schema), [Structured-output errors](/docs/guides/inference/structured-output/errors), [Assistant messages](/docs/guides/inference/responses/assistant-message).

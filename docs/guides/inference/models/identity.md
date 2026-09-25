@@ -45,7 +45,7 @@ if err := key.Validate(); err != nil {
 
 ## Proof
 
-- Source: [`inference/model/modelkey.go`](https://github.com/looprig/inference/blob/v0.13.0/model/modelkey.go), [`inference/model/provider.go`](https://github.com/looprig/inference/blob/v0.13.0/model/provider.go), [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.13.0/model/model.go)
-- Tests: [`inference/model/modelkey_test.go`](https://github.com/looprig/inference/blob/v0.13.0/model/modelkey_test.go)
+- Source: [`inference/model/modelkey.go`](https://github.com/looprig/inference/blob/v0.14.0/model/modelkey.go), [`inference/model/provider.go`](https://github.com/looprig/inference/blob/v0.14.0/model/provider.go), [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.14.0/model/model.go)
+- Tests: [`inference/model/modelkey_test.go`](https://github.com/looprig/inference/blob/v0.14.0/model/modelkey_test.go)
 
 Related: [Model](/docs/guides/inference/models/model), [Resolved model](/docs/guides/inference/responses/resolved-model).

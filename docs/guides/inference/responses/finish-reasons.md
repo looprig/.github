@@ -52,7 +52,7 @@ Structured output additionally rejects non-empty future reasons with `Structured
 
 ## Proof
 
-- Source: [`inference/stream/finishreason.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/finishreason.go), [`inference/structured_result.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_result.go)
-- Tests: [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_result_test.go), [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream_test.go)
+- Source: [`inference/stream/finishreason.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/finishreason.go), [`inference/structured_result.go`](https://github.com/looprig/inference/blob/v0.14.0/structured_result.go)
+- Tests: [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/v0.14.0/structured_result_test.go), [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/stream_test.go)
 
 Related: [Structured output](/docs/guides/inference/structured-output), [Terminal stream results](/docs/guides/inference/streaming/terminal-results).

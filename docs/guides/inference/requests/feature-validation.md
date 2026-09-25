@@ -79,7 +79,7 @@ func sendableSessionID(id string) string {
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go), [`inference/session_id.go`](https://github.com/looprig/inference/blob/v0.13.0/session_id.go), [`inference/structured_errors.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_errors.go)
-- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/client_test.go) covers ordering, nested images, duplicates, reserved names, and bounded diagnostics. [`inference/session_id_test.go`](https://github.com/looprig/inference/blob/v0.13.0/session_id_test.go) covers each session-identity reason.
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.14.0/client.go), [`inference/session_id.go`](https://github.com/looprig/inference/blob/v0.14.0/session_id.go), [`inference/structured_errors.go`](https://github.com/looprig/inference/blob/v0.14.0/structured_errors.go)
+- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.14.0/client_test.go) covers ordering, nested images, duplicates, reserved names, and bounded diagnostics. [`inference/session_id_test.go`](https://github.com/looprig/inference/blob/v0.14.0/session_id_test.go) covers each session-identity reason.
 
 Related: [Structured output requests](/docs/guides/inference/requests/structured-output), [Model capabilities](/docs/guides/inference/models/capabilities).

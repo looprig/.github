@@ -44,7 +44,7 @@ _ = summary
 | `hustle.Define(opts ...hustle.Option) (hustle.Definition, error)` | Validates and freezes the definition. |
 | `hustle.WithName(hustle.Name) hustle.Option` | Stable registration name; trimmed emptiness and `_looprig.` names are rejected. |
 | `hustle.WithParticipation(hustle.Participation) hustle.Option` | Selects blocking or background lane. |
-| `hustle.WithTimeout(time.Duration) hustle.Option` | Requires a positive per-invocation timeout. |
+| `hustle.WithTimeout(time.Duration) hustle.Option` | Required; a positive value sets the execution deadline, and `WithTimeout(0)` sets no execution deadline. Negative values are refused. |
 | `hustle.WithLimits(hustle.Limits) hustle.Option` | Requires positive serialized input and output byte bounds of at most 16 MiB each. |
 | `hustle.WithCurrentLoopModel() hustle.Option` | Resolves the originating Loop model for every invocation. |
 | `hustle.WithNamedInference(inference.Client, model.Model) hustle.Option` | Freezes a validated client and model. |
@@ -55,6 +55,11 @@ _ = summary
 | `hustle.WithRetryPolicy(hustle.RetryPolicy) hustle.Option` | Enables the one classified retry only for eligible evidence definitions. |
 
 Proof: [Hustle options and Define](https://github.com/looprig/harness/blob/main/pkg/hustle/definition.go) and [definition validation tests](https://github.com/looprig/harness/blob/main/pkg/hustle/definition_test.go).
+
+`WithTimeout(0)` does not make the invocation immortal. Caller or session
+cancellation still stops it, and separate audit and finalization budgets still
+apply. The zero timeout is retained in the definition descriptor, so restore
+does not reinterpret it as a default deadline.
 
 ## Definition descriptor
 

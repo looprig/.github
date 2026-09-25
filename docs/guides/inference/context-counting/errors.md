@@ -47,8 +47,8 @@ case errors.As(err, &encoding):
 
 ## Source and proof
 
-- [`contextcount/errors.go`](https://github.com/looprig/inference/blob/v0.13.0/contextcount/errors.go)
-- [`contextcount/contracts_errors.go`](https://github.com/looprig/inference/blob/v0.13.0/contextcount/contracts_errors.go)
-- [`contextcount/estimator_test.go`](https://github.com/looprig/inference/blob/v0.13.0/contextcount/estimator_test.go)
+- [`contextcount/errors.go`](https://github.com/looprig/inference/blob/v0.14.0/contextcount/errors.go)
+- [`contextcount/contracts_errors.go`](https://github.com/looprig/inference/blob/v0.14.0/contextcount/contracts_errors.go)
+- [`contextcount/estimator_test.go`](https://github.com/looprig/inference/blob/v0.14.0/contextcount/estimator_test.go)
 
 Run `go test ./contextcount`.

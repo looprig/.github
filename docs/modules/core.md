@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/core` |
-| Version | `v0.11.0` |
+| Version | `v0.12.0` |
 | GitHub | [looprig/core](https://github.com/looprig/core) |
 
 ## Description
@@ -33,6 +33,8 @@ Construct messages and content blocks, consume streaming chunks, and share the s
 Core is the foundation for applications that need provider-neutral messages, content blocks, streaming chunks, usage values, logging, or UUIDs. Within Looprig, those types are shared by [Inference](/docs/modules/inference), [Harness](/docs/modules/harness), [Tools](/docs/modules/tools), stores, and user interfaces.
 
 Core also owns `sessionwire/v1`, the transport-neutral session contract. It defines durable command requests, gate and publication records, and the HostLink records and framing that [Factory](/docs/modules/factory) and [Host](/docs/modules/host) exchange to attach, bind, drain, and deliver commands to resident sessions. [SessionStore](/docs/modules/sessionstore) persists those records, and [WUI](/docs/modules/wui) ships their JSON schemas to the browser. Core defines common values and wire shapes without owning model transport, runtime lifecycle, or network transport.
+
+`sessionwire/v1.Principal` carries the Factory-verified tenant, subject, and actor or service kind; `MessageMetadata` carries client-defined string fields and is not identity. `HostLinkCapabilityAttributionPrincipal` names the `hostlink.attribution.principal` capability token, not an RPC method. Factory checks a Host's advertised token before sending attributed commands. See the [Message presenter](/docs/guides/harness/commands/message-presenter) guide for the runtime boundary.
 
 ## Dependencies
 

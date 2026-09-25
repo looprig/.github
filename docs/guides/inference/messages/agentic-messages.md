@@ -49,8 +49,8 @@ Do not mutate a thread concurrently with a client that is encoding it. The slice
 
 ## Proof
 
-- Source: [`core/content/message.go`](https://github.com/looprig/core/blob/v0.11.0/content/message.go)
-- Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/message_test.go) covers nil, empty, and mixed four-type threads.
-- Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/v0.11.0/examples/content/example_test.go)
+- Source: [`core/content/message.go`](https://github.com/looprig/core/blob/v0.12.0/content/message.go)
+- Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/v0.12.0/content/message_test.go) covers nil, empty, and mixed four-type threads.
+- Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/v0.12.0/examples/content/example_test.go)
 
 Related: [Conversation](/docs/guides/inference/messages/conversation), [Request messages](/docs/guides/inference/requests/messages).

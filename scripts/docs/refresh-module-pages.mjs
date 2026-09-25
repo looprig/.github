@@ -71,6 +71,19 @@ const ecosystem = new Map([
   ["workflows", "Workflows are useful on their own when an application needs typed, durable workflow definitions with interruption, recovery, supervision, and tool-facing controls. Within Looprig, the module combines [Flow](/docs/modules/flow), [Harness](/docs/modules/harness), and [Storage](/docs/modules/storage), with [Flow Store](/docs/modules/flow-store) as the usual checkpoint adapter. A supervisor registered as a Harness session resource stops its runs when the session shuts down. Workflows coordinate long-running business processes; Harness continues to own agent sessions and Flow continues to execute graphs."],
 ]);
 
+// Add release-specific consumer obligations inside Where it fits; Module pages
+// deliberately retain their five-section contract, with full API examples in
+// the owning guides rather than new generated sections.
+const currentReleaseNotes = new Map([
+  ["core", "`sessionwire/v1.Principal` carries the Factory-verified tenant, subject, and actor or service kind; `MessageMetadata` carries client-defined string fields and is not identity. `HostLinkCapabilityAttributionPrincipal` names the `hostlink.attribution.principal` capability token, not an RPC method. Factory checks a Host's advertised token before sending attributed commands. See the [Message presenter](/docs/guides/harness/commands/message-presenter) guide for the runtime boundary."],
+  ["sessionstore", "Since v0.14.0, disposition descriptors and public creates can retain an optional `Principal` and create/input `Metadata`. The store validates their shape and preserves their bytes; it does not verify a sender. Once an attributed version-3 disposition row is written, every Factory and Host reading that store needs SessionStore v0.14.0 or later: older readers refuse the row, so rolling back wedges command consumption."],
+  ["inference", "`transport.WithoutExecutionTimeout(ctx)` opts an invocation or stream out of the transport's whole-request and response-header execution ceilings. Caller cancellation and deadlines, TLS settings, redirect refusal, authorization, and response-size limits still apply. Use it only when the caller provides its own lifecycle policy."],
+  ["harness", "The `pkg/present` contract and `rig.WithMessagePresenter` let a product place bounded text around a human's message while journaling the chosen frame for restore. `loop.Unlimited` removes the per-turn iteration or call cap, and `hustle.WithTimeout(0)` removes a Hustle's execution deadline; caller and session cancellation still apply. See [Message presenter](/docs/guides/harness/commands/message-presenter) and [tool limits](/docs/guides/harness/loop/tools-and-tool-limits)."],
+  ["host", "Host v0.11.0 advertises `hostlink.attribution.principal` only when it carries `Principal` on all five command kinds and `Metadata` on create and input into the product runtime. A product's field-by-field `runtimecommand.Admitted` adapter must copy both fields; dropping either loses attribution silently. Upgrade Hosts before enabling Factory's principal stamping."],
+  ["factory", "`WithPrincipalStamping` is off by default. When enabled, Factory stamps the verified `Principal` after credential verification and refuses to place attributed work on a Host lacking `hostlink.attribution.principal`. `AuditAuthorizer` optionally grants `Principal` and `Metadata` on `GET /v1/sessions/{sid}/commands/{cid}`; otherwise public command status omits both audit members."],
+  ["wui", "The v0.4.0 browser contract re-vendors Core v0.12.0's 43 schemas and fixtures. Its user transcript row separates the original user blocks from a model-visible presenter `frame` and shows a `principal` sender badge when present. Client `MessageMetadata` is not displayed as identity."],
+]);
+
 const pages = readdirSync(modulesRoot).filter((name) => name.endsWith(".md")).sort();
 const slugs = pages.map((name) => name.slice(0, -3));
 // Records are keyed by module path, not by repository: a nested module such as
@@ -165,7 +178,7 @@ ${description}
 
 ## Where it fits
 
-${ecosystem.get(slug)}
+${ecosystem.get(slug)}${currentReleaseNotes.has(slug) ? `\n\n${currentReleaseNotes.get(slug)}` : ""}
 
 ## Dependencies
 

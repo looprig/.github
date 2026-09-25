@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/sessionstore` |
-| Version | `v0.13.1` |
+| Version | `v0.14.0` |
 | GitHub | [looprig/sessionstore](https://github.com/looprig/sessionstore) |
 
 ## Description
@@ -35,6 +35,8 @@ SessionStore is useful on its own when several processes must share one durable 
 Within Looprig, SessionStore is the shared contract between [Factory](/docs/modules/factory) and [Host](/docs/modules/host). Factory writes catalog entries, admits commands, and reads gates and journals. A Host acquires residency, claims and settles commands, and publishes the gates its runtime opens. [Controller](/docs/modules/controller) reads desired placement and records how a workload ended, and [Harness](/docs/modules/harness) writes its runtime journal in SessionStore's envelope format. SessionStore is built only from [Core](/docs/modules/core) wire records and [Storage](/docs/modules/storage) primitives. The backend's Blobs provider must implement Storage's bounded reader lifecycle, so `Open` refuses [FSStore](/docs/modules/fsstore) Blobs, while [S3Store](/docs/modules/s3store), [NATSStore](/docs/modules/natsstore), and Storage's memory backend qualify.
 
 SessionStore owns fencing, ordering, and durable encoding. Callers own transport, authentication, the backend they open, and the decision about which records to write.
+
+Since v0.14.0, disposition descriptors and public creates can retain an optional `Principal` and create/input `Metadata`. The store validates their shape and preserves their bytes; it does not verify a sender. Once an attributed version-3 disposition row is written, every Factory and Host reading that store needs SessionStore v0.14.0 or later: older readers refuse the row, so rolling back wedges command consumption.
 
 ## Dependencies
 

@@ -48,8 +48,8 @@ The accumulator does not send events, validate output, or decide whether the tur
 
 ## Proof
 
-- Source: [`core/content/chunk.go`](https://github.com/looprig/core/blob/v0.11.0/content/chunk.go), [`core/content/streamaccumulator/streamaccumulator.go`](https://github.com/looprig/core/blob/v0.11.0/content/streamaccumulator/streamaccumulator.go)
-- Tests: [`core/content/streamaccumulator/streamaccumulator_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/streamaccumulator/streamaccumulator_test.go)
-- Example: [`core/examples/streaming/example_test.go`](https://github.com/looprig/core/blob/v0.11.0/examples/streaming/example_test.go)
+- Source: [`core/content/chunk.go`](https://github.com/looprig/core/blob/v0.12.0/content/chunk.go), [`core/content/streamaccumulator/streamaccumulator.go`](https://github.com/looprig/core/blob/v0.12.0/content/streamaccumulator/streamaccumulator.go)
+- Tests: [`core/content/streamaccumulator/streamaccumulator_test.go`](https://github.com/looprig/core/blob/v0.12.0/content/streamaccumulator/streamaccumulator_test.go)
+- Example: [`core/examples/streaming/example_test.go`](https://github.com/looprig/core/blob/v0.12.0/examples/streaming/example_test.go)
 
 Related: [TextBlock](/docs/guides/inference/content-blocks/text), [Accumulate a response](/docs/guides/inference/streaming/accumulation).

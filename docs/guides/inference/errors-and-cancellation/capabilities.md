@@ -50,8 +50,8 @@ feature instead of retrying the same request.
 
 ## Source and proof
 
-- [`model/capabilities.go`](https://github.com/looprig/inference/blob/v0.13.0/model/capabilities.go)
-- [`model/model.go`](https://github.com/looprig/inference/blob/v0.13.0/model/model.go)
-- [`gateway/http_errors.go`](https://github.com/looprig/inference/blob/v0.13.0/gateway/http_errors.go)
+- [`model/capabilities.go`](https://github.com/looprig/inference/blob/v0.14.0/model/capabilities.go)
+- [`model/model.go`](https://github.com/looprig/inference/blob/v0.14.0/model/model.go)
+- [`gateway/http_errors.go`](https://github.com/looprig/inference/blob/v0.14.0/gateway/http_errors.go)
 
 Run `go test ./model ./gateway`.

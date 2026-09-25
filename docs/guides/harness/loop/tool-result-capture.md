@@ -256,10 +256,10 @@ spill-base rules are the same. The two options cannot be combined.
 
 ## Source and proof
 
-- [`rig.WithToolResultObjects` and `CaptureSafety`](https://github.com/looprig/harness/blob/v0.40.2/pkg/rig/capture.go)
-- [`loop.ToolResultObjects` and limits](https://github.com/looprig/harness/blob/v0.40.2/pkg/loop/tool_capture.go)
-- [`ToolLimits`](https://github.com/looprig/harness/blob/v0.40.2/pkg/loop/mode.go)
-- [`tool.ToolResultReader`](https://github.com/looprig/harness/blob/v0.40.2/pkg/tool/tool_result_reader.go)
-- [`event.ToolResultCapture`](https://github.com/looprig/harness/blob/v0.40.2/pkg/event/turn.go)
-- [`Store.ToolResultObjects` and `LookupToolResultCapture`](https://github.com/looprig/harness/blob/v0.40.2/pkg/sessionstore/tool_results.go)
-- [Capture and marker implementation](https://github.com/looprig/harness/blob/v0.40.2/internal/loopruntime/tool_result_capture.go)
+- [`rig.WithToolResultObjects` and `CaptureSafety`](https://github.com/looprig/harness/blob/v0.41.0/pkg/rig/capture.go)
+- [`loop.ToolResultObjects` and limits](https://github.com/looprig/harness/blob/v0.41.0/pkg/loop/tool_capture.go)
+- [`ToolLimits`](https://github.com/looprig/harness/blob/v0.41.0/pkg/loop/mode.go)
+- [`tool.ToolResultReader`](https://github.com/looprig/harness/blob/v0.41.0/pkg/tool/tool_result_reader.go)
+- [`event.ToolResultCapture`](https://github.com/looprig/harness/blob/v0.41.0/pkg/event/turn.go)
+- [`Store.ToolResultObjects` and `LookupToolResultCapture`](https://github.com/looprig/harness/blob/v0.41.0/pkg/sessionstore/tool_results.go)
+- [Capture and marker implementation](https://github.com/looprig/harness/blob/v0.41.0/internal/loopruntime/tool_result_capture.go)

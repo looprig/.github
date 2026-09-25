@@ -46,7 +46,7 @@ if err != nil && !errors.Is(err, io.EOF) {
 
 ## Proof
 
-- Source: [`inference/stream/result.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/result.go), [`inference/stream/chunkstream.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/chunkstream.go)
-- Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream_test.go), [`inference/stream/chunkstream_test.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/chunkstream_test.go)
+- Source: [`inference/stream/result.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/result.go), [`inference/stream/chunkstream.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/chunkstream.go)
+- Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/stream_test.go), [`inference/stream/chunkstream_test.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/chunkstream_test.go)
 
 Related: [StreamReader](/docs/guides/inference/streaming/stream-reader), [Terminal stream results](/docs/guides/inference/streaming/terminal-results).

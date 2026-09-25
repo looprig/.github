@@ -40,7 +40,7 @@ Always use `errors.As` instead of matching the human-readable error string. A ca
 
 ## Proof
 
-- Source: [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.13.0/model/model.go), [`inference/model/errors.go`](https://github.com/looprig/inference/blob/v0.13.0/model/errors.go), [`inference/model/contextlimits.go`](https://github.com/looprig/inference/blob/v0.13.0/model/contextlimits.go)
-- Tests: [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/v0.13.0/model/model_test.go), [`inference/model/contextlimits_test.go`](https://github.com/looprig/inference/blob/v0.13.0/model/contextlimits_test.go), [`inference/model/apiformat_test.go`](https://github.com/looprig/inference/blob/v0.13.0/model/apiformat_test.go)
+- Source: [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.14.0/model/model.go), [`inference/model/errors.go`](https://github.com/looprig/inference/blob/v0.14.0/model/errors.go), [`inference/model/contextlimits.go`](https://github.com/looprig/inference/blob/v0.14.0/model/contextlimits.go)
+- Tests: [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/v0.14.0/model/model_test.go), [`inference/model/contextlimits_test.go`](https://github.com/looprig/inference/blob/v0.14.0/model/contextlimits_test.go), [`inference/model/apiformat_test.go`](https://github.com/looprig/inference/blob/v0.14.0/model/apiformat_test.go)
 
 Related: [Custom models](/docs/guides/inference/models/custom-models), [Model identity](/docs/guides/inference/models/identity).

@@ -54,8 +54,8 @@ if result, ok := reader.Result(); ok {
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go), [`inference/stream/stream.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream.go)
-- Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream_test.go), [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/client_test.go)
-- Example: [`inference/examples/stream/main.go`](https://github.com/looprig/inference/blob/v0.13.0/examples/stream/main.go)
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.14.0/client.go), [`inference/stream/stream.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/stream.go)
+- Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.14.0/stream/stream_test.go), [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.14.0/client_test.go)
+- Example: [`inference/examples/stream/main.go`](https://github.com/looprig/inference/blob/v0.14.0/examples/stream/main.go)
 
 Related: [StreamReader](/docs/guides/inference/streaming/stream-reader), [Terminal stream results](/docs/guides/inference/streaming/terminal-results), [Close streams](/docs/guides/inference/streaming/close).

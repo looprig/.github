@@ -56,10 +56,21 @@ if response.Message != nil {
 
 The caller owns the context and decides whether an error is retryable. The client owns transport response bodies and closes them before returning. A cancelled context should stop work and return its cancellation error or a wrapped transport error; callers should not retry a request after the context is done.
 
+`transport.WithoutExecutionTimeout(ctx)` opts a call made through Inference's
+transport client out of its whole-`Invoke` ceiling (five minutes by default)
+and, for `Stream`, its 60-second response-header ceiling. Pass the returned
+context to `Invoke` or `Stream`. It retains the caller's own deadline and
+cancellation, TLS roots, configured round tripper, dial and handshake bounds,
+authorization, redirect refusal, and response-size limits. It is a process-local
+marker, not a wire field. Use it only when the caller owns cancellation; a
+half-open peer may otherwise be detected only by TCP keepalive. The [streaming
+client](/docs/guides/inference/client/stream) has the matching stream lifecycle.
+
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go)
-- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/client_test.go), [`inference/transport/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/transport/client_test.go)
-- Example: [`inference/examples/invoke/main.go`](https://github.com/looprig/inference/blob/v0.13.0/examples/invoke/main.go)
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.14.0/client.go)
+- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.14.0/client_test.go), [`inference/transport/client_test.go`](https://github.com/looprig/inference/blob/v0.14.0/transport/client_test.go)
+- Opt-out and cancellation proof: [`transport/execution_timeout.go`](https://github.com/looprig/inference/blob/v0.14.0/transport/execution_timeout.go), [`transport/execution_timeout_test.go`](https://github.com/looprig/inference/blob/v0.14.0/transport/execution_timeout_test.go)
+- Example: [`inference/examples/invoke/main.go`](https://github.com/looprig/inference/blob/v0.14.0/examples/invoke/main.go)
 
 Related: [Responses](/docs/guides/inference/responses), [Request feature validation](/docs/guides/inference/requests/feature-validation).

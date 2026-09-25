@@ -38,7 +38,7 @@ Use `Request.System` for request-scoped behavior. Use [SystemMessage](/docs/guid
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go), [`core/content/message.go`](https://github.com/looprig/core/blob/v0.11.0/content/message.go)
-- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/client_test.go), [`core/content/message_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/message_test.go)
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.14.0/client.go), [`core/content/message.go`](https://github.com/looprig/core/blob/v0.12.0/content/message.go)
+- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.14.0/client_test.go), [`core/content/message_test.go`](https://github.com/looprig/core/blob/v0.12.0/content/message_test.go)
 
 Related: [Conversation input](/docs/guides/inference/requests/messages), [SystemMessage](/docs/guides/inference/messages/message-types/system-message).

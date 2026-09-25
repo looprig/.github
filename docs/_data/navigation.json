@@ -932,6 +932,16 @@
       "order": 14
     },
     {
+      "path": "guides/harness/commands/message-presenter.md",
+      "audience": "human",
+      "order": 15
+    },
+    {
+      "path": "guides/harness/commands/attribution-and-audit.md",
+      "audience": "human",
+      "order": 16
+    },
+    {
       "path": "guides/harness/events/index.md",
       "audience": "human",
       "order": 3

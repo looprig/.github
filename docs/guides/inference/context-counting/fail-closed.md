@@ -46,8 +46,8 @@ if count.Quality == contextcount.CountQualityUnknown {
 
 ## Source and proof
 
-- [`contextcount/estimator.go`](https://github.com/looprig/inference/blob/v0.13.0/contextcount/estimator.go)
-- [`contextcount/contracts.go`](https://github.com/looprig/inference/blob/v0.13.0/contextcount/contracts.go)
-- [`contextcount/estimator_test.go`](https://github.com/looprig/inference/blob/v0.13.0/contextcount/estimator_test.go)
+- [`contextcount/estimator.go`](https://github.com/looprig/inference/blob/v0.14.0/contextcount/estimator.go)
+- [`contextcount/contracts.go`](https://github.com/looprig/inference/blob/v0.14.0/contextcount/contracts.go)
+- [`contextcount/estimator_test.go`](https://github.com/looprig/inference/blob/v0.14.0/contextcount/estimator_test.go)
 
 Run `go test ./contextcount`.

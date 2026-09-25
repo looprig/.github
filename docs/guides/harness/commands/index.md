@@ -10,7 +10,7 @@ proofs:
   start: [release-github-com-looprig-harness]
   two-command-lanes: [release-github-com-looprig-harness]
   the-public-contracts: [release-github-com-looprig-harness]
-  host-admitted-runtime-commands: [release-github-com-looprig-harness]
+  host-admitted-runtime-commands: [release-github-com-looprig-harness, tests-principal-presenter]
   choosing-a-page: [release-github-com-looprig-harness]
   source-and-proof: [release-github-com-looprig-harness]
 ---
@@ -140,7 +140,7 @@ which round-trips every durable command type and rejects codec drift.
 
 A Host that serves remote clients admits commands in its own durable store
 before any runtime sees them, then must apply each one exactly once, even
-across a crash or failover. [`pkg/runtimecommand`](https://github.com/looprig/harness/blob/v0.40.2/pkg/runtimecommand/command.go)
+across a crash or failover. [`pkg/runtimecommand`](https://github.com/looprig/harness/blob/v0.41.0/pkg/runtimecommand/command.go)
 is that seam. It is separate from `pkg/command`: an admitted command names a
 retry-stable public `CommandID` (an opaque UTF-8 string of at most 256 bytes)
 and the `RuntimeCommandID` UUID the Host allocated once, which Harness stamps on
@@ -163,6 +163,8 @@ type Admitted struct {
 	Blocks           []content.Block
 	GateResponse     *gate.GateResponse
 	AttemptID        AttemptID
+	Principal        *sessionwire.Principal
+	Metadata         sessionwire.MessageMetadata
 }
 ```
 
@@ -173,6 +175,16 @@ type Admitted struct {
 | `gate_response` | `GateResponse`, required; `AttemptID` required | `Session.RespondGate`, with all of its refusals |
 | `create` | `Blocks`, optional first message | the active loop when a message is present; otherwise nothing, because the Host already made the session resident |
 | `restore` | none | nothing; residency is the effect |
+
+`Principal` is Factory's assertion about the verified sender and can accompany
+every kind. `Metadata` is client-defined, allowed only on `create` and `input`.
+Harness validates the shapes and carries them unchanged. Neither becomes a
+model-facing `content.Message` unless a product explicitly frames human input
+with a [Message presenter](/docs/guides/harness/commands/message-presenter).
+Every product adapter that constructs `runtimecommand.Admitted` field by field
+must copy both `Principal` and `Metadata`; omitting either drops attribution
+silently. [The released integration lane](https://github.com/looprig/tests/blob/v0.14.0/principal_presenter_integration_test.go)
+exercises this seam across Factory, Host, and Harness.
 
 `ApplyRuntimeCommand` writes a private application record before any effect,
 so a redelivery returns the original `Disposition` with `Duplicate` set and
@@ -194,7 +206,10 @@ you are writing a journal adapter or restore reader. Use [Submit input](/docs/gu
 for user or delegate payloads, [Approve and deny](/docs/guides/harness/commands/approve-and-deny) and
 [Provide requested user input](/docs/guides/harness/commands/provide-user-input) for parked gates, and
 [Shutdown](/docs/guides/harness/commands/shutdown) when owning the whole session lifecycle. The remaining
-pages document the narrow control paths and their durable boundaries.
+pages document the narrow control paths and their durable boundaries. For a
+hosted product, [Attribution and audit](/docs/guides/harness/commands/attribution-and-audit)
+explains the Factory-to-Host sender and audit contract, and [Message presenter](/docs/guides/harness/commands/message-presenter)
+explains how to show that sender to a model without changing the original input.
 
 ## Source and proof
 

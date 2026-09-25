@@ -96,8 +96,8 @@ test("Module page versions and graph links match the checked code inventory", ()
 });
 
 for (const [repository, slug, title, version] of [
-  ["harness", "harness", "Harness", "v0.40.2"],
-  ["inference", "inference", "Inference", "v0.13.0"],
+  ["harness", "harness", "Harness", "v0.41.0"],
+  ["inference", "inference", "Inference", "v0.14.0"],
   ["tui", "tui", "TUI", "v0.21.1"],
 ]) {
   test(`${title} generated inventory and module page use ${version}`, () => {
@@ -143,19 +143,37 @@ test("Flow Store is released from the Flow repository at its own nested tag", ()
   assert.equal(fields.get("Version"), "`store/v0.1.2`");
 });
 
-test("Carbon v0.29.1 stays product-only in generated inventory and release evidence", () => {
+test("Carbon v0.30.0 stays product-only in generated inventory and release evidence", () => {
   const record = inventory.modules.find((candidate) => candidate.repository === "carbon");
   assert.ok(record, "missing Carbon inventory record");
   assert.equal(record.module, "github.com/looprig/carbon");
   assert.equal(record.disposition, "product-only");
   assert.equal(record.publication?.status, "released");
-  assert.equal(record.publication?.tag, "v0.29.1", "Carbon inventory release is stale");
+  assert.equal(record.publication?.tag, "v0.30.0", "Carbon inventory release is stale");
   assert.equal(pages.includes("carbon.md"), false, "Carbon must not have a reusable module page");
 
   const proof = evidence.proofs.find((candidate) => candidate.id === "release-github-com-looprig-carbon");
   assert.ok(proof, "missing Carbon release evidence");
   assert.equal(proof.type, "release-record");
   assert.equal(proof.repository, "carbon");
-  assert.equal(proof.tag, "v0.29.1", "Carbon release evidence is stale");
+  assert.equal(proof.tag, "v0.30.0", "Carbon release evidence is stale");
   assert.equal(proof.commit, record.commit, "Carbon inventory and release evidence commits differ");
+});
+
+test("new attribution and unbounded-run APIs appear in their owning Module summaries", () => {
+  for (const [slug, expressions] of [
+    ["core", [/Principal/, /MessageMetadata/, /hostlink\.attribution\.principal/]],
+    ["sessionstore", [/Principal/, /Metadata/, /v0\.14\.0/]],
+    ["harness", [/pkg\/present/, /WithMessagePresenter/, /loop\.Unlimited/, /WithTimeout\(0\)/]],
+    ["host", [/hostlink\.attribution\.principal/, /Principal/, /Metadata/]],
+    ["factory", [/WithPrincipalStamping/, /AuditAuthorizer/, /commands\/\{cid\}/]],
+    ["wui", [/principal/, /frame/, /43 schemas/]],
+    ["inference", [/WithoutExecutionTimeout/]],
+  ]) {
+    const section = readFileSync(path.join(modulesRoot, `${slug}.md`), "utf8")
+      .match(/^## Where it fits\n\n([\s\S]*?)(?=\n## Dependencies$)/m)?.[1] ?? "";
+    for (const expression of expressions) {
+      assert.match(section, expression, `${slug} is missing ${expression}`);
+    }
+  }
 });

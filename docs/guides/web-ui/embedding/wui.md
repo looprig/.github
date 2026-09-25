@@ -10,6 +10,7 @@ proofs:
   choose-wui-or-the-client-sdk: [release-github-com-looprig-wui]
   go-api: [release-github-com-looprig-wui]
   mount-the-bundle-under-factory: [release-github-com-looprig-wui]
+  read-attributed-messages: [release-github-com-looprig-wui]
   check-the-bundle-marker: [release-github-com-looprig-wui]
   deprecated-harness-serve-adapter: [release-github-com-looprig-wui]
   move-the-pin: [release-github-com-looprig-wui]
@@ -73,6 +74,25 @@ func browserOptions() []factory.Option {
 
 Own-command matching in the transcript relies on Factory resolving each session's journal. Carbon wires `factory.WithSessionJournalResolver` for this; without a resolver, the UI cannot mark which commands a viewer sent.
 
+## Read attributed messages
+
+WUI v0.4.0 projects a committed user row into the original user blocks, an
+optional model-visible presenter frame, and an optional Factory-stamped
+principal. The presenter frame is shown dimmed around the user's own blocks;
+the verified sender appears separately as a `from` chip. The chip uses the
+opaque subject, not a friendly display name. A product that wants names should
+resolve them from its trusted member directory, never from client metadata or
+the message text. A row without a principal has no chip, including older
+sessions. The protocol does not invent a frame when none was journaled, and a
+malformed frame count leaves the user's blocks visible.
+
+The [Message presenter](/docs/guides/harness/commands/message-presenter) guide
+explains how a product adds model-visible household context without replacing
+the original message. [WUI's row projection](https://github.com/looprig/wui/blob/v0.4.0/packages/protocol/src/rows.ts),
+[user bubble](https://github.com/looprig/wui/blob/v0.4.0/app/src/components/transcript/user-bubble.tsx),
+and [row tests](https://github.com/looprig/wui/blob/v0.4.0/packages/protocol/test/rows-principal.test.ts)
+pin this separation.
+
 ## Check the bundle marker
 
 A Go module zip is source only, and `go get` runs no build step, so the committed `dist` tree is exactly what your binary embeds. `BundleProtocolVersion` reads the marker the build wrote into that tree.
@@ -101,7 +121,7 @@ if !bundle.Release || bundle.SessionwireVersion != 1 {
 }
 ```
 
-`ErrNoBundleManifest` is distinct from a marker that parses and declares `Release: false`, so you can report which of the two you refused. The v0.3.0 bundle is built against Core v0.11.0.
+`ErrNoBundleManifest` is distinct from a marker that parses and declares `Release: false`, so you can report which of the two you refused. The v0.4.0 bundle is built against Core v0.12.0 and mirrors its 43 schemas and 43 fixtures, including the principal and metadata contracts.
 
 ## Deprecated Harness serve adapter
 
@@ -112,15 +132,15 @@ if !bundle.Release || bundle.SessionwireVersion != 1 {
 wui's only Looprig requirement is Core, used by its contract tests, and no compiled file imports it. `go mod tidy` in the wui module would therefore drop that requirement, so the module's own pin is moved with `go get`. In your application, add or upgrade wui the same way:
 
 ```sh
-go get github.com/looprig/wui@v0.3.0
+go get github.com/looprig/wui@v0.4.0
 ```
 
-Use v0.3.0 or later against a released Factory: it is the first bundle that connects to Factory's ClientLink and answers gates with `gate.respond`. v0.1.0 is retracted because it shipped a placeholder page instead of the app.
+Use v0.4.0 or later when the UI should show attributed user rows and presenter frames. v0.3.0 was the first bundle that connected to Factory's ClientLink and answered gates with `gate.respond`; v0.1.0 is retracted because it shipped a placeholder page instead of the app.
 
 ## Source
 
-The SPA handler and path confinement are in [`assets.go`](https://github.com/looprig/wui/blob/v0.3.0/assets.go), the options, `Guard`, and the deprecated `Handler` in [`handler.go`](https://github.com/looprig/wui/blob/v0.3.0/handler.go), the marker in [`bundle.go`](https://github.com/looprig/wui/blob/v0.3.0/bundle.go), and the guards in [`guard.go`](https://github.com/looprig/wui/blob/v0.3.0/guard.go) and [`csrf.go`](https://github.com/looprig/wui/blob/v0.3.0/csrf.go). The browser's Factory routes are in [`factory-rest.ts`](https://github.com/looprig/wui/blob/v0.3.0/packages/protocol/src/factory-rest.ts) and its ClientLink connection in [`clientlink.ts`](https://github.com/looprig/wui/blob/v0.3.0/packages/protocol/src/clientlink.ts). Carbon's composition is in [`browser/factory.go`](https://github.com/looprig/carbon/blob/v0.29.1/browser/factory.go).
+The SPA handler and path confinement are in [`assets.go`](https://github.com/looprig/wui/blob/v0.4.0/assets.go), the options, `Guard`, and the deprecated `Handler` in [`handler.go`](https://github.com/looprig/wui/blob/v0.4.0/handler.go), the marker in [`bundle.go`](https://github.com/looprig/wui/blob/v0.4.0/bundle.go), and the guards in [`guard.go`](https://github.com/looprig/wui/blob/v0.4.0/guard.go) and [`csrf.go`](https://github.com/looprig/wui/blob/v0.4.0/csrf.go). The browser's Factory routes are in [`factory-rest.ts`](https://github.com/looprig/wui/blob/v0.4.0/packages/protocol/src/factory-rest.ts) and its ClientLink connection in [`clientlink.ts`](https://github.com/looprig/wui/blob/v0.4.0/packages/protocol/src/clientlink.ts). Carbon's composition is in [`browser/factory.go`](https://github.com/looprig/carbon/blob/v0.30.0/browser/factory.go).
 
 ## Proof
 
-[`assets_test.go`](https://github.com/looprig/wui/blob/v0.3.0/assets_test.go) covers real assets, SPA fallback, and traversal confinement. [`bundle_test.go`](https://github.com/looprig/wui/blob/v0.3.0/bundle_test.go) drives each marker rejection, including a missing manifest and a release claim over an unbuilt tree. [`handler_test.go`](https://github.com/looprig/wui/blob/v0.3.0/handler_test.go) and [`guard_test.go`](https://github.com/looprig/wui/blob/v0.3.0/guard_test.go) check routing, per-route CSRF, and origin rejection, and [`module_graph_test.go`](https://github.com/looprig/wui/blob/v0.3.0/module_graph_test.go) enforces that no compiled package imports Core and that Harness is absent from the module graph.
+[`assets_test.go`](https://github.com/looprig/wui/blob/v0.4.0/assets_test.go) covers real assets, SPA fallback, and traversal confinement. [`bundle_test.go`](https://github.com/looprig/wui/blob/v0.4.0/bundle_test.go) drives each marker rejection, including a missing manifest and a release claim over an unbuilt tree. [`handler_test.go`](https://github.com/looprig/wui/blob/v0.4.0/handler_test.go) and [`guard_test.go`](https://github.com/looprig/wui/blob/v0.4.0/guard_test.go) check routing, per-route CSRF, and origin rejection, and [`module_graph_test.go`](https://github.com/looprig/wui/blob/v0.4.0/module_graph_test.go) enforces that no compiled package imports Core and that Harness is absent from the module graph.

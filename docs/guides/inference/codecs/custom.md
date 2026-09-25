@@ -49,9 +49,9 @@ normalization before registering the codec.
 
 ## Source and proof
 
-- [`codec/contracts.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/contracts.go)
-- [`codec/requestmode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/requestmode.go)
-- [`route/contracts.go`](https://github.com/looprig/inference/blob/v0.13.0/route/contracts.go)
-- [`transport/client.go`](https://github.com/looprig/inference/blob/v0.13.0/transport/client.go)
+- [`codec/contracts.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/contracts.go)
+- [`codec/requestmode.go`](https://github.com/looprig/inference/blob/v0.14.0/codec/requestmode.go)
+- [`route/contracts.go`](https://github.com/looprig/inference/blob/v0.14.0/route/contracts.go)
+- [`transport/client.go`](https://github.com/looprig/inference/blob/v0.14.0/transport/client.go)
 
 Run the custom package's tests with `go test ./codec ./route ./transport`.
