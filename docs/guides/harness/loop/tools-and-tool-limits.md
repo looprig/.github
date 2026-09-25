@@ -74,8 +74,9 @@ a session object, `StepDone.Captures` records it, and the marker names
 [Tool result capture](/docs/guides/harness/loop/tool-result-capture).
 
 The base definition's limits apply to the implicit base mode. For a declared
-mode, `resolveLimits` takes each positive mode field and otherwise keeps the
-base value. The returned `BoundMode.ToolLimits` is a value copy.
+mode, `loop.Unlimited` overrides `Iterations` or `Calls` just as a positive
+value does. The other fields take positive overrides only; zero keeps the base
+value. The returned `BoundMode.ToolLimits` is a value copy.
 
 ## Binding and ownership
 

@@ -2,9 +2,10 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
+import { resolveWorkspaceRoot } from "./package-surface.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
-const workspace = path.resolve(root, "../../..");
+const workspace = resolveWorkspaceRoot(root);
 const page = "guides/harness/commands/message-presenter.md";
 
 test("message presenter guide is published with source-backed safety rules", () => {
@@ -39,6 +40,19 @@ test("owning guides describe released unbounded execution and browser attributio
   for (const claim of [/v0\.4\.0/, /43 schemas/, /presenter frame/, /principal/]) {
     assert.match(wui, claim);
   }
+});
+
+test("tool limits guide allows Unlimited in a declared mode", () => {
+  const guide = readFileSync(path.join(root, "docs/guides/harness/loop/tools-and-tool-limits.md"), "utf8");
+  assert.match(guide, /declared\s+mode[\s\S]*`loop\.Unlimited`[\s\S]*`Iterations`[\s\S]*`Calls`/);
+  assert.doesNotMatch(guide, /`resolveLimits` takes each positive mode field/);
+});
+
+test("attribution suite uses the checkout-aware workspace resolver", () => {
+  const source = readFileSync(new URL(import.meta.url), "utf8");
+  assert.match(source, /import \{ resolveWorkspaceRoot \} from "\.\/package-surface\.mjs"/);
+  assert.match(source, /const workspace = resolveWorkspaceRoot\(root\)/);
+  assert.doesNotMatch(source, /path\.resolve\(root, "\.\.\/\.\.\/\.\."\)/);
 });
 
 test("integration evidence names the released attribution and unbounded lanes", () => {
