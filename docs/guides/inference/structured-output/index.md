@@ -45,7 +45,7 @@ fmt.Println(result.Answer)
 
 ## Proof
 
-- Source: [`inference/output.go`](https://github.com/looprig/inference/blob/main/output.go), [`inference/structured_result.go`](https://github.com/looprig/inference/blob/main/structured_result.go), [`inference/structured_errors.go`](https://github.com/looprig/inference/blob/main/structured_errors.go)
-- Tests: [`inference/output_test.go`](https://github.com/looprig/inference/blob/main/output_test.go), [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/main/structured_result_test.go)
+- Source: [`inference/output.go`](https://github.com/looprig/inference/blob/v0.13.0/output.go), [`inference/structured_result.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_result.go), [`inference/structured_errors.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_errors.go)
+- Tests: [`inference/output_test.go`](https://github.com/looprig/inference/blob/v0.13.0/output_test.go), [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_result_test.go)
 
 Related: [OutputSchema](/docs/guides/inference/structured-output/output-schema), [Schema validation](/docs/guides/inference/structured-output/validation), [Typed decoding](/docs/guides/inference/structured-output/decoding).

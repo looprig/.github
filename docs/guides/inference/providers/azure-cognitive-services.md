@@ -109,13 +109,13 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure-cognitive-services/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure-cognitive-services/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure-cognitive-services/errors.go)
-- [options.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure-cognitive-services/options.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure-cognitive-services/client.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure-cognitive-services/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure-cognitive-services/errors.go)
+- [options.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure-cognitive-services/options.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure-cognitive-services/client_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure-cognitive-services/counter_test.go)
-- [default_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure-cognitive-services/default_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure-cognitive-services/client_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure-cognitive-services/counter_test.go)
+- [default_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure-cognitive-services/default_test.go)

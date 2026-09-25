@@ -91,8 +91,10 @@ stable cross-loop correlation.
 ## Failure payload
 
 The runtime returns `TurnFailed` for a non-cancellation error. The failed
-in-flight step has not committed, so no `StepDone` is emitted for that step. A
-prior step remains durable and visible. Examples include an empty model
+in-flight step has not committed, so no `StepDone` is emitted for that step,
+unless the stream failed after delivering text; then the safe prefix commits as
+a `StepDone` ending in a truncation notice. A prior step remains durable and
+visible. Examples include an empty model
 response, a malformed final structured output, a tool limit, a hook denial, and
 a provider error.
 
@@ -128,7 +130,9 @@ When the Turn context is canceled, the runtime maps the cancellation to
 `TurnInterrupted`, including cancellation while streaming, executing tools,
 waiting for a gate, measuring a candidate request, draining queued input, or
 waiting for a durable commit acknowledgement. The current incomplete step is
-discarded. Previously committed steps and their `StepDone` events stay intact.
+discarded, except that text already streamed commits as a `StepDone` ending in
+an interruption notice. Previously committed steps and their `StepDone` events
+stay intact.
 
 ```mermaid
 %%{init: {"theme":"dark"}}%%

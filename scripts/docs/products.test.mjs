@@ -41,14 +41,40 @@ test("Carbon is one practical coding-agent page with concise feature coverage", 
   }
 });
 
-test("the Carbon Install command pins v0.23.0", () => {
+test("the Carbon Install command pins v0.29.1", () => {
   const install = section(read("carbon.md"), "Install");
   assert.ok(install, "Carbon is missing its Install section");
   const [command] = fencedBlocks(install, ["sh", "bash", "shell"]);
   assert.ok(command, "Carbon Install needs a shell block");
 
   const pins = [...command.matchAll(/go install (\S+?)@(v\S+)/g)].map(([, module, version]) => [module, version]);
-  assert.deepEqual(pins, [["github.com/looprig/carbon/cmd/carbon", "v0.23.0"]]);
+  assert.deepEqual(pins, [["github.com/looprig/carbon/cmd/carbon", "v0.29.1"]]);
+});
+
+test("Carbon documents the one-way data directory of v0.29.0 and later", () => {
+  const body = section(read("carbon.md"), "Data directories and upgrades");
+  assert.ok(body, "Carbon is missing its data directory upgrade section");
+  assert.match(body, /\bno migration\b|\bnot migrated\b|\bdoes not migrate\b/i, "the layout change must be documented as unmigrated");
+  assert.match(body, /\brefuses?\b[^.]*\bearlier release\b/i, "Carbon must document refusing an earlier release's directory");
+  assert.match(body, /\bMove or delete\b/, "Carbon must name the move-or-delete remedy");
+  assert.match(body, /\bone-way\b/i, "the change must be documented as one-way");
+  assert.match(body, /\bNever point an older Carbon\b/, "Carbon must warn against pointing an older release at a new directory");
+  refuteClaim(body, { all: [/\bmigrat\w*\b/i, /\bautomatic\w*\b/i] }, "Carbon must not claim an automatic migration");
+});
+
+test("Carbon describes the browser composition and large tool-result retention", () => {
+  const clients = section(read("carbon.md"), "TUI and browser clients");
+  assert.ok(clients, "Carbon is missing its TUI and browser clients section");
+  for (const slug of ["factory", "host", "sessionstore", "wui"]) {
+    assert.match(clients, new RegExp(`\\(/docs/modules/${slug}\\)`), `browser composition must link the ${slug} module`);
+  }
+  assert.match(clients, /`carbon serve`[^.]*\brefuses to start\b/, "the stock serve command must be documented as refusing to start");
+
+  const results = section(read("carbon.md"), "Large tool results");
+  assert.ok(results, "Carbon is missing its Large tool results section");
+  assert.match(results, /`read_tool_result`/);
+  assert.match(results, /\b8 MiB\b/);
+  assert.match(results, /\bbrowser path\b/i, "retention must be scoped to the browser path");
 });
 
 test("Carbon resolves ACP launchers as an ordered override, configuration, PATH list", () => {
@@ -162,6 +188,17 @@ test("the Pluto Install command pins the released nested command version", () =>
 
   const pins = [...command.matchAll(/go install (\S+?)@(v\S+)/g)].map(([, module, pinned]) => [module, pinned]);
   assert.deepEqual(pins, [["github.com/looprig/pluto/cmd/pluto", version]]);
+});
+
+test("the Pluto run example names every required run flag", () => {
+  const run = section(read("pluto.md"), "Run Pluto");
+  assert.ok(run, "Pluto is missing its Run Pluto section");
+  const [command] = fencedBlocks(run, ["sh", "bash", "shell"]);
+  assert.ok(command, "Run Pluto needs a shell block");
+  for (const flag of ["--manifest", "--profile", "--packs"]) {
+    assert.match(command, new RegExp(`^pluto run\\b.*\\s${flag}\\s`, "m"), `pluto run needs ${flag}`);
+  }
+  assert.doesNotMatch(command, /--report\b/, "pluto run has no --report flag; the report path is --out");
 });
 
 test("Pluto is one practical evaluation-product page", () => {

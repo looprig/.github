@@ -65,9 +65,9 @@ The [network page](/docs/guides/sandboxing/enforcement/network) describes the an
 
 ## Source
 
-- [Effective policy compilation](https://github.com/looprig/sandbox/blob/main/internal/policy/effective.go)
-- [Compiled filesystem policy](https://github.com/looprig/sandbox/blob/main/internal/policy/compiled_fs.go)
+- [Effective policy compilation](https://github.com/looprig/sandbox/blob/v0.9.1/internal/policy/effective.go)
+- [Compiled filesystem policy](https://github.com/looprig/sandbox/blob/v0.9.1/internal/policy/compiled_fs.go)
 
 ## Proof
 
-- [Effective policy tests](https://github.com/looprig/sandbox/blob/main/internal/policy/effective_test.go)
+- [Effective policy tests](https://github.com/looprig/sandbox/blob/v0.9.1/internal/policy/effective_test.go)

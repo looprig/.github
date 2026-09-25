@@ -70,4 +70,4 @@ For the actual workspace capabilities and tool permits, read [Tools](/docs/guide
 
 - [Screen lifecycle and presentation tests](https://github.com/looprig/tui/blob/main/internal/presentation/screen_test.go)
 - [Adapter behavior tests](https://github.com/looprig/tui/blob/main/sessionadapter/adapter_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)

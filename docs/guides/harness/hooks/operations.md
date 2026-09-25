@@ -63,7 +63,7 @@ The operation payloads expose these exact fields:
 | `ToolExecutionData` | `ToolExecutionID uuid.UUID`, `ToolUseID string`, `ToolName string`, `ArgsJSON json.RawMessage`, `Result *tool.ToolResult`, `ResultPreview string`, `IsError bool` |
 | `JournalAppendData` | `Family hook.RecordFamily`, `RecordID string` |
 
-`RecordFamily` is closed: `RecordEvent`, `RecordCommand`, `RecordGatePrepared`, and `RecordFence`. The journal hook sees the family and bounded record identity, not serialized bytes. The runtime uses `JournalAppend` to attach durable append work to the active operation's causal context.
+`RecordFamily` is closed: `RecordEvent`, `RecordCommand`, `RecordGatePrepared`, `RecordFence`, and `RecordCommandApplication` (the private prefix that maps a Host-admitted public command ID to its runtime command ID and lease epoch). The journal hook sees the family and bounded record identity, not serialized bytes. The runtime uses `JournalAppend` to attach durable append work to the active operation's causal context.
 
 ## Outcomes
 

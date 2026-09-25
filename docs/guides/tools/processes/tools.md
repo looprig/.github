@@ -20,7 +20,7 @@ The process companion tools operate on an already-owned supervised process. Thei
 
 ## ProcessOutput
 
-`ProcessOutput` is read-only. Supply exactly one `process_id` or a distinct, non-empty `process_ids` array. `cursor` is a byte offset, `limit_bytes` defaults to 32 KiB, and `encoding` is `safe_text` or `base64`. `wait` is `poll`, `any`, or `all`; `any` waits for one selected process to append output past the cursor or become terminal, while `all` waits for every selected process. `timeout_ms` bounds only that wait, not the process.
+`ProcessOutput` is read-only. Supply exactly one `process_id` or a distinct, non-empty `process_ids` array. `cursor` is a byte offset, `limit_bytes` defaults to 32 KiB and has no upper bound in this release, and `encoding` is `safe_text` or `base64`. `wait` is `poll`, `any`, or `all`; `any` waits for one selected process to append output past the cursor or become terminal, while `all` waits for every selected process. `timeout_ms` bounds only that wait, not the process.
 
 Single calls return one JSON object. Multi calls preserve the input order in an array. Each entry can include `output`, `start_cursor`, `next_cursor`, `gap`, `total_bytes`, `status`, `exit_code`, `reason`, `started_at`, `finished_at`, normalization and binary indicators, or a stable `error`. A missing or cross-owner handle is `not_found`. A cursor beyond the retained stream is `cursor_ahead`.
 

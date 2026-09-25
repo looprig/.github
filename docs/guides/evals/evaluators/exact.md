@@ -142,21 +142,21 @@ preserving evidence for later review.
 ## Source
 
 The deterministic constructors are in
-[exact/text.go](https://github.com/looprig/eval/blob/main/exact/text.go),
-[exact/tool.go](https://github.com/looprig/eval/blob/main/exact/tool.go),
-[exact/structured.go](https://github.com/looprig/eval/blob/main/exact/structured.go),
-and [exact/operational.go](https://github.com/looprig/eval/blob/main/exact/operational.go).
+[exact/text.go](https://github.com/looprig/eval/blob/v0.2.2/exact/text.go),
+[exact/tool.go](https://github.com/looprig/eval/blob/v0.2.2/exact/tool.go),
+[exact/structured.go](https://github.com/looprig/eval/blob/v0.2.2/exact/structured.go),
+and [exact/operational.go](https://github.com/looprig/eval/blob/v0.2.2/exact/operational.go).
 
 ## Proof
 
 Required and forbidden text are implemented in
-[exact/text.go](https://github.com/looprig/eval/blob/main/exact/text.go) and
-tested in [exact/text_test.go](https://github.com/looprig/eval/blob/main/exact/text_test.go),
+[exact/text.go](https://github.com/looprig/eval/blob/v0.2.2/exact/text.go) and
+tested in [exact/text_test.go](https://github.com/looprig/eval/blob/v0.2.2/exact/text_test.go),
 including Unicode, cross-message boundaries, nested tool results, and vacuous
 constructors. Tool behavior is in
-[exact/tool.go](https://github.com/looprig/eval/blob/main/exact/tool.go) and
-[exact/tool_test.go](https://github.com/looprig/eval/blob/main/exact/tool_test.go).
+[exact/tool.go](https://github.com/looprig/eval/blob/v0.2.2/exact/tool.go) and
+[exact/tool_test.go](https://github.com/looprig/eval/blob/v0.2.2/exact/tool_test.go).
 Structured-output and operational semantics are in
-[exact/structured.go](https://github.com/looprig/eval/blob/main/exact/structured.go)
-and [exact/operational.go](https://github.com/looprig/eval/blob/main/exact/operational.go)
+[exact/structured.go](https://github.com/looprig/eval/blob/v0.2.2/exact/structured.go)
+and [exact/operational.go](https://github.com/looprig/eval/blob/v0.2.2/exact/operational.go)
 with their focused tests.

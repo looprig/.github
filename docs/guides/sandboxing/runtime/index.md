@@ -46,8 +46,8 @@ func run(executor *sandbox.Executor, workspace string) error {
 
 ## Source
 
-- [Executor and process facade](https://github.com/looprig/sandbox/blob/main/sandbox.go)
+- [Executor and process facade](https://github.com/looprig/sandbox/blob/v0.9.1/sandbox.go)
 
 ## Proof
 
-- [Policy and enforcement runtime fixture](https://github.com/looprig/sandbox/blob/main/examples/policy-enforcement/example_test.go)
+- [Policy and enforcement runtime fixture](https://github.com/looprig/sandbox/blob/v0.9.1/examples/policy-enforcement/example_test.go)

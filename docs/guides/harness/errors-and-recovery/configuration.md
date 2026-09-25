@@ -30,7 +30,8 @@ Its exact kinds cover the composition graph:
 | Group | `DefinitionErrorKind` values |
 | --- | --- |
 | Definition shape | `nil_option`, `missing_loop`, `invalid_loop`, `duplicate_loop`, `missing_primer`, `invalid_primer`, `invalid_active_primer`, `missing_session_store`, `invalid_session_store`, `duplicate_option` |
-| Runtime collaborators | `invalid_delegation_limits`, `invalid_foreign_builders`, `invalid_gate_caps`, `invalid_restore_decider`, `invalid_hooks`, `missing_resource_storage`, `invalid_resource_storage` |
+| Runtime collaborators | `invalid_delegation_limits`, `invalid_foreign_builders`, `invalid_gate_caps`, `invalid_restore_decider`, `invalid_runtime_restore_resolver`, `invalid_restore_failure_policy`, `invalid_hooks`, `missing_resource_storage`, `invalid_resource_storage` |
+| Tool-result capture | `invalid_tool_result_capture` (`Name` is the field label `objects` or `spill_base`, never the value), `tool_result_spill_overlaps_workspace`, `tool_result_reader_without_objects` |
 | Hustle and compaction | `invalid_hustle`, `duplicate_hustle`, `missing_hustle_limits`, `unused_hustle_limits`, `invalid_hustle_limits`, `missing_compaction_hustle`, `incompatible_compaction_hustle` |
 | Permission review | `invalid_permission_classifiers`, `invalid_permission_review_policy`, `incomplete_permission_review`, `unused_permission_review_limits`, `invalid_permission_review_evidence`, `missing_permission_review_evidence`, `unused_permission_review_evidence`, `invalid_permission_review_security_ceiling`, `missing_permission_review_security_ceiling`, `unused_permission_review_security_ceiling`, `invalid_permission_review_observations`, `unused_permission_review_observations` |
 
@@ -101,8 +102,8 @@ kinds are `multiple_placements`, `nil_store`, `nil_leaser`, `empty_root`,
 `canonicalize_failed`, `lease_name_invalid`, and
 `workspace_tool_without_placement`. `PersistenceOverlapError` reports the
 canonical persistence path and workspace root. Per-call `NewSession` options
-use `SessionOptionError` kinds `nil_option`, `duplicate_seed`, and
-`empty_seed`.
+use `SessionOptionError` kinds `nil_option`, `duplicate_seed`, `empty_seed`,
+`duplicate_session_id`, and `zero_session_id`.
 
 ## Recovery boundary {#recovery-boundary}
 

@@ -4,7 +4,7 @@ title: Session lifecycle
 description: Model a session from discovery and status reads through binding, exact live reconnects, and durable restoration.
 audience: developer
 section: guides
-order: 15
+order: 16
 publication: released
 proofs:
   model-session-state: [release-github-com-looprig-client]
@@ -39,7 +39,7 @@ The durable cursor is the handoff point between cold reads and live events. Do n
 
 ## Source
 
-Wire DTOs for summaries, status, journal pages, and lifecycle responses are derived in [`sdk/core/src/types.ts`](https://github.com/looprig/client/blob/main/sdk/core/src/types.ts). The read and control methods that operate on those DTOs are implemented in [`sdk/core/src/transport.ts`](https://github.com/looprig/client/blob/main/sdk/core/src/transport.ts).
+Wire DTOs for summaries, status, journal pages, and lifecycle responses are derived in [`sdk/core/src/types.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/src/types.ts). The read and control methods that operate on those DTOs are implemented in [`sdk/core/src/transport.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/src/transport.ts).
 
 ## Proof
 

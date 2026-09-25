@@ -4,7 +4,7 @@ title: Context Transports
 description: Describe context transport choices exposed by a loop definition and bound runtime.
 audience: developer
 section: guides
-order: 14
+order: 15
 publication: released
 proofs:
   start: [release-github-com-looprig-harness]

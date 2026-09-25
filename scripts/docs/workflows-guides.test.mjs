@@ -51,7 +51,7 @@ function pageMarkdown(id) {
 }
 
 function sourceUrl(relative) {
-  return `https://github.com/looprig/workflows/blob/main/${relative}`;
+  return `https://github.com/looprig/workflows/blob/v0.1.2/${relative}`;
 }
 
 function headingSlug(heading) {

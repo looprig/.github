@@ -19,9 +19,20 @@ proofs:
 
 Harness persistence has one authoritative ordered ledger per session and a
 derived catalog for cheap listing. The journal stores Enduring events, command
-intent records, lease fences, and private gate-preparation records. Large
-envelopes are stored in the session's content-addressed blob prefix and the
-ledger receives an integrity-checked pointer.
+intent records, lease fences, private gate-preparation records, and the private
+command application and disposition records a Host uses to settle admitted
+commands. `pkg/sessionstore` builds on the
+[SessionStore module](/docs/modules/sessionstore): every frame is written in
+SessionStore's envelope format, and a body above the offload threshold is
+stored as an integrity-checked SessionStore object that the frame references.
+
+The backend must supply all five storage primitives, and its Blobs provider
+must implement `storage.BlobReaderLifecycle`. The filesystem backend's Blobs
+provider does not, so `sessionstore.Open` refuses it. The storage module's
+in-memory store, [S3 store](/docs/modules/s3store), and [NATS store](/docs/modules/natsstore) implement
+it. See
+[the session store overview](/docs/guides/harness/session-persistence/session-store)
+for the exact checks.
 
 ## Durable boundaries
 
@@ -50,7 +61,7 @@ idempotency and delegate-delivery indexes and to recover gate payloads.
 flowchart LR
     W[Session runtime] -->|Append| J[SessionJournal]
     J --> L[Ledger: sessions/UUID]
-    J --> B[Blob store for large frames]
+    J --> B[SessionStore objects for large bodies]
     J --> C[Catalog UpdateOnEvent]
     L --> P[OpenEventReplayer: public events]
     L --> I[OpenInternalRecordReplayer: events commands fences private gates]
@@ -90,6 +101,7 @@ sequenceDiagram
 - Use [the session catalog](/docs/guides/harness/session-persistence/session-store/catalog) for a picker or status endpoint.
 - Use [restore](/docs/guides/harness/session-persistence/session-store/restore) only through `Rig.RestoreSession`.
 - Use [garbage collection](/docs/guides/harness/session-persistence/session-store/garbage-collection) only while the single-writer lease is held.
+- Use [tool-result capture](/docs/guides/harness/loop/tool-result-capture) to retain oversized tool results as objects beside the journal.
 
 ## Source and proof
 

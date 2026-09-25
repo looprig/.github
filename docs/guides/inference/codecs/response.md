@@ -62,10 +62,10 @@ typed/API errors when required response structure is absent.
 
 ## Source and proof
 
-- [`openaiapi/decode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/decode.go)
-- [`openairesponses/decode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openairesponses/decode.go)
-- [`anthropicapi/decode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/anthropicapi/decode.go)
-- [`geminiapi/decode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/geminiapi/decode.go)
-- [`bedrockconverse/decode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/bedrockconverse/decode.go)
+- [`openaiapi/decode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/openaiapi/decode.go)
+- [`openairesponses/decode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/openairesponses/decode.go)
+- [`anthropicapi/decode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/anthropicapi/decode.go)
+- [`geminiapi/decode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/geminiapi/decode.go)
+- [`bedrockconverse/decode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/bedrockconverse/decode.go)
 
 Run `go test ./codec/...`.

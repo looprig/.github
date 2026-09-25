@@ -4,7 +4,7 @@ title: TUI
 description: Build terminal screens for session events, replay, restore decisions, runtime teardown, widgets, and rendering styles.
 audience: developer
 section: modules
-order: 24
+order: 29
 publication: released
 proofs:
   repository: release-github-com-looprig-tui
@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/tui` |
-| Version | `v0.16.1` |
+| Version | `v0.21.1` |
 | GitHub | [looprig/tui](https://github.com/looprig/tui) |
 
 ## Description

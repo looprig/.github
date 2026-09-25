@@ -62,7 +62,7 @@ The inference request validator walks all four sealed message types and nested `
 
 ## Proof
 
-- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/main/content/block.go), [`core/content/media_type.go`](https://github.com/looprig/core/blob/main/content/media_type.go)
-- Tests: [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/main/content/block_json_test.go), [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go)
+- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.11.0/content/block.go), [`core/content/media_type.go`](https://github.com/looprig/core/blob/v0.11.0/content/media_type.go)
+- Tests: [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/block_json_test.go), [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/client_test.go)
 
 Related: [Model capabilities](/docs/guides/inference/models/capabilities), [Conversation input](/docs/guides/inference/requests/messages).

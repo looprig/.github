@@ -23,21 +23,27 @@ attempt.
 ## Committed history
 
 During replay, `CompactionCommitted` supplies the summary, post-context
-measurement, and next basis identity. The restored transcript contains the
-summary at the committed replacement point plus the runtime tail after that
-point. `CompactionRejected` leaves the original transcript unchanged.
+measurement, and next basis identity. The restored transcript is the summary,
+then the committed `Retained` suffix, then the runtime tail after that point.
+`CompactionRejected` leaves the original transcript unchanged.
 
 The replacement is applied only after terminal publication is durable. A
 summary is marked as derived history so downstream review and evidence logic
 does not treat it as a human-authored message.
+
+A compaction inside a turn that is still open at restore prevents that turn
+from resuming at an open gate: Harness can no longer tell the turn's own
+messages from its base, so the parked step is not resumed and the gate follows
+the ordinary restore closure. See [gates](/docs/guides/harness/gates).
 
 Proof: [context replacement](https://github.com/looprig/harness/blob/main/internal/loopruntime/context_replacement.go), [restore compaction tests](https://github.com/looprig/harness/blob/main/internal/sessionruntime/restore_compaction_test.go), and [context fold tests](https://github.com/looprig/harness/blob/main/internal/sessionruntime/context_fold_test.go).
 
 ## Rejected or interrupted attempt
 
 A rejected terminal records a bounded reason and waiter outcomes. It does not
-change transcript history. An unmatched `CompactionStarted` is not replayed as
-an active inference. The restored Loop receives a fresh control slot; callers
+change transcript history. `CompactionStarted` is ephemeral and never
+persisted, so an attempt with no durable terminal leaves nothing to replay and
+no worker is recreated. The restored Loop receives a fresh control slot; callers
 must request a new manual attempt or wait for a new automatic basis.
 
 ```mermaid
@@ -47,7 +53,7 @@ flowchart LR
     E -->|Committed| V[validate basis, identity, summary, post-count]
     V --> R[install summary replacement]
     E -->|Rejected| H[retain original history]
-    E -->|Started only| I[interruption evidence, no worker]
+    E -->|none| I[no replacement, no worker]
     R --> N[fresh compaction control]
     H --> N
     I --> N

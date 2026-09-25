@@ -25,7 +25,7 @@ Hooks describe runtime boundaries, not every public object method. In the native
 | `OperationTurn` | `OperationStep` and journal appends |
 | `OperationStep` | `OperationInference`, `OperationToolCall`, and journal appends |
 | `OperationToolCall` | `OperationGateWait`, `OperationToolExecution`, and journal appends |
-| any active boundary | A `JournalAppend` for an event, command, prepared gate record, or fence |
+| any active boundary | A `JournalAppend` for an event, command, prepared gate record, fence, or command-application prefix |
 | compaction | `OperationCompaction`; its Hustle inference is not a native `OperationInference` |
 
 The `Step` callback is therefore the step boundary, while the inference and semantic tool call callbacks give finer-grained children. A foreign engine can use the rig hook runner for its own supported integration surface, but the native operation hooks are not fabricated for a foreign backend; the integration test proves that a foreign turn does not increment the native `OperationTurn` observer.
@@ -73,7 +73,7 @@ sequenceDiagram
 
 ## Journal boundary
 
-`OperationJournalAppend` is an around-only observation point. Its `JournalAppendData.Family` is one of `RecordEvent`, `RecordCommand`, `RecordGatePrepared`, or `RecordFence`, and `RecordID` identifies the bounded record. It does not expose encoded journal bytes or give the observer append authority. An append created inside a turn or tool call receives that active operation context; an opening fence remains a single fence append.
+`OperationJournalAppend` is an around-only observation point. Its `JournalAppendData.Family` is one of `RecordEvent`, `RecordCommand`, `RecordGatePrepared`, `RecordFence`, or `RecordCommandApplication`, and `RecordID` identifies the bounded record. It does not expose encoded journal bytes or give the observer append authority. An append created inside a turn or tool call receives that active operation context; an opening fence remains a single fence append.
 
 `pkg/journal/hooked.go` is the journal adapter proof for the callback shape, and the integration test checks both ordinary nested appends and the restore fence. Historical events are replayed as state, not re-executed through the new hook runner. Restore can therefore produce a new `JournalAppend` for its fence and subsequent work without replaying old `Turn` or `ToolCall` callbacks.
 

@@ -18,10 +18,17 @@ proofs:
 
 # Garbage collection
 
-Sessionstore GC reclaims only orphaned offload blobs. It is not a journal
-compaction operation and it never deletes ledger history. Because an upload is
-durable before its ledger pointer, a crash can leave an unreferenced blob; GC
-scans the ledger for live pointers and sweeps the remainder.
+Sessionstore GC reclaims only orphaned legacy offload blobs, the
+`sessions/<uuid>/blobs/<sha256>` shape older releases wrote. It is not a
+journal compaction operation and it never deletes ledger history. Because an
+upload is durable before its ledger pointer, a crash can leave an unreferenced
+blob; GC scans the ledger for live pointers and sweeps the remainder.
+
+Current releases store offloaded journal bodies and captured tool results as
+SessionStore objects. GC never deletes those, because SessionStore exposes no
+public enumeration or deletion API for them yet, and it counts them in
+`GCResult.Unreclaimable` instead. An orphaned SessionStore object stays until
+such an API exists.
 
 ## Object GC contract
 
@@ -29,10 +36,11 @@ The exact public types are:
 
 ```go
 type GCResult struct {
-	Scanned     int
-	Referenced  int
-	Deleted     int
-	DeletedKeys []string
+	Scanned       int // legacy blobs considered
+	Referenced    int
+	Deleted       int
+	DeletedKeys   []string
+	Unreclaimable int // other keys under the blob prefix, live or orphaned
 }
 
 func (s *Store) OpenObjectGC(
@@ -52,10 +60,13 @@ One pass performs these steps:
 
 1. Check `lease.Valid()` and `lease.Lost()`; otherwise return
    `*GCLeaseNotHeldError` and delete nothing.
-2. Read every ledger envelope under `sessions/<uuid>` and collect referenced
-   blob keys from `blobptr` frames.
-3. List `sessions/<uuid>/blobs/`.
-4. Delete listed keys absent from the complete live set, in sorted order.
+2. Read every ledger frame under `sessions/<uuid>`. Validate each SessionStore
+   envelope's object references and collect blob keys from legacy `blobptr`
+   frames.
+3. List `sessions/<uuid>/blobs/` and keep only legacy keys, one lowercase
+   SHA-256 leaf directly under the prefix. Count every other key as
+   unreclaimable.
+4. Delete legacy keys absent from the complete live set, in sorted order.
 5. Recheck lease ownership before each delete. A loss stops the sweep.
 
 ```mermaid
@@ -74,6 +85,9 @@ flowchart TD
     G --> H[GCResult]
 ```
 
+On a successful pass `Scanned == Referenced + Deleted`. Read it together with
+`Unreclaimable`: a pass over a session whose prefix holds only SessionStore
+objects reports zeros for the first three and a nonzero `Unreclaimable`.
 `GCScanError` and `GCListError` fail closed because an incomplete live set is
 unsafe. A delete failure returns `*GCDeleteError` with the blob key; previous
 deletes are not rolled back, so operators can run another pass.
@@ -133,7 +147,8 @@ if err != nil {
 	}
 	return err
 }
-log.Printf("scanned=%d kept=%d deleted=%d", result.Scanned, result.Referenced, result.Deleted)
+log.Printf("scanned=%d kept=%d deleted=%d unreclaimable=%d",
+	result.Scanned, result.Referenced, result.Deleted, result.Unreclaimable)
 ```
 
 The runtime normally owns the lease release, so a caller using

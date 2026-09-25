@@ -175,22 +175,22 @@ the same redaction behavior described in [Evals reporting](/docs/guides/evals/re
 ## Source
 
 Planning and table expansion are implemented in
-[pkg/qual/pack.go](https://github.com/looprig/pluto/blob/main/pkg/qual/pack.go).
+[pkg/qual/pack.go](https://github.com/looprig/pluto/blob/v0.2.2/pkg/qual/pack.go).
 Shared execution is in
-[pkg/run/run.go](https://github.com/looprig/pluto/blob/main/pkg/run/run.go),
+[pkg/run/run.go](https://github.com/looprig/pluto/blob/v0.2.2/pkg/run/run.go),
 scorecard rollups are in
-[pkg/qual/scorecard.go](https://github.com/looprig/pluto/blob/main/pkg/qual/scorecard.go),
+[pkg/qual/scorecard.go](https://github.com/looprig/pluto/blob/v0.2.2/pkg/qual/scorecard.go),
 and profile derivation is in
-[pkg/profile/evaluate.go](https://github.com/looprig/pluto/blob/main/pkg/profile/evaluate.go).
+[pkg/profile/evaluate.go](https://github.com/looprig/pluto/blob/v0.2.2/pkg/profile/evaluate.go).
 
 ## Proof
 
 Planning, capability skips, and suite expansion are covered by
-[pkg/qual/pack_test.go](https://github.com/looprig/pluto/blob/main/pkg/qual/pack_test.go).
+[pkg/qual/pack_test.go](https://github.com/looprig/pluto/blob/v0.2.2/pkg/qual/pack_test.go).
 Score and coverage semantics are covered by
-[pkg/qual/scorecard_test.go](https://github.com/looprig/pluto/blob/main/pkg/qual/scorecard_test.go),
+[pkg/qual/scorecard_test.go](https://github.com/looprig/pluto/blob/v0.2.2/pkg/qual/scorecard_test.go),
 and disposition precedence by
-[pkg/profile/evaluate_test.go](https://github.com/looprig/pluto/blob/main/pkg/profile/evaluate_test.go).
+[pkg/profile/evaluate_test.go](https://github.com/looprig/pluto/blob/v0.2.2/pkg/profile/evaluate_test.go).
 The shared run and Go test wrappers are
-[pkg/run/run.go](https://github.com/looprig/pluto/blob/main/pkg/run/run.go) and
-[pkg/plutotest/run.go](https://github.com/looprig/pluto/blob/main/pkg/plutotest/run.go).
+[pkg/run/run.go](https://github.com/looprig/pluto/blob/v0.2.2/pkg/run/run.go) and
+[pkg/plutotest/run.go](https://github.com/looprig/pluto/blob/v0.2.2/pkg/plutotest/run.go).

@@ -87,6 +87,14 @@ The `pkg/sessionstore` public event replayer is another defense in depth for
 durable reads, but serve still validates the returned DTO because its `Reader`
 interface is intentionally adapter-neutral.
 
+Visibility is not redaction. A public event is sent with its native codec body,
+so fields that the `pkg/sessionwire` public projection removes or rewrites,
+such as a loop runtime's `base_url`, the `SessionStarted` workspace root, and
+the `GateResolved` audit, still appear on this surface. Factory and Host serve
+the redacted projection instead; see
+[the event envelope](/docs/guides/harness/events/event-envelope) for the list
+of redactions.
+
 ## Source and runnable proof {#source-and-runnable-proof}
 
 - [`serve` visibility predicate and DTO validation](https://github.com/looprig/harness/blob/main/pkg/serve/visibility.go)

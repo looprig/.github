@@ -60,7 +60,7 @@ The parser bounds an unterminated line at `MAX_BUFFERED_LINE_BYTES` and emits a 
 
 ## Source
 
-Line framing, UTF-8 streaming, frame validation, heartbeat behavior, and the `SseFrameParser` API are implemented in [`sdk/core/src/sse.ts`](https://github.com/looprig/client/blob/main/sdk/core/src/sse.ts). Boundary and malformed-frame cases are exercised in [`sdk/core/test/sse.test.ts`](https://github.com/looprig/client/blob/main/sdk/core/test/sse.test.ts).
+Line framing, UTF-8 streaming, frame validation, heartbeat behavior, and the `SseFrameParser` API are implemented in [`sdk/core/src/sse.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/src/sse.ts). Boundary and malformed-frame cases are exercised in [`sdk/core/test/sse.test.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/test/sse.test.ts).
 
 ## Proof
 

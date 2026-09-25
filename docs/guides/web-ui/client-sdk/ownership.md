@@ -56,7 +56,7 @@ Control requests on the BFF include CSRF handling; direct `ServeTransport` reque
 
 ## Source
 
-The shared request pipeline, CSRF cache and retry, BFF and serve URL differences, abort behavior, and auth headers are in [`sdk/core/src/transport.ts`](https://github.com/looprig/client/blob/main/sdk/core/src/transport.ts). Direct bearer behavior is asserted in [`sdk/core/test/serve-transport.test.ts`](https://github.com/looprig/client/blob/main/sdk/core/test/serve-transport.test.ts).
+The shared request pipeline, CSRF cache and retry, BFF and serve URL differences, abort behavior, and auth headers are in [`sdk/core/src/transport.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/src/transport.ts). Direct bearer behavior is asserted in [`sdk/core/test/serve-transport.test.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/test/serve-transport.test.ts).
 
 ## Proof
 

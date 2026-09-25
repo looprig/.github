@@ -44,8 +44,8 @@ the long-lived body bounded by that context after response headers arrive.
 
 ## Source and proof
 
-- [`failure/errors.go`](https://github.com/looprig/inference/blob/v0.12.0/failure/errors.go)
-- [`transport/client.go`](https://github.com/looprig/inference/blob/v0.12.0/transport/client.go)
-- [`stream/stream.go`](https://github.com/looprig/inference/blob/v0.12.0/stream/stream.go)
+- [`failure/errors.go`](https://github.com/looprig/inference/blob/v0.13.0/failure/errors.go)
+- [`transport/client.go`](https://github.com/looprig/inference/blob/v0.13.0/transport/client.go)
+- [`stream/stream.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream.go)
 
 Run `go test ./failure ./transport ./stream ./gateway`.

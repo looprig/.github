@@ -23,8 +23,8 @@ definition property, not a per-request hint.
 
 | Mode | Ownership behavior | Typical facility |
 | --- | --- | --- |
-| `ParticipationBlocking` | Acquires blocking activity, retains ownership through finalization, and participates in session shutdown drain. | Compaction or a request that must complete before its caller proceeds. |
-| `ParticipationBackground` | Uses the background lane and returns to the owning facility while session activity continues under the run's lifecycle. | A best-effort classification or asynchronous observation. |
+| `ParticipationBlocking` | Holds a hub activity lease while it runs, so the session is not idle until the run finishes; retains ownership through finalization. | Compaction or a request that must complete before its caller proceeds. |
+| `ParticipationBackground` | Uses the background lane without holding session activity; ownership still runs through finalization and shutdown drain. | A best-effort classification or asynchronous observation. |
 
 Both modes validate input, persist `HustleStarted`, run bounded inference, and
 persist one terminal audit event. A background mode does not make the output
@@ -58,7 +58,8 @@ Proof: [lane controller](https://github.com/looprig/harness/blob/main/internal/h
 The definition's `Participation` is included in its descriptor and policy
 revision. A facility selects a registered name; it cannot change a blocking
 definition into background execution by changing request JSON. Rig validation
-also requires compaction definitions to be blocking.
+also requires a compaction definition to be blocking and to use
+`WithCurrentLoopModel`, and evidence-tool definitions must be blocking.
 
 Proof: [descriptor participation validation](https://github.com/looprig/harness/blob/main/pkg/hustle/definition.go) and [compaction Hustle compatibility checks](https://github.com/looprig/harness/blob/main/pkg/rig/definition.go).
 

@@ -37,14 +37,27 @@ type Lease interface {
 ```
 
 `Epoch` increases across handovers. `Valid` is a fast non-blocking state check;
-`Lost` closes when the lease is released or overtaken. `Release` is owned by
-the holder and is idempotent. The journal itself never releases its lease.
+`Lost` closes when the lease is lost. `Release` is owned by the holder and is
+idempotent. The journal itself never releases its lease, except that a journal
+whose opening fence loses the ownership race releases that spent grant.
+
+The storage contract allows a provider to end a grant by expiry or by a
+higher-epoch takeover, but the in-memory store is release-only and the
+filesystem store's grant is an advisory lock the operating system drops when
+the holding process exits. Treat loss as something your code causes by
+releasing, not as something that will happen on its own; an unreleased grant
+stays held for as long as its holder lives.
 
 ## Fencing
 
-`Store.OpenJournal` reads the current tip, appends a `FenceRecord` carrying the
-lease epoch at that tip, and marks the journal ready only after the fence
-commits. Every later append uses a CAS against the tracked tip. A stale writer
+`Store.OpenJournal` refuses a lease that is no longer held with
+`*journal.JournalLeaseLostError`, reads the current tip, appends a
+`FenceRecord` carrying the lease epoch at that tip, and marks the journal ready
+only after the fence commits. The fence is attempted exactly once. If another
+writer moves the tip first, the grant is released and
+`*sessionstore.OpeningFenceConflictError` is returned; acquire a fresh lease,
+which has a strictly higher epoch, and open a new journal. A grant is never
+rebased onto a newer tip. Every later append uses a CAS against the tracked tip. A stale writer
 can pass its local `Valid` check and still lose the backend CAS; the hard fence
 then returns `*journal.AppendError`.
 
@@ -78,7 +91,8 @@ func (s *Store) OpenJournal(context.Context, uuid.UUID, journal.Lease) (journal.
 ```
 
 An already-held session returns `*journal.LeaseHeldError` with the session ID
-and holder epoch. A nil lease passed to `OpenJournal` returns
+and holder epoch. Retrying later in the same process keeps failing until the
+holder releases or exits. A nil lease passed to `OpenJournal` returns
 `*sessionstore.NilLeaseError`. A successful rig construction installs
 `lease.Release` on the session. Shutdown releases workspace-root ownership
 first, then the session lease, after the last durable append.

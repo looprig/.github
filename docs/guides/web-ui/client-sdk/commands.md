@@ -63,7 +63,7 @@ Every response goes through the matching validator and a non-success response be
 
 ## Source
 
-Route construction, body handling, idempotency, gate opacity, and control headers are implemented in [`sdk/core/src/transport.ts`](https://github.com/looprig/client/blob/main/sdk/core/src/transport.ts). The shared request and error behavior is covered by [`sdk/core/test/conformance.test.ts`](https://github.com/looprig/client/blob/main/sdk/core/test/conformance.test.ts).
+Route construction, body handling, idempotency, gate opacity, and control headers are implemented in [`sdk/core/src/transport.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/src/transport.ts). The shared request and error behavior is covered by [`sdk/core/test/conformance.test.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/test/conformance.test.ts).
 
 ## Proof
 

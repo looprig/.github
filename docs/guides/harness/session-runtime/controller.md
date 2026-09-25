@@ -11,6 +11,7 @@ proofs:
   data-plane-contract: [release-github-com-looprig-harness]
   control-plane-contract: [release-github-com-looprig-harness]
   gate-host-contract: [release-github-com-looprig-harness]
+  optional-capabilities: [release-github-com-looprig-harness]
   errors-are-typed: [release-github-com-looprig-harness]
   source-and-proof: [release-github-com-looprig-harness]
 ---
@@ -20,7 +21,8 @@ proofs:
 The value returned by `Rig.NewSession` and `Rig.RestoreSession` is a
 `session.SessionController`. The interface intentionally separates ordinary
 data-plane work from trusted lifecycle mutations. The concrete runtime also
-implements `session.GateHost`, but that capability is a separate assertion.
+implements `session.GateHost` and several other optional capabilities, each
+discovered by its own type assertion.
 
 ## Data-plane contract
 
@@ -113,6 +115,52 @@ func hostCapability(c session.SessionController) (session.GateHost, error) {
 	return host, nil
 }
 ```
+
+## Optional capabilities
+
+These interfaces in `pkg/session` are not methods on `Session` or
+`SessionController`. Assert on the value the Rig returned; a false result means
+the session cannot do that, not that an error occurred. A wrapper around a live
+session must forward the method, or it silently opts the wrapped session out.
+
+| Interface | Method | Use it to |
+| --- | --- | --- |
+| `Liveness` | `Done() <-chan struct{}` | `select` on teardown. The channel closes when teardown begins, not when it finishes. |
+| `IdleWaiter` | `WaitIdle(context.Context) error` | Wait for whole-session quiescence; returns the terminal reason if the session failed or stopped. A foreign primary loop never reaches whole-session idle. |
+| `Releaser` | `ReleaseResidency(context.Context) error` | Give up this process's runtime while leaving the session restorable. See [shutdown](/docs/guides/harness/session-runtime/shutdown). |
+| `ResidencyAbandoner` | `AbandonResidency(context.Context) error` | Release residency the way a crash would, writing nothing. |
+| `PersistenceFaultReporter` | `PersistenceFaulted() <-chan struct{}`, `PersistenceFault() error` | Notice that a required journal append failed and the session can never persist again. |
+| `LeaseEpochReporter` | `LeaseEpoch() (epoch uint64, held bool)` | Read the journal single-writer lease epoch this process holds; `(0, false)` once the lease is released or lost. |
+| `WorkspaceReporter` | `WorkspaceStatus() WorkspaceStatus` | Read the workspace's physical and logical roots and the checkpoint it was restored from. |
+| `CommittedPublicEventProvider` | `CommittedPublicEvents() (CommittedPublicEventSource, bool)` | Subscribe to a stream whose every delivery carries the committed public bytes. See [subscriptions](/docs/guides/harness/session-runtime/subscriptions). |
+
+`runtimecommand.Provider` (`RuntimeCommands() (Applier, bool)`) is the same
+pattern for applying Host-admitted commands with durable dispositions.
+
+```go
+faults, reportsFaults := controller.(session.PersistenceFaultReporter)
+live, reportsDone := controller.(session.Liveness)
+abandoner, canAbandon := controller.(session.ResidencyAbandoner)
+if reportsFaults && reportsDone && canAbandon {
+	go func() {
+		select {
+		case <-faults.PersistenceFaulted():
+			// The fault is permanent for this process. Release without writing
+			// so a successor restores the session from the journal.
+			if err := abandoner.AbandonResidency(context.Background()); err != nil {
+				log.Printf("abandon residency: %v", err)
+			}
+		case <-live.Done():
+			// Teardown began for another reason.
+		}
+	}()
+}
+```
+
+A `LeaseEpoch` result is a report about the instant of the call, not a
+reservation; work stamped with it can still be refused as stale.
+`WorkspaceStatus` reports `Root` and `LogicalRoot` live, but its checkpoint
+fields are as of restore and do not refresh.
 
 ## Errors are typed
 

@@ -58,7 +58,7 @@ The [Events and live streams](/docs/guides/web-ui/client-sdk/events) page covers
 
 ## Source
 
-The immutable `SessionView` model, tagged content entries, tool-call merge rules, durable markers, and `fold` function are in [`sdk/core/src/fold.ts`](https://github.com/looprig/client/blob/main/sdk/core/src/fold.ts). The fold behavior and error cases are covered in [`sdk/core/test/fold.test.ts`](https://github.com/looprig/client/blob/main/sdk/core/test/fold.test.ts).
+The immutable `SessionView` model, tagged content entries, tool-call merge rules, durable markers, and `fold` function are in [`sdk/core/src/fold.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/src/fold.ts). The fold behavior and error cases are covered in [`sdk/core/test/fold.test.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/test/fold.test.ts).
 
 ## Proof
 

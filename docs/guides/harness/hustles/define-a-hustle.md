@@ -45,7 +45,7 @@ _ = summary
 | `hustle.WithName(hustle.Name) hustle.Option` | Stable registration name; trimmed emptiness and `_looprig.` names are rejected. |
 | `hustle.WithParticipation(hustle.Participation) hustle.Option` | Selects blocking or background lane. |
 | `hustle.WithTimeout(time.Duration) hustle.Option` | Requires a positive per-invocation timeout. |
-| `hustle.WithLimits(hustle.Limits) hustle.Option` | Requires positive serialized input and output byte bounds. |
+| `hustle.WithLimits(hustle.Limits) hustle.Option` | Requires positive serialized input and output byte bounds of at most 16 MiB each. |
 | `hustle.WithCurrentLoopModel() hustle.Option` | Resolves the originating Loop model for every invocation. |
 | `hustle.WithNamedInference(inference.Client, model.Model) hustle.Option` | Freezes a validated client and model. |
 | `hustle.WithSystemPrompt(string, string) hustle.Option` | Freezes prompt bytes and a public prompt revision. |

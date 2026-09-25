@@ -31,7 +31,14 @@ type GatePrepared struct {
 	enduring
 	loopScoped
 	Header
-	Gate gate.Gate `json:"gate,omitzero"`
+	Gate   gate.Gate       `json:"gate,omitzero"`
+	Resume *ToolStepResume `json:"resume,omitempty"`
+}
+
+type ToolStepResume struct {
+	StepIndex uint64             `json:"step_index"`
+	Message   *content.AIMessage `json:"message"`
+	ToolUseID string             `json:"tool_use_id"`
 }
 
 type GateOpened struct {
@@ -75,6 +82,16 @@ loop-owned permission or ask-user gate must carry the full step quartet.
 `GateResolved.Resolver` is retained on the record so a decoder can choose the
 same identity profile without the prepared payload.
 
+`GatePrepared.Resume` lets a restored session continue the parked tool step
+instead of interrupting its turn. The loop sets it for a permission gate, and
+for an ask-user gate raised by a tool that declares `tool.UserInputReplaySafe`.
+It holds the step's assistant message as `StepDone` will commit it, including
+raw tool arguments, which is why it lives only in the private prepared record.
+On restore, an open permission gate is reinstalled as answerable. An open
+ask-user gate stays open only when its `Resume` is valid (`Valid()` requires
+the message to carry exactly one call with `ToolUseID`). Every other open gate
+is closed with `CloseRestoreUnavailable`.
+
 ## Open, answer, resolve
 
 ```mermaid
@@ -101,9 +118,17 @@ For a permission gate, `Action` is one of the exact
 `gate.ApprovalAction` values: `Approve`, `Approve always for this workspace`,
 or `Deny`. A non-answer close such as `CloseAbandoned` or
 `CloseOwnerClosed` has an empty action and a non-empty `Reason`. `Audit` is
-projected through the typed gate audit codec. It can retain redaction-aware
-requirement, candidate, form, or answer summaries, but never grant tokens,
-raw tool arguments, or an open-url action target.
+projected through the typed gate audit codec into the native journal body. It
+can retain redaction-aware requirement, candidate, form, or answer summaries,
+but never grant tokens, raw tool arguments, or an open-url action target. The
+public body that session viewers read omits `audit` entirely, because it may
+contain raw form answers.
+
+`Header.Cause.CommandID` on `GateResolved` is zero for an answer given through
+`Session.RespondGate`. When a Host applies the answer as an admitted
+`gate_response` runtime command, it carries that command's `RuntimeCommandID`,
+so the answer and its settlement stay correlated across a crash. See
+[Host-admitted runtime commands](/docs/guides/harness/commands#host-admitted-runtime-commands).
 
 ## Host-owned versus loop-owned identity
 

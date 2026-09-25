@@ -100,7 +100,7 @@ func requestObserver() (*hook.Runner, error) {
 		{
 			Operation: hook.OperationStep,
 			Begin: func(ctx context.Context, call hook.Call) (context.Context, hook.FinishFunc) {
-				fmt.Printf("step index=%d id=%v\n", call.Step.Index, call.StepID)
+				fmt.Printf("step index=%d id=%v\n", call.Step.Index, call.Coordinates.StepID)
 				return ctx, nil
 			},
 		},

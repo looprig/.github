@@ -64,7 +64,7 @@ Proof: [named/current options](https://github.com/looprig/harness/blob/main/pkg/
 
 ## Binding and errors
 
-`hustle.Bind(ctx, Bindings)` rejects a nil context and requires
+`Definition.Bind(ctx, Bindings)` rejects a nil context and requires
 `Bindings.Models` for current Loop definitions. `ResolveError.Kind` is one of
 `ResolveInvalidContext`, `ResolveInvalidLoopID`, `ResolveModelFailed`, or
 `ResolveInvalidBinding`. Use `errors.As` and preserve the cause for trusted

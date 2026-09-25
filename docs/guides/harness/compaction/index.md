@@ -17,7 +17,8 @@ proofs:
 # Compaction
 
 Compaction measures the complete model request and, at a safe Loop boundary,
-replaces an older transcript prefix with one validated user-message summary.
+replaces an older transcript prefix with one validated user-message summary
+while keeping a recent suffix of the conversation verbatim.
 The attempt carries a context basis, model identity, and request fingerprint so
 the summary cannot be committed against a different conversation.
 
@@ -54,21 +55,24 @@ assistant, err := loop.Define(
 	loop.WithContextCounter(counter),
 	loop.WithInferenceCapability(capability),
 	loop.WithCompaction(loop.CompactionPolicy{
-		Automatic:        true,
-		CounterPolicy:    loop.CounterPolicyRequireExact,
-		CompactAt:        8_000,
-		RearmBelow:       6_000,
-		ReservedOutput:   4_096,
-		MaxSummaryTokens: 2_048,
-		CountTimeout:     3 * time.Second,
-		Hustle:           hustle.Name("context.compact"),
+		Automatic:          true,
+		CounterPolicy:      loop.CounterPolicyRequireExact,
+		CompactAt:          8_000,
+		RearmBelow:         6_000,
+		KeepRecentSegments: 2,
+		KeepRecentTokens:   2_000,
+		ReservedOutput:     4_096,
+		MaxSummaryTokens:   2_048,
+		CountTimeout:       3 * time.Second,
+		Hustle:             hustle.Name("context.compact"),
 	}),
 )
 ```
 
 The context counter, inference capability, and policy are validated as one
 compatible configuration. Harness supplies no hidden timeout or threshold
-defaults. The named Hustle must be registered on the Rig and be blocking with
+defaults. `KeepRecentSegments` and `KeepRecentTokens` are required and bound
+the recent suffix that is kept verbatim after the summary. The named Hustle must be registered on the Rig and be blocking with
 `ModelSourceCurrentLoop`.
 
 Proof: [Loop compaction definition](https://github.com/looprig/harness/blob/main/pkg/loop/definition.go), [policy validation](https://github.com/looprig/harness/blob/main/pkg/loop/compaction_policy.go), and [Rig validation](https://github.com/looprig/harness/blob/main/pkg/rig/definition.go).
@@ -76,14 +80,16 @@ Proof: [Loop compaction definition](https://github.com/looprig/harness/blob/main
 ## Run manual compaction
 
 ```go
-attemptID, err := live.Compact(ctx)
+commandID, err := live.Compact(ctx)
 if err != nil {
 	return fmt.Errorf("request compaction: %w", err)
 }
-fmt.Printf("compaction requested: %s\n", attemptID)
+fmt.Printf("compaction requested by command %s\n", commandID)
 ```
 
-`CompactToLoop` targets a particular Loop ID. Completion is asynchronous with
+The returned UUID is the compact command ID, which later appears in the
+terminal event's `WaiterCommandIDs`. `CompactToLoop` targets a particular
+native Loop ID. Completion is asynchronous with
 respect to the request, so observe `CompactionStarted`,
 `CompactionCommitted`, or `CompactionRejected`, along with
 `CompactWaiterResolved` or `CompactWaiterRejected` when waiting for a command

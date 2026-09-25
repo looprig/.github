@@ -39,6 +39,7 @@ type StepDone struct {
 	loopScoped
 	Header
 	Messages content.AgenticMessages `json:"messages,omitempty"`
+	Captures []ToolResultCapture     `json:"captures,omitempty"`
 }
 
 type TurnFoldedInto struct {
@@ -75,7 +76,7 @@ type TokenDelta struct {
 	ephemeral
 	loopScoped
 	Header
-	TurnIndex TurnIndex
+	TurnIndex TurnIndex `json:"turn_index,omitzero"`
 	Chunk content.Chunk `json:"-"`
 }
 
@@ -160,7 +161,12 @@ sequenceDiagram
 
 `StepDone` is emitted only when the finalized group is committed. Its
 `Messages` contains the step's single AI message followed by its tool-result
-messages. The step's `Header` carries all four coordinates, so a consumer can
+messages. `Captures` is empty unless the loop retained tool results durably;
+when present it holds exactly one `ToolResultCapture` per tool result, joined
+by `ToolUseID` and `ToolExecutionID`, and names the stored object for any
+result the model saw only a preview of. See
+[tool-result capture](/docs/guides/harness/loop/tool-result-capture). The
+step's `Header` carries all four coordinates, so a consumer can
 group multiple `StepDone` values under one `TurnID` without relying on timing.
 `TokenDelta` and tool lifecycle events carry the same Step identity while live,
 but their absence after reconnect is normal.

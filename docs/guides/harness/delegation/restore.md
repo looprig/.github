@@ -36,6 +36,12 @@ channels or in-memory response trackers survived a restart.
 boundary. A queued request with no opening evidence is never blindly replayed as
 if it had started.
 
+Only the active primer Loop can resume a turn parked at a gate. An open turn in
+a child Loop is closed as interrupted at restore, as after any crash: an open
+permission gate in that child stays answerable, but its gated tool does not
+run, and an open `ask_user` gate is closed `restore_unavailable`. See
+[gates](/docs/guides/harness/gates) for the primer's resume rules.
+
 Proof: [delegation restore reconstruction](https://github.com/looprig/harness/blob/main/internal/sessionruntime/delegation.go) and [restore tests](https://github.com/looprig/harness/blob/main/internal/sessionruntime/agent_restore_test.go).
 
 ## Direct-child ownership and quota

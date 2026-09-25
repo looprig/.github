@@ -74,9 +74,9 @@ If a platform cannot compile a required profile guarantee, `NewExecutorSet` or `
 
 ## Source
 
-- [Root error aliases and public error surface](https://github.com/looprig/sandbox/blob/main/sandbox.go)
-- [Grant and executor error sentinels](https://github.com/looprig/sandbox/blob/main/internal/exec/grant.go)
+- [Root error aliases and public error surface](https://github.com/looprig/sandbox/blob/v0.9.1/sandbox.go)
+- [Grant and executor error sentinels](https://github.com/looprig/sandbox/blob/v0.9.1/internal/exec/grant.go)
 
 ## Proof
 
-- [Facade error and sentinel tests](https://github.com/looprig/sandbox/blob/main/facade_test.go)
+- [Facade error and sentinel tests](https://github.com/looprig/sandbox/blob/v0.9.1/facade_test.go)

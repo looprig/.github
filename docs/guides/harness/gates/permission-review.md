@@ -52,7 +52,9 @@ type PermissionClassifier interface {
 
 `PermissionReviewSubject` contains `{Basis ReviewBasis; Request tool.Request; Context ReviewContext}`. `NewPermissionReviewSubject` validates and clones the request/context, computes the subject digest, and rejects mismatch, missing IDs, invalid context, oversized requirements/candidates, and overlong input. `Clone` owns nested slices; `SubjectDigest` recomputes the digest without trusting the stored value.
 
-`ReviewContext` contains `identity.Coordinates`, context and gate policy revisions, workspace root, working directory, retry reason, security ceiling, bounded authority-labeled entries, and a `ReviewTruncation` summary. Entries use closed origin values user, assistant, tool, runtime, external, and omission, and closed kinds such as `user_message`, `assistant_tool_request`, `tool_result`, and `runtime_context`. `BuildReviewContext` requires a user message and active assistant tool request and marks material truncation explicitly.
+`ReviewContext` contains `identity.Coordinates`, context and gate policy revisions, workspace root, working directory, retry reason, security ceiling, bounded authority-labeled entries, and a `ReviewTruncation` summary. Entries use closed origin values user, assistant, tool, runtime, external, and omission, and closed kinds such as `user_message`, `assistant_tool_request`, `tool_result`, `tool_preview`, and `runtime_context`. `BuildReviewContext` requires a user message and active assistant tool request and marks material truncation explicitly.
+
+When the gated tool supplies a [mutation preview](/docs/guides/harness/gates/approval-gates#mutation-previews), the classifier's context gains one tool-origin `ReviewContextKindToolPreview` entry holding the pending unified diff, and the context revision is recomputed for that gate. The kind is distinct from `tool_result` because the change has not executed; it uses the same `MaxToolEntryBytes` limit and tool-entry truncation bit.
 
 ## Outcomes
 

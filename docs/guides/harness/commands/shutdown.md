@@ -60,13 +60,12 @@ context is canceled before cleanup completes, the ack carries
 ```mermaid
 %%{init: {"theme":"dark"}}%%
 flowchart TD
-    A[Latch closing and snapshot loops] --> B[Close hustle admission]
-    B --> C[Cancel queued and executing inference]
-    C --> D[Send Shutdown to every loop]
+    A[Latch closing and snapshot loops] --> B[Revoke delegation origins, stop permission reviews, close hustle admission]
+    B --> D[Send Shutdown to every loop]
     D --> E[Wait for loop acks]
-    E --> F[Join finalizers, audits, and workers]
-    F --> G[Stop checkpoints and hub]
-    G --> H[Publish SessionStopped]
+    E --> F[Join hustles and close the delegation broker]
+    F --> G[Stop checkpoints and session resources]
+    G --> H[Publish SessionStopped and stop the hub]
     H --> I[Release workspace and session leases]
     I --> J[Cancel session context last]
 ```
@@ -80,6 +79,17 @@ Caller cancellation is diagnostic, not permission to detach cleanup. Concurrent
 or repeated `Shutdown` calls join the existing teardown owner and receive the
 same cleanup result, augmented with their own context error after cleanup. A
 shutdown call from a session-owned hustle finalizer is rejected as re-entry.
+The returned error is a `*session.SessionError` whose cause chain holds the
+cleanup failures, so match specific causes with `errors.As`.
+
+A supervisor that must notice teardown without polling can assert
+`session.Liveness` on the controller and select on `Done()`. The channel closes
+when teardown starts, not when it finishes. To give up this process's runtime
+without ending the session, for example when a Host hands a session to another
+process, use `session.Releaser.ReleaseResidency` instead of `Shutdown`. It runs
+the same loop drain but appends `SessionResidencyReleased` rather than
+`SessionStopped`, so the session stays restorable. See
+[session lifecycle events](/docs/guides/harness/events/session-lifecycle).
 
 ```go
 func closeSession(ctx context.Context, c session.SessionController) error {

@@ -61,7 +61,7 @@ The package also provides cold read stores with `refresh` methods and last-start
 
 ## Source
 
-The live reactive wrapper, cancellation cascade, generation guard, and `$state` fields are in [`sdk/svelte/src/live-session.svelte.ts`](https://github.com/looprig/client/blob/main/sdk/svelte/src/live-session.svelte.ts). Browser-level lifecycle cases are covered in [`sdk/svelte/test/live-session.test.ts`](https://github.com/looprig/client/blob/main/sdk/svelte/test/live-session.test.ts).
+The live reactive wrapper, cancellation cascade, generation guard, and `$state` fields are in [`sdk/svelte/src/live-session.svelte.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/svelte/src/live-session.svelte.ts). Browser-level lifecycle cases are covered in [`sdk/svelte/test/live-session.test.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/svelte/test/live-session.test.ts).
 
 ## Proof
 

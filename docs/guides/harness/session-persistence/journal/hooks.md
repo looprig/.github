@@ -35,8 +35,25 @@ func HookMiddleware(runner *hook.Runner, sessionID uuid.UUID) AppendMiddleware
 ```
 
 Middleware must call `next` synchronously exactly once with the supplied record
-and return its exact sequence and error. `WithHooks` returns the original journal
-when it is nil or the runner does not handle `hook.OperationJournalAppend`.
+and return its exact sequence and error. `WithHooks` returns nil for a nil
+journal and the original journal when the runner does not handle
+`hook.OperationJournalAppend`.
+
+`WithHooks` decorates through `journal.Decorate`, which returns a journal that
+advertises exactly the optional contracts of the one it wraps. A hooked
+idempotent journal is still a `journal.IdempotentJournal`, and a
+committed-bytes journal is still a `journal.CommittedPublicJournal`, so the hub
+keeps its duplicate signal and a Host keeps the committed public event stream.
+Write your own decorators with the same function:
+
+```go
+type AroundAppend func(ctx context.Context, rec JournalRecord, next func(context.Context) error) error
+
+func Decorate(inner SessionJournal, around AroundAppend) SessionJournal
+```
+
+`next` must be called exactly once. Returning without calling it skips the
+append, and returning a different error substitutes it.
 
 ## Middleware order
 
@@ -65,7 +82,8 @@ sequenceDiagram
 
 The hook call carries bounded metadata: operation, session coordinates, record
 family, record ID, start/end time, and outcome. `describeRecord` recognizes
-event, command, gate-prepared, and fence records. Unknown or panic-prone
+event, command, gate-prepared, fence, and command-application records;
+disposition records are appended unobserved. Unknown or panic-prone
 metadata is passed through unchanged.
 
 ## Failure semantics

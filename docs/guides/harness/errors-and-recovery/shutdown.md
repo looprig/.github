@@ -36,7 +36,8 @@ The implementation takes one teardown owner and follows this order:
 3. Send `command.Shutdown` to every snapshotted loop, then wait for its ack or
    actor exit.
 4. Join hustle audit, finalizers, and blocking-activity drain.
-5. Stop collaboration, checkpoints, session resources, and the hub. The hub
+5. Stop collaboration, remove the tool-result capture spill directory, then
+   stop checkpoints, session resources, and the hub. The hub
    publishes `SessionStopped` while the session is still able to reach its
    durable append.
 6. Release the workspace root lease and session writer lease.
@@ -78,6 +79,7 @@ private deadlines derived from validated component bounds. The exact internal
 | Loop shutdown send | `loop_send` |
 | Loop shutdown drain | `loop_drain` |
 | Checkpoint drain | `checkpoint_drain` |
+| Residency anchor checkpoint (`ReleaseResidency` only) | `residency_anchor` |
 | Collaboration broker | `collab_broker` |
 | Session resources | `session_resources` |
 | Hub stop | `hub_stop` |
@@ -134,10 +136,11 @@ session or by reading the public event stream. A successful shutdown produces
 `SessionStopped`; a stopped hub returns `hub.ErrSessionStopped` rather than
 silently reporting idle.
 
-`WaitIdle` is an internal concrete-session or hub observation seam, not a
-method on the public `SessionController` interface. Production callers can
-instead consume the `SessionStopped` event through `SubscribeEvents` or use the
-status read endpoint.
+`WaitIdle` is not a method on the public `SessionController` interface. Reach
+it through the optional `session.IdleWaiter` capability, or consume the
+`SessionStopped` event through `SubscribeEvents`. The optional
+`session.Liveness` capability's `Done()` channel closes when teardown begins, so
+a receive from it does not mean teardown has finished.
 
 ## Source and runnable proof {#source-and-runnable-proof}
 

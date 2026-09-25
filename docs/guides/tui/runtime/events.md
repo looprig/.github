@@ -89,4 +89,4 @@ Live and restored child cards render the same persisted message, because the cod
 - [Agent contract tests](https://github.com/looprig/tui/blob/main/internal/presentation/agent_test.go)
 - [Restore projection tests](https://github.com/looprig/tui/blob/main/internal/presentation/restore_test.go)
 - [Command and subscription tests](https://github.com/looprig/tui/blob/main/internal/presentation/commands_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)

@@ -36,7 +36,7 @@ The embedded `Header` carries `Coordinates`. A live Step event has `SessionID`, 
 
 ## Ordering and ownership
 
-For every provider chunk, the runtime publishes `TokenDelta` before folding that chunk into the Step's internal block accumulator. The stream test observes this ordering by checking that the accumulator is still empty when the callback sees the event. At EOF, the runtime materializes one `content.AIMessage`. A stream with only empty chunks still produces one `TokenDelta` per chunk, then fails with `*event.EmptyResponseError` and produces no `StepDone`.
+For every provider chunk, the runtime publishes `TokenDelta` before folding that chunk into the Step's internal block accumulator. The stream test observes this ordering by checking that the accumulator is still empty when the callback sees the event. At EOF, the runtime materializes one `content.AIMessage`. A stream with only empty chunks still produces one `TokenDelta` per chunk, then fails with `*event.EmptyResponseError` and produces no `StepDone`. A stream that fails or is canceled after delivering text commits its safe prefix, with a notice block, as a `StepDone` before the Turn terminal, so the text a user watched arrive stays in history.
 
 ```mermaid
 %%{init: {"theme":"dark"}}%%

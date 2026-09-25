@@ -76,8 +76,9 @@ Blocking and background definitions use separate bounded lanes. A supported
 facility binds the definition, validates input, owns a RunID, persists an
 internal `HustleStarted` record, admits the run, resolves inference, validates
 bounded output, persists exactly one internal terminal event, and finalizes
-once. Session shutdown closes admission, cancels active work, drains owned
-invocations, and only then tears down loop runtimes and resources.
+once. Session shutdown closes Hustle admission and cancels active work before
+it stops the loops, waits for owned invocations to drain, and only then closes
+checkpoints, session resources, the event hub, and the session lease.
 
 Proof: [Hustle runtime ownership](https://github.com/looprig/harness/blob/main/internal/hustleruntime/execution.go) and [lifecycle tests](https://github.com/looprig/harness/blob/main/internal/hustleruntime/ownership_test.go).
 

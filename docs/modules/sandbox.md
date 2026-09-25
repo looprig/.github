@@ -4,7 +4,7 @@ title: Sandbox
 description: Turn an explicit access profile into the strongest confinement a supported host can prove.
 audience: developer
 section: modules
-order: 8
+order: 12
 publication: released
 proofs:
   repository: release-github-com-looprig-sandbox
@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/sandbox` |
-| Version | `v0.9.0` |
+| Version | `v0.9.1` |
 | GitHub | [looprig/sandbox](https://github.com/looprig/sandbox) |
 
 ## Description

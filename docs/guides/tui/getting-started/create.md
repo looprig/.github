@@ -73,4 +73,4 @@ For the process-level lifecycle, continue to [Run a TUI Entry Point](/docs/guide
 
 - [Root API compile-time proof](https://github.com/looprig/tui/blob/main/api_test.go)
 - [Screen behavior tests](https://github.com/looprig/tui/blob/main/internal/presentation/screen_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)

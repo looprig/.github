@@ -34,7 +34,11 @@ type SessionJournal interface {
 The implementation must serialize records, return strictly increasing ledger
 sequences, and refuse to write after its lease is lost. The storage implementation
 also satisfies the optional `IdempotentJournal` extension described in
-[idempotency](/docs/guides/harness/session-persistence/journal/idempotency).
+[idempotency](/docs/guides/harness/session-persistence/journal/idempotency),
+and `CommittedPublicJournal`, whose `AppendCommitted` additionally reports the
+exact canonical public body stored for a public event. Decorators built with
+`journal.Decorate`, including `journal.WithHooks`, advertise exactly the
+optional contracts of the journal they wrap.
 
 ## Reader contracts
 
@@ -74,16 +78,19 @@ flowchart TD
     V -- no --> E[typed refusal]
     V -- yes --> F[marshal payload]
     F --> S{over threshold?}
-    S -- no --> N[versioned envelope]
-    S -- yes --> O[Put full envelope blob]
-    O --> P[append blob pointer envelope]
+    S -- no --> N[inline body in SessionStore envelope]
+    S -- yes --> O[PutObject body as SessionStore object]
+    O --> P[envelope with object reference]
     N --> C[CAS at tracked tip]
     P --> C
     C --> U[advance tip and idempotency index]
 ```
 
-The blob is written before its pointer. The pointer carries the key, byte size,
-and SHA-256; replay verifies all three relationships before decoding.
+The object is written before the frame that references it. The reference
+carries the object ID, byte size, and SHA-256, and replay reads the object
+through SessionStore, which verifies size and digest before the body is
+decoded. See [records and append](/docs/guides/harness/session-persistence/journal/records-and-append#envelope-and-offload)
+for the envelope kinds.
 
 ## Persistence errors
 
@@ -96,7 +103,7 @@ Errors carry stable typed context and preserve their leaf through `Unwrap`:
 | `*journal.AppendError` | definite CAS conflict or append failure |
 | `*journal.AmbiguousAckError` | append outcome could not be resolved |
 | `*journal.MarshalRecordError` | payload cannot be encoded |
-| `*journal.RecordTooLargeError` | offload failed for an over-threshold frame |
+| `*journal.RecordTooLargeError` | offload failed, or a runtime body exceeds the 16 MiB replay ceiling |
 | `*journal.IdempotencyCollisionError` | same ID names different durable bytes |
 
 ```go

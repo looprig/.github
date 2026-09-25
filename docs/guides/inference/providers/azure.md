@@ -18,7 +18,7 @@ proofs:
 
 # Azure OpenAI
 
-A compatibility-backed provider client binds its declared endpoint to the shared inference request, response, and stream codecs.
+Azure OpenAI Responses client. Request encoding and non-streaming decoding use the shared OpenAI Responses codec, with Azure reasoning and content-filter variants normalized locally. Streaming uses an Azure-specific event collector.
 
 ## Contract and endpoint
 
@@ -31,10 +31,10 @@ The public constructor is `func New(selected model.Model, key auth.APIKey, optio
 | Formats | OpenAI Responses |
 | Default base | dynamic: https://{resource}.openai.azure.com/openai/v1 |
 | Authentication | API key |
-| Header or signer | Authorization: Bearer |
+| Header or signer | api-key |
 | Options | WithResourceName; WithReasoning; WithMetadata; WithPromptCacheKey |
 
-A missing or malformed resource is rejected before transport construction. OpenAI Chat is not registered for this provider.
+When Model.BaseURL is empty, the resource name comes from `WithResourceName`, then the `AZURE_RESOURCE_NAME` environment variable. A missing or malformed resource is rejected before transport construction with `*ResourceConfigurationError`, whose `Reason` classifies the failure without echoing the value. OpenAI Chat is not registered for this provider.
 
 An explicit model BaseURL is caller-controlled and is used by the provider route builder. It replaces the package default; it is not appended to the default.
 
@@ -45,7 +45,7 @@ The llm provider registry classifies this identity as requiring API key. The con
 | Decision | Result |
 | --- | --- |
 | Credential | API key |
-| Wire auth | Authorization: Bearer |
+| Wire auth | api-key |
 | Format gate | OpenAI Responses; unsupported values fail model validation before I/O |
 | Model identity | Provider and APIFormat select the route and codec; optional capabilities remain request-level and are not inferred from the model string. |
 
@@ -56,6 +56,13 @@ Optional capability bits on model.Model remain caller input. Request validation 
 The client returns the shared stream reader from Stream. Its selected codec encodes provider-neutral tool declarations, tool results, and structured-output schemas when the request is valid. Streaming responses preserve codec usage and finish metadata; no capability beyond the source-backed format is inferred.
 
 A stream owns its response body through the returned reader. Transport and non-success HTTP failures are returned before a reader is exposed; decode failures surface from Next or the terminal result.
+
+The Azure stream collector differs from the shared Responses collector in a few visible ways:
+
+- Azure reasoning deltas (`response.reasoning_text.delta`, `response.reasoning.delta`, and `response.reasoning_summary.delta`) become thinking chunks indexed by the reasoning item's output position, so separate reasoning items stay separate blocks.
+- A turn ended as `response.incomplete` with `incomplete_details.reason: "content_filter"` finishes with the content-filter reason, in both streaming and non-streaming responses, rather than a length-style finish.
+- A top-level `error` event and a `response.failed` event both fail the stream with `*openairesponses.StreamAPIError`. A failed envelope that cannot be read still fails the stream, with less detail.
+- A frame that is not valid JSON fails the stream with `*openairesponses.StreamEventDecodeError` instead of being skipped. Well-formed unknown event types are still passed to the shared decoder.
 
 ```mermaid
 %%{init: {"theme":"base","themeVariables":{"background":"#0b1020","primaryColor":"#172554","primaryTextColor":"#f8fafc","primaryBorderColor":"#60a5fa","lineColor":"#94a3b8","secondaryColor":"#1e293b","tertiaryColor":"#111827","fontFamily":"ui-sans-serif,system-ui"}}}%%
@@ -109,13 +116,14 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure/client.go)
-- [codec.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure/codec.go)
-- [counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure/counter.go)
-- [options.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure/options.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/client.go)
+- [codec.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/codec.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/counter.go)
+- [options.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/options.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure/client_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure/counter_test.go)
-- [options_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/azure/options_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/client_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/counter_test.go)
+- [delta_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/delta_test.go)
+- [options_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/options_test.go)

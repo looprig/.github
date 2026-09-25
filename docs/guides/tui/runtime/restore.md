@@ -32,7 +32,7 @@ flowchart LR
     Q2 --> L[Continue EventStream]
 ```
 
-`Agent.ReplayBacklog` returns a materialized, session-ordered slice. A new session returns an empty backlog and skips the repaint. A read failure becomes a non-fatal restore notice while the live subscription continues. Ephemeral timing is not journaled, so restored thinking durations can differ from a live render without making the committed transcript unequal.
+`Agent.ReplayBacklog` returns a materialized, session-ordered slice. A new session returns an empty backlog and skips the repaint. A read failure becomes a non-fatal restore notice while the live subscription continues. Ephemeral timing is not journaled, so restored thinking durations can differ from a live render without making the committed transcript unequal. A permission card's diff preview is also live-only, so a prompt reconstructed from the backlog shows its requirements and actions but no diff unless a live delivery supplies one.
 
 ## Pure repaint
 
@@ -65,4 +65,4 @@ The adapter retains the highest consumed journal sequence. If the live subscript
 - [Restore projection tests](https://github.com/looprig/tui/blob/main/internal/presentation/restore_test.go)
 - [Adapter tests](https://github.com/looprig/tui/blob/main/sessionadapter/adapter_test.go)
 - [Restore and replay example](https://github.com/looprig/tui/blob/main/examples/restore/example_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)

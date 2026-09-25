@@ -109,10 +109,10 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/xai/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/xai/counter.go)
-- [options.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/xai/options.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.15.0/providers/xai/client.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/xai/counter.go)
+- [options.go](https://github.com/looprig/llm/blob/v0.15.0/providers/xai/options.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/xai/client_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/xai/client_test.go)

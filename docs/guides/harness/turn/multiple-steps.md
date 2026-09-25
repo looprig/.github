@@ -50,7 +50,7 @@ sequenceDiagram
 | --- | --- | --- |
 | Final answer | one assistant message | publish `TurnDone` after commit acknowledgement |
 | Tool continuation | assistant message, then one tool-result message per result | fold eligible queued input, then issue another request |
-| Failed or interrupted cycle | no event | publish Turn terminal; prior StepDone records remain |
+| Failed or interrupted cycle | no event, or the safe text prefix if the stream was cut short after producing text | publish Turn terminal; prior StepDone records remain |
 
 Usage from each completed request is checked and summed into `TurnDone.Usage`. Loop cumulative accounting folds the StepDone messages once; consumers should not add `TurnDone.Usage` back into loop totals a second time.
 
@@ -95,7 +95,7 @@ Do not infer that one `TurnStarted` implies one `StepDone`. Wait for the Turn te
 
 ## Partial-turn failure
 
-The runtime commits each successful Step independently. If Step 0 commits and Step 1 fails, Step 0 remains in loop history and exactly one `TurnFailed` or `TurnInterrupted` ends the Turn. The failed Step has no `StepDone`, and the next input starts from the committed history that includes Step 0.
+The runtime commits each successful Step independently. If Step 0 commits and Step 1 fails, Step 0 remains in loop history and exactly one `TurnFailed` or `TurnInterrupted` ends the Turn. The failed Step has no `StepDone` unless its stream was cut short after producing text, in which case only that text prefix commits. The next input starts from the committed history that includes Step 0.
 
 ## Source and proof
 

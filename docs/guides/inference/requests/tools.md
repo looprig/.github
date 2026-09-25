@@ -45,7 +45,7 @@ The Harness [tool calls and results guide](/docs/guides/harness/step/tool-calls-
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go)
-- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go) covers raw schema preservation and feature conflicts.
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go)
+- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/client_test.go) covers raw schema preservation and feature conflicts.
 
 Related: [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use), [Tool choice](/docs/guides/inference/requests/tool-choice), [Structured output with tools](/docs/guides/inference/structured-output/with-tools).

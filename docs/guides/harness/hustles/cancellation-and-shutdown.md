@@ -37,21 +37,25 @@ Proof: [execution ownership](https://github.com/looprig/harness/blob/main/intern
 ## Shutdown order
 
 `Controller.Close(ctx)` closes both admissions, cancels active execution,
-finishes queued owned runs through their finalizers, waits for worker drain,
-and reports any finalizer failures as `CloseError`. Session shutdown keeps the
-session context alive while Hustle activity, terminal audit, and finalization
-complete; only then does it publish idle/stopped lifecycle and release the
-session lease.
+finishes queued owned runs through their finalizers, and reports any finalizer
+failures as `CloseError`. It does not wait for executing runs; `Drained()`
+closes once they have finished terminal audit and finalization. Session
+shutdown first signals active permission reviews, calls `Close`, sends
+shutdown to every loop and waits for them, and then waits on `Drained()`. The
+session context stays alive through all of this; only afterwards does shutdown
+close checkpoints, session resources, and the hub, and release the session
+lease.
 
 ```mermaid
 %%{init: {"theme":"dark"}}%%
 flowchart TD
-    S[session shutdown] --> C[close blocking and background admission]
+    S[session shutdown] --> P[stop permission reviews]
+    P --> C[close blocking and background admission]
     C --> X[cancel active runs]
-    X --> Q[finish owned queued runs]
-    Q --> F[terminal audit and finalizers]
-    F --> D[worker drain]
-    D --> R[close loops and resources]
+    X --> Q[finish owned queued runs through finalizers]
+    Q --> L[shut down and wait for loops]
+    L --> D[wait for Drained]
+    D --> R[close checkpoints, resources, hub, and leases]
 ```
 
 Proof: [controller Close](https://github.com/looprig/harness/blob/main/internal/hustleruntime/controller.go) and [Hustle shutdown ordering tests](https://github.com/looprig/harness/blob/main/internal/sessionruntime/hustle_shutdown_test.go).

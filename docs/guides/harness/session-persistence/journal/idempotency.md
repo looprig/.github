@@ -92,6 +92,13 @@ Machine delegate delivery has a stronger state machine than ordinary retries:
    returns `*journal.DeliveryTransitionError` or
    `*journal.CommandRouteMismatchError`.
 
+Runtime command records use namespaced IDs. A `CommandApplicationRecord` is
+keyed by `command-application:<public command ID>`, so a redelivered command
+deduplicates and the same public ID mapped to a different runtime command fails
+with `*IdempotencyCollisionError`. A `CommandDispositionRecord` is keyed by
+`command-disposition:<attempt ID>`, so a successor cannot record a different
+outcome for an attempt whose disposition is already durable.
+
 The fallback physical ID has a typed suffix, but its normalized fingerprint
 clears only `DelegateDeliveryPhase`; blocks, target loop, agency, hand-back,
 timestamps, and other durable fields remain part of the comparison.

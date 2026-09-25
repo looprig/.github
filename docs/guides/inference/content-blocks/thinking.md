@@ -62,7 +62,7 @@ The zero signature is not an error during streaming. Use [Thinking deltas](/docs
 
 ## Proof
 
-- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/main/content/block.go)
-- Tests: [`core/content/block_test.go`](https://github.com/looprig/core/blob/main/content/block_test.go), [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/main/content/block_json_test.go)
+- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.11.0/content/block.go)
+- Tests: [`core/content/block_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/block_test.go), [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/block_json_test.go)
 
 Related: [Thinking deltas](/docs/guides/inference/streaming/thinking-deltas), [AIMessage](/docs/guides/inference/messages/message-types/ai-message).

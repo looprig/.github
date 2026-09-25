@@ -34,6 +34,8 @@ func main() error {
 }
 ```
 
+This page embeds an app you build yourself. To serve Looprig's prebuilt React interface instead, with no front-end build of your own, see [Prebuilt wui bundle](/docs/guides/web-ui/embedding/wui).
+
 Keep the [Client SDK](/docs/guides/web-ui/client-sdk) framework-neutral inside the app, then choose [Static bundle](/docs/guides/web-ui/embedding/static-bundle) for the build and [Go webui package](/docs/guides/web-ui/embedding/go-webui) for serving.
 
 ## Build and serve flow
@@ -54,7 +56,7 @@ The embedding boundary contains no protocol implementation. It only serves the b
 
 ## Source
 
-The exported `embed.FS`, `Handler`, asset confinement, and SPA fallback are implemented in [`pkg/webui/webui.go`](https://github.com/looprig/client/blob/main/pkg/webui/webui.go). Build output and the static adapter are configured in [`app/vite.config.ts`](https://github.com/looprig/client/blob/main/app/vite.config.ts).
+The exported `embed.FS`, `Handler`, asset confinement, and SPA fallback are implemented in [`pkg/webui/webui.go`](https://github.com/looprig/client/blob/v0.4.0/pkg/webui/webui.go). Build output and the static adapter are configured in [`app/vite.config.ts`](https://github.com/looprig/client/blob/v0.4.0/app/vite.config.ts).
 
 ## Proof
 

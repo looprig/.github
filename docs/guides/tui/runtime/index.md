@@ -63,4 +63,4 @@ The focused loop is a view choice. `AllLoopsEventFilter` delivers every loop, an
 
 - [Screen behavior tests](https://github.com/looprig/tui/blob/main/internal/presentation/screen_test.go)
 - [Runtime behavior tests](https://github.com/looprig/tui/blob/main/runtime/run_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)

@@ -55,8 +55,8 @@ Proof: [resolve errors](https://github.com/looprig/harness/blob/main/pkg/hustle/
 
 ## Output, evidence, and shutdown errors
 
-`OutputError` classifies invalid shape, empty text, oversized output, or
-invalid JSON. `EvidenceError` uses bounded reasons for binding, authorization,
+`OutputError` classifies invalid shape, empty text, oversized output, invalid
+JSON, or a model refusal (`refused`). `EvidenceError` uses bounded reasons for binding, authorization,
 containment, execution, result/evidence limits, rounds/calls, cancellation,
 deadline, and internal faults. `WorkerPanicError` and `WorkerPoisonError`
 redact panic/provider details. `FinalizerError`, `ActivityError`, `AuditError`,

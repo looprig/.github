@@ -78,9 +78,9 @@ Set `ProcessOptions.TTY` only when a real terminal is required. Unix can provide
 
 ## Source
 
-- [PreparedProcess and Process API](https://github.com/looprig/sandbox/blob/main/internal/exec/process.go)
-- [Executor lifecycle barriers](https://github.com/looprig/sandbox/blob/main/internal/exec/executor_lifecycle.go)
+- [PreparedProcess and Process API](https://github.com/looprig/sandbox/blob/v0.9.1/internal/exec/process.go)
+- [Executor lifecycle barriers](https://github.com/looprig/sandbox/blob/v0.9.1/internal/exec/executor_lifecycle.go)
 
 ## Proof
 
-- [Prepared process lifecycle tests](https://github.com/looprig/sandbox/blob/main/internal/exec/process_lifecycle_test.go)
+- [Prepared process lifecycle tests](https://github.com/looprig/sandbox/blob/v0.9.1/internal/exec/process_lifecycle_test.go)

@@ -35,9 +35,11 @@ Proof: [Session Hustle restore](https://github.com/looprig/harness/blob/main/int
 
 The restored runtime binds the current registered definitions and lane limits.
 It does not resume an interrupted model call. A supported facility may submit a
-new invocation, receiving a new RunID and a new `HustleStarted` record. Policy
-or descriptor mismatch is a configuration restore failure, not a request to
-silently use a different definition.
+new invocation, receiving a new RunID and a new `HustleStarted` record.
+Registered definitions and lane limits are folded into the configuration
+topology revision, so a changed registration surfaces as info-severity
+`DriftTopology` drift on restore. Recorded audit keeps the descriptor each run
+actually used, so the change stays visible after the fact.
 
 ```mermaid
 %%{init: {"theme":"dark"}}%%
@@ -58,7 +60,7 @@ Proof: [Hustle restore implementation](https://github.com/looprig/harness/blob/m
 Queue position and worker identity are process-local. Replaying them would
 double inference or invoke a finalizer without a live ownership record. The
 durable audit preserves enough evidence to report what happened and enough
-definition identity to reject incompatible restore, while the new controller
+definition identity to detect configuration drift, while the new controller
 re-establishes bounded admission from current Rig configuration.
 
 Proof: [runtime ownership model](https://github.com/looprig/harness/blob/main/internal/hustleruntime/execution.go) and [restore tests](https://github.com/looprig/harness/blob/main/internal/sessionruntime/hustle_restore_test.go).

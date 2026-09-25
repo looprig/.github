@@ -4,7 +4,7 @@ title: Configuration Changes
 description: Describe validated configuration changes through loop.Controller for a live loop.
 audience: developer
 section: guides
-order: 22
+order: 23
 publication: released
 proofs:
   start: [release-github-com-looprig-harness]

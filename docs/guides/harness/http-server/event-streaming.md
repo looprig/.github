@@ -18,7 +18,9 @@ proofs:
 # Event streaming
 
 `GET /v1/sessions/{sid}/events` opens a Server-Sent Events stream for a live
-session. The handler subscribes to the whole session, encodes both public
+session. `pkg/serve` is deprecated; see the
+[HTTP server overview](/docs/guides/harness/http-server) for the migration
+path. The handler subscribes to the whole session, encodes both public
 Enduring and public Ephemeral deliveries, and flushes each frame immediately.
 
 ## Open the stream {#open-the-stream}
@@ -37,7 +39,10 @@ Cache-Control: no-store
 X-Accel-Buffering: no
 ```
 
-The stream uses `http.ResponseController` to flush every frame. The server's
+The handler flushes the response head as soon as the subscription succeeds, so
+an `EventSource` client reaches the open state immediately rather than at the
+first event or heartbeat. The stream uses `http.ResponseController` to flush
+every frame. The server's
 write timeout is zero so a long-lived stream is not truncated.
 
 ```go
@@ -94,6 +99,9 @@ always present, including `id: 0` for a zero sequence test delivery.
 
 The stream skips an Enduring value that the event codec cannot marshal instead
 of emitting a lossy body. It also skips an event whose visibility is not public.
+The nested event is the native codec body, not the redacted public projection,
+so fields such as a loop's model `base_url` and the physical workspace root are
+sent as the runtime recorded them.
 
 ## Ephemeral frames {#ephemeral-frames}
 
@@ -126,7 +134,8 @@ comment `: ping\n\n`; an EventSource client ignores it while intermediaries see
 traffic. The ticker runs independently of event activity.
 
 The handler returns when the request context is cancelled, the subscription
-channel closes, a write fails, or a flush fails. It always calls
+channel closes, a write fails, a flush fails, or a session that implements
+`serve.SessionDone` begins shutting down. It always calls
 `Subscription.Close` on return. A client disconnect should therefore cancel its
 request context and let the server release the subscription.
 

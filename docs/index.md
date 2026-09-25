@@ -7,9 +7,9 @@ section: home
 order: 1
 publication: released
 proofs:
-  build-with-looprig: [release-github-com-looprig-core, release-github-com-looprig-inference, release-github-com-looprig-harness]
+  build-with-looprig: [release-github-com-looprig-core, release-github-com-looprig-inference, release-github-com-looprig-harness, release-github-com-looprig-factory, release-github-com-looprig-host]
   start-with-an-outcome: [release-github-com-looprig-harness, release-github-com-looprig-tools]
-  choose-only-what-you-need: [release-github-com-looprig-inference, release-github-com-looprig-harness, release-github-com-looprig-sandbox]
+  choose-only-what-you-need: [release-github-com-looprig-inference, release-github-com-looprig-harness, release-github-com-looprig-sandbox, release-github-com-looprig-factory]
 ---
 
 # Overview
@@ -26,6 +26,7 @@ Looprig is a collection of composable Go modules for building model-powered appl
 | Confine child processes and verify native guarantees | [Sandboxing](/docs/guides/sandboxing) |
 | Add durable graphs, interruption, recovery, and workflow tools | [Workflows](/docs/guides/workflows) |
 | Connect terminal or browser consumers | [TUI](/docs/guides/tui) and [Web UI](/docs/guides/web-ui) |
+| Run durable, multi-tenant sessions on pooled or dedicated Hosts behind one public service | [Factory](/docs/modules/factory), [Host](/docs/modules/host), and [SessionStore](/docs/modules/sessionstore) |
 
 ## Start with an outcome
 
@@ -35,6 +36,6 @@ Every implementation step links to a runnable checkpoint and the deeper guide fo
 
 ## Choose only what you need
 
-The modules have narrow responsibilities and compose through explicit interfaces. An application can use Inference without Harness, Harness without a browser client, or the Web UI with any frontend framework. Add a module when the application needs the boundary it owns.
+The modules have narrow responsibilities and compose through explicit interfaces. An application can use Inference without Harness, Harness without a browser client, or the Web UI with any frontend framework. A hosted service can add Factory in front of its Hosts without either importing the other, because they exchange only Core and SessionStore records. Add a module when the application needs the boundary it owns.
 
 When you need API-level detail, use the module guides in the left navigation and follow their source and runnable-example links.

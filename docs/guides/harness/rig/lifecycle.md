@@ -36,11 +36,13 @@ lookup, workspace checkpoint/restore, and `Shutdown`.
 
 ## New session
 
-`NewSession` resolves `SessionOption` values first, then allocates an ID,
-acquires the session lease, opens the journal, applies optional workspace seed
+`NewSession` resolves `SessionOption` values first, then mints an ID (or adopts
+the one given by `WithSessionID`), acquires the session lease, opens the journal, applies optional workspace seed
 state, binds loops, and publishes the start record. A failure unwinds acquired
 resources in reverse order. With a seed, the workspace checkpoint is committed
-before any loop starts.
+before any loop starts. The `ctx` argument is the parent of the session's whole
+lifetime, so pass a context that lives as long as the session should, such as
+`context.WithoutCancel(r.Context())` in an HTTP handler.
 
 ```mermaid
 %%{init: {"theme":"dark"}}%%
@@ -64,7 +66,9 @@ sequenceDiagram
 compares the Rig's current fingerprint, and consults the configured restore
 decider before acquiring workspace or binding live collaborators. It reconstructs
 the same session ID, loop IDs, active primer, journals, gates, and workspace
-pointer. A fingerprint mismatch is not silently ignored.
+pointer. A fingerprint mismatch is not silently ignored. A per-session workspace
+base that moved to a different path on the restoring host is not treated as
+drift; see [restore errors](/docs/guides/harness/errors-and-recovery/restore).
 
 ```go
 restored, err := runtime.RestoreSession(ctx, savedID)
@@ -85,7 +89,10 @@ It stops admission, interrupts and drains loops/subtrees, finishes required
 journal/checkpoint work, stops process and foreign services, releases workspace
 and session leases, and is idempotent at the controller boundary. The caller
 must continue to service or close event subscriptions according to the session
-contract while shutdown drains.
+contract while shutdown drains. `Shutdown` appends `SessionStopped` and makes the
+session terminal; to hand a session to another process instead, use the
+nonterminal release capabilities described in
+[session shutdown](/docs/guides/harness/session-runtime/shutdown).
 
 `Rig` maps construction failures to `*rig.LifecycleError` kinds such as
 `LifecycleContextDone`, `LifecycleIDGenerationFailed`, `LifecycleLeaseFailed`,

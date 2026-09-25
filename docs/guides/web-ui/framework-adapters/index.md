@@ -44,7 +44,7 @@ The vanilla example owns event listeners and returns one teardown function. The 
 
 ## Source
 
-The ordinary DOM binding is shown in [`sdk/core/examples/vanilla-session.ts`](https://github.com/looprig/client/blob/main/sdk/core/examples/vanilla-session.ts). The Svelte package barrel exposes its reactive wrappers from [`sdk/svelte/src/index.ts`](https://github.com/looprig/client/blob/main/sdk/svelte/src/index.ts).
+The ordinary DOM binding is shown in [`sdk/core/examples/vanilla-session.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/examples/vanilla-session.ts). The Svelte package barrel exposes its reactive wrappers from [`sdk/svelte/src/index.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/svelte/src/index.ts).
 
 ## Proof
 

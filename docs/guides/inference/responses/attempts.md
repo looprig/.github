@@ -49,7 +49,7 @@ Streaming exposes the same concept as `stream.StreamResult.Attempts`, where it c
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go), [`inference/stream/result.go`](https://github.com/looprig/inference/blob/main/stream/result.go)
-- Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/main/stream/stream_test.go), [`inference/retry/invoke_test.go`](https://github.com/looprig/inference/blob/main/retry/invoke_test.go)
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go), [`inference/stream/result.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/result.go)
+- Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream_test.go), [`inference/retry/invoke_test.go`](https://github.com/looprig/inference/blob/v0.13.0/retry/invoke_test.go)
 
 Related: [Terminal stream results](/docs/guides/inference/streaming/terminal-results), [Responses](/docs/guides/inference/responses).

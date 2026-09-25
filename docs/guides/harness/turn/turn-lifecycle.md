@@ -38,6 +38,8 @@ type TurnStarted struct {
 
 `TurnStarted` is both an enduring event and a `event.Reply`. Its `ReplyTo()` is the submit command ID. It is not a separate transport acknowledgement.
 
+A restored session can resume a Turn that was parked at an open gate when the runtime moved. The active primer loop continues the parked Step instead of starting a new Turn, so no second `TurnStarted` is published; `hub.Hub.ResumeTurn` marks the session active for it. The resumed Turn still ends with one of the terminals below. Subagent and foreign loops, and a Turn that compacted after it began, are interrupted at restore instead.
+
 ## Running boundary
 
 The Turn builds one request per conceptual Step. The current model configuration and tool set are captured at Turn start. Each successful Step commits a `StepDone`; a tool-using Step may then fold queued input and continue. A text-only Step commits and proceeds directly to the Turn terminal.
@@ -78,8 +80,10 @@ The terminal set is closed:
 | Terminal | Trigger | Current incomplete Step |
 | --- | --- | --- |
 | `event.TurnDone` | final assistant message committed | none |
-| `event.TurnFailed` | provider, output, tool, hook, or durable failure | discarded |
-| `event.TurnInterrupted` | Turn context canceled | discarded |
+| `event.TurnFailed` | provider, output, tool, hook, or durable failure | discarded, except a streamed text prefix |
+| `event.TurnInterrupted` | Turn context canceled | discarded, except a streamed text prefix |
+
+A streamed text prefix is committed as a `StepDone` ending in a notice block; see [Step failure and cancellation](/docs/guides/harness/step/failure-and-cancellation).
 
 ## Observe with a Turn hook
 
@@ -98,7 +102,7 @@ func compileTurnTimingHook() (*hook.Runner, error) {
 		Operation: hook.OperationTurn,
 		Begin: func(ctx context.Context, call hook.Call) (context.Context, hook.FinishFunc) {
 			fmt.Printf("turn index=%d id=%v input=%v\n",
-				call.Turn.Index, call.TurnID, call.Turn.Input != nil)
+				call.Turn.Index, call.Coordinates.TurnID, call.Turn.Input != nil)
 			return ctx, func(result hook.Result) {
 				fmt.Printf("turn outcome=%v error=%v\n", result.Outcome, result.Err)
 			}

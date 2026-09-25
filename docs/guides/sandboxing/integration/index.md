@@ -85,9 +85,9 @@ The model request can contain tool definitions and later tool-use blocks, but it
 
 ## Source
 
-- [Executable policy, gate, and ExecutorSet fixture](https://github.com/looprig/sandbox/blob/main/examples/policy-enforcement/example_test.go)
-- [Public asynchronous process aliases](https://github.com/looprig/sandbox/blob/main/sandbox.go)
+- [Executable policy, gate, and ExecutorSet fixture](https://github.com/looprig/sandbox/blob/v0.9.1/examples/policy-enforcement/example_test.go)
+- [Public asynchronous process aliases](https://github.com/looprig/sandbox/blob/v0.9.1/sandbox.go)
 
 ## Proof
 
-- [Sandbox example artifact contract](https://github.com/looprig/sandbox/blob/main/examples/contract_test.go)
+- [Sandbox example artifact contract](https://github.com/looprig/sandbox/blob/v0.9.1/examples/contract_test.go)

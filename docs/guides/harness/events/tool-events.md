@@ -38,6 +38,7 @@ type PermissionRequested struct {
 	Header
 	ToolExecutionID uuid.UUID `json:"tool_execution_id,omitzero"`
 	Request tool.Request `json:"-"`
+	Preview *tool.MutationPreview `json:"-"` // live only; nil means no preview
 }
 
 type PermissionDecided struct {
@@ -96,6 +97,14 @@ by `GateOpened` and closed by `GateResolved`; this event is the typed prepared
 request delivered on the loop's per-turn stream. `PermissionDecided` excludes
 the `ask` effect because a gated ask is represented by the gate lifecycle.
 
+`Preview` shows a reviewer the pending file change. When the prepared call
+implements `tool.MutationPreviewer`, the loop asks it for a
+`tool.MutationPreview` (`Path`, `Creates`, and an opaque `UnifiedDiff`) while
+opening the gate. The preview is never journaled, never sent to the model, and
+never encoded, so a restored or replayed `PermissionRequested` has a nil
+`Preview`. A nil value is normal for a non-mutating tool or a failed preview
+attempt and is not an error.
+
 ## Approval and execution sequence
 
 ```mermaid
@@ -134,7 +143,9 @@ decoder. It carries the typed requirement and candidate descriptions, never
 grant tokens or raw tool arguments. `PermissionDecided.Subject` and `Audit`
 are summaries. `ToolCallStarted.Summary` and
 `ToolCallCompleted.ResultPreview` are capped at construction and are for
-presentation, not for replaying the call.
+presentation, not for replaying the call. When a loop retains a large result
+durably, `StepDone.Captures` locates the full bytes; see
+[tool-result capture](/docs/guides/harness/loop/tool-result-capture).
 
 `event.ValidateEvent` rejects any of these events with missing
 `ToolExecutionID`, missing step coordinates, invalid visibility, or malformed

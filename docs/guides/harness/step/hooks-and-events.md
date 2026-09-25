@@ -57,6 +57,7 @@ type StepDone struct {
 	loopScoped
 	Header
 	Messages content.AgenticMessages `json:"messages,omitempty"`
+	Captures []ToolResultCapture     `json:"captures,omitempty"`
 }
 
 type TokenDelta struct {
@@ -106,7 +107,7 @@ func compileStepObserver() (*hook.Runner, error) {
 			if call.Step == nil {
 				return ctx, nil
 			}
-			fmt.Printf("step %d id=%v\n", call.Step.Index, call.StepID)
+			fmt.Printf("step %d id=%v\n", call.Step.Index, call.Coordinates.StepID)
 			return ctx, func(result hook.Result) {
 				fmt.Printf("step outcome=%v error=%v\n", result.Outcome, result.Err)
 			}

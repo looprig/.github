@@ -92,6 +92,12 @@ type UserInput struct {
 	BackgroundHandBack    bool             `json:"background_hand_back,omitzero"`
 	DelegateDeliveryPhase DelegateDeliveryPhase `json:"delegate_delivery_phase,omitzero"`
 	Accepted              chan error       `json:"-"`
+	Admission             *Admission       `json:"-"`
+}
+
+type Admission struct {
+	Commit func(context.Context) error // makes the Host's acceptance durable
+	Result chan error                  // capacity >= 1; receives the loop's answer once
 }
 ```
 
@@ -106,6 +112,7 @@ semantics:
 | `BackgroundHandBack` | machine marker requesting automatic parent hand-back after a managed child completes |
 | `DelegateDeliveryPhase` | machine-only durable phase, either `intent` or `fallback_queued`; ordinary interactive input leaves it empty |
 | `Accepted` | transient managed-delegate acceptance channel; never serialized |
+| `Admission` | transient handshake for input a Host admitted as a runtime command; never serialized, and a `UserInput` carries at most one of `Accepted` and `Admission` |
 
 ```go
 type DelegateDeliveryPhase string
@@ -117,6 +124,17 @@ const (
 
 func (p DelegateDeliveryPhase) Valid() bool
 ```
+
+`Admission` exists so a Host's durable "applied" record and the loop's live
+acceptance cannot disagree. The loop either declines the input, replying a
+`*loop.InputRejectedError` on `Result` and publishing no event, or calls
+`Commit` on its own goroutine before the input can have any effect. An input
+taken this way is carried over rather than returned with `InputCancelled` when
+its loop shuts down, because a restored successor replays it. The session sends
+an `Admission` only to a loop backend that implements
+`SupportsRuntimeAdmission() bool` and returns true. Applications reach this path
+through [Host-admitted runtime commands](/docs/guides/harness/commands#host-admitted-runtime-commands),
+not by building a `UserInput`.
 
 An ordinary interactive `UserInput` has a command ID and blocks. It does not
 carry a context. The loop derives the turn context only when it actually starts

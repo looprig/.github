@@ -53,7 +53,7 @@ User input travels in the opposite direction. The screen calls `Agent.Submit` or
 
 The screen is a consumer of [Harness sessions and events](/docs/guides/harness), not a replacement for them. Use [Tools](/docs/guides/tools) to understand preparation, permission requirements, and tool results that become TUI gate cards and tool summaries. The TUI only renders the resulting session contract.
 
-There are no separate public TUI pages for keymaps or layout engines. Those details belong to the internal presentation implementation and Bubble Tea integration. The public surfaces are the `Screen`, `Agent`, components, styles, and adapters documented here.
+Key bindings and layout are not a public API. Those details belong to the internal presentation implementation and Bubble Tea integration, and end users can press `?` on an empty composer to see the key legend. [Commands and Gates](/docs/guides/tui/runtime/commands) lists the keys, including the permission-card accelerators and the diff preview a card shows for a pending file change. The public surfaces are the `Screen`, `Agent`, components, styles, and adapters documented here.
 
 ## Source
 
@@ -63,4 +63,4 @@ There are no separate public TUI pages for keymaps or layout engines. Those deta
 ## Proof
 
 - [Root API compile-time proof](https://github.com/looprig/tui/blob/main/api_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)

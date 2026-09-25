@@ -41,7 +41,7 @@ Keep the system prompt in `Request.System` when it is a per-agent instruction th
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go), [`core/content/message.go`](https://github.com/looprig/core/blob/main/content/message.go)
-- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go), [`core/content/message_test.go`](https://github.com/looprig/core/blob/main/content/message_test.go)
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go), [`core/content/message.go`](https://github.com/looprig/core/blob/v0.11.0/content/message.go)
+- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/client_test.go), [`core/content/message_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/message_test.go)
 
 Related: [AgenticMessages](/docs/guides/inference/messages/agentic-messages), [System instructions](/docs/guides/inference/requests/system-instructions), [ImageBlock](/docs/guides/inference/content-blocks/image).

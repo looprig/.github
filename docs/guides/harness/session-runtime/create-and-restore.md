@@ -32,8 +32,15 @@ func (r *Rig) NewSession(ctx context.Context, opts ...SessionOption) (session.Se
 func (r *Rig) RestoreSession(ctx context.Context, id uuid.UUID) (session.SessionController, error)
 ```
 
-`NewSession` accepts `WithSeedSnapshot` through `SessionOption`; the seed is
-materialized before the first loop starts. `RestoreSession` takes the existing
+`NewSession` accepts `WithSeedSnapshot` and `WithSessionID` through
+`SessionOption`; the seed is materialized before the first loop starts, and
+`WithSessionID` replaces the minted ID with one the caller chose (see
+[session options](/docs/guides/harness/rig/session-options)).
+
+The `ctx` passed to either method is the parent of the session's lifetime, not
+just of construction: cancelling it later stops the session. From a
+request-scoped caller such as an HTTP handler, pass
+`context.WithoutCancel(ctx)`. `RestoreSession` takes the existing
 ID and has no per-call options. Restore-only policy such as allowing config
 mismatch is captured when the rig is defined.
 
@@ -42,7 +49,7 @@ mismatch is captured when the rig is defined.
 The live path is ordered so no reachable session can write without ownership:
 
 1. Check the caller context and validate topology requirements.
-2. Mint a non-zero session UUID.
+2. Mint a non-zero session UUID, or adopt the one given by `WithSessionID`.
 3. Acquire `Store.AcquireLease` for that UUID.
 4. Call `Store.OpenJournalWithOpeningAppend`; the first record is a
    `journal.FenceRecord` containing the lease epoch.
@@ -84,9 +91,18 @@ sequenceDiagram
     R-->>R: transfer lease and context ownership to Session
 ```
 
+If the opening fence loses a handover race with another writer, restore claims
+the session again under a fresh lease at a higher epoch and keeps that lease.
 The first restore mutation after the fence is `RestoreStarted`. Open turns are
-closed with durable `TurnInterrupted` records. The workspace pointer is parsed
-and materialized before `RestoreDone`. `RestoreDone` is the commit point: a
+closed with durable `TurnInterrupted` records, with one exception: when the
+active primer's open turn is parked at a resumable gate, its gates stay open
+and the turn resumes from the parked step once the restore commits, so an
+answer that arrives after failover reaches the waiting tool. A gate is
+resumable in a native loop with no compaction inside the turn, when it is a
+permission gate or an ask-user gate from a tool whose
+`tool.UserInputReplaySafe` method returns true.
+
+The workspace pointer is parsed and materialized before `RestoreDone`. `RestoreDone` is the commit point: a
 failure before it records `RestoreErrored`, releases ownership, and returns no
 live session.
 
@@ -138,7 +154,10 @@ fmt.Println(restored.SessionID() == id)
 ```
 
 The restore keeps the same session ID and loop identity. It does not replay
-Ephemeral delivery or recreate abandoned in-memory cancellation handles.
+Ephemeral delivery or recreate abandoned in-memory cancellation handles. It
+does replay one kind of owed work: a Host-admitted input recorded as `applied`
+whose effect never reached the journal runs again under its original runtime
+command ID, at most once.
 
 ## Source and proof
 

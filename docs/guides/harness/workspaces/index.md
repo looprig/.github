@@ -82,6 +82,8 @@ ordinary data-plane `session.Session` interface.
 ```go
 type SessionController interface {
 	session.Session
+	SetActiveLoop(context.Context, uuid.UUID) error
+	LoopController(uuid.UUID) (loop.Controller, bool)
 	CheckpointWorkspace(context.Context) (workspacestore.Ref, error)
 	RestoreWorkspace(context.Context, workspacestore.Ref) error
 	Shutdown(context.Context) error

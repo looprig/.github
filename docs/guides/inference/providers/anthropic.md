@@ -34,7 +34,7 @@ The public constructor is `func New(selected model.Model, key auth.APIKey, optio
 | Header or signer | x-api-key |
 | Options | WithThinking; WithBetaHeaders; WithMetadataUserID; WithPromptCacheControl |
 
-Prompt cache control requires a non-empty system prompt or message. The client returns an error instead of silently attaching a cache marker to an empty request.
+Prompt cache control needs a stable prefix to mark. Without one, encoding fails with `*OptionError` instead of attaching a marker to nothing; see [Caching controls](#caching-controls).
 
 An explicit model BaseURL is caller-controlled and is used by the provider route builder. It replaces the package default; it is not appended to the default.
 
@@ -71,11 +71,20 @@ flowchart LR
 
 ## Caching controls
 
-WithPromptCacheControl emits native cache_control blocks; decoded usage preserves cache-read and cache-creation counts.
+`WithPromptCacheControl(CacheControlOptions{Type, TTL})` places one native `cache_control` breakpoint on the stable part of the request. `Type` defaults to `ephemeral`, which is the only accepted value, and `TTL` must be empty, `5m`, or `1h`. The explicit option replaces any breakpoints the shared codec would add from the model's prompt-caching capability, so a request never carries two competing boundaries.
+
+| Request shape | Breakpoint placement |
+| --- | --- |
+| `Request.TransientMessages > 0` | The committed-prefix boundary computed by the shared codec, before the transient tail. If the codec marks no message block, the system prompt is used. |
+| No transient messages | The system prompt, converted to a text block. The last message is the live turn, so marking it would write a new cache entry on every request. |
+| No transient messages and an empty system prompt | Encoding fails with `*OptionError`. |
+| A transient `SystemMessage` | Encoding fails with `*OptionError`, because a cached prefix cannot follow volatile system context. |
+
+`OptionError{Reason, Err}` reports a local option-encoding failure before any request is sent and unwraps to its cause. Decoded usage preserves cache-read and cache-creation token counts; the client does not infer a cache hit.
 
 ## Counters, errors, and retries
 
-NewCounter performs exact Anthropic count_tokens calls and reports typed endpoint, request, and response errors.
+NewCounter performs exact Anthropic count_tokens calls and reports typed endpoint, request, and response errors. Client option failures during request encoding, such as an invalid cache TTL, surface from Invoke or Stream as `*OptionError`.
 
 The shared inference boundary returns typed model-validation, authentication, network, HTTP, request-encoding, response-decoding, and stream errors. A provider-local retry loop is not implied by a constructor name.
 
@@ -109,12 +118,12 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/errors.go)
-- [options.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/options.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.15.0/providers/anthropic/client.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/anthropic/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.15.0/providers/anthropic/errors.go)
+- [options.go](https://github.com/looprig/llm/blob/v0.15.0/providers/anthropic/options.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/client_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/anthropic/counter_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/anthropic/client_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/anthropic/counter_test.go)

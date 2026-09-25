@@ -4,7 +4,7 @@ title: Errors
 description: Describe Loop definition and runtime errors.
 audience: developer
 section: guides
-order: 23
+order: 24
 publication: released
 proofs:
   start: [release-github-com-looprig-harness]

@@ -43,6 +43,10 @@ Follow the runtime from its public control surface into reusable configuration a
 7. [Session runtime](/docs/guides/harness/session-runtime) owns the live controllers, queues, subscriptions, resources, and shutdown boundary.
 8. [Skills](/docs/guides/harness/skills) load reusable instructions on demand from curated embedded catalogs or gated project workspaces.
 9. [Hustles](/docs/guides/harness/hustles) run bounded auxiliary inference for facilities such as compaction and permission review.
-10. [Compaction](/docs/guides/harness/compaction) replaces an older transcript prefix with a validated summary tied to the exact context basis.
+10. [Compaction](/docs/guides/harness/compaction) replaces an older transcript prefix with a validated summary and keeps a recent suffix verbatim.
+11. [Session persistence](/docs/guides/harness/session-persistence) stores each Session's journal in the SessionStore format so it can be listed, replayed, and restored on another process.
+12. [Tool-result capture](/docs/guides/harness/loop/tool-result-capture) keeps oversized tool results durable and lets the model page through them.
+
+To serve Sessions to remote clients, run them on a [Host](/docs/modules/host) behind [Factory](/docs/modules/factory). The in-process [HTTP server](/docs/guides/harness/http-server) in `pkg/serve` is deprecated and kept only for existing deployments.
 
 Start with [Build an agent with Harness](/docs/start/first-run), then build the [Weather Assistant](/docs/examples/weather-assistant) or [Research Assistant](/docs/examples/research-assistant). Use the [complete Harness module guide](/docs/modules/harness) for repository and dependency details.

@@ -105,6 +105,8 @@ folded merely because it was popped from the inbox.
 | `CancelTurnInterrupted` | An abnormal interrupted Turn returned the queued entry. | The interrupted Turn ID. |
 | `CancelTurnFailed` | A start, admission, persistence, or other failure returned the entry. | The active Turn ID when one exists. |
 
+An input a Host admitted through `command.Admission` follows the same rules with one exception: when its loop shuts down or its context is canceled, it is carried over rather than returned, so no `InputCancelled` is published and a restored session replays it. An ordinary interrupt retains it like other user input, and a Turn failure or a retraction still resolves it visibly.
+
 `TurnIndex` identifies the loop-local Turn that caused the resolution. It is not
 globally unique across loops. A zero `Header.TurnID` on a client retract is
 intentional and distinguishes it from an active-turn return.

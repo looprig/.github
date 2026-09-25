@@ -41,13 +41,13 @@ The facade owns subscription cleanup and forwards user intent to typed transport
 
 ## Guide map
 
-Use the [Client SDK guides](/docs/guides/web-ui/client-sdk) for the transport, events, folding, validation, and ownership contracts. Choose [Framework adapters](/docs/guides/web-ui/framework-adapters) when a DOM binding or Svelte 5 state wrapper is useful. Follow [Embedding](/docs/guides/web-ui/embedding) to package the app as a static bundle and serve it from Go. The [Session lifecycle guides](/docs/guides/web-ui/sessions) cover binding, exact reconnect joins, and restoring a durable session. The [Harness guide](/docs/guides/harness) is the adjacent server contract that the browser client calls.
+Use the [Client SDK guides](/docs/guides/web-ui/client-sdk) for the transport, events, folding, validation, and ownership contracts. Choose [Framework adapters](/docs/guides/web-ui/framework-adapters) when a DOM binding or Svelte 5 state wrapper is useful. Follow [Embedding](/docs/guides/web-ui/embedding) to package the app as a static bundle and serve it from Go. If you want a finished interface rather than your own app, the [Prebuilt wui bundle](/docs/guides/web-ui/embedding/wui) serves Looprig's React UI from a Factory with no front-end build. The [Session lifecycle guides](/docs/guides/web-ui/sessions) cover binding, exact reconnect joins, and restoring a durable session. The [Harness guide](/docs/guides/harness) is the adjacent server contract that the browser client calls.
 
 The framework-neutral route is the primary API. A Svelte adapter is optional and should wrap this same client rather than replace its transport, event parser, or state fold.
 
 ## Source
 
-The public barrel exports the transport, validation, SSE, fold, join, and action surfaces from [`sdk/core/src/index.ts`](https://github.com/looprig/client/blob/main/sdk/core/src/index.ts). The end-to-end framework-neutral shape is shown in [`sdk/core/examples/session-client.ts`](https://github.com/looprig/client/blob/main/sdk/core/examples/session-client.ts).
+The public barrel exports the transport, validation, SSE, fold, join, and action surfaces from [`sdk/core/src/index.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/src/index.ts). The end-to-end framework-neutral shape is shown in [`sdk/core/examples/session-client.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/examples/session-client.ts).
 
 ## Proof
 

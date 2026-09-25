@@ -72,7 +72,7 @@ flowchart LR
 | Active | submits queue or start turns; gates and subscriptions are live | every Enduring event is appended before publication |
 | Interrupted | current turns are cancelled; accepted user input waits behind the interrupt barrier | `TurnInterrupted` and idle edge are durable |
 | Closing | `NewLoop`, active-loop changes, and new work are refused | shutdown sends every loop a command, then appends `SessionStopped` |
-| Restored | old events are folded; open turns are crash-closed; loops are rebuilt idle | `RestoreStarted` precedes repair, `RestoreDone` is the commit point |
+| Restored | old events are folded; open turns are crash-closed and loops rebuilt idle, except that the active primer resumes a turn parked at a resumable gate | `RestoreStarted` precedes repair, `RestoreDone` is the commit point |
 
 Start with [the controller contract](/docs/guides/harness/session-runtime/controller),
 then [create and restore](/docs/guides/harness/session-runtime/create-and-restore).
@@ -87,11 +87,16 @@ For persistence details, see [session persistence](/docs/guides/harness/session-
 - [`pkg/rig/lifecycle_test.go`](https://github.com/looprig/harness/blob/main/pkg/rig/lifecycle_test.go)
 
 ```go
-disk, err := fsstore.Open(fsstore.Options{Root: "./agent-data"})
-if err != nil { return err }
-sessions, err := sessionstore.Open(disk.Backend())
+// memstore is in-process only; a durable deployment supplies a composite whose
+// Blobs provider implements storage.BlobReaderLifecycle.
+sessions, err := sessionstore.Open(memstore.New())
 if err != nil { return err }
 restored, err := runtime.RestoreSession(ctx, savedSessionID)
 ```
+
+`sessionstore.Open` refuses an `fsstore` Blobs provider, because it does not
+implement the bounded reader lifecycle the store requires. See
+[the Rig session store](/docs/guides/harness/rig/session-store) for the backend
+requirements.
 
 Start with [Create and restore](/docs/guides/harness/session-runtime/create-and-restore), then read [Session persistence](/docs/guides/harness/session-persistence) and the [`pkg/session` source](https://github.com/looprig/harness/tree/main/pkg/session).

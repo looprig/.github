@@ -11,6 +11,7 @@ proofs:
   authentication-and-model-formats: [release-github-com-looprig-llm]
   streaming-structured-output-and-tools: [release-github-com-looprig-llm]
   caching-controls: [release-github-com-looprig-llm]
+  conversation-header: [release-github-com-looprig-llm]
   counters-errors-and-retries: [release-github-com-looprig-llm]
   consumer-example: [release-github-com-looprig-llm]
   source-and-proof: [release-github-com-looprig-llm]
@@ -33,6 +34,7 @@ The public constructor is `func New(selected model.Model, key auth.APIKey, optio
 | Authentication | API key |
 | Header or signer | Authorization: Bearer |
 | Options | WithHeader |
+| Conversation header | `x-opencode-session` from `inference.Request.SessionID` |
 
 opencode owns opencode identity; separate opencode-go owns the Go endpoint and identity.
 
@@ -73,6 +75,19 @@ flowchart LR
 
 No provider cache controls are exported.
 
+## Conversation header
+
+OpenCode reads a per-conversation header to keep one conversation on one route and cache prefix. Since llm v0.15.0 this client copies `inference.Request.SessionID` verbatim into `x-opencode-session` on every format (Chat, Responses, and Messages) and on both `Invoke` and `Stream`. Set the same `SessionID` on every turn of a conversation; see [Conversation identity](/docs/guides/inference/requests#conversation-identity).
+
+| Case | Header sent |
+| --- | --- |
+| `SessionID` empty | None; the request is unchanged from earlier releases |
+| `SessionID` set | `x-opencode-session: <SessionID>`, as the only value |
+| `WithHeader("x-opencode-session", v)` with non-empty `v` | `v`; an explicit operator value wins over the per-request identity |
+| `SessionID` unsendable | No request is made; the call returns `*inference.InvalidSessionIDError` |
+
+An empty `WithHeader` value does not suppress the identity; leave `SessionID` empty to send none. OpenCode Zen and OpenCode Go share one implementation, so both send the same header. No other provider package forwards `SessionID`.
+
 ## Counters, errors, and retries
 
 NewCounter returns a typed llm.CounterSupportError because no exact provider counter is implemented.
@@ -109,12 +124,14 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/opencode/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/opencode/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/opencode/errors.go)
-- [options.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/opencode/options.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/client.go)
+- [opencodesession/session.go](https://github.com/looprig/llm/blob/v0.15.0/providers/internal/opencodesession/session.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/errors.go)
+- [options.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/options.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/opencode/client_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/opencode/counter_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/client_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/counter_test.go)
+- [session_header_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/session_header_test.go) runs the shared [session-header contract](https://github.com/looprig/llm/blob/v0.15.0/providers/internal/contracttest/session.go)

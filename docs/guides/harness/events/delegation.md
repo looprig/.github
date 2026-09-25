@@ -77,7 +77,9 @@ and step, when any, are in `Header.Cause.Coordinates`; the root has a zero
 cause location. `ParentToolUseID` is the provider tool-use ID that spawned the
 child, `InitialRequestID` proves the prepared delegate request was accepted,
 and `ForeignSID` or `ACPSessionID` preserves an adapter session binding for
-restore. These are identities, not credentials or broker tokens.
+restore. These are identities, not credentials or broker tokens. The public
+body a session viewer reads omits `runtime.base_url`, which is Host
+configuration; restore reads it from the native body.
 
 | Event | Class | Scope | Visibility | Durable meaning |
 | --- | --- | --- | --- | --- |

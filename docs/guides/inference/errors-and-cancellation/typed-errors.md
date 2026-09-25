@@ -22,7 +22,7 @@ output are not retained in the shared failure values.
 
 | Family | Types |
 | --- | --- |
-| request | `ModelMismatchError`, `InvalidTransientMessagesError`, structured-output validation/conflict errors |
+| request | `ModelMismatchError`, `InvalidTransientMessagesError`, `InvalidSessionIDError`, structured-output validation/conflict errors |
 | transport | `RequestBuildError`, `NetworkError`, `APIError`, `ResponseBodyTooLargeError` |
 | codec | `UnsupportedBlockError`, `UnsupportedConversationError`, dialect decode errors |
 | stream | `StreamReaderError`, `StreamResultError`, dialect `StreamAPIError` |
@@ -48,8 +48,8 @@ if errors.Is(err, context.Canceled) {
 
 ## Source and proof
 
-- [`failure/errors.go`](https://github.com/looprig/inference/blob/v0.12.0/failure/errors.go)
-- [`gateway/http_errors.go`](https://github.com/looprig/inference/blob/v0.12.0/gateway/http_errors.go)
-- [`structured_errors.go`](https://github.com/looprig/inference/blob/v0.12.0/structured_errors.go)
+- [`failure/errors.go`](https://github.com/looprig/inference/blob/v0.13.0/failure/errors.go)
+- [`gateway/http_errors.go`](https://github.com/looprig/inference/blob/v0.13.0/gateway/http_errors.go)
+- [`structured_errors.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_errors.go)
 
 Run `go test ./failure ./gateway`.

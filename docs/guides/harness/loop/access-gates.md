@@ -4,7 +4,7 @@ title: Access Gates
 description: Describe access-gate configuration for effectful tools declared by a loop definition.
 audience: developer
 section: guides
-order: 12
+order: 13
 publication: released
 proofs:
   start: [release-github-com-looprig-harness]
@@ -73,6 +73,16 @@ Tool code can receive the prepared execution contract with
 installed only for the current live call. `RequestUserInput` outside a live
 request returns `*loop.UserInputContextError`; approval outside one returns
 `*loop.ApprovalContextError`. Do not put grants in ambient process state.
+
+A prepared artifact that implements `tool.MutationPreviewer` supplies a
+`tool.MutationPreview` (path, create flag and unified diff) when an
+interactive approval opens. Harness attaches it to the live
+`event.PermissionRequested.Preview` and to a classifier's review context, but
+never journals it or shows it to the model. A tool that asks the user through
+`RequestUserInput` can implement `tool.UserInputReplaySafe` and return true
+only when nothing before its question has an outside effect; a restored
+session can then re-run the call against the still-open gate instead of
+closing it.
 
 ```go
 prepared, ok := loop.PreparedCallFromContext(ctx)

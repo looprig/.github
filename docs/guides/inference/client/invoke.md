@@ -58,8 +58,8 @@ The caller owns the context and decides whether an error is retryable. The clien
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go)
-- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/main/client_test.go), [`inference/transport/client_test.go`](https://github.com/looprig/inference/blob/main/transport/client_test.go)
-- Example: [`inference/examples/invoke/main.go`](https://github.com/looprig/inference/blob/main/examples/invoke/main.go)
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go)
+- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/client_test.go), [`inference/transport/client_test.go`](https://github.com/looprig/inference/blob/v0.13.0/transport/client_test.go)
+- Example: [`inference/examples/invoke/main.go`](https://github.com/looprig/inference/blob/v0.13.0/examples/invoke/main.go)
 
 Related: [Responses](/docs/guides/inference/responses), [Request feature validation](/docs/guides/inference/requests/feature-validation).

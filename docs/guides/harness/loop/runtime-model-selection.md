@@ -4,7 +4,7 @@ title: Runtime Model Selection
 description: Describe model selection through loop.Handle and loop.Controller for a live loop runtime.
 audience: developer
 section: guides
-order: 18
+order: 19
 publication: released
 proofs:
   start: [release-github-com-looprig-harness]

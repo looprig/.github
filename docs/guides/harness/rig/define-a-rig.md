@@ -41,9 +41,14 @@ cross-feature checks run after every option has been collected.
 | `WithGateCaps` | `func WithGateCaps(caps GateCaps) Option` |
 | `WithAllowConfigMismatch` | `func WithAllowConfigMismatch() Option` |
 | `WithRestoreDecider` | `func WithRestoreDecider(decider session.RestoreDecider) Option` |
+| `WithRuntimeRestoreResolver` | `func WithRuntimeRestoreResolver(resolver session.RuntimeRestoreResolver) Option` |
+| `WithRestoreFailurePolicy` | `func WithRestoreFailurePolicy(options ...RestoreFailureOption) Option` |
 | `WithForeignBuilders` | `func WithForeignBuilders(builder foreign.Builder, restored foreign.RestoredBuilder) Option` |
 | `WithForeignServicesBuilders` | `func WithForeignServicesBuilders(builder foreign.ServicesBuilder, restored foreign.ServicesRestoredBuilder) Option` |
 | `WithSessionResourceStorage` | `func WithSessionResourceStorage(provider SessionResourceStorageProvider) Option` |
+| `WithOffloadGC` | `func WithOffloadGC(policy OffloadGCPolicy) Option` |
+| `WithToolResultObjects` | `func WithToolResultObjects(objects loop.ToolResultObjects, spillBase string) Option` |
+| `WithToolResultCapture` (deprecated) | `func WithToolResultCapture(objects loop.ToolResultObjectStore, spillBase string) Option` |
 | `WithHustles` / `WithHustleLimits` | `func WithHustles(definitions ...hustle.Definition) Option`; `func WithHustleLimits(limits HustleLimits) Option` |
 | `WithSnapshots` | `func WithSnapshots(policy SnapshotPolicy) Option` |
 | `WithExclusiveWorkspace` | `func WithExclusiveWorkspace(*workspacestore.Store, string, storage.Leaser) Option` |
@@ -51,6 +56,14 @@ cross-feature checks run after every option has been collected.
 | `WithSharedWorkspace` | `func WithSharedWorkspace(*workspacestore.Store, string) Option` |
 
 Permission-review options are listed on [Gates and Hooks](/docs/guides/harness/rig/gates-and-hooks); their pairings are validated at the same Define boundary.
+
+`WithToolResultObjects` wires readable retention of oversized tool results: a
+store that issues each capture's reference (for example
+`(*sessionstore.Store).ToolResultObjects()`) and an absolute spill base
+directory. `WithToolResultCapture` is its deprecated predecessor; captures it
+retains can never be read back. The two options are mutually exclusive. See
+[tool-result capture](/docs/guides/harness/loop/tool-result-capture) for the
+full contract.
 
 ## Cross-feature validation
 
@@ -77,6 +90,13 @@ Important invariants include:
   are rejected;
 - a required snapshot on a shared workspace is invalid;
 - a process-service tool requires a session-resource provider;
+- a tool-result reader tool requires `WithToolResultObjects`
+  (`tool_result_reader_without_objects`), a nil store or non-absolute spill
+  base is `invalid_tool_result_capture`, and a spill base that overlaps the
+  workspace region in either direction is
+  `tool_result_spill_overlaps_workspace`;
+- `WithRestoreFailurePolicy` cannot be combined with `WithAllowConfigMismatch`,
+  `WithRestoreDecider`, or `WithRuntimeRestoreResolver` (`duplicate_option`);
 - every registered compaction hustle and required Hustle limit must match.
 
 The resulting Rig owns copies of additive option slices and hook sets. A later

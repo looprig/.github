@@ -39,7 +39,7 @@ if err != nil {
 // The Rig validates the compaction policy's Hustle name and descriptor.
 runtime, err := rig.Define(
 	rig.WithLoops(assistant),
-	rig.WithPrimers(assistant.Name()),
+	rig.WithPrimers(string(assistant.Name())),
 	rig.WithHustles(compactor),
 	rig.WithHustleLimits(rig.HustleLimits{
 		BlockingConcurrent: 1, BlockingQueued: 2,

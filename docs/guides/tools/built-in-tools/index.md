@@ -33,6 +33,7 @@ operation and keep the composition root responsible for its bindings.
 | Read a bounded text view | [ReadFile](/docs/guides/tools/built-in-tools/readfile) | Records a full-file observation before displaying selected lines. |
 | Load an approved skill | [Skill](/docs/guides/tools/built-in-tools/skill) | Uses an agent-scoped loader and a TOCTOU-safe workspace snapshot. |
 | Track loop-local work | [Task tools](/docs/guides/tools/built-in-tools/task) | Keeps one in-memory dependency graph per definition bundle. |
+| Page through a large retained result | [read_tool_result](/docs/guides/tools/built-in-tools/readtoolresult) | Reads only the calling loop's own captures through a Harness-bound reader. |
 | Search through a declared provider | [WebSearch](/docs/guides/tools/built-in-tools/websearch) | Emits network requirements for the provider's declared endpoints. |
 | Replace a complete file | [WriteFile](/docs/guides/tools/built-in-tools/writefile) | Uses a same-directory temporary file, sync, and atomic rename. |
 
@@ -42,16 +43,28 @@ Every built-in follows the common [definition and preparation contract](/docs/gu
 Preparation validates arguments, resolves paths or endpoints, and returns the
 requirements and artifact that a Harness gate can inspect. The direct run path
 must use that approved artifact rather than reconstructing untrusted input.
+Every built-in definition also declares its capture safety for large results;
+see [Large results and capture](/docs/guides/tools/core-concepts#large-results-and-capture).
 
 ```go
-defs := tool.TaskDefinitions()
-task := defs[0]
-prepared, err := task.PrepareCall(ctx, []byte(`{"subject":"review"}`))
+// Build the Tasks bundle, then prepare one call. The request carries the
+// requirements a Harness gate evaluates; the sealed artifact is what runs.
+built, err := standardtools.TaskDefinitions().Build(ctx, tool.Bindings{SessionID: sessionID, LoopID: loopID})
 if err != nil {
 	return err
 }
-// A Harness gate evaluates prepared.Requirements before Invoke uses its artifact.
-_ = prepared
+create := built[0].(tool.CallPreparer) // TaskCreate
+request, artifact, err := create.PrepareCall(ctx, executionID,
+	`{"subject":"Review","description":"Check the diff"}`)
+if err != nil {
+	return err // malformed arguments fail before any gate or effect
+}
+prepared := loop.WithPreparedCall(ctx, tool.PreparedCall{
+	ExecutionID: executionID,
+	Request:     request,
+	Artifact:    artifact,
+})
+result, err := built[0].InvokableRun(prepared, `{}`)
 ```
 
 For the shared permission and grant boundary, read [Safety, Permissions, and

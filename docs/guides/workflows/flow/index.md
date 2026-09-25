@@ -132,8 +132,8 @@ Flow's [module reference](/docs/modules/flow) covers graph routing and checkpoin
 
 ## Source
 
-- [examples/docs/stage18_workflows/main.go](https://github.com/looprig/workflows/blob/main/examples/docs/stage18_workflows/main.go)
+- [examples/docs/stage18_workflows/main.go](https://github.com/looprig/workflows/blob/v0.1.2/examples/docs/stage18_workflows/main.go)
 
 ## Proof
 
-- [examples/docs/stage18_workflows/main_test.go](https://github.com/looprig/workflows/blob/main/examples/docs/stage18_workflows/main_test.go)
+- [examples/docs/stage18_workflows/main_test.go](https://github.com/looprig/workflows/blob/v0.1.2/examples/docs/stage18_workflows/main_test.go)

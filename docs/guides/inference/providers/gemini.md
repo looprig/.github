@@ -110,13 +110,13 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/errors.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gemini/client.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gemini/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gemini/errors.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/client_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/counter_test.go)
-- [export_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/export_test.go)
-- [usage_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/gemini/usage_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gemini/client_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gemini/counter_test.go)
+- [export_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gemini/export_test.go)
+- [usage_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gemini/usage_test.go)

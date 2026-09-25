@@ -92,8 +92,11 @@ sequenceDiagram
 Shutdown stops Hustles, loops, process resources, checkpoint activity, and the
 hub before releasing ownership. It releases the exclusive root lease exactly
 once, then the session journal lease. Each release gets a fresh bounded cleanup
-context; a release failure is logged and the backend TTL remains the backstop.
-Repeated shutdown calls join the same teardown result.
+context. A release failure is logged, and because no pinned storage backend has
+a lease TTL, the lease stays held until the process exits. Repeated shutdown
+calls join the same teardown result. The nonterminal residency release
+(`session.Releaser`) and the crash-equivalent `session.ResidencyAbandoner` run
+the same teardown and release the leases in the same order.
 
 The source is [`pkg/rig/workspace.go`](https://github.com/looprig/harness/blob/main/pkg/rig/workspace.go), [`internal/sessionruntime/lifecycle.go`](https://github.com/looprig/harness/blob/main/internal/sessionruntime/lifecycle.go), and [`internal/sessionruntime/session.go`](https://github.com/looprig/harness/blob/main/internal/sessionruntime/session.go). Lease-loss behavior is proved by [`internal/sessionruntime/workspace_fault_test.go`](https://github.com/looprig/harness/blob/main/internal/sessionruntime/workspace_fault_test.go); teardown ordering is covered by [`internal/sessionruntime/lifecycle_test.go`](https://github.com/looprig/harness/blob/main/internal/sessionruntime/lifecycle_test.go).
 

@@ -4,7 +4,7 @@ title: Flow
 description: Build a graph once, compile it into an immutable runner, and resume from append-only checkpoints.
 audience: developer
 section: modules
-order: 9
+order: 13
 publication: released
 proofs:
   repository: release-github-com-looprig-flow
@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/flow` |
-| Version | `v0.4.0` |
+| Version | `v0.4.3` |
 | GitHub | [looprig/flow](https://github.com/looprig/flow) |
 
 ## Description

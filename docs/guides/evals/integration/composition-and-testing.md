@@ -171,20 +171,20 @@ credential-gated smoke test with its own timeout and provider budget.
 ## Source
 
 The inference adapter is in
-[target/inference/target.go](https://github.com/looprig/eval/blob/main/target/inference/target.go)
-and [target/inference/project.go](https://github.com/looprig/eval/blob/main/target/inference/project.go).
+[target/inference/target.go](https://github.com/looprig/eval/blob/v0.2.2/target/inference/target.go)
+and [target/inference/project.go](https://github.com/looprig/eval/blob/v0.2.2/target/inference/project.go).
 The target boundary is declared in
-[target.go](https://github.com/looprig/eval/blob/main/target.go), and test
-presentation is in [evaltest/run.go](https://github.com/looprig/eval/blob/main/evaltest/run.go).
+[target.go](https://github.com/looprig/eval/blob/v0.2.2/target.go), and test
+presentation is in [evaltest/run.go](https://github.com/looprig/eval/blob/v0.2.2/evaltest/run.go).
 
 ## Proof
 
 Deterministic target projection and identity behavior are covered by
-[target/inference/target_test.go](https://github.com/looprig/eval/blob/main/target/inference/target_test.go)
-and [target/inference/conform_test.go](https://github.com/looprig/eval/blob/main/target/inference/conform_test.go).
+[target/inference/target_test.go](https://github.com/looprig/eval/blob/v0.2.2/target/inference/target_test.go)
+and [target/inference/conform_test.go](https://github.com/looprig/eval/blob/v0.2.2/target/inference/conform_test.go).
 The live seam and credential gate are explicit in
-[target/inference/target_integration_test.go](https://github.com/looprig/eval/blob/main/target/inference/target_integration_test.go).
+[target/inference/target_integration_test.go](https://github.com/looprig/eval/blob/v0.2.2/target/inference/target_integration_test.go).
 The deterministic exact fixture is
-[examples/exact/example_test.go](https://github.com/looprig/eval/blob/main/examples/exact/example_test.go),
+[examples/exact/example_test.go](https://github.com/looprig/eval/blob/v0.2.2/examples/exact/example_test.go),
 and runner concurrency proof is in
-[run_race_test.go](https://github.com/looprig/eval/blob/main/run_race_test.go).
+[run_race_test.go](https://github.com/looprig/eval/blob/v0.2.2/run_race_test.go).

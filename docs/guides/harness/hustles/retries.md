@@ -16,7 +16,7 @@ proofs:
 
 # Retries
 
-Retries are an immutable policy on a Hustle definition. They are distinct from [Inference client retries](/docs/guides/inference/retries): Hustle retries restart classified background work, while transport retries repeat eligible model-provider operations. The default
+Retries are an immutable policy on a Hustle definition. They are distinct from [Inference client retries](/docs/guides/inference/retries): Hustle retries restart classified evidence-backed work, while transport retries repeat eligible model-provider operations. The default
 `RetryPolicyNone` performs one attempt. `RetryPolicyClassifiedOnce` allows one
 restart only for the closed evidence-backed classifications accepted by the
 runtime.

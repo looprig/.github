@@ -51,6 +51,8 @@ The actor decides against its own queue and lifecycle state, so there is no sess
 
 `RejectUnspecified` is the zero sentinel and is not produced by the runtime. A successful method return means only that the command was handed to the loop. A non-nil method error means no usable correlation ID is returned: the UUID is zero for context cancellation, an exited loop, an unknown target, session fault, or ID generation failure.
 
+Input that a Host applies as a runtime command (`runtimecommand.Applier`) is admitted differently when the loop declares `SupportsRuntimeAdmission`, as the native loop does. The loop decides on its own state and, if it takes the input, calls `command.Admission.Commit` to record the durable `applied` disposition before the input is queued or started. An input it declines publishes no `TurnRejected`; the disposition is recorded `refused` instead. On restore, an `applied` input with no durable event caused by it is replayed under its original runtime command ID, and it runs at most once.
+
 ## Submit to a selected loop
 
 `Submit` samples the active loop once. `SubmitToLoop` does not follow later active-loop changes; it targets the UUID passed by the caller. Both public methods stamp `identity.AgencyUser` onto the command, so the resulting `TurnStarted`, `TurnFoldedInto`, or `InputCancelled` carries that agency in `Header.Cause.Agency`.

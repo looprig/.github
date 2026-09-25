@@ -79,10 +79,10 @@ Linux Rung 2's native network restriction is a TCP-port allowlist. It cannot cla
 
 ## Source
 
-- [Route and target types](https://github.com/looprig/sandbox/blob/main/pkg/network/route.go)
-- [Authenticated proxy](https://github.com/looprig/sandbox/blob/main/pkg/network/proxy.go)
-- [Public route facade](https://github.com/looprig/sandbox/blob/main/sandbox.go)
+- [Route and target types](https://github.com/looprig/sandbox/blob/v0.9.1/pkg/network/route.go)
+- [Authenticated proxy](https://github.com/looprig/sandbox/blob/v0.9.1/pkg/network/proxy.go)
+- [Public route facade](https://github.com/looprig/sandbox/blob/v0.9.1/sandbox.go)
 
 ## Proof
 
-- [Proxy authorization and denial tests](https://github.com/looprig/sandbox/blob/main/pkg/network/proxy_test.go)
+- [Proxy authorization and denial tests](https://github.com/looprig/sandbox/blob/v0.9.1/pkg/network/proxy_test.go)

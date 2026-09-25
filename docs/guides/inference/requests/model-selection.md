@@ -41,7 +41,7 @@ Use `request.Model.Key()` when caching or attributing results. `ModelKey` contai
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go), [`inference/model/model.go`](https://github.com/looprig/inference/blob/main/model/model.go)
-- Tests: [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/main/model/model_test.go), [`inference/model/modelkey_test.go`](https://github.com/looprig/inference/blob/main/model/modelkey_test.go)
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go), [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.13.0/model/model.go)
+- Tests: [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/v0.13.0/model/model_test.go), [`inference/model/modelkey_test.go`](https://github.com/looprig/inference/blob/v0.13.0/model/modelkey_test.go)
 
 Related: [Model](/docs/guides/inference/models/model), [Model identity](/docs/guides/inference/models/identity).

@@ -62,7 +62,7 @@ stable := descriptor.Key()
 
 ## Proof
 
-- Source: [`inference/model/model.go`](https://github.com/looprig/inference/blob/main/model/model.go)
-- Tests: [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/main/model/model_test.go) covers field validation, options, cloning, and non-aliasing.
+- Source: [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.13.0/model/model.go)
+- Tests: [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/v0.13.0/model/model_test.go) covers field validation, options, cloning, and non-aliasing.
 
 Related: [Custom models](/docs/guides/inference/models/custom-models), [Sampling](/docs/guides/inference/models/sampling).

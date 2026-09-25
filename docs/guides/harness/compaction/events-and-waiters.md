@@ -37,6 +37,7 @@ type CompactionCommitted struct {
 	Reason           CompactionReason
 	Basis            ContextBasis
 	Summary          *content.UserMessage
+	Retained         content.AgenticMessages
 	PostContext      ContextMeasurement
 	Duration         time.Duration
 }
@@ -54,7 +55,8 @@ type CompactionRejected struct {
 The concrete structs also carry the stamped `event.Header`. Started is
 ephemeral and loop-scoped. Committed and Rejected are enduring and
 loop-scoped. All three are public. `CompactionCommitted` validates a nonempty
-one-user-text summary and post-context measurement; `CompactionRejected`
+one-user-text summary, the kept `Retained` suffix that follows it, and the
+post-context measurement; `CompactionRejected`
 validates a closed `CompactRejectReason`.
 
 Proof: [compaction event declarations](https://github.com/looprig/harness/blob/main/pkg/event/compaction.go) and [event validation tests](https://github.com/looprig/harness/blob/main/pkg/event/compaction_test.go).
@@ -95,13 +97,15 @@ represents machine pressure. `CompactRejectReason` includes
 `CompactRejectProgressPublication`, `CompactRejectUnavailable`,
 `CompactRejectExecutionFailed`, `CompactRejectInvalidSummary`,
 `CompactRejectContextCountFailed`, `CompactRejectSummaryTooLarge`,
-`CompactRejectInternal`, and `CompactRejectContextLimitUnknown`.
+`CompactRejectInternal`, `CompactRejectContextLimitUnknown`, and
+`CompactRejectRetainedTailTooLarge`.
 
 Proof: [reason constants](https://github.com/looprig/harness/blob/main/pkg/event/compaction.go) and [reason validation](https://github.com/looprig/harness/blob/main/pkg/event/compaction_test.go).
 
 ## Publication order
 
-The finalizer validates and appends the canonical terminal first, then appends
+`CompactionStarted` is published live and never persisted. The finalizer
+validates and appends the canonical terminal first, then appends
 each deterministic waiter reply. Retrying finalization for the same AttemptID
 returns the first terminal identity. A journal failure is a typed
 `CompactionFinalizationError`, not a fabricated rejection event.
@@ -110,8 +114,9 @@ returns the first terminal identity. A journal failure is a typed
 %%{init: {"theme":"dark"}}%%
 sequenceDiagram
     participant C as compaction control
+    participant E as live event stream
     participant J as journal
-    C->>J: CompactionStarted
+    C->>E: CompactionStarted (not persisted)
     C->>J: CompactionCommitted or CompactionRejected
     C->>J: one waiter reply per command
 ```

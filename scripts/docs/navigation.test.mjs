@@ -28,6 +28,7 @@ const tools = [
   "built-in-tools/task",
   "built-in-tools/websearch",
   "built-in-tools/writefile",
+  "built-in-tools/readtoolresult",
 ].map((page) => `guides/tools/${page}.md`);
 
 const workflows = [
@@ -115,6 +116,7 @@ const webUi = [
   "embedding/static-bundle",
   "embedding/go-webui",
   "embedding/app-integration",
+  "embedding/wui",
   "sessions/index",
   "sessions/binding",
   "sessions/reconnect",

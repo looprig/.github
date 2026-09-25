@@ -4,7 +4,7 @@ title: Reconnect and exact joins
 description: Subscribe before paging durable history, filter by the journal cursor, and reconnect without losing or duplicating enduring events.
 audience: developer
 section: guides
-order: 17
+order: 18
 publication: released
 proofs:
   exact-join-algorithm: [release-github-com-looprig-client]
@@ -42,7 +42,7 @@ The framework-neutral `SessionClient` opts into `autoReconnect: true`, and `Live
 
 ## Source
 
-The subscribe-buffer-catch-up algorithm, tip filter, cursor resume, abort checks, and reconnect options are implemented in [`sdk/core/src/join.ts`](https://github.com/looprig/client/blob/main/sdk/core/src/join.ts). Race, clean-end, error, and reconnect cases are covered in [`sdk/core/test/join.test.ts`](https://github.com/looprig/client/blob/main/sdk/core/test/join.test.ts).
+The subscribe-buffer-catch-up algorithm, tip filter, cursor resume, abort checks, and reconnect options are implemented in [`sdk/core/src/join.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/src/join.ts). Race, clean-end, error, and reconnect cases are covered in [`sdk/core/test/join.test.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/test/join.test.ts).
 
 ## Proof
 

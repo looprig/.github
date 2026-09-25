@@ -4,7 +4,7 @@ title: Compaction Policy
 description: Describe compaction policy attached to a loop definition.
 audience: developer
 section: guides
-order: 20
+order: 21
 publication: released
 proofs:
   start: [release-github-com-looprig-harness]

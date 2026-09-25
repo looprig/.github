@@ -46,7 +46,7 @@ This guard covers the shell as well as API requests. That keeps future HTML addi
 
 ## Source
 
-The top-level route composition and whole-surface guard are implemented in [`internal/compose/handler.go`](https://github.com/looprig/client/blob/main/internal/compose/handler.go). Routing and rebound-host behavior are covered in [`internal/compose/handler_test.go`](https://github.com/looprig/client/blob/main/internal/compose/handler_test.go).
+The top-level route composition and whole-surface guard are implemented in [`internal/compose/handler.go`](https://github.com/looprig/client/blob/v0.4.0/internal/compose/handler.go). Routing and rebound-host behavior are covered in [`internal/compose/handler_test.go`](https://github.com/looprig/client/blob/v0.4.0/internal/compose/handler_test.go).
 
 ## Proof
 

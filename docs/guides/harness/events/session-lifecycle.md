@@ -53,6 +53,14 @@ type SessionStopped struct {
 	Header
 }
 
+type SessionResidencyReleased struct {
+	enduring
+	sessionScoped
+	Header
+	CheckpointSeq uint64 `json:"checkpoint_seq,omitempty"` // 0: no workspace anchor
+	LeaseEpoch    uint64 `json:"lease_epoch,omitempty"`    // 0: no epoch-reporting lease
+}
+
 type RestoreStarted struct {
 	enduring
 	sessionScoped
@@ -92,6 +100,7 @@ during the compatibility window when the runtime has both forms.
 | `WorkspaceCheckpointed`, `WorkspaceRestored` | Workspace pointer changes become durable | No | Public |
 | `ActiveLoopChanged` | The session's selected loop changes | No | Public |
 | `SessionStopped` | `SessionController.Shutdown` commits the stop transition | No | Public |
+| `SessionResidencyReleased` | `session.Releaser.ReleaseResidency` gave up this process's runtime; the session stays restorable | No | Public |
 
 `SessionActive` and `SessionIdle` are derived by the hub, not by a loop
 publisher. `SessionActive` is durable after the first activity insertion.
@@ -137,6 +146,19 @@ second durable record is absorbed by event identity deduplication when needed.
 to stop reading and call `Close`; a hub-forced stream loss remains observable
 through `Subscription.Err`.
 
+A Host that moves a session to another process releases it instead of stopping
+it. `ReleaseResidency`, discovered by asserting `session.Releaser` on the
+controller, refuses with no effect unless the session is healthy and idle. It
+then drains every loop, commits a workspace checkpoint, and appends
+`SessionResidencyReleased` with that checkpoint's sequence and the lease
+epoch it held. It appends no `SessionStopped`: the release is nonterminal, and a
+fold must switch on the concrete type rather than treat it as an end. Open
+subscriptions then close with `Err() == hub.ErrResidencyReleased`. The
+crash-equivalent `session.ResidencyAbandoner.AbandonResidency` appends nothing
+and closes subscriptions with the same cause. In both paths, and in `Shutdown`,
+the `session.Liveness.Done()` channel closes when teardown starts, not when it
+finishes.
+
 ## Observe a session from the public contract
 
 ```go
@@ -168,6 +190,8 @@ func watchLifecycle(ctx context.Context, live session.Session) error {
 				return fmt.Errorf("restore failed: %w", e.Err)
 			case event.SessionStopped:
 				return nil // the event is terminal for the session, not the channel
+			case event.SessionResidencyReleased:
+				return nil // cold but restorable; this process no longer hosts it
 			}
 		}
 	}

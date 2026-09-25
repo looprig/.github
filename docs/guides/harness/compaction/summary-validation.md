@@ -54,7 +54,8 @@ Proof: [compaction input/output contracts](https://github.com/looprig/harness/bl
 ## Transcript validation
 
 Supported messages are User, AI, System, and ToolResult with matching roles.
-Supported leaf blocks are Text, Image, Audio, Document, Thinking, and ToolUse;
+Supported leaf blocks are Text, Refusal, Image, Audio, Document, Thinking, and
+ToolUse;
 ToolResult content may nest to a maximum depth of 128. Typed nil messages or
 blocks, unsupported block types, malformed JSON, and an empty transcript are
 rejected before adapter serialization.

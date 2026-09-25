@@ -50,6 +50,8 @@ The release occurs before notification so a slow notifier cannot hold a workspac
 
 The in-memory `Buffer` is a rolling window for recent polls. The disk `Spool` is the durable bounded retention window and the source of truth for completed output and cursor recovery. Both use raw byte cursors in one combined append order for stdout and stderr. When a window drops old bytes, a read whose cursor is before `RetainedFrom` returns the retained beginning and marks `gap: true`. A cursor beyond `TotalBytes` returns `cursor_ahead`.
 
+`Supervisor.CopyOutput(ctx, owner, handle, w)` streams a process's retained combined output to a writer in chunks of at most 32 KiB, from the earliest retained byte up to the total observed when the call began. It applies the same owner check as `ProcessOutput`, so a foreign handle is `not_found`. The returned `OutputCopy` reports `RetainedFrom`, `TotalBytes`, and `Copied`, which lets a caller say how many leading bytes the spool had already dropped. It is meant for a terminal process; on a live one it fails with `cursor_gap` if retention overtakes the copy. Supervised Bash uses it to stream a finished command's full output into Harness's result capture.
+
 Safe-text rendering normalizes invalid UTF-8 and terminal control sequences, records whether normalization occurred, detects binary-looking data, and attaches an opaque artifact descriptor. Base64 rendering returns the same raw bytes without normalization. Neither result contains a spool path or manifest path.
 
 ## Shutdown
@@ -82,6 +84,7 @@ See [Process Supervision](/docs/guides/tools/processes) for composition and [Pro
 - [Lifecycle state and errors](https://github.com/looprig/tools/blob/main/process/state.go)
 - [Terminalization and stream drain](https://github.com/looprig/tools/blob/main/process/entry.go)
 - [Manifest persistence](https://github.com/looprig/tools/blob/main/process/manifest.go)
+- [Retained output copy](https://github.com/looprig/tools/blob/main/process/copy_output.go)
 - [Restore reconciliation](https://github.com/looprig/tools/blob/main/process/restore.go)
 
 ## Proof
@@ -89,4 +92,5 @@ See [Process Supervision](/docs/guides/tools/processes) for composition and [Pro
 - [State transition tests](https://github.com/looprig/tools/blob/main/process/state_test.go)
 - [Manifest monotonicity tests](https://github.com/looprig/tools/blob/main/process/manifest_test.go)
 - [Restore tests](https://github.com/looprig/tools/blob/main/process/restore_test.go)
+- [Output copy tests](https://github.com/looprig/tools/blob/main/process/copy_output_test.go)
 - [Shutdown and restore integration](https://github.com/looprig/tools/blob/main/process/shutdown_restore_test.go)

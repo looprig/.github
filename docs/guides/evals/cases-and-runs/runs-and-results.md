@@ -136,21 +136,21 @@ serious finding on a pass, and measurements on `unverified`, `error`, or
 ## Source
 
 The runner and report contracts are in
-[run.go](https://github.com/looprig/eval/blob/main/run.go),
-[suite.go](https://github.com/looprig/eval/blob/main/suite.go), and
-[report.go](https://github.com/looprig/eval/blob/main/report.go). The report
+[run.go](https://github.com/looprig/eval/blob/v0.2.2/run.go),
+[suite.go](https://github.com/looprig/eval/blob/v0.2.2/suite.go), and
+[report.go](https://github.com/looprig/eval/blob/v0.2.2/report.go). The report
 assertions are exposed by
-[evaltest/assert.go](https://github.com/looprig/eval/blob/main/evaltest/assert.go).
+[evaltest/assert.go](https://github.com/looprig/eval/blob/v0.2.2/evaltest/assert.go).
 
 ## Proof
 
 Execution, cancellation, timeouts, and fixed-slot ordering are implemented in
-[run.go](https://github.com/looprig/eval/blob/main/run.go) and covered by
-[run_test.go](https://github.com/looprig/eval/blob/main/run_test.go) and
-[run_race_test.go](https://github.com/looprig/eval/blob/main/run_race_test.go).
+[run.go](https://github.com/looprig/eval/blob/v0.2.2/run.go) and covered by
+[run_test.go](https://github.com/looprig/eval/blob/v0.2.2/run_test.go) and
+[run_race_test.go](https://github.com/looprig/eval/blob/v0.2.2/run_race_test.go).
 Report invariants live in
-[report.go](https://github.com/looprig/eval/blob/main/report.go) and
-[report_test.go](https://github.com/looprig/eval/blob/main/report_test.go);
+[report.go](https://github.com/looprig/eval/blob/v0.2.2/report.go) and
+[report_test.go](https://github.com/looprig/eval/blob/v0.2.2/report_test.go);
 status construction and consistency live in
-[assessment.go](https://github.com/looprig/eval/blob/main/assessment.go) and
-[assessment_test.go](https://github.com/looprig/eval/blob/main/assessment_test.go).
+[assessment.go](https://github.com/looprig/eval/blob/v0.2.2/assessment.go) and
+[assessment_test.go](https://github.com/looprig/eval/blob/v0.2.2/assessment_test.go).

@@ -139,18 +139,18 @@ truth.
 
 ## Source
 
-The public pipeline is declared in [run.go](https://github.com/looprig/eval/blob/main/run.go),
-with case identity in [scenario.go](https://github.com/looprig/eval/blob/main/scenario.go)
+The public pipeline is declared in [run.go](https://github.com/looprig/eval/blob/v0.2.2/run.go),
+with case identity in [scenario.go](https://github.com/looprig/eval/blob/v0.2.2/scenario.go)
 and the exact example in
-[examples/exact/example_test.go](https://github.com/looprig/eval/blob/main/examples/exact/example_test.go).
+[examples/exact/example_test.go](https://github.com/looprig/eval/blob/v0.2.2/examples/exact/example_test.go).
 
 ## Proof
 
 The pipeline and its invariants are implemented in
-[run.go](https://github.com/looprig/eval/blob/main/run.go),
-[scenario.go](https://github.com/looprig/eval/blob/main/scenario.go),
-[observation.go](https://github.com/looprig/eval/blob/main/observation.go),
-[assessment.go](https://github.com/looprig/eval/blob/main/assessment.go), and
-[report.go](https://github.com/looprig/eval/blob/main/report.go). The
+[run.go](https://github.com/looprig/eval/blob/v0.2.2/run.go),
+[scenario.go](https://github.com/looprig/eval/blob/v0.2.2/scenario.go),
+[observation.go](https://github.com/looprig/eval/blob/v0.2.2/observation.go),
+[assessment.go](https://github.com/looprig/eval/blob/v0.2.2/assessment.go), and
+[report.go](https://github.com/looprig/eval/blob/v0.2.2/report.go). The
 deterministic exact gate is exercised by
-[examples/exact/example_test.go](https://github.com/looprig/eval/blob/main/examples/exact/example_test.go).
+[examples/exact/example_test.go](https://github.com/looprig/eval/blob/v0.2.2/examples/exact/example_test.go).

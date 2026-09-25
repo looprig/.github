@@ -52,7 +52,7 @@ For the guarded API and SPA mount, continue to [Application integration](/docs/g
 
 ## Source
 
-The public `FS`, handler, path confinement, asset serving, and index fallback are implemented in [`pkg/webui/webui.go`](https://github.com/looprig/client/blob/main/pkg/webui/webui.go). Traversal, fallback, content type, and real-asset behavior are checked in [`pkg/webui/webui_test.go`](https://github.com/looprig/client/blob/main/pkg/webui/webui_test.go).
+The public `FS`, handler, path confinement, asset serving, and index fallback are implemented in [`pkg/webui/webui.go`](https://github.com/looprig/client/blob/v0.4.0/pkg/webui/webui.go). Traversal, fallback, content type, and real-asset behavior are checked in [`pkg/webui/webui_test.go`](https://github.com/looprig/client/blob/v0.4.0/pkg/webui/webui_test.go).
 
 ## Proof
 

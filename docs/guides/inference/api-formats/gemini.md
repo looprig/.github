@@ -47,9 +47,9 @@ only cache evidence it consumes is the response usage field.
 
 ## Source and proof
 
-- [`geminiapi/types.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/geminiapi/types.go)
-- [`geminiapi/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/geminiapi/encode.go)
-- [`geminiapi/decode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/geminiapi/decode.go)
-- [`route/route.go`](https://github.com/looprig/inference/blob/v0.12.0/route/route.go)
+- [`geminiapi/types.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/geminiapi/types.go)
+- [`geminiapi/encode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/geminiapi/encode.go)
+- [`geminiapi/decode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/geminiapi/decode.go)
+- [`route/route.go`](https://github.com/looprig/inference/blob/v0.13.0/route/route.go)
 
 Run `go test ./codec/geminiapi ./route`.

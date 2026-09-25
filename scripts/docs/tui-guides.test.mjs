@@ -41,16 +41,16 @@ const sourceProof = {
   "getting-started/run": ["runtime/run.go", "runtime/run_test.go", "examples/runtimehost/example_test.go"],
   "runtime/index": ["runtime/run.go", "internal/presentation/screen.go", "runtime/run_test.go"],
   "runtime/events": ["internal/presentation/agent.go", "internal/presentation/restore.go", "internal/presentation/commands.go", "internal/presentation/agent_test.go", "internal/presentation/restore_test.go"],
-  "runtime/commands": ["internal/presentation/agent.go", "internal/presentation/commands.go", "internal/presentation/interaction.go", "internal/presentation/commands_test.go", "internal/presentation/interaction_test.go"],
+  "runtime/commands": ["internal/presentation/agent.go", "internal/presentation/commands.go", "internal/presentation/interaction.go", "internal/presentation/prompt.go", "internal/presentation/diffview.go", "internal/presentation/keypanel.go", "internal/presentation/commands_test.go", "internal/presentation/interaction_test.go", "internal/presentation/diffview_test.go", "internal/presentation/keypanel_test.go"],
   "runtime/restore": ["internal/presentation/restore.go", "internal/presentation/restore_test.go", "sessionadapter/adapter.go", "examples/restore/example_test.go"],
   "runtime/lifecycle": ["internal/presentation/status.go", "internal/presentation/agentholder.go", "internal/presentation/commands.go", "internal/presentation/screen.go", "runtime/run.go", "runtime/run_test.go"],
   "runtime/session-adapter": ["sessionadapter/adapter.go", "sessionadapter/replaying_subscription.go", "sessionadapter/adapter_test.go", "sessionadapter/replaying_subscription_test.go", "examples/sessionadapter/example_test.go"],
   "components/index": ["components/input.go", "components/slashcomplete.go", "components/valuecomplete.go", "components/filecomplete.go", "components/sessioncomplete.go"],
   "components/input": ["components/input.go", "components/input_test.go"],
-  "components/completion": ["components/slashcomplete.go", "components/valuecomplete.go", "components/filecomplete.go", "components/slashcomplete_test.go", "components/valuecomplete_test.go", "components/filecomplete_test.go"],
+  "components/completion": ["components/slashcomplete.go", "components/valuecomplete.go", "components/filecomplete.go", "components/traylist.go", "components/slashcomplete_test.go", "components/valuecomplete_test.go", "components/filecomplete_test.go"],
   "components/sessions": ["components/sessioncomplete.go", "components/sessioncomplete_test.go"],
   "styling/index": ["styles/styles.go", "styles/card.go", "styles/styles_test.go"],
-  "styling/styles": ["styles/styles.go", "styles/card.go", "styles/styles_test.go"],
+  "styling/styles": ["styles/styles.go", "styles/card.go", "styles/selection.go", "styles/styles_test.go", "styles/selection_test.go"],
   "styling/markdown": ["styles/styles.go", "styles/markdown_tables.go", "styles/markdown_tables_test.go"],
   "integration/index": ["api.go", "sessionadapter/adapter.go", "restore/decider.go", "examples/sessionadapter/example_test.go"],
   "integration/harness": ["sessionadapter/adapter.go", "restore/decider.go", "sessionadapter/adapter_test.go", "restore/decider_test.go"],
@@ -172,6 +172,33 @@ test("public component and integration pages cover the source-backed seams", () 
   }
   assert.match(all, /StatusIdle[\s\S]*StatusRunning[\s\S]*StatusInterrupting[\s\S]*StatusResetting/);
   assert.match(all, /```mermaid[\s\S]*sequenceDiagram/);
+});
+
+test("v0.21.1 gate, key, tray, and composer behavior is documented", () => {
+  const commands = pageMarkdown("runtime/commands");
+  for (const phrase of ["?", "key legend", "Approve always for this workspace", "Ctrl+A", "rendered keystroke", "Deny-only", "diff", "never journaled", "Current", "Provider", "searchable"]) {
+    assert.ok(commands.includes(phrase), `commands omits ${phrase}`);
+  }
+  refuteClaim(commands, {
+    all: [/\bctrl\+a\b[^.;!?]{0,60}\b(?:approves|grants)\b/i],
+  }, "a modified accelerator must not be documented as approving");
+  const completion = pageMarkdown("components/completion");
+  for (const phrase of ["NewModelComplete", "Filter", "Provider", "Current", "SelectedRowWithRail"]) {
+    assert.ok(completion.includes(phrase), `completion omits ${phrase}`);
+  }
+  const sessions = pageMarkdown("components/sessions");
+  for (const phrase of ["Filter", "Description", "Current", "ViewWindow"]) {
+    assert.ok(sessions.includes(phrase), `sessions omits ${phrase}`);
+  }
+  const input = pageMarkdown("components/input");
+  for (const phrase of ["[pasted", "DisplayValue", "SetPlaceholder", "ResetPlaceholder"]) {
+    assert.ok(input.includes(phrase), `input omits ${phrase}`);
+  }
+  const all = pages.map(([relative]) => pageMarkdown(relative)).join("\n");
+  for (const removed of ["TraySelectedBg", "ViewWindowBackground("]) {
+    assert.ok(!all.includes(removed), `TUI guides still document removed ${removed}`);
+  }
+  assert.ok(pageMarkdown("styling/styles").includes("SelectedRow"), "styles omits SelectedRow");
 });
 
 test("every TUI page cites the released TUI tag", () => {

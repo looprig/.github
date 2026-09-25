@@ -84,11 +84,14 @@ caller that needs the snapshot guarantee.
 
 ## Drain by correlation
 
-There is no public `WaitIdle` method in `session.SessionController`; the
-public contract is event- and shutdown-based. A consumer that needs one input
-to settle subscribes before submitting, matches `ReplyTo`, and waits for a
-terminal reply. A consumer that needs the entire session stopped calls
-`Shutdown`, which joins every loop.
+`WaitIdle` is not a method on `session.SessionController`. A supervisor that
+needs whole-session quiescence asserts the optional `session.IdleWaiter`
+capability, whose `WaitIdle(ctx)` returns when no work is in flight, or returns
+the terminal reason if the session failed or stopped. A foreign primary loop
+does not reach whole-session idle. A consumer that needs one input to settle
+subscribes before submitting, matches `ReplyTo`, and waits for a terminal
+reply. A consumer that needs the entire session stopped calls `Shutdown`,
+which joins every loop.
 
 ```go
 func interruptAndDrain(ctx context.Context, c session.SessionController) error {

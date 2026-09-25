@@ -11,6 +11,7 @@ proofs:
   session-and-turn: [release-github-com-looprig-harness]
   hustle-and-tool-runs: [release-github-com-looprig-harness]
   durable-failure-boundary: [release-github-com-looprig-harness]
+  runtime-command-errors: [release-github-com-looprig-harness]
   errors-as: [release-github-com-looprig-harness]
   source-and-runnable-proof: [release-github-com-looprig-harness]
 ---
@@ -120,6 +121,29 @@ flowchart TD
     E -- cleanup failure --> J[FinalizerError or CleanupErr child]
 ```
 
+## Runtime command errors {#runtime-command-errors}
+
+A Host that applies admitted commands through `runtimecommand.Applier` (obtained
+from `runtimecommand.Provider`) gets typed refusals from `pkg/runtimecommand`.
+The application prefix is written before the effect, so an error from
+`ApplyRuntimeCommand` does not mean nothing was recorded: re-deliver and read
+`Disposition.Duplicate` instead of assuming a clean retry.
+
+| Type | Meaning | Response |
+| --- | --- | --- |
+| `ValidationError` | `Field` and `Reason` of a malformed admitted record | Fix the record; it cannot apply. |
+| `MappingConflictError` | The public `CommandID` is durable under another runtime ID or kind; a zero `DurableRuntimeID` means the prefix was unreadable | Fail closed; never treat as a duplicate. |
+| `StaleLeaseEpochError` | `Admitted` epoch is not the applier's `Current` epoch | The admission belongs to another lease epoch; do not apply it here. |
+| `LeaseLostError` | The session lease is gone | Nothing may apply under this runtime; a successor restores the session. |
+| `CapabilityUnavailableError` | The session has no durable application-prefix log | Use `Provider.RuntimeCommands` to check first. |
+| `DispositionUnsupportedError` | An attempt-bearing command reached a log that cannot record a disposition; nothing durable was written | The command may be offered to another runtime. |
+| `ClosureNotAuthorizedError` | `CloseAttempt` without a strictly later grant (`Held` false means no live grant) | Close from a successor holding a later lease. |
+| `EnduringEffectError` | The predecessor's effect committed, so the attempt cannot be closed `not_applied` | Settle from the effect, never tombstone it. |
+
+After `AbandonResidency` seals the session, `ApplyRuntimeCommand` and
+`CloseAttempt` are refused with `session.SessionError{Kind: SessionClosing}`
+and write nothing.
+
 ## Inspect primary and cleanup causes {#errors-as}
 
 Use `errors.As` repeatedly. A multi-error wrapper is not a signal to choose
@@ -151,6 +175,9 @@ Session and loop runtime errors are defined in
 and [`pkg/loop/errors.go`](https://github.com/looprig/harness/blob/main/pkg/loop/errors.go).
 Owned-run classifications and multi-error unwrapping are in
 [`internal/hustleruntime/errors.go`](https://github.com/looprig/harness/blob/main/internal/hustleruntime/errors.go).
+Runtime command errors are in
+[`pkg/runtimecommand/command.go`](https://github.com/looprig/harness/blob/main/pkg/runtimecommand/command.go)
+and [`pkg/runtimecommand/disposition.go`](https://github.com/looprig/harness/blob/main/pkg/runtimecommand/disposition.go).
 Journal and replay errors are in
 [`pkg/journal/errors.go`](https://github.com/looprig/harness/blob/main/pkg/journal/errors.go)
 and [`pkg/sessionstore/replay.go`](https://github.com/looprig/harness/blob/main/pkg/sessionstore/replay.go).

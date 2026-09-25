@@ -41,8 +41,8 @@ func enforcementFacts(executor *sandbox.Executor) (uint8, sandbox.Guarantees, sa
 
 ## Source
 
-- [Public enforcement facade](https://github.com/looprig/sandbox/blob/main/sandbox.go)
+- [Public enforcement facade](https://github.com/looprig/sandbox/blob/v0.9.1/sandbox.go)
 
 ## Proof
 
-- [Policy and enforcement fixture](https://github.com/looprig/sandbox/blob/main/examples/policy-enforcement/example_test.go)
+- [Policy and enforcement fixture](https://github.com/looprig/sandbox/blob/v0.9.1/examples/policy-enforcement/example_test.go)

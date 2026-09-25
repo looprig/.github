@@ -55,7 +55,7 @@ if err != nil {
 
 ## Gap repair
 
-When a live subscription closes with a Harness hub loss, the adapter connects a replacement subscription before opening the journal gap. It replays from the last delivered sequence, drops overlapping deliveries, forwards the missing range in order, and then forwards newer live events. If the journal cannot repair the range, the subscription exposes the typed error rather than silently skipping history.
+When a live subscription closes with a Harness hub loss, the adapter connects a replacement subscription before opening the journal gap. It replays from the last delivered sequence, drops overlapping deliveries, forwards the missing range in order, and then forwards newer live events. If the journal cannot repair the range, the subscription exposes the typed error rather than silently skipping history. One overlap is forwarded on purpose: a live `PermissionRequested` that carries a mutation preview for a gate that is still open. The durable copy of that event has no preview, so the screen merges the first non-empty live preview into the pending card and never lets a later event replace it.
 
 This ordering is important for a terminal UI. The user should see a durable event once, in journal order, even when a bounded in-memory hub buffer overflowed while the terminal was rendering.
 
@@ -72,4 +72,4 @@ The store owns its file or remote persistence and the session controller owns th
 
 - [Adapter replay tests](https://github.com/looprig/tui/blob/main/sessionadapter/adapter_test.go)
 - [Gap-repair tests](https://github.com/looprig/tui/blob/main/sessionadapter/replaying_subscription_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)

@@ -132,8 +132,8 @@ The code owns the `ExecutorSet`, not the caller-owned scratch parent. `Close` re
 
 ## Source
 
-- [Public sandbox facade](https://github.com/looprig/sandbox/blob/main/sandbox.go)
+- [Public sandbox facade](https://github.com/looprig/sandbox/blob/v0.9.1/sandbox.go)
 
 ## Proof
 
-- [Executable policy and enforcement example](https://github.com/looprig/sandbox/blob/main/examples/policy-enforcement/example_test.go)
+- [Executable policy and enforcement example](https://github.com/looprig/sandbox/blob/v0.9.1/examples/policy-enforcement/example_test.go)

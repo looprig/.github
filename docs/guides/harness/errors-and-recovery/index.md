@@ -80,8 +80,14 @@ but it still releases the acquired lease.
 
 Live runtime failures can also be durable. A session may enter the
 `SessionFaulted` state after a persistence or workspace-integrity failure, and
-shutdown still owns cleanup and lease release. Treat the session ID and journal
-as the source of truth before deciding to create a replacement session.
+shutdown still owns cleanup and lease release. A persistence fault is permanent
+for that process: observe it with the optional
+`session.PersistenceFaultReporter` capability, and to keep the session
+restorable release it with `session.ResidencyAbandoner` rather than `Shutdown`,
+which would append `SessionStopped` and end it. See
+[session shutdown](/docs/guides/harness/session-runtime/shutdown). Treat the
+session ID and journal as the source of truth before deciding to create a
+replacement session.
 
 ```mermaid
 %%{init: {"theme":"dark"}}%%

@@ -58,7 +58,7 @@ Both transports share one implementation of URL construction, JSON decoding, run
 
 ## Source
 
-The public client composition and its `createBFFClient` default are implemented in [`sdk/core/src/client.ts`](https://github.com/looprig/client/blob/main/sdk/core/src/client.ts). The transport interface, shared HTTP implementation, `BFFTransport`, and `ServeTransport` are in [`sdk/core/src/transport.ts`](https://github.com/looprig/client/blob/main/sdk/core/src/transport.ts).
+The public client composition and its `createBFFClient` default are implemented in [`sdk/core/src/client.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/src/client.ts). The transport interface, shared HTTP implementation, `BFFTransport`, and `ServeTransport` are in [`sdk/core/src/transport.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/src/transport.ts).
 
 ## Proof
 

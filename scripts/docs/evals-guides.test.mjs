@@ -119,7 +119,7 @@ test("Evals guides link every proof claim to existing eval or Pluto source", () 
     const markdown = readPage(relative);
     const owner = relative === "integration/pluto" ? "pluto" : "eval";
     for (const file of files) {
-      const sourceUrl = `https://github.com/looprig/${owner}/blob/main/${file}`;
+      const sourceUrl = `https://github.com/looprig/${owner}/blob/${{ eval: "v0.2.2", pluto: "v0.2.2" }[owner]}/${file}`;
       assert.match(markdown, new RegExp(sourceUrl.replaceAll("/", "\\/")), `${relative} does not link ${file}`);
       const sourceRoot = path.join(workspaceRoot, owner);
       assert.equal(fs.existsSync(path.join(sourceRoot, file)), true, `missing source ${owner}/${file}`);

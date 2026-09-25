@@ -63,9 +63,9 @@ _ = body // JSON bytes are consumed once by the transport.
 
 ## Source and proof
 
-- [`codec/requestmode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/requestmode.go)
-- [`inference/client.go`](https://github.com/looprig/inference/blob/v0.12.0/client.go)
-- [`openaiapi/encode.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/encode.go)
-- [`openaiapi/encode_test.go`](https://github.com/looprig/inference/blob/v0.12.0/codec/openaiapi/encode_test.go)
+- [`codec/requestmode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/requestmode.go)
+- [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go)
+- [`openaiapi/encode.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/openaiapi/encode.go)
+- [`openaiapi/encode_test.go`](https://github.com/looprig/inference/blob/v0.13.0/codec/openaiapi/encode_test.go)
 
 Run `go test ./codec/openaiapi ./codec/openairesponses ./codec/anthropicapi ./codec/geminiapi ./codec/bedrockconverse`.

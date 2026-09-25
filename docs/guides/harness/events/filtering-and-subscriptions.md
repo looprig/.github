@@ -115,7 +115,11 @@ recovery point. An Enduring overflow is different: dropping it would hide a
 state transition, so the hub closes that subscriber with
 `*hub.SubscriptionLossError{DroppedClass: event.Enduring}`. The subscriber must
 resubscribe and use the durable event replay surface to recover the missing
-history. The error's optional `Cause` is available through `errors.Unwrap`.
+history. The error's optional `Cause` is available through `errors.Unwrap`. A
+nil cause means egress overflow. On the committed public stream described in
+the [events overview](/docs/guides/harness/events), a cause of
+`hub.ErrCommittedBodyMissing` or `hub.ErrCommitEventMismatch` is a broken
+invariant rather than congestion, so check `errors.Is` before resubscribing.
 
 ## A consumer with class-aware interest
 
@@ -171,9 +175,12 @@ at an inclusive sequence; replay itself does not support a live `Follow` mode.
 `SessionStopped` is an Enduring session event. It is delivered in order and
 does not close subscriptions. A subscriber can observe it, finish its own
 drain, and call `Close`. A stream can close before `SessionStopped` if the hub
-loses the subscription to Enduring overflow or if the session construction is
-aborted. After `Events()` closes, always inspect `Err` before deciding whether
-the stream ended intentionally.
+loses the subscription to Enduring overflow, if the session construction is
+aborted, or if this process gives up the session with `ReleaseResidency` or
+`AbandonResidency`. The last case closes with `Err() == hub.ErrResidencyReleased`:
+the session is not stopped and can be restored elsewhere. After `Events()`
+closes, always inspect `Err` before deciding whether the stream ended
+intentionally.
 
 Internal values never enter this path. `HustleStarted`, `HustleCompleted`,
 `HustleFailed`, `PermissionReviewStarted`, and `PermissionReviewCompleted` are

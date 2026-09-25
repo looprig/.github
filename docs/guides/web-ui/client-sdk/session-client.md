@@ -69,7 +69,7 @@ For the lower-level request details, see [Commands and gates](/docs/guides/web-u
 
 ## Source
 
-The complete facade, listener contract, cleanup path, and action methods are in [`sdk/core/examples/session-client.ts`](https://github.com/looprig/client/blob/main/sdk/core/examples/session-client.ts). Its focused behavior tests are in [`sdk/core/examples/session-client.test.ts`](https://github.com/looprig/client/blob/main/sdk/core/examples/session-client.test.ts).
+The complete facade, listener contract, cleanup path, and action methods are in [`sdk/core/examples/session-client.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/examples/session-client.ts). Its focused behavior tests are in [`sdk/core/examples/session-client.test.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/examples/session-client.test.ts).
 
 ## Proof
 

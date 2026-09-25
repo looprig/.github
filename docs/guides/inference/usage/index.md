@@ -44,8 +44,8 @@ provider report.
 
 ## Source and proof
 
-- [`usage/usage.go`](https://github.com/looprig/inference/blob/v0.12.0/usage/usage.go)
-- [`core/content/usage.go`](https://github.com/looprig/core/blob/v0.6.0/content/usage.go)
+- [`usage/usage.go`](https://github.com/looprig/inference/blob/v0.13.0/usage/usage.go)
+- [`core/content/usage.go`](https://github.com/looprig/core/blob/v0.11.0/content/usage.go)
 - [`responses/usage.md`](../responses/usage.md)
 
 Run `go test ./usage ./stream ./codec/...`.

@@ -131,8 +131,8 @@ The repository's stage example demonstrates the full lifecycle: start into an in
 
 ## Source
 
-- [typed_definition.go](https://github.com/looprig/workflows/blob/main/typed_definition.go)
+- [typed_definition.go](https://github.com/looprig/workflows/blob/v0.1.2/typed_definition.go)
 
 ## Proof
 
-- [examples/docs/stage18_workflows/main_test.go](https://github.com/looprig/workflows/blob/main/examples/docs/stage18_workflows/main_test.go)
+- [examples/docs/stage18_workflows/main_test.go](https://github.com/looprig/workflows/blob/v0.1.2/examples/docs/stage18_workflows/main_test.go)

@@ -147,8 +147,8 @@ This is runnable with the published `flow` and `workflows` modules. A caller sho
 
 ## Source
 
-- [doc.go](https://github.com/looprig/workflows/blob/main/doc.go)
+- [doc.go](https://github.com/looprig/workflows/blob/v0.1.2/doc.go)
 
 ## Proof
 
-- [examples/docs_contract_test.go](https://github.com/looprig/workflows/blob/main/examples/docs_contract_test.go)
+- [examples/docs_contract_test.go](https://github.com/looprig/workflows/blob/v0.1.2/examples/docs_contract_test.go)

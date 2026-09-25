@@ -8,6 +8,7 @@ order: 21
 publication: released
 proofs:
   contract: [release-github-com-looprig-tools]
+  gate-preview: [release-github-com-looprig-tools]
   source: [release-github-com-looprig-tools]
   proof: [release-github-com-looprig-tools]
 ---
@@ -41,12 +42,19 @@ prepared := loop.WithPreparedCall(ctx, tool.PreparedCall{
 result, err := writer.InvokableRun(prepared, `{}`)
 ```
 
+## Gate preview
+
+The prepared artifact implements `tool.MutationPreviewer`, so a permission gate can show the pending write as a create or an overwrite. An overwrite reads the current file and renders a unified diff against the new content with three lines of context, capped at 16 KiB. A new file is rendered as a create. The preview declines, leaving the call unchanged, when the resolution changed, the target is irregular or not UTF-8, or either side exceeds 1 MiB.
+
+For a host write that was previewed, the commit compares the target's presence and content hash with what the reviewer saw. A drifted target fails with `file changed since preview; the approved diff no longer applies` instead of writing unreviewed bytes. Contained writes keep their observation-map check. See [Review what a mutation will change](/docs/guides/tools/safety#review-what-a-mutation-will-change).
+
 See [ReadFile](/docs/guides/tools/built-in-tools/readfile) for observations, [EditFile](/docs/guides/tools/built-in-tools/editfile) for exact replacements, and [Safety, Permissions, and Gates](/docs/guides/tools/safety) for permits and gate decisions.
 
 ## Source
 
 - [WriteFile public wrapper](https://github.com/looprig/tools/blob/main/writefile/writefile.go)
 - [WriteFile implementation](https://github.com/looprig/tools/blob/main/internal/filemutation/writefile.go)
+- [Unified diff rendering](https://github.com/looprig/tools/blob/main/internal/filemutation/textdiff.go)
 
 ## Proof
 

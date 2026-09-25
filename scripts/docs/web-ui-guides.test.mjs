@@ -7,6 +7,9 @@ import { resolveWorkspaceRoot } from "./package-surface.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const clientRoot = path.join(resolveWorkspaceRoot(root), "client");
+const wuiRoot = path.join(resolveWorkspaceRoot(root), "wui");
+const clientTag = "v0.4.0";
+const wuiTag = "v0.3.0";
 
 const pages = [
   ["guides/web-ui/index", "Web UI"],
@@ -24,6 +27,7 @@ const pages = [
   ["guides/web-ui/embedding/static-bundle", "Static bundle"],
   ["guides/web-ui/embedding/go-webui", "Go webui package"],
   ["guides/web-ui/embedding/app-integration", "Application integration"],
+  ["guides/web-ui/embedding/wui", "Prebuilt wui bundle"],
   ["guides/web-ui/sessions/index", "Session lifecycle"],
   ["guides/web-ui/sessions/binding", "Binding a session"],
   ["guides/web-ui/sessions/reconnect", "Reconnect and exact joins"],
@@ -50,6 +54,10 @@ const sourceProof = {
   "guides/web-ui/sessions/binding": ["sdk/core/examples/session-client.ts", "sdk/svelte/src/session.svelte.ts"],
   "guides/web-ui/sessions/reconnect": ["sdk/core/src/join.ts", "sdk/core/test/join.test.ts"],
   "guides/web-ui/sessions/restore": ["sdk/core/src/transport.ts", "sdk/core/test/conformance.test.ts"],
+};
+
+const wuiSourceProof = {
+  "guides/web-ui/embedding/wui": ["assets.go", "handler.go", "bundle.go", "assets_test.go", "bundle_test.go"],
 };
 
 function readPage(id) {
@@ -130,11 +138,33 @@ test("Web UI guides link every proof claim to existing client source", () => {
   for (const [id, files] of Object.entries(sourceProof)) {
     const markdown = readPage(id);
     for (const file of files) {
-      const url = `https://github.com/looprig/client/blob/main/${file}`;
+      const url = `https://github.com/looprig/client/blob/${clientTag}/${file}`;
       assert.match(markdown, new RegExp(regexEscape(url)), `${id} does not link ${file}`);
       assert.equal(fs.existsSync(path.join(clientRoot, file)), true, `missing client source ${file}`);
     }
+    assert.doesNotMatch(markdown, /github\.com\/looprig\/client\/blob\/main\//, `${id} links a mutable client branch`);
   }
+});
+
+test("Web UI wui page links its claims to wui source at the released tag", () => {
+  for (const [id, files] of Object.entries(wuiSourceProof)) {
+    const markdown = readPage(id);
+    for (const file of files) {
+      const url = `https://github.com/looprig/wui/blob/${wuiTag}/${file}`;
+      assert.match(markdown, new RegExp(regexEscape(url)), `${id} does not link ${file}`);
+      assert.equal(fs.existsSync(path.join(wuiRoot, file)), true, `missing wui source ${file}`);
+    }
+  }
+});
+
+test("Web UI guides cover the prebuilt wui bundle and its pin rule", () => {
+  const page = readPage("guides/web-ui/embedding/wui");
+  for (const phrase of ["wui.Assets()", "factory.WithUIHandler", "BundleProtocolVersion", "ErrNoBundleManifest", "go get github.com/looprig/wui@v0.3.0"]) {
+    assert.match(page, new RegExp(regexEscape(phrase)), `wui page missing ${phrase}`);
+  }
+  assert.match(page, /`go mod tidy`[^.]*drop/, "wui page must warn that go mod tidy drops the Core pin");
+  assert.match(readPage("guides/web-ui/embedding/index"), /\/docs\/guides\/web-ui\/embedding\/wui/);
+  assert.match(readPage("guides/web-ui/sessions/restore"), /`restored`/);
 });
 
 test("Web UI guides cover the public runtime contracts", () => {

@@ -117,8 +117,8 @@ The matching model-facing operation is `workflow_run_history`, documented in [Wo
 
 ## Source
 
-- [history.go](https://github.com/looprig/workflows/blob/main/history.go)
+- [history.go](https://github.com/looprig/workflows/blob/v0.1.2/history.go)
 
 ## Proof
 
-- [history_test.go](https://github.com/looprig/workflows/blob/main/history_test.go)
+- [history_test.go](https://github.com/looprig/workflows/blob/v0.1.2/history_test.go)

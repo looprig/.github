@@ -4,7 +4,7 @@ title: Context Limits
 description: Describe context limits and counting configuration for a loop definition.
 audience: developer
 section: guides
-order: 13
+order: 14
 publication: released
 proofs:
   start: [release-github-com-looprig-harness]

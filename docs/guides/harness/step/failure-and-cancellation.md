@@ -23,10 +23,11 @@ Step failure is reported by the enclosing Turn. Harness has no separate public p
 
 | Cause in the current Step | In-flight Step | Turn result |
 | --- | --- | --- |
-| Provider `Stream` or `Next` returns a non-cancellation error | No `StepDone` | `event.TurnFailed{Err: original typed error}` |
+| Provider `Stream` or `Next` returns a non-cancellation error | No `StepDone`, unless text already streamed (see below) | `event.TurnFailed{Err: original typed error}` |
 | Stream reaches EOF with no usable text, thinking, or tool use | No assistant message | `event.TurnFailed` with `*event.EmptyResponseError` |
 | Tool iteration or call limit is exceeded | Tool Step is not committed | `event.TurnFailed` with `*event.ToolLimitError` |
-| A Step hook or inference hook guard refuses | No Step commit | `event.TurnFailed` with a safe hook error |
+| An inference hook guard refuses (`OperationStep` is not guardable) | No Step commit | `event.TurnFailed` with a safe hook error |
+| Tool-result capture is wired and a result cannot be retained | `StepDone` commits; the failed result becomes an error-marked notice and no captures are recorded | `event.TurnFailed` with the retention error |
 | Step context is canceled while streaming, executing, or committing | Current Step is discarded | `event.TurnInterrupted` |
 
 `TurnFailed.Err` retains the typed in-memory cause for `errors.As`. Its durable codec projects an error-safe representation because arbitrary Go errors do not have a stable JSON shape. `TurnInterrupted` carries no error field; the context cancellation is represented by the event kind.
@@ -35,7 +36,7 @@ Step failure is reported by the enclosing Turn. Harness has no separate public p
 
 The submit call's context controls command delivery only. Once a command is admitted, the loop derives the Turn context from its own loop lifetime. `Session.Interrupt` or shutdown cancels that Turn context. The commit handshake also selects on cancellation, so a goroutine parked waiting for `StepDone` publication is released.
 
-Rollback stops at the current Step. Earlier `StepDone` records and their committed history remain. A tool batch that is canceled before its result group commits produces neither a partial StepDone nor partial tool-result history.
+Rollback stops at the current Step. Earlier `StepDone` records and their committed history remain. If the stream fails or is canceled after the model delivered text, and the Turn has no output schema, Harness commits the safe prefix as a `StepDone` whose assistant message ends with a notice block: `[truncated: ...]` for a stream failure, `[interrupted: ...]` for a cancellation. The prefix never contains a tool call, so nothing from it executes. The Turn still ends with `TurnFailed` or `TurnInterrupted`. A tool batch that is canceled before its result group commits produces neither a partial StepDone nor partial tool-result history.
 
 ```mermaid
 %%{init: {"theme":"dark"}}%%

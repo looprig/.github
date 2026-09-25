@@ -4,7 +4,7 @@ title: Classifiers
 description: Use deterministic command-safety review as bounded evidence inside Harness gate policy.
 audience: developer
 section: modules
-order: 16
+order: 20
 publication: released
 proofs:
   repository: release-github-com-looprig-classifiers
@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/classifiers` |
-| Version | `v0.2.0` |
+| Version | `v0.2.2` |
 | GitHub | [looprig/classifiers](https://github.com/looprig/classifiers) |
 
 ## Description

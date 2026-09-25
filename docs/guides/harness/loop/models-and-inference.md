@@ -34,7 +34,9 @@ The loop treats the model as a descriptor, not as a credential container. The
 descriptor is passed to the inference client at request time and participates in
 the definition and restore fingerprints. Provider endpoints and credentials are
 owned by the client/composition root; runtime identity projections deliberately
-omit raw credentials and endpoints.
+omit raw credentials and endpoints. The public bodies of `LoopStarted`,
+`LoopInferenceChanged`, and `LoopModeChanged` omit the model's base URL; only
+the private journal body that restore reads keeps it.
 
 `Definition.FingerprintInitial` returns an `InitialFingerprint` with the selected
 initial `model.Model`, the effective system text, and produced tool names. A

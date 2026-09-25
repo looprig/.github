@@ -70,8 +70,8 @@ The zero value of `AgenticMessages` is a valid empty thread. A nil `Blocks` slic
 
 ## Proof
 
-- Source: [`core/content/message.go`](https://github.com/looprig/core/blob/main/content/message.go)
-- Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/main/content/message_test.go), [`core/content/message_json_test.go`](https://github.com/looprig/core/blob/main/content/message_json_test.go)
-- Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/main/examples/content/example_test.go)
+- Source: [`core/content/message.go`](https://github.com/looprig/core/blob/v0.11.0/content/message.go)
+- Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/message_test.go), [`core/content/message_json_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/message_json_test.go)
+- Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/v0.11.0/examples/content/example_test.go)
 
 Related: [Conversation](/docs/guides/inference/messages/conversation), [AgenticMessages](/docs/guides/inference/messages/agentic-messages), [Request messages](/docs/guides/inference/requests/messages).

@@ -54,7 +54,7 @@ The producer is called once at clean EOF. A false boolean means no authoritative
 
 ## Proof
 
-- Source: [`inference/stream/result.go`](https://github.com/looprig/inference/blob/main/stream/result.go), [`inference/stream/stream.go`](https://github.com/looprig/inference/blob/main/stream/stream.go), [`inference/stream/chunkstream.go`](https://github.com/looprig/inference/blob/main/stream/chunkstream.go)
-- Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/main/stream/stream_test.go), [`inference/stream/chunkstream_test.go`](https://github.com/looprig/inference/blob/main/stream/chunkstream_test.go)
+- Source: [`inference/stream/result.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/result.go), [`inference/stream/stream.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream.go), [`inference/stream/chunkstream.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/chunkstream.go)
+- Tests: [`inference/stream/stream_test.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/stream_test.go), [`inference/stream/chunkstream_test.go`](https://github.com/looprig/inference/blob/v0.13.0/stream/chunkstream_test.go)
 
 Related: [Response usage](/docs/guides/inference/responses/usage), [Finish reasons](/docs/guides/inference/responses/finish-reasons).

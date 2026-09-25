@@ -119,11 +119,30 @@ version and caps the encoded or accepted event at 16 MiB.
 
 `TokenDelta.Chunk` is `json:"-"`; it is a live `content.Chunk` interface and
 there is intentionally no durable chunk codec. `StepDone.Messages` uses the
-dedicated content message-slice codec. `PermissionRequested.Request` and
+dedicated content message-slice codec, and `StepDone.Captures` uses a closed
+allowlist codec that rejects unknown members. `PermissionRequested.Preview` is
+`json:"-"` and is never projected, so it exists only on the live event.
+`PermissionRequested.Request` and
 `GateResolved.Audit` are validated and projected through their strict typed
 codecs. `TurnFailed.Err` and `RestoreErrored.Err` are projected as a stable
 `{kind,message}` pair; restore returns `*RestoredError` (or the explicit
 model-facing restore form), never an arbitrary live error implementation.
+
+The journal stores two bodies for a public event: the native body shown here,
+which restore reads, and a public body that
+[`pkg/sessionwire`](https://github.com/looprig/harness/blob/v0.40.2/pkg/sessionwire/privacy.go)
+projects for session viewers. The public projection removes Host configuration
+a viewer must not see:
+
+| Event | Public body change |
+| --- | --- |
+| `LoopStarted`, `LoopInferenceChanged`, `LoopModeChanged` | `runtime.base_url` is omitted |
+| `SessionStarted` | `workspace_root` in `config` and `manifest` becomes `/sessions/<session-id>/workspace` |
+| `ConfigurationAdopted` | `workspace_root` in `manifest` becomes the same logical root; workspace-category `drift` entries drop `old` and `new` |
+| `GateResolved` | `audit` is omitted |
+
+Because the public manifest is rewritten, it no longer hashes to the adopted
+fingerprint beside it. Fingerprints are checked only against the native body.
 
 ## Validation errors
 

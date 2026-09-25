@@ -44,9 +44,23 @@ runtime, err := rig.Define(
 ```
 
 `sessionstore.Open` rejects a nil composite or any nil Ledger, Leaser, KV, or
-Blobs primitive with `*sessionstore.InvalidBackendError`. The default large
-record offload threshold is 512 KiB; consumers can use
-`sessionstore.WithOffloadThreshold(n)` with a positive byte count.
+Blobs primitive with `*sessionstore.InvalidBackendError`. The store is built on
+the [`github.com/looprig/sessionstore`](https://github.com/looprig/sessionstore)
+module, whose own `Open` then requires an OrderedIndex and a Blobs provider that
+implements `storage.BlobReaderLifecycle` with a positive close bound. A backend
+that fails either check is refused before any provider I/O with that module's
+`*InvalidBackendError` (`Component` is `OrderedIndex` or
+`BlobReaderLifecycle`). `memstore` qualifies; `fsstore` Blobs does not and is
+refused, so a disk-backed deployment needs a conforming Blobs provider such as
+`s3store`.
+
+The default large record offload threshold is 512 KiB;
+`sessionstore.WithOffloadThreshold(n)` overrides it with a positive byte count
+and ignores a non-positive one. `sessionstore.WithTenant(tenant)` names the
+tenant every record is filed under (default `local`); a tenant that disagrees
+with the one recorded in the backend is refused at `Open`. See
+[session store](/docs/guides/harness/session-persistence/session-store) for the
+store's full contract.
 
 The store provides durable session leases, append-only journals, event replay,
 catalog projections, and optional blob offload. `Rig.Define` asks its
@@ -57,7 +71,8 @@ session persistence region does not overlap the managed workspace.
 
 The Rig owns the store reference for its lifecycle, while the store owns backend
 resources. A session acquires its own session lease, opens its journal, and
-releases the lease during `SessionController.Shutdown`. Restore opens the same
+releases the lease during `SessionController.Shutdown` or a nonterminal
+residency release. Restore opens the same
 session ID and compares the frozen configuration identity before binding
 workspace or loop collaborators.
 

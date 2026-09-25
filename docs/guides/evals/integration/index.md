@@ -34,13 +34,13 @@ the qualification suite depend on network timing.
 ## Source
 
 The public target seam is declared in
-[`target.go`](https://github.com/looprig/eval/blob/main/target.go), with the
+[`target.go`](https://github.com/looprig/eval/blob/v0.2.2/target.go), with the
 Inference adapter in
-[`target/inference/target.go`](https://github.com/looprig/eval/blob/main/target/inference/target.go).
+[`target/inference/target.go`](https://github.com/looprig/eval/blob/v0.2.2/target/inference/target.go).
 
 ## Proof
 
 The live adapter boundary is covered by
-[`target_integration_test.go`](https://github.com/looprig/eval/blob/main/target/inference/target_integration_test.go),
+[`target_integration_test.go`](https://github.com/looprig/eval/blob/v0.2.2/target/inference/target_integration_test.go),
 and deterministic test presentation by
-[`evaltest/run.go`](https://github.com/looprig/eval/blob/main/evaltest/run.go).
+[`evaltest/run.go`](https://github.com/looprig/eval/blob/v0.2.2/evaltest/run.go).

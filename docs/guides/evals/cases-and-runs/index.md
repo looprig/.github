@@ -34,14 +34,14 @@ model or agent identity.
 ## Source
 
 The case contract is defined in
-[`scenario.go`](https://github.com/looprig/eval/blob/main/scenario.go) and
-[`suite.go`](https://github.com/looprig/eval/blob/main/suite.go), and the
+[`scenario.go`](https://github.com/looprig/eval/blob/v0.2.2/scenario.go) and
+[`suite.go`](https://github.com/looprig/eval/blob/v0.2.2/suite.go), and the
 execution contract is in
-[`run.go`](https://github.com/looprig/eval/blob/main/run.go).
+[`run.go`](https://github.com/looprig/eval/blob/v0.2.2/run.go).
 
 ## Proof
 
 Validation behavior is exercised by
-[`scenario_test.go`](https://github.com/looprig/eval/blob/main/scenario_test.go),
+[`scenario_test.go`](https://github.com/looprig/eval/blob/v0.2.2/scenario_test.go),
 and run-stage behavior by
-[`run_test.go`](https://github.com/looprig/eval/blob/main/run_test.go).
+[`run_test.go`](https://github.com/looprig/eval/blob/v0.2.2/run_test.go).

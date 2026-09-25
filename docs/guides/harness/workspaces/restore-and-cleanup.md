@@ -11,6 +11,7 @@ proofs:
   restore-contract: [release-github-com-looprig-harness]
   admission-and-commit: [release-github-com-looprig-harness]
   placement-specific-restore: [release-github-com-looprig-harness]
+  restoring-a-session-on-another-host: [release-github-com-looprig-harness]
   cleanup-and-events: [release-github-com-looprig-harness]
   source-and-proof: [release-github-com-looprig-harness]
 ---
@@ -30,12 +31,16 @@ import (
 	"context"
 	"errors"
 
+	"github.com/looprig/core/uuid"
+	"github.com/looprig/harness/pkg/loop"
 	"github.com/looprig/harness/pkg/session"
 	"github.com/looprig/harness/pkg/workspacestore"
 )
 
 type SessionController interface {
 	session.Session
+	SetActiveLoop(context.Context, uuid.UUID) error
+	LoopController(uuid.UUID) (loop.Controller, bool)
 	CheckpointWorkspace(context.Context) (workspacestore.Ref, error)
 	RestoreWorkspace(context.Context, workspacestore.Ref) error
 	Shutdown(context.Context) error
@@ -89,6 +94,31 @@ manifest, replace changed files, and delete files absent from the ref in sorted
 order. Every touched file has a rollback copy. Symlinked components are refused
 so a restore cannot write outside the root. Empty directories and non-regular
 entries not represented by the archive are not pruned in the fixed-root path.
+
+## Restoring a session on another Host
+
+Session restore (`Rig.RestoreSession`) brings the tree back from the journal
+rather than from the old directory. Before the session is built, it
+materializes the ref named by the latest `WorkspaceCheckpointed` or
+`WorkspaceRestored` into the placement's root, using the
+[materialization](/docs/guides/harness/workspaces/materialization) truth path.
+A failure is `*session.RestoreError{Kind: session.RestoreMaterializeFailed}`,
+and the session does not come up. A non-empty root whose digest differs fails
+closed with `*workspacestore.DestNotEmptyError` and is not cleared.
+
+A per-session placement may restore under a different `baseDir` than the one
+that wrote the session; the relocation is not treated as configuration drift.
+Tools and the model keep seeing the same `LogicalRoot`
+(`/sessions/<sessionID>/workspace`), and public events publish
+`workspace_root` in that logical form rather than the Host's physical path.
+
+Restore carries only what a checkpoint captured. A session with no checkpoint
+comes up on an untouched (usually empty) root, and edits after the last
+checkpoint are not recovered. A controller that implements
+`session.WorkspaceReporter` reports this as `session.WorkspaceStatus`:
+`HasCheckpoint`, `CheckpointSeq`, and `PostCheckpointEvents` describe the
+boundary as of restore, and `PostCheckpointLoss()` is true when loop events
+followed that checkpoint.
 
 ## Cleanup and events
 

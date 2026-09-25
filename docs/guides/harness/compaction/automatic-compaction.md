@@ -27,7 +27,10 @@ automatic attempt only when policy and pressure allow it.
 3. Compute occupancy and pressure against `CompactAt` and full scale.
 4. If eligible at a safe boundary, coalesce the automatic request with any
    current waiters and publish `CompactionStarted`.
-5. Run the registered blocking current-Loop Hustle and validate its result.
+5. Select the kept recent suffix, reject with
+   `CompactRejectRetainedTailTooLarge` if it cannot fit with the summary
+   budget, otherwise run the registered blocking current-Loop Hustle on the
+   older prefix and validate its result.
 6. Append `CompactionCommitted` or `CompactionRejected`, then waiter replies.
 
 `PressureHardLimit` without a new eligible attempt is a typed context-limit

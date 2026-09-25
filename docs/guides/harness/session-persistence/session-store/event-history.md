@@ -32,7 +32,11 @@ func (s *Store) OpenEventReplayer(
 
 The returned `EventReplayer` yields Public `event.Event` values in ledger
 sequence order. It drops command intent records, lease fences, private
-`GatePreparedRecord` values, and Internal events. A zero session UUID is a
+`GatePreparedRecord` values, command application and disposition records, and
+Internal events. The values are native events. A viewer that must see exactly
+the redacted public wire bodies should read the committed public event stream
+or SessionStore's public journal instead; see
+[the event envelope](/docs/guides/harness/events/event-envelope). A zero session UUID is a
 concrete ledger name, not a wildcard.
 
 ## Internal history
@@ -50,9 +54,9 @@ func (s *Store) OpenInternalRecordReplayer(
 ```
 
 The internal event view includes Internal events but still omits commands,
-fences, and private gate payloads. The record view includes all four journal
-record variants and reconstructs command/fence routing with the bound session
-ID. It is not a product history endpoint because command bodies and private
+fences, and private gate payloads. The record view includes every journal
+record variant and reconstructs command and fence routing with the bound
+session ID. It is not a product history endpoint because command bodies and private
 gate payloads are not ordinary event visibility.
 
 ## History and catalog

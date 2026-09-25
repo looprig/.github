@@ -25,9 +25,11 @@ func WithToolMiddlewares(middlewares ...tool.ToolMiddleware) Option
 func WithToolLimits(limits ToolLimits) Option
 
 type ToolLimits struct {
-	Iterations int
-	Calls      int
-	Parallel   int
+	Iterations   int
+	Calls        int
+	Parallel     int
+	ResultBytes  int
+	CaptureBytes int
 }
 ```
 
@@ -40,14 +42,27 @@ typed binding failure.
 
 ## Limits
 
-Zero limits receive the fixed defaults shown below. Negative values are rejected
-by `DefinitionInvalidToolLimits`; a mode may override only positive fields.
+Zero limits receive the defaults shown below. Negative values, and a positive
+`ResultBytes` or `CaptureBytes` below 256, are rejected with
+`DefinitionInvalidToolLimits`; a mode may override only positive fields.
 
 | Field | Meaning | Default |
 | --- | --- | ---: |
-| `Iterations` | maximum tool-loop iterations in one turn | 25 |
+| `Iterations` | maximum tool steps (model and tool round trips) in one turn | 25 |
 | `Calls` | maximum tool calls in one turn | 100 |
 | `Parallel` | maximum concurrent calls in one batch | 8 |
+| `ResultBytes` | maximum model-visible bytes of one tool result | unbounded |
+| `CaptureBytes` | maximum bytes of one tool result retained durably | 8 MiB (`loop.DefaultToolResultCaptureBytes`) |
+
+When a result exceeds `ResultBytes`, the model sees a bounded preview plus a
+marker instead of the full text. Without capture, the preview keeps the head
+and tail and the marker states how many bytes were omitted; the omitted bytes
+are not kept anywhere. When the Rig wires capture with
+`rig.WithToolResultObjects`, the full result, up to `CaptureBytes`, is stored as
+a session object, `StepDone.Captures` records it, and the marker names
+`read_tool_result` only when the mode has a real reader bound
+(`BoundMode.ToolResultReaderBound`). See
+[Tool result capture](/docs/guides/harness/loop/tool-result-capture).
 
 The base definition's limits apply to the implicit base mode. For a declared
 mode, `resolveLimits` takes each positive mode field and otherwise keeps the
@@ -61,7 +76,14 @@ binding, so the same immutable factory used by the base and a mode builds once
 and its instances are reused. Different definitions that produce the same
 model-facing name are rejected. `bindings.ExtraTools`, when supplied by a
 composition root, is appended to the base and every mode and is subject to the
-same collision checks.
+same collision checks. A definition that declares
+`tool.RequiresToolResultReader` receives `tool.Bindings.ToolResults`, a reader
+scoped to this session and loop, and binding fails when that reader is nil.
+
+`Definition.ToolDefinitions()` lists every declared tool definition across the
+base tool set and all modes, deduplicated by name, without binding. A
+composition can pass it to `tool.ProjectCaptureSafety` to learn whether every
+tool's retained output is bounded before any session exists.
 
 ```go
 bound, err := definition.Bind(ctx, tool.Bindings{

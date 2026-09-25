@@ -60,9 +60,13 @@ lease name as:
 workspace-roots/<sha256(canonical-root) in lowercase hex>
 ```
 
-The canonical root and mode also enter the rig fingerprint. Changing either
-is a durable configuration change, not a runtime-only detail. A root lease is
-acquired only after the session journal lease has been acquired.
+The mode and canonical region also enter the rig fingerprint as
+`<mode>:<region>`. Changing the mode, or the fixed root of an exclusive or
+shared placement, is a durable configuration change that restore reports as
+workspace drift. A per-session base is compared by mode alone, so a session
+restored on a Host with a different `baseDir` (a pod-specific mount, a changed
+mount path, or a symlink that resolves differently) is not refused. A root
+lease is acquired only after the session journal lease has been acquired.
 
 ## Tool bindings
 
@@ -70,7 +74,8 @@ The public binding structs are intentionally narrow:
 
 ```go
 type WorkspaceBinding struct {
-	Root         string
+	Root         string // this process's physical path
+	LogicalRoot  string // session-derived path, stable across Hosts
 	Coordinator  WorkspaceCoordinator
 	Observations WorkspaceObservations
 }
@@ -94,6 +99,12 @@ exclusive snapshot/restore permit and requires an empty path. A canceled wait
 returns a typed acquisition error and leaves no permit behind. A mutator must
 check `Healthy` before committing; after exclusive lease loss it fails closed.
 
+`Root` is where this process performs filesystem operations and can differ
+between Hosts. `LogicalRoot` is `/sessions/<sessionID>/workspace`, derived from
+the session ID alone, so a path the model saw before a restore still names the
+same tree afterwards. Fresh and restored loops both receive it; a binding with
+no session identity carries an empty `LogicalRoot`.
+
 `WorkspaceObservations` is optional shared state for one loop's file tools and
 Bash. It does not grant authority or escape the root.
 
@@ -105,12 +116,15 @@ type Bindings struct {
 	ReadWorkspace *ReadWorkspaceBinding
 	Delegate      DelegateController
 	Process       *ProcessBinding
+	ToolResults   ToolResultReader
+	ExtraTools    []Definition
 }
 ```
 
 `tool.RequiresWorkspace` requires `Workspace != nil`, a non-empty root, and a
 healthy coordinator. `tool.RequiresWorkspaceRead` requires an absolute clean
-read root and exposes no mutation capability. Build calls receive a defensive
+read root and exposes no mutation capability. `tool.RequiresToolResultReader`
+requires a non-nil `ToolResults` reader scoped to the calling loop. Build calls receive a defensive
 attenuation of `Bindings`, so a definition cannot retain unrelated session
 authority.
 

@@ -38,6 +38,7 @@ errors so consumers do not mistake missing evidence for a model rejection.
 | `CompactRejectSummaryTooLarge` | Post-replacement input still exceeds its context limit. |
 | `CompactRejectInternal` | A bounded internal execution failure occurred. |
 | `CompactRejectContextLimitUnknown` | Context limit could not be resolved safely. |
+| `CompactRejectRetainedTailTooLarge` | The kept recent suffix plus `MaxSummaryTokens` does not fit under the input limit; the Hustle is not invoked. |
 
 Proof: [reject constants](https://github.com/looprig/harness/blob/main/pkg/event/compaction.go) and [reject event validation](https://github.com/looprig/harness/blob/main/pkg/event/compaction_test.go).
 

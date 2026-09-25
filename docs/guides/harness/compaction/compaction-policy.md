@@ -26,15 +26,17 @@ defaults.
 ```go
 // package loop
 type CompactionPolicy struct {
-	Automatic        bool
-	CounterPolicy    CounterPolicy
-	CompactAt        event.BasisPoints
-	RearmBelow       event.BasisPoints
-	ReservedOutput   content.TokenCount
-	SafetyMargin     content.TokenCount
-	MaxSummaryTokens content.TokenCount
-	CountTimeout     time.Duration
-	Hustle           hustle.Name
+	Automatic          bool
+	CounterPolicy      CounterPolicy
+	CompactAt          event.BasisPoints
+	RearmBelow         event.BasisPoints
+	KeepRecentSegments int
+	KeepRecentTokens   content.TokenCount
+	ReservedOutput     content.TokenCount
+	SafetyMargin       content.TokenCount
+	MaxSummaryTokens   content.TokenCount
+	CountTimeout       time.Duration
+	Hustle             hustle.Name
 }
 
 func (p CompactionPolicy) Validate(contextcount.CounterCapability) error
@@ -54,6 +56,8 @@ Proof: [policy types and validation](https://github.com/looprig/harness/blob/mai
 | `CounterPolicy` | Required for automatic mode; selects accepted count quality. |
 | `CompactAt` | Automatic threshold, strictly below `event.FullScaleBasisPoints`. |
 | `RearmBelow` | Automatic re-arm threshold, nonzero and strictly below `CompactAt`. |
+| `KeepRecentSegments` | Positive number of newest complete user-anchored segments kept verbatim. |
+| `KeepRecentTokens` | Positive token target for the kept suffix. |
 | `ReservedOutput` | Positive output reservation used to resolve input limits. |
 | `SafetyMargin` | Positive when the counter quality is heuristic. |
 | `MaxSummaryTokens` | Positive summary output budget. |
@@ -61,8 +65,15 @@ Proof: [policy types and validation](https://github.com/looprig/harness/blob/mai
 | `Hustle` | Valid named Hustle; Rig checks registration and compatibility. |
 
 When `Automatic` is false, threshold and counter-policy checks are skipped, but
-the common reservation, summary budget, timeout, Hustle, and heuristic margin
-requirements remain.
+the common retention, reservation, summary budget, timeout, Hustle, and
+heuristic margin requirements remain.
+
+The kept suffix is selected by estimate (`ceil(JSON bytes / 4)` per message),
+so it is best-effort: the newest complete segment is always kept, and the cut
+moves earlier to keep a tool call with its result, so the suffix may exceed
+either target. Before invoking the Hustle, Harness counts the kept suffix; if it
+plus `MaxSummaryTokens` does not fit under the input limit, the attempt is
+rejected with `CompactRejectRetainedTailTooLarge` and no summary is requested.
 
 Proof: [CompactionPolicy.Validate](https://github.com/looprig/harness/blob/main/pkg/loop/compaction_policy.go) and [configuration tests](https://github.com/looprig/harness/blob/main/internal/loopruntime/context_config_test.go).
 

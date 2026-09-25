@@ -48,6 +48,16 @@ missing exclusive leasers, and canonicalization failures return typed
 workspace-store persistence paths are not equal to or below the managed region;
 an overlap returns `*rig.PersistenceOverlapError`.
 
+The placement mode and canonical region are recorded in the session's
+configuration fingerprint. On restore, a change of mode, a different exclusive
+or shared root, or an added or removed placement is workspace drift. Two
+per-session placements compare by mode alone, so a session can restore on a
+host whose `baseDir` is mounted at a different path. Restore then materializes
+the latest checkpoint into `baseDir/<sessionID>` when that directory is absent
+or empty. A non-empty directory whose contents do not match the checkpoint is
+never cleared; restore fails with a wrapped `*workspacestore.DestNotEmptyError`.
+Edits made after the last checkpoint are not carried to the new host.
+
 ```mermaid
 %%{init: {"theme":"dark"}}%%
 flowchart TD

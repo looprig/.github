@@ -4,7 +4,7 @@ title: Live Loop Controller
 description: Describe the public loop.Handle and loop.Controller surfaces bound to a live loop.
 audience: developer
 section: guides
-order: 21
+order: 22
 publication: released
 proofs:
   start: [release-github-com-looprig-harness]

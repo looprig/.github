@@ -11,6 +11,8 @@ proofs:
   actions: [release-github-com-looprig-harness]
   loop-routing: [release-github-com-looprig-harness]
   host-routing: [release-github-com-looprig-harness]
+  admitted-gate-responses: [release-github-com-looprig-harness]
+  mutation-previews: [release-github-com-looprig-harness]
   durable-first: [release-github-com-looprig-harness]
   source-and-proof: [release-github-com-looprig-harness]
 ---
@@ -73,6 +75,24 @@ type GateHost interface {
 ```
 
 Only `KindForm` and `KindOpenURL` with `ResolverSession` qualify. `OpenHostGate` validates the kind/payload pair, derives the trusted schema or origin onto `Gate.Prompt`, prepares and activates the gate, and returns a public ID. The opener must then await or close it. A canceled await frees the live slot but does not close durable state; the opener must call `CloseGate` if it gives up.
+
+## Admitted gate responses
+
+A Host that receives answers through a durable command inbox applies each one as a runtime command of kind `runtimecommand.KindGateResponse` instead of calling `RespondGate` directly. `runtimecommand.Admitted.GateResponse` carries the answer and is required for this kind, as is a non-empty `AttemptID`. The answer goes through the same path as `RespondGate`, so every refusal applies, including the rejection of classifier provenance. The admitted `RuntimeCommandID` is used as the translated command ID and stamped on `GateResolved.Cause.CommandID`, so a successor can find an answer that became durable before its disposition was written.
+
+| Result of the answer | Recorded disposition |
+| --- | --- |
+| Resolved | `DispositionApplied` |
+| Gate absent or not ready (`GateNotFound`, `GateNotReady`) | `DispositionNoOp` |
+| Any other refusal or append failure | `DispositionRefused` |
+
+Once a journal holds any `gate_response` application, harness v0.34.0 and older refuse to replay it, so do not roll a runtime back below v0.35.0.
+
+## Mutation previews
+
+A tool whose prepared artifact implements `tool.MutationPreviewer` can show the pending change at a permission gate. `MutationPreview() (tool.MutationPreview, bool)` returns `{Path string; Creates bool; UnifiedDiff string}` and is called once, when the gate is about to open, never during `PrepareCall`. A false result means no preview and must not change the request, result, or error the model sees. Harness treats `UnifiedDiff` as opaque, so bounding it is the tool's responsibility.
+
+The preview reaches renderers as `event.PermissionRequested.Preview`, which is live only: it is never journaled, never sent on a wire, and never shown to the model. A nil preview is normal, and a restored session never carries one. When permission review is configured, the same diff is added to the classifier's review context as a `tool_preview` entry; see [Permission review](/docs/guides/harness/gates/permission-review).
 
 ## Durable-first
 

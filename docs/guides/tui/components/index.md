@@ -21,7 +21,7 @@ The `github.com/looprig/tui/components` package contains small Bubble Tea and st
 
 ## Component boundary
 
-Components copy caller-owned slices where a live tray must not change underneath keyboard input. Empty candidate lists return `nil` from their constructors, which is the hidden-panel signal used by the screen. Selection methods wrap or select within the visible window, while rendering methods clamp to terminal display columns without changing the selected value.
+Components copy caller-owned slices where a live tray must not change underneath keyboard input. Empty candidate lists return `nil` from their constructors, which is the hidden-panel signal used by the screen. The trays share one list engine built on the Bubbles `list` package: selection wraps, filtering is fuzzy, heading and spacer rows are inert, and the selected row is banded with `styles.SelectedRow`. Rendering methods clamp to terminal display columns without changing the selected value.
 
 ```mermaid
 %%{init: {"theme":"dark"}}%%
@@ -35,13 +35,13 @@ flowchart LR
 
 ## Input and completion
 
-[InputBox](/docs/guides/tui/components/input) documents the auto-growing editor, its newline bindings, and the modern panel options. [Completion Trays](/docs/guides/tui/components/completion) covers slash, file, and typed runtime choices. [Session Completion](/docs/guides/tui/components/sessions) covers the two-line record renderer used by session browsing.
+[InputBox](/docs/guides/tui/components/input) documents the auto-growing editor, its newline bindings, and the modern panel options. [Completion Trays](/docs/guides/tui/components/completion) covers slash, file, and typed runtime choices, including the searchable model picker. [Session Completion](/docs/guides/tui/components/sessions) covers the two-line record renderer used by session browsing.
 
 The widgets do not expose a public keymap or layout engine. A host should route Bubble Tea messages to the documented methods and let the main screen decide which action a selection means. This keeps completion display reusable without making the component package own command policy.
 
 ## Display-only data
 
-`FileItem.Path` remains the exact completion payload while control runes are sanitized only in the rendered label. `ValueItem.ID` is the opaque selection payload; `Label`, `Description`, and `Aliases` are matching metadata. `SessionItem` is already formatted and secret-free. Treat these structs as view data and do not put credentials, full prompts, or unredacted tool arguments in them.
+`FileItem.Path` remains the exact completion payload while control runes are sanitized only in the rendered label. `ValueItem.ID` is the opaque selection payload; `Label` and `Aliases` are matching metadata, `Description` is display text, `Provider` groups the model tray, and `Current` marks the live value. `SessionItem` is already formatted and secret-free; its `Description` is searchable but not drawn. Treat these structs as view data and do not put credentials, full prompts, or unredacted tool arguments in them.
 
 ## Component pages
 
@@ -56,6 +56,7 @@ The widgets do not expose a public keymap or layout engine. A host should route 
 - [Value completion](https://github.com/looprig/tui/blob/main/components/valuecomplete.go)
 - [File completion](https://github.com/looprig/tui/blob/main/components/filecomplete.go)
 - [Session completion](https://github.com/looprig/tui/blob/main/components/sessioncomplete.go)
+- [Shared tray engine](https://github.com/looprig/tui/blob/main/components/traylist.go)
 
 ## Proof
 
@@ -64,4 +65,5 @@ The widgets do not expose a public keymap or layout engine. A host should route 
 - [Value completion tests](https://github.com/looprig/tui/blob/main/components/valuecomplete_test.go)
 - [File completion tests](https://github.com/looprig/tui/blob/main/components/filecomplete_test.go)
 - [Session completion tests](https://github.com/looprig/tui/blob/main/components/sessioncomplete_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
+- [Tray engine tests](https://github.com/looprig/tui/blob/main/components/traylist_test.go)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)

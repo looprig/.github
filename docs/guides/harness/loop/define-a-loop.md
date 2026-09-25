@@ -72,6 +72,7 @@ func (d Definition) Engine() Engine
 func (d Definition) Delegates() []identity.AgentName
 func (d Definition) Modes() []Mode
 func (d Definition) ToolRequirements() tool.Requirements
+func (d Definition) ToolDefinitions() []tool.Definition
 func (d Definition) InitialMode() ModeName
 func (d Definition) FingerprintInitial() InitialFingerprint
 func (d Definition) Delegation() Delegation
@@ -82,7 +83,9 @@ func (d Definition) Bind(context.Context, tool.Bindings) (BoundDefinition, error
 `Delegates` and `Modes` are fresh slices. `PolicyRevision` is a deterministic
 SHA-256 projection of execution behavior and opaque revisions. `FingerprintInitial`
 resolves the initial model, effective system, and produced tool names without
-building tool instances. `Bind` is where factories run and IDs are checked.
+building tool instances. `ToolDefinitions` returns the base and mode tool
+definitions, deduplicated by name, also without building instances. `Bind` is
+where factories run and IDs are checked.
 
 ## Validation order
 

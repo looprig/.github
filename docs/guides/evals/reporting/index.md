@@ -154,19 +154,19 @@ out why raw judge reasons are not safe wire fields.
 ## Source
 
 The sink contract is implemented by
-[reportjson/sink.go](https://github.com/looprig/eval/blob/main/reportjson/sink.go),
+[reportjson/sink.go](https://github.com/looprig/eval/blob/v0.2.2/reportjson/sink.go),
 and the redacted codec is in
-[reportjson/codec.go](https://github.com/looprig/eval/blob/main/reportjson/codec.go).
+[reportjson/codec.go](https://github.com/looprig/eval/blob/v0.2.2/reportjson/codec.go).
 
 ## Proof
 
 The sink sequence and path boundary are implemented in
-[reportjson/sink.go](https://github.com/looprig/eval/blob/main/reportjson/sink.go).
+[reportjson/sink.go](https://github.com/looprig/eval/blob/v0.2.2/reportjson/sink.go).
 The envelope, redaction projection, canonical ordering, strict decoder, and
 target-error classes are implemented in
-[reportjson/codec.go](https://github.com/looprig/eval/blob/main/reportjson/codec.go).
+[reportjson/codec.go](https://github.com/looprig/eval/blob/v0.2.2/reportjson/codec.go).
 Atomicity, redaction, canonical round trips, path rejection, and no-write-on-invalid
 tests are in
-[reportjson/codec_test.go](https://github.com/looprig/eval/blob/main/reportjson/codec_test.go).
+[reportjson/codec_test.go](https://github.com/looprig/eval/blob/v0.2.2/reportjson/codec_test.go).
 The complete runnable example is
-[examples/report/example_test.go](https://github.com/looprig/eval/blob/main/examples/report/example_test.go).
+[examples/report/example_test.go](https://github.com/looprig/eval/blob/v0.2.2/examples/report/example_test.go).

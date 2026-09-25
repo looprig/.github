@@ -44,7 +44,7 @@ When a `ToolUseBlock` appears, correlate its `ID` and append a `ToolResultMessag
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/main/client.go), [`core/content/message.go`](https://github.com/looprig/core/blob/main/content/message.go)
-- Tests: [`core/content/message_json_test.go`](https://github.com/looprig/core/blob/main/content/message_json_test.go), [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/main/structured_result_test.go)
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.13.0/client.go), [`core/content/message.go`](https://github.com/looprig/core/blob/v0.11.0/content/message.go)
+- Tests: [`core/content/message_json_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/message_json_test.go), [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/v0.13.0/structured_result_test.go)
 
 Related: [AIMessage](/docs/guides/inference/messages/message-types/ai-message), [Tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas).

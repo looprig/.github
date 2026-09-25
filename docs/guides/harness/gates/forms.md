@@ -62,7 +62,7 @@ func parse(values map[string]json.RawMessage) (map[string]string, error) {
 
 `gate.FormAudit` is the durable answer projection. `NewFormAudit(schema, answers)` walks the schema, not an arbitrary answers map, so undeclared keys cannot enter an audit. `ValidateFormAuditBounds` repeats the limits at the record boundary: at most 32 values, names at most 128 bytes, and values at most 4096 bytes. Its typed kinds are `FormAuditTooManyValues`, `FormAuditFieldNameTooLong`, and `FormAuditValueTooLong`.
 
-The schema is authoritative for validation; `Gate.Prompt.Schema` is a renderer projection. `OpenHostGate` derives that projection from the validated `FormPayload`, so a host cannot show one schema and validate another. `GateResolved` carries the bounded audit, while the live `gate.Answer.Values` gives the opener the parsed strings.
+The schema is authoritative for validation; `Gate.Prompt.Schema` is a renderer projection. `OpenHostGate` derives that projection from the validated `FormPayload`, so a host cannot show one schema and validate another. `GateResolved` carries the bounded audit in the private journal record, while the live `gate.Answer.Values` gives the opener the parsed strings. The public projection built by `sessionwire.Project`, which session-wire viewers receive live and through journal reads, removes `audit` from every `GateResolved` and keeps only the gate, action, and source correlation, because the audit may contain raw form answers.
 
 ## Host flow
 

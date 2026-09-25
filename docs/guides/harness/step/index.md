@@ -26,7 +26,7 @@ The public API deliberately splits the boundary into observation and durable rec
 | Read committed Step history | `event.StepDone` | The finalized assistant message followed by its tool-result messages. |
 | Correlate all Step records | `event.Header.Coordinates` | `SessionID`, `LoopID`, `TurnID`, and `StepID`; Step events require all four IDs. |
 
-There is no separate public per-Step start, failure, or completion event. A failed or interrupted in-flight Step is represented by the enclosing Turn terminal, and it has no `StepDone` record.
+There is no separate public per-Step start, failure, or completion event. A failed or interrupted in-flight Step is represented by the enclosing Turn terminal and normally has no `StepDone` record. The exception is a stream cut short after the model already produced text: the safe prefix commits as a `StepDone` ending in a truncation notice before the terminal, as described in [Failure and cancellation](/docs/guides/harness/step/failure-and-cancellation).
 
 ## How it works
 

@@ -36,6 +36,13 @@ The public constructor is `func New(creds auth.SigV4Credentials, region string, 
 
 New requires region, access key, and secret key. Optional session tokens are signed. OpenAI format is rejected before I/O.
 
+Both routes check a few provider rules locally, before signing or sending, so a request Bedrock would refuse with an opaque HTTP 400 fails with a typed error instead:
+
+| Error | Route | Condition |
+| --- | --- | --- |
+| `*UnsupportedImageSourceError` | Anthropic InvokeModel and its counter | An image block, including one nested in a tool result, uses a source other than inline `base64`, such as a remote URL. `SourceType` names the rejected source type, never the URL. |
+| `*ThinkingBudgetError` | Converse | `inferenceConfig.maxTokens` is not greater than `thinking.budget_tokens`. The check reads the merged fields, so a budget set through `WithAdditionalModelRequestFields` is held to the same rule as `WithReasoning`. `MaxTokens` and `BudgetTokens` carry both values. The check passes when either value is absent. |
+
 An explicit model BaseURL is caller-controlled and is used by the provider route builder. It replaces the package default; it is not appended to the default.
 
 ## Authentication and model formats
@@ -71,7 +78,11 @@ flowchart LR
 
 ## Caching controls
 
-WithPromptCachePoint adds a native Converse cache point with the declared TTL and does not alter the Anthropic InvokeModel path.
+`WithPromptCachePoint(CachePointOptions{Type, TTL})` adds one native Converse `cachePoint` block, on Invoke, Stream, and the counter. It does not alter the Anthropic InvokeModel path. `Type` defaults to `default`, the only accepted value, and `TTL` must be empty, `CachePointTTL5m` (`"5m"`), or `CachePointTTL1h` (`"1h"`). Any cache points already present in the encoded body are removed first, so the request carries exactly one.
+
+The block marks the end of the committed conversation. The client encodes the request without its `Request.TransientMessages` tail, compares that projection with the full body, and inserts the cache point where the two stop matching. With no transient messages, that is the end of the last message. When there are no committed messages, the cache point is appended to the system content instead.
+
+Encoding fails with `*OptionError` when the type or TTL is invalid, when a transient `SystemMessage` follows the cached prefix, when the first message has no stable prefix and there is no system prompt, or when there is neither a committed message nor a system prompt to mark.
 
 ## Counters, errors, and retries
 
@@ -110,18 +121,19 @@ func invoke() error {
 
 ## Source and proof
 
-- [body.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/bedrock/body.go)
-- [client.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/bedrock/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/bedrock/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/bedrock/errors.go)
-- [options.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/bedrock/options.go)
+- [body.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/body.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/client.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/errors.go)
+- [options.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/options.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
 
-- [body_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/bedrock/body_test.go)
-- [client_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/bedrock/client_test.go)
-- [converse_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/bedrock/converse_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/bedrock/counter_test.go)
-- [export_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/bedrock/export_test.go)
-- [options_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/bedrock/options_test.go)
-- [usage_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/bedrock/usage_test.go)
+- [body_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/body_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/client_test.go)
+- [converse_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/converse_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/counter_test.go)
+- [export_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/export_test.go)
+- [options_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/options_test.go)
+- [thinking_budget_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/thinking_budget_test.go)
+- [usage_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/bedrock/usage_test.go)

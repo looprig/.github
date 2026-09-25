@@ -64,13 +64,18 @@ Restore repairs only what the durable stream proves:
 1. Append `RestoreStarted` as the first restore mutation.
 2. Append `ConfigurationAdopted` when an accepted manifest decision changes
    configuration or upgrades the manifest schema.
-3. Close unsupported or payload-less open gates durably.
+3. Close unsupported or payload-less open gates durably with
+   `restore_unavailable`. Open permission gates stay answerable.
 4. For each loop with `TurnStarted` and no terminal, append
-   `TurnInterrupted` with its stored turn ID and index.
+   `TurnInterrupted` with its stored turn ID and index, unless the active
+   primer's turn is parked at a gate and can be resumed (see below).
 5. Materialize the latest checkpoint or restore workspace pointer before
    building live loops.
 6. Rebuild native or foreign loops from folded context, messages, runtime
    selection, gates, and process notifications.
+7. After `RestoreDone`, replay any Host-admitted input whose `applied`
+   disposition is durable but which caused no durable event, under its
+   original runtime command ID and at most once.
 
 Unmatched hustle starts remain audit evidence. Restore does not recreate a
 queue, worker, finalizer, or synthetic hustle terminal for them.
@@ -101,7 +106,23 @@ performs the normal shutdown order.
 The restored session starts with fresh in-memory gate answer slots,
 subscriptions, review cancellation handles, and actor contexts. Durable gate
 payloads and open public gates are folded; a caller must reattach a host to
-await a host-owned answer on the new live instance.
+await a host-owned answer on the new live instance. Restore never starts a new
+classifier review for a restored gate.
+
+When the active primer loop is native and its open turn is parked at gates
+whose private `GatePrepared.Resume` snapshots all describe the same uncommitted
+step, with no compaction inside the turn, restore resumes that step instead of
+interrupting the turn. A permission-gated batch re-runs, and the gated call
+reuses its restored gate only if the re-checked request is unchanged; restored
+gates it does not adopt are closed `abandoned` first. An `ask_user` gate stays
+open only for a tool declaring `tool.UserInputReplaySafe` and the same
+question; its answer becomes the tool result. Subagent loops, foreign loops,
+and turns that compacted keep the interrupt behaviour. The
+[gates guide](/docs/guides/harness/gates#restore-and-failover) covers the details.
+
+A per-session workspace base (`session:<base>`) is compared by placement mode
+only, so a session restored on a host whose base path differs restores into
+the new base from its latest checkpoint rather than failing on drift.
 
 ## Restore errors
 

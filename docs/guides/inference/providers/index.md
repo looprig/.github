@@ -110,6 +110,7 @@ Streaming, tools, structured output, images, thinking, and usage are request fea
 | Structured output and tools | The selected codec encodes `inference.OutputSchema`, `Tools`, and `ToolChoice` where that dialect defines them. Provider-specific normalization is documented only on pages that implement it. |
 | Capability metadata | `model.Model.Caps` is supplied by the caller and checked by inference request validation; provider metadata is not a capability guarantee. |
 | Context counting | A page lists `NewCounter` only when the package has one. The common unsupported-counter result is a typed `llm.CounterSupportError`, not an estimate. |
+| Conversation identity | `inference.Request.SessionID` is forwarded only by OpenCode Zen and OpenCode Go, as `x-opencode-session`. Every other package leaves it off the wire; see [Conversation identity](/docs/guides/inference/requests#conversation-identity). |
 | Caching | Cache controls appear only for packages with source-level options such as OpenAI, Anthropic, Bedrock, Cloudflare AI Gateway, OpenRouter, or xAI. |
 
 ## Secret references and retries
@@ -120,7 +121,7 @@ The generic transport reports validation, network, HTTP, codec, and stream failu
 
 ## Source and proof
 
-- [`llm/provider.go`](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/provider.go) defines provider identities, supported API formats, empty-base policy, and required auth.
-- [`llm/validate.go`](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/validate.go) proves fail-closed model validation.
-- [`llm/authpolicy.go`](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/authpolicy.go) binds provider, transport, credential scheme, issuer, and audience.
-- [`inference/transport`](https://github.com/looprig/inference/tree/67df7e6bb20b5232f9cac94938d85a844779169b/transport) and [`inference/retry`](https://github.com/looprig/inference/tree/67df7e6bb20b5232f9cac94938d85a844779169b/retry) define the shared request and retry boundaries.
+- [`llm/provider.go`](https://github.com/looprig/llm/blob/v0.15.0/provider.go) defines provider identities, supported API formats, empty-base policy, and required auth.
+- [`llm/validate.go`](https://github.com/looprig/llm/blob/v0.15.0/validate.go) proves fail-closed model validation.
+- [`llm/authpolicy.go`](https://github.com/looprig/llm/blob/v0.15.0/authpolicy.go) binds provider, transport, credential scheme, issuer, and audience.
+- [`inference/transport`](https://github.com/looprig/inference/tree/v0.13.0/transport) and [`inference/retry`](https://github.com/looprig/inference/tree/v0.13.0/retry) define the shared request and retry boundaries.

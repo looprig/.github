@@ -30,22 +30,23 @@ type Session interface {
 }
 
 // Compact targets the active Loop.
-attemptID, err := live.Compact(ctx)
+commandID, err := live.Compact(ctx)
 if err != nil {
 	return fmt.Errorf("request manual compaction: %w", err)
 }
 
 // CompactToLoop targets a known Loop ID.
-targetAttempt, err := live.CompactToLoop(ctx, loopID)
-_ = attemptID
-_ = targetAttempt
+targetCommand, err := live.CompactToLoop(ctx, loopID)
+_ = commandID
+_ = targetCommand
 ```
 
-`Compact` and `CompactToLoop` return a UUID-shaped request/attempt identity,
-not a summary and not a synchronous success claim. Invalid context, closing,
-missing Loop, unsupported compaction, or command admission failures are
-returned at request time; execution and summary rejection are reported by
-events.
+`Compact` and `CompactToLoop` return the compact command ID, not the attempt
+ID, not a summary, and not a synchronous success claim. Invalid context, a
+faulted session, a missing or exited Loop, and unsupported compaction are
+returned at request time; compaction is supported only on native Loops whose
+definition installs `loop.WithCompaction`. Execution and summary rejection are
+reported by events.
 
 Proof: [Session interface](https://github.com/looprig/harness/blob/main/pkg/session/session.go), [session compaction implementation](https://github.com/looprig/harness/blob/main/internal/sessionruntime/session.go), and [manual compaction tests](https://github.com/looprig/harness/blob/main/internal/sessionruntime/compaction_live_test.go).
 
@@ -60,7 +61,10 @@ Proof: [compaction control admission](https://github.com/looprig/harness/blob/ma
 
 ## Observe completion
 
-Subscribe to the public event stream and correlate `AttemptID`. A committed
+Subscribe to the public event stream. Match the returned command ID against
+the terminal event's `WaiterCommandIDs` or the waiter reply's
+`Cause.CommandID`, then use `AttemptID` to relate the terminal to its
+`CompactionStarted`. A committed
 event contains the validated summary and `PostContext`; a rejected event
 contains the bounded `CompactRejectReason`. Waiter replies are deterministic
 event identities derived by `event.CompactWaiterReplyID`.
@@ -73,7 +77,7 @@ sequenceDiagram
     participant L as Loop actor
     participant E as event stream
     A->>S: Compact(ctx)
-    S-->>A: attempt ID
+    S-->>A: command ID
     L->>E: CompactionStarted
     L->>E: CompactionCommitted or CompactionRejected
     E-->>A: waiter reply when command was awaited

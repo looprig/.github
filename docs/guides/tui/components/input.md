@@ -9,6 +9,7 @@ publication: released
 proofs:
   constructor: release-github-com-looprig-tui
   editing: release-github-com-looprig-tui
+  pasted-text: release-github-com-looprig-tui
   sizing-and-rendering: release-github-com-looprig-tui
   source: release-github-com-looprig-tui
   proof: release-github-com-looprig-tui
@@ -48,6 +49,18 @@ if strings.TrimSpace(box.Value()) != "" {
 }
 ```
 
+## Pasted text
+
+A multiline paste collapses into a compact `[pasted N chars]` marker so a long log or file does not fill the composer. `Value` returns the text with every marker expanded to its exact original payload, which is what the host should submit. `DisplayValue` returns the compact text the editor shows. Pressing Backspace directly after a collapsed paste removes the marker and its payload as one item. Single-line pastes are inserted as ordinary editable text.
+
+```go
+// Submit the expanded value, never the compact display text.
+text := box.Value()         // original pasted bytes restored
+shown := box.DisplayValue() // "[pasted 1432 chars]" style markers
+```
+
+`SetPlaceholder` replaces the empty-editor hint without touching the value, and `ResetPlaceholder` restores the default compose hint. The screen uses the pair when the composer temporarily becomes the search field of the model or session tray.
+
 ## Sizing and rendering
 
 `Resize(width)` subtracts the left rail and padding before sizing the inner textarea. `SetMinLines` changes the visible lower bound. `SetVerticalPadding` adds rows above and below the text without changing the editor's auto-grow range. `SetBackground` enables the modern full-width panel fill and reopens the background after internal ANSI resets. The default widget remains the lightweight scrollback composer.
@@ -61,4 +74,4 @@ The `View` result is a string. It can be embedded in a `tea.View` or composed wi
 ## Proof
 
 - [InputBox behavior tests](https://github.com/looprig/tui/blob/main/components/input_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)

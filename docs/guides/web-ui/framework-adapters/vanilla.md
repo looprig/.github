@@ -62,7 +62,7 @@ For richer rendering, keep the same callback shape and render `toolCalls`, `queu
 
 ## Source
 
-The complete data-attribute binding, rendering callback, submit and interrupt handlers, and disposer are in [`sdk/core/examples/vanilla-session.ts`](https://github.com/looprig/client/blob/main/sdk/core/examples/vanilla-session.ts). The facade lifecycle it uses is exercised in [`sdk/core/examples/session-client.test.ts`](https://github.com/looprig/client/blob/main/sdk/core/examples/session-client.test.ts).
+The complete data-attribute binding, rendering callback, submit and interrupt handlers, and disposer are in [`sdk/core/examples/vanilla-session.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/examples/vanilla-session.ts). The facade lifecycle it uses is exercised in [`sdk/core/examples/session-client.test.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/examples/session-client.test.ts).
 
 ## Proof
 

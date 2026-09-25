@@ -8,6 +8,7 @@ order: 11
 publication: released
 proofs:
   contract: [release-github-com-looprig-tools]
+  restore-and-failover: [release-github-com-looprig-tools]
   source: [release-github-com-looprig-tools]
   proof: [release-github-com-looprig-tools]
 ---
@@ -34,6 +35,10 @@ answer, err := built[0].InvokableRun(ctx, `{"question":"Continue?","choices":["y
 ```
 
 Parsing, a missing question, an answer outside the choice list, a canceled turn, or a provider failure becomes a tool-result error string. `AuditSummary` includes the question because the user sees it directly. It does not expose hidden gate state.
+
+## Restore and failover
+
+`AskUser` implements Harness's `tool.UserInputReplaySafe` and reports `true`, because nothing it does before asking has an effect outside the process: it only parses and validates `question` and `choices`. When a session parked at an AskUser question is restored after a crash, drain, or Host failover, Harness can run the call again against the same open gate, so the user's answer reaches the waiting tool instead of the question being closed as `restore_unavailable`. A tool that does not declare replay safety keeps that fail-safe closure.
 
 See [Tool Definitions, Preparation, and Results](/docs/guides/tools/core-concepts) for the common lifecycle and Harness's [tool calls and results](/docs/guides/harness/step/tool-calls-and-results) for the surrounding turn.
 

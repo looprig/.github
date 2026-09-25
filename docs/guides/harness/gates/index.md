@@ -11,6 +11,7 @@ proofs:
   payload-union: [release-github-com-looprig-harness]
   ownership: [release-github-com-looprig-harness]
   lifecycle: [release-github-com-looprig-harness]
+  restore-and-failover: [release-github-com-looprig-harness]
   limits-and-errors: [release-github-com-looprig-harness]
   source-and-proof: [release-github-com-looprig-harness]
 ---
@@ -87,9 +88,20 @@ sequenceDiagram
 
 `RespondGate` is durable-first: it claims the open entry, appends `GateResolved`, removes the entry, then delivers a loop command or host answer. If the append fails, the claim is reverted and the gate remains answerable. `CloseGate` follows the same durable-first rule for public gates; a still-preparing entry is removed without a public close event.
 
+## Restore and failover
+
+When a session is restored, for example on another Host after a crash or drain, the session rebuilds its gate directory from the journal. An open gate is reinstalled as answerable only if it is a restorable permission gate, or an ask-user gate whose parked step the restore resumes. Every other open gate, including form and open-URL gates, is closed with a `GateResolved` whose reason is `gate.CloseRestoreUnavailable`. A restored permission gate never starts a new classifier review, so only a user or policy answer resolves it.
+
+A loop-owned tool gate records a private resume snapshot, `event.GatePrepared.Resume` of type `*event.ToolStepResume` (`StepIndex`, the step's assistant `Message`, and the gated call's `ToolUseID`). It carries raw tool arguments, so it is kept only in the private prepare record and never appears in a public event. On restore, the native active loop resumes its open turn at the parked step when every gate it owns carries a valid snapshot of the same uncommitted step and no compaction ran inside the turn:
+
+- **Permission gates.** Nothing in the batch executed before access resolution, so the whole batch runs again. The gated call adopts the restored gate only if its re-evaluated request is unchanged. Any restored gate that is not adopted is closed `abandoned` before anything runs; if that durable close fails, nothing runs and the turn fails. The approved tool runs once.
+- **Ask-user gates.** Only a tool implementing `tool.UserInputReplaySafe` and returning true is re-run, and it adopts the gate only for the exact same question and choices. The answer becomes its tool result. Sibling calls that may already have taken effect are not re-run; each receives an explicit outcome-unknown error result.
+
+When those conditions do not hold, the turn is interrupted and an unresumed ask-user gate is closed `restore_unavailable`. Declare `UserInputReplaySafe` only when every path before the question is free of external effects.
+
 ## Limits and errors
 
-`sessionruntime.GateCaps` has `MaxOpen int` and `MaxTimeout time.Duration`; `rig.WithGateCaps(caps)` installs the option. `MaxOpen` counts preparing, open, and claiming entries, and zero means unlimited. A timeout above `MaxTimeout` or a full directory returns `*session.GateError{Kind: session.GateCapacity}`.
+`rig.GateCaps` has `MaxOpen int` and `MaxTimeout time.Duration`; `rig.WithGateCaps(caps)` installs the option and rejects negative values with `rig.DefinitionInvalidGateCaps`. `MaxOpen` counts preparing, open, and claiming entries, and zero means unlimited. Zero `MaxTimeout` also means no timeout cap. A permission gate opened with no response policy defaults to a five-minute timeout that answers `Deny`. A timeout above `MaxTimeout` or a full directory returns `*session.GateError{Kind: session.GateCapacity}`.
 
 `session.GateError` has `GateID gate.ID`, `Kind session.GateErrorKind`, and `Cause error`. Its kinds are `GateNotFound`, `GateNotReady`, `GateKindMismatch`, `GateActionInvalid`, `GateCapacity`, and `GateAppendFailed`. Gate validation adds `*gate.GateValidationError` for `GateRestorableNotAllowed` and `GateOriginInvalid`. Use `errors.As` rather than string matching.
 

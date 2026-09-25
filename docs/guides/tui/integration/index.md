@@ -63,4 +63,4 @@ For the capabilities being rendered, read [Tools](/docs/guides/tools) and [Harne
 - [Adapter behavior tests](https://github.com/looprig/tui/blob/main/sessionadapter/adapter_test.go)
 - [Restore decider tests](https://github.com/looprig/tui/blob/main/restore/decider_test.go)
 - [Session adapter example](https://github.com/looprig/tui/blob/main/examples/sessionadapter/example_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)

@@ -63,9 +63,16 @@ type Subscription interface {
 }
 
 type Delivery struct {
-	Event Event
+	Event      Event
 	JournalSeq uint64 // 0 for Ephemeral; append sequence for Enduring
+
+	// Set only on a committed public delivery; see "Durable append and live delivery".
+	EventID        string // canonical public event ID
+	PublicBody     []byte // exact public body the durable append stored
+	CoveredThrough uint64 // equals JournalSeq
 }
+
+func (d Delivery) Committed() bool
 ```
 
 `Event` is sealed by the unexported `isEvent` method, so a downstream package
@@ -89,7 +96,7 @@ the listed class, scope, and visibility unless the row calls out an exception.
 
 | Family | Concrete events | Class | Scope | Visibility | Lifecycle |
 | --- | --- | --- | --- | --- | --- |
-| Session lifecycle | `SessionStarted`, `SessionActive`, `SessionIdle`, `SessionStopped`, `RestoreStarted`, `RestoreDone`, `RestoreErrored` | Enduring | Session | Public | Mid-stream |
+| Session lifecycle | `SessionStarted`, `SessionActive`, `SessionIdle`, `SessionStopped`, `SessionResidencyReleased`, `RestoreStarted`, `RestoreDone`, `RestoreErrored` | Enduring | Session | Public | Mid-stream |
 | Restore and workspace | `ConfigurationAdopted`, `WorkspaceCheckpointed`, `WorkspaceRestored`, `ActiveLoopChanged`, `DelegateDeliveryStateChanged`, `WorkflowActivity` | Enduring | Session | Public | Mid-stream |
 | Hustle audit | `HustleStarted`, `HustleCompleted`, `HustleFailed` | Enduring | Session | Internal | Mid-stream |
 | Loop lifecycle | `LoopStarted`, `LoopIdle`, `LoopRestoreTombstoned`, `ForeignSessionBound`, `LoopAgentSessionBound`, `DelegateRequestAccepted` | Enduring | Loop | Public | Mid-stream |
@@ -97,7 +104,7 @@ the listed class, scope, and visibility unless the row calls out an exception.
 | Context and compaction | `ContextMeasured`, `CompactionCommitted`, `CompactionRejected`, `CompactWaiterResolved`, `CompactWaiterRejected` | Enduring | Loop | Public | Mid-stream |
 | Context signals | `ContextPressure`, `CompactionStarted` | Ephemeral | Loop | Public | Mid-stream |
 | Input admission | `InputQueued` | Ephemeral | Loop | Public | Mid-stream |
-| Turn admission and terminal | `TurnStarted`, `TurnFoldedInto`, `InputCancelled`, `TurnRejected`, `TurnDone`, `TurnFailed`, `TurnInterrupted` | Enduring except `InputQueued`; terminal rows are Enduring | Loop | Public | `TurnDone`, `TurnFailed`, `TurnInterrupted` are terminal |
+| Turn admission, steps, and terminal | `TurnStarted`, `StepDone`, `TurnFoldedInto`, `InputCancelled`, `TurnRejected`, `TurnDone`, `TurnFailed`, `TurnInterrupted` | Enduring | Loop | Public | `TurnDone`, `TurnFailed`, `TurnInterrupted` are terminal |
 | Streaming and tool lifecycle | `TokenDelta`, `ToolCallStarted`, `ToolCallCompleted` | Ephemeral | Loop | Public | Mid-stream |
 | Tool interaction | `PermissionRequested`, `PermissionDecided`, `UserInputRequested` | Enduring | Loop | Public | Mid-stream |
 | Gates | `GatePrepared`, `GateOpened`, `GateResolved` | Enduring | Loop-shaped coordinates | `GatePrepared` is private journal state; the opened/resolved projections are Public | Mid-stream |
@@ -145,6 +152,18 @@ and delivers nothing for that publication. A duplicate idempotent append is
 also not broadcast a second time. `SessionStopped` is a durable event and does
 not close a subscription by itself; the consumer closes it, the hub tears it
 down, or an Enduring overflow fails it.
+
+A consumer that joins a durable public tail to the live stream, such as a Host
+serving remote viewers, needs the exact bytes the journal stored rather than a
+re-projection. Discover that capability with
+`session.CommittedPublicEventProvider`: `CommittedPublicEvents()` returns
+`ok == false` when the session's persistence cannot report stored bodies, which
+includes a headless session. On the returned source,
+`SubscribeCommittedPublicEvents` delivers only public Enduring events, each with
+`Committed() == true`, and skips Ephemeral values. A stream that fails with a
+`*hub.SubscriptionLossError` wrapping `hub.ErrCommittedBodyMissing` or
+`hub.ErrCommitEventMismatch` reports a broken invariant, so resubscribing will
+not help. A loss with a nil cause is ordinary egress overflow.
 
 ## Subscribe from `session.Session`
 

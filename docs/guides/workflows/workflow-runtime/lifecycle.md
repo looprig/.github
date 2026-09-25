@@ -91,8 +91,8 @@ For the lower-level checkpoint failure taxonomy, see [Interruption, resume, and 
 
 ## Source
 
-- [run.go](https://github.com/looprig/workflows/blob/main/run.go)
+- [run.go](https://github.com/looprig/workflows/blob/v0.1.2/run.go)
 
 ## Proof
 
-- [reconcile_test.go](https://github.com/looprig/workflows/blob/main/reconcile_test.go)
+- [reconcile_test.go](https://github.com/looprig/workflows/blob/v0.1.2/reconcile_test.go)

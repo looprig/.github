@@ -67,8 +67,8 @@ At the message level, [ToolResultMessage](/docs/guides/inference/messages/messag
 
 ## Proof
 
-- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/main/content/block.go), [`core/content/block_json.go`](https://github.com/looprig/core/blob/main/content/block_json.go)
-- Tests: [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/main/content/block_json_test.go)
-- Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/main/examples/content/example_test.go)
+- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.11.0/content/block.go), [`core/content/block_json.go`](https://github.com/looprig/core/blob/v0.11.0/content/block_json.go)
+- Tests: [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.11.0/content/block_json_test.go)
+- Example: [`core/examples/content/example_test.go`](https://github.com/looprig/core/blob/v0.11.0/examples/content/example_test.go)
 
 Related: [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use), [ToolResultMessage](/docs/guides/inference/messages/message-types/tool-result-message).

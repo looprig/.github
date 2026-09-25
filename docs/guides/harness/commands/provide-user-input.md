@@ -123,6 +123,11 @@ For host-owned form gates, use the separate `session.GateHost` contract and its
 `AwaitGateAnswer` path; `ProvideUserInput` is specifically for the loop-owned
 AskUser route.
 
+An open AskUser gate survives a session restore only when the asking tool
+implements `tool.UserInputReplaySafe`, reports true, and the restore resumes that tool step.
+Otherwise restore closes the gate with `gate.CloseRestoreUnavailable`, and a
+response sent afterwards fails with `GateNotFound` or `GateNotReady`.
+
 The source of the command is [`pkg/command/provide_user_input.go`](https://github.com/looprig/harness/blob/main/pkg/command/provide_user_input.go)
 and the event is [`pkg/event/tool.go`](https://github.com/looprig/harness/blob/main/pkg/event/tool.go).
 The gate behavior is proved by [`internal/sessionruntime/gates_test.go`](https://github.com/looprig/harness/blob/main/internal/sessionruntime/gates_test.go),

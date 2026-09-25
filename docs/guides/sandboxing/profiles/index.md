@@ -84,9 +84,9 @@ The `Home` choice is independent from the authority axes. `RealHome` gives the c
 
 ## Source
 
-- [ProfileConfig, enum values, validation, and AccessFor](https://github.com/looprig/sandbox/blob/main/pkg/profile/profile.go)
-- [Public profile aliases](https://github.com/looprig/sandbox/blob/main/sandbox.go)
+- [ProfileConfig, enum values, validation, and AccessFor](https://github.com/looprig/sandbox/blob/v0.9.1/pkg/profile/profile.go)
+- [Public profile aliases](https://github.com/looprig/sandbox/blob/v0.9.1/sandbox.go)
 
 ## Proof
 
-- [Profile construction and validation tests](https://github.com/looprig/sandbox/blob/main/pkg/profile/profile_test.go)
+- [Profile construction and validation tests](https://github.com/looprig/sandbox/blob/v0.9.1/pkg/profile/profile_test.go)

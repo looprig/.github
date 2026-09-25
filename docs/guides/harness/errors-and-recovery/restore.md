@@ -29,13 +29,13 @@ The restore constructor uses one writer lease and an ordered journal boundary:
 
 | Stage | Work | Failure family |
 | --- | --- | --- |
-| 1 | Acquire the session lease, open the journal with its opening `LeaseFence`, and open the internal record replayer. | `RestoreLeaseFailed`, `RestoreJournalFailed`, or `RestoreReplayFailed`; the lease is released. |
+| 1 | Acquire the session lease, open the journal with its opening `LeaseFence`, and open the internal record replayer. A fence that loses a handover race is retried under a fresh lease at a higher epoch. | `RestoreLeaseFailed` (including a failed re-claim), `RestoreJournalFailed`, or `RestoreReplayFailed`; the lease is released. |
 | 2 | Replay the full record stream and discover the persisted session, root loop, open turns, workspace pointer, and gate state. | `RestoreReplayFailed`, `RestoreDiscoveryError`, or a wrapped fold error. |
 | 3 | Compare the persisted baseline with the live fingerprint or configuration manifest and ask the restore decider. | `ConfigMismatchError`, `RestoreRejectedError`, or `RestoreRuntimeMismatchError`. |
 | 4 | Resolve workspace placement and bind every declared durable loop. | `RestoreLeaseFailed` for placement contention, `RestoreLoopFailed`, or `RestoreForeignBuilderMissing`. |
-| 5 | Append `RestoreStarted`, durable adoption when required, crash-seam `TurnInterrupted` events, and any recovery closures. | `RestoreAppendFailed` or `RestoreAdoptionInvalid`. |
+| 5 | Append `RestoreStarted`, durable adoption when required, crash-seam `TurnInterrupted` events, and any recovery closures. A turn the active primer can resume at an open gate is not interrupted. | `RestoreAppendFailed` or `RestoreAdoptionInvalid`. |
 | 6 | Materialize the workspace, build and attach loops, activate session resources, and validate the active loop. | `RestoreMaterializeFailed` or `RestoreLoopFailed`. |
-| 7 | Append `RestoreDone`. Only then is the restored controller returned and its lease retained. | `RestoreAppendFailed`. |
+| 7 | Append `RestoreDone`. Then resume a parked turn, if any, and replay Host-admitted inputs recorded `applied` whose effect never reached the journal. Only then is the restored controller returned and its lease retained. | `RestoreAppendFailed`, or `RestoreLoopFailed` if the parked turn cannot start. |
 
 ```mermaid
 %%{init: {"theme":"dark"}}%%
@@ -73,6 +73,15 @@ Runtime mismatch kinds are exactly `missing_runtime`, `runtime_unavailable`,
 `target_mismatch`, `credential_mismatch`, and `effort_mismatch`. The public
 error text contains only the category. Provider selectors, credentials, and
 model-specific details remain in the wrapped cause for trusted diagnostics.
+
+A per-session workspace placement (`WithSessionWorkspaces`) whose base
+directory is at a different path on the restoring host is not drift: the two
+placements compare by mode alone and no `ConfigurationAdopted` is recorded. A
+changed placement mode, a different exclusive or shared root, or an added or
+removed placement is still workspace drift. If the new base already holds a
+tree that does not match the checkpoint, restore fails with
+`RestoreMaterializeFailed` wrapping `*workspacestore.DestNotEmptyError` and does
+not clear the directory.
 
 The general `session.RestoreError` wrapper has these exact `Kind` values:
 `lease_failed`, `journal_failed`, `replay_failed`, `append_failed`,

@@ -128,8 +128,8 @@ The supervisor exposes focused controls:
 
 ## Source
 
-- [supervisor.go](https://github.com/looprig/workflows/blob/main/supervisor.go)
+- [supervisor.go](https://github.com/looprig/workflows/blob/v0.1.2/supervisor.go)
 
 ## Proof
 
-- [supervisor_test.go](https://github.com/looprig/workflows/blob/main/supervisor_test.go)
+- [supervisor_test.go](https://github.com/looprig/workflows/blob/v0.1.2/supervisor_test.go)

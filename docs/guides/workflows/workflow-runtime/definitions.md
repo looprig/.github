@@ -160,8 +160,8 @@ The Flow graph remains reusable and immutable after `Compile`. Changing graph be
 
 ## Source
 
-- [definition.go](https://github.com/looprig/workflows/blob/main/definition.go)
+- [definition.go](https://github.com/looprig/workflows/blob/v0.1.2/definition.go)
 
 ## Proof
 
-- [definition_test.go](https://github.com/looprig/workflows/blob/main/definition_test.go)
+- [definition_test.go](https://github.com/looprig/workflows/blob/v0.1.2/definition_test.go)

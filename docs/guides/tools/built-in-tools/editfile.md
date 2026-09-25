@@ -8,13 +8,14 @@ order: 13
 publication: released
 proofs:
   contract: [release-github-com-looprig-tools]
+  gate-preview: [release-github-com-looprig-tools]
   source: [release-github-com-looprig-tools]
   proof: [release-github-com-looprig-tools]
 ---
 
 # EditFile
 
-`EditFile` replaces an exact substring in a UTF-8 text file and returns a compact diff preview. Its default unique mode requires `old` to occur exactly once. Set `replace_all` to replace every occurrence. Zero matches and ambiguous matches are tool-result errors, not silent edits.
+`EditFile` replaces an exact substring in a UTF-8 text file and returns a compact unified diff of the change. Its default unique mode requires `old` to occur exactly once. Set `replace_all` to replace every occurrence. Zero matches and ambiguous matches are tool-result errors, not silent edits.
 
 ## Contract
 
@@ -42,13 +43,21 @@ result, err := editor.InvokableRun(prepared, `{}`)
 
 When the file changed since the complete read, the result uses `StaleFileError`. A missing file, irregular node, bad anchor, lease failure, or changed resolution is also surfaced as a bounded error string. See [WriteFile](/docs/guides/tools/built-in-tools/writefile) for full-file replacement and [Safety, Permissions, and Gates](/docs/guides/tools/safety) for coordinator behavior.
 
+## Gate preview
+
+The prepared artifact implements `tool.MutationPreviewer`. When a permission gate opens, it reads the current file, applies the edit in memory, and renders a unified diff with three lines of context, capped at 16 KiB. That is what a reviewer sees on the permission card. The successful result is `edited <path>` followed by the diff. When the committed bytes still match the previewed ones, the result reuses the reviewed diff verbatim; otherwise it renders a fresh diff capped at 8 KiB.
+
+Preview failures decline silently and never change the outcome of the call. For a host edit that was previewed, the commit is bound to the reviewed bytes and refuses if the file drifted in between. See [Review what a mutation will change](/docs/guides/tools/safety#review-what-a-mutation-will-change).
+
 ## Source
 
 - [EditFile public wrapper](https://github.com/looprig/tools/blob/main/editfile/editfile.go)
 - [EditFile implementation](https://github.com/looprig/tools/blob/main/internal/filemutation/editfile.go)
+- [Unified diff rendering](https://github.com/looprig/tools/blob/main/internal/filemutation/textdiff.go)
 
 ## Proof
 
 - [EditFile behavior tests](https://github.com/looprig/tools/blob/main/internal/filemutation/editfile_test.go)
 - [EditFile preparation tests](https://github.com/looprig/tools/blob/main/internal/filemutation/preparecall_test.go)
 - [Host-write and paired-read tests](https://github.com/looprig/tools/blob/main/internal/filemutation/hostwrites_test.go)
+- [Diff rendering tests](https://github.com/looprig/tools/blob/main/internal/filemutation/textdiff_test.go)

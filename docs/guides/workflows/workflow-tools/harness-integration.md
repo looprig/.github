@@ -114,8 +114,8 @@ For event envelopes and workflow event visibility, read [Harness workflow events
 
 ## Source
 
-- [session_resource.go](https://github.com/looprig/workflows/blob/main/session_resource.go)
+- [session_resource.go](https://github.com/looprig/workflows/blob/v0.1.2/session_resource.go)
 
 ## Proof
 
-- [harness_restore_integration_test.go](https://github.com/looprig/workflows/blob/main/harness_restore_integration_test.go)
+- [harness_restore_integration_test.go](https://github.com/looprig/workflows/blob/v0.1.2/harness_restore_integration_test.go)

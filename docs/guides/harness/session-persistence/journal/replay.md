@@ -71,7 +71,10 @@ type RecordCursor interface {
 ```
 
 `EventCursor` yields events only. `RecordCursor` yields `EventRecord`,
-`CommandRecord`, `FenceRecord`, and `GatePreparedRecord` in one ledger sequence.
+`CommandRecord`, `FenceRecord`, `GatePreparedRecord`,
+`CommandApplicationRecord`, and `CommandDispositionRecord` in one ledger
+sequence. A replayed `CommandRecord` carries the bound session ID and a zero
+loop ID, because the frame does not persist the dispatch loop.
 Both `Close` methods are idempotent. A `Next` after close returns `io.EOF`.
 
 ## Visibility and narrowing
@@ -84,8 +87,11 @@ func (s *Store) OpenInternalEventReplayer(id uuid.UUID, req ReplayRequest) (jour
 func (s *Store) OpenInternalRecordReplayer(id uuid.UUID, req ReplayRequest) (journal.RecordReplayer, error)
 ```
 
-The first is product-facing and filters internal events, commands, fences, and
-private gate preparation. The second includes internal events but still yields
+The first is product-facing and filters internal events, commands, fences,
+private gate preparation, and command application and disposition records. It
+yields native `event.Event` values; the redacted public wire body stored with
+each public event is served by the committed public event stream, not by this
+replayer. The second includes internal events but still yields
 events only. The third is privileged and returns every record. Restore uses the
 third view because a private gate payload and command intent cannot be
 reconstructed from public events.
@@ -98,16 +104,31 @@ flowchart TD
     V -- yes --> EC[EventCursor]
     V -- no --> X[filtered]
     L --> I[Internal RecordReplayer]
-    I --> RC[RecordCursor: events, commands, fences, prepared gates]
+    I --> RC[RecordCursor: events, commands, fences, prepared gates, command records]
 ```
 
 ## Integrity fail-closed
 
-For an offloaded frame, replay fetches the pointer's blob, verifies SHA-256,
-size, and matching inner/outer idempotency IDs, then decodes the real envelope.
-The typed failures are `*BlobUnavailableError`, `*BlobIntegrityError`,
-`*BlobPointerIDMismatchError`, `*ReplayDecodeError`, and `*ReplayReadError`.
-Use `errors.As`; do not skip the bad sequence or treat it as completed history.
+For a body stored as a SessionStore object, replay refuses a declared size
+above 16 MiB before fetching anything, then reads the object through
+SessionStore, which verifies its size and SHA-256. For a legacy `blobptr` frame
+written by an older release, replay fetches the blob, verifies SHA-256, size,
+and matching inner and outer idempotency IDs, then decodes the real envelope. A
+frame that carries SessionStore's envelope magic but fails to decode is an
+error; it never falls back to the legacy decoder.
+
+| Error | Meaning |
+| --- | --- |
+| `*BlobUnavailableError` | the object or blob could not be read |
+| `*BlobIntegrityError` | stored bytes do not match the recorded size or digest |
+| `*DurableBodyTooLargeError` | a referenced body declares more than the 16 MiB replay ceiling; a size refusal, not evidence of tampering |
+| `*BlobPointerIDMismatchError` | a legacy pointer and its blob disagree on the record ID |
+| `*ReplayDecodeError` | a frame or body cannot be decoded |
+| `*ReplayReadError` | the ledger cursor failed |
+
+Object failures during a durable-body read are wrapped in `*ReplayDecodeError`,
+so match the leaf with `errors.As`. Do not skip the bad sequence or treat it as
+completed history.
 
 ## Replay example
 

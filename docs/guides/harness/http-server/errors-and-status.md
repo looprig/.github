@@ -69,7 +69,7 @@ After boundary validation, operation failures use these responses:
 | Operation | Success | Failure mapping |
 | --- | --- | --- |
 | `POST /v1/sessions` create | `201` | `500 internal` for `NewSession`; `500 internal` for `Submit` failure. |
-| `POST /v1/sessions/{sid}/restore` | `200` | `404 session_not_found` only when the Rig returns `serve.SessionNotFoundError`; otherwise `500 internal`. |
+| `POST /v1/sessions/{sid}/restore` | `200` with `restored` | An already-live session answers `200` with `restored: false` without calling the Rig. `404 session_not_found` only when the Rig returns `serve.SessionNotFoundError`; otherwise `500 internal`. |
 | `POST /v1/sessions/{sid}/input` | `200` with `command_id` | `500 internal` for `Submit` failure. |
 | `POST /v1/sessions/{sid}/interrupt` | `200` with `interrupted` | `500 internal` for `Interrupt` failure. |
 | Gate response | `202` with `{}` | Gate-specific table below; unknown or non-gate failures are `500 internal`. |
@@ -81,6 +81,9 @@ After boundary validation, operation failures use these responses:
 The live control routes consult the process-local registry. The read routes use
 the injected Reader and do not require a live session. A `404` on a control
 route therefore means only that the requested ID is not live in this process.
+A session that implements `serve.SessionDone` and has begun shutting down gets
+the same `404` as an ID that never existed, so the route is not a liveness
+oracle.
 
 ## Gate and stream mappings {#gate-and-stream}
 

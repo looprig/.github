@@ -46,7 +46,7 @@ In development, Vite proxies `/api` to the BFF at `http://127.0.0.1:8080`, prese
 
 ## Source
 
-The `adapter-static` output, `index.html` fallback, and development `/api` proxy are configured in [`app/vite.config.ts`](https://github.com/looprig/client/blob/main/app/vite.config.ts). Client-only rendering is declared in [`app/src/routes/+layout.ts`](https://github.com/looprig/client/blob/main/app/src/routes/+layout.ts).
+The `adapter-static` output, `index.html` fallback, and development `/api` proxy are configured in [`app/vite.config.ts`](https://github.com/looprig/client/blob/v0.4.0/app/vite.config.ts). Client-only rendering is declared in [`app/src/routes/+layout.ts`](https://github.com/looprig/client/blob/v0.4.0/app/src/routes/+layout.ts).
 
 ## Proof
 

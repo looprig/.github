@@ -26,16 +26,18 @@ Pluto is an evaluation and qualification framework for models and agents. It run
 ## Install
 
 ```sh
-go install github.com/looprig/pluto/cmd/pluto@v0.2.0
+go install github.com/looprig/pluto/cmd/pluto@v0.2.1
 ```
 
 ## Run Pluto
 
-Define the target, packs, and profile in Pluto configuration, then run the command against that checked input. Provider credentials are resolved from the environment rather than copied into the manifest.
+Describe the target under test in a manifest and the product requirements in a profile, each a small YAML file, then run one or more pack directories against them. Provider credentials are resolved from the environment rather than copied into the manifest.
 
 ```sh
-pluto run --manifest model.yaml --report report.json
+pluto run --manifest target.yaml --profile profile.yaml --packs packs/tool-use --out report.json
 ```
+
+`pluto run` checks capabilities and prints a token and cost estimate before any paid call, then writes the report to `--out` (default `pluto-report.json`). It exits with status 3 unless the resulting disposition meets `--require`, which defaults to `qualified`.
 
 ## Features
 

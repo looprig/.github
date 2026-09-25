@@ -82,7 +82,7 @@ Include every runtime dependency your tools need. For example, an agent that inv
 This multi-stage Dockerfile builds the application and runs it as a non-root user. Replace `./cmd/agent` with the main package in your project.
 
 ```dockerfile
-FROM golang:1.26.5-bookworm AS build
+FROM golang:1.26.8-bookworm AS build
 WORKDIR /src
 
 # Cache module downloads independently from application source changes.
@@ -179,10 +179,10 @@ Use [profiles and access dimensions](/docs/guides/sandboxing/profiles), [platfor
 
 ## Source
 
-- [Linux re-exec initialization](https://github.com/looprig/sandbox/blob/main/init_linux.go)
-- [Executor level, report, and guarantees](https://github.com/looprig/sandbox/blob/main/internal/exec/executor.go)
+- [Linux re-exec initialization](https://github.com/looprig/sandbox/blob/v0.9.1/init_linux.go)
+- [Executor level, report, and guarantees](https://github.com/looprig/sandbox/blob/v0.9.1/internal/exec/executor.go)
 
 ## Proof
 
-- [Linux re-exec initialization tests](https://github.com/looprig/sandbox/blob/main/internal/exec/init_linux_test.go)
-- [Runnable sandbox policy example](https://github.com/looprig/sandbox/blob/main/examples/policy-enforcement/example_test.go)
+- [Linux re-exec initialization tests](https://github.com/looprig/sandbox/blob/v0.9.1/internal/exec/init_linux_test.go)
+- [Runnable sandbox policy example](https://github.com/looprig/sandbox/blob/v0.9.1/examples/policy-enforcement/example_test.go)

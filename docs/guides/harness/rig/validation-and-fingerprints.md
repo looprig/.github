@@ -53,7 +53,7 @@ fingerprint. Runtime identity is the opaque digest from
 | --- | --- |
 | `AgentKind` | consumer's role identity |
 | `RuntimeSkills` | whether runtime skills are enabled |
-| `WorkspaceRoot` | canonical placement mode and region, when configured |
+| `WorkspaceRoot` | canonical placement mode and region (`<mode>:<region>`), when configured; restore compares a per-session placement by mode alone |
 | `AdapterID`, `Posture` | foreign adapter and permission posture |
 | `NativePermissionPolicyRev` | native permission policy identity |
 | `ExternalCapabilityRev` | external capability catalog identity |
@@ -98,8 +98,12 @@ sequenceDiagram
 
 `WithAllowConfigMismatch()` is the legacy blanket opt-in. Prefer
 `WithRestoreDecider(session.RestoreDecider)`, which receives the typed drift
-assessment and can reject or explicitly accept it. Omitting both leaves the
-default fail-secure policy, which rejects warning-level drift. A planned model,
+assessment and can reject or explicitly accept it.
+`WithRestoreFailurePolicy(rig.AllowModelDrift(), ...)` is the declarative
+alternative: each `Allow...Drift` option exempts one named fact and every
+unlisted warning stays fatal. It cannot be combined with the other restore
+options. Omitting all of them leaves the default fail-secure policy, which
+rejects warning-level drift. A planned model,
 access, topology, runtime, or workspace change should normally create a fresh
 session rather than weakening restore checks.
 

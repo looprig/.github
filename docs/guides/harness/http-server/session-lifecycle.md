@@ -21,6 +21,14 @@ for an existing durable session. Both attach the returned live session to the
 handler's in-process registry before the client can use input, interrupt, gates,
 or events.
 
+`pkg/serve` is deprecated in favor of [Factory](/docs/modules/factory) and
+[Host](/docs/modules/host); see the [HTTP server overview](/docs/guides/harness/http-server).
+
+Both routes call the Rig with `context.WithoutCancel(r.Context())`: the context
+keeps request-scoped values but is never cancelled, so the session outlives the
+HTTP request. A Rig implementation must not rely on that context to learn that
+the client went away.
+
 ## Create {#create}
 
 `POST /v1/sessions` accepts no body, an empty body, `{}`, or an empty
@@ -44,8 +52,8 @@ does not detach it as a side effect of a submit error.
 
 ```go
 type createResult struct {
-		SessionID uuid.UUID  `json:"session_id"`
-		CommandID *uuid.UUID `json:"command_id,omitempty"`
+	SessionID uuid.UUID  `json:"session_id"`
+	CommandID *uuid.UUID `json:"command_id,omitempty"`
 }
 
 func create(ctx context.Context, baseURL string, blocks []content.Block) (createResult, error) {
@@ -68,7 +76,7 @@ func create(ctx context.Context, baseURL string, blocks []content.Block) (create
 	}
 	defer res.Body.Close()
 	if res.StatusCode != http.StatusCreated {
-		return serve.createResponse{}, fmt.Errorf("create: HTTP %s", res.Status)
+		return out, fmt.Errorf("create: HTTP %s", res.Status)
 	}
 	err = json.NewDecoder(res.Body).Decode(&out)
 	return out, err
@@ -81,18 +89,28 @@ JSON fields, not depend on unexported serve types.
 
 ## Restore {#restore}
 
-`POST /v1/sessions/{sid}/restore` parses a canonical UUID before calling
-`Rig.RestoreSession`.
+`POST /v1/sessions/{sid}/restore` is attach-or-restore. It parses a canonical
+UUID, then answers from the live registry when the session is already live in
+this process, and calls `Rig.RestoreSession` only for a cold session.
 
 | Condition | Status | Response code |
 | --- | --- | --- |
-| valid restore | 200 | `{"session_id":"..."}` |
+| session already live in this process | 200 | `{"session_id":"...","restored":false}`; the Rig is not called |
+| cold session rebuilt | 200 | `{"session_id":"...","restored":true}` |
+| a concurrent restore registered the session first | 200 | `{"session_id":"...","restored":false}` |
 | malformed `{sid}` | 400 | `invalid_parameter` |
 | `Rig.RestoreSession` returns `serve.SessionNotFoundError` | 404 | `session_not_found` |
 | any other restore failure | 500 | `internal` |
 
-On success the returned session is registered under the requested ID. A restore
-failure never attaches a partial session.
+On success the returned session is registered under the requested ID, unless
+another restore of the same ID won the race; the incumbent is kept so its
+subscribers are not orphaned. A Rig backed by `sessionstore` fences restore
+with the session lease, so the losing rebuild normally fails at the lease
+instead. A restore failure never attaches a partial session.
+
+The `restored` field is required in the response schema. A client that
+validates bodies against a vendored copy of `restore_response.schema.json`
+must update it.
 
 ```mermaid
 %%{init: {"theme":"dark"}}%%
@@ -104,7 +122,7 @@ sequenceDiagram
     participant S as LiveSession
     C->>H: POST /v1/sessions
     H->>H: read and validate optional body
-    H->>R: NewSession(ctx)
+    H->>R: NewSession(detached ctx)
     R-->>H: live session and ID
     H->>G: put(session ID, session)
     opt blocks present
@@ -114,10 +132,14 @@ sequenceDiagram
     H-->>C: 201 session_id and optional command_id
     C->>H: POST /v1/sessions/{sid}/restore
     H->>H: parse canonical UUID
-    H->>R: RestoreSession(ctx, sid)
-    R-->>H: restored live session
-    H->>G: put(sid, session)
-    H-->>C: 200 session_id
+    alt sid already live
+        H-->>C: 200 session_id, restored false
+    else cold
+        H->>R: RestoreSession(ctx, sid)
+        R-->>H: restored live session
+        H->>G: put if absent(sid, session)
+        H-->>C: 200 session_id, restored true
+    end
 ```
 
 ## Ordering and failure {#ordering-and-failure}

@@ -19,8 +19,10 @@ proofs:
   compaction: release-github-com-looprig-carbon
   sessions-and-restore: release-github-com-looprig-carbon
   workspaces: release-github-com-looprig-carbon
+  large-tool-results: release-github-com-looprig-carbon
   model-proxy: release-github-com-looprig-carbon
   tui-and-browser-clients: release-github-com-looprig-carbon
+  data-directories-and-upgrades: release-github-com-looprig-carbon
   acp-launcher-troubleshooting: release-github-com-looprig-carbon
   repository: release-github-com-looprig-carbon
 ---
@@ -32,7 +34,7 @@ Carbon is a coding agent built from Looprig modules. It provides a ready termina
 ## Install
 
 ```sh
-go install github.com/looprig/carbon/cmd/carbon@v0.23.0
+go install github.com/looprig/carbon/cmd/carbon@v0.29.1
 ```
 
 Carbon stores configuration under `~/.looprig/carbon` by default. Its configuration files must be regular, owner-only files.
@@ -70,7 +72,9 @@ chmod 600 ~/.looprig/carbon/models.json
 carbon --access-profile readonly
 ```
 
-Start with `readonly`. Use `trusted` only when Carbon should modify the workspace. `unconfined` requires explicit acknowledgement and grants the launching user’s authority.
+Start with `readonly`. Use `trusted` only when Carbon should modify the workspace. `unconfined` requires `--acknowledge-unconfined` and grants the launching user’s authority.
+
+Carbon keeps terminal and headless sessions in `~/.looprig/carbon/store` unless you pass `--data-dir`. Use `carbon --list` to see resumable sessions and `carbon --resume <session-id>` to continue one.
 
 ## Features
 
@@ -106,19 +110,37 @@ Sessions persist messages, events, tool activity, and runtime state. Carbon can 
 
 Each session can bind a workspace with explicit roots, leases, permissions, snapshots, and restore behavior. The workspace is separate from model context and session history.
 
+Carbon adds the repository branch and status to the model's runtime context. That git probe runs inside the session's own sandbox with a scrubbed environment, so repository-local git configuration planted by the model cannot run with Carbon's own authority. Under `readonly` the runtime context carries no git state, because commands are gated; the model can still ask to run `git status` itself.
+
+### Large tool results
+
+The model sees at most a 50 KiB preview of each tool result. On the browser path, Carbon retains a larger result in full, up to 8 MiB, as a tool-result object in the session's own store, and the model pages through it with the `read_tool_result` tool. The session's browser can read the same object through Factory, which serves it only when a committed step in that session names it; any other reference answers the same 404 as a missing object.
+
+Retained output is durable and is not reaped, so it can include content the preview used to discard, such as environment dumps or verbose logs. Treat it as readable by everyone who can view the session. The terminal and headless paths keep the preview-only behavior.
+
 ### Model proxy
 
 Carbon’s model proxy exposes configured models through a local protocol endpoint. ACP children and other compatible Harness compositions can use Carbon’s provider routing and credentials without receiving the original secret.
 
 ### TUI and browser clients
 
-Carbon ships with a terminal UI for prompts, events, tools, gates, model selection, and session browsing. Browser clients can consume the separate framework-neutral client contract when a product supplies a web interface.
+Carbon ships with a terminal UI for prompts, events, tools, gates, model selection, and session browsing. Multiline pastes collapse into a compact marker in the composer while the exact pasted text is submitted.
+
+The browser path is a composition in Carbon's importable `browser` package. `browser.Start` runs [Factory](/docs/modules/factory) as the public API, one local pooled [Host](/docs/modules/host) that runs the sessions, and a shared filesystem [SessionStore](/docs/modules/sessionstore), and it serves the [wui](/docs/modules/wui) bundle through Factory's UI seam. Browser sessions get their own workspace and journal, cold sessions stay readable without starting a runtime, and a reconnecting browser recovers missed events from the journal.
+
+Your application supplies the credential verifier, authorizer, tenant, HostLink service token, CSRF policy, and listener addresses. The stock `carbon serve` command has none of these and refuses to start, so it is not a ready-to-expose web service. The local Host serves only the configured default tenant and refuses principals of any other tenant. Under `trusted`, a pooled session can read sibling session directories, so serve one tenant per Carbon process.
+
+## Data directories and upgrades
+
+Carbon v0.29.0 moved to a storage layout that is not compatible with earlier releases, and there is no migration. At startup Carbon refuses any data directory written by an earlier release, whether it is the terminal session store, a browser data root, or a per-tenant journal root. The error names the directory. Move or delete that directory, and Carbon creates a fresh one on the next start.
+
+The change is one-way. An older Carbon does not refuse a new directory: it silently misreads it and sees no data. Never point an older Carbon at a directory that Carbon v0.29.0 or later has written.
 
 ## ACP launcher troubleshooting
 
 Carbon resolves the launcher for each ACP harness in a fixed order, and the first source that yields a command decides the result.
 
-1. A nonempty harness-specific environment override — `CLAUDE_CODE_ACP_EXECUTABLE` for `claude-code`, `CODEX_ACP_EXECUTABLE` for `codex` — is read first, and an empty value is ignored rather than accepted as a launcher.
+1. A nonempty harness-specific environment override (`CLAUDE_CODE_ACP_EXECUTABLE` for `claude-code`, `CODEX_ACP_EXECUTABLE` for `codex`) is read first, and an empty value is ignored rather than accepted as a launcher.
 2. The matching entry in the configured `acp_launchers` map is consulted next, only when no environment override applies.
 3. A lookup of the well-known adapter names on `PATH` is the last source, reached only after the first two yield nothing.
 

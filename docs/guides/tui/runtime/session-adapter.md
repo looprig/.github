@@ -76,4 +76,4 @@ If no matching gate is open, the adapter returns `*GateNotOpenError` with the lo
 - [Replay subscription tests](https://github.com/looprig/tui/blob/main/sessionadapter/replaying_subscription_test.go)
 - [Adapter API compile-time proof](https://github.com/looprig/tui/blob/main/sessionadapter/api_test.go)
 - [Session adapter example](https://github.com/looprig/tui/blob/main/examples/sessionadapter/example_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.16.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)

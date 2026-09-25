@@ -4,7 +4,7 @@ title: Modes
 description: Describe Loop execution modes and their configuration.
 audience: developer
 section: guides
-order: 17
+order: 18
 publication: released
 proofs:
   start: [release-github-com-looprig-harness]
@@ -36,7 +36,10 @@ type BoundMode struct {
 	Tools        []tool.InvokableTool
 	ToolLimits   ToolLimits
 	Instructions string
+	// unexported: whether Bind gave this mode a tool-result reader
 }
+
+func (m BoundMode) ToolResultReaderBound() bool
 
 func WithModes(modes ...Mode) Option
 func WithInitialMode(name ModeName) Option
@@ -70,6 +73,11 @@ definition, err := loop.Define(
 	loop.WithInitialMode("review"),
 )
 ```
+
+`BoundMode.ToolResultReaderBound` reports whether the mode has a
+`read_tool_result` tool built by a definition that declares
+`tool.RequiresToolResultReader`. Only `Bind` can set it, so the loop's
+tool-result marker never tells the model to call a reader the mode lacks.
 
 `Definition.Modes` and `BoundDefinition.Modes` return defensive copies.
 `BoundDefinition.Mode(name)` returns `(BoundMode, bool)` and also copies its

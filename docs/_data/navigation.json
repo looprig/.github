@@ -1087,64 +1087,69 @@
       "order": 11
     },
     {
-      "path": "guides/harness/loop/access-gates.md",
+      "path": "guides/harness/loop/tool-result-capture.md",
       "audience": "human",
       "order": 12
     },
     {
-      "path": "guides/harness/loop/context-limits.md",
+      "path": "guides/harness/loop/access-gates.md",
       "audience": "human",
       "order": 13
     },
     {
-      "path": "guides/harness/loop/context-transports.md",
+      "path": "guides/harness/loop/context-limits.md",
       "audience": "human",
       "order": 14
     },
     {
-      "path": "guides/harness/loop/context-observation.md",
+      "path": "guides/harness/loop/context-transports.md",
       "audience": "human",
       "order": 15
     },
     {
-      "path": "guides/harness/loop/runtime-context.md",
+      "path": "guides/harness/loop/context-observation.md",
       "audience": "human",
       "order": 16
     },
     {
-      "path": "guides/harness/loop/modes.md",
+      "path": "guides/harness/loop/runtime-context.md",
       "audience": "human",
       "order": 17
     },
     {
-      "path": "guides/harness/loop/runtime-model-selection.md",
+      "path": "guides/harness/loop/modes.md",
       "audience": "human",
       "order": 18
     },
     {
-      "path": "guides/harness/loop/delegation-policy.md",
+      "path": "guides/harness/loop/runtime-model-selection.md",
       "audience": "human",
       "order": 19
     },
     {
-      "path": "guides/harness/loop/compaction-policy.md",
+      "path": "guides/harness/loop/delegation-policy.md",
       "audience": "human",
       "order": 20
     },
     {
-      "path": "guides/harness/loop/live-loop-controller.md",
+      "path": "guides/harness/loop/compaction-policy.md",
       "audience": "human",
       "order": 21
     },
     {
-      "path": "guides/harness/loop/configuration-changes.md",
+      "path": "guides/harness/loop/live-loop-controller.md",
       "audience": "human",
       "order": 22
     },
     {
-      "path": "guides/harness/loop/errors.md",
+      "path": "guides/harness/loop/configuration-changes.md",
       "audience": "human",
       "order": 23
+    },
+    {
+      "path": "guides/harness/loop/errors.md",
+      "audience": "human",
+      "order": 24
     },
     {
       "path": "guides/harness/rig/index.md",
@@ -1757,6 +1762,11 @@
       "order": 21
     },
     {
+      "path": "guides/tools/built-in-tools/readtoolresult.md",
+      "audience": "human",
+      "order": 22
+    },
+    {
       "path": "guides/sandboxing/index.md",
       "audience": "human",
       "order": 0
@@ -2062,24 +2072,29 @@
       "order": 14
     },
     {
-      "path": "guides/web-ui/sessions/index.md",
+      "path": "guides/web-ui/embedding/wui.md",
       "audience": "human",
       "order": 15
     },
     {
-      "path": "guides/web-ui/sessions/binding.md",
+      "path": "guides/web-ui/sessions/index.md",
       "audience": "human",
       "order": 16
     },
     {
-      "path": "guides/web-ui/sessions/reconnect.md",
+      "path": "guides/web-ui/sessions/binding.md",
       "audience": "human",
       "order": 17
     },
     {
-      "path": "guides/web-ui/sessions/restore.md",
+      "path": "guides/web-ui/sessions/reconnect.md",
       "audience": "human",
       "order": 18
+    },
+    {
+      "path": "guides/web-ui/sessions/restore.md",
+      "audience": "human",
+      "order": 19
     },
     {
       "path": "guides/evals/index.md",
@@ -2292,99 +2307,139 @@
       "order": 3
     },
     {
-      "path": "modules/storage.md",
+      "path": "modules/drain.md",
       "audience": "human",
       "order": 4
     },
     {
-      "path": "modules/fsstore.md",
+      "path": "modules/storage.md",
       "audience": "human",
       "order": 5
     },
     {
-      "path": "modules/natsstore.md",
+      "path": "modules/fsstore.md",
       "audience": "human",
       "order": 6
     },
     {
-      "path": "modules/rclonestore.md",
+      "path": "modules/natsstore.md",
       "audience": "human",
       "order": 7
     },
     {
-      "path": "modules/sandbox.md",
+      "path": "modules/pgstore.md",
       "audience": "human",
       "order": 8
     },
     {
-      "path": "modules/flow.md",
+      "path": "modules/s3store.md",
       "audience": "human",
       "order": 9
     },
     {
-      "path": "modules/flow-store.md",
+      "path": "modules/rclonestore.md",
       "audience": "human",
       "order": 10
     },
     {
-      "path": "modules/inference.md",
+      "path": "modules/sessionstore.md",
       "audience": "human",
       "order": 11
     },
     {
-      "path": "modules/llm.md",
+      "path": "modules/sandbox.md",
       "audience": "human",
       "order": 12
     },
     {
-      "path": "modules/eval.md",
+      "path": "modules/flow.md",
       "audience": "human",
       "order": 13
     },
     {
-      "path": "modules/harness.md",
+      "path": "modules/flow-store.md",
       "audience": "human",
       "order": 14
     },
     {
-      "path": "modules/tools.md",
+      "path": "modules/inference.md",
       "audience": "human",
       "order": 15
     },
     {
-      "path": "modules/classifiers.md",
+      "path": "modules/llm.md",
       "audience": "human",
       "order": 16
     },
     {
-      "path": "modules/acp.md",
+      "path": "modules/eval.md",
       "audience": "human",
       "order": 17
     },
     {
-      "path": "modules/foreignloops.md",
+      "path": "modules/harness.md",
       "audience": "human",
       "order": 18
     },
     {
-      "path": "modules/mcp.md",
+      "path": "modules/tools.md",
       "audience": "human",
       "order": 19
     },
     {
-      "path": "modules/workflows.md",
+      "path": "modules/classifiers.md",
+      "audience": "human",
+      "order": 20
+    },
+    {
+      "path": "modules/acp.md",
       "audience": "human",
       "order": 21
     },
     {
-      "path": "modules/client.md",
+      "path": "modules/foreignloops.md",
+      "audience": "human",
+      "order": 22
+    },
+    {
+      "path": "modules/mcp.md",
       "audience": "human",
       "order": 23
     },
     {
-      "path": "modules/tui.md",
+      "path": "modules/workflows.md",
       "audience": "human",
       "order": 24
+    },
+    {
+      "path": "modules/host.md",
+      "audience": "human",
+      "order": 25
+    },
+    {
+      "path": "modules/factory.md",
+      "audience": "human",
+      "order": 26
+    },
+    {
+      "path": "modules/controller.md",
+      "audience": "human",
+      "order": 27
+    },
+    {
+      "path": "modules/client.md",
+      "audience": "human",
+      "order": 28
+    },
+    {
+      "path": "modules/tui.md",
+      "audience": "human",
+      "order": 29
+    },
+    {
+      "path": "modules/wui.md",
+      "audience": "human",
+      "order": 30
     },
     {
       "path": "products/index.md",

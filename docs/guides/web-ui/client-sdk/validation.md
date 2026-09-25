@@ -41,13 +41,13 @@ The exported helpers cover capabilities, create and restore responses, event env
 
 ## Inspect contract errors
 
-`ContractValidationError` carries the `schemaName` and Ajv `errors` array in addition to a readable message. Use the schema name for a stable diagnostic category and the error objects for telemetry or a developer-facing failure panel. A malformed error body is handled by the shared transport as `MalformedResponseError`, while a valid error envelope is mapped to its typed HTTP error.
+`ContractValidationError` carries the `schemaName` and Ajv `errors` array in addition to a readable message. Use the schema name for a stable diagnostic category and the error objects for telemetry or a developer-facing failure panel. A malformed error body is handled by the shared transport as `MalformedResponseError`, while a valid error envelope is mapped to its typed HTTP error. Codes with a dedicated class are `invalid_body`, `session_not_found`, `idempotency_conflict`, `internal`, and `gate_capacity`, plus the BFF-local `csrf_invalid` and `origin_not_allowed`. Every other code, including `unauthorized` (added to the envelope enum in client v0.4.0), arrives as `UnknownLooprigError`, which still carries the real `code` string, `status`, and `retryable` flag so a caller can branch on it.
 
 Do not recover by casting a failed payload. A contract failure means the data cannot safely be rendered or folded; keep the old view, surface the error, and decide whether a fresh request is appropriate.
 
 ## Source
 
-Ajv setup, `ContractValidationError`, the generic `validate` function, and each schema-specific helper are implemented in [`sdk/core/src/validate.ts`](https://github.com/looprig/client/blob/main/sdk/core/src/validate.ts). Schema drift, valid fixtures, and negative cases are checked in [`sdk/core/test/contract.test.ts`](https://github.com/looprig/client/blob/main/sdk/core/test/contract.test.ts).
+Ajv setup, `ContractValidationError`, the generic `validate` function, and each schema-specific helper are implemented in [`sdk/core/src/validate.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/src/validate.ts). Schema drift, valid fixtures, and negative cases are checked in [`sdk/core/test/contract.test.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/test/contract.test.ts).
 
 ## Proof
 

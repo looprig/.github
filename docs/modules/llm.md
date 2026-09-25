@@ -4,7 +4,7 @@ title: LLM
 description: Bind model descriptors to provider clients while keeping credentials outside model and request data.
 audience: developer
 section: modules
-order: 12
+order: 16
 publication: released
 proofs:
   repository: release-github-com-looprig-llm
@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/llm` |
-| Version | `v0.14.0` |
+| Version | `v0.15.0` |
 | GitHub | [looprig/llm](https://github.com/looprig/llm) |
 
 ## Description
@@ -30,7 +30,7 @@ Bind model descriptors to provider clients while keeping credentials outside mod
 
 ## Where it fits
 
-LLM is useful on its own when an application wants ready provider clients backed by explicit model descriptors and credentials. Within Looprig, it turns [Inference](/docs/modules/inference) contracts and [Credentials](/docs/modules/credentials) into clients that [Harness](/docs/modules/harness) applications can select. LLM owns provider construction; Inference retains the neutral request and response model.
+LLM is useful on its own when an application wants ready provider clients backed by explicit model descriptors and credentials. Within Looprig, it turns [Inference](/docs/modules/inference) contracts and [Credentials](/docs/modules/credentials) into clients that [Harness](/docs/modules/harness) applications can select. Both OpenCode gateways forward a request's session identity as the `x-opencode-session` header, so a conversation keeps the same upstream identity across turns and compaction. LLM owns provider construction; Inference retains the neutral request and response model.
 
 ## Dependencies
 

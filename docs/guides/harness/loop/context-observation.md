@@ -4,7 +4,7 @@ title: Context Observation
 description: Describe context observation configured for a loop definition.
 audience: developer
 section: guides
-order: 15
+order: 16
 publication: released
 proofs:
   start: [release-github-com-looprig-harness]

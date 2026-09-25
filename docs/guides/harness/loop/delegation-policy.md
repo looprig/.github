@@ -4,7 +4,7 @@ title: Delegation Policy
 description: Describe the delegates a loop definition may address and the policy that limits them.
 audience: developer
 section: guides
-order: 19
+order: 20
 publication: released
 proofs:
   start: [release-github-com-looprig-harness]

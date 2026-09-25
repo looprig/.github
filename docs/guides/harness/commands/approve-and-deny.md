@@ -83,7 +83,12 @@ type GateResponse struct {
 
 The caller gets `GateID` and the action from the public `event.GateOpened` or a
 gate-facing integration. For a permission decision, `Values` is unused and
-`Action` must be one of the exact strings above.
+`Action` must be one of the exact strings above. For a file-mutating tool, the
+live `event.PermissionRequested.Preview` can show the reviewer the pending diff;
+see [mutation previews](/docs/guides/harness/gates/approval-gates#mutation-previews).
+A Host that receives answers from remote clients applies them as admitted
+`gate_response` runtime commands, which take the same session path and
+refusals; see [Host-admitted runtime commands](/docs/guides/harness/commands#host-admitted-runtime-commands).
 
 ```go
 func answerPermission(ctx context.Context, s session.Session, gateID gate.ID, approve bool) error {

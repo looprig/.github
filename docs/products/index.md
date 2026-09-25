@@ -18,5 +18,5 @@ Products are complete tools assembled from Looprig modules. Choose a product whe
 
 | Product | Use it for |
 | --- | --- |
-| [Carbon](/docs/products/carbon) | A ready coding agent with tools, permissions, subagents, sessions, workspaces, ACP, MCP, and model routing. |
+| [Carbon](/docs/products/carbon) | A ready coding agent with tools, permissions, subagents, sessions, workspaces, ACP, MCP, and model routing, in the terminal or composed for the browser. |
 | [Pluto](/docs/products/pluto) | Evaluation, capability qualification, pricing comparison, and release reports for models and agents. |

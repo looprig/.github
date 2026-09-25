@@ -9,6 +9,7 @@ publication: released
 proofs:
   start: [release-github-com-looprig-harness]
   request-planes: [release-github-com-looprig-harness]
+  migrate-to-factory-and-host: [release-github-com-looprig-harness]
   route-contract: [release-github-com-looprig-harness]
   compose-the-handler: [release-github-com-looprig-harness]
   source-and-runnable-proof: [release-github-com-looprig-harness]
@@ -16,10 +17,31 @@ proofs:
 
 # Overview
 
+> **Deprecated.** `pkg/serve` is a frozen compatibility surface. Its import
+> path, routes, schemas, and fixtures remain available while existing consumers
+> migrate, but new public HTTP composition should use
+> [Factory](/docs/modules/factory) for the client-facing API and
+> [Host](/docs/modules/host) to run Harness sessions behind it. The package
+> carries a `Deprecated:` marker, so staticcheck reports SA1019 at every import
+> site; suppress it on the import line while you migrate. `pkg/serve` does not
+> import or delegate to Factory or Host.
+
 `github.com/looprig/harness/pkg/serve` is the HTTP composition seam for a live
 Harness session. It does not import `pkg/session`, a store, or an inference
 implementation. The composition root supplies a `Rig` for live sessions and a
 `Reader` for durable reads, then chooses the complete or read-only surface.
+
+## Migrate to Factory and Host {#migrate-to-factory-and-host}
+
+| Need | `pkg/serve` | Factory and Host |
+| --- | --- | --- |
+| Public API and authorization | one process, `WithAuth` callback | Factory, with injected authorizer seams |
+| Where sessions run | the same process as the HTTP server | Host processes that Factory places sessions on |
+| Commands | submitted directly to the live session | admitted durably by Factory, applied by Host through `pkg/runtimecommand` |
+| Viewer events | native event bodies over SSE | the redacted public projection stored with each journal frame |
+
+Keep `pkg/serve` only for an existing single-process deployment you have not
+migrated yet.
 
 ## Request planes {#request-planes}
 
@@ -53,6 +75,22 @@ Authentication is applied before the body cap and before a route handler. A
 live lookup releases the registry lock before calling the session. A read never
 needs a live session on the current process.
 
+Sessions created or restored over HTTP outlive the request that created them:
+the handler passes the Rig a context that keeps the request's values but is
+never cancelled. A live session that also implements the optional
+`serve.SessionDone` interface is evicted from the registry once its shutdown
+begins, both by a watcher and by a check on every lookup, so later requests for
+it get the same 404 as an unknown ID and its SSE streams end. A session that
+does not implement `SessionDone` is treated as live until the process exits,
+and a wrapper around a live session must forward `Done()` or it opts out of
+eviction.
+
+The SSE stream and the journal route send native event bodies. They do not
+apply the public-body redaction that `pkg/sessionwire` applies for Factory and
+Host, so a model gateway `base_url` or a physical workspace path can reach an
+HTTP client. Put this surface only in front of clients you already trust with
+that data.
+
 ## Route contract {#route-contract}
 
 These are the ten patterns registered by `Handler`. The method is part of each
@@ -64,7 +102,7 @@ an unknown path is a plain 404 before a serve handler runs.
 | `GET /v1/capabilities` | none | `200 application/json`, protocol document |
 | `POST /v1/sessions` | optional `{"blocks":[...]}` and optional `Idempotency-Key` | `201`, `{"session_id": "...", "command_id": "..."}`; `command_id` is omitted for idle create |
 | `GET /v1/sessions` | `skip` default `0`, `limit` default `100` | `200`, `SessionList` |
-| `POST /v1/sessions/{sid}/restore` | none | `200`, `{"session_id":"..."}` |
+| `POST /v1/sessions/{sid}/restore` | none | `200`, `{"session_id":"...","restored":true\|false}` |
 | `POST /v1/sessions/{sid}/input` | required non-empty `{"blocks":[...]}` | `200`, `{"command_id":"..."}` |
 | `POST /v1/sessions/{sid}/interrupt` | none | `200`, `{"interrupted":true\|false}` |
 | `POST /v1/sessions/{sid}/gates/{gid}` | `{"action":"...","values":{...}}` | `202`, `{}` after durable acceptance |
@@ -130,7 +168,8 @@ removes that proof and makes a public bind fail closed.
 ## Source and runnable proof {#source-and-runnable-proof}
 
 - [`Handler`, `ReadHandler`, and route patterns](https://github.com/looprig/harness/blob/main/pkg/serve/mux.go)
-- [`LiveSession`, `Rig`, and the generic seam](https://github.com/looprig/harness/blob/main/pkg/serve/serve.go)
+- [`LiveSession`, `SessionDone`, `Rig`, and the deprecation notice](https://github.com/looprig/harness/blob/main/pkg/serve/serve.go)
+- [Session registry and eviction](https://github.com/looprig/harness/blob/main/pkg/serve/server_core.go)
 - [`Reader` and response DTOs](https://github.com/looprig/harness/blob/main/pkg/serve/reader.go)
 - [`Handler` route and method tests](https://github.com/looprig/harness/blob/main/pkg/serve/mux_test.go)
 - [`capabilities` wire contract tests](https://github.com/looprig/harness/blob/main/pkg/serve/handlers_capabilities_test.go)

@@ -1,10 +1,10 @@
 ---
 id: modules/natsstore
 title: NATSStore
-description: Use NATS JetStream for durable storage primitives, with an optional confined embedded engine.
+description: Use NATS JetStream for all five durable storage primitives, including bounded blob readers, with an optional confined embedded engine.
 audience: developer
 section: modules
-order: 6
+order: 7
 publication: released
 proofs:
   repository: release-github-com-looprig-natsstore
@@ -21,16 +21,16 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/natsstore` |
-| Version | `v0.4.0` |
+| Version | `v0.5.3` |
 | GitHub | [looprig/natsstore](https://github.com/looprig/natsstore) |
 
 ## Description
 
-Use NATS JetStream for durable storage primitives, with an optional confined embedded engine.
+Use NATS JetStream for all five durable storage primitives, including bounded blob readers, with an optional confined embedded engine.
 
 ## Where it fits
 
-NATSStore is useful on its own when a distributed Go application needs Looprig's storage contracts on NATS JetStream. Within Looprig, it provides a shared [Storage](/docs/modules/storage) backend for the [Client](/docs/modules/client) and other multi-process deployments. NATSStore owns JetStream mapping and optional embedded startup; callers own data semantics and server operations.
+NATSStore is useful on its own when a distributed Go application needs Looprig's storage contracts on NATS JetStream. Within Looprig, it is a single backend that satisfies every [Storage](/docs/modules/storage) primitive and the bounded blob reader lifecycle, so it can back a [SessionStore](/docs/modules/sessionstore) and the [Harness](/docs/modules/harness) session store alone. It is also the shared backend for multi-process [Client](/docs/modules/client) deployments. NATSStore owns JetStream mapping and optional embedded startup; callers own data semantics and server operations.
 
 ## Dependencies
 

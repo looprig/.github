@@ -35,7 +35,7 @@ StepDone.Messages
 
 | Surface | Class | Use |
 | --- | --- | --- |
-| `event.PermissionRequested` | Enduring | A tool call is waiting for an interactive permission decision. |
+| `event.PermissionRequested` | Enduring | A tool call is waiting for an interactive permission decision. The live event may carry a `Preview` of a pending file change; the preview is never journaled. |
 | `event.PermissionDecided` | Enduring | A non-gated approve or deny decision. |
 | `event.UserInputRequested` | Enduring | A tool is waiting for free-form user input. |
 | `event.ToolCallStarted` | Ephemeral | An approved call began executing; includes bounded summary. |
@@ -67,6 +67,7 @@ type StepDone struct {
 	loopScoped
 	Header
 	Messages content.AgenticMessages `json:"messages,omitempty"`
+	Captures []ToolResultCapture     `json:"captures,omitempty"`
 }
 ```
 
@@ -96,6 +97,8 @@ sequenceDiagram
     A->>J: durable StepDone
     J-->>A: append/publication result
 ```
+
+A tool-result message is bounded by the mode's `ToolLimits.ResultBytes`. When a result exceeds it, the committed message holds a bounded preview plus a marker rather than the full output. Without capture, the marker reports the omitted byte count and those bytes are discarded. When the Rig wires capture with `rig.WithToolResultObjects`, Harness retains the full result, up to `ToolLimits.CaptureBytes`, as a session object before shaping, records a `ToolResultCapture` for each result in `StepDone.Captures`, and the marker tells the model how to page the rest with `read_tool_result` when that tool is bound. Read `Captures`, not the marker text, which is prompt text. See [Tool result capture](/docs/guides/harness/loop/tool-result-capture).
 
 Malformed model tool arguments have two views. The stored assistant message rewrites invalid JSON input to `{}` so committed history remains encodable. The raw executable view retains the invalid input so execution can return a model-visible error rather than silently changing what the model asked for. This is why inspecting only the stored `AIMessage` is not a reliable way to diagnose an invalid call.
 

@@ -25,6 +25,7 @@ const pages = [
   ["guides/tools/built-in-tools/glob", "Glob"],
   ["guides/tools/built-in-tools/grep", "Grep"],
   ["guides/tools/built-in-tools/readfile", "ReadFile"],
+  ["guides/tools/built-in-tools/readtoolresult", "read_tool_result"],
   ["guides/tools/built-in-tools/skill", "Skill"],
   ["guides/tools/built-in-tools/task", "Task Tools"],
   ["guides/tools/built-in-tools/websearch", "WebSearch"],
@@ -48,6 +49,7 @@ const sourceProof = {
   "guides/tools/built-in-tools/glob": ["glob/glob.go", "glob/glob_test.go"],
   "guides/tools/built-in-tools/grep": ["grep/grep.go", "grep/grep_test.go"],
   "guides/tools/built-in-tools/readfile": ["readfile/readfile.go", "readfile/readfile_test.go"],
+  "guides/tools/built-in-tools/readtoolresult": ["readtoolresult/tool.go", "readtoolresult/tool_test.go"],
   "guides/tools/built-in-tools/skill": ["skill/skill.go", "skill/skill_test.go"],
   "guides/tools/built-in-tools/task": ["task/tool.go", "task/tool_test.go"],
   "guides/tools/built-in-tools/websearch": ["websearch/websearch.go", "websearch/websearch_test.go"],
@@ -129,17 +131,18 @@ test("Every Tools page has source and proof links to real Tools files", () => {
 
 test("Tool pages describe their public contract and runnable proof", () => {
   const contracts = {
-    "guides/tools/built-in-tools/askuser": ["question", "choices", "loop.RequestUserInput"],
-    "guides/tools/built-in-tools/bash": ["sh -c", "30 seconds", "120 seconds", "background", "yield_time_ms", "access"],
-    "guides/tools/built-in-tools/editfile": ["old", "new", "replace_all", "unique", "diff", "StaleFileError"],
+    "guides/tools/built-in-tools/bash": ["sh -c", "30 seconds", "120 seconds", "background", "yield_time_ms", "access", "InvokableRunCaptured", "DeclaredCaptureSafety", "CopyOutput", "process group", "setsid"],
+    "guides/tools/built-in-tools/editfile": ["old", "new", "replace_all", "unique", "diff", "StaleFileError", "MutationPreviewer", "gate opens"],
     "guides/tools/built-in-tools/fetch": ["GET", "POST", "http://", "https://", "64 KiB", "redirect"],
     "guides/tools/built-in-tools/glob": ["**", "500", "DeniedRead", "tree"],
     "guides/tools/built-in-tools/grep": ["regular expression", "ripgrep", "fallback", "200", "context_lines"],
     "guides/tools/built-in-tools/readfile": ["line-numbered", "start_line", "end_line", "ReadGuard", "symlink"],
+    "guides/tools/built-in-tools/readtoolresult": ["capture_id", "offset", "max_bytes", "64 KiB", "including case", "RequiresToolResultReader", "rig.WithToolResultObjects", "tool_result_reader_without_objects", "base64"],
+    "guides/tools/built-in-tools/askuser": ["question", "choices", "loop.RequestUserInput", "UserInputReplaySafe", "restore_unavailable"],
     "guides/tools/built-in-tools/skill": ["embedded", "workspace", "agent", "TOCTOU", "context.load"],
     "guides/tools/built-in-tools/task": ["TaskCreate", "TaskUpdate", "TaskGet", "TaskList", "Loop-local", "blockedBy"],
     "guides/tools/built-in-tools/websearch": ["SearchProvider", "Endpoints", "DuckDuckGo", "10", "redirect"],
-    "guides/tools/built-in-tools/writefile": ["atomic", "content", "WriteTarget", "observation", "WithHostWrites"],
+    "guides/tools/built-in-tools/writefile": ["atomic", "content", "WriteTarget", "observation", "WithHostWrites", "MutationPreviewer", "file changed since preview"],
   };
   for (const [id, phrases] of Object.entries(contracts)) {
     const content = pageMarkdown(id);
@@ -148,13 +151,30 @@ test("Tool pages describe their public contract and runnable proof", () => {
   }
 });
 
+test("Capture and shell safety are documented at their owning pages", () => {
+  const concepts = pageMarkdown("guides/tools/core-concepts/index");
+  for (const phrase of ["CapturingInvokableTool", "CaptureSafetyDeclarer", "ProjectCaptureSafety", "Streaming", "HighOutput", "materialized", "ToolLimits.ResultBytes", "limit_bytes"]) {
+    assert.match(concepts, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `concepts omits ${phrase}`);
+  }
+  const safety = pageMarkdown("guides/tools/safety/index");
+  for (const phrase of ["MutationPreview", "gate-open", "process group", "SIGKILL", "setsid", "two seconds", "Ctrl-C", "read_tool_result"]) {
+    assert.match(safety, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), `safety omits ${phrase}`);
+  }
+  const registration = pageMarkdown("guides/tools/core-concepts/registration");
+  assert.match(registration, /ReadToolResultDefinition/);
+  assert.match(registration, /rig\.WithToolResultObjects/);
+  const overview = pageMarkdown("guides/tools/index");
+  assert.match(overview, /read_tool_result/);
+  assert.match(overview, /\/docs\/guides\/tools\/built-in-tools\/readtoolresult/);
+});
+
 test("Process pages cover ownership, cursor output, shutdown, and restore", () => {
   const overview = pageMarkdown("guides/tools/processes/index");
   for (const phrase of ["Handle", "Owner", "SessionID", "LoopID", "quota", "SupervisorResourceKey", "BashDefinition", "ProcessOutputDefinition"]) {
     assert.match(overview, new RegExp(phrase, "i"), `process overview omits ${phrase}`);
   }
   const lifecycle = pageMarkdown("guides/tools/processes/lifecycle");
-  for (const phrase of ["starting", "running", "exited", "lost_on_restore", "manifest", "spool", "stable", "Shutdown", "lease"]) {
+  for (const phrase of ["starting", "running", "exited", "lost_on_restore", "manifest", "spool", "stable", "Shutdown", "lease", "CopyOutput", "RetainedFrom"]) {
     assert.match(lifecycle, new RegExp(phrase, "i"), `lifecycle omits ${phrase}`);
   }
   const tools = pageMarkdown("guides/tools/processes/tools");

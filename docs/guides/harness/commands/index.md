@@ -10,6 +10,7 @@ proofs:
   start: [release-github-com-looprig-harness]
   two-command-lanes: [release-github-com-looprig-harness]
   the-public-contracts: [release-github-com-looprig-harness]
+  host-admitted-runtime-commands: [release-github-com-looprig-harness]
   choosing-a-page: [release-github-com-looprig-harness]
   source-and-proof: [release-github-com-looprig-harness]
 ---
@@ -134,6 +135,57 @@ The proof is [`internal/sessionruntime/submit_test.go`](https://github.com/loopr
 which checks the returned ID and the `command.UserInput` delivered to the actor.
 The exhaustive codec proof is [`pkg/command/marshal_test.go`](https://github.com/looprig/harness/blob/main/pkg/command/marshal_test.go),
 which round-trips every durable command type and rejects codec drift.
+
+## Host-admitted runtime commands
+
+A Host that serves remote clients admits commands in its own durable store
+before any runtime sees them, then must apply each one exactly once, even
+across a crash or failover. [`pkg/runtimecommand`](https://github.com/looprig/harness/blob/v0.40.2/pkg/runtimecommand/command.go)
+is that seam. It is separate from `pkg/command`: an admitted command names a
+retry-stable public `CommandID` (an opaque UTF-8 string of at most 256 bytes)
+and the `RuntimeCommandID` UUID the Host allocated once, which Harness stamps on
+the command headers and caused events without minting a replacement.
+
+```go
+type Provider interface {
+	RuntimeCommands() (Applier, bool) // false for a session with no deduplicating journal
+}
+
+type Applier interface {
+	ApplyRuntimeCommand(context.Context, Admitted) (Disposition, error)
+}
+
+type Admitted struct {
+	CommandID        CommandID
+	RuntimeCommandID uuid.UUID
+	Kind             Kind
+	LeaseEpoch       uint64 // a superseded epoch is refused
+	Blocks           []content.Block
+	GateResponse     *gate.GateResponse
+	AttemptID        AttemptID
+}
+```
+
+| Kind | Payload | Applies through |
+| --- | --- | --- |
+| `input` | `Blocks`, required | the active loop, like `Session.Submit` |
+| `interrupt` | none | `Session.Interrupt` |
+| `gate_response` | `GateResponse`, required; `AttemptID` required | `Session.RespondGate`, with all of its refusals |
+| `create` | `Blocks`, optional first message | the active loop when a message is present; otherwise nothing, because the Host already made the session resident |
+| `restore` | none | nothing; residency is the effect |
+
+`ApplyRuntimeCommand` writes a private application record before any effect,
+so a redelivery returns the original `Disposition` with `Duplicate` set and
+applies nothing. An error does not mean nothing was recorded; redeliver and
+read `Duplicate` rather than retrying blindly. When `AttemptID` is set, the
+runtime also writes a durable `CommandDisposition` of `applied`, `no_op`, or
+`refused`. A successor runtime that holds a strictly later lease uses the
+optional `AttemptCloser.CloseAttempt` to record `not_applied` for an attempt its
+predecessor never finished. It refuses if any event caused by that command
+exists. For a `gate_response`, `GateResolved.Header.Cause.CommandID` is the
+admitted `RuntimeCommandID`. An adapter that decodes a payload only for `input`
+drops a `create`'s first message and still settles it `applied`, so decode the
+create payload too.
 
 ## Choosing a page
 

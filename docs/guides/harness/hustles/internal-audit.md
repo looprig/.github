@@ -61,7 +61,9 @@ All three events have `Visibility() == event.Internal`, session scope, and an
 enduring lifecycle class. Ordinary event filters do not deliver them. A
 trusted audit consumer can correlate `Run.RunID`, descriptor policy revision,
 stage, reason, runtime, duration, and optional usage without receiving raw
-prompt, model endpoint, or provider response bytes.
+prompt, model endpoint, or provider response bytes. The session wire
+projection classifies all three as private, so they never appear in a public
+journal page or viewer stream.
 
 ```mermaid
 %%{init: {"theme":"dark"}}%%

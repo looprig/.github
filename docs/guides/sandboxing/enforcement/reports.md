@@ -65,9 +65,9 @@ Grant issuance and redemption bind tokens to the profile fingerprint and achieve
 
 ## Source
 
-- [CompileReport and Guarantees definitions](https://github.com/looprig/sandbox/blob/main/pkg/profile/report.go)
-- [Executor report accessors](https://github.com/looprig/sandbox/blob/main/internal/exec/executor.go)
+- [CompileReport and Guarantees definitions](https://github.com/looprig/sandbox/blob/v0.9.1/pkg/profile/report.go)
+- [Executor report accessors](https://github.com/looprig/sandbox/blob/v0.9.1/internal/exec/executor.go)
 
 ## Proof
 
-- [Policy and report fixture](https://github.com/looprig/sandbox/blob/main/examples/policy-enforcement/example_test.go)
+- [Policy and report fixture](https://github.com/looprig/sandbox/blob/v0.9.1/examples/policy-enforcement/example_test.go)

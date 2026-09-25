@@ -12,6 +12,7 @@ proofs:
   teardown-order: [release-github-com-looprig-harness]
   concurrent-callers: [release-github-com-looprig-harness]
   caller-context: [release-github-com-looprig-harness]
+  release-instead-of-stop: [release-github-com-looprig-harness]
   source-and-proof: [release-github-com-looprig-harness]
 ---
 
@@ -39,14 +40,16 @@ must be reported; the cleanup itself is not detached when a caller cancels.
 
 The order is load-bearing:
 
-1. Serialize with active-loop selection, latch `closing`, and snapshot every
-   registered loop under the same lock used by `NewLoop` registration.
+1. Elect the teardown owner and close the `session.Liveness` `Done()` channel,
+   then serialize with active-loop selection, latch `closing`, and snapshot
+   every registered loop under the same lock used by `NewLoop` registration.
 2. Revoke collaboration origins, stop permission reviews, close hustle
    admission, and send `command.Shutdown` to every loop in the snapshot.
 3. Wait for each reached loop's acknowledgement and actor drain, then join
    hustle terminal audit, finalizers, and blocking activity.
-4. Close collaboration broker, stop offload GC, stop checkpoints, and fully
-   shut down session resources while the hub and journal are still live.
+4. Close the collaboration broker, stop offload GC, remove the session's
+   tool-result capture spill directory, stop checkpoints, and fully shut down
+   session resources while the hub and journal are still live.
 5. Stop the hub, which appends/delivers `SessionStopped` before it stops
    publication.
 6. Release the exclusive workspace root lease, then the session lease, and
@@ -68,8 +71,10 @@ flowchart TD
 
 ## Concurrent callers
 
-Only one cleanup owner runs. A second call waits on `shutdownDone`, then sees
-the same aggregate cleanup result. If the second caller's context is already
+Only one cleanup owner runs. A second call waits for that owner to finish, then
+sees the same aggregate cleanup result. The owner is shared with the residency
+release methods below, so a session is either stopped or released, never
+both. If the second caller's context is already
 cancelled, its context error is combined after shared cleanup completes; it
 does not interrupt or reorder the first caller's teardown.
 
@@ -114,9 +119,28 @@ After shutdown, submits and active-loop changes fail closed, and no new loop
 can be registered. The durable `SessionStopped` event remains in history for
 the next restore attempt.
 
+## Release instead of stop
+
+`Shutdown` is terminal: the session's journal ends with `SessionStopped`. To
+move a live session to another process and keep it restorable, assert one of
+the optional release capabilities instead:
+
+| Capability | Admission | Durable writes | Use when |
+| --- | --- | --- | --- |
+| `session.Releaser.ReleaseResidency(ctx)` | session must be whole-session idle and not faulted; a refusal happens before teardown and leaves the session unchanged | a committed workspace checkpoint, then `SessionResidencyReleased`; no `SessionStopped` | a planned handover |
+| `session.ResidencyAbandoner.AbandonResidency(ctx)` | any session, faulted or not | none; durable writes are sealed first, and a runtime-command write after the seal is refused as `SessionClosing` | the session hit a persistence fault, or must be dropped as if the process crashed |
+
+Both run the same teardown sequence as `Shutdown` except at the hub close,
+then release the workspace root lease and the session lease so a successor can
+call `RestoreSession` at once. Work in flight at an abandon is treated by the
+successor's restore as crash debt. A caller that needs to know which mode won a
+race reads the session catalog: a release leaves the session restorable, a
+stop marks it stopped.
+
 ## Source and proof
 
 - [`Session.Shutdown` and ordering](https://github.com/looprig/harness/blob/main/internal/sessionruntime/session.go)
+- [`ReleaseResidency` and `AbandonResidency`](https://github.com/looprig/harness/blob/main/internal/sessionruntime/residency_release.go)
 - [`shutdown cleanup phases`](https://github.com/looprig/harness/blob/main/internal/sessionruntime/shutdown_cleanup.go)
 - [`shutdown error taxonomy`](https://github.com/looprig/harness/blob/main/pkg/session/errors.go)
 - [`shutdown lifecycle tests`](https://github.com/looprig/harness/blob/main/internal/sessionruntime/session_test.go)

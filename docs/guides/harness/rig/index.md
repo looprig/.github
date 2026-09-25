@@ -69,8 +69,11 @@ defer live.Shutdown(context.Background())
 
 Workspace placement requires a matching `WithSnapshots` policy. A loop whose
 tools require workspace binding requires one of the workspace options. A loop
-whose tools require process services requires `WithSessionResourceStorage`.
-These are Define-time checks, not best-effort session defaults.
+whose tools require process services requires `WithSessionResourceStorage`. A
+loop that registers a tool-result reader (`tool.RequiresToolResultReader`)
+requires `WithToolResultObjects`; see
+[tool-result capture](/docs/guides/harness/loop/tool-result-capture). These are
+Define-time checks, not best-effort session defaults.
 
 ## Immutable assembly
 
@@ -80,7 +83,19 @@ construction. The only public methods are:
 ```go
 func (r *Rig) NewSession(context.Context, ...SessionOption) (session.SessionController, error)
 func (r *Rig) RestoreSession(context.Context, uuid.UUID) (session.SessionController, error)
+func (r *Rig) CaptureSafety() tool.CaptureSafetyDescriptor
 ```
+
+`CaptureSafety` reports, from the tool definitions frozen at `Define`, whether
+every high-output tool streams its result into the capture sink or is bounded by
+the runtime's materialized maximum. A placement decision can read it before any
+session exists.
+
+The context passed to `NewSession` or `RestoreSession` becomes the parent of the
+whole session lifetime, not only of construction. Cancelling it ends the
+session's loops. A caller whose context is request-scoped, such as an HTTP
+handler, should pass `context.WithoutCancel(r.Context())`, which keeps request
+values and drops cancellation.
 
 Live input, subscriptions, gate responses, compaction, and shutdown belong to
 the returned `session.SessionController` and its embedded/session data-plane

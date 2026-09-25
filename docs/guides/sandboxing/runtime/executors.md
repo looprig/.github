@@ -84,9 +84,9 @@ After close, `For` returns `ErrExecutorSetClosed` and an executor run returns `E
 
 ## Source
 
-- [ExecutorSet construction, For, and Close](https://github.com/looprig/sandbox/blob/main/internal/exec/executor_set.go)
-- [Public ExecutorSet options](https://github.com/looprig/sandbox/blob/main/sandbox.go)
+- [ExecutorSet construction, For, and Close](https://github.com/looprig/sandbox/blob/v0.9.1/internal/exec/executor_set.go)
+- [Public ExecutorSet options](https://github.com/looprig/sandbox/blob/v0.9.1/sandbox.go)
 
 ## Proof
 
-- [ExecutorSet lifecycle and limit tests](https://github.com/looprig/sandbox/blob/main/internal/exec/executor_set_test.go)
+- [ExecutorSet lifecycle and limit tests](https://github.com/looprig/sandbox/blob/v0.9.1/internal/exec/executor_set_test.go)

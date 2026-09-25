@@ -4,7 +4,7 @@ title: Binding a session
 description: Attach one session id to a framework-neutral listener or Svelte store and keep cold reads, live views, and cleanup under one owner.
 audience: developer
 section: guides
-order: 16
+order: 17
 publication: released
 proofs:
   framework-neutral-binding: [release-github-com-looprig-client]
@@ -47,7 +47,7 @@ Use `LiveSessionViewStore` for the ongoing subscription rather than trying to tu
 
 ## Source
 
-The framework-neutral connect, listener, and cleanup behavior is in [`sdk/core/examples/session-client.ts`](https://github.com/looprig/client/blob/main/sdk/core/examples/session-client.ts). Cold reactive stores and their last-started-wins guards are in [`sdk/svelte/src/session.svelte.ts`](https://github.com/looprig/client/blob/main/sdk/svelte/src/session.svelte.ts).
+The framework-neutral connect, listener, and cleanup behavior is in [`sdk/core/examples/session-client.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/core/examples/session-client.ts). Cold reactive stores and their last-started-wins guards are in [`sdk/svelte/src/session.svelte.ts`](https://github.com/looprig/client/blob/v0.4.0/sdk/svelte/src/session.svelte.ts).
 
 ## Proof
 

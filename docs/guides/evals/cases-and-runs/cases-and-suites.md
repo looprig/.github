@@ -148,19 +148,19 @@ then emits a deliberately redacted projection.
 ## Source
 
 The case and suite declarations are in
-[scenario.go](https://github.com/looprig/eval/blob/main/scenario.go),
-[expectation.go](https://github.com/looprig/eval/blob/main/expectation.go),
-[observation.go](https://github.com/looprig/eval/blob/main/observation.go), and
-[suite.go](https://github.com/looprig/eval/blob/main/suite.go).
+[scenario.go](https://github.com/looprig/eval/blob/v0.2.2/scenario.go),
+[expectation.go](https://github.com/looprig/eval/blob/v0.2.2/expectation.go),
+[observation.go](https://github.com/looprig/eval/blob/v0.2.2/observation.go), and
+[suite.go](https://github.com/looprig/eval/blob/v0.2.2/suite.go).
 
 ## Proof
 
 The exact fields and validation rules are defined in
-[scenario.go](https://github.com/looprig/eval/blob/main/scenario.go),
-[expectation.go](https://github.com/looprig/eval/blob/main/expectation.go),
-[observation.go](https://github.com/looprig/eval/blob/main/observation.go), and
-[suite.go](https://github.com/looprig/eval/blob/main/suite.go). Revision
+[scenario.go](https://github.com/looprig/eval/blob/v0.2.2/scenario.go),
+[expectation.go](https://github.com/looprig/eval/blob/v0.2.2/expectation.go),
+[observation.go](https://github.com/looprig/eval/blob/v0.2.2/observation.go), and
+[suite.go](https://github.com/looprig/eval/blob/v0.2.2/suite.go). Revision
 matching is tested by
-[scenario_test.go](https://github.com/looprig/eval/blob/main/scenario_test.go)
+[scenario_test.go](https://github.com/looprig/eval/blob/v0.2.2/scenario_test.go)
 and stage behavior by
-[run_test.go](https://github.com/looprig/eval/blob/main/run_test.go).
+[run_test.go](https://github.com/looprig/eval/blob/v0.2.2/run_test.go).

@@ -167,22 +167,22 @@ testing](/docs/guides/evals/integration/composition-and-testing).
 ## Source
 
 The evaluator boundary is declared in
-[evaluator.go](https://github.com/looprig/eval/blob/main/evaluator.go),
-[assessment.go](https://github.com/looprig/eval/blob/main/assessment.go), and
-[evidence.go](https://github.com/looprig/eval/blob/main/evidence.go). Report
+[evaluator.go](https://github.com/looprig/eval/blob/v0.2.2/evaluator.go),
+[assessment.go](https://github.com/looprig/eval/blob/v0.2.2/assessment.go), and
+[evidence.go](https://github.com/looprig/eval/blob/v0.2.2/evidence.go). Report
 gates are exposed by
-[evaltest/assert.go](https://github.com/looprig/eval/blob/main/evaltest/assert.go).
+[evaltest/assert.go](https://github.com/looprig/eval/blob/v0.2.2/evaltest/assert.go).
 
 ## Proof
 
 The interface, descriptor gate, and status constructors are in
-[evaluator.go](https://github.com/looprig/eval/blob/main/evaluator.go) and
-[assessment.go](https://github.com/looprig/eval/blob/main/assessment.go).
+[evaluator.go](https://github.com/looprig/eval/blob/v0.2.2/evaluator.go) and
+[assessment.go](https://github.com/looprig/eval/blob/v0.2.2/assessment.go).
 Evidence references and validation are in
-[evidence.go](https://github.com/looprig/eval/blob/main/evidence.go). The
+[evidence.go](https://github.com/looprig/eval/blob/v0.2.2/evidence.go). The
 report-level assertions are implemented in
-[evaltest/assert.go](https://github.com/looprig/eval/blob/main/evaltest/assert.go),
+[evaltest/assert.go](https://github.com/looprig/eval/blob/v0.2.2/evaltest/assert.go),
 with behavior covered by
-[evaluator_test.go](https://github.com/looprig/eval/blob/main/evaluator_test.go),
-[assessment_test.go](https://github.com/looprig/eval/blob/main/assessment_test.go),
-and [evaltest/run_test.go](https://github.com/looprig/eval/blob/main/evaltest/run_test.go).
+[evaluator_test.go](https://github.com/looprig/eval/blob/v0.2.2/evaluator_test.go),
+[assessment_test.go](https://github.com/looprig/eval/blob/v0.2.2/assessment_test.go),
+and [evaltest/run_test.go](https://github.com/looprig/eval/blob/v0.2.2/evaltest/run_test.go).

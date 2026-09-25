@@ -49,15 +49,26 @@ Every method is a pure read. The handler never looks in the complete server's
 live registry, so status and journal remain available when a session is not
 live on this process.
 
+Harness ships an adapter over a `sessionstore.Store` in
+`pkg/serve/catalogreader`:
+
 ```go
-type catalogReader struct { catalog *catalog.Store }
+func New(catalog *sessionstore.Catalog, store *sessionstore.Store) *Reader
+func NewScoped(catalog *sessionstore.Catalog, store *sessionstore.Store,
+	authority sessionwire.ReadAuthority, residency coresessionwire.SessionResidency) *Reader
+```
 
-func (r catalogReader) ListSessions(ctx context.Context, p serve.Page) (serve.SessionList, error) {
-	// Query the durable catalog, stable-sort it, then fill NextSkip and Done.
-	return r.catalog.List(ctx, p.Skip, p.Limit)
-}
+`New` uses a fixed legacy single-tenant authority and reports residency as
+cold. `NewScoped` takes the caller's tenant and agent authority and the
+independently observed residency. Both return the same `serve` DTO bytes; the
+authority is used to validate each row against Core's session read contract,
+and a row that fails that validation is a `serve.StoreReadError` with `Op`
+`"project"`.
 
-func readOnly(reader serve.Reader) http.Handler {
+```go
+func readOnly(store *sessionstore.Store) http.Handler {
+	catalog := store.OpenCatalog(sessionstore.WithCatalogReplayer(store))
+	reader := catalogreader.New(catalog, store)
 	// Auth is still applied to the read plane when the process has a trust boundary.
 	return serve.ReadHandler(reader, serve.WithAuth(authenticate))
 }

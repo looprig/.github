@@ -27,10 +27,11 @@ type StepDone struct {
 	loopScoped
 	Header
 	Messages content.AgenticMessages `json:"messages,omitempty"`
+	Captures []ToolResultCapture     `json:"captures,omitempty"`
 }
 ```
 
-The `Header.Coordinates` identity contract is strict. A valid StepDone needs non-zero `SessionID`, `LoopID`, `TurnID`, `StepID`, and `EventID`; `StepID` without `TurnID` is invalid. `event.ValidateEvent` also requires the message-group shape described in [Tool Calls and Results](/docs/guides/harness/step/tool-calls-and-results).
+`Captures` is present only when the Rig wires tool-result capture; it normally has one entry per tool-result message and locates any retained full result. The `Header.Coordinates` identity contract is strict. A valid StepDone needs non-zero `SessionID`, `LoopID`, `TurnID`, `StepID`, and `EventID`; `StepID` without `TurnID` is invalid. `event.ValidateEvent` also requires the message-group shape described in [Tool Calls and Results](/docs/guides/harness/step/tool-calls-and-results).
 
 ## What commits
 
@@ -63,7 +64,7 @@ stateDiagram-v2
 
 ## Rollback scope
 
-Rollback is step-granular, not whole-Turn. If the provider fails, the response is empty, a tool batch is canceled, or the commit handshake is canceled, the in-flight Step is discarded and no StepDone is emitted for it. Any earlier StepDone records in the same Turn remain committed. The enclosing Turn then publishes `TurnFailed` for a non-cancellation error or `TurnInterrupted` when the Turn context was canceled.
+Rollback is step-granular, not whole-Turn. If the provider fails, the response is empty, a tool batch is canceled, or the commit handshake is canceled, the in-flight Step is discarded and no StepDone is emitted for it. One case keeps part of the Step: when a stream fails or is canceled after it delivered text, and the Turn has no output schema, the safe prefix (text and sealed reasoning, never a tool call) commits as a lone assistant message ending in a truncation or interruption notice. Any earlier StepDone records in the same Turn remain committed. The enclosing Turn then publishes `TurnFailed` for a non-cancellation error or `TurnInterrupted` when the Turn context was canceled.
 
 This is the important distinction:
 

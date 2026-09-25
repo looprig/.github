@@ -10,6 +10,7 @@ proofs:
   contract-and-endpoint: [release-github-com-looprig-llm]
   authentication-and-model-formats: [release-github-com-looprig-llm]
   streaming-structured-output-and-tools: [release-github-com-looprig-llm]
+  reasoning-details: [release-github-com-looprig-llm]
   caching-controls: [release-github-com-looprig-llm]
   counters-errors-and-retries: [release-github-com-looprig-llm]
   consumer-example: [release-github-com-looprig-llm]
@@ -57,6 +58,18 @@ The client returns the shared stream reader from Stream. Its selected codec enco
 
 A stream owns its response body through the returned reader. Transport and non-success HTTP failures are returned before a reader is exposed; decode failures surface from Next or the terminal result.
 
+### Reasoning details
+
+OpenRouter returns its reasoning continuation state as a `reasoning_details` array of typed records (`reasoning.text`, `reasoning.summary`, `reasoning.encrypted`, or a newer variant it adds later). The client keeps that array as provider state, never as text, so a multi-turn conversation can hand it back intact:
+
+| Path | Behavior |
+| --- | --- |
+| Invoke | The array from the first choice is stored on the response's `*content.ThinkingBlock` as `ProviderState`, with `ProviderStateFormat` set to `openrouter-reasoning-details`. If the message has no thinking block, a zero-text one is inserted first. |
+| Stream | Records are accumulated in arrival order and carried on `*content.ThinkingChunk.ProviderState` with the same format label. Encrypted-only reasoning has no readable text, so the client emits a zero-text thinking chunk to carry it ahead of the text or tool call from the same delta. State not yet delivered when the stream ends, including on a failure, is emitted as one final carrier before the terminal error. |
+| Request | Each assistant message whose thinking block is `ReplayableAs("openrouter-reasoning-details")` gets its array back as `reasoning_details` on the matching wire message. |
+
+A stored array is replayed only if it still has the documented shape: a non-empty array of objects, each with a non-empty `type`. A malformed or foreign-format state is silently omitted rather than sent, because OpenRouter would reject it with HTTP 400. Unknown record types are preserved byte for byte. If the shared OpenAI encoder ever stops emitting one wire message per neutral message, the request fails to encode instead of attaching state to the wrong turn.
+
 ```mermaid
 %%{init: {"theme":"base","themeVariables":{"background":"#0b1020","primaryColor":"#172554","primaryTextColor":"#f8fafc","primaryBorderColor":"#60a5fa","lineColor":"#94a3b8","secondaryColor":"#1e293b","tertiaryColor":"#111827","fontFamily":"ui-sans-serif,system-ui"}}}%%
 flowchart LR
@@ -76,6 +89,8 @@ WithPromptCacheKey sets OpenRouter prompt cache key. Provider routing is routing
 ## Counters, errors, and retries
 
 No NewCounter is exported. The package has an explicit no-counter boundary.
+
+Usage is decoded by the shared OpenAI codec and passed through as OpenRouter reports it. The client does not add reasoning tokens to completion tokens, because OpenRouter documents reasoning tokens as part of output. When a response reports more reasoning tokens than completion tokens, `content.Usage.ReasoningWithinOutput` returns false, so anything that prices or reports usage can detect the inconsistency.
 
 The shared inference boundary returns typed model-validation, authentication, network, HTTP, request-encoding, response-decoding, and stream errors. A provider-local retry loop is not implied by a constructor name.
 
@@ -109,8 +124,11 @@ func invoke() error {
 
 ## Source and proof
 
-- [openrouter.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/openrouter/openrouter.go)
+- [openrouter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/openrouter/openrouter.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
 
-- [openrouter_test.go](https://github.com/looprig/llm/blob/107b378c3882c0a99ad98e36d89e542c5461bc55/providers/openrouter/openrouter_test.go)
+- [openrouter_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/openrouter/openrouter_test.go)
+- [reasoning_state_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/openrouter/reasoning_state_test.go)
+- [stream_terminal_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/openrouter/stream_terminal_test.go)
+- [usage_reasoning_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/openrouter/usage_reasoning_test.go)

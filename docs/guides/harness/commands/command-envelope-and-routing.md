@@ -92,8 +92,8 @@ codec; all other ordinary fields use `encoding/json`.
 
 The JSON above illustrates the fields and is not a command to copy into an
 application. A journal adapter should call the Go codec. A command's transient
-`Ack`, `Accepted`, and `Result` channels are tagged `json:"-"`; after restore,
-they are nil and cannot be used as a historical reply path. A restored command
+`Ack`, `Accepted`, and `Result` channels and the `UserInput.Admission`
+handshake are tagged `json:"-"`; after restore, they are nil and cannot be used as a historical reply path. A restored command
 must be given a fresh live delivery path by the owning runtime.
 
 ```mermaid

@@ -4,7 +4,7 @@ title: Runtime Context
 description: Describe runtime context supplied while a bound loop runtime runs.
 audience: developer
 section: guides
-order: 16
+order: 17
 publication: released
 proofs:
   start: [release-github-com-looprig-harness]

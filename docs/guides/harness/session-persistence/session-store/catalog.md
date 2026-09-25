@@ -70,6 +70,7 @@ type SessionMeta struct {
 	AgentKind         string
 	LoopCount         int
 	ConfigFingerprint event.ConfigFingerprint
+	Residency         SessionResidency
 	State             SessionState
 	LastJournalSeq    uint64
 	ActiveTurnID      uuid.UUID
@@ -90,6 +91,13 @@ interface value.
 `StateRunning`, `StateWaitingOnGate`, `StateIdle`, `StateFailed`,
 `StateInterrupted`, and `StateStopped`. `StateStopped` wins over every later
 projection and survives on disk.
+
+`SessionResidency` records whether some process currently holds the session's
+runtime, independently of its state. `ResidencyResident` is set by
+`SessionStarted` and `RestoreDone`; `ResidencyCold` is set by both
+`SessionResidencyReleased` and `SessionStopped`. Residency alone therefore
+never tells a released session from a stopped one; read `Status` or `State`
+for that. An entry written before the field existed has an empty residency.
 
 The bounded loop projection is:
 
@@ -127,9 +135,11 @@ regressing the projection.
 ## Projection and CAS
 
 `applyEvent` maps only catalog-relevant events. `SessionStarted` seeds identity
-and the primary loop; `TurnStarted`, `GateOpened`, gate resolution, turn
-terminal events, `StepDone`, `RestoreDone`, `LoopStarted`, and `SessionStopped`
-update bounded fields. Every changed event advances `LastJournalSeq` by max,
+and the primary loop. Turn start, fold, and terminal events, gate open and
+resolve, `StepDone`, `RestoreDone`, loop lifecycle and runtime changes, context
+measurement, compaction commits, workspace checkpoints and restores, Hustle
+lifecycle, `SessionResidencyReleased`, and `SessionStopped` update bounded
+fields. Every changed event advances `LastJournalSeq` by max,
 never by blind assignment.
 
 The online path is a read-modify-write under storage KV revision CAS. It retries
@@ -157,8 +167,13 @@ sequenceDiagram
 
 ## Read and repair
 
-`ListSessions` reads keys then values from KV and returns deterministic session
-ID order. A key deleted between those operations is skipped. `ReadMeta` makes
+`ListSessions` reads keys under `sessions/` and then their values, in the order
+the KV provider returns keys; sort the result yourself if a picker needs a
+stable order. Only exact-depth catalog keys (`sessions/<uuid>`) are read. Keys
+nested beneath a catalog entry, such as the object metadata written for
+offloaded journal bodies and captured tool results, are skipped rather than
+reported as corrupt entries. A key deleted between the key listing and its
+read is skipped. `ReadMeta` makes
 one KV load and returns `(zero, false, nil)` for absence.
 
 `RepairCatalog` opens privileged event replay, requires a `SessionStarted`,
@@ -183,7 +198,7 @@ if err != nil {
 	return err
 }
 if found {
-	fmt.Printf("%s %s %s\\n", meta.SessionID, meta.State, meta.Title)
+	fmt.Printf("%s %s %s\n", meta.SessionID, meta.State, meta.Title)
 }
 ```
 

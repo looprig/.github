@@ -113,8 +113,8 @@ Prefer looking up a tool by its `ToolInfo.Name` in production rather than relyin
 
 ## Source
 
-- [tools/bundle.go](https://github.com/looprig/workflows/blob/main/tools/bundle.go)
+- [tools/bundle.go](https://github.com/looprig/workflows/blob/v0.1.2/tools/bundle.go)
 
 ## Proof
 
-- [tools/tools_test.go](https://github.com/looprig/workflows/blob/main/tools/tools_test.go)
+- [tools/tools_test.go](https://github.com/looprig/workflows/blob/v0.1.2/tools/tools_test.go)

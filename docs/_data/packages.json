@@ -26,6 +26,16 @@
       "path": "github.com/looprig/acp/transport/stdio"
     },
     {
+      "repository": "carbon",
+      "module": "github.com/looprig/carbon",
+      "path": "github.com/looprig/carbon/browser"
+    },
+    {
+      "repository": "carbon",
+      "module": "github.com/looprig/carbon",
+      "path": "github.com/looprig/carbon/examples/local-browser"
+    },
+    {
       "repository": "classifiers",
       "module": "github.com/looprig/classifiers",
       "path": "github.com/looprig/classifiers/pkg/catalog"
@@ -39,6 +49,31 @@
       "repository": "client",
       "module": "github.com/looprig/client",
       "path": "github.com/looprig/client/pkg/webui"
+    },
+    {
+      "repository": "controller",
+      "module": "github.com/looprig/controller",
+      "path": "github.com/looprig/controller"
+    },
+    {
+      "repository": "controller",
+      "module": "github.com/looprig/controller",
+      "path": "github.com/looprig/controller/driver"
+    },
+    {
+      "repository": "controller",
+      "module": "github.com/looprig/controller",
+      "path": "github.com/looprig/controller/hostlink"
+    },
+    {
+      "repository": "controller",
+      "module": "github.com/looprig/controller",
+      "path": "github.com/looprig/controller/kubernetes"
+    },
+    {
+      "repository": "controller",
+      "module": "github.com/looprig/controller",
+      "path": "github.com/looprig/controller/workload"
     },
     {
       "repository": "core",
@@ -59,6 +94,11 @@
       "repository": "core",
       "module": "github.com/looprig/core",
       "path": "github.com/looprig/core/logging"
+    },
+    {
+      "repository": "core",
+      "module": "github.com/looprig/core",
+      "path": "github.com/looprig/core/sessionwire/v1"
     },
     {
       "repository": "core",
@@ -89,6 +129,16 @@
       "repository": "credentials",
       "module": "github.com/looprig/credentials",
       "path": "github.com/looprig/credentials/refresh"
+    },
+    {
+      "repository": "drain",
+      "module": "github.com/looprig/drain",
+      "path": "github.com/looprig/drain"
+    },
+    {
+      "repository": "drain",
+      "module": "github.com/looprig/drain",
+      "path": "github.com/looprig/drain/draintest"
     },
     {
       "repository": "eval",
@@ -134,6 +184,16 @@
       "repository": "eval",
       "module": "github.com/looprig/eval",
       "path": "github.com/looprig/eval/target/inference"
+    },
+    {
+      "repository": "factory",
+      "module": "github.com/looprig/factory",
+      "path": "github.com/looprig/factory"
+    },
+    {
+      "repository": "factory",
+      "module": "github.com/looprig/factory",
+      "path": "github.com/looprig/factory/identity"
     },
     {
       "repository": "flow",
@@ -248,6 +308,11 @@
     {
       "repository": "harness",
       "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/runtimecommand"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
       "path": "github.com/looprig/harness/pkg/serve"
     },
     {
@@ -268,12 +333,27 @@
     {
       "repository": "harness",
       "module": "github.com/looprig/harness",
+      "path": "github.com/looprig/harness/pkg/sessionwire"
+    },
+    {
+      "repository": "harness",
+      "module": "github.com/looprig/harness",
       "path": "github.com/looprig/harness/pkg/tool"
     },
     {
       "repository": "harness",
       "module": "github.com/looprig/harness",
       "path": "github.com/looprig/harness/pkg/workspacestore"
+    },
+    {
+      "repository": "host",
+      "module": "github.com/looprig/host",
+      "path": "github.com/looprig/host"
+    },
+    {
+      "repository": "host",
+      "module": "github.com/looprig/host",
+      "path": "github.com/looprig/host/department"
     },
     {
       "repository": "inference",
@@ -741,6 +821,11 @@
       "path": "github.com/looprig/natsstore"
     },
     {
+      "repository": "pgstore",
+      "module": "github.com/looprig/pgstore",
+      "path": "github.com/looprig/pgstore"
+    },
+    {
       "repository": "pluto",
       "module": "github.com/looprig/pluto",
       "path": "github.com/looprig/pluto/pkg/cli"
@@ -831,6 +916,11 @@
       "path": "github.com/looprig/rclonestore"
     },
     {
+      "repository": "s3store",
+      "module": "github.com/looprig/s3store",
+      "path": "github.com/looprig/s3store"
+    },
+    {
       "repository": "sandbox",
       "module": "github.com/looprig/sandbox",
       "path": "github.com/looprig/sandbox"
@@ -864,6 +954,11 @@
       "repository": "secrets",
       "module": "github.com/looprig/secrets",
       "path": "github.com/looprig/secrets/local"
+    },
+    {
+      "repository": "sessionstore",
+      "module": "github.com/looprig/sessionstore",
+      "path": "github.com/looprig/sessionstore"
     },
     {
       "repository": "storage",
@@ -933,6 +1028,11 @@
     {
       "repository": "tools",
       "module": "github.com/looprig/tools",
+      "path": "github.com/looprig/tools/readtoolresult"
+    },
+    {
+      "repository": "tools",
+      "module": "github.com/looprig/tools",
       "path": "github.com/looprig/tools/skill"
     },
     {
@@ -989,6 +1089,11 @@
       "repository": "workflows",
       "module": "github.com/looprig/workflows",
       "path": "github.com/looprig/workflows/tools"
+    },
+    {
+      "repository": "wui",
+      "module": "github.com/looprig/wui",
+      "path": "github.com/looprig/wui"
     },
     {
       "repository": "client",

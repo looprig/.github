@@ -10,6 +10,7 @@ proofs:
   start: [release-github-com-looprig-harness]
   filter-contract: [release-github-com-looprig-harness]
   delivery-contract: [release-github-com-looprig-harness]
+  committed-public-events: [release-github-com-looprig-harness]
   bounded-lifecycle: [release-github-com-looprig-harness]
   consumer-example: [release-github-com-looprig-harness]
   source-and-proof: [release-github-com-looprig-harness]
@@ -62,15 +63,51 @@ type Subscription interface {
 }
 
 type Delivery struct {
-	Event      Event
-	JournalSeq uint64
+	Event          Event
+	JournalSeq     uint64
+	EventID        string // public event ID; empty unless PublicBody is set
+	PublicBody     []byte // committed canonical public body, cloned per subscriber
+	CoveredThrough uint64 // equals JournalSeq when committed
 }
+
+func (d Delivery) Committed() bool
 ```
+
+On the ordinary `SubscribeEvents` stream the public fields may be empty; it
+promises nothing about bytes and also serves sessions with no persistence.
 
 The concrete hub channel is bounded to 256 values. `Close` is idempotent and
 intentional, so `Err` remains nil. If an Enduring value cannot enter the
 buffer, the hub closes the channel and stores `*hub.SubscriptionLossError` in
 `Err`. A consumer must resync from durable history after that error.
+
+## Committed public events
+
+A consumer that joins a durable history tail to the live stream, such as a
+Host serving viewers, needs every live delivery to carry the exact bytes the
+journal stored. Ask for that stream through the optional capability, which
+reports `false` when the session's persistence cannot supply the bytes:
+
+```go
+provider, ok := live.(session.CommittedPublicEventProvider)
+if !ok {
+	return errors.New("session does not report committed public events")
+}
+source, ok := provider.CommittedPublicEvents()
+if !ok {
+	return errors.New("session persistence cannot report committed bytes")
+}
+sub, err := source.SubscribeCommittedPublicEvents(event.EventFilter{
+	Enduring: event.LoopScope{All: true},
+})
+```
+
+On this stream every delivery is `Committed()`, and Ephemeral events are
+skipped. A `*hub.SubscriptionLossError` needs different handling depending on
+its cause. A nil `Cause` is egress overflow, so resubscribe and resync. A cause
+of `hub.ErrCommittedBodyMissing` or `hub.ErrCommitEventMismatch` is a broken
+invariant, and resubscribing would loop forever. Check with `errors.Is` before
+retrying.
 
 ## Bounded lifecycle
 
@@ -130,5 +167,6 @@ causal identity.
 - [`EventFilter` and matching](https://github.com/looprig/harness/blob/main/pkg/event/filter.go)
 - [`Subscription` and `Delivery`](https://github.com/looprig/harness/blob/main/pkg/event/event.go)
 - [`EventSubscription` and loss error](https://github.com/looprig/harness/blob/main/pkg/hub/subscription.go)
+- [`CommittedPublicEventSource` and provider](https://github.com/looprig/harness/blob/main/pkg/session/session.go)
 - [`Session.SubscribeEvents`](https://github.com/looprig/harness/blob/main/internal/sessionruntime/session.go)
 - [`subscription and overflow tests`](https://github.com/looprig/harness/blob/main/pkg/hub/subscription_test.go)
