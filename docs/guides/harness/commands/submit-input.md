@@ -9,6 +9,7 @@ publication: released
 proofs:
   start: [release-github-com-looprig-harness]
   public-entry-points: [release-github-com-looprig-harness]
+  attributed-in-process-input: [release-github-com-looprig-harness]
   command-shapes: [release-github-com-looprig-harness]
   what-the-event-stream-means: [release-github-com-looprig-harness]
   delegate-hand-backs: [release-github-com-looprig-harness]
@@ -78,6 +79,30 @@ from the composition root and does not construct an internal command. The
 [`pkg/session/session.go`](https://github.com/looprig/harness/blob/main/pkg/session/session.go)
 contract and [`internal/sessionruntime/submit_test.go`](https://github.com/looprig/harness/blob/main/internal/sessionruntime/submit_test.go)
 are the relevant source and proof.
+
+## Attributed in-process input
+
+Harness v0.41.0 adds an optional `session.InputSubmitter` capability; the
+`session.Session` interface and `Submit` signature stay unchanged. Assert that
+your session supports the capability, then call
+`SubmitInput(context.Context, session.Input) (uuid.UUID, error)` with:
+
+```go
+type Input struct {
+    Blocks    []content.Block
+    Principal *sessionwire.Principal
+    Metadata  sessionwire.MessageMetadata
+}
+```
+
+The caller must verify the principal before supplying it. Harness validates
+its shape, validates metadata, and refuses an empty message; it does not
+authenticate the caller. The returned command ID is the resulting events'
+`Cause.CommandID`. Plain `Submit` still works without a principal, so a
+[Message presenter](/docs/guides/harness/commands/message-presenter) must handle
+nil attribution. Principal and metadata remain audit fields unless the
+presenter renders them. See [Attribution and audit](/docs/guides/harness/commands/attribution-and-audit)
+for the distinction between native journal metadata and public transcript fields.
 
 ## Command shapes
 
@@ -208,6 +233,8 @@ For the gate commands that can interrupt a parked tool step, see [Approve and de
 and [Provide requested user input](/docs/guides/harness/commands/provide-user-input).
 
 ## Source and proof
+
+- [`Input` and `InputSubmitter`](https://github.com/looprig/harness/blob/v0.41.1/pkg/session/session.go)
 
 - [`Session.Submit` and admission](https://github.com/looprig/harness/blob/main/internal/sessionruntime/session.go)
 - [`submit command contracts`](https://github.com/looprig/harness/blob/main/pkg/command/submit_test.go)

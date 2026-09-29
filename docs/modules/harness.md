@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/harness` |
-| Version | `v0.41.0` |
+| Version | `v0.41.1` |
 | GitHub | [looprig/harness](https://github.com/looprig/harness) |
 
 ## Description
@@ -34,7 +34,7 @@ Harness is useful on its own when an application needs to turn model calls and t
 
 A Rig wired with `rig.WithToolResultObjects` keeps every tool result larger than the preview budget as a session object beside the journal, and the model pages it back with `read_tool_result` from [Tools](/docs/modules/tools). [Host](/docs/modules/host) runs Harness sessions for [Factory](/docs/modules/factory), and the older `pkg/serve` HTTP surface is deprecated in favor of Factory. Harness owns runtime coordination; applications still choose models, authority, persistence, and interfaces.
 
-The `pkg/present` contract and `rig.WithMessagePresenter` let a product place bounded text around a human's message while journaling the chosen frame for restore. `loop.Unlimited` removes the per-turn iteration or call cap, and `hustle.WithTimeout(0)` removes a Hustle's execution deadline; caller and session cancellation still apply. See [Message presenter](/docs/guides/harness/commands/message-presenter) and [tool limits](/docs/guides/harness/loop/tools-and-tool-limits).
+The optional `session.InputSubmitter` accepts caller-verified `Principal` and client `Metadata` without changing `session.Session`. Public journals retain the principal but strip metadata; native metadata is available through `ReadRuntimeJournal`. The `pkg/present` contract and `rig.WithMessagePresenter` let a product place bounded text around a human's message while journaling the chosen frame for restore. `loop.Unlimited` removes the per-turn iteration or call cap, and `hustle.WithTimeout(0)` removes a Hustle's execution deadline; caller and session cancellation still apply. See [Message presenter](/docs/guides/harness/commands/message-presenter) and [tool limits](/docs/guides/harness/loop/tools-and-tool-limits). Since v0.41.1, plain-JSON Hustle output accepts thinking blocks beside exactly one text block, so reasoning models no longer have valid JSON refused, and it refuses length-limited, content-filtered, tool-use and unrecognized finishes with the typed `inference.StructuredOutputFinishError`. Compaction records `CompactRejectExecutionFailed` rather than `CompactRejectInvalidSummary` for those responses.
 
 ## Dependencies
 
@@ -48,7 +48,6 @@ The `pkg/present` contract and `rig.WithMessagePresenter` let a product place bo
 
 - [ACP](/docs/modules/acp)
 - [Classifiers](/docs/modules/classifiers)
-- [Client](/docs/modules/client)
 - [Foreign Loops](/docs/modules/foreignloops)
 - [Host](/docs/modules/host)
 - [MCP](/docs/modules/mcp)

@@ -110,6 +110,13 @@ discriminator, decodes the known type, projects interface-valued fields, and
 then validates identity and body. The codec rejects an unsupported schema
 version and caps the encoded or accepted event at 16 MiB.
 
+The duplicate-key check treats a `tool_use` block's `Input` as opaque JSON.
+Tool arguments containing duplicate object keys survive journal replay;
+Harness does not reinterpret their application-defined structure. Duplicate
+keys in the enclosing event or block are still refused, and a non-tool
+block's `Input` does not get this exception. See the
+[opaque tool-input replay tests](https://github.com/looprig/harness/blob/v0.41.1/pkg/event/opaque_tool_input_test.go).
+
 | Value | Durable behavior | Reason |
 | --- | --- | --- |
 | Enduring Public | Encoded, appended, and exposed by ordinary event replay | Authoritative product-visible history |
@@ -130,7 +137,7 @@ model-facing restore form), never an arbitrary live error implementation.
 
 The journal stores two bodies for a public event: the native body shown here,
 which restore reads, and a public body that
-[`pkg/sessionwire`](https://github.com/looprig/harness/blob/v0.41.0/pkg/sessionwire/privacy.go)
+[`pkg/sessionwire`](https://github.com/looprig/harness/blob/v0.41.1/pkg/sessionwire/privacy.go)
 projects for session viewers. The public projection removes Host configuration
 a viewer must not see:
 

@@ -76,7 +76,7 @@ Every module is published at `github.com/looprig/<name>` and installed with
 - **[natsstore](https://github.com/looprig/natsstore)** - All storage primitives over NATS JetStream, remote or embedded.
 - **[pgstore](https://github.com/looprig/pgstore)** - PostgreSQL provider for `Ledger`, `Leaser`, `KV`, and `OrderedIndex`.
 - **[s3store](https://github.com/looprig/s3store)** - S3-compatible provider for `Blobs`, including bounded reader lifecycle.
-- **[rclonestore](https://github.com/looprig/rclonestore)** - `Blobs` over any rclone remote, driving the `rclone` binary as a bounded subprocess.
+- **[rclonestore](https://github.com/looprig/rclonestore)** - `Blobs` over any rclone remote, driving the `rclone` binary as a bounded subprocess. Supports nested storage names; see the [layout upgrade requirements](https://looprig.com/docs/modules/rclonestore) before upgrading an existing root.
 - **[sessionstore](https://github.com/looprig/sessionstore)** - The durable session aggregate over the storage contracts: catalog, journal, command admission and settlement, gates, and residency.
 
 ### Models
@@ -102,8 +102,7 @@ Every module is published at `github.com/looprig/<name>` and installed with
 ### Interfaces
 
 - **[tui](https://github.com/looprig/tui)** - Reusable terminal user interface (Bubble Tea v2) for Harness sessions.
-- **[wui](https://github.com/looprig/wui)** - Reusable web user interface: a React SPA embedded as a static bundle, served by a Go handler.
-- **[client](https://github.com/looprig/client)** - A Go backend-for-frontend and a framework-neutral TypeScript session SDK, with a reference Svelte app.
+- **[client](https://github.com/looprig/client)** - Not a Go module: the npm packages `@looprig/client` (framework-neutral Factory client, ClientLink, commands, validation, and live previews) and `@looprig/react` (React 19 hooks) for building browser UIs over Factory. The former `wui` bundle is retired and archived; Carbon ships its own browser app.
 
 ### Orchestration
 
@@ -113,7 +112,7 @@ Every module is published at `github.com/looprig/<name>` and installed with
 
 ### Products
 
-- **[carbon](https://github.com/looprig/carbon)** - Carbon, the coding agent: an interactive TUI and headless CLI, plus a browser mode composed from Factory, a local Host, and `wui`.
+- **[carbon](https://github.com/looprig/carbon)** - Carbon, the coding agent: an interactive TUI and headless CLI, plus a browser mode composed from Factory, a local Host, and its own embedded web app.
 - **[pluto](https://github.com/looprig/pluto)** - Pluto, the model profiler: qualifies a new model or configuration under representative load, faults, and hostile inputs. The CLI is the nested module `github.com/looprig/pluto/cmd/pluto`.
 
 ### Integration
@@ -131,9 +130,10 @@ Modules release from the bottom up; a module depends only on layers below it.
 | Session state | `sessionstore` |
 | Models and workflow storage | `inference`, `flow/store` |
 | Shared runtime | `harness`, `llm`, `eval` |
-| Capabilities and interfaces | `tools`, `mcp`, `acp`, `classifiers`, `tui`, `wui`, `pluto` |
+| Capabilities and interfaces | `tools`, `mcp`, `acp`, `classifiers`, `tui`, `pluto` |
 | Orchestration | `foreignloops`, `workflows`, `host`, `factory`, `controller` |
-| Products and integration | `carbon`, `client`, `tests` |
+| Products and integration | `carbon`, `tests` |
+| Browser packages (npm) | `@looprig/client`, `@looprig/react` |
 
 This repository also holds the public documentation corpus, runnable examples,
 and the journal published at [looprig.com](https://looprig.com).

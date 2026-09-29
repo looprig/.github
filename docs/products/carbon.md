@@ -34,7 +34,7 @@ Carbon is a coding agent built from Looprig modules. It provides a ready termina
 ## Install
 
 ```sh
-go install github.com/looprig/carbon/cmd/carbon@v0.30.0
+go install github.com/looprig/carbon/cmd/carbon@v0.31.0
 ```
 
 Carbon stores configuration under `~/.looprig/carbon` by default. Its configuration files must be regular, owner-only files.
@@ -126,14 +126,18 @@ Carbon’s model proxy exposes configured models through a local protocol endpoi
 
 Carbon ships with a terminal UI for prompts, events, tools, gates, model selection, and session browsing. Multiline pastes collapse into a compact marker in the composer while the exact pasted text is submitted.
 
-The browser path is a composition in Carbon's importable `browser` package. `browser.Start` runs [Factory](/docs/modules/factory) as the public API, one local pooled [Host](/docs/modules/host) that runs the sessions, and a shared filesystem [SessionStore](/docs/modules/sessionstore), and it serves the [wui](/docs/modules/wui) bundle through Factory's UI seam. Browser sessions get their own workspace and journal, cold sessions stay readable without starting a runtime, and a reconnecting browser recovers missed events from the journal.
+The browser path is a composition in Carbon's importable `browser` package. `browser.Start` runs [Factory](/docs/modules/factory) as the public API, one local pooled [Host](/docs/modules/host) that runs the sessions, and a shared filesystem [SessionStore](/docs/modules/sessionstore), and it serves Carbon's own browser app through Factory's UI seam. That app is built from `@looprig/client` and `@looprig/react` (see the [Web UI guides](/docs/guides/web-ui)) and embedded in the binary, so running it needs no Node toolchain. Assistant replies stream as they are generated, and the model's reasoning preview is visible live to everyone watching the session, so treat a shared session as showing reasoning. A New session form creates sessions from the page. Browser sessions get their own workspace and journal, cold sessions stay readable without starting a runtime, and a reconnecting browser recovers missed events from the journal.
 
-Carbon v0.30.0 carries principal and metadata through its Host-to-Harness
+Carbon carries principal and metadata through its Host-to-Harness
 adapter, but its stock browser composition does not enable Factory's optional
 `WithPrincipalStamping`. A product composing Carbon's runtime with its own
 Factory can enable stamping after all Hosts advertise
 `hostlink.attribution.principal`; otherwise attributed browser labels will
 not appear. The product still decides who may read each session or audit field.
+Metadata can still be supplied with stamping disabled, and metadata-only
+records also require the new Host, Harness, and SessionStore readers. Follow
+the [one-way rollout and recovery rules](/docs/guides/harness/commands/attribution-and-audit#rollout-and-recovery)
+before upgrading an existing store.
 
 Your application supplies the credential verifier, authorizer, tenant, HostLink service token, CSRF policy, and listener addresses. The stock `carbon serve` command has none of these and refuses to start, so it is not a ready-to-expose web service. The local Host serves only the configured default tenant and refuses principals of any other tenant. Under `trusted`, a pooled session can read sibling session directories, so serve one tenant per Carbon process.
 

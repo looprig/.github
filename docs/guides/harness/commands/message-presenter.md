@@ -97,7 +97,9 @@ Harness journals the selected frame with the command. After that durable
 prefix, restore and duplicate delivery reuse the recorded rendering exactly
 once rather than calling the presenter again. The `Principal` and `Metadata`
 are separate attribution on the journal record; adding a visible prefix does
-not turn either into user-authored text. See [Submit input](/docs/guides/harness/commands/submit-input)
+not turn either into user-authored text. `event.UserBlocks(message, input)`
+selects the original blocks using the recorded prefix and suffix counts;
+`hook.TurnData.Input` sees the assembled message, including the frame. See [Submit input](/docs/guides/harness/commands/submit-input)
 for the ordinary command path and [Session restore](/docs/guides/harness/session-persistence/session-store/restore)
 for the durable boundary.
 
@@ -107,19 +109,21 @@ A presenter error or panic becomes `*present.Error` with
 `ErrorPresenterFailed`; an invalid frame becomes `ErrorFrameInvalid`. Harness
 refuses the admitted message before writing its command intent or sending it
 to the model. A disposition-backed attempt records a durable refused prefix,
-so redelivery returns that refusal without invoking the presenter again.
+so redelivery returns that refusal without invoking the presenter again,
+even if the successor no longer installs a presenter. The durable refused
+disposition carries no reason.
 Without disposition evidence, a failure returns no disposition and writes no
 intent. The hook receives a five-second context, but product code must honor
 it: Harness cannot forcibly stop a presenter that ignores cancellation.
 
 ## Source
 
-- [`present.Input`, `Frame`, limits, and `Run`](https://github.com/looprig/harness/blob/v0.41.0/pkg/present/present.go)
-- [`rig.WithMessagePresenter`](https://github.com/looprig/harness/blob/v0.41.0/pkg/rig/presenter.go)
-- [`presentUserInput` and its deadline](https://github.com/looprig/harness/blob/v0.41.0/internal/sessionruntime/present.go)
+- [`present.Input`, `Frame`, limits, and `Run`](https://github.com/looprig/harness/blob/v0.41.1/pkg/present/present.go)
+- [`rig.WithMessagePresenter`](https://github.com/looprig/harness/blob/v0.41.1/pkg/rig/presenter.go)
+- [`presentUserInput` and its deadline](https://github.com/looprig/harness/blob/v0.41.1/internal/sessionruntime/present.go)
 
 ## Proof
 
-- [Restore does not re-render](https://github.com/looprig/harness/blob/v0.41.0/internal/sessionruntime/presented_restore_test.go)
-- [Failure refuses before intent](https://github.com/looprig/harness/blob/v0.41.0/internal/sessionruntime/present_refusal_test.go)
-- [Frame validation and copying](https://github.com/looprig/harness/blob/v0.41.0/pkg/present/present_test.go)
+- [Restore does not re-render](https://github.com/looprig/harness/blob/v0.41.1/internal/sessionruntime/presented_restore_test.go)
+- [Failure refuses before intent](https://github.com/looprig/harness/blob/v0.41.1/internal/sessionruntime/present_refusal_test.go)
+- [Frame validation and copying](https://github.com/looprig/harness/blob/v0.41.1/pkg/present/present_test.go)

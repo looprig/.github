@@ -140,7 +140,7 @@ which round-trips every durable command type and rejects codec drift.
 
 A Host that serves remote clients admits commands in its own durable store
 before any runtime sees them, then must apply each one exactly once, even
-across a crash or failover. [`pkg/runtimecommand`](https://github.com/looprig/harness/blob/v0.41.0/pkg/runtimecommand/command.go)
+across a crash or failover. [`pkg/runtimecommand`](https://github.com/looprig/harness/blob/v0.41.1/pkg/runtimecommand/command.go)
 is that seam. It is separate from `pkg/command`: an admitted command names a
 retry-stable public `CommandID` (an opaque UTF-8 string of at most 256 bytes)
 and the `RuntimeCommandID` UUID the Host allocated once, which Harness stamps on
@@ -183,7 +183,7 @@ model-facing `content.Message` unless a product explicitly frames human input
 with a [Message presenter](/docs/guides/harness/commands/message-presenter).
 Every product adapter that constructs `runtimecommand.Admitted` field by field
 must copy both `Principal` and `Metadata`; omitting either drops attribution
-silently. [The released integration lane](https://github.com/looprig/tests/blob/v0.14.0/principal_presenter_integration_test.go)
+silently. [The released integration lane](https://github.com/looprig/tests/blob/v0.15.0/principal_presenter_integration_test.go)
 exercises this seam across Factory, Host, and Harness.
 
 `ApplyRuntimeCommand` writes a private application record before any effect,

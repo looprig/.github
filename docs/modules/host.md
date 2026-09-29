@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/host` |
-| Version | `v0.11.0` |
+| Version | `v0.14.0` |
 | GitHub | [looprig/host](https://github.com/looprig/host) |
 
 ## Description
@@ -36,7 +36,7 @@ Within Looprig, Host is the runtime side of [Factory](/docs/modules/factory). Fa
 
 Host owns residency, command consumption, the HostLink surface, and drain. Callers own the Department, the storage backend, the harness journal stores used as settlement evidence, credential verification, and deployment.
 
-Host v0.11.0 advertises `hostlink.attribution.principal` only when it carries `Principal` on all five command kinds and `Metadata` on create and input into the product runtime. A product's field-by-field `runtimecommand.Admitted` adapter must copy both fields; dropping either loses attribution silently. Upgrade Hosts before enabling Factory's principal stamping.
+Host v0.11.0 unconditionally advertises `hostlink.attribution.principal` and carries `Principal` on all five command kinds and `Metadata` on create and input into the product runtime. A product's field-by-field `runtimecommand.Admitted` adapter must copy both fields; dropping either loses attribution silently. Host decodes stored command bodies before starting an attempt: malformed bodies are rejected, while future fields and unsupported versions remain claimed for a compatible reader or deadline sweep. Upgrade Hosts before enabling Factory's principal stamping. See [Attribution and audit](/docs/guides/harness/commands/attribution-and-audit) for the decoder and rollback rules. Since v0.14.0, Host applies a create, input or gate response whose body Factory stored by reference, reading it in the command's own tenant and session scope and verifying size and SHA-256 before the runtime sees it. `Composition.MaxCommandBodyBytes` bounds that body (default 8 MiB, above 64 KiB and at most 16 MiB), and Host advertises `hostlink.payload.reference` when the control SessionStore reader is wired. An opt-in `Composition.LiveText` forwards public text previews as ephemeral publications over HostLink, rate-limited per client, and its `IncludeReasoning` option also streams public reasoning previews to every viewer of the session; without it Host sends committed records only.
 
 ## Dependencies
 
