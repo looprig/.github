@@ -4,7 +4,7 @@ title: Evaluation and qualification
 description: Run deterministic or inference-backed evaluations, preserve redacted reports, compare revisions, and qualify model capabilities with Pluto.
 audience: developer
 section: build
-order: 25
+order: 24
 publication: released
 examples:
   - stage-23-eval

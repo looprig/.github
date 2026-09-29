@@ -113,7 +113,10 @@ export function validateProgressiveManifest(manifest, { requireAll = true } = {}
   }
 
   if (requireAll) {
-    const missing = Array.from({ length: 23 }, (_, index) => index + 1).filter((stage) => !seenStages.has(stage));
+    // Stage 20 (the Svelte web client) is retired: the browser libraries are npm-only and
+    // no longer ship a runnable stage in this manifest.
+    const retired = new Set([20]);
+    const missing = Array.from({ length: 23 }, (_, index) => index + 1).filter((stage) => !retired.has(stage) && !seenStages.has(stage));
     if (missing.length > 0) errors.push(`missing progressive stages: ${missing.join(', ')}`);
   }
   return errors;

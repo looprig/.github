@@ -179,10 +179,10 @@ Use [profiles and access dimensions](/docs/guides/sandboxing/profiles), [platfor
 
 ## Source
 
-- [Linux re-exec initialization](https://github.com/looprig/sandbox/blob/v0.9.1/init_linux.go)
-- [Executor level, report, and guarantees](https://github.com/looprig/sandbox/blob/v0.9.1/internal/exec/executor.go)
+- [Linux re-exec initialization](https://github.com/looprig/sandbox/blob/v0.9.2/init_linux.go)
+- [Executor level, report, and guarantees](https://github.com/looprig/sandbox/blob/v0.9.2/internal/exec/executor.go)
 
 ## Proof
 
-- [Linux re-exec initialization tests](https://github.com/looprig/sandbox/blob/v0.9.1/internal/exec/init_linux_test.go)
-- [Runnable sandbox policy example](https://github.com/looprig/sandbox/blob/v0.9.1/examples/policy-enforcement/example_test.go)
+- [Linux re-exec initialization tests](https://github.com/looprig/sandbox/blob/v0.9.2/internal/exec/init_linux_test.go)
+- [Runnable sandbox policy example](https://github.com/looprig/sandbox/blob/v0.9.2/examples/policy-enforcement/example_test.go)

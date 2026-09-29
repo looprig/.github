@@ -45,8 +45,8 @@ For graph construction and graph-level interrupts, use the [Flow graph compositi
 
 ## Source
 
-- [Supervisor implementation](https://github.com/looprig/workflows/blob/v0.1.2/supervisor.go)
+- [Supervisor implementation](https://github.com/looprig/workflows/blob/v0.1.3/supervisor.go)
 
 ## Proof
 
-- [Supervisor recovery tests](https://github.com/looprig/workflows/blob/v0.1.2/supervisor_test.go)
+- [Supervisor recovery tests](https://github.com/looprig/workflows/blob/v0.1.3/supervisor_test.go)

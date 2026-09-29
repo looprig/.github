@@ -7,7 +7,7 @@ section: start
 order: 10
 publication: released
 proofs:
-  choose-an-interface: [release-github-com-looprig-tui, release-github-com-looprig-client]
+  choose-an-interface: [release-github-com-looprig-tui, release-npm-looprig-client]
   expose-a-protocol: [release-github-com-looprig-acp, release-github-com-looprig-mcp]
   add-durable-workflows: [release-github-com-looprig-workflows, release-github-com-looprig-flow]
   evaluate-the-agent: [release-github-com-looprig-eval, release-github-com-looprig-pluto]
@@ -24,9 +24,9 @@ The coding assistant runtime does not depend on the CLI. Keep the Loop, Rig, Ses
 | --- | --- | --- |
 | CLI | A small command or service owns input and output directly | The tutorial application |
 | TUI | You want a ready terminal experience with session lists, input, events, and restore | [TUI Getting Started](/docs/guides/tui/getting-started) |
-| Web UI | You want React, Vue, Svelte, Solid, or vanilla DOM to consume the same Session contract | [Web UI Client SDK](/docs/guides/web-ui/client-sdk) |
+| Web UI | You want a browser UI over Factory, with the framework-neutral `@looprig/client` npm package or the React 19 `@looprig/react` hooks | [Web UI Client SDK](/docs/guides/web-ui/client-sdk) |
 
-The Web UI client is framework-neutral. The optional Svelte adapter does not require applications to use Svelte.
+`@looprig/client` is framework-neutral and speaks Factory's REST and ClientLink contract. `@looprig/react` is an optional adapter over it, so applications on another framework use the client package alone.
 
 ## Expose a protocol
 

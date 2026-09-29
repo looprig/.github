@@ -4,7 +4,7 @@ title: Terminal session interfaces
 description: Build a terminal UI around a session adapter that folds public history, subscribes to live events, and disposes one live session cleanly.
 audience: developer
 section: build
-order: 24
+order: 23
 publication: released
 examples:
   - stage-21-tui

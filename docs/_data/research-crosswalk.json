@@ -60,8 +60,6 @@
       ],
       "appliedInLooprig": [
         "concepts/composition.md",
-        "build/23-client.md",
-        "modules/client.md",
         "reference/packages/client/sdk/core.md",
         "reference/packages/client/sdk/svelte.md"
       ]
@@ -123,7 +121,6 @@
       "appliedInLooprig": [
         "build/14-delegation.md",
         "build/22-serving.md",
-        "build/23-client.md",
         "build/24-tui.md",
         "carbon/browser-clients.md",
         "carbon/tui.md"

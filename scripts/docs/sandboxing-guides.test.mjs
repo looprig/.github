@@ -50,7 +50,7 @@ function pageMarkdown(id) {
 }
 
 function sourceUrl(relative) {
-  return `https://github.com/looprig/sandbox/blob/v0.9.1/${relative}`;
+  return `https://github.com/looprig/sandbox/blob/v0.9.2/${relative}`;
 }
 
 function headingSlug(heading) {

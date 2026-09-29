@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/sandbox` |
-| Version | `v0.9.1` |
+| Version | `v0.9.2` |
 | GitHub | [looprig/sandbox](https://github.com/looprig/sandbox) |
 
 ## Description

@@ -27,7 +27,7 @@ test("message presenter guide is published with source-backed safety rules", () 
     "harness/internal/sessionruntime/present_refusal_test.go",
   ]) {
     assert.equal(existsSync(path.join(workspace, source)), true, `${source} is missing`);
-    assert.match(markdown, new RegExp(`https://github.com/looprig/harness/blob/v0\\.41\\.0/${source.slice("harness/".length).replaceAll("/", "\\/")}`));
+    assert.match(markdown, new RegExp(`https://github.com/looprig/harness/blob/v0\\.41\\.\\d+/${source.slice("harness/".length).replaceAll("/", "\\/")}`));
   }
 });
 
@@ -36,9 +36,9 @@ test("owning guides describe released unbounded execution and browser attributio
   assert.match(read("guides/harness/loop/tools-and-tool-limits.md"), /loop\.Unlimited/);
   assert.match(read("guides/harness/hustles/define-a-hustle.md"), /WithTimeout\(0\)/);
   assert.match(read("guides/inference/client/invoke.md"), /WithoutExecutionTimeout/);
-  const wui = read("guides/web-ui/embedding/wui.md");
-  for (const claim of [/v0\.4\.0/, /43 schemas/, /presenter frame/, /principal/]) {
-    assert.match(wui, claim);
+  const attribution = read("guides/harness/commands/attribution-and-audit.md");
+  for (const claim of [/sender chip/, /presenter frame/, /principal/]) {
+    assert.match(attribution, claim);
   }
 });
 

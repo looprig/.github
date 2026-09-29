@@ -109,12 +109,12 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/v0.15.0/providers/openai/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/openai/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/v0.15.0/providers/openai/errors.go)
-- [options.go](https://github.com/looprig/llm/blob/v0.15.0/providers/openai/options.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.15.1/providers/openai/client.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.15.1/providers/openai/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.15.1/providers/openai/errors.go)
+- [options.go](https://github.com/looprig/llm/blob/v0.15.1/providers/openai/options.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.1/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/openai/client_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/openai/counter_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/openai/client_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/openai/counter_test.go)

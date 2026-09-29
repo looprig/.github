@@ -46,11 +46,6 @@
       "path": "github.com/looprig/classifiers/pkg/commandsafety"
     },
     {
-      "repository": "client",
-      "module": "github.com/looprig/client",
-      "path": "github.com/looprig/client/pkg/webui"
-    },
-    {
       "repository": "controller",
       "module": "github.com/looprig/controller",
       "path": "github.com/looprig/controller"
@@ -1094,33 +1089,6 @@
       "repository": "workflows",
       "module": "github.com/looprig/workflows",
       "path": "github.com/looprig/workflows/tools"
-    },
-    {
-      "repository": "wui",
-      "module": "github.com/looprig/wui",
-      "path": "github.com/looprig/wui"
-    },
-    {
-      "repository": "client",
-      "ecosystem": "npm",
-      "name": "@looprig/client",
-      "path": "sdk/core",
-      "version": "0.0.0",
-      "private": true,
-      "availability": "source-workspace",
-      "role": "framework-neutral TypeScript client",
-      "installCommand": null
-    },
-    {
-      "repository": "client",
-      "ecosystem": "npm",
-      "name": "@looprig/svelte",
-      "path": "sdk/svelte",
-      "version": "0.0.0",
-      "private": true,
-      "availability": "source-workspace",
-      "role": "optional Svelte adapter",
-      "installCommand": null
     }
   ]
 }

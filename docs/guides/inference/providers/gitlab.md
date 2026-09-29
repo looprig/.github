@@ -109,13 +109,13 @@ func invoke() error {
 
 ## Source and proof
 
-- [auth.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gitlab/auth.go)
-- [client.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gitlab/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gitlab/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gitlab/errors.go)
-- [model_mapping.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gitlab/model_mapping.go)
+- [auth.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gitlab/auth.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gitlab/client.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gitlab/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gitlab/errors.go)
+- [model_mapping.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gitlab/model_mapping.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.1/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gitlab/client_test.go)
-- [model_mapping_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/gitlab/model_mapping_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gitlab/client_test.go)
+- [model_mapping_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gitlab/model_mapping_test.go)

@@ -136,4 +136,4 @@ The legend is drawn from the same bindings the screen dispatches on, and narrow 
 - [Agent contract tests](https://github.com/looprig/tui/blob/main/internal/presentation/agent_test.go)
 - [Diff preview tests](https://github.com/looprig/tui/blob/main/internal/presentation/diffview_test.go)
 - [Key panel tests](https://github.com/looprig/tui/blob/main/internal/presentation/keypanel_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.2)

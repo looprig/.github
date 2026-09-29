@@ -174,7 +174,7 @@ test("public component and integration pages cover the source-backed seams", () 
   assert.match(all, /```mermaid[\s\S]*sequenceDiagram/);
 });
 
-test("v0.21.1 gate, key, tray, and composer behavior is documented", () => {
+test("v0.21 gate, key, tray, and composer behavior is documented", () => {
   const commands = pageMarkdown("runtime/commands");
   for (const phrase of ["?", "key legend", "Approve always for this workspace", "Ctrl+A", "rendered keystroke", "Deny-only", "diff", "never journaled", "Current", "Provider", "searchable"]) {
     assert.ok(commands.includes(phrase), `commands omits ${phrase}`);

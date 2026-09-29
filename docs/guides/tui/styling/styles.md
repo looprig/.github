@@ -88,4 +88,4 @@ Do not use a plain Lip Gloss background wrapper when a row contains Glamour or n
 
 - [Styles behavior tests](https://github.com/looprig/tui/blob/main/styles/styles_test.go)
 - [Selection band tests](https://github.com/looprig/tui/blob/main/styles/selection_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.2)

@@ -41,14 +41,14 @@ test("Carbon is one practical coding-agent page with concise feature coverage", 
   }
 });
 
-test("the Carbon Install command pins v0.30.0", () => {
+test("the Carbon Install command pins v0.31.0", () => {
   const install = section(read("carbon.md"), "Install");
   assert.ok(install, "Carbon is missing its Install section");
   const [command] = fencedBlocks(install, ["sh", "bash", "shell"]);
   assert.ok(command, "Carbon Install needs a shell block");
 
   const pins = [...command.matchAll(/go install (\S+?)@(v\S+)/g)].map(([, module, version]) => [module, version]);
-  assert.deepEqual(pins, [["github.com/looprig/carbon/cmd/carbon", "v0.30.0"]]);
+  assert.deepEqual(pins, [["github.com/looprig/carbon/cmd/carbon", "v0.31.0"]]);
 });
 
 test("Carbon documents the one-way data directory of v0.29.0 and later", () => {
@@ -65,7 +65,7 @@ test("Carbon documents the one-way data directory of v0.29.0 and later", () => {
 test("Carbon describes the browser composition and large tool-result retention", () => {
   const clients = section(read("carbon.md"), "TUI and browser clients");
   assert.ok(clients, "Carbon is missing its TUI and browser clients section");
-  for (const slug of ["factory", "host", "sessionstore", "wui"]) {
+  for (const slug of ["factory", "host", "sessionstore"]) {
     assert.match(clients, new RegExp(`\\(/docs/modules/${slug}\\)`), `browser composition must link the ${slug} module`);
   }
   assert.match(clients, /`carbon serve`[^.]*\brefuses to start\b/, "the stock serve command must be documented as refusing to start");

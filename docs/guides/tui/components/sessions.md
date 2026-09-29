@@ -63,4 +63,4 @@ When a pointer event names a rendered row, pass the row and maximum row count to
 ## Proof
 
 - [Session completion tests](https://github.com/looprig/tui/blob/main/components/sessioncomplete_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.2)

@@ -106,12 +106,12 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/v0.15.0/providers/ollama/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/ollama/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/v0.15.0/providers/ollama/errors.go)
-- [options.go](https://github.com/looprig/llm/blob/v0.15.0/providers/ollama/options.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.15.1/providers/ollama/client.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.15.1/providers/ollama/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.15.1/providers/ollama/errors.go)
+- [options.go](https://github.com/looprig/llm/blob/v0.15.1/providers/ollama/options.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.1/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/ollama/client_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/ollama/counter_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/ollama/client_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/ollama/counter_test.go)

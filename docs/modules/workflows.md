@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/workflows` |
-| Version | `v0.1.2` |
+| Version | `v0.1.3` |
 | GitHub | [looprig/workflows](https://github.com/looprig/workflows) |
 
 ## Description

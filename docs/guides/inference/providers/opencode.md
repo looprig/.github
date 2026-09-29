@@ -124,14 +124,14 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/client.go)
-- [opencodesession/session.go](https://github.com/looprig/llm/blob/v0.15.0/providers/internal/opencodesession/session.go)
-- [counter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/errors.go)
-- [options.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/options.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.15.1/providers/opencode/client.go)
+- [opencodesession/session.go](https://github.com/looprig/llm/blob/v0.15.1/providers/internal/opencodesession/session.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.15.1/providers/opencode/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.15.1/providers/opencode/errors.go)
+- [options.go](https://github.com/looprig/llm/blob/v0.15.1/providers/opencode/options.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.1/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/client_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/counter_test.go)
-- [session_header_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/opencode/session_header_test.go) runs the shared [session-header contract](https://github.com/looprig/llm/blob/v0.15.0/providers/internal/contracttest/session.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/opencode/client_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/opencode/counter_test.go)
+- [session_header_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/opencode/session_header_test.go) runs the shared [session-header contract](https://github.com/looprig/llm/blob/v0.15.1/providers/internal/contracttest/session.go)

@@ -2017,72 +2017,72 @@
       "order": 1
     },
     {
-      "path": "guides/web-ui/client-sdk/session-client.md",
+      "path": "guides/web-ui/client-sdk/factory-rest.md",
       "audience": "human",
       "order": 2
     },
     {
-      "path": "guides/web-ui/client-sdk/events.md",
+      "path": "guides/web-ui/client-sdk/clientlink.md",
       "audience": "human",
       "order": 3
     },
     {
-      "path": "guides/web-ui/client-sdk/commands.md",
+      "path": "guides/web-ui/client-sdk/live-previews.md",
       "audience": "human",
       "order": 4
     },
     {
-      "path": "guides/web-ui/client-sdk/fold.md",
+      "path": "guides/web-ui/client-sdk/commands.md",
       "audience": "human",
       "order": 5
     },
     {
-      "path": "guides/web-ui/client-sdk/validation.md",
+      "path": "guides/web-ui/client-sdk/fold.md",
       "audience": "human",
       "order": 6
     },
     {
-      "path": "guides/web-ui/client-sdk/ownership.md",
+      "path": "guides/web-ui/client-sdk/validation.md",
       "audience": "human",
       "order": 7
     },
     {
-      "path": "guides/web-ui/framework-adapters/index.md",
+      "path": "guides/web-ui/client-sdk/auth.md",
       "audience": "human",
       "order": 8
     },
     {
-      "path": "guides/web-ui/framework-adapters/vanilla.md",
+      "path": "guides/web-ui/react/index.md",
       "audience": "human",
       "order": 9
     },
     {
-      "path": "guides/web-ui/framework-adapters/svelte.md",
+      "path": "guides/web-ui/react/link-and-identity.md",
       "audience": "human",
       "order": 10
     },
     {
-      "path": "guides/web-ui/embedding/index.md",
+      "path": "guides/web-ui/react/session-view.md",
       "audience": "human",
       "order": 11
     },
     {
-      "path": "guides/web-ui/embedding/static-bundle.md",
+      "path": "guides/web-ui/react/controls.md",
       "audience": "human",
       "order": 12
     },
     {
-      "path": "guides/web-ui/embedding/go-webui.md",
+      "path": "guides/web-ui/embedding/index.md",
       "audience": "human",
       "order": 13
     },
     {
-      "path": "guides/web-ui/embedding/app-integration.md",
+      "path": "guides/web-ui/embedding/static-bundle.md",
       "audience": "human",
       "order": 14
     },
     {
-      "path": "guides/web-ui/embedding/wui.md",
+      "path": "guides/web-ui/embedding/app-integration.md",
       "audience": "human",
       "order": 15
     },
@@ -2272,19 +2272,14 @@
       "order": 22
     },
     {
-      "path": "build/23-client.md",
+      "path": "build/24-tui.md",
       "audience": "human",
       "order": 23
     },
     {
-      "path": "build/24-tui.md",
-      "audience": "human",
-      "order": 24
-    },
-    {
       "path": "build/25-evaluation.md",
       "audience": "human",
-      "order": 25
+      "order": 24
     },
     {
       "path": "examples/index.md",
@@ -2437,19 +2432,9 @@
       "order": 27
     },
     {
-      "path": "modules/client.md",
-      "audience": "human",
-      "order": 28
-    },
-    {
       "path": "modules/tui.md",
       "audience": "human",
-      "order": 29
-    },
-    {
-      "path": "modules/wui.md",
-      "audience": "human",
-      "order": 30
+      "order": 28
     },
     {
       "path": "products/index.md",

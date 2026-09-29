@@ -30,7 +30,7 @@ Put the five neutral storage primitives under one owner-only local directory wit
 
 ## Where it fits
 
-FSStore is useful on its own when a Go application needs a durable ledger, leases, key-value records, blobs, and ordered indexes in one owner-controlled local directory. Within Looprig, it implements [Storage](/docs/modules/storage) for local [Client](/docs/modules/client) deployments and the Carbon coding agent. It is also the filesystem conformance backend in [Harness](/docs/modules/harness) and [Flow Store](/docs/modules/flow-store) tests.
+FSStore is useful on its own when a Go application needs a durable ledger, leases, key-value records, blobs, and ordered indexes in one owner-controlled local directory. Within Looprig, it implements [Storage](/docs/modules/storage) for local deployments and the Carbon coding agent. It is also the filesystem conformance backend in [Harness](/docs/modules/harness) and [Flow Store](/docs/modules/flow-store) tests.
 
 v0.6.0 changed the on-disk layout so a name and its "/" extension can coexist, and it ships no migration. `Open` refuses a root written by an earlier release with an error matching `ErrLegacyLayout`. Move or delete that directory rather than retrying, and never roll a v0.6.0 root back to an older release, which misreads it as empty. Its Blobs deliberately omit the bounded reader lifecycle, so [SessionStore](/docs/modules/sessionstore) refuses a plain FSStore composite. FSStore chooses the filesystem backend; callers retain ownership of record meaning and retention policy.
 
@@ -40,6 +40,5 @@ v0.6.0 changed the on-disk layout so a name and its "/" extension can coexist, a
 
 ## Dependents
 
-- [Client](/docs/modules/client)
 - [Flow Store](/docs/modules/flow-store)
 - [Harness](/docs/modules/harness)

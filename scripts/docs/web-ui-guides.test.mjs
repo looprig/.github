@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
@@ -6,59 +7,42 @@ import test from "node:test";
 import { resolveWorkspaceRoot } from "./package-surface.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
-const clientRoot = path.join(resolveWorkspaceRoot(root), "client");
-const wuiRoot = path.join(resolveWorkspaceRoot(root), "wui");
-const clientTag = "v0.4.0";
-const wuiTag = "v0.4.0";
+const workspace = resolveWorkspaceRoot(root);
+const clientTag = "v0.2.0";
 
 const pages = [
   ["guides/web-ui/index", "Web UI"],
   ["guides/web-ui/client-sdk/index", "Client SDK"],
-  ["guides/web-ui/client-sdk/session-client", "SessionClient"],
-  ["guides/web-ui/client-sdk/events", "Events and live streams"],
+  ["guides/web-ui/client-sdk/factory-rest", "Factory REST client"],
+  ["guides/web-ui/client-sdk/clientlink", "ClientLink and live streams"],
+  ["guides/web-ui/client-sdk/live-previews", "Live text and reasoning previews"],
   ["guides/web-ui/client-sdk/commands", "Commands and gates"],
   ["guides/web-ui/client-sdk/fold", "Folding session state"],
   ["guides/web-ui/client-sdk/validation", "Validation and errors"],
-  ["guides/web-ui/client-sdk/ownership", "Transport and ownership"],
-  ["guides/web-ui/framework-adapters/index", "Framework adapters"],
-  ["guides/web-ui/framework-adapters/vanilla", "Vanilla DOM"],
-  ["guides/web-ui/framework-adapters/svelte", "Svelte 5"],
+  ["guides/web-ui/client-sdk/auth", "Authentication and recovery"],
+  ["guides/web-ui/react/index", "React"],
+  ["guides/web-ui/react/link-and-identity", "Link and identity providers"],
+  ["guides/web-ui/react/session-view", "Session views and lists"],
+  ["guides/web-ui/react/controls", "Composer, gates, and interrupt"],
   ["guides/web-ui/embedding/index", "Embedding"],
   ["guides/web-ui/embedding/static-bundle", "Static bundle"],
-  ["guides/web-ui/embedding/go-webui", "Go webui package"],
   ["guides/web-ui/embedding/app-integration", "Application integration"],
-  ["guides/web-ui/embedding/wui", "Prebuilt wui bundle"],
   ["guides/web-ui/sessions/index", "Session lifecycle"],
   ["guides/web-ui/sessions/binding", "Binding a session"],
   ["guides/web-ui/sessions/reconnect", "Reconnect and exact joins"],
   ["guides/web-ui/sessions/restore", "Restore a session"],
 ];
 
-const sourceProof = {
-  "guides/web-ui/index": ["sdk/core/src/index.ts", "sdk/core/examples/session-client.ts"],
-  "guides/web-ui/client-sdk/index": ["sdk/core/src/client.ts", "sdk/core/src/transport.ts"],
-  "guides/web-ui/client-sdk/session-client": ["sdk/core/examples/session-client.ts", "sdk/core/examples/session-client.test.ts"],
-  "guides/web-ui/client-sdk/events": ["sdk/core/src/sse.ts", "sdk/core/test/sse.test.ts"],
-  "guides/web-ui/client-sdk/commands": ["sdk/core/src/transport.ts", "sdk/core/test/conformance.test.ts"],
-  "guides/web-ui/client-sdk/fold": ["sdk/core/src/fold.ts", "sdk/core/test/fold.test.ts"],
-  "guides/web-ui/client-sdk/validation": ["sdk/core/src/validate.ts", "sdk/core/test/contract.test.ts"],
-  "guides/web-ui/client-sdk/ownership": ["sdk/core/src/transport.ts", "sdk/core/test/serve-transport.test.ts"],
-  "guides/web-ui/framework-adapters/index": ["sdk/core/examples/vanilla-session.ts", "sdk/svelte/src/index.ts"],
-  "guides/web-ui/framework-adapters/vanilla": ["sdk/core/examples/vanilla-session.ts", "sdk/core/examples/session-client.test.ts"],
-  "guides/web-ui/framework-adapters/svelte": ["sdk/svelte/src/live-session.svelte.ts", "sdk/svelte/test/live-session.test.ts"],
-  "guides/web-ui/embedding/index": ["pkg/webui/webui.go", "app/vite.config.ts"],
-  "guides/web-ui/embedding/static-bundle": ["app/vite.config.ts", "app/src/routes/+layout.ts"],
-  "guides/web-ui/embedding/go-webui": ["pkg/webui/webui.go", "pkg/webui/webui_test.go"],
-  "guides/web-ui/embedding/app-integration": ["internal/compose/handler.go", "internal/compose/handler_test.go"],
-  "guides/web-ui/sessions/index": ["sdk/core/src/types.ts", "sdk/core/src/transport.ts"],
-  "guides/web-ui/sessions/binding": ["sdk/core/examples/session-client.ts", "sdk/svelte/src/session.svelte.ts"],
-  "guides/web-ui/sessions/reconnect": ["sdk/core/src/join.ts", "sdk/core/test/join.test.ts"],
-  "guides/web-ui/sessions/restore": ["sdk/core/src/transport.ts", "sdk/core/test/conformance.test.ts"],
-};
-
-const wuiSourceProof = {
-  "guides/web-ui/embedding/wui": ["assets.go", "handler.go", "bundle.go", "assets_test.go", "bundle_test.go"],
-};
+// The browser packages are npm-only. Their released source is the client repository at the
+// tag that published @looprig/client and @looprig/react 0.2.0.
+function existsAtTag(repo, tag, file) {
+  try {
+    execFileSync("git", ["-C", path.join(workspace, repo), "cat-file", "-e", `${tag}:${file}`], { stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 function readPage(id) {
   const file = path.join(root, "docs", `${id}.md`);
@@ -112,77 +96,72 @@ test("Web UI guide inventory is complete, ordered, and fully evidenced", () => {
   }
 });
 
-test("Web UI guides interlink SDK, adapters, embedding, sessions, and Harness", () => {
+test("Web UI guides interlink the client SDK, React, embedding, sessions, and Harness", () => {
   const all = Object.fromEntries(pages.map(([id]) => [id, readPage(id)]));
-  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/web-ui\/client-sdk/);
-  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/web-ui\/framework-adapters/);
-  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/web-ui\/embedding/);
-  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/web-ui\/sessions/);
-  assert.match(all["guides/web-ui/index"], /\/docs\/guides\/harness/);
-  assert.match(all["guides/web-ui/client-sdk/index"], /\/docs\/guides\/web-ui\/client-sdk\/session-client/);
-  assert.match(all["guides/web-ui/client-sdk/index"], /\/docs\/guides\/web-ui\/client-sdk\/events/);
-  assert.match(all["guides/web-ui/client-sdk/session-client"], /\/docs\/guides\/web-ui\/client-sdk\/commands/);
-  assert.match(all["guides/web-ui/client-sdk/events"], /\/docs\/guides\/web-ui\/client-sdk\/fold/);
-  assert.match(all["guides/web-ui/client-sdk/commands"], /\/docs\/guides\/web-ui\/client-sdk\/ownership/);
-  assert.match(all["guides/web-ui/framework-adapters/index"], /\/docs\/guides\/web-ui\/framework-adapters\/(vanilla|svelte)/);
-  assert.match(all["guides/web-ui/framework-adapters/svelte"], /\/docs\/guides\/web-ui\/client-sdk/);
-  assert.match(all["guides/web-ui/embedding/index"], /\/docs\/guides\/web-ui\/embedding\/static-bundle/);
-  assert.match(all["guides/web-ui/embedding/index"], /\/docs\/guides\/web-ui\/embedding\/go-webui/);
-  assert.match(all["guides/web-ui/embedding/app-integration"], /\/docs\/guides\/harness/);
-  assert.match(all["guides/web-ui/sessions/index"], /\/docs\/guides\/web-ui\/sessions\/(binding|reconnect|restore)/);
-  assert.match(all["guides/web-ui/sessions/reconnect"], /\/docs\/guides\/web-ui\/client-sdk\/events/);
-  assert.match(all["guides/web-ui/sessions/restore"], /\/docs\/guides\/web-ui\/client-sdk\/ownership/);
+  const link = (id, target) => assert.match(all[id], new RegExp(target.replaceAll("/", "\\/")), `${id} must link ${target}`);
+  for (const target of ["client-sdk", "react", "embedding", "sessions"]) link("guides/web-ui/index", `/docs/guides/web-ui/${target}`);
+  link("guides/web-ui/index", "/docs/guides/harness");
+  link("guides/web-ui/index", "/docs/products/carbon");
+  link("guides/web-ui/client-sdk/index", "/docs/guides/web-ui/client-sdk/factory-rest");
+  link("guides/web-ui/client-sdk/index", "/docs/guides/web-ui/client-sdk/clientlink");
+  link("guides/web-ui/client-sdk/clientlink", "/docs/guides/web-ui/client-sdk/live-previews");
+  link("guides/web-ui/react/index", "/docs/guides/web-ui/client-sdk");
+  link("guides/web-ui/embedding/index", "/docs/guides/web-ui/embedding/static-bundle");
+  link("guides/web-ui/embedding/index", "/docs/guides/web-ui/embedding/app-integration");
+  link("guides/web-ui/sessions/index", "/docs/guides/web-ui/sessions/(binding|reconnect|restore)");
+  link("guides/web-ui/sessions/reconnect", "/docs/guides/web-ui/client-sdk");
 });
 
-test("Web UI guides link every proof claim to existing client source", () => {
-  for (const [id, files] of Object.entries(sourceProof)) {
+test("Web UI guides link real source at released tags and never a mutable branch", () => {
+  const links = /https:\/\/github\.com\/looprig\/([a-z0-9.-]+)\/blob\/([^/\s)]+)\/([^\s)`]+)/g;
+  let clientLinks = 0;
+  for (const [id] of pages) {
     const markdown = readPage(id);
-    for (const file of files) {
-      const url = `https://github.com/looprig/client/blob/${clientTag}/${file}`;
-      assert.match(markdown, new RegExp(regexEscape(url)), `${id} does not link ${file}`);
-      assert.equal(fs.existsSync(path.join(clientRoot, file)), true, `missing client source ${file}`);
+    assert.doesNotMatch(markdown, /github\.com\/looprig\/[a-z0-9.-]+\/blob\/main\//, `${id} links a mutable branch`);
+    let own = 0;
+    for (const [, repo, tag, file] of markdown.matchAll(links)) {
+      assert.match(tag, /^v\d+\.\d+\.\d+$/, `${id} links ${repo} at a non-release ref ${tag}`);
+      if (repo === "client") {
+        own++;
+        clientLinks++;
+        assert.equal(tag, clientTag, `${id} must link the client source at ${clientTag}`);
+      }
+      if (fs.existsSync(path.join(workspace, repo, ".git"))) {
+        assert.equal(existsAtTag(repo, tag, file), true, `${id} links missing ${repo}@${tag}:${file}`);
+      }
     }
-    assert.doesNotMatch(markdown, /github\.com\/looprig\/client\/blob\/main\//, `${id} links a mutable client branch`);
+    if (id !== "guides/web-ui/index" && !id.endsWith("/index")) assert.ok(own > 0, `${id} must link client source`);
   }
+  assert.ok(clientLinks > 20, "expected the guides to link the client source");
 });
 
-test("Web UI wui page links its claims to wui source at the released tag", () => {
-  for (const [id, files] of Object.entries(wuiSourceProof)) {
-    const markdown = readPage(id);
-    for (const file of files) {
-      const url = `https://github.com/looprig/wui/blob/${wuiTag}/${file}`;
-      assert.match(markdown, new RegExp(regexEscape(url)), `${id} does not link ${file}`);
-      assert.equal(fs.existsSync(path.join(wuiRoot, file)), true, `missing wui source ${file}`);
-    }
-  }
-});
-
-test("Web UI guides cover the prebuilt wui bundle and its pin rule", () => {
-  const page = readPage("guides/web-ui/embedding/wui");
-  for (const phrase of ["wui.Assets()", "factory.WithUIHandler", "BundleProtocolVersion", "ErrNoBundleManifest", "go get github.com/looprig/wui@v0.4.0"]) {
-    assert.match(page, new RegExp(regexEscape(phrase)), `wui page missing ${phrase}`);
-  }
-  assert.match(page, /`go mod tidy`[^.]*drop/, "wui page must warn that go mod tidy drops the Core pin");
-  assert.match(readPage("guides/web-ui/embedding/index"), /\/docs\/guides\/web-ui\/embedding\/wui/);
-  assert.match(readPage("guides/web-ui/sessions/restore"), /`restored`/);
-});
-
-test("Web UI guides cover the public runtime contracts", () => {
+test("Web UI guides describe the npm packages and retire the Go client and wui", () => {
   const all = pages.map(([id]) => readPage(id)).join("\n");
   for (const phrase of [
-    "LooprigTransport",
-    "createBFFClient",
-    "ServeTransport",
-    "SessionClient",
-    "SseFrameParser",
-    "joinSessionView",
-    "SessionView",
-    "ContractValidationError",
-    "GATE_APPROVAL_ACTIONS",
-    "autoReconnect",
-    "restoreSession",
-    "embed.FS",
-    "adapter-static",
-  ]) assert.match(all, new RegExp(phrase.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")), `missing contract phrase ${phrase}`);
+    "@looprig/client",
+    "@looprig/react",
+    "npm install",
+    "0.2.0",
+    "createFactoryClient",
+    "createClientLink",
+    "useFactorySessionView",
+    "FactoryLinkProvider",
+    "decodeFactoryLiveDelta",
+    "WithUIHandler",
+  ]) assert.match(all, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `missing contract phrase ${phrase}`);
   assert.match(all, /```mermaid[\s\S]*theme["']?\s*:\s*["']dark["']/i);
+  assert.doesNotMatch(all, /go get github\.com\/looprig\/(client|wui)/, "the browser packages are not Go modules");
+  assert.doesNotMatch(all, /modules\/(client|wui)\b/, "the client and wui module pages are retired");
+  assert.doesNotMatch(all, /createBFFClient|LooprigTransport|SseFrameParser|joinSessionView/, "the retired serve client API must not appear");
+  assert.match(readPage("guides/web-ui/index"), /retired/i);
+});
+
+test("retired client and wui module pages, guides, and examples stay out of the corpus", () => {
+  for (const retired of ["modules/client.md", "modules/wui.md", "guides/web-ui/embedding/wui.md", "build/23-client.md"]) {
+    assert.equal(fs.existsSync(path.join(root, "docs", retired)), false, `${retired} must be removed`);
+  }
+  const examples = JSON.parse(fs.readFileSync(path.join(root, "docs/_data/examples.json"), "utf8"));
+  assert.equal(examples.examples.some(({ id }) => id === "stage-20-web-client"), false);
+  const modules = JSON.parse(fs.readFileSync(path.join(root, "docs/_data/modules.json"), "utf8"));
+  assert.equal(modules.modules.some(({ repository }) => repository === "client" || repository === "wui"), false);
 });

@@ -7,7 +7,6 @@ import { resolveWorkspaceRoot } from "./package-surface.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const workspaceRoot = resolveWorkspaceRoot(root);
-const clientRoot = path.join(workspaceRoot, "client");
 const llmRoot = path.join(workspaceRoot, "llm");
 
 const guideRoots = [
@@ -82,17 +81,11 @@ test("every Harness Mermaid block opts into the dark theme", () => {
   }
 });
 
-test("the framework-neutral Web UI examples use the public live-source API", () => {
+test("the Web UI overview teaches the published npm packages, not the retired serve client", () => {
   const overview = read("docs/guides/web-ui/index.md");
-  const sessionClient = read("docs/guides/web-ui/client-sdk/session-client.md");
-  const liveSource = fs.readFileSync(path.join(clientRoot, "sdk/core/src/live.ts"), "utf8");
-
-  assert.doesNotMatch(overview, /createLiveSource/);
-  assert.match(overview, /createFetchLiveFrameSource/);
-  assert.doesNotMatch(sessionClient, /createFetchLiveFrameSource\([^\n]*\{\s*signal\s*\}/);
-  assert.doesNotMatch(sessionClient, /createLiveSource/);
-  assert.match(liveSource, /export function createFetchLiveFrameSource\(/);
-  assert.match(liveSource, /export interface FetchLiveFrameSourceOptions[\s\S]*baseUrl\?: string;[\s\S]*fetch\?: FetchLike;/);
+  assert.match(overview, /@looprig\/client/);
+  assert.match(overview, /@looprig\/react/);
+  assert.doesNotMatch(overview, /createBFFClient|createFetchLiveFrameSource|createLiveSource/);
 });
 
 test("the Inference landing page is a source-backed developer overview", () => {

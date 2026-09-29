@@ -111,8 +111,8 @@ func invoke() error {
 
 ## Source and proof
 
-- [phala.go](https://github.com/looprig/llm/blob/v0.15.0/providers/phala/phala.go)
+- [phala.go](https://github.com/looprig/llm/blob/v0.15.1/providers/phala/phala.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.1/provider.go). Adjacent behavior tests:
 
-- [policy_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/phala/policy_test.go)
+- [policy_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/phala/policy_test.go)

@@ -458,29 +458,6 @@
       ]
     },
     {
-      "id": "stage-20-web-client",
-      "stage": 20,
-      "ecosystem": "npm",
-      "owner": "client",
-      "sourcePath": "examples/docs/stage20_web_client/SessionPage.svelte",
-      "availability": "source-workspace",
-      "versions": {
-        "@looprig/client": "source-workspace",
-        "@looprig/svelte": "source-workspace"
-      },
-      "offlineCommand": "npm run docs:examples",
-      "assertion": "The stage 20 command typechecks both framework-neutral TypeScript files, runs svelte-check on the optional SessionPage component, and executes its deterministic SessionClient cleanup proof.",
-      "workflowPath": ".github/workflows/docs-examples.yml",
-      "jobId": "docs-examples",
-      "cleanup": "The stage 20 proof closes its in-memory live iterator; the typechecks and proof create no persistent resources.",
-      "proofIds": [
-        "central-client-stage20-session-client-source",
-        "central-client-stage20-session-client-proof",
-        "central-client-stage20-vanilla-session-source",
-        "central-client-stage20-svelte-page-source"
-      ]
-    },
-    {
       "id": "stage-21-tui",
       "stage": 21,
       "ecosystem": "go",

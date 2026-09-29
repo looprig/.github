@@ -116,14 +116,14 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/client.go)
-- [codec.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/codec.go)
-- [counter.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/counter.go)
-- [options.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/options.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.15.1/providers/azure/client.go)
+- [codec.go](https://github.com/looprig/llm/blob/v0.15.1/providers/azure/codec.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.15.1/providers/azure/counter.go)
+- [options.go](https://github.com/looprig/llm/blob/v0.15.1/providers/azure/options.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.0/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.1/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/client_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/counter_test.go)
-- [delta_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/delta_test.go)
-- [options_test.go](https://github.com/looprig/llm/blob/v0.15.0/providers/azure/options_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/azure/client_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/azure/counter_test.go)
+- [delta_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/azure/delta_test.go)
+- [options_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/azure/options_test.go)

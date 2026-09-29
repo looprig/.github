@@ -63,4 +63,4 @@ Key bindings and layout are not a public API. Those details belong to the intern
 ## Proof
 
 - [Root API compile-time proof](https://github.com/looprig/tui/blob/main/api_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.1)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.2)

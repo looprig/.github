@@ -13,6 +13,13 @@ const releasedTags = new Map(inventory.modules
     && !record.module.replace("github.com/looprig/", "").includes("/"))
   .map((record) => [record.module.replace("github.com/looprig/", ""), record.publication.tag]));
 
+// The client repository publishes npm packages, not a Go module, so its release
+// is the tag recorded in the npm release evidence rather than an inventory record.
+const evidence = JSON.parse(fs.readFileSync(path.join(root, "docs/_data/evidence.json"), "utf8"));
+const npmRelease = evidence.proofs.find((proof) => proof.id === "release-npm-looprig-client");
+assert.ok(npmRelease, "missing npm release evidence for @looprig/client");
+releasedTags.set("client", npmRelease.tag);
+
 function markdownFiles(...globs) {
   const files = [];
   const walk = (directory) => {
