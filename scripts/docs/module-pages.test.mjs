@@ -136,7 +136,7 @@ test("Flow Store is released from the Flow repository at its own nested tag", ()
 
   const flow = inventory.modules.find((candidate) => candidate.module === "github.com/looprig/flow");
   assert.deepEqual(flow.publication, { status: "released", tag: "v0.4.4" });
-  assert.notEqual(record.commit, flow.commit, "a nested module releases on its own commit");
+  // Flow v0.4.4 and store/v0.1.3 were tagged on one commit, so the commits may coincide.
 
   const fields = repositoryFields("flow-store");
   assert.equal(fields.get("Repository"), "`github.com/looprig/flow/store`");
