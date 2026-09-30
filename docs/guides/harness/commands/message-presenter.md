@@ -118,12 +118,12 @@ it: Harness cannot forcibly stop a presenter that ignores cancellation.
 
 ## Source
 
-- [`present.Input`, `Frame`, limits, and `Run`](https://github.com/looprig/harness/blob/v0.41.1/pkg/present/present.go)
-- [`rig.WithMessagePresenter`](https://github.com/looprig/harness/blob/v0.41.1/pkg/rig/presenter.go)
-- [`presentUserInput` and its deadline](https://github.com/looprig/harness/blob/v0.41.1/internal/sessionruntime/present.go)
+- [`present.Input`, `Frame`, limits, and `Run`](https://github.com/looprig/harness/blob/v0.42.1/pkg/present/present.go)
+- [`rig.WithMessagePresenter`](https://github.com/looprig/harness/blob/v0.42.1/pkg/rig/presenter.go)
+- [`presentUserInput` and its deadline](https://github.com/looprig/harness/blob/v0.42.1/internal/sessionruntime/present.go)
 
 ## Proof
 
-- [Restore does not re-render](https://github.com/looprig/harness/blob/v0.41.1/internal/sessionruntime/presented_restore_test.go)
-- [Failure refuses before intent](https://github.com/looprig/harness/blob/v0.41.1/internal/sessionruntime/present_refusal_test.go)
-- [Frame validation and copying](https://github.com/looprig/harness/blob/v0.41.1/pkg/present/present_test.go)
+- [Restore does not re-render](https://github.com/looprig/harness/blob/v0.42.1/internal/sessionruntime/presented_restore_test.go)
+- [Failure refuses before intent](https://github.com/looprig/harness/blob/v0.42.1/internal/sessionruntime/present_refusal_test.go)
+- [Frame validation and copying](https://github.com/looprig/harness/blob/v0.42.1/pkg/present/present_test.go)

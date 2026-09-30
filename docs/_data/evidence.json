@@ -103,16 +103,16 @@
       "type": "release-record",
       "repository": "client",
       "path": "packages/client/package.json",
-      "commit": "17bc2765475c460dc7634c0470a726f33aa5e6cb",
-      "tag": "v0.2.0"
+      "commit": "31cb43754dec8dc868adf2066dbb7b80ca86b17c",
+      "tag": "v0.3.0"
     },
     {
       "id": "release-npm-looprig-react",
       "type": "release-record",
       "repository": "client",
       "path": "packages/react/package.json",
-      "commit": "17bc2765475c460dc7634c0470a726f33aa5e6cb",
-      "tag": "v0.2.0"
+      "commit": "31cb43754dec8dc868adf2066dbb7b80ca86b17c",
+      "tag": "v0.3.0"
     },
     {
       "id": "release-github-com-looprig-acp",
@@ -127,8 +127,8 @@
       "type": "release-record",
       "repository": "carbon",
       "path": "go.mod",
-      "commit": "eebd4e4830532972315ce63b5493cf19eae1a3a2",
-      "tag": "v0.31.0"
+      "commit": "298cc5cf58efcd9570674ed8b731f77559add597",
+      "tag": "v0.32.2"
     },
     {
       "id": "release-github-com-looprig-classifiers",
@@ -223,16 +223,16 @@
       "type": "release-record",
       "repository": "harness",
       "path": "go.mod",
-      "commit": "124344dbafdc0b0372fe45dc0bab992861c4633a",
-      "tag": "v0.41.1"
+      "commit": "18b88415a4599a12e6768cc12a9faf771829ce43",
+      "tag": "v0.42.1"
     },
     {
       "id": "release-github-com-looprig-host",
       "type": "release-record",
       "repository": "host",
       "path": "go.mod",
-      "commit": "12334d46618643c47ff18001ce34984910a90185",
-      "tag": "v0.14.0"
+      "commit": "afa168106bfee9dd61ea9a75c820b6f269151795",
+      "tag": "v0.15.1"
     },
     {
       "id": "release-github-com-looprig-inference",
@@ -311,8 +311,8 @@
       "type": "release-record",
       "repository": "sandbox",
       "path": "go.mod",
-      "commit": "72d72bdf04066cb04d251e501fa6402cb65899fb",
-      "tag": "v0.9.2"
+      "commit": "fb57ecb7fc434f47718987980bfea2eea796d46a",
+      "tag": "v0.9.3"
     },
     {
       "id": "release-github-com-looprig-secrets",
@@ -335,24 +335,24 @@
       "type": "release-record",
       "repository": "storage",
       "path": "go.mod",
-      "commit": "f7b2be261559b92e350a4c08fb5ae51821eab4a5",
-      "tag": "v0.7.0"
+      "commit": "b602028ab46a41f25a6eb6a92f869fc88238a735",
+      "tag": "v0.8.0"
     },
     {
       "id": "release-github-com-looprig-tests",
       "type": "release-record",
       "repository": "tests",
       "path": "go.mod",
-      "commit": "42f2b239dfd9aed94dcf660b1c1388df8be64193",
-      "tag": "v0.15.0"
+      "commit": "304bbde908c5215c80adb5f6910dc2c1f8c2815e",
+      "tag": "v0.16.0"
     },
     {
       "id": "release-github-com-looprig-tools",
       "type": "release-record",
       "repository": "tools",
       "path": "go.mod",
-      "commit": "98b98f1d331f2c79e3b9baf2be83c00aa4db477a",
-      "tag": "v0.14.1"
+      "commit": "fc0607d20a5e60219fb48be91ec0dc746de05fb5",
+      "tag": "v0.15.0"
     },
     {
       "id": "release-github-com-looprig-tui",

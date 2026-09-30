@@ -19,7 +19,7 @@ Create a normal Go module for the coding assistant. Looprig does not require a g
 
 ## Prerequisites
 
-- Go 1.26 or newer
+- Go 1.26.8 or newer
 - A terminal
 - An API key for a hosted model, or a local model server such as Ollama
 

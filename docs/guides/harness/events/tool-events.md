@@ -66,6 +66,7 @@ type ToolCallStarted struct {
 	loopScoped
 	Header
 	ToolExecutionID uuid.UUID `json:"tool_execution_id,omitzero"`
+	ToolUseID string `json:"tool_use_id,omitempty"`
 	ToolName string `json:"tool_name,omitempty"`
 	Summary string `json:"summary,omitempty"`
 }
@@ -75,7 +76,10 @@ type ToolCallCompleted struct {
 	loopScoped
 	Header
 	ToolExecutionID uuid.UUID `json:"tool_execution_id,omitzero"`
+	ToolUseID string `json:"tool_use_id,omitempty"`
+	ToolName string `json:"tool_name,omitempty"`
 	IsError bool `json:"is_error,omitzero"`
+	ElapsedMillis uint64 `json:"elapsed_ms,omitzero"`
 	ResultPreview string `json:"result_preview,omitempty"`
 }
 ```
@@ -83,6 +87,12 @@ type ToolCallCompleted struct {
 All five values are loop-scoped and require the full Session, Loop, Turn, and
 Step coordinate quartet. Each also requires a non-zero `ToolExecutionID`, the
 stable join key for one call across approval, execution, and result displays.
+Since harness v0.42.0, both live events also carry `ToolUseID`, the model's
+`tool_use` block id and the key a committed `StepDone` is joined on. `ToolCallCompleted`
+adds `ToolName`, so a viewer can render a call whose start was dropped, and
+`ElapsedMillis`, the execution wall time, which is omitted for a call that failed
+before running. The events remain ephemeral and are never journaled, and an event that
+leaves the new fields empty projects to the same public bytes as before.
 
 | Event | Class | Durable | Payload purpose |
 | --- | --- | --- | --- |

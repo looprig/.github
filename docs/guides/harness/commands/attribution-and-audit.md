@@ -93,7 +93,7 @@ dispatch and passes them to the product runtime. A field-by-field adapter to
 silently. Harness records attribution on applicable intents and events; restore
 attribution remains in the SessionStore descriptor. A browser UI such as Carbon's displays an optional sender chip and separates any
 model-visible presenter frame from the user's original blocks. Metadata is
-not rendered as identity. [The cross-module integration test](https://github.com/looprig/tests/blob/v0.15.0/principal_presenter_integration_test.go)
+not rendered as identity. [The cross-module integration test](https://github.com/looprig/tests/blob/v0.16.0/principal_presenter_integration_test.go)
 exercises create, input, interrupt, restore, gate response, replay, and
 redelivery through this chain.
 
@@ -155,7 +155,7 @@ define the behavior.
 Roll out every Host at v0.11.0 or later first, then Factory v0.12.0, and only
 then enable `WithPrincipalStamping`. A retry admitted before stamping is
 enabled has different command identity and is refused, so switch during a
-quiet period. The [old-Host integration lane](https://github.com/looprig/tests/blob/v0.15.0/old_host_probe_integration_test.go)
+quiet period. The [old-Host integration lane](https://github.com/looprig/tests/blob/v0.16.0/old_host_probe_integration_test.go)
 checks that an older Host never receives a stamped command.
 
 The data upgrade is one-way. Once a version-3 attributed command is stored,
@@ -172,14 +172,14 @@ not to roll back the journal consumer.
 
 - [Core `Principal`](https://github.com/looprig/core/blob/v0.13.1/sessionwire/v1/principal.go), [metadata rules](https://github.com/looprig/core/blob/v0.13.1/sessionwire/v1/metadata.go), and [HostLink capability](https://github.com/looprig/core/blob/v0.13.1/sessionwire/v1/hostlink_framing.go)
 - [Factory stamping option](https://github.com/looprig/factory/blob/v0.15.0/options.go), [authorization seam](https://github.com/looprig/factory/blob/v0.15.0/server.go), and [command status route](https://github.com/looprig/factory/blob/v0.15.0/internal/httpapi/commands.go)
-- [SessionStore descriptor](https://github.com/looprig/sessionstore/blob/v0.14.0/disposition_inbox.go), [Host adapter](https://github.com/looprig/host/blob/v0.14.0/internal/harnessadapter/session.go), and [Harness admitted command](https://github.com/looprig/harness/blob/v0.41.1/pkg/runtimecommand/command.go)
+- [SessionStore descriptor](https://github.com/looprig/sessionstore/blob/v0.14.0/disposition_inbox.go), [Host adapter](https://github.com/looprig/host/blob/v0.15.1/internal/harnessadapter/session.go), and [Harness admitted command](https://github.com/looprig/harness/blob/v0.42.1/pkg/runtimecommand/command.go)
 
 - [Factory capability response](https://github.com/looprig/factory/blob/v0.15.0/internal/httpapi/reads.go) and [startup probe](https://github.com/looprig/factory/blob/v0.15.0/serve.go)
-- [Host pre-attempt decoding](https://github.com/looprig/host/blob/v0.14.0/internal/commands/apply.go) and [body taxonomy tests](https://github.com/looprig/host/blob/v0.14.0/internal/commands/principal_precheck_test.go)
-- [Harness message attribution](https://github.com/looprig/harness/blob/v0.41.1/pkg/event/message_input.go)
+- [Host pre-attempt decoding](https://github.com/looprig/host/blob/v0.15.1/internal/commands/apply.go) and [body taxonomy tests](https://github.com/looprig/host/blob/v0.15.1/internal/commands/principal_precheck_test.go)
+- [Harness message attribution](https://github.com/looprig/harness/blob/v0.42.1/pkg/event/message_input.go)
 
 ## Proof
 
-- [Principal, metadata, presenter, restore, and redelivery](https://github.com/looprig/tests/blob/v0.15.0/principal_presenter_integration_test.go)
-- [Incapable old Host stays out of attributed delivery](https://github.com/looprig/tests/blob/v0.15.0/old_host_probe_integration_test.go)
+- [Principal, metadata, presenter, restore, and redelivery](https://github.com/looprig/tests/blob/v0.16.0/principal_presenter_integration_test.go)
+- [Incapable old Host stays out of attributed delivery](https://github.com/looprig/tests/blob/v0.16.0/old_host_probe_integration_test.go)
 - [Factory audit-member authorization](https://github.com/looprig/factory/blob/v0.15.0/internal/httpapi/commands_test.go)

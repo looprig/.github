@@ -34,7 +34,7 @@ Carbon is a coding agent built from Looprig modules. It provides a ready termina
 ## Install
 
 ```sh
-go install github.com/looprig/carbon/cmd/carbon@v0.31.0
+go install github.com/looprig/carbon/cmd/carbon@v0.32.2
 ```
 
 Carbon stores configuration under `~/.looprig/carbon` by default. Its configuration files must be regular, owner-only files.
@@ -114,7 +114,7 @@ Carbon adds the repository branch and status to the model's runtime context. Tha
 
 ### Large tool results
 
-The model sees at most a 50 KiB preview of each tool result. On the browser path, Carbon retains a larger result in full, up to 8 MiB, as a tool-result object in the session's own store, and the model pages through it with the `read_tool_result` tool. The session's browser can read the same object through Factory, which serves it only when a committed step in that session names it; any other reference answers the same 404 as a missing object.
+The model sees at most a 50 KiB preview of each tool result. On the browser path, Carbon retains a larger result in full, up to 8 MiB, as a tool-result object in the session's own store, and the model pages through it with the `read_tool_result` tool. The session's browser can read the same object through Factory, which serves it only when a committed step in that session names it; any other reference answers the same 404 as a missing object. A throttled read answers a retryable 429 with a `Retry-After` header, never a 404, and an evidence-store fault answers 500 rather than a false 404 (Carbon v0.32.0).
 
 Retained output is durable and is not reaped, so it can include content the preview used to discard, such as environment dumps or verbose logs. Treat it as readable by everyone who can view the session. The terminal and headless paths keep the preview-only behavior.
 
@@ -126,7 +126,7 @@ Carbon’s model proxy exposes configured models through a local protocol endpoi
 
 Carbon ships with a terminal UI for prompts, events, tools, gates, model selection, and session browsing. Multiline pastes collapse into a compact marker in the composer while the exact pasted text is submitted.
 
-The browser path is a composition in Carbon's importable `browser` package. `browser.Start` runs [Factory](/docs/modules/factory) as the public API, one local pooled [Host](/docs/modules/host) that runs the sessions, and a shared filesystem [SessionStore](/docs/modules/sessionstore), and it serves Carbon's own browser app through Factory's UI seam. That app is built from `@looprig/client` and `@looprig/react` (see the [Web UI guides](/docs/guides/web-ui)) and embedded in the binary, so running it needs no Node toolchain. Assistant replies stream as they are generated, and the model's reasoning preview is visible live to everyone watching the session, so treat a shared session as showing reasoning. A New session form creates sessions from the page. Browser sessions get their own workspace and journal, cold sessions stay readable without starting a runtime, and a reconnecting browser recovers missed events from the journal.
+The browser path is a composition in Carbon's importable `browser` package. `browser.Start` runs [Factory](/docs/modules/factory) as the public API, one local pooled [Host](/docs/modules/host) that runs the sessions, and a shared filesystem [SessionStore](/docs/modules/sessionstore), and it serves Carbon's own browser app through Factory's UI seam. That app is built from `@looprig/client` and `@looprig/react` (see the [Web UI guides](/docs/guides/web-ui)) and embedded in the binary, so running it needs no Node toolchain. Assistant replies stream as they are generated, and the model's reasoning preview is visible live to everyone watching the session, so treat a shared session as showing reasoning. A New session form creates sessions from the page. Since v0.32.0 the page also shows each tool call live: a running row that turns ok or failed with a result preview of at most 2 KiB, then gives way to the committed step. Every viewer of a session sees these previews, which carry the tool's redacted audit summary and never raw arguments, the same content the committed step shows moments later. Nothing is journaled, so the upgrade is not one-way, and Factory v0.12.1 or later is required. Browser sessions get their own workspace and journal, cold sessions stay readable without starting a runtime, and a reconnecting browser recovers missed events from the journal.
 
 Carbon carries principal and metadata through its Host-to-Harness
 adapter, but its stock browser composition does not enable Factory's optional
@@ -138,6 +138,8 @@ Metadata can still be supplied with stamping disabled, and metadata-only
 records also require the new Host, Harness, and SessionStore readers. Follow
 the [one-way rollout and recovery rules](/docs/guides/harness/commands/attribution-and-audit#rollout-and-recovery)
 before upgrading an existing store.
+
+Since v0.32.1, an application that embeds Carbon on Linux must call `sandbox.Init()` first in `main`, as `cmd/carbon` does.
 
 Your application supplies the credential verifier, authorizer, tenant, HostLink service token, CSRF policy, and listener addresses. The stock `carbon serve` command has none of these and refuses to start, so it is not a ready-to-expose web service. The local Host serves only the configured default tenant and refuses principals of any other tenant. Under `trusted`, a pooled session can read sibling session directories, so serve one tenant per Carbon process.
 

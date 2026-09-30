@@ -84,9 +84,9 @@ See [platform levels and guarantees](/docs/guides/sandboxing/enforcement/platfor
 
 ## Source
 
-- [RunCommand, RunArgv, and output limits](https://github.com/looprig/sandbox/blob/v0.9.2/internal/exec/executor.go)
-- [Public execution facade](https://github.com/looprig/sandbox/blob/v0.9.2/sandbox.go)
+- [RunCommand, RunArgv, and output limits](https://github.com/looprig/sandbox/blob/v0.9.3/internal/exec/executor.go)
+- [Public execution facade](https://github.com/looprig/sandbox/blob/v0.9.3/sandbox.go)
 
 ## Proof
 
-- [Portable command and argv tests](https://github.com/looprig/sandbox/blob/v0.9.2/internal/exec/portable_command_test.go)
+- [Portable command and argv tests](https://github.com/looprig/sandbox/blob/v0.9.3/internal/exec/portable_command_test.go)

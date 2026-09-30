@@ -17,7 +17,7 @@ Those choices are covered in [Loop](loop.md).
 
 ## Prerequisites
 
-- Go 1.26.4 or later for the current harness and provider modules
+- Go 1.26.8 or later for the current harness and provider modules
 - an OpenRouter API key
 - an OpenRouter model identifier chosen by you
 

@@ -8,7 +8,7 @@ import { resolveWorkspaceRoot } from "./package-surface.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const workspace = resolveWorkspaceRoot(root);
-const clientTag = "v0.2.0";
+const clientTag = "v0.3.0";
 
 const pages = [
   ["guides/web-ui/index", "Web UI"],
@@ -34,7 +34,7 @@ const pages = [
 ];
 
 // The browser packages are npm-only. Their released source is the client repository at the
-// tag that published @looprig/client and @looprig/react 0.2.0.
+// tag that published @looprig/client and @looprig/react 0.3.0.
 function existsAtTag(repo, tag, file) {
   try {
     execFileSync("git", ["-C", path.join(workspace, repo), "cat-file", "-e", `${tag}:${file}`], { stdio: "ignore" });
@@ -141,7 +141,7 @@ test("Web UI guides describe the npm packages and retire the Go client and wui",
     "@looprig/client",
     "@looprig/react",
     "npm install",
-    "0.2.0",
+    "0.3.0",
     "createFactoryClient",
     "createClientLink",
     "useFactorySessionView",

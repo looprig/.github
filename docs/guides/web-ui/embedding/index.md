@@ -68,8 +68,8 @@ Continue with [Static bundle](/docs/guides/web-ui/embedding/static-bundle) for t
 
 ## Source
 
-The browser side of this boundary is `createFactoryClient` in [`packages/client/src/client.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/src/client.ts), which derives same-origin `/v1/realtime` when no `baseUrl` is given. The server options are in Factory's [`options.go`](https://github.com/looprig/factory/blob/v0.15.0/options.go), and the path split and security headers in [`internal/httpapi/routes.go`](https://github.com/looprig/factory/blob/v0.15.0/internal/httpapi/routes.go). Carbon's composition is [`browser/factory.go`](https://github.com/looprig/carbon/blob/v0.31.0/browser/factory.go).
+The browser side of this boundary is `createFactoryClient` in [`packages/client/src/client.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/client.ts), which derives same-origin `/v1/realtime` when no `baseUrl` is given. The server options are in Factory's [`options.go`](https://github.com/looprig/factory/blob/v0.15.0/options.go), and the path split and security headers in [`internal/httpapi/routes.go`](https://github.com/looprig/factory/blob/v0.15.0/internal/httpapi/routes.go). Carbon's composition is [`browser/factory.go`](https://github.com/looprig/carbon/blob/v0.32.2/browser/factory.go).
 
 ## Proof
 
-[`packages/client/test/vanilla-consumer.test.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/test/vanilla-consumer.test.ts) installs the packed client into a clean consumer. Carbon v0.31.0 is a released consumer that composes `factory.WithUIHandler` with its embedded bundle. The next page, [Static bundle](/docs/guides/web-ui/embedding/static-bundle), shows the build side.
+[`packages/client/test/vanilla-consumer.test.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/test/vanilla-consumer.test.ts) installs the packed client into a clean consumer. Carbon v0.32.2 is a released consumer that composes `factory.WithUIHandler` with its embedded bundle. The next page, [Static bundle](/docs/guides/web-ui/embedding/static-bundle), shows the build side.

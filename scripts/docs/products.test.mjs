@@ -41,14 +41,14 @@ test("Carbon is one practical coding-agent page with concise feature coverage", 
   }
 });
 
-test("the Carbon Install command pins v0.31.0", () => {
+test("the Carbon Install command pins v0.32.2", () => {
   const install = section(read("carbon.md"), "Install");
   assert.ok(install, "Carbon is missing its Install section");
   const [command] = fencedBlocks(install, ["sh", "bash", "shell"]);
   assert.ok(command, "Carbon Install needs a shell block");
 
   const pins = [...command.matchAll(/go install (\S+?)@(v\S+)/g)].map(([, module, version]) => [module, version]);
-  assert.deepEqual(pins, [["github.com/looprig/carbon/cmd/carbon", "v0.31.0"]]);
+  assert.deepEqual(pins, [["github.com/looprig/carbon/cmd/carbon", "v0.32.2"]]);
 });
 
 test("Carbon documents the one-way data directory of v0.29.0 and later", () => {

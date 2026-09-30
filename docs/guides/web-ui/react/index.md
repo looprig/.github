@@ -21,11 +21,13 @@ proofs:
 
 ## Install
 
-Install both packages at the same exact version. `@looprig/react` 0.2.0 depends on exactly `@looprig/client` 0.2.0, and it declares `react` and `react-dom` `^19.0.0` as peer dependencies.
+Install both packages at the same exact version. `@looprig/react` 0.3.0 depends on exactly `@looprig/client` 0.3.0, and it declares `react` and `react-dom` `^19.0.0` as peer dependencies.
 
 ```sh
-npm install @looprig/client@0.2.0 @looprig/react@0.2.0 react@19 react-dom@19
+npm install @looprig/client@0.3.0 @looprig/react@0.3.0 react@19 react-dom@19
 ```
+
+Upgrading from 0.2.0 needs two small changes at most. `UseFactorySessionViewResult` gains a required `liveToolSteps` array for live tool calls, so a hand-built result such as a test double adds `liveToolSteps: []`. And `FactoryLivePreview` gains a `"tool"` kind, so an exhaustive `switch` over that type needs one more arm. `browseEarlier()` now pages backward through older history. See [Session views and lists](/docs/guides/web-ui/react/session-view).
 
 ## Compose the application plane
 
@@ -74,8 +76,8 @@ The provider builds its client in a ref on first render rather than in `useMemo`
 
 ## Source
 
-The public barrel is [`packages/react/src/index.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/react/src/index.ts). Provider construction is in [`packages/react/src/use-connection.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/react/src/use-connection.ts), the store bindings in [`packages/react/src/use-store.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/react/src/use-store.ts), and the package manifest in [`packages/react/package.json`](https://github.com/looprig/client/blob/v0.2.0/packages/react/package.json).
+The public barrel is [`packages/react/src/index.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/react/src/index.ts). Provider construction is in [`packages/react/src/use-connection.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/react/src/use-connection.ts), the store bindings in [`packages/react/src/use-store.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/react/src/use-store.ts), and the package manifest in [`packages/react/package.json`](https://github.com/looprig/client/blob/v0.3.0/packages/react/package.json).
 
 ## Proof
 
-[`packages/react/src/index.test.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/react/src/index.test.ts) asserts the exact export list. [`packages/react/src/use-factory-link.strict.test.tsx`](https://github.com/looprig/client/blob/v0.2.0/packages/react/src/use-factory-link.strict.test.tsx) checks that session views share one client and one link and that a StrictMode mount, unmount, and remount opens one subscription per view. [`packages/react/src/use-store.test.tsx`](https://github.com/looprig/client/blob/v0.2.0/packages/react/src/use-store.test.tsx) checks that a store mounts with one render and no uncached-snapshot error. Next, read [Link and identity providers](/docs/guides/web-ui/react/link-and-identity).
+[`packages/react/src/index.test.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/react/src/index.test.ts) asserts the exact export list. [`packages/react/src/use-factory-link.strict.test.tsx`](https://github.com/looprig/client/blob/v0.3.0/packages/react/src/use-factory-link.strict.test.tsx) checks that session views share one client and one link and that a StrictMode mount, unmount, and remount opens one subscription per view. [`packages/react/src/use-store.test.tsx`](https://github.com/looprig/client/blob/v0.3.0/packages/react/src/use-store.test.tsx) checks that a store mounts with one render and no uncached-snapshot error. Next, read [Link and identity providers](/docs/guides/web-ui/react/link-and-identity).

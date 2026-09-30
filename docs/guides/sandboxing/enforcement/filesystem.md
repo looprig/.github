@@ -28,6 +28,8 @@ The most specific configured root wins for a path. A workspace descendant uses w
 
 The backends intentionally differ in how a denial appears. Linux Rung 1's mount view can make an unbound host path invisible after `pivot_root`. Linux Rung 2's Landlock allowlist can deny access without making sibling topology disappear. Windows can project restrictions onto configured roots using native ACL mechanisms. Do not use a successful `os.Stat` in the parent as proof that the child can read a path.
 
+At Linux Rung 1, a declared carve-out or deny whose path does not exist beneath a writable bind fails the spawn, so create declared carve-outs before spawning. Since sandbox v0.9.3, a zero-trust profile (`HostRead: Deny`) can again write its own workspace through a `WorkspaceWrite: Allow` or a filesystem write grant, `/dev/null` is writable at both Linux rungs, and Rung 1 filesystem grants and file masks work; write-only allows in still-unreadable subtrees stay suppressed and protected children stay carved.
+
 ## Isolated HOME and TMPDIR
 
 When `Home: IsolatedHome`, each memoized executor gets a private mode-`0700` home under the ExecutorSet child. The set also creates a private mode-`0700` temporary directory for every executor and sets `HOME` and `TMPDIR` in the child environment. The isolated home and temporary directory are added to the compiled writable projection. `RealHome` points `HOME` at the real user home and does not create the same isolation boundary.
@@ -65,9 +67,9 @@ The [network page](/docs/guides/sandboxing/enforcement/network) describes the an
 
 ## Source
 
-- [Effective policy compilation](https://github.com/looprig/sandbox/blob/v0.9.2/internal/policy/effective.go)
-- [Compiled filesystem policy](https://github.com/looprig/sandbox/blob/v0.9.2/internal/policy/compiled_fs.go)
+- [Effective policy compilation](https://github.com/looprig/sandbox/blob/v0.9.3/internal/policy/effective.go)
+- [Compiled filesystem policy](https://github.com/looprig/sandbox/blob/v0.9.3/internal/policy/compiled_fs.go)
 
 ## Proof
 
-- [Effective policy tests](https://github.com/looprig/sandbox/blob/v0.9.2/internal/policy/effective_test.go)
+- [Effective policy tests](https://github.com/looprig/sandbox/blob/v0.9.3/internal/policy/effective_test.go)

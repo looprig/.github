@@ -11,6 +11,7 @@ proofs:
   create-one-client-per-application: [release-npm-looprig-client]
   what-the-client-contains: [release-npm-looprig-client]
   package-boundary: [release-npm-looprig-client]
+  report-the-contract-version: [release-npm-looprig-client]
   where-to-go-next: [release-npm-looprig-client, release-npm-looprig-react]
   source: [release-npm-looprig-client]
   proof: [release-npm-looprig-client]
@@ -25,7 +26,7 @@ proofs:
 The package is published on npm under Apache-2.0 and declares Node 22 or newer for tooling. Its runtime dependencies are `ajv` for schema validation, `centrifuge` for the WebSocket, and `json-schema-to-ts` for the derived types.
 
 ```sh
-npm install @looprig/client@0.2.0
+npm install @looprig/client@0.3.0
 ```
 
 ## Create one client per application
@@ -64,7 +65,22 @@ Pass `realtimeUrl` to override the derived WebSocket address, for example when a
 
 ## Package boundary
 
-Import everything from the package root. Deep imports are not part of the published surface, and the package's own surface test checks that every emitted module is reachable from the root. Release 0.2.0 carries only the Factory-native client. It has no Harness serve transport, no SSE parser, and no legacy constructor. The earlier prebuilt web UI bundle has been retired, and [Carbon](/docs/products/carbon) now ships its own SPA on these packages.
+Import everything from the package root. Deep imports are not part of the published surface, and the package's own surface test checks that every emitted module is reachable from the root. Release 0.3.0 carries only the Factory-native client. It has no Harness serve transport, no SSE parser, and no legacy constructor. The earlier prebuilt web UI bundle has been retired, and [Carbon](/docs/products/carbon) now ships its own SPA on these packages.
+
+## Report the contract version
+
+Since 0.3.0 the package exports `contractInfo`, a frozen record of its own version and the Core contract whose schemas and fixtures it vendors. Log it at startup or show it in an about panel, so a bug report names the exact wire contract the browser validated against.
+
+```ts
+import { contractInfo } from "@looprig/client";
+
+// { clientVersion: "0.3.0", coreVersion: "v0.12.0", sessionwireVersion: 1 }
+console.info(
+  `@looprig/client ${contractInfo.clientVersion}, Core ${contractInfo.coreVersion}, sessionwire v${contractInfo.sessionwireVersion}`,
+);
+```
+
+`coreVersion` is the Core release tag the schemas were copied from, and `sessionwireVersion` is the wire version the client negotiates with Factory.
 
 ## Where to go next
 
@@ -72,7 +88,7 @@ Import everything from the package root. Deep imports are not part of the publis
 | --- | --- |
 | Read sessions, journals, gates, and objects over REST | [Factory REST client](/docs/guides/web-ui/client-sdk/factory-rest) |
 | Connect the WebSocket and subscribe to a session | [ClientLink and live streams](/docs/guides/web-ui/client-sdk/clientlink) |
-| Show text and reasoning while a model is still writing | [Live text and reasoning previews](/docs/guides/web-ui/client-sdk/live-previews) |
+| Show text, reasoning, and tool calls while a model is still working | [Live text and reasoning previews](/docs/guides/web-ui/client-sdk/live-previews) |
 | Send input, interrupt, restore, and answer gates | [Commands and gates](/docs/guides/web-ui/client-sdk/commands) |
 | Turn journal events into transcript rows | [Folding session state](/docs/guides/web-ui/client-sdk/fold) |
 | Handle schema failures and Core error codes | [Validation and errors](/docs/guides/web-ui/client-sdk/validation) |
@@ -81,8 +97,8 @@ Import everything from the package root. Deep imports are not part of the publis
 
 ## Source
 
-The client constructor and its option types are in [`packages/client/src/client.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/src/client.ts), the public barrel is [`packages/client/src/index.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/src/index.ts), and the shared `FetchLike` and `RequestOptions` types are in [`packages/client/src/transport.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/src/transport.ts). The package manifest is [`packages/client/package.json`](https://github.com/looprig/client/blob/v0.2.0/packages/client/package.json).
+The client constructor and its option types are in [`packages/client/src/client.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/client.ts), the public barrel is [`packages/client/src/index.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/index.ts), `contractInfo` is in [`packages/client/src/contract-info.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/contract-info.ts), and the shared `FetchLike` and `RequestOptions` types are in [`packages/client/src/transport.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/transport.ts). The package manifest is [`packages/client/package.json`](https://github.com/looprig/client/blob/v0.3.0/packages/client/package.json).
 
 ## Proof
 
-[`packages/client/test/surface.test.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/test/surface.test.ts) checks the exported surface, confirms that the removed serve transport is absent, rejects framework dependencies, and installs the packed artifact into a standalone consumer that typechecks and runs. [`packages/client/test/vanilla-consumer.test.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/test/vanilla-consumer.test.ts) exercises the package without a framework. Continue with the [Factory REST client](/docs/guides/web-ui/client-sdk/factory-rest).
+[`packages/client/test/surface.test.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/test/surface.test.ts) checks the exported surface, confirms that the removed serve transport is absent, rejects framework dependencies, and installs the packed artifact into a standalone consumer that typechecks and runs. [`packages/client/test/vanilla-consumer.test.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/test/vanilla-consumer.test.ts) exercises the package without a framework, and [`packages/client/test/contract.test.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/test/contract.test.ts) checks that `contractInfo` matches the package manifest, the vendored Core `VERSION` file, and the negotiated wire version, and that it is frozen. Continue with the [Factory REST client](/docs/guides/web-ui/client-sdk/factory-rest).

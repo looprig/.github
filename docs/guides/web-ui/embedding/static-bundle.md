@@ -111,12 +111,12 @@ Run Factory, then `npm run dev` in `web/` with `FACTORY_TARGET` pointing at it. 
 
 ## Keep the bundle reproducible
 
-Pin `@looprig/client` and `@looprig/react` to the same exact version, `0.2.0`, and commit the lockfile. `@looprig/react` itself depends on exactly `@looprig/client` 0.2.0, so a caret range on one and not the other can install two copies. Carbon v0.31.0 goes further: its release script builds twice into separate directories and compares the results before it commits `dist/`.
+Pin `@looprig/client` and `@looprig/react` to the same exact version, `0.3.0`, and commit the lockfile. `@looprig/react` itself depends on exactly `@looprig/client` 0.3.0, so a caret range on one and not the other can install two copies. Carbon v0.32.2 goes further: its release script builds twice into separate directories and compares the results before it commits `dist/`.
 
 ## Source
 
-Carbon's [`web/vite.config.ts`](https://github.com/looprig/carbon/blob/v0.31.0/web/vite.config.ts) and [`internal/browserui/assets.go`](https://github.com/looprig/carbon/blob/v0.31.0/internal/browserui/assets.go) are the released model for this page. The relative endpoints come from `createFactoryClient` in [`packages/client/src/client.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/src/client.ts), and the exact client pin is in [`packages/react/package.json`](https://github.com/looprig/client/blob/v0.2.0/packages/react/package.json).
+Carbon's [`web/vite.config.ts`](https://github.com/looprig/carbon/blob/v0.32.2/web/vite.config.ts) and [`internal/browserui/assets.go`](https://github.com/looprig/carbon/blob/v0.32.2/internal/browserui/assets.go) are the released model for this page. The relative endpoints come from `createFactoryClient` in [`packages/client/src/client.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/client.ts), and the exact client pin is in [`packages/react/package.json`](https://github.com/looprig/client/blob/v0.3.0/packages/react/package.json).
 
 ## Proof
 
-[`packages/client/test/vanilla-consumer.test.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/test/vanilla-consumer.test.ts) builds and runs a clean consumer from the packed tarball, and Carbon's asset tests cover traversal confinement and the index fallback in the same shape as the handler above. Continue with [Application integration](/docs/guides/web-ui/embedding/app-integration).
+[`packages/client/test/vanilla-consumer.test.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/test/vanilla-consumer.test.ts) builds and runs a clean consumer from the packed tarball, and Carbon's asset tests cover traversal confinement and the index fallback in the same shape as the handler above. Continue with [Application integration](/docs/guides/web-ui/embedding/app-integration).

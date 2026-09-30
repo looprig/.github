@@ -115,8 +115,8 @@ A non-2xx response is decoded as a Core error envelope and thrown as the matchin
 
 ## Source
 
-The reads, journal options, cursor classifier, and bounded range reader are in [`packages/client/src/factory-rest.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/src/factory-rest.ts). Error classes are in [`packages/client/src/errors.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/src/errors.ts), and the response validators are in [`packages/client/src/validate.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/src/validate.ts).
+The reads, journal options, cursor classifier, and bounded range reader are in [`packages/client/src/factory-rest.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/factory-rest.ts). Error classes are in [`packages/client/src/errors.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/errors.ts), and the response validators are in [`packages/client/src/validate.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/validate.ts).
 
 ## Proof
 
-[`packages/client/test/factory-rest.test.ts`](https://github.com/looprig/client/blob/v0.2.0/packages/client/test/factory-rest.test.ts) covers the exact bootstrap route and shape, `from_seq` exclusivity, the restartable cursor refusal, every range-response rejection, abort and reader-failure classification, identical handling of missing and denied objects, and the bound default `fetch`. Continue with [ClientLink and live streams](/docs/guides/web-ui/client-sdk/clientlink).
+[`packages/client/test/factory-rest.test.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/test/factory-rest.test.ts) covers the exact bootstrap route and shape, `from_seq` exclusivity, the restartable cursor refusal, every range-response rejection, abort and reader-failure classification, identical handling of missing and denied objects, and the bound default `fetch`. Continue with [ClientLink and live streams](/docs/guides/web-ui/client-sdk/clientlink).
