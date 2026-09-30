@@ -75,7 +75,7 @@ A turn opener whose cause names a child loop is a subagent hand-back, not user i
 
 ## Tool rows and captures
 
-A committed `StepDone` produces at most one `assistant` row (thinking, narration, refusal, and a `redactedThinking` flag) followed by one `tool` row per tool use, paired with its result by tool-use id. The row's `summary` is derived by `toolUseSummary(name, input)`, which redacts file contents, edit text, request bodies, and task text; an unknown tool yields `""`. When Harness retained a large result, `capture` is a `ToolResultCaptureSummary` decoded by `toolResultCaptures`: object id, captured and original byte counts, truncation, and encoding, never URLs or bytes. Reading the bytes is a separate authorized Factory read.
+A committed `StepDone` produces at most one `assistant` row (thinking, narration, refusal, and a `redactedThinking` flag) followed by one `tool` row per tool use, paired with its result by tool-use id. The row's `summary` is derived by `toolUseSummary(name, input)`, which redacts file contents, edit text, request bodies, and task text; an unknown tool yields `""`. When Harness retained a large result, `capture` is a `ToolResultCaptureSummary` decoded by `toolResultCaptures`: object id, captured and original byte counts, truncation, and encoding, never URLs or bytes. Reading the bytes is a separate authorized Factory read; [`readToolCapturePages`](/docs/guides/web-ui/client-sdk/factory-rest#verified-tool-captures) performs it in bounded pages and verifies the whole object's SHA-256 digest.
 
 ## The public gate board
 

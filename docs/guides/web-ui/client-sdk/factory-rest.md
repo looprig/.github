@@ -11,6 +11,7 @@ proofs:
   page-through-sessions-and-agents: [release-npm-looprig-client]
   journal-positions: [release-npm-looprig-client]
   retained-objects: [release-npm-looprig-client]
+  verified-tool-captures: [release-npm-looprig-client]
   failures: [release-npm-looprig-client]
   source: [release-npm-looprig-client]
   proof: [release-npm-looprig-client]
@@ -109,14 +110,61 @@ async function firstKilobyte(reads: FactoryReads, sessionId: string, objectId: s
 
 The response must be `206` with a `Content-Range` of `bytes start-end/total`, and a `Content-Length`, when present, must equal the range size. A `200` answer, mismatched bounds, a short body, or an oversized chunk is a `MalformedResponseError`, and the body is cancelled before it is consumed further. Factory answers a missing object and a denied one identically, so the client cannot tell them apart either.
 
+## Verified tool captures
+
+When Harness retained a large tool result, the folded [tool row](/docs/guides/web-ui/client-sdk/fold) carries a `capture` summary but no bytes. `readToolCapturePages` loads that object on an explicit user action, in bounded range requests, and verifies it before returning anything.
+
+```ts
+function readToolCapturePages(
+  reads: FactoryReads,
+  sessionId: string,
+  capture: ToolResultCaptureSummary,
+  options: { pageBytes: number; ceilingBytes: number; signal?: AbortSignal },
+): Promise<ToolCaptureContent>; // { metadata, pages, bytes }
+```
+
+The read runs in a fixed order:
+
+1. `ceilingBytes` must be a non-negative safe integer and `pageBytes` a positive safe integer no larger than it, or the call throws `RangeError`. A capture larger than `ceilingBytes` throws `ToolCaptureTooLargeError`, and one without an object id throws `ToolCaptureUnavailableError`, both before any request.
+2. It reads the object metadata, which must name the same object and size and carry a `sha256:` digest.
+3. It requests `pageBytes`-sized ranges and checks each `Content-Range` and length exactly.
+4. It computes SHA-256 over the whole assembled object and compares it with the metadata digest.
+
+Any mismatch throws `ToolCaptureIntegrityError`, and nothing is returned until the whole object verifies. `pages` records the ranges that were issued; each entry's `bytes` is a view into the single verified `bytes` buffer, not an incremental delivery.
+
+```ts
+import {
+  ToolCaptureError,
+  readToolCapturePages,
+  type FactoryReads,
+  type ToolRow,
+} from "@looprig/client";
+
+async function loadFullResult(reads: FactoryReads, sessionId: string, row: ToolRow, signal?: AbortSignal) {
+  if (row.capture === undefined) return row.result; // only the inline preview exists
+  try {
+    const content = await readToolCapturePages(reads, sessionId, row.capture, {
+      pageBytes: 256 * 1024, // bytes per range request
+      ceilingBytes: 8 * 1024 * 1024, // refuse larger captures before any request
+      signal,
+    });
+    return row.capture.encoding === "utf-8" ? new TextDecoder().decode(content.bytes) : content.bytes;
+  } catch (cause) {
+    // Too large, unavailable, or failed verification: keep showing the preview.
+    if (cause instanceof ToolCaptureError) return row.result;
+    throw cause;
+  }
+}
+```
+
 ## Failures
 
 A non-2xx response is decoded as a Core error envelope and thrown as the matching `CoreProtocolError` subclass, for example `CoreSessionNotFoundError` or `CoreInvalidRequestError`. A rejected `fetch` becomes `NetworkError`, an aborted signal becomes `RequestAbortedError`, and a body that is not JSON becomes `MalformedResponseError`. Schema mismatches throw `ContractValidationError`. [Validation and errors](/docs/guides/web-ui/client-sdk/validation) covers each class.
 
 ## Source
 
-The reads, journal options, cursor classifier, and bounded range reader are in [`packages/client/src/factory-rest.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/factory-rest.ts). Error classes are in [`packages/client/src/errors.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/errors.ts), and the response validators are in [`packages/client/src/validate.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/validate.ts).
+The reads, journal options, cursor classifier, and bounded range reader are in [`packages/client/src/factory-rest.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/factory-rest.ts). The verified capture reader is in [`packages/client/src/tool-capture.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/tool-capture.ts). Error classes are in [`packages/client/src/errors.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/errors.ts), and the response validators are in [`packages/client/src/validate.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/validate.ts).
 
 ## Proof
 
-[`packages/client/test/factory-rest.test.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/test/factory-rest.test.ts) covers the exact bootstrap route and shape, `from_seq` exclusivity, the restartable cursor refusal, every range-response rejection, abort and reader-failure classification, identical handling of missing and denied objects, and the bound default `fetch`. Continue with [ClientLink and live streams](/docs/guides/web-ui/client-sdk/clientlink).
+[`packages/client/test/factory-rest.test.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/test/factory-rest.test.ts) covers the exact bootstrap route and shape, `from_seq` exclusivity, the restartable cursor refusal, every range-response rejection, abort and reader-failure classification, identical handling of missing and denied objects, and the bound default `fetch`. [`packages/client/test/toolsummary.test.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/test/toolsummary.test.ts) covers `readToolCapturePages` bounds, ceiling refusal before I/O, and digest verification. Continue with [ClientLink and live streams](/docs/guides/web-ui/client-sdk/clientlink).
