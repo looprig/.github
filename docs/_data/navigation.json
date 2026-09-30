@@ -82,6 +82,11 @@
       "order": 10
     },
     {
+      "path": "start/starters.md",
+      "audience": "human",
+      "order": 11
+    },
+    {
       "path": "guides/inference.md",
       "audience": "human",
       "order": 1
