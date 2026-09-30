@@ -1,7 +1,7 @@
 ---
 id: overview/architecture
 title: Architecture
-description: How Looprig's modules fit together, from a single-process agent to a browser product served by Factory and Hosts, and how one message flows through the system.
+description: How Looprig's modules fit together, from a single-process agent to a browser product served by Factory and Hosts, in one process with Stack or across deployments, and how one message flows through the system.
 audience: developer
 section: overview
 order: 2
@@ -9,9 +9,11 @@ publication: released
 proofs:
   two-ways-to-run-an-agent: [release-github-com-looprig-harness, release-github-com-looprig-factory, release-github-com-looprig-host]
   the-hosted-architecture: [release-github-com-looprig-factory, release-github-com-looprig-host, release-github-com-looprig-sessionstore, release-github-com-looprig-harness, release-npm-looprig-client]
+  stack-the-hosted-system-in-one-process: [release-github-com-looprig-stack, release-github-com-looprig-factory, release-github-com-looprig-host]
+  agents-on-a-host: [release-github-com-looprig-host, release-github-com-looprig-harness]
   who-owns-what: [release-github-com-looprig-factory, release-github-com-looprig-host, release-github-com-looprig-sessionstore, release-github-com-looprig-harness]
   how-a-message-flows: [release-github-com-looprig-factory, release-github-com-looprig-host, release-github-com-looprig-sessionstore, release-github-com-looprig-harness]
-  what-happens-on-failure: [release-github-com-looprig-host, release-github-com-looprig-sessionstore, release-github-com-looprig-factory]
+  what-happens-on-failure: [release-github-com-looprig-host, release-github-com-looprig-sessionstore, release-github-com-looprig-factory, release-github-com-looprig-harness]
   inside-the-runtime: [release-github-com-looprig-harness, release-github-com-looprig-inference, release-github-com-looprig-tools, release-github-com-looprig-sandbox]
 ---
 
@@ -23,7 +25,7 @@ Looprig is layered. Contracts sit at the bottom (Core, Storage, Inference), the 
 
 **In your own process.** Your program defines a Loop, assembles a Rig, and runs a Session directly. Events stream to your code, and the Session's journal goes to a Harness session store. A CLI, a TUI, a test, or a backend job all work this way. The [Quickstart](/docs/start/quickstart) is the smallest example.
 
-**As a hosted service.** Browsers and API clients talk to Factory. Factory never runs an agent itself; it records commands in SessionStore and places each session on a Host, which runs the same Harness Rigs you would run in your own process. Factory and Host can share one process or run as separate deployments, pooled or one Host per session.
+**As a hosted service.** Browsers and API clients talk to Factory. Factory never runs an agent itself; it records commands in SessionStore and places each session on a Host, which runs the same Harness Rigs you would run in your own process. Factory and Host can share one process or run as separate deployments, pooled or one Host per session. [Stack](/docs/modules/stack) is the supported way to run them in one process.
 
 The rest of this page describes the hosted shape, because it has the most moving parts. The runtime inside a Host is the same as the in-process one.
 
@@ -77,6 +79,24 @@ The storage cylinders are logical. Both usually live on the same backend, such a
 | [Harness](/docs/modules/harness) | The agent runtime: Loops, Rigs, Sessions, tools, gates, and the journal. |
 | [Controller](/docs/modules/controller) | Optional. Runs one dedicated Host Pod per session on Kubernetes and drains before deleting. |
 
+## Stack: the hosted system in one process
+
+[Stack](/docs/modules/stack) composes the hosted architecture in a single process from one `stack.Options` value: Factory, one pooled Host running in the same process, and one storage profile. It is the embedded mode, not a different architecture. Factory still reaches the in-process Host over a loopback HostLink WebSocket and shares state with it only through SessionStore, exactly as it would reach a remote Host, so an agent that runs under Stack runs unchanged on separate Hosts.
+
+- **One source for the agreements.** Factory and Host must agree on the journal binding, each agent's launch template, the evidence Host settles commands from, and the resolvers Factory reads history through. Stack derives all of them from the same `Agents` list, so they cannot disagree.
+- **Agents are Rig builders.** Each `stack.Agent` names an agent ID, a compatibility ID, its `department.Capabilities`, and a `Define` function that builds the Rig for every launch from a `stack.Binding` (tenant, session, the journal store to pass to `rig.WithSessionStore`, and an optional workspace root). Every agent runs through `host/harnessruntime`, described below.
+- **Storage profiles.** `stack/localdisk` opens FSStore directories under one data directory for a single machine, `stack/memory` is for tests, and `stack/devauth` is a development-only identity that `Options.AllowDevelopmentIdentity` must enable. Stack v0.1.0 exposes no workspace snapshot store; an agent that places a workspace opens its own and must keep it durable, because a session restored after a restart against an in-memory snapshot store fails with `materialize_failed`.
+- **Ordered shutdown.** `Stop` runs Factory `Quiesce`, Host `Stop` (the drain, while HostLink is still served), Factory `Stop`, and then closes storage last, on its own lifecycle: the caller's context bounds only the wait, and a retried `Stop` waits for the same teardown. It returns `*ParkedSessionsError` when the drain leaves a runtime running.
+- **Moving Hosts out.** `stack.RemoteHosts{}` plus `stack.ServeHost` in each Host process moves the Hosts to other processes over shared storage, such as NATS or PostgreSQL with S3, with the same `Agents`.
+
+The [browser-app starter](/docs/start/starters) is a complete program on Stack. Compose Factory and Host yourself when you need what Stack v0.1.0 does not include: an object policy, checkpointing, or dedicated placement.
+
+## Agents on a Host
+
+A Host launches runtimes through its Department, the map from agent identity to launch target. For Harness agents the launch target comes from the public [`host/harnessruntime`](/docs/modules/host) package: `harnessruntime.Target` binds your Rigs (`SharedRig`, `RigPerTenant`, or `RigsFunc`) to Host's runtime seams, and `harnessruntime.Registration` registers it for an agent ID. The adapter carries each command's `Principal` and `Metadata`, re-presents a create's first message, decodes gate responses, refuses an unresolved payload reference, relays live text, reasoning, and tool steps, and launches under the binding's runtime session ID, so a product no longer hand-writes it.
+
+Host holds every launch target to a **runtime profile**. The default, `RuntimeProfileDurable`, makes `host.Compose` refuse a target that does not declare `department.Capabilities.Recovery`: an `AttemptCloser`, so a successor can close an attempt a crashed predecessor left in flight, and `PersistenceFaults`, so a journal fault ends residency instead of leaving a session resident and refusing commands. The declaration is checked again when each session launches. `harnessruntime.Target` declares and provides both. `RuntimeProfileBestEffort` admits a target without them and logs one warning at start; it is an explicit opt-out for runtimes that cannot recover. A custom runtime can check itself with `department/departmenttest.RunRuntimeConformance`.
+
 ## Who owns what
 
 Each boundary has one owner, which is what lets the parts fail and restart independently.
@@ -128,9 +148,9 @@ sequenceDiagram
 ## What happens on failure
 
 - **The browser disconnects.** Nothing stops. On reconnect, the client reads committed history from its last cursor and rejoins the live stream.
-- **A Host crashes.** Its residency lapses. Factory places a session automatically only when it still has a qualifying open command in SessionStore: one that is pending, claimed, or applying. The new Host acquires residency with a higher epoch and restores the runtime from the journal. Restoring the session and recovering a stranded command are separate steps: a command whose attempt had started but never settled is closed from journal evidence rather than blindly replayed, so it is not applied twice, and the product runtime must implement `department.AttemptCloser` for that closure to complete.
+- **A Host crashes.** Its residency lapses. Factory places a session automatically only when it still has a qualifying open command in SessionStore: one that is pending, claimed, or applying. The new Host acquires residency with a higher epoch and restores the runtime from the journal. Restoring the session and recovering a stranded command are separate steps: a command whose attempt had started but never settled is closed from journal evidence rather than blindly replayed, so it is not applied twice, which is why Host's durable runtime profile requires the runtime to provide `department.AttemptCloser`.
 - **A turn is interrupted after its input settled.** An input settles as `applied` when the runtime accepts it, before the turn runs. If the Host dies mid-turn after that, the session has no open command, so Factory does not place it on that account; it is restored the next time a command arrives for it (for example a new input or an explicit restore), and restore records the open turn as interrupted and comes up idle rather than re-running it.
-- **A Host is drained.** It refuses new attaches, drains every resident session, and returns a `DrainReport` listing anything an operator must reconcile. Factory can then place those sessions elsewhere.
+- **A Host is drained.** It refuses new attaches, releases every resident session, and returns a `DrainReport` listing anything an operator must reconcile. Factory can then place those sessions elsewhere. A runtime waiting at an approval gate refuses a graceful release, so the drain then abandons it crash-equivalently: nothing is journaled, the open gate is preserved, and the runtime stops and releases its journal lease, so a successor in this process or another restores the session with the gate still answerable. `DrainReport.Abandoned` lists those sessions. A session whose release or abandon failed, or whose runtime kept its lease, is listed in `DrainReport.Parked`; treat it as a leak, because no pinned storage backend expires a lease on its own. Size the platform's termination grace above the drain's `Grace` plus twice its `IdleBoundary`, since a gate-waiting session spends the whole grace being refused before it is abandoned.
 - **Factory restarts.** Admitted commands are already in SessionStore, and a periodic sweep places any session with a pending, claimed, or applying command.
 
 ## Inside the runtime

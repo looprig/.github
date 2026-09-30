@@ -1,7 +1,7 @@
 ---
 id: overview/glossary
 title: Glossary
-description: Definitions of the terms used across Looprig code and documentation, from Loop, Rig, and Session to Factory, Host, HostLink, and residency.
+description: Definitions of the terms used across Looprig code and documentation, from Loop, Rig, and Session to Factory, Host, Stack, HostLink, and residency.
 audience: developer
 section: overview
 order: 5
@@ -14,10 +14,10 @@ proofs:
   tools-permissions-and-safety: [release-github-com-looprig-harness, release-github-com-looprig-sandbox, release-github-com-looprig-tools, release-github-com-looprig-classifiers]
   events-durability-and-recovery: [release-github-com-looprig-harness, release-github-com-looprig-storage]
   durable-workflows: [release-github-com-looprig-flow, release-github-com-looprig-workflows]
-  serving-and-orchestration: [release-github-com-looprig-factory, release-github-com-looprig-host, release-github-com-looprig-sessionstore, release-github-com-looprig-controller, release-npm-looprig-client]
+  serving-and-orchestration: [release-github-com-looprig-factory, release-github-com-looprig-host, release-github-com-looprig-sessionstore, release-github-com-looprig-controller, release-github-com-looprig-stack, release-npm-looprig-client]
   interfaces-and-protocols: [release-github-com-looprig-acp, release-github-com-looprig-mcp, release-github-com-looprig-factory, release-github-com-looprig-harness]
   evaluation-and-observability: [release-github-com-looprig-eval]
-  modules-and-repositories: [release-github-com-looprig-storage, release-github-com-looprig-fsstore, release-github-com-looprig-natsstore, release-github-com-looprig-harness, release-npm-looprig-client]
+  modules-and-repositories: [release-github-com-looprig-stack, release-github-com-looprig-storage, release-github-com-looprig-fsstore, release-github-com-looprig-natsstore, release-github-com-looprig-harness, release-npm-looprig-client]
   architecture-and-engineering-language: [release-github-com-looprig-harness]
 ---
 
@@ -457,6 +457,15 @@ systems.
 **Workspace permit.** The runtime authority for a tool to perform a declared
 operation against the Session workspace.
 
+**Workspace access.** The one-option access gate installed by
+`loop.WithWorkspaceAccess`: reads under its roots run, a write under them asks
+an approver first, and everything else is denied, including commands and
+network access. By default the approver is the Loop's durable permission Gate;
+`gate.ApproverFunc` answers in-process. An "Approve always" answer is kept in a
+per-session `gate.SessionRules` while the process runs unless a durable
+`gate.RuleStore` is supplied. `loop.WithReadOnlyAccess` is the read-only
+counterpart.
+
 ## Events, durability, and recovery
 
 **Ambiguous append.** A storage write whose acknowledgement was lost, leaving
@@ -626,6 +635,16 @@ and execution metadata needed to recover a Graph run.
 These terms describe how Looprig runs agents as a multi-user service. The
 [Architecture](/docs/overview/architecture) page shows how the parts connect.
 
+**Abandoned and Parked.** The two ways a Host drain can end a runtime that
+refused its graceful release, as reported in `host.DrainReport` since Host
+v0.17.0. A runtime waiting at an approval Gate refuses a graceful release, so
+the drain abandons it crash-equivalently: nothing is journaled, the open Gate
+is preserved, and the runtime stops and releases its journal lease, so a
+successor restores the session with the Gate still answerable. Such a session
+is **Abandoned**. A session whose release or abandon failed, or whose runtime
+kept its lease, is **Parked**: a leak an embedder must treat as residency still
+held. Stack's `Stop` returns `*ParkedSessionsError` for them.
+
 **Capture.** A large tool result retained as a durable object instead of being
 truncated. When a Rig is configured with tool-result capture, a result over the
 preview budget is stored in the Session's journal store under a store-issued
@@ -657,6 +676,13 @@ and ClientLink, verifies identity through seams you supply, admits commands into
 SessionStore, places sessions on Hosts, and relays live output to viewers. It is
 a library with no binary and no UI.
 
+**harnessruntime.** The public Harness adapter for Host,
+`github.com/looprig/host/harnessruntime`. `harnessruntime.Target` turns a
+product's Rigs into a Department launch target that declares full recovery,
+carries `Principal` and `Metadata`, relays live text, reasoning, and tool steps,
+and refuses an unresolved payload reference, so a product does not hand-write
+a runtime adapter. `harnessruntime.Registration` registers it for an agent ID.
+
 **Host.** The runtime side of a hosted service, from
 [`github.com/looprig/host`](/docs/modules/host). A Host keeps agent sessions
 resident, applies the commands Factory admits, publishes open Gates, serves
@@ -675,6 +701,14 @@ SessionStore. Each grant carries a residency epoch that only increases, so a
 successor Host fences out a predecessor that may still be running. A residency
 epoch is not a journal epoch.
 
+**Runtime profile.** How strictly a Host holds its launch targets to recovery,
+set by `host.Composition.RuntimeProfile`. The default,
+`RuntimeProfileDurable`, makes `host.Compose` refuse a target that does not
+declare `department.Capabilities.Recovery`, an `AttemptCloser` and
+`PersistenceFaults`, and refuses a launched session that lacks what its target
+declared. `RuntimeProfileBestEffort` is the explicit opt-out and logs one
+warning at start.
+
 **SessionStore.** Two packages share this name, and they are not
 interchangeable:
 
@@ -690,6 +724,14 @@ Both require a Blobs provider that implements Storage's bounded reader
 lifecycle, so raw `fsstore` Blobs are refused. Use `memstore`, `natsstore`, or
 `s3store` Blobs, or, on one host, `fsstore` wrapped with Storage's
 `WithBoundedBlobReaders`.
+
+**Stack.** The supported single-process composition of the hosted system, from
+[`github.com/looprig/stack`](/docs/modules/stack). `stack.Start` runs Factory,
+an in-process pooled Host running Harness agents through `harnessruntime`, and
+one storage profile from one `stack.Options` value, and `Stop` shuts them down
+in a fixed safe order. Factory still reaches the Host over HostLink, so
+`stack.RemoteHosts` with `stack.ServeHost` moves Hosts to other processes
+without changing agent code.
 
 **Tenant.** The isolation scope for sessions in a hosted service, named by a
 Core `TenantID`. Records, objects, and HostLink addresses are scoped by tenant,
@@ -836,6 +878,15 @@ tree into looprig.
 enforcement for commands. It compiles a profile into the strongest available OS
 boundary, mints post-approval grant tokens, and reports the guarantees achieved
 by the current platform.
+
+**`stack`.** The single-process composition module: Factory, an in-process
+Host, and one storage profile started from one `stack.Options`. See
+[Stack](/docs/modules/stack).
+
+**`starters`.** The templates repository
+[`github.com/looprig/starters`](https://github.com/looprig/starters), holding
+the `cli-agent` and `browser-app` starters as separately tagged Go modules. It
+is copied with `gonew`, not imported; see [Starter templates](/docs/start/starters).
 
 **`storage`.** The dependency-light persistence contract module. It defines
 five primitives, Ledger, Leaser, KV, Blobs, and OrderedIndex, plus the
