@@ -15,7 +15,7 @@ func TestEachSessionWorksOnItsOwnCopy(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	repo := fixtureRepo(t)
-	cfg := config{question: "What is this repository?", repo: repo, data: t.TempDir()}
+	cfg := config{question: "What is this repository?", repo: repo, data: t.TempDir(), answers: strings.NewReader("y\n")}
 
 	var first bytes.Buffer
 	if err := run(ctx, &first, &bytes.Buffer{}, cfg); err != nil {
@@ -33,14 +33,26 @@ func TestEachSessionWorksOnItsOwnCopy(t *testing.T) {
 		t.Fatalf("the session workspace holds no copy of go.mod: %v", err)
 	}
 
+	// The approved write landed in the session's copy, not in the repository.
+	if _, err := os.Stat(filepath.Join(cfg.data, "workspaces", id, "NOTES.md")); err != nil {
+		t.Fatalf("the approved write did not land in the session workspace: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(repo, "NOTES.md")); !os.IsNotExist(err) {
+		t.Fatalf("the write reached the repository (stat err %v)", err)
+	}
+
 	// The session and its workspace survive a restart.
-	cfg.sessionID, cfg.question = id, "What did you read?"
+	// This time the write is denied: the call is refused and the turn goes on.
+	cfg.sessionID, cfg.question, cfg.answers = id, "What did you read?", strings.NewReader("n\n")
 	var second bytes.Buffer
 	if err := run(ctx, &second, &bytes.Buffer{}, cfg); err != nil {
 		t.Fatal(err)
 	}
 	if got := linePrefixed(t, second.String(), "session: "); got != id {
 		t.Fatalf("restored session %s, want %s", got, id)
+	}
+	if !strings.Contains(second.String(), "[WriteFile] refused") {
+		t.Fatalf("a denied write was not refused:\n%s", second.String())
 	}
 }
 

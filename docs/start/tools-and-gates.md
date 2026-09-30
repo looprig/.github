@@ -20,7 +20,7 @@ proofs:
 The coding assistant can answer general questions without tools, but it needs evidence to discuss a repository. Start with read-only file inspection. Commands come later, behind a sandbox.
 
 ```sh
-go get github.com/looprig/tools@v0.15.0
+go get github.com/looprig/tools@v0.15.1
 ```
 
 ## How a tool call runs
@@ -363,7 +363,7 @@ This is the Go module example.com/looprig-coding-assistant, according to its go.
 
 With a hosted model, point it at any repository: `go run . -repo ~/src/some-project -ask "Where is the HTTP router?"`.
 
-When the assistant later needs a policy that is not read-only, compose a `gate.Evaluator` yourself and install it with `loop.WithAccessGate` and `loop.WithPolicyRevision`, as the [sandbox page](/docs/start/sandbox-and-interfaces) does. Interactive approval, saved rules, and headless policies are covered in [access gates](/docs/guides/harness/gates/access-gates) and the [built-in tool catalog](/docs/guides/tools/built-in-tools).
+When the assistant should also change files, `loop.WithWorkspaceAccess` is the next one-option gate: reads under its roots run, each write under them asks an approver first, and commands and network stay denied. The [workspace page](/docs/start/workspaces) switches to it once each session has its own copy of the repository. For any other policy, such as sandboxed commands, compose a `gate.Evaluator` yourself and install it with `loop.WithAccessGate` and `loop.WithPolicyRevision`, as the [sandbox page](/docs/start/sandbox-and-interfaces) does. Interactive approval, saved rules, and headless policies are covered in [access gates](/docs/guides/harness/gates/access-gates) and the [built-in tool catalog](/docs/guides/tools/built-in-tools).
 
 ## Runnable checkpoint
 

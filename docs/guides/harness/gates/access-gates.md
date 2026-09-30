@@ -7,6 +7,7 @@ section: guides
 order: 11
 publication: released
 proofs:
+  ready-made-gates: [release-github-com-looprig-harness]
   access-abi: [release-github-com-looprig-harness]
   bindings: [release-github-com-looprig-harness]
   evaluator-contract: [release-github-com-looprig-harness]
@@ -16,6 +17,36 @@ proofs:
 ---
 
 # Access gates
+
+## Ready-made gates
+
+A Loop with no access gate denies every tool call. Two Loop options install a complete gate without building an evaluator, and each takes the Loop's one access-gate slot, so neither combines with `WithAccessGate` or with the other:
+
+| Option | Allows | Asks | Denies |
+| --- | --- | --- | --- |
+| `loop.WithReadOnlyAccess(roots...)` | Reads at or beneath the roots | Nothing | Every write, every other read, commands, network |
+| `loop.WithWorkspaceAccess(loop.WorkspaceAccess{Roots, Approver, Rules})` | Reads at or beneath the roots | Each write at or beneath the roots | Reads and writes outside the roots, whole-host scopes, commands, network, and any other requirement kind |
+
+```go
+agent, err := loop.Define(
+    loop.WithName("assistant"),
+    loop.WithInference(client, selected),
+    loop.WithTools(tools.ReadFileDefinition(guard), tools.EditFileDefinition(), tools.WriteFileDefinition()),
+    loop.WithWorkspaceAccess(loop.WorkspaceAccess{
+        Roots: []string{repo},
+        // Nil sends each write to the Loop's durable permission gate.
+        Approver: gate.ApproverFunc(func(ctx context.Context, p gate.ApprovalPrompt) (gate.ApprovalAction, error) {
+            return askSomeone(ctx, p) // gate.ApprovalApprove, gate.ApprovalApproveAlwaysWorkspace or gate.ApprovalDeny
+        }),
+    }),
+)
+```
+
+With a nil `Approver`, a write opens the Loop's durable permission gate (`loop.GateApprover()`), which the TUI, a headless session's `RespondGate`, or a Host's `gate_response` from Factory answers. `gate.ApproverFunc` answers in-process instead. With nil `Rules`, every bound Loop gets its own `gate.NewSessionRules()`, so "Approve always for this workspace" lasts for that Loop in that session while the process runs and never reaches another session, a subagent, or a restored session. A supplied `gate.RuleStore` (`RuleMatcher` plus `RuleWriter`) keeps the answers; a remembered rule can never widen access past the roots.
+
+Both options derive the Loop's policy revision, so neither needs `WithPolicyRevision`: the read-only gate hashes its canonical roots, and the workspace gate hashes `workspace-access/v1`, its roots, and, when `Rules` implements `gate.PolicyRevisioner`, that store's `PolicyRevision()` read once when the option is applied. An approver and in-memory rules add nothing, so an "always" answer never makes a restored session report drift. A revisioned store must keep its Define-time revision, and that revision must exclude rules appended by approvals; if it later reports another, `Bind` and every rule lookup fail closed with `*loop.WorkspaceRulesRevisionError` until the definition and Rig are rebuilt. Invalid roots, or a typed-nil `Approver` or `Rules`, fail `loop.Define` with `DefinitionInvalidAccessGate`.
+
+Both gates are lexical: they judge the canonical path a tool prepared and touch no filesystem, so they are sound only with trusted tools that resolve symlinks before preparing and confine their own I/O to the approved path, as the standard file tools do. They decide tool calls; they are not an operating-system sandbox. To also route commands or network, build the gate yourself: `gate.NewWorkspaceAccess(roots...)` returns the access source, its `Bindings()` route `filesystem.read`, `filesystem.write`, `command.execute`, and `network` to it, and you replace the kinds you re-route before passing the bindings to `gate.NewInteractiveEvaluator` and installing the result with `loop.WithAccessGate` and `loop.WithPolicyRevision`. `gate.NewWorkspaceEvaluator(access, approver, rules)` is the evaluator `WithWorkspaceAccess` builds, with no grant issuer, so commands stay denied.
 
 ## Access ABI
 
@@ -105,6 +136,7 @@ The full decision implementation is [`pkg/gate/evaluator.go`](https://github.com
 
 ## Source and proof
 
+- [`loop.WithWorkspaceAccess`](https://github.com/looprig/harness/blob/v0.45.0/pkg/loop/workspace_access.go) and [`gate.WorkspaceAccess`, `gate.SessionRules`, `gate.ApproverFunc`](https://github.com/looprig/harness/blob/v0.45.0/pkg/gate/workspace.go)
 - [`gate.Evaluator`](https://github.com/looprig/harness/blob/main/pkg/gate/evaluator.go)
 - [`access routing`](https://github.com/looprig/harness/blob/main/pkg/gate/access.go)
 - [`policy` runnable fixture](https://github.com/looprig/harness/blob/main/examples/policy/example_test.go)

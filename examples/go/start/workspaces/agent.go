@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/looprig/harness/pkg/gate"
 	"github.com/looprig/harness/pkg/loop"
 	"github.com/looprig/harness/pkg/rig"
 	"github.com/looprig/harness/pkg/sessionstore"
@@ -10,24 +11,31 @@ import (
 	"github.com/looprig/tools"
 )
 
-// defineAssistant gives the coding assistant three read-only tools and an
-// access gate that lets them read inside the workspaces directory and
-// nowhere else.
-func defineAssistant(client inference.Client, selected model.Model, workspaceBase string) (loop.Definition, error) {
+// defineAssistant gives the coding assistant the read tools plus EditFile
+// and WriteFile, and an access gate that lets it read inside the workspaces
+// directory and write there only when approver says yes.
+func defineAssistant(client inference.Client, selected model.Model, workspaceBase string, approver gate.Approver) (loop.Definition, error) {
 	guard := readGuard{}
 	return loop.Define(
 		loop.WithName("coding-assistant"),
 		loop.WithSystem("You are a concise coding assistant. Use Glob, Grep and ReadFile for evidence "+
-			"and cite the paths you read. Never claim a file was read unless a tool returned it."),
+			"and cite the paths you read. Use EditFile or WriteFile to change files; each write needs approval."),
 		loop.WithInference(client, selected),
 		loop.WithTools(
 			tools.GlobDefinition(guard),
 			tools.GrepDefinition(guard),
 			tools.ReadFileDefinition(guard),
+			tools.EditFileDefinition(),
+			tools.WriteFileDefinition(),
 		),
 		// Each session's workspace is a directory beneath workspaceBase, so
-		// that is the one root reads are allowed under.
-		loop.WithReadOnlyAccess(workspaceBase),
+		// that is the one root. Reads there run, a write there asks approver
+		// first, and everything else is denied: other paths, commands and
+		// network access.
+		loop.WithWorkspaceAccess(loop.WorkspaceAccess{
+			Roots:    []string{workspaceBase},
+			Approver: approver,
+		}),
 	)
 }
 

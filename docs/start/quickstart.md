@@ -47,7 +47,7 @@ mkdir my-agent
 cd my-agent
 go mod init example.com/my-agent
 go get github.com/looprig/core@v0.13.1 \
-  github.com/looprig/harness@v0.43.0 \
+  github.com/looprig/harness@v0.45.0 \
   github.com/looprig/inference@v0.15.0 \
   github.com/looprig/llm@v0.15.1 \
   github.com/looprig/storage@v0.9.0

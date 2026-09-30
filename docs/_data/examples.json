@@ -52,7 +52,7 @@
       "availability": "released",
       "versions": {
         "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
@@ -75,7 +75,7 @@
       "availability": "released",
       "versions": {
         "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
@@ -98,7 +98,7 @@
       "availability": "released",
       "versions": {
         "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
@@ -121,7 +121,7 @@
       "availability": "released",
       "versions": {
         "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0",
         "github.com/looprig/storage": "v0.9.0"
       },
@@ -146,7 +146,7 @@
       "availability": "released",
       "versions": {
         "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0",
         "github.com/looprig/storage": "v0.9.0"
       },
@@ -172,7 +172,7 @@
       "versions": {
         "github.com/looprig/core": "v0.13.1",
         "github.com/looprig/fsstore": "v0.6.0",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0",
         "github.com/looprig/storage": "v0.9.0"
       },
@@ -199,7 +199,7 @@
       "versions": {
         "github.com/looprig/core": "v0.13.1",
         "github.com/looprig/fsstore": "v0.6.0",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0",
         "github.com/looprig/storage": "v0.9.0"
       },
@@ -225,7 +225,7 @@
       "availability": "released",
       "versions": {
         "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0",
         "github.com/looprig/storage": "v0.9.0"
       },
@@ -273,7 +273,7 @@
       "availability": "released",
       "versions": {
         "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
@@ -297,7 +297,7 @@
       "versions": {
         "github.com/looprig/classifiers": "v0.2.3",
         "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
@@ -321,7 +321,7 @@
       "availability": "released",
       "versions": {
         "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0",
         "github.com/looprig/storage": "v0.9.0"
       },
@@ -348,7 +348,7 @@
         "github.com/looprig/acp": "v0.3.4",
         "github.com/looprig/core": "v0.13.1",
         "github.com/looprig/foreignloops": "v0.3.4",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
@@ -373,7 +373,7 @@
       "availability": "released",
       "versions": {
         "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0",
         "github.com/looprig/mcp": "v0.7.3"
       },
@@ -447,7 +447,7 @@
       "availability": "released",
       "versions": {
         "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
@@ -470,7 +470,7 @@
       "availability": "released",
       "versions": {
         "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.43.0",
+        "github.com/looprig/harness": "v0.45.0",
         "github.com/looprig/inference": "v0.15.0",
         "github.com/looprig/tui": "v0.21.2"
       },

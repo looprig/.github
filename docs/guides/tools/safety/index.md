@@ -43,6 +43,8 @@ For workspace paths, the implementation resolves the canonical target during pre
 
 The [Sandboxing and Interfaces](/docs/start/sandbox-and-interfaces) guide explains the runtime access boundary. Tools supply its request vocabulary. The Harness [gate guide](/docs/guides/harness/gates) explains how a consumer applies the decision.
 
+For the file tools alone, Harness has two one-option gates. `loop.WithReadOnlyAccess(roots...)` allows `ReadFile`, `Glob`, and `Grep` under the roots and denies everything else. `loop.WithWorkspaceAccess(loop.WorkspaceAccess{Roots: ...})` also lets `WriteFile` and `EditFile` write under the roots once an approver says yes, through the Loop's durable permission gate or an in-process `gate.ApproverFunc`, and still denies commands, network, and every path outside the roots. Both rely on the checks above: they judge the canonical path the tool prepared, and the tool confines its own I/O to that path. See [access gates](/docs/guides/harness/gates/access-gates#ready-made-gates).
+
 ## Review what a mutation will change
 
 `WriteFile` and `EditFile` artifacts implement Harness's `tool.MutationPreviewer`. When a permission gate opens, Harness calls `MutationPreview()` and carries the returned path, create flag, and unified diff on the live `PermissionRequested` event so a UI can show the reviewer the exact change. The TUI renders it on the permission card, as described in [Commands and Gates](/docs/guides/tui/runtime/commands).

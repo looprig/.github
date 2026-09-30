@@ -26,7 +26,7 @@ proofs:
 > [quickstart](/docs/start/quickstart). Stage 19 is kept building only so
 > existing readers can still run it.
 
-This stage pins [harness module v0.43.0](https://github.com/looprig/harness/tree/v0.43.0) keeps HTTP composition at a narrow boundary. `serve.Handler` receives a `Rig[S,O]` for live creation/restoration and a `Reader` for durable projections. It does not import a session implementation, an LLM client, or a storage backend. `serve.ReadHandler` builds only the read plane when the process has no live rig.
+This stage pins [harness module v0.43.0](https://github.com/looprig/harness/tree/v0.45.0) keeps HTTP composition at a narrow boundary. `serve.Handler` receives a `Rig[S,O]` for live creation/restoration and a `Reader` for durable projections. It does not import a session implementation, an LLM client, or a storage backend. `serve.ReadHandler` builds only the read plane when the process has no live rig.
 
 ## Narrow serving seams {#narrow-serving-seams}
 
@@ -48,6 +48,6 @@ Malformed IDs and paging are 400 responses. Missing sessions are 404. Invalid JS
 
 ## Runnable proof {#runnable-proof}
 
-The reviewed serving fixture prints the capabilities document, creates one session, and exercises a protected control route. Its source and route tests are pinned to the [harness release](https://github.com/looprig/harness/tree/v0.43.0/pkg/serve).
+The reviewed serving fixture prints the capabilities document, creates one session, and exercises a protected control route. Its source and route tests are pinned to the [harness release](https://github.com/looprig/harness/tree/v0.45.0/pkg/serve).
 
 Example source: [`stage-19-http-serve`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage19_http_serve/main.go).

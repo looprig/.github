@@ -14,7 +14,9 @@ import (
 )
 
 // defineAssistant adds a Bash tool whose commands run in the sandbox, and
-// replaces the read-only gate with one derived from the sandbox profile.
+// replaces the workspace-access gate with one derived from the sandbox
+// profile. That gate is headless and the profile denies workspace writes, so
+// EditFile and WriteFile are left out.
 func defineAssistant(client inference.Client, selected model.Model, executor *sandbox.Executor, access *gate.Evaluator) (loop.Definition, error) {
 	guard := readGuard{}
 	return loop.Define(

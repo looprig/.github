@@ -131,7 +131,9 @@ import (
 )
 
 // defineAssistant adds a Bash tool whose commands run in the sandbox, and
-// replaces the read-only gate with one derived from the sandbox profile.
+// replaces the workspace-access gate with one derived from the sandbox
+// profile. That gate is headless and the profile denies workspace writes, so
+// EditFile and WriteFile are left out.
 func defineAssistant(client inference.Client, selected model.Model, executor *sandbox.Executor, access *gate.Evaluator) (loop.Definition, error) {
 	guard := readGuard{}
 	return loop.Define(
@@ -167,7 +169,7 @@ func defineRuntime(assistant loop.Definition, sessions *sessionstore.Store, work
 }
 ```
 
-`loop.WithReadOnlyAccess` is gone: a Loop has exactly one access gate. A gate you build yourself is opaque to Harness, so `loop.WithPolicyRevision` names its policy; change the revision whenever the policy changes. For several Loops, resolve one executor per Loop identity rather than sharing one runner. Background and supervised processes are covered in [process ownership](/docs/guides/tools/processes).
+`loop.WithWorkspaceAccess` is gone: a Loop has exactly one access gate, and `WithWorkspaceAccess` denies every command. The profile-derived gate is headless, so it cannot ask about a write, and this profile denies workspace writes, so `EditFile` and `WriteFile` are left out too. To keep approved writes beside sandboxed commands, compose a `gate.NewInteractiveEvaluator` from `gate.WorkspaceAccess`'s bindings plus a `command.execute` route to the profile, as described in [access gates](/docs/guides/harness/gates/access-gates). A gate you build yourself is opaque to Harness, so `loop.WithPolicyRevision` names its policy; change the revision whenever the policy changes. For several Loops, resolve one executor per Loop identity rather than sharing one runner. Background and supervised processes are covered in [process ownership](/docs/guides/tools/processes).
 
 ## Initialize the application
 

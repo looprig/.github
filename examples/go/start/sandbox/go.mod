@@ -5,11 +5,11 @@ go 1.26.8
 require (
 	github.com/looprig/core v0.13.1
 	github.com/looprig/fsstore v0.6.0
-	github.com/looprig/harness v0.43.0
+	github.com/looprig/harness v0.45.0
 	github.com/looprig/inference v0.15.0
 	github.com/looprig/llm v0.15.1
 	github.com/looprig/sandbox v0.9.3
-	github.com/looprig/tools v0.15.0
+	github.com/looprig/tools v0.15.1
 )
 
 require (

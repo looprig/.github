@@ -18,8 +18,8 @@ github.com/looprig/credentials v0.2.1 h1:C3g+fgBgfocv82WGpPk5Goj0idU31EARYXKaOEc
 github.com/looprig/credentials v0.2.1/go.mod h1:8T6fGYOI4+erw6dZt8ghxQZHuo4CwKwD1CS1y9qrVj4=
 github.com/looprig/fsstore v0.6.0 h1:QREW8IWIyB5ra3+Am9gU5sqi2dsbf0vfb+N5kyUEdT0=
 github.com/looprig/fsstore v0.6.0/go.mod h1:D9aehkAJDU1//uOFALEKmkWXHO0ZehadH3ZbpiN4HLs=
-github.com/looprig/harness v0.43.0 h1:PU7hgvLMOHfOIC6fcRUPFJ7PDiHV0k3MF4jS0BMehiQ=
-github.com/looprig/harness v0.43.0/go.mod h1:EctlxfTEkoZO6MiQi0UiYFqhDPNoxFM1zlPBpDPhgAo=
+github.com/looprig/harness v0.45.0 h1:w8WenAfwv+r2elZ9j5GWbYIMBXQREsuf90BtRBB88so=
+github.com/looprig/harness v0.45.0/go.mod h1:EctlxfTEkoZO6MiQi0UiYFqhDPNoxFM1zlPBpDPhgAo=
 github.com/looprig/inference v0.15.0 h1:s0sMnjwvwsfJUsOze2lNguPwQCI41QZHiPTBh4p06TM=
 github.com/looprig/inference v0.15.0/go.mod h1:XpZ5IbETJxxA3TWYRLwHW0N0o015AK9LClWo8XnzKlw=
 github.com/looprig/llm v0.15.1 h1:/eem2rjBhavlyQKiMhGSzDvmmYCx56TQbby1YMBTreY=
@@ -32,8 +32,8 @@ github.com/looprig/sessionstore v0.14.0 h1:B0ZNy72UJolMJTdKZgM7yvrISLy8TUaKBlzDJ
 github.com/looprig/sessionstore v0.14.0/go.mod h1:mSPJ253ljp5ehpOefhI8ix32RqSxDPURC4z8t7/PrOk=
 github.com/looprig/storage v0.9.0 h1:b/oKTetYCH8N0rLtEaxRs2qb+E/zlF/9HsZZ98AAqPo=
 github.com/looprig/storage v0.9.0/go.mod h1:z9XKe/fQBSJgr13Sh2PKqxmLAVZ6d2X0lZUm1eDLj7M=
-github.com/looprig/tools v0.15.0 h1:Xavl8MSBceRnAxEsTOryXTmO3lV1XL3HdsCIk8Mpe6c=
-github.com/looprig/tools v0.15.0/go.mod h1:cUbkVHDaTkWO/1pYGfJtDEhs3T7M7QNqcnsFutIpCGA=
+github.com/looprig/tools v0.15.1 h1:0DKwZ1DmTQiciGZHL1tUOtRIIsAvFyxIzpLwJWVreQ8=
+github.com/looprig/tools v0.15.1/go.mod h1:6VcrRTnbsTaUQkWXVJPfSWV1lQT5iN5gkACs3cRGjFU=
 github.com/mdlayher/netlink v1.11.2 h1:HKh2jqe+omdSWcQ88nrT7INE61B0NXfiSPFdgL4YbNI=
 github.com/mdlayher/netlink v1.11.2/go.mod h1:uT2Yc/QLaZubzDpZIBi9d4GoeLwtp3x1AMeqSRrK2sA=
 github.com/mdlayher/socket v0.6.1 h1:M7uj2NtuujUY4mYr1C57NmfNiRHbkKpnBxO856lsc3A=

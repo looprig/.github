@@ -21,7 +21,8 @@ type config struct {
 	question  string
 	repo      string
 	data      string
-	sessionID string // empty starts a new session
+	sessionID string    // empty starts a new session
+	answers   io.Reader // approval answers; main reads the terminal
 }
 
 func main() {
@@ -31,6 +32,7 @@ func main() {
 	flag.StringVar(&cfg.data, "data", defaultDataDir(), "directory for durable assistant data, outside the repository")
 	flag.StringVar(&cfg.sessionID, "session", "", "ID of a session to continue")
 	flag.Parse()
+	cfg.answers = os.Stdin
 
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
@@ -60,7 +62,7 @@ func run(ctx context.Context, stdout, stderr io.Writer, cfg config) error {
 	if err != nil {
 		return err
 	}
-	assistant, err := defineAssistant(client, selected, workspaceBase)
+	assistant, err := defineAssistant(client, selected, workspaceBase, approveOnTerminal(cfg.answers, stderr))
 	if err != nil {
 		return err
 	}
