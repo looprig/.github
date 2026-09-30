@@ -17,7 +17,7 @@ proofs:
 
 # Terminal session interfaces
 
-This stage pins [tui module v0.15.1](https://github.com/looprig/tui/tree/6b362dda04b086c8a94146320e9faad38dac9b6c) supplies presentation, a session adapter, restore decisions, runtime plumbing, completion widgets, and styles. It does not make a second durable store. The session owns event history and shutdown; the adapter owns its live subscription, replay dependencies, and gate index.
+This stage pins [tui module v0.21.2](https://github.com/looprig/tui/tree/v0.21.2) supplies presentation, a session adapter, restore decisions, runtime plumbing, completion widgets, and styles. It does not make a second durable store. The session owns event history and shutdown; the adapter owns its live subscription, replay dependencies, and gate index.
 
 ## Screen and projection {#screen-and-projection}
 
@@ -39,4 +39,6 @@ The component package provides bounded completion widgets (`InputBox`, file/sess
 
 ## Runnable proof {#runnable-proof}
 
-The reviewed TUI fixture prints the session-adapter state, image capability, one event, and one shutdown. The reviewed source links for [sessionadapter](https://github.com/looprig/tui/tree/6b362dda04b086c8a94146320e9faad38dac9b6c/sessionadapter), [restore](https://github.com/looprig/tui/tree/6b362dda04b086c8a94146320e9faad38dac9b6c/restore), and [runtime](https://github.com/looprig/tui/tree/6b362dda04b086c8a94146320e9faad38dac9b6c/runtime) are pinned to v0.15.1's release commit.
+The reviewed TUI fixture prints the session-adapter state, image capability, one event, and one shutdown. The reviewed source links for [sessionadapter](https://github.com/looprig/tui/tree/v0.21.2/sessionadapter), [restore](https://github.com/looprig/tui/tree/v0.21.2/restore), and [runtime](https://github.com/looprig/tui/tree/v0.21.2/runtime) are pinned to the v0.21.2 release.
+
+Example source: [`stage-21-tui`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage21_tui/main.go).

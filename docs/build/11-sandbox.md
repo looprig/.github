@@ -49,4 +49,6 @@ Use `errors.Is` for `ErrSandboxUnavailable`, `ErrInvalidProfile`, grant mismatch
 
 ## Runnable proof {#runnable-proof}
 
-`stage-11-sandbox-process` builds a denied-network, isolated-home profile, creates an executor set, runs `echo confined`, checks a non-empty enforcement level, and prints a zero exit status. Run it with `node scripts/docs/run-examples.mjs`. Read the [pinned profile implementation](https://github.com/looprig/sandbox/tree/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/pkg/profile/) and [profile declaration](https://github.com/looprig/sandbox/blob/b76852a7c5327c9dcb4f2b3f74ef36a3e9ca06e7/pkg/profile/profile.go).
+`stage-11-sandbox-process` builds a denied-network, isolated-home profile, creates an executor set, runs `echo confined`, checks a non-empty enforcement level, and prints a zero exit status. Run it with `node scripts/docs/run-examples.mjs`. Read the [pinned profile implementation](https://github.com/looprig/sandbox/tree/v0.9.3/pkg/profile/) and [profile declaration](https://github.com/looprig/sandbox/blob/v0.9.3/pkg/profile/profile.go).
+
+Example source: [`stage-11-sandbox-process`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage11_sandbox_process/main.go).

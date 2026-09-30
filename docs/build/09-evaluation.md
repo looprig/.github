@@ -53,4 +53,6 @@ A run owns the target invocation and evaluator result for one scenario set. Make
 
 ## Runnable proof {#runnable-proof}
 
-`stage-23-eval` runs the released Eval and Inference modules, emits the evaluation report, and asserts the qualification score. Run it with `node scripts/docs/run-examples.mjs`; implementation is pinned in the [Eval release tree](https://github.com/looprig/eval/tree/v0.1.2/) and [Inference release tree](https://github.com/looprig/inference/tree/v0.9.2/). The referenced package pages list the pinned source files and adjacent tests used for this boundary.
+`stage-23-eval` runs the released Eval and Inference modules, emits the evaluation report, and asserts the qualification score. Run it with `node scripts/docs/run-examples.mjs`; implementation is pinned in the [Eval release tree](https://github.com/looprig/eval/tree/v0.2.3/) and [Inference release tree](https://github.com/looprig/inference/tree/v0.15.0/). The referenced package pages list the pinned source files and adjacent tests used for this boundary.
+
+Example source: [`stage-23-eval`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage23_eval/main.go).

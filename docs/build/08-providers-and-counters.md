@@ -46,7 +46,7 @@ Use `llm` as the provider assembly layer when a process needs a common model pol
 
 ## Counters {#counters}
 
-`auto.NewCounter` and provider-level counter constructors return a `contextcount.ContextCounter`. The implementation is in [`llm/auto/counter.go`](https://github.com/looprig/llm/blob/v0.13.3/auto/counter.go). A counter estimates or obtains the number of input-context tokens as a preflight operation before a model call; it does not wrap an inference client or aggregate response usage. Automatic selection returns only exact counters for supported provider and API-format pairs. Unsupported pairs fail closed with a typed support error rather than silently substituting an estimator. Call `CountContext` with the intended `inference.Request`, inspect the returned capability when policy depends on exactness, and keep response usage accounting separate.
+`auto.NewCounter` and provider-level counter constructors return a `contextcount.ContextCounter`. The implementation is in [`llm/auto/counter.go`](https://github.com/looprig/llm/blob/v0.15.1/auto/counter.go). A counter estimates or obtains the number of input-context tokens as a preflight operation before a model call; it does not wrap an inference client or aggregate response usage. Automatic selection returns only exact counters for supported provider and API-format pairs. Unsupported pairs fail closed with a typed support error rather than silently substituting an estimator. Call `CountContext` with the intended `inference.Request`, inspect the returned capability when policy depends on exactness, and keep response usage accounting separate.
 
 ## Subscription and credential boundaries {#subscription-and-credential-boundaries}
 
@@ -58,4 +58,4 @@ Handle unsupported provider/model combinations, missing credentials, unavailable
 
 ## Runnable proof {#runnable-proof}
 
-The LLM module's native provider, automatic-selection, counter, and subscription examples are the runnable evidence for this path. Run those examples and tests with `GOWORK=off`; source is pinned in the [LLM release tree](https://github.com/looprig/llm/tree/v0.13.3/) and [Credentials release tree](https://github.com/looprig/credentials/tree/v0.1.0/). No central progressive example currently covers provider counters; use the native examples, tests, and pinned package proof links above.
+The LLM module's native provider, automatic-selection, counter, and subscription examples are the runnable evidence for this path. Run those examples and tests with `GOWORK=off`; source is pinned in the [LLM release tree](https://github.com/looprig/llm/tree/v0.15.1/) and [Credentials release tree](https://github.com/looprig/credentials/tree/v0.2.1/). No central progressive example currently covers provider counters; use the native examples, tests, and pinned package proof links above.

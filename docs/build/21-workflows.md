@@ -17,7 +17,7 @@ proofs:
 
 # Typed workflow orchestration
 
-`github.com/looprig/workflows` is a released module in this corpus. It is the orchestration layer above Flow: definitions describe a named, versioned workflow; a catalog resolves those definitions; a supervisor owns the session lease and lifecycle; and registries project bounded run metadata. The [module file](https://github.com/looprig/workflows/blob/c28c40bb4543eff2c68f52f26f9abde0146a45dd/go.mod) and [implementation source](https://github.com/looprig/workflows/tree/c28c40bb4543eff2c68f52f26f9abde0146a45dd) are the released `v0.1.0` boundary.
+`github.com/looprig/workflows` is a released module in this corpus. It is the orchestration layer above Flow: definitions describe a named, versioned workflow; a catalog resolves those definitions; a supervisor owns the session lease and lifecycle; and registries project bounded run metadata. The [module file](https://github.com/looprig/workflows/blob/v0.1.3/go.mod) and [implementation source](https://github.com/looprig/workflows/tree/v0.1.3) are the released `v0.1.3` boundary.
 
 ## Definition and catalog {#definition-and-catalog}
 
@@ -40,3 +40,5 @@ The lifecycle is deliberately session-owned. `ErrSupervisorActive`, `ErrSupervis
 ## Release proof {#release-proof}
 
 The reviewed workflow fixture validates typed input, interrupts a Flow run, recovers the checkpoint, resumes with typed input, cancels another run, and asserts append-only history. Its expected output is `started: Interrupted`, `recovered: Interrupted`, `resumed: Completed count=3`, `cancelled: Cancelled`, and `history: append-only`. The fixture runs from the module's own repository rather than from a pinned release import.
+
+Example source: [`stage-18-workflows`](https://github.com/looprig/workflows/blob/v0.1.3/examples/docs/stage18_workflows/main.go).

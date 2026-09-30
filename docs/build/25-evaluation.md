@@ -17,7 +17,7 @@ proofs:
 
 # Evaluation and qualification
 
-This stage pins [eval module v0.1.2](https://github.com/looprig/eval/tree/ba758feb51fc22f009acf67dadfa692750e3cdd1) defines scenarios, targets, evaluators, assessments, and reports. This stage pins [Pluto module v0.1.2](https://github.com/looprig/pluto/tree/a558d9006ba74559668d9929fb6d872cea0599b4) turns those measurements into capability scorecards and profile dispositions. Evaluation output is an artifact of a run; it is not session state, a checkpoint, or model context.
+This stage pins [eval module v0.2.3](https://github.com/looprig/eval/tree/v0.2.3) defines scenarios, targets, evaluators, assessments, and reports. This stage pins [Pluto module v0.2.3](https://github.com/looprig/pluto/tree/v0.2.3) turns those measurements into capability scorecards and profile dispositions. Evaluation output is an artifact of a run; it is not session state, a checkpoint, or model context.
 
 ## Evaluation model {#evaluation-model}
 
@@ -39,4 +39,6 @@ The packfile loader is a strict, size-capped YAML boundary. `gen.Generate` valid
 
 ## Runnable proof {#runnable-proof}
 
-The reviewed evaluation fixture prints a passing exact evaluation report and a Qualified Pluto capability report. The [eval release source](https://github.com/looprig/eval/tree/ba758feb51fc22f009acf67dadfa692750e3cdd1) and [Pluto release source](https://github.com/looprig/pluto/tree/a558d9006ba74559668d9929fb6d872cea0599b4) are the pinned declarations behind this page; the nested `cmd/pluto` module is separately released at [cmd/pluto/v0.1.2](https://github.com/looprig/pluto/tree/8ffaa725ece6b937e4852b23bbb3fa57a1e5dd03/cmd/pluto).
+The reviewed evaluation fixture prints a passing exact evaluation report and a Qualified Pluto capability report. The [eval release source](https://github.com/looprig/eval/tree/v0.2.3) and [Pluto release source](https://github.com/looprig/pluto/tree/v0.2.3) are the pinned declarations behind this page; the nested `cmd/pluto` module is separately released at [cmd/pluto/v0.2.1](https://github.com/looprig/pluto/tree/v0.2.3/cmd/pluto).
+
+Example source: [`stage-23-eval`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage23_eval/main.go).

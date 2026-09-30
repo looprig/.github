@@ -17,14 +17,16 @@ proofs:
 
 # Session serving and live events
 
-> **Deprecated.** As of the current Harness release, `pkg/serve` is deprecated
-> and frozen as a compatibility surface: its import path, routes, schemas, and
-> fixtures stay available while existing consumers migrate. Build new public
-> services on [Factory](/docs/modules/factory), [Host](/docs/modules/host), and
-> [SessionStore](/docs/modules/sessionstore), with the `@looprig/client` browser
-> packages. This stage remains accurate for its pinned release.
+> **Deprecated and frozen.** `harness/pkg/serve` is deprecated: it is a frozen
+> compatibility surface whose import path, routes, schemas, and fixtures stay
+> available while existing consumers migrate, and it receives no new features.
+> Build new public services on [Factory](/docs/modules/factory), with
+> [Host](/docs/modules/host) and [SessionStore](/docs/modules/sessionstore), and
+> the `@looprig/client` browser packages; start from the
+> [quickstart](/docs/start/quickstart). Stage 19 is kept building only so
+> existing readers can still run it.
 
-This stage pins [harness module v0.24.2](https://github.com/looprig/harness/tree/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb) keeps HTTP composition at a narrow boundary. `serve.Handler` receives a `Rig[S,O]` for live creation/restoration and a `Reader` for durable projections. It does not import a session implementation, an LLM client, or a storage backend. `serve.ReadHandler` builds only the read plane when the process has no live rig.
+This stage pins [harness module v0.43.0](https://github.com/looprig/harness/tree/v0.43.0) keeps HTTP composition at a narrow boundary. `serve.Handler` receives a `Rig[S,O]` for live creation/restoration and a `Reader` for durable projections. It does not import a session implementation, an LLM client, or a storage backend. `serve.ReadHandler` builds only the read plane when the process has no live rig.
 
 ## Narrow serving seams {#narrow-serving-seams}
 
@@ -46,4 +48,6 @@ Malformed IDs and paging are 400 responses. Missing sessions are 404. Invalid JS
 
 ## Runnable proof {#runnable-proof}
 
-The reviewed serving fixture prints the capabilities document, creates one session, and exercises a protected control route. Its source and route tests are pinned to the [harness release commit](https://github.com/looprig/harness/tree/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/serve).
+The reviewed serving fixture prints the capabilities document, creates one session, and exercises a protected control route. Its source and route tests are pinned to the [harness release](https://github.com/looprig/harness/tree/v0.43.0/pkg/serve).
+
+Example source: [`stage-19-http-serve`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage19_http_serve/main.go).

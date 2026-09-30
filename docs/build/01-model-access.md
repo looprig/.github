@@ -32,7 +32,7 @@ Begin at the `inference` boundary when the application needs one request and one
 
 ## Boundary {#boundary}
 
-`model.Model`, `inference.Request`, and `inference.Response` describe the provider-neutral call. A `model.Model` supplies an ID, capabilities, and limits; a `Request` carries messages, optional tools, and call options; a `Response` carries the assistant message, usage, finish information, and provider metadata. `Client.Invoke` is the one-shot operation and `Client.Stream` returns a reader for incremental chunks. The descriptor is defined in [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.9.2/model/model.go), not in the root `inference` package.
+`model.Model`, `inference.Request`, and `inference.Response` describe the provider-neutral call. A `model.Model` supplies an ID, capabilities, and limits; a `Request` carries messages, optional tools, and call options; a `Response` carries the assistant message, usage, finish information, and provider metadata. `Client.Invoke` is the one-shot operation and `Client.Stream` returns a reader for incremental chunks. The descriptor is defined in [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.15.0/model/model.go), not in the root `inference` package.
 
 `llm` is a policy and construction layer. Its `AuthPolicy` controls whether a provider may use an explicit credential, a named credential source, or no credential. `auto.New` chooses a provider from the configured model and `auto.NewWithAuth` makes that credential decision explicit. The resulting client still exposes the `inference.Client` contract, so the rest of the loop does not need provider-specific request types.
 
@@ -52,4 +52,6 @@ Validate a model before sending a request so unsupported capabilities and invali
 
 ## Runnable proof {#runnable-proof}
 
-`stage-01-inference` is the deterministic one-call path and asserts the assistant content produced by the released Core and Inference modules. `stage-22-model-gateway` adds the gateway boundary and asserts alias routing, upstream identity, and strict handling of an unknown alias. Run both through `node scripts/docs/run-examples.mjs`; the source implementation is pinned in the [Inference release tree](https://github.com/looprig/inference/tree/v0.9.2/) and [LLM release tree](https://github.com/looprig/llm/tree/v0.13.3/). The referenced package pages list the pinned source files and adjacent tests used for this boundary.
+`stage-01-inference` is the deterministic one-call path and asserts the assistant content produced by the released Core and Inference modules. `stage-22-model-gateway` adds the gateway boundary and asserts alias routing, upstream identity, and strict handling of an unknown alias. Run both through `node scripts/docs/run-examples.mjs`; the source implementation is pinned in the [Inference release tree](https://github.com/looprig/inference/tree/v0.15.0/) and [LLM release tree](https://github.com/looprig/llm/tree/v0.15.1/). The referenced package pages list the pinned source files and adjacent tests used for this boundary.
+
+Example source: [`stage-01-inference`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage01_inference/main.go), [`stage-22-model-gateway`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage22_model_gateway/main.go).

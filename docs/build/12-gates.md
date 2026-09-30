@@ -47,4 +47,6 @@ Validate requirements, bindings, gate payloads, and approval actions at construc
 
 ## Runnable proof {#runnable-proof}
 
-`stage-12-gate-rules` installs a source that reports a gated capability and a matcher that reports both deny and allow. It asserts that the result is not approved and that the allow matcher is never consulted after deny. Run it with `node scripts/docs/run-examples.mjs`. The [pinned evaluator](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/evaluator.go) and [gate tests](https://github.com/looprig/harness/tree/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/pkg/gate/) show the ordering contract.
+`stage-12-gate-rules` installs a source that reports a gated capability and a matcher that reports both deny and allow. It asserts that the result is not approved and that the allow matcher is never consulted after deny. Run it with `node scripts/docs/run-examples.mjs`. The [pinned evaluator](https://github.com/looprig/harness/blob/v0.43.0/pkg/gate/evaluator.go) and [gate tests](https://github.com/looprig/harness/tree/v0.43.0/pkg/gate/) show the ordering contract.
+
+Example source: [`stage-12-gate-rules`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage12_gate_rules/main.go).

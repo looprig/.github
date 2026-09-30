@@ -45,7 +45,7 @@ A released module has a versioned `go.mod` dependency and an immutable tag. Core
 
 ## Source-workspace modules {#source-workspace-modules}
 
-The browser SDK packages under `client/sdk` are the remaining exception in this set. `@looprig/client` and `@looprig/svelte` are private npm packages with no published version, so they must be labelled `source-workspace` and must not be presented as installable. A nested Go module is not an exception: `flow/store` has its own `go.mod` and is published from the Flow repository at its own `store/` tag, on its own cadence, so a consumer pins that tag rather than a filesystem replacement.
+The browser libraries are no longer an exception: `@looprig/client` and `@looprig/react` are published on npm, so pin a published version. The one remaining source-workspace entry is progressive stage 18, whose source lives in, and is run by, the `workflows` repository. A nested Go module is not an exception: `flow/store` has its own `go.mod` and is published from the Flow repository at its own `store/` tag, on its own cadence, so a consumer pins that tag rather than a filesystem replacement.
 
 ## Verification boundary {#verification-boundary}
 
@@ -57,4 +57,6 @@ Use Fsstore for a local single-process path when an explicit root and file durab
 
 ## Runnable proof {#runnable-proof}
 
-`stage-08-session-store` proves the released Fsstore path and `stage-10-workspace` proves a Storage snapshot round trip. Run them with `node scripts/docs/run-examples.mjs`, then repeat relevant module tests with `GOWORK=off`. Source trees are pinned in the [Storage release](https://github.com/looprig/storage/tree/v0.3.1/) and [Fsstore release](https://github.com/looprig/fsstore/tree/v0.3.2/). The referenced package pages list the pinned source files and adjacent tests used for these workspace boundaries.
+`stage-08-session-store` proves the released Fsstore path and `stage-10-workspace` proves a Storage snapshot round trip. Run them with `node scripts/docs/run-examples.mjs`, then repeat relevant module tests with `GOWORK=off`. Source trees are pinned in the [Storage release](https://github.com/looprig/storage/tree/v0.9.0/) and [Fsstore release](https://github.com/looprig/fsstore/tree/v0.6.0/). The referenced package pages list the pinned source files and adjacent tests used for these workspace boundaries.
+
+Example source: [`stage-08-session-store`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage08_session_store/main.go), [`stage-10-workspace`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage10_workspace/main.go).

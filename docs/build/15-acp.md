@@ -50,4 +50,6 @@ The protocol layer bounds frames, messages, nesting depth, handler concurrency, 
 
 ## Runnable proof {#runnable-proof}
 
-`stage-15-acp-foreign` constructs a Codex ACP child profile with a forwarded MCP server, registers both live and restored foreign builders, and asserts that both are available with scoped services. Run it with `node scripts/docs/run-examples.mjs`. See the [pinned ACP client](https://github.com/looprig/acp/tree/07678cf987c022c8a4583a71d40c77dd4f35fb0f/client/), [agent facade](https://github.com/looprig/acp/tree/07678cf987c022c8a4583a71d40c77dd4f35fb0f/agent/), and [launch lifecycle](https://github.com/looprig/acp/tree/07678cf987c022c8a4583a71d40c77dd4f35fb0f/launch/).
+`stage-15-acp-foreign` constructs a Codex ACP child profile with a forwarded MCP server, registers both live and restored foreign builders, and asserts that both are available with scoped services. Run it with `node scripts/docs/run-examples.mjs`. See the [pinned ACP client](https://github.com/looprig/acp/tree/v0.3.4/client/), [agent facade](https://github.com/looprig/acp/tree/v0.3.4/agent/), and [launch lifecycle](https://github.com/looprig/acp/tree/v0.3.4/launch/).
+
+Example source: [`stage-15-acp-foreign`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage15_acp_foreign/main.go).

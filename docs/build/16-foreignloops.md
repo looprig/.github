@@ -46,4 +46,6 @@ Handle `SpawnError`, `DecodeError`, `HistoryError`, `ExitError`, `SnapshotError`
 
 ## Runnable proof {#runnable-proof}
 
-`stage-15-acp-foreign` registers `BuildWithServices` and `BuildRestoredWithServices` for a Codex ACP profile and verifies that both constructors and scoped services are present without spawning a real provider. Run it with `node scripts/docs/run-examples.mjs`. Read the [neutral driver](https://github.com/looprig/foreignloops/tree/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/), [ACP adapter](https://github.com/looprig/foreignloops/tree/b46a9c576f8cbc064957c188c76da4c4e83e57f4/driver/acp/), and [backend builders](https://github.com/looprig/foreignloops/tree/b46a9c576f8cbc064957c188c76da4c4e83e57f4/backend/).
+`stage-15-acp-foreign` registers `BuildWithServices` and `BuildRestoredWithServices` for a Codex ACP profile and verifies that both constructors and scoped services are present without spawning a real provider. Run it with `node scripts/docs/run-examples.mjs`. Read the [neutral driver](https://github.com/looprig/foreignloops/tree/v0.3.4/driver/), [ACP adapter](https://github.com/looprig/foreignloops/tree/v0.3.4/driver/acp/), and [backend builders](https://github.com/looprig/foreignloops/tree/v0.3.4/backend/).
+
+Example source: [`stage-15-acp-foreign`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage15_acp_foreign/main.go).

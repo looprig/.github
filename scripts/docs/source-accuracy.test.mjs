@@ -41,7 +41,7 @@ test("Build 01 names the released inference model contract", () => {
   const content = page("build/01-model-access.md");
 
   assert.match(content, /`model\.Model`/);
-  assert.match(content, /github\.com\/looprig\/inference\/blob\/v0\.9\.2\/model\/model\.go/);
+  assert.match(content, /github\.com\/looprig\/inference\/blob\/v0\.15\.0\/model\/model\.go/);
   assert.doesNotMatch(content, /`inference\.Model`/);
 });
 
@@ -52,16 +52,16 @@ test("Build 08 describes counters as preflight ContextCounters", () => {
   assert.match(content, /CountContext/);
   assert.match(content, /input-context tokens as a preflight operation/i);
   assert.match(content, /fail(?:s|ure)? closed/i);
-  assert.match(content, /github\.com\/looprig\/llm\/blob\/v0\.13\.3\/auto\/counter\.go/);
+  assert.match(content, /github\.com\/looprig\/llm\/blob\/v0\.15\.1\/auto\/counter\.go/);
   assert.doesNotMatch(content, /counter (?:wraps|is a wrapper)|usage-accounting wrapper/i);
 });
 
 test("guide, product, and module pages cite the current released tag of every module they link", () => {
   // Scope note: docs/build is deliberately excluded. Build pages cite the
-  // versions their example stage pins in docs/_data/examples.json, which are
-  // intentionally older than the current release, so sweeping them here would
-  // report a legitimate pin as staleness. docs/build freshness is owned by the
-  // example manifest, not by this test.
+  // versions their example stage pins in docs/_data/examples.json, which can
+  // move ahead of (or lag) this inventory's recorded tag between refreshes, so
+  // docs/build freshness is owned by the example manifest and its scheduled
+  // --latest drift run, not by this test.
   const pattern = /https:\/\/github\.com\/looprig\/([a-z]+)\/(?:blob|tree)\/(v[0-9.]+)\//g;
   const stale = [];
   const unknown = [];

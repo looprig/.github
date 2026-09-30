@@ -47,4 +47,6 @@ Construction rejects nil inference clients, invalid models, missing structured-o
 
 ## Runnable proof {#runnable-proof}
 
-`stage-13-classifier` builds an offline classifier, encodes a high-risk data-exfiltration assessment, validates it, and asserts that Harness marks it ineligible for local auto-approval. Run it with `node scripts/docs/run-examples.mjs`. Inspect the [pinned classifier](https://github.com/looprig/classifiers/blob/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/commandsafety/commandsafety.go), [evidence catalog](https://github.com/looprig/classifiers/blob/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/internal/evidence/catalog.go), and [reconciliation tests](https://github.com/looprig/classifiers/tree/9df4a42884187de95a8ece6b75c4ee4a3eacd45d/pkg/commandsafety/).
+`stage-13-classifier` builds an offline classifier, encodes a high-risk data-exfiltration assessment, validates it, and asserts that Harness marks it ineligible for local auto-approval. Run it with `node scripts/docs/run-examples.mjs`. Inspect the [pinned classifier](https://github.com/looprig/classifiers/blob/v0.2.3/pkg/commandsafety/commandsafety.go), [evidence catalog](https://github.com/looprig/classifiers/blob/v0.2.3/internal/evidence/catalog.go), and [reconciliation tests](https://github.com/looprig/classifiers/tree/v0.2.3/pkg/commandsafety/).
+
+Example source: [`stage-13-classifier`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage13_classifier/main.go).

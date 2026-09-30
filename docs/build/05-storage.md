@@ -53,7 +53,7 @@ Choose the smallest contract that expresses the state you need. A workspace snap
 
 ## Fsstore {#fsstore}
 
-`fsstore.Open` owns an explicit root directory and creates the backend's ledger, lease, KV, and blob areas under it. It uses framed records and lock files, and reports whether a bad frame is torn or corrupt. Close the store before releasing or replacing its root. Stage 08 proves a durable session path and Stage 09 proves restore from it.
+`fsstore.Open` owns an explicit root directory and creates the backend's ledger, lease, KV, and blob areas under it. It uses framed records and lock files, and reports whether a bad frame is torn or corrupt. Close the store before releasing or replacing its root. The v0.6.0 on-disk layout is one-way: `Open` refuses a pre-v0.6.0 root with an error matching `fsstore.ErrLegacyLayout`, and the remedy is to move or delete that root, never to retry. Fsstore Blobs do not bound a blocked read, so wrap the composite with `Backend().WithBoundedBlobReaders()` from Storage before opening a Harness session store over it. Stage 08 proves a durable session path and Stage 09 proves restore from it.
 
 ## Natsstore {#natsstore}
 
@@ -69,4 +69,6 @@ A backend handle owns resources even when the shared contract does not expose ev
 
 ## Runnable proof {#runnable-proof}
 
-`stage-08-session-store` proves a released Fsstore path, `stage-09-restore` proves that the stored state can be restored, and `stage-10-workspace` proves a snapshot round trip using Storage. Run them with `node scripts/docs/run-examples.mjs`. The implementation trees are pinned for [Storage](https://github.com/looprig/storage/tree/v0.3.1/), [Fsstore](https://github.com/looprig/fsstore/tree/v0.3.2/), [Natsstore](https://github.com/looprig/natsstore/tree/v0.3.1/), and [Rclonestore](https://github.com/looprig/rclonestore/tree/v0.3.2/). The referenced package pages list the pinned source files and adjacent tests used for these storage boundaries.
+`stage-08-session-store` proves a released Fsstore path, `stage-09-restore` proves that the stored state can be restored, and `stage-10-workspace` proves a snapshot round trip using Storage. Run them with `node scripts/docs/run-examples.mjs`. The implementation trees are pinned for [Storage](https://github.com/looprig/storage/tree/v0.9.0/), [Fsstore](https://github.com/looprig/fsstore/tree/v0.6.0/), [Natsstore](https://github.com/looprig/natsstore/tree/v0.5.4/), and [Rclonestore](https://github.com/looprig/rclonestore/tree/v0.6.0/). The referenced package pages list the pinned source files and adjacent tests used for these storage boundaries.
+
+Example source: [`stage-08-session-store`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage08_session_store/main.go), [`stage-09-restore`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage09_restore/main.go), [`stage-10-workspace`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage10_workspace/main.go).

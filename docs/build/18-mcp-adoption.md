@@ -45,4 +45,6 @@ Use `ErrAlreadyStarted`, `ErrAlreadyBound`, `ErrNotBound`, `ErrManagerClosed`, `
 
 ## Runnable proof {#runnable-proof}
 
-`stage-16-mcp-adoption` uses a child server with one `lookup` tool, starts a session-scoped binding visible to all loops, installs it, disables it, and verifies the source, definition count, model-facing tool name, and status. Run it with `node scripts/docs/run-examples.mjs`. See the [pinned manager](https://github.com/looprig/mcp/blob/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/harness/manager.go), [adopter](https://github.com/looprig/mcp/tree/e900ad4bcddc76a593c0719b607bd2b0c9561cc0/pkg/harness/), and [Harness external-tool runtime](https://github.com/looprig/harness/blob/43e0939bb78ae5d113add0ecc0fddd22c6a2b7eb/internal/loopruntime/external_tools.go).
+`stage-16-mcp-adoption` uses a child server with one `lookup` tool, starts a session-scoped binding visible to all loops, installs it, disables it, and verifies the source, definition count, model-facing tool name, and status. Run it with `node scripts/docs/run-examples.mjs`. See the [pinned manager](https://github.com/looprig/mcp/blob/v0.7.3/pkg/harness/manager.go), [adopter](https://github.com/looprig/mcp/tree/v0.7.3/pkg/harness/), and [Harness external-tool runtime](https://github.com/looprig/harness/blob/v0.43.0/internal/loopruntime/external_tools.go).
+
+Example source: [`stage-16-mcp-adoption`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage16_mcp_adoption/main.go).
