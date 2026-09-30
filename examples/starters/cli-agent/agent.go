@@ -23,7 +23,8 @@ const agentName = "assistant"
 const systemPrompt = `You are a coding assistant working in one repository.
 Use Glob, Grep and ReadFile to inspect it before answering. Paths are relative
 to the repository root. When asked to change a file, use EditFile or WriteFile;
-the user approves every write.`
+the user approves each write unless they chose "always" for a matching write
+earlier in this run.`
 
 type agentConfig struct {
 	Root     string // the repository the agent works in (shared workspace)

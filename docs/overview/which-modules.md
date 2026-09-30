@@ -104,12 +104,9 @@ npm install @looprig/client@0.3.0 @looprig/react@0.3.0
 
 Factory and Host can run in one process or in separate deployments, and they need a shared storage backend from the previous row. You supply credential verification, authorization, the UI, and the Department. Move Factory and Host releases together, because each Factory feature is gated on capabilities the Host advertises.
 
-This is the row with the most assembly. There is no starter template yet; [Carbon](/docs/products/carbon) is the reference product that composes Factory, Host, Harness, and a browser UI, and its source is the most complete worked example.
+This is the row with the most assembly. The [browser-app starter](/docs/start/starters) is the smallest runnable composition of it; [Carbon](/docs/products/carbon) is the reference product that composes Factory, Host, Harness, and a browser UI, and its source is the most complete worked example.
 
 The older `harness/pkg/serve` HTTP and SSE server is deprecated and frozen as a compatibility surface. Do not start new services on it.
-
-
-The [browser-app starter](/docs/start/starters) composes exactly these modules in one runnable program.
 
 ## Scale Hosts on Kubernetes
 

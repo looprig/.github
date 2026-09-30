@@ -109,27 +109,29 @@ sequenceDiagram
   F->>H: bind and subscribe to live tail
   H->>S: claim command, begin attempt
   H->>R: submit input
-  R->>R: model calls, tools, gates
+  R-->>H: input accepted (applied disposition journaled)
+  H->>S: settle command from runtime evidence
+  R->>R: turn runs: model calls, tools, gates
   R-->>H: journal records and live text
   H-->>F: live publications
   F-->>B: live output over ClientLink
-  H->>S: settle command from runtime evidence
   B->>F: read committed history to confirm
 ```
 
 1. **Admission.** The browser sends the input through the REST API or a ClientLink command. Factory verifies the caller with your identity seam, authorizes the request, and writes the command into the session's inbox in SessionStore. From here the message is durable.
 2. **Placement.** No Host holds the session, so Factory picks a live Host that advertises the capabilities this command needs and asks it to attach the session over HostLink. The Host acquires residency, a lease in SessionStore whose epoch fences out any earlier holder, then uses its Department to launch the agent's Rig, restoring from the journal if the session already has history.
-3. **Delivery.** Factory binds the session to that Host and subscribes to its live tail. The Host claims the command, records the start of an attempt, and submits the input to the Harness Session.
+3. **Delivery and settlement.** Factory binds the session to that Host and subscribes to its live tail. The Host claims the command, records the start of an attempt, and submits the input to the Harness Session. The runtime journals an `applied` disposition when its Loop accepts the input, before the turn runs, and the Host then settles the command in SessionStore from that evidence. For an input, `applied` means durably accepted, not that the answer is complete.
 4. **Execution.** The Session runs a turn: the Loop calls the model through Inference, prepares tool calls, checks them against the access gate, and runs process tools inside the Sandbox when one is configured. If a tool needs approval, the runtime opens a gate; the Host publishes it to SessionStore, the browser shows it, and the user's answer arrives as another admitted command.
 5. **Streaming.** Every committed record goes to the Harness journal. The Host forwards committed records, and optionally live text previews, over HostLink; Factory relays them to every viewer of the session over ClientLink.
-6. **Settlement.** When the runtime has recorded what it did with the command, the Host settles it in SessionStore. The browser can confirm the result by reading committed history, which Factory serves from the journal store.
+6. **Confirmation.** The turn is finished when its records are committed to the journal. The browser confirms the answer by reading committed history, which Factory serves from the journal store, not by looking at the command's settlement.
 
 ## What happens on failure
 
 - **The browser disconnects.** Nothing stops. On reconnect, the client reads committed history from its last cursor and rejoins the live stream.
-- **A Host crashes mid-turn.** Its residency lapses. Because the session still has open work, Factory places it on another Host, which acquires residency with a higher epoch and restores the runtime from the journal. A command whose attempt had started is closed from evidence rather than blindly replayed, so it is not applied twice. The product runtime must implement `department.AttemptCloser` for this recovery to complete.
+- **A Host crashes.** Its residency lapses. Factory places a session automatically only when it still has a qualifying open command in SessionStore: one that is pending, claimed, or applying. The new Host acquires residency with a higher epoch and restores the runtime from the journal. Restoring the session and recovering a stranded command are separate steps: a command whose attempt had started but never settled is closed from journal evidence rather than blindly replayed, so it is not applied twice, and the product runtime must implement `department.AttemptCloser` for that closure to complete.
+- **A turn is interrupted after its input settled.** An input settles as `applied` when the runtime accepts it, before the turn runs. If the Host dies mid-turn after that, the session has no open command, so Factory does not place it on that account; it is restored the next time a command arrives for it (for example a new input or an explicit restore), and restore records the open turn as interrupted and comes up idle rather than re-running it.
 - **A Host is drained.** It refuses new attaches, drains every resident session, and returns a `DrainReport` listing anything an operator must reconcile. Factory can then place those sessions elsewhere.
-- **Factory restarts.** Admitted commands are already in SessionStore, and a periodic sweep places any session with open work.
+- **Factory restarts.** Admitted commands are already in SessionStore, and a periodic sweep places any session with a pending, claimed, or applying command.
 
 ## Inside the runtime
 

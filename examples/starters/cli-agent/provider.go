@@ -19,13 +19,19 @@ import (
 // Provider selection is read from the environment:
 //
 //	LOOPRIG_PROVIDER    scripted (default) | openai | anthropic | ollama | llama.cpp | lmstudio
-//	                    | any other provider name llm knows (openrouter, groq, ...)
+//	                    | any other provider llm's auto.New can build from a model and a
+//	                    key (openrouter, groq, google, ...). auto.New refuses bedrock
+//	                    (AWS SigV4 credentials) and phala (an attestation policy); use
+//	                    bedrock.New or phala.New in newModel instead.
 //	LOOPRIG_MODEL       the provider's model name (required unless scripted)
 //	LOOPRIG_API_KEY     the provider key (not needed for local providers)
 //	LOOPRIG_BASE_URL    optional; an OpenAI-compatible endpoint when LOOPRIG_PROVIDER=openai,
 //	                    or a non-default port for ollama / llama.cpp
-//	LOOPRIG_API_FORMAT  optional; openai | openai-responses | anthropic (default: anthropic
-//	                    for anthropic, openai otherwise)
+//	LOOPRIG_API_FORMAT  optional; openai | openai-responses | anthropic | gemini (default:
+//	                    anthropic for anthropic, openai otherwise). Set it for a provider
+//	                    that does not speak the default: gemini for google,
+//	                    openai-responses for azure, anthropic for minimax and
+//	                    google-vertex-anthropic.
 //	LOOPRIG_CONTEXT_WINDOW  optional; the model's context window in tokens (default 128000)
 type providerConfig struct {
 	Provider, Model, APIKey, BaseURL, APIFormat string

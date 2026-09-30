@@ -87,17 +87,24 @@ The same variables as the cli-agent starter:
 
 | Variable | Meaning |
 |---|---|
-| `LOOPRIG_PROVIDER` | `openai`, `anthropic`, `ollama`, `llama.cpp`, `lmstudio`, or another `llm` provider name. Unset means the scripted model. |
+| `LOOPRIG_PROVIDER` | `openai`, `anthropic`, `ollama`, `llama.cpp`, `lmstudio`, or another provider that `llm`'s `auto.New` can construct from a model and one key. Unset means the scripted model. |
 | `LOOPRIG_MODEL` | The provider's model name. |
 | `LOOPRIG_API_KEY` | The key. Local providers need none. |
 | `LOOPRIG_BASE_URL` | Optional: an OpenAI-compatible endpoint, or a non-default local port. |
-| `LOOPRIG_API_FORMAT` | Optional: `openai`, `openai-responses` or `anthropic`. |
+| `LOOPRIG_API_FORMAT` | Optional: `openai`, `openai-responses`, `anthropic` or `gemini`. Set it for a provider that does not speak the default (`anthropic` for Anthropic, `openai` otherwise): `gemini` for `google`, `openai-responses` for `azure`, `anthropic` for `minimax` and `google-vertex-anthropic`. |
 | `LOOPRIG_CONTEXT_WINDOW` | Optional: context window in tokens (default 128000). |
 
 ```sh
 LOOPRIG_PROVIDER=anthropic LOOPRIG_MODEL=claude-sonnet-4-5 LOOPRIG_API_KEY=... go run .
 LOOPRIG_PROVIDER=ollama LOOPRIG_MODEL=qwen3 go run .
 ```
+
+Two providers need a code change in `provider.go`: `auto.New` refuses
+`bedrock`, which needs AWS SigV4 credentials (`bedrock.New`), and `phala`,
+which needs an attestation acceptance policy (`phala.New`). Providers whose
+credential is not a static API key (`google-vertex`, `github-copilot`,
+`gitlab`, `sap-ai-core`, `snowflake-cortex`) receive `LOOPRIG_API_KEY` as an
+already-issued token; the starter does not obtain or refresh it.
 
 Other settings: `LOOPRIG_ADDR` (default `127.0.0.1:8080`), `LOOPRIG_DATA`
 (default `./data`).

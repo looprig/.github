@@ -79,7 +79,11 @@ request tools, or end the Turn.
 
 **Tool.** A named capability a Loop can ask to use, such as reading a file,
 running a command, searching, or calling an application API. Tools are selected
-individually and remain under the runtime access gate and OS confinement.
+individually and every call is authorized by the runtime access gate. The
+standard file tools confine their own reads and writes in-process to the path
+the gate approved; that is not an OS sandbox. Processes a tool spawns, such as
+shell commands, are additionally OS-confined only when you run them through
+the `sandbox` module.
 
 **Workflow.** Durable coordination across tasks, agents, people, and external
 systems. In looprig, workflows are built with the `flow` module and are separate

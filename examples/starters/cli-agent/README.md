@@ -3,14 +3,17 @@
 A complete command-line coding assistant on Looprig, small enough to read in
 one sitting. It is a starting point to copy and change, not a library.
 
-- **Model:** any provider `github.com/looprig/llm` supports, chosen by
-  environment variables. With none set, a scripted model from
+- **Model:** any provider that `github.com/looprig/llm`'s `auto.New` can
+  construct from a model and one key, chosen by environment variables
+  (Bedrock and Phala need a code change; see below). With none set, a scripted model from
   `inference/inferencetest` runs it keyless and offline.
 - **Tools:** the standard `Glob`, `Grep`, `ReadFile`, `EditFile` and
   `WriteFile` from `github.com/looprig/tools`. They work on your repository,
   which is the current directory or `--root`.
 - **Access gate:** the agent can read inside the repository. Every write asks
-  you first (`y` / `a` always this session / `N`). Reads outside the
+  you first (`y` / `a` always this session / `N`) unless an earlier `a`
+  answer in the same run already covers it; `a` stores allow rules in memory
+  for the life of the process. Reads outside the
   repository, commands and network access are denied. `--read-only` drops the
   write tools and uses `loop.WithReadOnlyAccess(root)`, the one-option gate.
 - **Durable sessions:** the journal lives on local disk (`fsstore`, through
@@ -23,7 +26,7 @@ one sitting. It is a starting point to copy and change, not a library.
 ## Get it
 
 Copy this directory, or see [`docs/start/starters.md`](../../../docs/start/starters.md)
-for the `gonew` command. Then rename the module in `go.mod`
+for the sparse Git checkout commands. Then rename the module in `go.mod`
 (`example.com/cli-agent`).
 
 ## Run it without a key
@@ -40,11 +43,11 @@ go run .
 
 | Variable | Meaning |
 |---|---|
-| `LOOPRIG_PROVIDER` | `openai`, `anthropic`, `ollama`, `llama.cpp`, `lmstudio`, or any other `llm` provider name (`openrouter`, `groq`, ...). Unset means `scripted`. |
+| `LOOPRIG_PROVIDER` | `openai`, `anthropic`, `ollama`, `llama.cpp`, `lmstudio`, or another provider that `llm`'s `auto.New` can construct from a model and one key (`openrouter`, `groq`, `google`, ...). Unset means `scripted`. |
 | `LOOPRIG_MODEL` | The provider's model name. |
 | `LOOPRIG_API_KEY` | The key. Local providers need none. |
 | `LOOPRIG_BASE_URL` | Optional. Set it to point `openai` at any OpenAI-compatible server, or to use a non-default local port. |
-| `LOOPRIG_API_FORMAT` | Optional: `openai`, `openai-responses` or `anthropic`. The default is `anthropic` for Anthropic and `openai` otherwise. |
+| `LOOPRIG_API_FORMAT` | Optional: `openai`, `openai-responses`, `anthropic` or `gemini`. The default is `anthropic` for Anthropic and `openai` otherwise; set it for a provider that speaks something else (`gemini` for `google`, `openai-responses` for `azure`, `anthropic` for `minimax` and `google-vertex-anthropic`). |
 | `LOOPRIG_CONTEXT_WINDOW` | Optional. The model's context window in tokens (default 128000). |
 
 ```sh
@@ -53,7 +56,15 @@ LOOPRIG_PROVIDER=openai LOOPRIG_MODEL=gpt-4.1 LOOPRIG_API_KEY=... go run .
 LOOPRIG_PROVIDER=ollama LOOPRIG_MODEL=qwen3 go run .           # http://localhost:11434
 LOOPRIG_PROVIDER=llama.cpp LOOPRIG_MODEL=local go run .        # http://localhost:8080
 LOOPRIG_PROVIDER=openai LOOPRIG_BASE_URL=https://my-gateway/v1 LOOPRIG_MODEL=... LOOPRIG_API_KEY=... go run .
+LOOPRIG_PROVIDER=google LOOPRIG_API_FORMAT=gemini LOOPRIG_MODEL=gemini-2.5-flash LOOPRIG_API_KEY=... go run .
 ```
+
+Two providers need a code change in `provider.go`: `auto.New` refuses
+`bedrock`, which needs AWS SigV4 credentials (`bedrock.New`), and `phala`,
+which needs an attestation acceptance policy (`phala.New`). Providers whose
+credential is not a static API key (`google-vertex`, `github-copilot`,
+`gitlab`, `sap-ai-core`, `snowflake-cortex`) receive `LOOPRIG_API_KEY` as an
+already-issued token; the starter does not obtain or refresh it.
 
 ## Resume a session
 

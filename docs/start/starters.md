@@ -27,7 +27,7 @@ you add it.
 
 | Starter | What you get | Looprig modules |
 |---|---|---|
-| [`cli-agent`](https://github.com/looprig/.github/tree/main/examples/starters/cli-agent) | A terminal coding assistant: reads your repository with Glob, Grep and ReadFile, asks before every write, streams output, and resumes sessions with `--resume <id>`. | harness v0.43.0, tools v0.15.0, inference v0.15.0, llm v0.15.1, fsstore v0.6.0, storage v0.9.0 |
+| [`cli-agent`](https://github.com/looprig/.github/tree/main/examples/starters/cli-agent) | A terminal coding assistant: reads your repository with Glob, Grep and ReadFile, asks before each write unless an earlier "always" answer in the same run covers it, streams output, and resumes sessions with `--resume <id>`. | harness v0.43.0, tools v0.15.0, inference v0.15.0, llm v0.15.1, fsstore v0.6.0, storage v0.9.0 |
 | [`browser-app`](https://github.com/looprig/.github/tree/main/examples/starters/browser-app) | A multi-user web app in one process: Factory's API and browser link, an in-process Host running the agent, dev-only sign-in, and a React UI that streams text, reasoning and tool steps live. | factory v0.15.0, host v0.15.1, harness v0.43.0, sessionstore v0.14.0, fsstore v0.6.0, storage v0.9.0, `@looprig/client` and `@looprig/react` 0.3.0 |
 
 Both keep state on local disk with `fsstore`, adapted by
@@ -39,16 +39,30 @@ rather than migrating it.
 
 The starters live in the `looprig/.github` documentation repository. Its path
 begins with a dot, which Go does not allow in a module path, so `gonew` cannot
-fetch them. Copy one with a sparse Git checkout instead:
+fetch them. Copy one with a sparse Git checkout instead. For the CLI starter:
 
 ```sh
 git clone --depth 1 --filter=blob:none --sparse https://github.com/looprig/.github looprig-starters
-cd looprig-starters
-git sparse-checkout set examples/starters/browser-app   # or examples/starters/cli-agent
-cp -R examples/starters/browser-app ~/src/myapp
+git -C looprig-starters sparse-checkout set examples/starters/cli-agent
+mkdir -p ~/src
+cp -R looprig-starters/examples/starters/cli-agent ~/src/myapp
 cd ~/src/myapp
-go mod edit -module example.com/myapp                   # optional: everything is package main
+go mod edit -module example.com/myapp   # optional: everything is package main
 ```
+
+For the browser starter:
+
+```sh
+git clone --depth 1 --filter=blob:none --sparse https://github.com/looprig/.github looprig-starters
+git -C looprig-starters sparse-checkout set examples/starters/browser-app
+mkdir -p ~/src
+cp -R looprig-starters/examples/starters/browser-app ~/src/myapp
+cd ~/src/myapp
+go mod edit -module example.com/myapp   # optional: everything is package main
+```
+
+`~/src/myapp` must not exist yet, or `cp` copies the starter inside it. The
+commands below run from `~/src/myapp`, the root of the copied module.
 
 Each starter is its own Go module with no `replace` directives, so the copy
 builds anywhere. It needs Go 1.26.8 or later; the browser app's UI also needs
@@ -56,8 +70,9 @@ Node 22 or later.
 
 ## cli-agent
 
+From `~/src/myapp`:
+
 ```sh
-cd cli-agent
 go run .                         # keyless: a scripted model
 > what is here?                  # lists the repository with Glob
 > write notes.txt hello          # asks to write; answer y or n
@@ -75,8 +90,9 @@ harness's approval gate), and storage.
 
 ## browser-app
 
+From `~/src/myapp`:
+
 ```sh
-cd browser-app
 (cd web && npm ci && npm run build)   # once; Go embeds web/dist
 go run .
 ```
@@ -100,8 +116,12 @@ flowchart LR
 ```
 
 Factory and Host run in one process but still talk only over HostLink and
-SessionStore, so moving the Host to its own machine later changes the
-composition file and nothing else. For UI work run `npm run dev` in `web/`
+SessionStore, so moving the Host to its own machine keeps `runtime.go` and
+`agent.go` as they are and changes the composition in `app.go`. It also needs
+things this one-process starter does not have: storage both processes share in
+place of the local `fsstore` roots, a HostLink token and model credentials
+available to the Host deployment, and that separate Host deployment itself,
+with its own `HostID` and increasing generation. For UI work run `npm run dev` in `web/`
 beside `go run .`; Vite proxies `/v1` to the Go process. Test with
 `GOWORK=off go test ./...`, which boots the app, creates a session and sends
 input through the Factory REST API, restarts over the same data, and reads the
@@ -119,18 +139,26 @@ Both starters read the same environment variables:
 
 | Variable | Meaning |
 |---|---|
-| `LOOPRIG_PROVIDER` | `openai`, `anthropic`, `ollama`, `llama.cpp`, `lmstudio`, or another provider name from `llm`. Unset means the scripted model. |
+| `LOOPRIG_PROVIDER` | `openai`, `anthropic`, `ollama`, `llama.cpp`, `lmstudio`, or another provider that `llm`'s `auto.New` can construct from a model and one key (`openrouter`, `groq`, `google`, ...). Unset means the scripted model. |
 | `LOOPRIG_MODEL` | The provider's model name. |
 | `LOOPRIG_API_KEY` | The key. Local models need none. |
 | `LOOPRIG_BASE_URL` | Optional: an OpenAI-compatible endpoint, or a non-default local port. |
-| `LOOPRIG_API_FORMAT` | Optional: `openai`, `openai-responses` or `anthropic`. |
+| `LOOPRIG_API_FORMAT` | Optional: `openai`, `openai-responses`, `anthropic` or `gemini`. The default is `anthropic` for `anthropic` and `openai` otherwise; set it for a provider that speaks something else (`gemini` for `google`, `openai-responses` for `azure`, `anthropic` for `minimax` and `google-vertex-anthropic`). |
 | `LOOPRIG_CONTEXT_WINDOW` | Optional: the context window in tokens (default 128000). |
 
 ```sh
 LOOPRIG_PROVIDER=anthropic LOOPRIG_MODEL=claude-sonnet-4-5 LOOPRIG_API_KEY=... go run .
 LOOPRIG_PROVIDER=openai LOOPRIG_MODEL=gpt-4.1 LOOPRIG_API_KEY=... go run .
 LOOPRIG_PROVIDER=ollama LOOPRIG_MODEL=qwen3 go run .
+LOOPRIG_PROVIDER=google LOOPRIG_API_FORMAT=gemini LOOPRIG_MODEL=gemini-2.5-flash LOOPRIG_API_KEY=... go run .
 ```
+
+Two providers need a code change in `provider.go`: `auto.New` refuses
+`bedrock`, which needs AWS SigV4 credentials (`bedrock.New`), and `phala`,
+which needs an attestation acceptance policy (`phala.New`). Providers whose
+credential is not a static API key (`google-vertex`, `github-copilot`,
+`gitlab`, `sap-ai-core`, `snowflake-cortex`) receive `LOOPRIG_API_KEY` as an
+already-issued token; the starters do not obtain or refresh it.
 
 ## What to change for production
 

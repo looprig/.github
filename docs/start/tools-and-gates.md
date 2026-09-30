@@ -208,7 +208,7 @@ func canonicalDir(dir string) (string, error) {
 }
 ```
 
-`canonicalDir` resolves the repository path once, absolute and with symlinks resolved, and the gate and the workspace both get that one path. Tools declare resolved paths, so a root spelled through a symlink (such as `/tmp` on macOS) would not match what they ask for.
+`canonicalDir` resolves the repository path once, absolute and with symlinks resolved, and the gate and the workspace both get that one path. `WithReadOnlyAccess` resolves its roots' symlinks itself when the Loop is defined, so the gate would also accept a root spelled through a symlink (such as `/tmp` on macOS). Resolving once up front keeps the gate, the workspace, and the paths tools declare all naming the same canonical directory.
 
 ## Print tool calls
 

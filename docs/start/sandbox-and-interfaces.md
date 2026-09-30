@@ -105,7 +105,7 @@ func newSandbox(workspaceBase, scratch string, stderr io.Writer) (*sandbox.Execu
 }
 ```
 
-The profile lets commands read the session workspaces and nothing else, write nothing, and reach no network. `Command: sandbox.Allow` lets the headless gate approve commands without asking anyone. `sandbox.Gated` would need an interactive approver or saved rules; see [access gates](/docs/guides/harness/gates/access-gates). `sandbox.Restrict` intersects a requested profile with an application ceiling and never widens it.
+The profile lets commands read (not write) the session workspaces and reach no network. The sandbox adds what any process needs to start: read and execute access to the system runtime paths (such as `/bin`, `/usr/bin`, shared libraries and a few `/etc` resolver and time-zone files), `/dev/null`, and a private writable `HOME` and `TMPDIR` created per executor under the scratch root. Writes to the workspaces and any other host access are denied. `Command: sandbox.Allow` lets the headless gate approve commands without asking anyone. `sandbox.Gated` would need an interactive approver or saved rules; see [access gates](/docs/guides/harness/gates/access-gates). `sandbox.Restrict` intersects a requested profile with an application ceiling and never widens it.
 
 The scratch root holds per-process temporary state and must exist before `NewExecutorSet`, so `newSandbox` creates it.
 
