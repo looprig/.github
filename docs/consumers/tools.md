@@ -54,11 +54,12 @@ File definitions share observations and mutation coordination through the Loop's
 `tools.TaskDefinitions()` is one selected definition for the related task
 capability family. Its build exposes four model-facing names: `TaskCreate`,
 `TaskUpdate`, `TaskGet`, and `TaskList`. It gives the bound Loop one task
-graph. Every bound Loop, including each Subagent Loop, gets an independent
+graph. Every bound Loop, including each child agent Loop, gets an independent
 graph; modes within one Loop reuse that Loop's graph. The Harness injects the
-model-facing `Subagent` control tool automatically when delegation is enabled,
-so do not add it to `WithTools`. Agents coordinate across their separate task
-graphs through Subagent messages rather than shared task memory.
+model-facing agent tools (`ListAgents`, `MessageAgent`, `StartAgent`, and
+`StopAgent`) automatically when delegation is enabled, so do not add them to
+`WithTools`. Agents coordinate across their separate task graphs through
+`MessageAgent` and delegate results rather than shared task memory.
 
 ## Permissions are separate from tool selection
 

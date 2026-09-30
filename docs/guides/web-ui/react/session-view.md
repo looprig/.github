@@ -79,7 +79,7 @@ Every option except `tenantId` and `sessionId` is a construction input: it is re
 | --- | --- | --- |
 | `coveredThrough` | `0` | Greatest sequence the app has already applied |
 | `tailLimit` | `256` | Size of the captured tail, of each continuation page, and of each earlier-history window |
-| `maxTailPages`, `maxTailEvents`, `maxTailBytes` | `8`, `2048`, `1048576` | Bounds on one captured tail's walk; exceeding one refuses the whole capture. `maxTailPages` also bounds the reads of one `browseEarlier()` call |
+| `maxTailPages`, `maxTailEvents`, `maxTailBytes` | `8`, `2048`, `1048576` | Bounds on one capture's walk. Exceeding one refuses a tail capture whole; a forward capture (one that starts from coverage above zero) commits the contiguous prefix it proved and the next repair resumes past it. `maxTailPages` also bounds the reads of one `browseEarlier()` call |
 | `maxRepairAttempts` | `32` | Consecutive repairs with no coverage progress before failing |
 | `repairDelayMs` | `250` | Base delay for the second and later non-progressing repairs, doubling |
 | `gateRefreshMs` | `1000` | Base delay for re-reading the gate page, doubling to 8 times |

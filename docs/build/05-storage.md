@@ -57,7 +57,7 @@ Choose the smallest contract that expresses the state you need. A workspace snap
 
 ## Natsstore {#natsstore}
 
-`natsstore.OpenEngine` configures an embedded or remote NATS engine, while `OpenLockedEngine` adds the lock/lease path. `DefaultEngineOptions` supplies the package defaults; `Engine.Conn` and `Engine.JetStream` expose the owned connection and stream context for the backend's own operations. Remote deployments must own server availability and stream configuration separately from the Go handle.
+The Storage backend is `natsstore.Open(ctx, natsstore.Options{...})`, which takes exactly one of `Options.URL` (dial a remote NATS server) or `Options.EmbeddedDir` (start an embedded, in-process JetStream server on a caller-owned absolute directory) and returns a `Store` carrying all five primitives, including its `Leaser` for Storage leases. `natsstore.OpenEngine` is a separate, lower-level constructor: it only starts an embedded server on a home/XDG-confined data directory and returns an `Engine`, never a remote connection. `OpenLockedEngine` wraps that embedded engine in a process-exclusive directory lock (a second open of the same directory returns `*StoreLockedError`); that lock is not a Storage lease. `DefaultEngineOptions` supplies the engine defaults, and `Engine.Conn` and `Engine.JetStream` expose the owned connection and stream context. Remote deployments must own server availability and stream configuration separately from the Go handle.
 
 ## Rclonestore {#rclonestore}
 

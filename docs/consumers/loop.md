@@ -188,11 +188,12 @@ agent, err := loop.Define(
 
 That one definition exposes the four model-facing names `TaskCreate`,
 `TaskUpdate`, `TaskGet`, and `TaskList`. Every bound Loop, including each
-Subagent Loop, receives an independent task graph. Modes within one Loop share
-that graph because they reuse the same bound tools. The Harness injects the
-`Subagent` control tool automatically when delegation is enabled; do not add it
-manually. Agents coordinate across Loop boundaries through Subagent messages,
-not through shared task memory.
+child agent Loop, receives an independent task graph. Modes within one Loop
+share that graph because they reuse the same bound tools. The Harness injects
+the agent collaboration tools (`ListAgents`, `MessageAgent`, `StartAgent`, and
+`StopAgent`) automatically when delegation is enabled; do not add them
+manually. Agents coordinate across Loop boundaries through `MessageAgent` and
+delegate results, not through shared task memory.
 
 ## Tool limits
 
@@ -210,7 +211,12 @@ loop.WithToolLimits(loop.ToolLimits{
 - `Calls` bounds total tool calls in one turn.
 - `Parallel` bounds calls that may execute concurrently.
 
-Zero values select harness defaults. Negative values are rejected.
+Zero values select harness defaults (25 iterations, 100 calls, 8 parallel).
+`Iterations` and `Calls` also accept `loop.Unlimited` (`-1`), which removes that
+per-turn cap; values below `-1` are invalid. `Parallel` and the byte limits do
+not accept `loop.Unlimited`, and a negative value there is rejected. An
+unlimited turn still ends when the model stops, or on interrupt, shutdown, or
+context cancellation, so pair the sentinel with your own cancellation policy.
 
 ## Multiple modes
 
@@ -261,11 +267,23 @@ researcher, err := loop.Define(
 The Rig must contain both definitions. It rejects missing delegates and Loops
 that are unreachable from every primer.
 
-Do not add the `Subagent` tool yourself. When a Loop declares delegates, the
-harness injects exactly one scoped Subagent tool from the frozen delegate list.
-The parent cannot use it to reach an undeclared agent.
+Do not add delegation tools yourself. When a Loop declares delegates, the
+harness injects one parent-scoped `AgentTools` bundle built from the frozen
+delegate list. It exposes four model-facing tools: `ListAgents`,
+`MessageAgent`, `StartAgent`, and `StopAgent`. The parent cannot use them to
+reach an undeclared agent.
 
-- `DelegationSyncOnly` supports a direct request and response.
+Since harness v0.42.1 each of these tools publishes one flat, closed JSON
+object schema: top-level `properties` with `additionalProperties: false` and no
+root `oneOf`, `anyOf`, `allOf`, `not`, or `const`. `StartAgent`'s `agent_type`
+is an enum of the startable agents, and optional selectors such as `model` or
+`effort` list the union of values any agent accepts. The harness checks
+per-agent validity when it prepares the call, and a refusal names the allowed
+values. This keeps the schemas usable by grammar-constrained local models,
+Anthropic, and OpenAI strict mode.
+
+- `DelegationSyncOnly` supports a direct request and response
+  (`wait_for_response` must be true).
 - `DelegationManaged` also supports sending follow-up work, waiting, checking
   status, and interrupting a child.
 

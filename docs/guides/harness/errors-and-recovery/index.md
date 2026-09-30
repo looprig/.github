@@ -35,7 +35,7 @@ cleanup context without putting provider payloads in error text.
 | Hustle definition or model binding | `hustle.DefinitionError`, `hustle.BindError`, `hustle.ResolveError`, `hustle.RevisionError` | Correct the declared model, limits, policy, or evidence contract. |
 | Gate evaluation and response | `gate.GateValidationError`, `gate.EvaluationError`, payload/form errors, `session.GateError` | Treat semantic rejection differently from capacity or append failure. |
 | Hook and tool boundaries | `hook.ConfigError`, `hook.CallError`, `hook.GuardError`, tool validation errors | Fix declaration or request shape; preserve intentional `hook.Denial`. |
-| Live session and turns | `session.SessionError`, `session.TurnRejectedError`, `session.InputRejectedError` | Determine whether the session is closing, faulted, or temporarily full. |
+| Live session and turns | `session.SessionError`, `session.TurnRejectedError`; `loop.InputRejectedError` for a managed delegate's input | Determine whether the session is closing, faulted, or temporarily full. |
 | Journal and storage | `journal.AppendError`, `journal.AmbiguousAckError`, `sessionstore.Replay*Error` | Stop writes on ambiguous acknowledgement and inspect durable state. |
 | Restore | `session.RestoreError`, `RestoreRejectedError`, `RestoreRuntimeMismatchError`, discovery errors | Keep the original session ID and correct drift or runtime availability. |
 | Owned hustle execution | `hustleruntime.RunError`, `QueueFailureError`, `FinalizerError`, `CloseError` | Handle the primary run failure and separately inspect cleanup children. |

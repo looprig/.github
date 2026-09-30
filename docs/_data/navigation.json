@@ -2465,17 +2465,17 @@
     },
     {
       "path": "consumers/larger-systems.md",
-      "sha256": "f60ed8c8e22dfc59cc00a7c043a47bf4ba4210c8c8804083cc654fbdea1175fd",
+      "sha256": "b7276c74e0fdc1ebc0ee5b282f4c50bec11b2d8f6a8c1986adc1dec703d9e115",
       "disposition": "replace-in-task-15"
     },
     {
       "path": "consumers/loop.md",
-      "sha256": "a68829b709b98df78b2ea899dc1d28dae5d6310d370612ac752de6793f0ca8f0",
+      "sha256": "738b7c3cb71f996146d64b79f66c49a0d863b9a90835025bf599a3174fc3f40b",
       "disposition": "replace-in-task-15"
     },
     {
       "path": "consumers/packages.md",
-      "sha256": "3be5cbb6f2a8bc0b4176b5214b3b55e55a98af230880c815e80d9513b3fc73d4",
+      "sha256": "ddb6eaaa3ebb85bfb29ca4ae8d7b65a552b33e3959f1b1736aec4d5fd61c3890",
       "disposition": "replace-in-task-15"
     },
     {
@@ -2485,17 +2485,17 @@
     },
     {
       "path": "consumers/rig.md",
-      "sha256": "7f99225fcb4b83517ed94078e8ed461b5b2d4acb2aead4f5f70c538f620a741f",
+      "sha256": "9f4f30b8192554fa2b68ad07543056b45c2fd47a4c8c62e2d6c268cbe7d06ca1",
       "disposition": "replace-in-task-15"
     },
     {
       "path": "consumers/session.md",
-      "sha256": "a3fdb641ac60e0e7b1c9e040febe1cb80d0c2f5a302ccc8fb5c2f46960ff7073",
+      "sha256": "6ce3936cd239ba6d203359df3fb1c930acbe75564140a78433cc9c6d6fa0a956",
       "disposition": "replace-in-task-15"
     },
     {
       "path": "consumers/tools.md",
-      "sha256": "31f22233b84c41d3fa693e941d856511a5ea68e0e0ed9b1bad723ebb31b331bc",
+      "sha256": "6391f2a8655d52e019c0abc94c383be0069f901ba3f9ffde170280d5cb8ceef7",
       "disposition": "replace-in-task-15"
     },
     {

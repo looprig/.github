@@ -28,11 +28,11 @@ application chooses and wires both.
 | `core` | shared content blocks, identifiers, logging contracts | exchanging content or IDs across looprig modules |
 | `inference` | provider-neutral invocation contracts, with focused model, stream, codec, context-counting, auth, routing, transport, and failure packages | declaring models or implementing an inference client |
 | `llm` | provider clients and wire codecs | calling OpenRouter, LM Studio, Bedrock, Google, Phala, Chutes, or another supported provider |
-| `harness` | Loops, Rigs, Sessions, tool contracts, gates, journals, workspaces, delegation, serving | building and running an agent system |
+| `harness` | Loops, Rigs, Sessions, tool contracts, gates, journals, workspaces, delegation, and the deprecated `pkg/serve` HTTP surface | building and running an agent system |
 | `tools` | optional standard file, command, web, interaction, skill, and permission implementations | adding selected standard capabilities to a Loop |
-| `storage` | neutral ledger, lease, KV, and blob contracts plus in-memory implementations | implementing a backend or running in memory |
-| `fsstore` | filesystem implementations of all four storage contracts | persisting one-host systems on local disk |
-| `natsstore` | JetStream implementations of all four storage contracts | sharing durable state across processes or hosts |
+| `storage` | neutral ledger, lease, KV, blob, and ordered-index contracts plus in-memory implementations | implementing a backend or running in memory |
+| `fsstore` | filesystem implementations of all five storage contracts | persisting one-host systems on local disk |
+| `natsstore` | JetStream implementations of all five storage contracts | sharing durable state across processes or hosts |
 | `rclonestore` | blob storage through rclone | keeping snapshots or offloads on an rclone-supported remote |
 | `sandbox` | access profiles, OS-level command enforcement, and honest guarantee reports | giving agents command execution with an operating-system boundary |
 | `flow` | durable graph execution, messages, checkpoints, ingress, and control plane | coordinating explicit resumable workflows |
@@ -70,8 +70,9 @@ github.com/looprig/natsstore
 Add `github.com/looprig/tools` for standard tools. Add
 `github.com/looprig/sandbox` when a Loop can spawn confined commands: its
 `Profile` drives both the access gate and OS enforcement. Add
-`github.com/looprig/tui` or the Harness `serve` package only when you want those
-presentation surfaces.
+`github.com/looprig/tui` when you want a terminal interface. For a public web
+service, use Factory (with Host and SessionStore) and the `@looprig/client`
+browser packages; the Harness `serve` package is deprecated (see below).
 
 ## Harness package map
 
@@ -87,7 +88,7 @@ Most consumer code uses a small part of the harness module:
 | `pkg/gate` | evaluate the three access states and answer durable permission gates |
 | `pkg/sessionstore` | open durable Session journals, offloads, leases, and catalog state over `storage.Composite` |
 | `pkg/workspacestore` | capture and materialize content-addressed workspace snapshots over `storage.Blobs` |
-| `pkg/serve` | expose live and durable Session operations over HTTP and server-sent events |
+| `pkg/serve` | deprecated, frozen compatibility surface exposing live and durable Session operations over HTTP and server-sent events; use Factory for new public services |
 | `pkg/serve/catalogreader` | connect the durable session catalog to the HTTP read plane |
 | `pkg/hustle` | define bounded inference jobs outside the normal turn lane, including compaction work |
 | `pkg/foreignloop` | integrate supported foreign Claude or Codex execution engines |
@@ -128,17 +129,32 @@ support on each model, and keep credentials on the client side of the boundary.
 
 ## Storage packages
 
-The `storage` module defines four independent contracts:
+The `storage` module defines five independent contracts:
 
 - `Ledger` for ordered append-only records;
 - `Leaser` for ownership and coordination;
 - `KV` for revisioned keyed state;
-- `Blobs` for content-addressed or named binary objects.
+- `Blobs` for content-addressed or named binary objects;
+- `OrderedIndex` for durable records with an immutable acceptance order plus
+  ranked and due views.
 
 `storage.Composite` bundles one implementation of each contract because their
 method names overlap and cannot be implemented by one ordinary Go interface.
+`Ledger`, `Leaser`, `KV`, and `Blobs` are embedded; `OrderedIndex` is a named
+field that may be nil. `storage.NewComposite` takes only the first four and
+leaves `OrderedIndex` unwired, while `storage.NewCompositeWithOrderedIndex`
+requires all five. Call `Composite.RequireOrderedIndex` when a component needs
+the index. `fsstore.Open`, `natsstore.Open`, and `memstore.New` (from
+`github.com/looprig/storage/memstore`) all return a composite with every
+primitive wired, including `OrderedIndex`.
 
-The harness uses them through two facades:
+`fsstore.Open` refuses a root written by fsstore before v0.6.0 with
+`*fsstore.LegacyLayoutError`, which wraps `fsstore.ErrLegacyLayout`. Check it
+with `errors.Is(err, fsstore.ErrLegacyLayout)` and tell the user to move or
+delete that root. Do not retry: no migration exists, and an older fsstore must
+never be pointed at a v0.6.0 root, because it misreads it instead of refusing.
+
+The harness uses the contracts through two facades:
 
 ```text
 storage.Composite --> sessionstore.Store
@@ -146,7 +162,13 @@ storage.Blobs     --> workspacestore.Store
 ```
 
 This means Session history and workspace snapshots can share a backend or use
-different ones. [Build larger systems](larger-systems.md#choose-durable-storage)
+different ones. `sessionstore.Open` also requires the `Blobs` provider to
+implement `storage.BlobReaderLifecycle`, and fails otherwise with
+`sessionstore: invalid backend: missing BlobReaderLifecycle`. Raw fsstore
+`Blobs` does not implement it, so an fsstore composite cannot back a Session
+store directly. Embedded natsstore
+(`natsstore.Open(ctx, natsstore.Options{EmbeddedDir: absPath})`) and s3store
+`Blobs` do. [Build larger systems](larger-systems.md#choose-durable-storage)
 shows the standard choices.
 
 ## Harness and flow
@@ -177,9 +199,12 @@ interface. You can drive it from:
 - a workflow task;
 - another Go library.
 
-Use the `tui` module when its terminal adapter fits. Use `pkg/serve` when its HTTP
-surface fits. Otherwise keep the Session interface and build the interaction
-model your product needs.
+Use the `tui` module when its terminal adapter fits. For a new public web
+service, use Factory, Host, and SessionStore with the `@looprig/client` and
+`@looprig/react` browser packages. `pkg/serve` is deprecated: it remains
+available, with frozen routes and schemas, only as a compatibility surface for
+existing consumers while they migrate. Otherwise keep the Session interface and
+build the interaction model your product needs.
 
 ## What the application owns
 

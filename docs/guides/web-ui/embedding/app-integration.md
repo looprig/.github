@@ -67,7 +67,7 @@ export function causeCommandId(event: PublicJournalEvent): string {
 
 ## CSRF and your own requests
 
-The packages need no CSRF token. Their REST calls are all `GET`s, and commands travel as RPCs over the ClientLink, whose upgrade Factory accepts only with a trusted `Origin`. If your app adds its own state-changing request, such as a `POST` to a `/ui/` route mounted with `WithUIRoutes`, fetch a token from `GET /v1/csrf-token` (`{ "csrf_token", "expires_at" }`) and echo it in the `X-CSRF-Token` header. A 403 with code `csrf_token_expired` means fetch a fresh token and retry. Requests authenticated with a bearer credential skip the origin and CSRF checks.
+The packages need no CSRF token. Their REST calls are all `GET`s, and commands travel as RPCs over the ClientLink, whose upgrade Factory accepts only with a trusted `Origin`. If your app adds its own state-changing request, such as a `POST` to a `/ui/` route mounted with `WithUIRoutes`, fetch a token from `GET /v1/csrf-token` (`{ "csrf_token", "expires_at" }`) and echo it in the `X-CSRF-Token` header. A 403 with code `csrf_token_expired` means fetch a fresh token and retry. Requests authenticated with a bearer credential are exempt only from the rules that require an `Origin` header and a CSRF token. Factory still checks every request's `Host` against the deployment's trusted hosts, and still rejects a request whose `Origin`, when supplied, is not trusted, before the bearer exemption applies.
 
 ## Feature detection
 

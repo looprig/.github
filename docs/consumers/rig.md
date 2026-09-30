@@ -45,7 +45,7 @@ if err != nil {
 ```
 
 This is enough for an agent with no workspace-bound tools. The complete running
-form is in the [quickstart](quickstart.md).
+form is in the [quickstart](../start/quickstart.md).
 
 Every Rig requires:
 
@@ -123,8 +123,11 @@ For a process-local prototype:
 sessionStore, err := sessionstore.Open(memstore.New())
 ```
 
-For history that survives restart, use `fsstore` or `natsstore`, then open the
-same facade over that backend. See
+For history that survives restart, use `natsstore` (embedded on one host, or
+remote across hosts), then open the same facade over that backend. Raw
+`fsstore` cannot back a Session store: `sessionstore.Open` requires a `Blobs`
+provider that implements `storage.BlobReaderLifecycle`, which fsstore does not.
+See
 [Choose durable storage](larger-systems.md#choose-durable-storage).
 
 The session store is required even when your agent has no filesystem workspace.
@@ -201,9 +204,12 @@ seconds. A snapshot policy without a workspace is rejected.
 You can also checkpoint explicitly through
 `SessionController.CheckpointWorkspace`.
 
-## Seed a new Session from a snapshot
+## Per-call NewSession options
 
-`WithSeedSnapshot` is the only current per-call `NewSession` option:
+`NewSession` accepts two per-call options. Each may be supplied at most once;
+a duplicate or nil option is refused with `*rig.SessionOptionError`.
+
+### Seed a new Session from a snapshot
 
 ```go
 session, err := assembly.NewSession(ctx, rig.WithSeedSnapshot(ref))
@@ -211,7 +217,26 @@ session, err := assembly.NewSession(ctx, rig.WithSeedSnapshot(ref))
 
 The snapshot is materialized before any Loop starts and becomes the first
 workspace checkpoint in the new journal. Seeding is valid for a per-session
-workspace or an empty exclusive root, never a shared root.
+workspace or an empty exclusive root, never a shared root. An empty ref is
+refused.
+
+### Name the Session before launch
+
+```go
+id, err := uuid.New() // github.com/looprig/core/uuid; mint once, use once
+if err != nil {
+	return err
+}
+session, err := assembly.NewSession(ctx, rig.WithSessionID(id))
+```
+
+`WithSessionID` makes the new Session adopt an id you minted, so a durable
+record written before launch can name it. A zero id is refused rather than
+replaced. The Rig does not verify freshness: passing the id of a Session that
+already exists, including one that has ended, reopens that Session's journal
+and appends a second `SessionStarted` instead of failing. The single-writer
+lease refuses only a live holder, so your application owns never reusing an
+id. `RestoreSession` takes the id positionally and ignores this option.
 
 ## Delegation limits
 

@@ -30,7 +30,7 @@ Delegation is a Harness session capability, not a second composition root. A par
 
 ## Boundary {#boundary}
 
-`loop.Definition` declares delegates with `loop.WithDelegates`; `rig.Define` installs the definitions and `rig.WithDelegationLimits` sets depth and quota. The live `session.Session` exposes parent-scoped delegation through its controller and injects one derived Subagent tool into the parent's toolset. The child receives a `loop.Provenance` value that identifies its parent rather than a raw session controller.
+`loop.Definition` declares delegates with `loop.WithDelegates`; `rig.Define` installs the definitions and `rig.WithDelegationLimits` sets depth and quota. The live `session.Session` exposes parent-scoped delegation through its controller and injects one derived `AgentTools` bundle (`ListAgents`, `MessageAgent`, `StartAgent`, `StopAgent`) into the parent's toolset. The child receives a `loop.Provenance` value that identifies its parent rather than a raw session controller.
 
 ## Composition {#composition}
 

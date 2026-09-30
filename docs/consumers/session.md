@@ -108,7 +108,8 @@ package defines:
 - `ToolResultBlock`.
 
 Ordinary user input usually contains text, images, audio, or documents. Declare
-matching model capabilities with `inference.WithImages` and other model options
+matching model capabilities with `model.WithImages()` (package
+`github.com/looprig/inference/model`) and other model options
 where appropriate. Provider codecs reject unsupported shapes rather than
 silently dropping them.
 

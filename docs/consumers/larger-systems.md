@@ -1,6 +1,6 @@
 # Build larger systems
 
-The [quickstart](quickstart.md) is already a complete looprig system. Larger
+The [quickstart](../start/quickstart.md) is already a complete looprig system. Larger
 systems use the same composition order and add only the capabilities they need:
 
 ```text
@@ -21,17 +21,19 @@ application without adopting all of them.
 
 ## Choose durable storage
 
-The quickstart uses `memstore`, which disappears with the process. Use
-`fsstore` when one process should keep its history and snapshots on local disk:
+The quickstart uses `memstore`, which disappears with the process. For one
+host that should keep its history and snapshots on local disk, use embedded
+`natsstore`, which owns an in-process JetStream server under a directory you
+choose:
 
 ```go
-backend, err := fsstore.Open(fsstore.Options{
-	Root: storageRoot,
+backend, err := natsstore.Open(ctx, natsstore.Options{
+	EmbeddedDir: storageRoot, // absolute path; one open per directory
 })
 if err != nil {
 	return err
 }
-defer func() { _ = backend.Close() }()
+defer func() { _ = backend.Close(context.Background()) }()
 
 sessionStore, err := sessionstore.Open(backend.Backend())
 if err != nil {
@@ -48,6 +50,32 @@ if err != nil {
 `workspaceStore` uses the same blob backend for content-addressed workspace
 snapshots. They are separate facades even when they share one backend.
 
+`sessionstore.Open` requires its `Blobs` provider to implement
+`storage.BlobReaderLifecycle` and otherwise fails with
+`sessionstore: invalid backend: missing BlobReaderLifecycle`. Raw `fsstore`
+`Blobs` deliberately does not implement it, so an `fsstore` composite cannot
+back a Session store directly. `fsstore` still works for components that take
+plain primitives, such as `workspacestore.Open(backend.Blobs)`.
+
+`fsstore.Open` fails closed on a root written by fsstore before v0.6.0, with
+`*fsstore.LegacyLayoutError` wrapping `fsstore.ErrLegacyLayout`. There is no
+migration. Report the root and stop rather than retrying:
+
+```go
+backend, err := fsstore.Open(fsstore.Options{Root: snapshotRoot})
+if errors.Is(err, fsstore.ErrLegacyLayout) {
+	// Permanent: move or delete the old root, then start again.
+	return fmt.Errorf("%s holds data from fsstore before v0.6.0; move or delete it: %w", snapshotRoot, err)
+}
+if err != nil {
+	return err
+}
+defer func() { _ = backend.Close() }()
+```
+
+Never point an older fsstore at a v0.6.0 root; it does not refuse the new
+layout, it misreads it.
+
 Keep the storage root outside the workspace being captured:
 
 ```text
@@ -58,7 +86,8 @@ Keep the storage root outside the workspace being captured:
 The Rig rejects overlapping persistence and workspace paths because writing a
 journal must not change the tree being snapshotted.
 
-For multiple processes or hosts, use JetStream through `natsstore`:
+For multiple processes or hosts, connect `natsstore` to a remote JetStream
+server instead:
 
 ```go
 backend, err := natsstore.Open(ctx, natsstore.Options{
@@ -73,21 +102,22 @@ sessionStore, err := sessionstore.Open(backend.Backend())
 ```
 
 Set exactly one of `URL` or `EmbeddedDir`. Embedded mode owns an in-process NATS
-server and requires an absolute directory. The caller must ensure that only one
-embedded store opens that directory at a time.
+server and requires an absolute directory. It takes no cross-process lock, so
+the caller must ensure that only one embedded store opens that directory at a
+time.
 
 `rclonestore` implements the blob contract through an rclone remote. It is useful
-for snapshot or offload data, but it does not provide the ledger, lease, and KV
-contracts required by `sessionstore`. Combine it with providers for those
-contracts through `storage.NewComposite` when you intentionally want a hybrid
-backend.
+for snapshot data, but it does not provide the ledger, lease, KV, and ordered
+index contracts, nor `storage.BlobReaderLifecycle`, so it cannot supply the
+`Blobs` of a `sessionstore` backend. Use it where plain `storage.Blobs` is
+enough, such as `workspacestore`.
 
 | Backend | Best fit | Contracts |
 | --- | --- | --- |
-| `memstore` | tests and process-local prototypes | ledger, leases, KV, blobs |
-| `fsstore` | one host with local durable state | ledger, leases, KV, blobs |
-| `natsstore` | multiple processes or hosts | ledger, leases, KV, blobs |
-| `rclonestore` | remote snapshot and offload blobs | blobs only |
+| `memstore` | tests and process-local prototypes | ledger, leases, KV, blobs, ordered index |
+| `fsstore` | one host with local durable state (not a Session store) | ledger, leases, KV, blobs, ordered index |
+| `natsstore` | Session stores on one host (embedded) or across hosts (remote) | ledger, leases, KV, blobs, ordered index |
+| `rclonestore` | remote snapshot blobs | blobs only |
 
 Your application owns each backend's lifecycle. Close it only after every
 Session using it has shut down.
@@ -309,25 +339,33 @@ assembly, err := rig.Define(
 )
 ```
 
-The harness injects one scoped Subagent tool into `planner`. Do not add that tool
-yourself. The frozen delegate list controls which Loop definitions the parent can
+The harness injects one parent-scoped `AgentTools` bundle into `planner`: the
+model-facing tools `ListAgents`, `MessageAgent`, `StartAgent`, and `StopAgent`.
+Do not add these tools yourself. The frozen delegate list controls which Loop definitions the parent can
 reach, while Rig limits bound total depth and child count.
 
 If these Loops select `tools.TaskDefinitions()`, that one definition supplies
 the four model-facing task names: `TaskCreate`, `TaskUpdate`, `TaskGet`, and
-`TaskList`. The parent and every Subagent receive
+`TaskList`. The parent and every child agent receive
 independent task graphs, while modes within one Loop share that Loop's graph.
-The Subagent tool is automatically injected by the Harness and is not another
-tool to add manually. Use Subagent messages to coordinate between agents; task
-graphs are not shared memory.
+The agent tools are automatically injected by the Harness and are not tools to
+add manually. Use `MessageAgent` and delegate results to coordinate between
+agents; task graphs are not shared memory.
 
-The parent model must declare `model.WithTools()` because the injected
-Subagent definition is model-facing. The Subagent tool still passes through the
+The parent model must declare `model.WithTools()` because the injected agent
+tools are model-facing. Each agent tool call still passes through the
 parent's access gate (`plannerGate`), constructed as shown earlier. With no
 matching saved rule, each delegate call produces one approval; a saved allow rule
 can approve known delegate calls, and a deny rule refuses delegation outright.
 
 ## Expose Sessions over HTTP
+
+`pkg/serve` is deprecated and frozen as a compatibility surface: its import
+path, routes, and schemas remain available while existing consumers migrate,
+and staticcheck reports SA1019 at the import. Build a new public service on
+Factory (with Host and SessionStore) and the `@looprig/client` and
+`@looprig/react` browser packages instead. The rest of this section describes
+the existing surface.
 
 The `serve` package turns a Rig into a small HTTP and server-sent events surface.
 It separates live Session control from durable catalog reads:

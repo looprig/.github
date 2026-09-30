@@ -139,7 +139,9 @@ stage distinction.
 
 The following client is suitable for a unit test. It proves the request shape
 and score handling without a provider call; a live client can be injected at
-the same boundary later.
+the same boundary later. `judge.New` takes an `inference.Client`, so the fixture
+implements both `Invoke` and `Stream` (`stream` is
+`github.com/looprig/inference/stream`).
 
 ```go
 type scriptedJudgeClient struct{}
@@ -154,6 +156,12 @@ func (scriptedJudgeClient) Invoke(context.Context, inference.Request) (*inferenc
 		}},
 		Usage: &content.Usage{InputTokens: 24, OutputTokens: 9},
 	}, nil
+}
+
+// Stream completes inference.Client, which judge.New requires. The judge only
+// calls Invoke, so the fixture refuses streaming with an explicit error.
+func (scriptedJudgeClient) Stream(context.Context, inference.Request) (*stream.StreamReader[content.Chunk], error) {
+	return nil, errors.New("streaming is not used by the judge")
 }
 
 func TestJudge(t *testing.T) {
