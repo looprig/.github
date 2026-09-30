@@ -40,17 +40,17 @@ The [Architecture](/docs/overview/architecture) page shows how the modules in th
 
 ```sh
 go get github.com/looprig/core@v0.13.1 \
-  github.com/looprig/inference@v0.14.1 \
+  github.com/looprig/inference@v0.15.0 \
   github.com/looprig/llm@v0.15.1
 ```
 
-[Inference](/docs/modules/inference) defines the provider-neutral `inference.Client` contract (`Invoke` and `Stream`), messages, codecs, and streaming. [LLM](/docs/modules/llm) supplies provider clients and defaults, such as OpenAI, Anthropic, OpenRouter, and Ollama. [Core](/docs/modules/core) holds the shared content types. Start with the [Inference guide](/docs/guides/inference) and the [provider list](/docs/guides/inference/providers). You can skip LLM if you construct an `inference.Client` yourself.
+[Inference](/docs/modules/inference) defines the provider-neutral `inference.Client` contract (`Invoke` and `Stream`), messages, codecs, and streaming. [LLM](/docs/modules/llm) supplies provider clients and defaults, such as OpenAI, Anthropic, OpenRouter, and Ollama. [Core](/docs/modules/core) holds the shared content types. Start with the [Inference guide](/docs/guides/inference) and the [provider list](/docs/guides/inference/providers). You can skip LLM if you construct an `inference.Client` yourself. To run and test without an API key, `inference/inferencetest` supplies a scripted client.
 
 ## Run a CLI agent
 
 ```sh
-go get github.com/looprig/harness@v0.42.1 \
-  github.com/looprig/storage@v0.8.0
+go get github.com/looprig/harness@v0.43.0 \
+  github.com/looprig/storage@v0.9.0
 ```
 
 [Harness](/docs/modules/harness) is the agent runtime: you define a Loop, assemble a Rig, and run Sessions that stream typed events. A Rig needs a session store; `harness/pkg/sessionstore` over Storage's in-memory `memstore` is enough for a process that does not need to resume. The [Quickstart](/docs/start/quickstart) is this row as a complete program.
@@ -64,7 +64,7 @@ go get github.com/looprig/tools@v0.15.0 \
   github.com/looprig/sandbox@v0.9.3
 ```
 
-[Tools](/docs/modules/tools) provides file, search, process, fetch, and interaction tools, and you can register your own. Tools run only behind an **access gate**: a Loop with no access gate refuses every prepared tool call, including file reads, and the model sees a permission error. Configure one with `loop.WithAccessGate`; see [Access gates](/docs/guides/harness/gates/access-gates). Approval gates, which pause for a person, are part of Harness; see [Gates](/docs/guides/harness/gates).
+[Tools](/docs/modules/tools) provides file, search, process, fetch, and interaction tools, and you can register your own. Tools run only behind an **access gate**: a Loop with no access gate refuses every prepared tool call, including file reads, and the model sees a permission error. For read-only tools, `loop.WithReadOnlyAccess(root)` is enough; for anything wider, configure one with `loop.WithAccessGate`. See [Add read-only tools and gates](/docs/start/tools-and-gates) and [Access gates](/docs/guides/harness/gates/access-gates). Approval gates, which pause for a person, are part of Harness; see [Gates](/docs/guides/harness/gates).
 
 [Sandbox](/docs/modules/sandbox) confines the processes that tools such as Bash start and reports which guarantees the current platform actually enforced. Add it whenever the agent can run commands; see the [Sandboxing guide](/docs/guides/sandboxing).
 
@@ -76,11 +76,12 @@ A Harness session store needs every Storage primitive, and its Blobs provider mu
 
 | Deployment | Modules | Notes |
 | --- | --- | --- |
-| One process on one machine | `github.com/looprig/natsstore@v0.5.4` | `natsstore.Open(ctx, natsstore.Options{EmbeddedDir: absPath})` runs JetStream inside your process. One process may open a directory at a time. |
+| One process on one machine, plain files | `github.com/looprig/fsstore@v0.6.0` and `github.com/looprig/storage@v0.9.0` | Open the session store over `fs.Backend().WithBoundedBlobReaders()`, an explicit single-host opt-in; see [Persist and restore sessions](/docs/start/sessions). |
+| One process on one machine, embedded NATS | `github.com/looprig/natsstore@v0.5.4` | `natsstore.Open(ctx, natsstore.Options{EmbeddedDir: absPath})` runs JetStream inside your process. One process may open a directory at a time. |
 | Several processes or machines | `natsstore@v0.5.4` with `Options.URL` | Connects to your NATS server. |
 | PostgreSQL and object storage | `github.com/looprig/pgstore@v0.2.1` and `github.com/looprig/s3store@v0.2.1` | PGStore provides Ledger, Leaser, KV, and OrderedIndex; S3Store provides Blobs. |
 
-[FSStore](/docs/modules/fsstore) (`v0.6.0`) is a complete local backend for other uses, such as workspace snapshots, but a session store refuses its Blobs with `sessionstore: invalid backend: missing BlobReaderLifecycle`. Its v0.6.0 on-disk layout is one-way: `fsstore.Open` refuses an older directory with an error that matches `errors.Is(err, fsstore.ErrLegacyLayout)`. There is no migration, so move or delete that directory rather than retrying.
+A session store refuses raw [FSStore](/docs/modules/fsstore) Blobs with `sessionstore: invalid backend: missing BlobReaderLifecycle`; the `WithBoundedBlobReaders` opt-in in the first row is what makes FSStore usable. FSStore's v0.6.0 on-disk layout is one-way: `fsstore.Open` refuses an older directory with an error that matches `errors.Is(err, fsstore.ErrLegacyLayout)`. There is no migration, so move or delete that directory rather than retrying.
 
 See [Session persistence](/docs/guides/harness/session-persistence) and [Create and restore](/docs/guides/harness/session-runtime/create-and-restore).
 

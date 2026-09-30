@@ -50,9 +50,9 @@ var _ route.Router = acmeRouter{}
 
 ## Source and proof
 
-- [`model/apiformat.go`](https://github.com/looprig/inference/blob/v0.14.1/model/apiformat.go)
-- [`codec/contracts.go`](https://github.com/looprig/inference/blob/v0.14.1/codec/contracts.go)
-- [`route/contracts.go`](https://github.com/looprig/inference/blob/v0.14.1/route/contracts.go)
-- [`transport/client.go`](https://github.com/looprig/inference/blob/v0.14.1/transport/client.go)
+- [`model/apiformat.go`](https://github.com/looprig/inference/blob/v0.15.0/model/apiformat.go)
+- [`codec/contracts.go`](https://github.com/looprig/inference/blob/v0.15.0/codec/contracts.go)
+- [`route/contracts.go`](https://github.com/looprig/inference/blob/v0.15.0/route/contracts.go)
+- [`transport/client.go`](https://github.com/looprig/inference/blob/v0.15.0/transport/client.go)
 
 Run the custom package's tests together with `go test ./model ./codec ./route ./transport`.

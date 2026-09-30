@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/inference` |
-| Version | `v0.14.1` |
+| Version | `v0.15.0` |
 | GitHub | [looprig/inference](https://github.com/looprig/inference) |
 
 ## Description
@@ -34,7 +34,7 @@ Inference is useful on its own when a Go application needs provider-neutral mode
 
 `Request.SessionID` carries a stable conversation identity for providers that document a per-conversation header. It is validated for every provider, so an unsendable value fails the request locally instead of being altered in transit, and other providers ignore it. Inference moves model data; it does not own agent sessions or provider credential catalogs.
 
-`transport.WithoutExecutionTimeout(ctx)` opts an invocation or stream out of the transport's whole-request and response-header execution ceilings. Caller cancellation and deadlines, TLS settings, redirect refusal, authorization, and response-size limits still apply. Use it only when the caller provides its own lifecycle policy.
+`transport.WithoutExecutionTimeout(ctx)` opts an invocation or stream out of the transport's whole-request and response-header execution ceilings. Caller cancellation and deadlines, TLS settings, redirect refusal, authorization, and response-size limits still apply. Use it only when the caller provides its own lifecycle policy. Since v0.15.0, `inference/inferencetest` supplies a scripted, in-memory `inference.Client` and a matching `inferencetest.Model()` for running and testing agents without an API key or network: `inferencetest.New(inferencetest.Text("Let me check.").ToolCall(name, argsJSON), ...)` answers each call with the next scripted reply, streams the chunk shapes real codecs produce, validates each request like a real client, and records every request. The [Getting Started tutorial](/docs/start/choose-a-path) runs every step on it when no key is set.
 
 ## Dependencies
 

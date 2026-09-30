@@ -140,7 +140,7 @@ which round-trips every durable command type and rejects codec drift.
 
 A Host that serves remote clients admits commands in its own durable store
 before any runtime sees them, then must apply each one exactly once, even
-across a crash or failover. [`pkg/runtimecommand`](https://github.com/looprig/harness/blob/v0.42.1/pkg/runtimecommand/command.go)
+across a crash or failover. [`pkg/runtimecommand`](https://github.com/looprig/harness/blob/v0.43.0/pkg/runtimecommand/command.go)
 is that seam. It is separate from `pkg/command`: an admitted command names a
 retry-stable public `CommandID` (an opaque UTF-8 string of at most 256 bytes)
 and the `RuntimeCommandID` UUID the Host allocated once, which Harness stamps on

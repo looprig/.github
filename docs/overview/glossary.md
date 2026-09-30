@@ -684,7 +684,8 @@ interchangeable:
 
 Both require a Blobs provider that implements Storage's bounded reader
 lifecycle, so raw `fsstore` Blobs are refused. Use `memstore`, `natsstore`, or
-`s3store` Blobs.
+`s3store` Blobs, or, on one host, `fsstore` wrapped with Storage's
+`WithBoundedBlobReaders`.
 
 **Tenant.** The isolation scope for sessions in a hosted service, named by a
 Core `TenantID`. Records, objects, and HostLink addresses are scoped by tenant,
@@ -804,7 +805,8 @@ agent runtimes into looprig's Loop, Session, permission, and Event vocabulary.
 **`fsstore`.** The local-filesystem implementation of all five `storage`
 primitives. Its v0.6.0 on-disk layout is one-way: `Open` refuses an older root
 with `fsstore.ErrLegacyLayout`. Its Blobs do not implement the bounded reader
-lifecycle, so it cannot back a SessionStore directly.
+lifecycle, so it backs a SessionStore only through Storage's single-host
+`WithBoundedBlobReaders` opt-in.
 
 **`inference`.** The provider-neutral model contract, content mapping, codecs,
 streaming, routing, transport, usage, and context counting layer.

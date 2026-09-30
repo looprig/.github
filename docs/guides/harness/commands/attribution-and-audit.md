@@ -172,11 +172,11 @@ not to roll back the journal consumer.
 
 - [Core `Principal`](https://github.com/looprig/core/blob/v0.13.1/sessionwire/v1/principal.go), [metadata rules](https://github.com/looprig/core/blob/v0.13.1/sessionwire/v1/metadata.go), and [HostLink capability](https://github.com/looprig/core/blob/v0.13.1/sessionwire/v1/hostlink_framing.go)
 - [Factory stamping option](https://github.com/looprig/factory/blob/v0.15.0/options.go), [authorization seam](https://github.com/looprig/factory/blob/v0.15.0/server.go), and [command status route](https://github.com/looprig/factory/blob/v0.15.0/internal/httpapi/commands.go)
-- [SessionStore descriptor](https://github.com/looprig/sessionstore/blob/v0.14.0/disposition_inbox.go), [Host adapter](https://github.com/looprig/host/blob/v0.15.1/internal/harnessadapter/session.go), and [Harness admitted command](https://github.com/looprig/harness/blob/v0.42.1/pkg/runtimecommand/command.go)
+- [SessionStore descriptor](https://github.com/looprig/sessionstore/blob/v0.14.0/disposition_inbox.go), [Host adapter](https://github.com/looprig/host/blob/v0.15.1/internal/harnessadapter/session.go), and [Harness admitted command](https://github.com/looprig/harness/blob/v0.43.0/pkg/runtimecommand/command.go)
 
 - [Factory capability response](https://github.com/looprig/factory/blob/v0.15.0/internal/httpapi/reads.go) and [startup probe](https://github.com/looprig/factory/blob/v0.15.0/serve.go)
 - [Host pre-attempt decoding](https://github.com/looprig/host/blob/v0.15.1/internal/commands/apply.go) and [body taxonomy tests](https://github.com/looprig/host/blob/v0.15.1/internal/commands/principal_precheck_test.go)
-- [Harness message attribution](https://github.com/looprig/harness/blob/v0.42.1/pkg/event/message_input.go)
+- [Harness message attribution](https://github.com/looprig/harness/blob/v0.43.0/pkg/event/message_input.go)
 
 ## Proof
 

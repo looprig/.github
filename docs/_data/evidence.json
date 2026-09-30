@@ -223,8 +223,8 @@
       "type": "release-record",
       "repository": "harness",
       "path": "go.mod",
-      "commit": "18b88415a4599a12e6768cc12a9faf771829ce43",
-      "tag": "v0.42.1"
+      "commit": "15b23ef5c17853f4276d7f6c56fa80ad77010ff9",
+      "tag": "v0.43.0"
     },
     {
       "id": "release-github-com-looprig-host",
@@ -239,8 +239,8 @@
       "type": "release-record",
       "repository": "inference",
       "path": "go.mod",
-      "commit": "7a5a36481b89d1726cc54b1650083f460f5474b9",
-      "tag": "v0.14.1"
+      "commit": "c984455e35a6b6ebd7a544cd38478d1f4b864030",
+      "tag": "v0.15.0"
     },
     {
       "id": "release-github-com-looprig-llm",
@@ -335,8 +335,8 @@
       "type": "release-record",
       "repository": "storage",
       "path": "go.mod",
-      "commit": "b602028ab46a41f25a6eb6a92f869fc88238a735",
-      "tag": "v0.8.0"
+      "commit": "fb16b9667680aaf487239c6ccbbb7e79e2249936",
+      "tag": "v0.9.0"
     },
     {
       "id": "release-github-com-looprig-tests",

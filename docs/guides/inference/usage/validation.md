@@ -42,9 +42,9 @@ returns the error and does not publish a partially normalized value.
 
 ## Source and proof
 
-- [`internal/usagenorm/count.go`](https://github.com/looprig/inference/blob/v0.14.1/internal/usagenorm/count.go)
-- [`internal/usagenorm/field.go`](https://github.com/looprig/inference/blob/v0.14.1/internal/usagenorm/field.go)
-- [`usage/errors.go`](https://github.com/looprig/inference/blob/v0.14.1/usage/errors.go)
+- [`internal/usagenorm/count.go`](https://github.com/looprig/inference/blob/v0.15.0/internal/usagenorm/count.go)
+- [`internal/usagenorm/field.go`](https://github.com/looprig/inference/blob/v0.15.0/internal/usagenorm/field.go)
+- [`usage/errors.go`](https://github.com/looprig/inference/blob/v0.15.0/usage/errors.go)
 - [`core/content/usage.go`](https://github.com/looprig/core/blob/v0.13.1/content/usage.go)
 
 Run `go test ./internal/usagenorm ./usage` and `go test` in the core module for domain validation.

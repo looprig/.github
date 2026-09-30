@@ -45,8 +45,8 @@ it is safe even when cancellation already interrupted a read.
 
 ## Source and proof
 
-- [`transport/client.go`](https://github.com/looprig/inference/blob/v0.14.1/transport/client.go)
+- [`transport/client.go`](https://github.com/looprig/inference/blob/v0.15.0/transport/client.go)
 - [`credentials/httpauth/httpauth.go`](https://github.com/looprig/credentials/blob/v0.2.1/httpauth/httpauth.go)
-- [`stream/stream.go`](https://github.com/looprig/inference/blob/v0.14.1/stream/stream.go)
+- [`stream/stream.go`](https://github.com/looprig/inference/blob/v0.15.0/stream/stream.go)
 
 Run `go test ./transport ./stream`.

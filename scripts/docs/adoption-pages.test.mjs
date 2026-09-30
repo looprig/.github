@@ -97,7 +97,7 @@ test("the architecture page draws the hosted system in dark-theme Mermaid", () =
 test("the module decision guide names exact released versions", () => {
   const page = read("overview/which-modules.md");
   for (const pin of [
-    "core@v0.13.1", "inference@v0.14.1", "llm@v0.15.1", "harness@v0.42.1", "storage@v0.8.0",
+    "core@v0.13.1", "inference@v0.15.0", "llm@v0.15.1", "harness@v0.43.0", "storage@v0.9.0",
     "tools@v0.15.0", "sandbox@v0.9.3", "natsstore@v0.5.4", "factory@v0.15.0", "host@v0.15.1",
     "sessionstore@v0.14.0", "@looprig/client@0.3.0", "@looprig/react@0.3.0", "controller@v0.2.1",
   ]) assert.match(page, new RegExp(pin.replace(/[.@/]/g, "\\$&")), `which-modules omits ${pin}`);

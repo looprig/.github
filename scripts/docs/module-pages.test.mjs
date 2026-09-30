@@ -96,8 +96,8 @@ test("Module page versions and graph links match the checked code inventory", ()
 });
 
 for (const [repository, slug, title, version] of [
-  ["harness", "harness", "Harness", "v0.42.1"],
-  ["inference", "inference", "Inference", "v0.14.1"],
+  ["harness", "harness", "Harness", "v0.43.0"],
+  ["inference", "inference", "Inference", "v0.15.0"],
   ["tui", "tui", "TUI", "v0.21.2"],
 ]) {
   test(`${title} generated inventory and module page use ${version}`, () => {

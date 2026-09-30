@@ -7717,10 +7717,10 @@
     {
       "repository": "harness",
       "module": "github.com/looprig/harness",
-      "commit": "18b88415a4599a12e6768cc12a9faf771829ce43",
+      "commit": "15b23ef5c17853f4276d7f6c56fa80ad77010ff9",
       "publication": {
         "status": "released",
-        "tag": "v0.42.1"
+        "tag": "v0.43.0"
       },
       "disposition": "reusable",
       "nested": false,
@@ -14185,10 +14185,10 @@
     {
       "repository": "inference",
       "module": "github.com/looprig/inference",
-      "commit": "7a5a36481b89d1726cc54b1650083f460f5474b9",
+      "commit": "c984455e35a6b6ebd7a544cd38478d1f4b864030",
       "publication": {
         "status": "released",
-        "tag": "v0.14.1"
+        "tag": "v0.15.0"
       },
       "disposition": "reusable",
       "nested": false,
@@ -14207,6 +14207,7 @@
         "github.com/looprig/inference/contextcount",
         "github.com/looprig/inference/failure",
         "github.com/looprig/inference/gateway",
+        "github.com/looprig/inference/inferencetest",
         "github.com/looprig/inference/model",
         "github.com/looprig/inference/retry",
         "github.com/looprig/inference/route",
@@ -20338,10 +20339,10 @@
     {
       "repository": "storage",
       "module": "github.com/looprig/storage",
-      "commit": "b602028ab46a41f25a6eb6a92f869fc88238a735",
+      "commit": "fb16b9667680aaf487239c6ccbbb7e79e2249936",
       "publication": {
         "status": "released",
-        "tag": "v0.8.0"
+        "tag": "v0.9.0"
       },
       "disposition": "reusable",
       "nested": false,

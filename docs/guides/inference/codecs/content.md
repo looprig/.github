@@ -59,8 +59,8 @@ at all, while audio yields `UnsupportedAudioError`, a refusal
 ## Source and proof
 
 - [`core/content/block.go`](https://github.com/looprig/core/blob/v0.13.1/content/block.go)
-- [`openaiapi/encode.go`](https://github.com/looprig/inference/blob/v0.14.1/codec/openaiapi/encode.go)
-- [`anthropicapi/encode.go`](https://github.com/looprig/inference/blob/v0.14.1/codec/anthropicapi/encode.go)
-- [`bedrockconverse/encode.go`](https://github.com/looprig/inference/blob/v0.14.1/codec/bedrockconverse/encode.go)
+- [`openaiapi/encode.go`](https://github.com/looprig/inference/blob/v0.15.0/codec/openaiapi/encode.go)
+- [`anthropicapi/encode.go`](https://github.com/looprig/inference/blob/v0.15.0/codec/anthropicapi/encode.go)
+- [`bedrockconverse/encode.go`](https://github.com/looprig/inference/blob/v0.15.0/codec/bedrockconverse/encode.go)
 
 Run `go test ./codec/...`.
