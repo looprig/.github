@@ -2462,9 +2462,14 @@
       "order": 27
     },
     {
-      "path": "modules/tui.md",
+      "path": "modules/stack.md",
       "audience": "human",
       "order": 28
+    },
+    {
+      "path": "modules/tui.md",
+      "audience": "human",
+      "order": 29
     },
     {
       "path": "products/index.md",

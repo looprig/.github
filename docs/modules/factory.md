@@ -47,3 +47,4 @@ Factory owns the client-facing protocol, admission, and placement decisions. Cal
 ## Dependents
 
 - [Controller](/docs/modules/controller)
+- [Stack](/docs/modules/stack)

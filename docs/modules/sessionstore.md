@@ -49,4 +49,5 @@ Since v0.14.0, disposition descriptors and public creates can retain an optional
 - [Factory](/docs/modules/factory)
 - [Harness](/docs/modules/harness)
 - [Host](/docs/modules/host)
+- [Stack](/docs/modules/stack)
 - [Workflows](/docs/modules/workflows)

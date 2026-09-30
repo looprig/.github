@@ -356,6 +356,16 @@
       "path": "github.com/looprig/host/department"
     },
     {
+      "repository": "host",
+      "module": "github.com/looprig/host",
+      "path": "github.com/looprig/host/department/departmenttest"
+    },
+    {
+      "repository": "host",
+      "module": "github.com/looprig/host",
+      "path": "github.com/looprig/host/harnessruntime"
+    },
+    {
       "repository": "inference",
       "module": "github.com/looprig/inference",
       "path": "github.com/looprig/inference"
@@ -419,6 +429,11 @@
       "repository": "inference",
       "module": "github.com/looprig/inference",
       "path": "github.com/looprig/inference/gateway"
+    },
+    {
+      "repository": "inference",
+      "module": "github.com/looprig/inference",
+      "path": "github.com/looprig/inference/inferencetest"
     },
     {
       "repository": "inference",
@@ -959,6 +974,26 @@
       "repository": "sessionstore",
       "module": "github.com/looprig/sessionstore",
       "path": "github.com/looprig/sessionstore"
+    },
+    {
+      "repository": "stack",
+      "module": "github.com/looprig/stack",
+      "path": "github.com/looprig/stack"
+    },
+    {
+      "repository": "stack",
+      "module": "github.com/looprig/stack",
+      "path": "github.com/looprig/stack/devauth"
+    },
+    {
+      "repository": "stack",
+      "module": "github.com/looprig/stack",
+      "path": "github.com/looprig/stack/localdisk"
+    },
+    {
+      "repository": "stack",
+      "module": "github.com/looprig/stack",
+      "path": "github.com/looprig/stack/memory"
     },
     {
       "repository": "storage",

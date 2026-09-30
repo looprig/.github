@@ -42,3 +42,4 @@ v0.6.0 changed the on-disk layout so a name and its "/" extension can coexist, a
 
 - [Flow Store](/docs/modules/flow-store)
 - [Harness](/docs/modules/harness)
+- [Stack](/docs/modules/stack)

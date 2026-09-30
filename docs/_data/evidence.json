@@ -127,8 +127,8 @@
       "type": "release-record",
       "repository": "carbon",
       "path": "go.mod",
-      "commit": "298cc5cf58efcd9570674ed8b731f77559add597",
-      "tag": "v0.32.2"
+      "commit": "44079f3f07132ee1f135a860ea6d218aa8749b37",
+      "tag": "v0.33.0"
     },
     {
       "id": "release-github-com-looprig-classifiers",
@@ -223,16 +223,16 @@
       "type": "release-record",
       "repository": "harness",
       "path": "go.mod",
-      "commit": "15b23ef5c17853f4276d7f6c56fa80ad77010ff9",
-      "tag": "v0.43.0"
+      "commit": "d014609597b906a31875a9cd1ce25271557935e9",
+      "tag": "v0.45.0"
     },
     {
       "id": "release-github-com-looprig-host",
       "type": "release-record",
       "repository": "host",
       "path": "go.mod",
-      "commit": "afa168106bfee9dd61ea9a75c820b6f269151795",
-      "tag": "v0.15.1"
+      "commit": "dbdcee35920cdc0d4408f501ef58a85f8d81fce2",
+      "tag": "v0.17.0"
     },
     {
       "id": "release-github-com-looprig-inference",
@@ -331,6 +331,14 @@
       "tag": "v0.14.0"
     },
     {
+      "id": "release-github-com-looprig-stack",
+      "type": "release-record",
+      "repository": "stack",
+      "path": "go.mod",
+      "commit": "85496b67df8a2af06ec2669639b6954479ec4c6c",
+      "tag": "v0.1.0"
+    },
+    {
       "id": "release-github-com-looprig-storage",
       "type": "release-record",
       "repository": "storage",
@@ -343,16 +351,16 @@
       "type": "release-record",
       "repository": "tests",
       "path": "go.mod",
-      "commit": "304bbde908c5215c80adb5f6910dc2c1f8c2815e",
-      "tag": "v0.16.0"
+      "commit": "f4f9c23b98312e5241d6b256f0a3833bbd45448f",
+      "tag": "v0.17.0"
     },
     {
       "id": "release-github-com-looprig-tools",
       "type": "release-record",
       "repository": "tools",
       "path": "go.mod",
-      "commit": "fc0607d20a5e60219fb48be91ec0dc746de05fb5",
-      "tag": "v0.15.0"
+      "commit": "235aa7fa046fd9920cf7b44e676d605ca2fce0b2",
+      "tag": "v0.15.1"
     },
     {
       "id": "release-github-com-looprig-tui",

@@ -1306,13 +1306,13 @@
       "from": "github.com/looprig/carbon",
       "to": "github.com/looprig/storage",
       "kind": "production-import",
-      "path": "internal/app/blobreaderlifecycle.go"
+      "path": "internal/app/persistence.go"
     },
     {
       "from": "github.com/looprig/carbon",
       "to": "github.com/looprig/storage",
       "kind": "production-import",
-      "path": "internal/app/persistence.go"
+      "path": "internal/app/pooledlauncher.go"
     },
     {
       "from": "github.com/looprig/carbon",
@@ -1720,6 +1720,12 @@
       "from": "github.com/looprig/carbon",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "internal/app/department_conformance_test.go"
+    },
+    {
+      "from": "github.com/looprig/carbon",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "internal/app/department_faults_test.go"
     },
     {
@@ -2086,7 +2092,7 @@
       "from": "github.com/looprig/carbon",
       "to": "github.com/looprig/fsstore",
       "kind": "test-import",
-      "path": "internal/app/blobreaderlifecycle_test.go"
+      "path": "internal/app/blobreaders_test.go"
     },
     {
       "from": "github.com/looprig/carbon",
@@ -2230,6 +2236,12 @@
       "from": "github.com/looprig/carbon",
       "to": "github.com/looprig/harness",
       "kind": "test-import",
+      "path": "internal/app/department_conformance_test.go"
+    },
+    {
+      "from": "github.com/looprig/carbon",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
       "path": "internal/app/department_faults_test.go"
     },
     {
@@ -2237,6 +2249,12 @@
       "to": "github.com/looprig/harness",
       "kind": "test-import",
       "path": "internal/app/department_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/carbon",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "internal/app/department_probe_test.go"
     },
     {
       "from": "github.com/looprig/carbon",
@@ -2518,6 +2536,12 @@
       "from": "github.com/looprig/carbon",
       "to": "github.com/looprig/host",
       "kind": "test-import",
+      "path": "internal/app/department_conformance_test.go"
+    },
+    {
+      "from": "github.com/looprig/carbon",
+      "to": "github.com/looprig/host",
+      "kind": "test-import",
       "path": "internal/app/department_faults_test.go"
     },
     {
@@ -2741,6 +2765,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "internal/app/credentials_test.go"
+    },
+    {
+      "from": "github.com/looprig/carbon",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "internal/app/department_conformance_test.go"
     },
     {
       "from": "github.com/looprig/carbon",
@@ -3196,7 +3226,7 @@
       "from": "github.com/looprig/carbon",
       "to": "github.com/looprig/storage",
       "kind": "test-import",
-      "path": "internal/app/blobreaderlifecycle_test.go"
+      "path": "internal/app/blobreaders_test.go"
     },
     {
       "from": "github.com/looprig/carbon",
@@ -8830,7 +8860,25 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "examples/readonly/example_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "examples/readonly/readonly_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "examples/serving/example_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "examples/workspace/example_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -8963,6 +9011,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "internal/hustleruntime/tool_response_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "internal/loopruntime/access_missing_warning_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -9683,6 +9737,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "internal/sessionruntime/interrupt_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "internal/sessionruntime/lease_release_error_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -10552,6 +10612,12 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "pkg/rig/workspace_access_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "pkg/rig/workspace_base_relocation_test.go"
     },
     {
@@ -10925,6 +10991,18 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "examples/lifecycle/example_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "examples/readonly/example_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "examples/workspace/example_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -11656,6 +11734,12 @@
       "from": "github.com/looprig/harness",
       "to": "github.com/looprig/inference",
       "kind": "test-import",
+      "path": "pkg/rig/workspace_access_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
       "path": "pkg/serve/privacy_visibility_test.go"
     },
     {
@@ -11825,6 +11909,18 @@
       "to": "github.com/looprig/storage",
       "kind": "test-import",
       "path": "examples/persistence/example_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/storage",
+      "kind": "test-import",
+      "path": "examples/readonly/example_test.go"
+    },
+    {
+      "from": "github.com/looprig/harness",
+      "to": "github.com/looprig/storage",
+      "kind": "test-import",
+      "path": "examples/workspace/example_test.go"
     },
     {
       "from": "github.com/looprig/harness",
@@ -12280,7 +12376,37 @@
       "from": "github.com/looprig/host",
       "to": "github.com/looprig/core",
       "kind": "production-import",
+      "path": "department/departmenttest/conformance.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
       "path": "department/runtime.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "harnessruntime/rig.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "harnessruntime/rigs.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "harnessruntime/session.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "harnessruntime/target.go"
     },
     {
       "from": "github.com/looprig/host",
@@ -12395,18 +12521,6 @@
       "to": "github.com/looprig/core",
       "kind": "production-import",
       "path": "internal/gates/gates.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/core",
-      "kind": "production-import",
-      "path": "internal/harnessadapter/rig.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/core",
-      "kind": "production-import",
-      "path": "internal/harnessadapter/session.go"
     },
     {
       "from": "github.com/looprig/host",
@@ -12604,19 +12718,25 @@
       "from": "github.com/looprig/host",
       "to": "github.com/looprig/harness",
       "kind": "production-import",
+      "path": "harnessruntime/rig.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "production-import",
+      "path": "harnessruntime/rigs.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "production-import",
+      "path": "harnessruntime/session.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "production-import",
       "path": "internal/gates/gates.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/harness",
-      "kind": "production-import",
-      "path": "internal/harnessadapter/rig.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/harness",
-      "kind": "production-import",
-      "path": "internal/harnessadapter/session.go"
     },
     {
       "from": "github.com/looprig/host",
@@ -12868,6 +12988,60 @@
       "from": "github.com/looprig/host",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "harnessruntime/admit_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "harnessruntime/bind_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "harnessruntime/conformance_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "harnessruntime/fakes_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "harnessruntime/gate_response_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "harnessruntime/identity_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "harnessruntime/live_publications_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "harnessruntime/public_api_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "harnessruntime/scope_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "import_boundary_test.go"
     },
     {
@@ -13084,48 +13258,6 @@
       "from": "github.com/looprig/host",
       "to": "github.com/looprig/core",
       "kind": "test-import",
-      "path": "internal/harnessadapter/admit_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/core",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/bind_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/core",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/fakes_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/core",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/gate_response_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/core",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/identity_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/core",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/live_publications_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/core",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/scope_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/core",
-      "kind": "test-import",
       "path": "internal/hostconfig/endpoint_base_test.go"
     },
     {
@@ -13133,6 +13265,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "internal/hostconfig/hostconfig_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "internal/lifecycle/drain_abandon_test.go"
     },
     {
       "from": "github.com/looprig/host",
@@ -13360,6 +13498,12 @@
       "from": "github.com/looprig/host",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "lease_release_abandon_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "outage_test.go"
     },
     {
@@ -13420,6 +13564,72 @@
       "from": "github.com/looprig/host",
       "to": "github.com/looprig/harness",
       "kind": "test-import",
+      "path": "harnessruntime/admit_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "harnessruntime/bind_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "harnessruntime/conformance_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "harnessruntime/fakes_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "harnessruntime/gate_response_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "harnessruntime/gate_shapes_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "harnessruntime/lease_release_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "harnessruntime/live_publications_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "harnessruntime/public_api_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "harnessruntime/recovery_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "harnessruntime/scope_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
       "path": "internal/commands/create_e2e_test.go"
     },
     {
@@ -13445,48 +13655,6 @@
       "to": "github.com/looprig/harness",
       "kind": "test-import",
       "path": "internal/gates/gates_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/harness",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/admit_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/harness",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/bind_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/harness",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/fakes_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/harness",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/gate_response_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/harness",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/gate_shapes_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/harness",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/live_publications_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/harness",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/scope_test.go"
     },
     {
       "from": "github.com/looprig/host",
@@ -13529,6 +13697,12 @@
       "to": "github.com/looprig/harness",
       "kind": "test-import",
       "path": "internal/settlement/settlement_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "lease_release_abandon_test.go"
     },
     {
       "from": "github.com/looprig/host",
@@ -13600,6 +13774,12 @@
       "from": "github.com/looprig/host",
       "to": "github.com/looprig/sessionstore",
       "kind": "test-import",
+      "path": "harnessruntime/scope_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/sessionstore",
+      "kind": "test-import",
       "path": "internal/commands/create_e2e_test.go"
     },
     {
@@ -13619,12 +13799,6 @@
       "to": "github.com/looprig/sessionstore",
       "kind": "test-import",
       "path": "internal/compose/inbox_differential_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/sessionstore",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/scope_test.go"
     },
     {
       "from": "github.com/looprig/host",
@@ -13786,6 +13960,12 @@
       "from": "github.com/looprig/host",
       "to": "github.com/looprig/storage",
       "kind": "test-import",
+      "path": "harnessruntime/scope_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/storage",
+      "kind": "test-import",
       "path": "internal/commands/create_e2e_test.go"
     },
     {
@@ -13799,12 +13979,6 @@
       "to": "github.com/looprig/storage",
       "kind": "test-import",
       "path": "internal/compose/inbox_differential_test.go"
-    },
-    {
-      "from": "github.com/looprig/host",
-      "to": "github.com/looprig/storage",
-      "kind": "test-import",
-      "path": "internal/harnessadapter/scope_test.go"
     },
     {
       "from": "github.com/looprig/host",
@@ -13859,6 +14033,12 @@
       "to": "github.com/looprig/storage",
       "kind": "test-import",
       "path": "internal/settlement/settlement_test.go"
+    },
+    {
+      "from": "github.com/looprig/host",
+      "to": "github.com/looprig/storage",
+      "kind": "test-import",
+      "path": "lease_release_abandon_test.go"
     },
     {
       "from": "github.com/looprig/host",
@@ -14141,6 +14321,24 @@
       "to": "github.com/looprig/core",
       "kind": "production-import",
       "path": "gateway/stream.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "inferencetest/client.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "inferencetest/model.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "inferencetest/step.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -14789,6 +14987,18 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "gateway/stream_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "inferencetest/client_test.go"
+    },
+    {
+      "from": "github.com/looprig/inference",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "inferencetest/example_test.go"
     },
     {
       "from": "github.com/looprig/inference",
@@ -19699,6 +19909,516 @@
       "path": "termination_test.go"
     },
     {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "direct-require",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/factory",
+      "kind": "direct-require",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/fsstore",
+      "kind": "direct-require",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/harness",
+      "kind": "direct-require",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "direct-require",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/inference",
+      "kind": "direct-require",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/sessionstore",
+      "kind": "direct-require",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "direct-require",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "devauth/devauth.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "examples/browser-app/agent.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "examples/browser-app/app.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "examples/browser-app/model.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "generation.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "host.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "localdisk/localdisk.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "memory/memory.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "options.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "stack.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
+      "path": "validate.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/factory",
+      "kind": "production-import",
+      "path": "devauth/devauth.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/factory",
+      "kind": "production-import",
+      "path": "options.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/factory",
+      "kind": "production-import",
+      "path": "stack.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/factory",
+      "kind": "production-import",
+      "path": "validate.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/fsstore",
+      "kind": "production-import",
+      "path": "localdisk/localdisk.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/harness",
+      "kind": "production-import",
+      "path": "examples/browser-app/agent.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/harness",
+      "kind": "production-import",
+      "path": "examples/browser-app/app.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/harness",
+      "kind": "production-import",
+      "path": "host.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/harness",
+      "kind": "production-import",
+      "path": "options.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/harness",
+      "kind": "production-import",
+      "path": "stack.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "production-import",
+      "path": "examples/browser-app/app.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "production-import",
+      "path": "host.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "production-import",
+      "path": "limits.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "production-import",
+      "path": "options.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "production-import",
+      "path": "stack.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "production-import",
+      "path": "validate.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/inference",
+      "kind": "production-import",
+      "path": "examples/browser-app/agent.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/inference",
+      "kind": "production-import",
+      "path": "examples/browser-app/app.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/inference",
+      "kind": "production-import",
+      "path": "examples/browser-app/main.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/inference",
+      "kind": "production-import",
+      "path": "examples/browser-app/model.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/sessionstore",
+      "kind": "production-import",
+      "path": "host.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/sessionstore",
+      "kind": "production-import",
+      "path": "stack.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/sessionstore",
+      "kind": "production-import",
+      "path": "validate.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "production-import",
+      "path": "generation.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "production-import",
+      "path": "host.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "production-import",
+      "path": "localdisk/localdisk.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "production-import",
+      "path": "memory/memory.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "production-import",
+      "path": "options.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "production-import",
+      "path": "validate.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "release-order",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/factory",
+      "kind": "release-order",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/fsstore",
+      "kind": "release-order",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/harness",
+      "kind": "release-order",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "release-order",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/inference",
+      "kind": "release-order",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/sessionstore",
+      "kind": "release-order",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "release-order",
+      "path": "go.mod"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "devauth/helpers_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "examples/browser-app/app_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "localdisk/localdisk_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "stack_gate_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "stack_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "validate_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/factory",
+      "kind": "test-import",
+      "path": "devauth/devauth_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/factory",
+      "kind": "test-import",
+      "path": "validate_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/fsstore",
+      "kind": "test-import",
+      "path": "examples/browser-app/app_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/fsstore",
+      "kind": "test-import",
+      "path": "localdisk/localdisk_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "devauth/helpers_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "stack_gate_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "stack_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "validate_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "test-import",
+      "path": "devauth/helpers_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "test-import",
+      "path": "drain_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "test-import",
+      "path": "stack_gate_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "test-import",
+      "path": "stack_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/host",
+      "kind": "test-import",
+      "path": "validate_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "examples/browser-app/app_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "stack_gate_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "stack_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "test-import",
+      "path": "generation_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "test-import",
+      "path": "localdisk/localdisk_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "test-import",
+      "path": "memory/memory_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "test-import",
+      "path": "stack_gate_live_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "test-import",
+      "path": "stack_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "test-import",
+      "path": "start_failure_test.go"
+    },
+    {
+      "from": "github.com/looprig/stack",
+      "to": "github.com/looprig/storage",
+      "kind": "test-import",
+      "path": "validate_test.go"
+    },
+    {
       "from": "github.com/looprig/tests",
       "to": "github.com/looprig/classifiers",
       "kind": "direct-require",
@@ -19870,6 +20590,12 @@
       "from": "github.com/looprig/tests",
       "to": "github.com/looprig/core",
       "kind": "production-import",
+      "path": "internal/orchestrationtest/conformance.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
       "path": "internal/orchestrationtest/department.go"
     },
     {
@@ -20008,6 +20734,12 @@
       "from": "github.com/looprig/tests",
       "to": "github.com/looprig/core",
       "kind": "production-import",
+      "path": "internal/orchestrationtest/workspaceaccess.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/core",
+      "kind": "production-import",
       "path": "internal/toolresultobjects/policy.go"
     },
     {
@@ -20086,6 +20818,12 @@
       "from": "github.com/looprig/tests",
       "to": "github.com/looprig/harness",
       "kind": "production-import",
+      "path": "internal/orchestrationtest/conformance.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/harness",
+      "kind": "production-import",
       "path": "internal/orchestrationtest/drain.go"
     },
     {
@@ -20122,6 +20860,12 @@
       "from": "github.com/looprig/tests",
       "to": "github.com/looprig/harness",
       "kind": "production-import",
+      "path": "internal/orchestrationtest/workspaceaccess.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/harness",
+      "kind": "production-import",
       "path": "internal/toolresultobjects/policy.go"
     },
     {
@@ -20135,6 +20879,12 @@
       "to": "github.com/looprig/host",
       "kind": "production-import",
       "path": "internal/orchestrationtest/composedhost.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/host",
+      "kind": "production-import",
+      "path": "internal/orchestrationtest/conformance.go"
     },
     {
       "from": "github.com/looprig/tests",
@@ -20378,9 +21128,21 @@
     },
     {
       "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/storage",
+      "kind": "production-import",
+      "path": "internal/orchestrationtest/workspaceaccess.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
       "to": "github.com/looprig/tools",
       "kind": "production-import",
       "path": "internal/orchestrationtest/toolresults.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/tools",
+      "kind": "production-import",
+      "path": "internal/orchestrationtest/workspaceaccess.go"
     },
     {
       "from": "github.com/looprig/tests",
@@ -20776,6 +21538,12 @@
       "from": "github.com/looprig/tests",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "host_harnessruntime_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "host_lease_takeover_integration_test.go"
     },
     {
@@ -20788,7 +21556,19 @@
       "from": "github.com/looprig/tests",
       "to": "github.com/looprig/core",
       "kind": "test-import",
+      "path": "host_runtime_profile_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
       "path": "host_stale_writer_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "host_stop_gate_abandon_integration_test.go"
     },
     {
       "from": "github.com/looprig/tests",
@@ -20879,6 +21659,12 @@
       "to": "github.com/looprig/core",
       "kind": "test-import",
       "path": "unbounded_execution_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/core",
+      "kind": "test-import",
+      "path": "workspace_access_gate_integration_test.go"
     },
     {
       "from": "github.com/looprig/tests",
@@ -21076,6 +21862,12 @@
       "from": "github.com/looprig/tests",
       "to": "github.com/looprig/harness",
       "kind": "test-import",
+      "path": "host_harnessruntime_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
       "path": "host_lease_takeover_integration_test.go"
     },
     {
@@ -21089,6 +21881,12 @@
       "to": "github.com/looprig/harness",
       "kind": "test-import",
       "path": "host_stale_writer_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "host_stop_gate_abandon_integration_test.go"
     },
     {
       "from": "github.com/looprig/tests",
@@ -21158,6 +21956,12 @@
     },
     {
       "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/harness",
+      "kind": "test-import",
+      "path": "workspace_access_gate_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
       "to": "github.com/looprig/host",
       "kind": "test-import",
       "path": "factory_blocked_lanes_integration_test.go"
@@ -21202,6 +22006,12 @@
       "from": "github.com/looprig/tests",
       "to": "github.com/looprig/host",
       "kind": "test-import",
+      "path": "host_harnessruntime_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/host",
+      "kind": "test-import",
       "path": "host_lease_takeover_integration_test.go"
     },
     {
@@ -21209,6 +22019,18 @@
       "to": "github.com/looprig/host",
       "kind": "test-import",
       "path": "host_pooled_lifecycle_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/host",
+      "kind": "test-import",
+      "path": "host_runtime_profile_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/host",
+      "kind": "test-import",
+      "path": "host_stop_gate_abandon_integration_test.go"
     },
     {
       "from": "github.com/looprig/tests",
@@ -21263,6 +22085,12 @@
       "to": "github.com/looprig/inference",
       "kind": "test-import",
       "path": "foreignloop_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/inference",
+      "kind": "test-import",
+      "path": "host_harnessruntime_integration_test.go"
     },
     {
       "from": "github.com/looprig/tests",
@@ -21556,6 +22384,12 @@
       "from": "github.com/looprig/tests",
       "to": "github.com/looprig/sessionstore",
       "kind": "test-import",
+      "path": "host_harnessruntime_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/sessionstore",
+      "kind": "test-import",
       "path": "host_lease_takeover_integration_test.go"
     },
     {
@@ -21569,6 +22403,12 @@
       "to": "github.com/looprig/sessionstore",
       "kind": "test-import",
       "path": "host_stale_writer_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/sessionstore",
+      "kind": "test-import",
+      "path": "host_stop_gate_abandon_integration_test.go"
     },
     {
       "from": "github.com/looprig/tests",
@@ -21635,6 +22475,12 @@
       "to": "github.com/looprig/sessionstore",
       "kind": "test-import",
       "path": "unbounded_execution_integration_test.go"
+    },
+    {
+      "from": "github.com/looprig/tests",
+      "to": "github.com/looprig/sessionstore",
+      "kind": "test-import",
+      "path": "workspace_access_gate_integration_test.go"
     },
     {
       "from": "github.com/looprig/tests",

@@ -55,5 +55,6 @@ None.
 - [RcloneStore](/docs/modules/rclonestore)
 - [S3Store](/docs/modules/s3store)
 - [SessionStore](/docs/modules/sessionstore)
+- [Stack](/docs/modules/stack)
 - [Tools](/docs/modules/tools)
 - [Workflows](/docs/modules/workflows)

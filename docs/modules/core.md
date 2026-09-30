@@ -56,6 +56,7 @@ None.
 - [LLM](/docs/modules/llm)
 - [MCP](/docs/modules/mcp)
 - [SessionStore](/docs/modules/sessionstore)
+- [Stack](/docs/modules/stack)
 - [Tools](/docs/modules/tools)
 - [TUI](/docs/modules/tui)
 - [Workflows](/docs/modules/workflows)
