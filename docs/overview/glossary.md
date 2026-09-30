@@ -1,15 +1,39 @@
-# looprig Glossary
+---
+id: overview/glossary
+title: Glossary
+description: Definitions of the terms used across Looprig code and documentation, from Loop, Rig, and Session to Factory, Host, HostLink, and residency.
+audience: developer
+section: overview
+order: 5
+publication: released
+proofs:
+  core-mental-model: [release-github-com-looprig-harness]
+  foundational-ai-terms: [release-github-com-looprig-inference]
+  agents-and-runtime: [release-github-com-looprig-harness]
+  models-inference-and-content: [release-github-com-looprig-inference, release-github-com-looprig-core, release-github-com-looprig-llm]
+  tools-permissions-and-safety: [release-github-com-looprig-harness, release-github-com-looprig-sandbox, release-github-com-looprig-tools, release-github-com-looprig-classifiers]
+  events-durability-and-recovery: [release-github-com-looprig-harness, release-github-com-looprig-storage]
+  durable-workflows: [release-github-com-looprig-flow, release-github-com-looprig-workflows]
+  serving-and-orchestration: [release-github-com-looprig-factory, release-github-com-looprig-host, release-github-com-looprig-sessionstore, release-github-com-looprig-controller, release-npm-looprig-client]
+  interfaces-and-protocols: [release-github-com-looprig-acp, release-github-com-looprig-mcp, release-github-com-looprig-factory, release-github-com-looprig-harness]
+  evaluation-and-observability: [release-github-com-looprig-eval]
+  modules-and-repositories: [release-github-com-looprig-storage, release-github-com-looprig-fsstore, release-github-com-looprig-natsstore, release-github-com-looprig-harness, release-npm-looprig-client]
+  architecture-and-engineering-language: [release-github-com-looprig-harness]
+---
 
-This glossary defines the shared language used across looprig's code,
+# Glossary
+
+This glossary defines the shared language used across Looprig's code,
 documentation, and public interfaces. It focuses on terms that have a specific
 meaning inside the project.
 
 Capitalized terms such as **Loop**, **Rig**, and **Session** name public runtime
 concepts. Lowercase terms such as **harness** or **flow** usually name a module
-or a general idea. Where an item is not implemented yet, its definition is
-marked **planned**.
+or a general idea. The name Looprig describes the project as a whole: the rig
+that runs the loop. `rig.Rig` is one specific type, the configured agent system
+you build.
 
-## Core Mental Model
+## Core mental model
 
 **Agent.** A model-driven program that can receive input, maintain context, use
 tools, and produce actions or answers within defined boundaries.
@@ -61,7 +85,7 @@ individually and remain under the runtime access gate and OS confinement.
 systems. In looprig, workflows are built with the `flow` module and are separate
 from the model-driven execution inside a Loop.
 
-## Foundational AI Terms
+## Foundational AI terms
 
 **GPU.** Graphics processing unit. GPUs provide the highly parallel computation
 used to train and run many neural networks.
@@ -91,7 +115,7 @@ external information and supplies it to a model as context for a response.
 **TPU.** Tensor processing unit. A specialized processor built to accelerate
 the tensor computations used by machine learning models.
 
-## Agents and Runtime
+## Agents and runtime
 
 **Actor.** A runtime component that owns its mutable state and processes
 commands serially. Native Loops use this model to keep concurrent activity from
@@ -125,8 +149,13 @@ currently in use. It can be used to decide when compaction should begin.
 **Context window.** The maximum amount of input and generated content a model
 can consider in one request.
 
-**Controller.** A public control surface for changing live state, such as
-interrupting work, changing a mode, or selecting the active Loop.
+**Controller.** Two different things share this word; the context says which.
+In the Harness runtime, a controller is a public control surface for changing
+live state, such as `session.SessionController` or a Loop's live controller for
+interrupting work, changing a mode, or selecting the active Loop. The
+[Controller module](/docs/modules/controller) (`github.com/looprig/controller`)
+is unrelated: it is an optional Kubernetes workload controller that runs one
+dedicated Host Pod per session and drains each Host before deleting its Pod.
 
 **Command.** A typed request to change runtime state, such as submitting user
 input, interrupting a Turn, resolving a Gate, or starting compaction. Commands
@@ -163,8 +192,9 @@ the same work.
 or Session without exposing its internal runtime implementation.
 
 **Hustle.** Auxiliary, managed model work performed for a Session, such as
-context compaction or a future classifier. A Hustle is not a user-facing Loop
-and has its own purpose, limits, inference binding, run identity, and outcome.
+context compaction. A Hustle is not a user-facing Loop and has its own purpose,
+limits, inference binding, run identity, and outcome. See
+[Hustles](/docs/guides/harness/hustles).
 
 **Human in the loop.** A design in which work can pause for a person's judgment
 when authority, ambiguity, or consequences require it.
@@ -214,8 +244,10 @@ reliably wait for the whole Session to become idle.
 given Loop at a time.
 
 **Subagent.** General language for an agent working under another agent. In the
-harness, managed subagent work is represented through delegation to another
-Loop.
+harness, managed subagent work is delegation to another Loop in the same
+Session. The model drives it through the injected agent tools `ListAgents`,
+`StartAgent`, `MessageAgent`, and `StopAgent`; see
+[Delegation](/docs/guides/harness/delegation).
 
 **Transcript.** The ordered human-readable projection of a Session's
 conversation and tool activity. It is derived from typed runtime history rather
@@ -225,7 +257,7 @@ than serving as the source of truth for restoration.
 definition. It guides model behavior but does not replace runtime permissions
 or OS confinement.
 
-## Models, Inference, and Content
+## Models, inference, and content
 
 **API format.** The wire-level request and response shape used to communicate
 with a model endpoint. OpenAI, Anthropic, and Gemini formats are supported as
@@ -308,7 +340,7 @@ used for services such as Amazon Bedrock.
 **TEE.** Trusted execution environment. Hardware-backed isolation used to run
 code and handle data with evidence about the executing environment.
 
-## Tools, Permissions, and Safety
+## Tools, permissions, and safety
 
 **Approval scope.** The boundary within which a granted permission remains
 valid, such as one action, one Turn, one Session, or another explicitly defined
@@ -317,8 +349,9 @@ scope.
 **Auditable tool.** A tool that reports the security-relevant operation it is
 about to perform so the runtime can record and evaluate it.
 
-**Classifier.** A component that labels input for policy use. Planned
-classifiers include detection of prompt injection and other untrusted content.
+**Classifier.** A component that labels input for policy use. The
+[Classifiers module](/docs/modules/classifiers) provides deterministic
+command-safety review that Harness gate policy can use as bounded evidence.
 
 **Access profile.** The complete, immutable set of access states a Session's
 commands run under: a `Deny`/`Gated`/`Allow` value for each capability
@@ -344,7 +377,9 @@ less safe mode.
 
 **Gate.** A durable pause that requires input from a person or policy before
 work can continue. Gates are used for permissions, questions, and resumable
-control decisions.
+control decisions. An access gate decides whether a prepared tool call may run
+at all; tools fail closed when no access gate is configured. An approval gate
+asks a person. See [Gates](/docs/guides/harness/gates).
 
 **Gate criticality.** Whether an unresolved Gate must survive restoration or may
 be abandoned when a Session is restored.
@@ -362,7 +397,7 @@ a response to the correct resolver.
 permit a bounded escalation that untrusted code cannot forge.
 
 **Guardrail.** A check or policy applied around model input, output, tool use,
-or workflow execution. Broader integrated guardrails are planned.
+or workflow execution, such as an access gate, an approval gate, or a hook.
 
 **Permission.** Runtime authority for a proposed tool or system action. A model
 requesting an action does not itself grant permission to perform it.
@@ -394,9 +429,6 @@ mints only after the gate approves a `Gated` requirement. It binds the exact
 command, working directory, profile fingerprint, and expiry, and is never a
 durable permission record.
 
-**Secret brokerage.** **Planned.** Resolving secret references only inside an
-authorized tool or transport so raw secret values do not enter model context.
-
 **Tool definition.** The reusable, unbound description of a tool, including its
 name, input schema, and factory.
 
@@ -421,7 +453,7 @@ systems.
 **Workspace permit.** The runtime authority for a tool to perform a declared
 operation against the Session workspace.
 
-## Events, Durability, and Recovery
+## Events, durability, and recovery
 
 **Ambiguous append.** A storage write whose acknowledgement was lost, leaving
 the caller unsure whether the record committed. `AppendDefinite` resolves this
@@ -518,7 +550,7 @@ created, changed, or removed.
 **Workspace store.** The harness component that captures and restores
 content-addressed workspace snapshots through `storage.Blobs`.
 
-## Durable Workflows
+## Durable workflows
 
 **Bulk Synchronous Parallel.** The execution model used by `flow`. All vertices
 in a super-step read the same frozen state, run in parallel, then cross a
@@ -585,12 +617,90 @@ reducers, and routing.
 **Workflow checkpoint.** The durable Graph state, completed work, frontier,
 and execution metadata needed to recover a Graph run.
 
-## Interfaces and Protocols
+## Serving and orchestration
 
-**ACP.** Agent Client Protocol. **Planned for the general integration.** ACP will
-let looprig expose native Rigs to compatible clients and host compatible foreign
-agents through a shared protocol. Existing Codex and Claude Code adapters prove
-the foreign Loop boundary but are not the complete ACP implementation.
+These terms describe how Looprig runs agents as a multi-user service. The
+[Architecture](/docs/overview/architecture) page shows how the parts connect.
+
+**Capture.** A large tool result retained as a durable object instead of being
+truncated. When a Rig is configured with tool-result capture, a result over the
+preview budget is stored in the Session's journal store under a store-issued
+reference. The model pages it with the `read_tool_result` tool, and a browser
+reads it through Factory with `@looprig/client`'s `readToolCapturePages`, which
+verifies the whole object's SHA-256.
+
+**ClientLink.** Factory's browser-facing WebSocket. One link per application
+carries live publications for every session the user watches, plus command
+calls such as creating a session, sending input, and answering a Gate. History
+and gap repair use Factory's REST API. See
+[ClientLink](/docs/guides/web-ui/client-sdk/clientlink).
+
+**Department.** The immutable set of launch targets a Host serves, built with
+`department.New` in `github.com/looprig/host/department`. It maps each agent
+identity to the product code that launches that agent's runtime, usually a
+Harness Rig.
+
+**Disposition.** SessionStore's command lifecycle for Host-resident sessions. A
+command moves from `pending` to `claimed` by the resident Host, to `applying`
+when an attempt begins, and to a terminal `applied` or `rejected` state. Once an
+attempt exists, the store settles it from the disposition the runtime recorded
+(such as applied, `no_op`, `refused`, or `not_applied`), never from the caller's
+say-so, so a command survives a Host crash without being applied twice.
+
+**Factory.** The public front end of a hosted agent service, from
+[`github.com/looprig/factory`](/docs/modules/factory). It serves the HTTP API
+and ClientLink, verifies identity through seams you supply, admits commands into
+SessionStore, places sessions on Hosts, and relays live output to viewers. It is
+a library with no binary and no UI.
+
+**Host.** The runtime side of a hosted service, from
+[`github.com/looprig/host`](/docs/modules/host). A Host keeps agent sessions
+resident, applies the commands Factory admits, publishes open Gates, serves
+HostLink, and drains its sessions on release. A Host can be pooled (many
+sessions and tenants) or dedicated (one session).
+
+**HostLink.** The WebSocket protocol between Factory and a Host. Factory uses it
+to attach and bind sessions, deliver commands, subscribe to live output, and
+drain. A Host advertises one bare base endpoint and each tenant's HostLink
+address is derived from it. A Host also advertises capability tokens, such as
+`hostlink.command.gate_response`, and Factory uses a feature only on a Host that
+advertises it.
+
+**Residency.** A Host's time-bounded ownership of one session, granted by
+SessionStore. Each grant carries a residency epoch that only increases, so a
+successor Host fences out a predecessor that may still be running. A residency
+epoch is not a journal epoch.
+
+**SessionStore.** Two packages share this name, and they are not
+interchangeable:
+
+- `github.com/looprig/sessionstore` is the [SessionStore module](/docs/modules/sessionstore):
+  durable control records shared by Factory, Host, and Controller, such as the
+  session catalog, command inbox, Gates, residency, and Host registry.
+  `sessionstore.Open` takes a context.
+- `github.com/looprig/harness/pkg/sessionstore` is the Harness journal store
+  that a Rig writes to through `rig.WithSessionStore`. Its `Open` takes a
+  `*storage.Composite` and no context. A standalone agent needs only this one.
+
+Both require a Blobs provider that implements Storage's bounded reader
+lifecycle, so raw `fsstore` Blobs are refused. Use `memstore`, `natsstore`, or
+`s3store` Blobs.
+
+**Tenant.** The isolation scope for sessions in a hosted service, named by a
+Core `TenantID`. Records, objects, and HostLink addresses are scoped by tenant,
+and one pooled Host can serve several tenants over separate links.
+
+**Workload controller.** Factory's platform-neutral seam
+(`WorkloadController`) for starting, observing, draining, and deleting dedicated
+Host workloads. The Controller module implements it for Kubernetes.
+
+## Interfaces and protocols
+
+**ACP.** Agent Client Protocol. A JSON-RPC protocol between editors or other
+clients and coding agents. The [ACP module](/docs/modules/acp) exposes a Harness
+agent to ACP clients and drives ACP agents as children, and
+[Foreign Loops](/docs/modules/foreignloops) adapts ACP, Claude, and Codex
+processes to Harness.
 
 **BFF.** Backend for frontend. A service surface shaped for a particular user
 interface while delegating runtime behavior to the harness.
@@ -606,8 +716,10 @@ inference client, which calls a model API.
 submitting input, resolving a Gate, interrupting work, changing a mode, or
 restoring a Session.
 
-**HTTP API.** The harness service interface for Session history and control.
-Its live event stream uses SSE.
+**HTTP API.** A service interface for Session history and control. New hosted
+services use [Factory](/docs/modules/factory)'s HTTP and WebSocket API. The
+older `harness/pkg/serve` HTTP and SSE surface is deprecated and frozen for
+compatibility.
 
 **JSON-RPC.** A request and response protocol encoded in JSON. It is used by
 several external agent and tool protocols.
@@ -618,9 +730,10 @@ contains both enduring and ephemeral events.
 **History-to-live join.** The handoff a client performs from durable Journal
 history to the live event stream without losing or duplicating enduring events.
 
-**MCP.** Model Context Protocol. **Planned.** MCP integration will connect
-external tools and context servers to Loops while preserving looprig's
-authentication, permission, gate, provenance, and audit boundaries.
+**MCP.** Model Context Protocol. A protocol that connects external tools and
+context servers to agents. The [MCP module](/docs/modules/mcp) consumes,
+publishes, and adopts MCP tools with explicit authentication, lifecycle, and
+Harness gate boundaries.
 
 **NDJSON or JSONL.** Newline-delimited JSON, where each line is one complete
 JSON value. It is useful for streaming structured records between processes.
@@ -628,13 +741,14 @@ JSON value. It is useful for streaming structured records between processes.
 **Read plane.** The durable history surface used to inspect a Session from its
 Journal, whether or not that Session is currently running.
 
-**SSE.** Server-Sent Events. A one-way HTTP stream used to deliver live Session
-events to clients.
+**SSE.** Server-Sent Events. A one-way HTTP stream used to deliver live events
+to clients. The deprecated `harness/pkg/serve` surface uses it; Factory uses a
+WebSocket (ClientLink) instead.
 
 **TUI.** Terminal user interface. looprig's interactive terminal presentation
 layer is separate from the harness runtime.
 
-## Evaluation and Observability
+## Evaluation and observability
 
 **Evaluation.** A repeatable test of an agent or workflow against defined cases
 and metrics.
@@ -652,8 +766,8 @@ rubric. Its score is evidence, not an infallible ground truth.
 decision.
 
 **OpenTelemetry.** A vendor-neutral standard for traces, metrics, and logs.
-Complete correlated instrumentation across looprig is planned; existing events
-and hooks provide part of the required foundation.
+Looprig's typed events and hooks are the integration points for exporting
+telemetry; it does not ship a complete correlated OpenTelemetry integration.
 
 **Score.** A metric's structured evaluation of one result, including its value,
 reasoning, and threshold outcome.
@@ -664,13 +778,15 @@ tool call, Gate, delegate run, or workflow task.
 **Trace.** Correlated observability data that follows work across components and
 services.
 
-## Modules and Repositories
+## Modules and repositories
 
 **`tui`.** The interactive terminal presentation module. It provides the TUI surface
 without making the harness depend on terminal libraries.
 
-**`client`.** **Planned.** The shared client module for web, desktop, mobile,
-and framework-specific interfaces over the harness HTTP and SSE contract.
+**`client`.** The browser client repository. It publishes the npm packages
+`@looprig/client`, a framework-neutral SDK for Factory's REST API and
+ClientLink, and `@looprig/react`, React 19 hooks over it. See
+[Web UI](/docs/guides/web-ui).
 
 **`carbon`.** A complete coding Rig built from looprig modules. It demonstrates
 how an application owns model policy, Loop definitions, tools, prompts,
@@ -685,8 +801,10 @@ tasks, retries, checkpoints, interruptions, and resume.
 **`foreignloop`.** The harness boundary and adapters that translate external
 agent runtimes into looprig's Loop, Session, permission, and Event vocabulary.
 
-**`fsstore`.** The local-filesystem implementation of all four `storage`
-primitives.
+**`fsstore`.** The local-filesystem implementation of all five `storage`
+primitives. Its v0.6.0 on-disk layout is one-way: `Open` refuses an older root
+with `fsstore.ErrLegacyLayout`. Its Blobs do not implement the bounded reader
+lifecycle, so it cannot back a SessionStore directly.
 
 **`inference`.** The provider-neutral model contract, content mapping, codecs,
 streaming, routing, transport, usage, and context counting layer.
@@ -695,11 +813,14 @@ streaming, routing, transport, usage, and context counting layer.
 adds authentication, provider selection, model validation, and concrete model
 services.
 
-**`memstore`.** The in-memory reference backend for the four `storage`
-primitives. It is useful for tests and short-lived local execution.
+**`memstore`.** The in-memory reference backend for the five `storage`
+primitives, in `github.com/looprig/storage/memstore`. It is useful for tests
+and short-lived local execution.
 
-**`natsstore`.** The distributed implementation of all four `storage`
-primitives over NATS JetStream. It can use an embedded or remote server.
+**`natsstore`.** The implementation of all five `storage` primitives over NATS
+JetStream. `Open` either starts an embedded in-process server over a local
+directory (`Options.EmbeddedDir`) or connects to a remote server
+(`Options.URL`).
 
 **`rclonestore`.** A `storage.Blobs` implementation that uses the external
 `rclone` program to reach local or cloud remotes without linking its dependency
@@ -711,16 +832,19 @@ boundary, mints post-approval grant tokens, and reports the guarantees achieved
 by the current platform.
 
 **`storage`.** The dependency-light persistence contract module. It defines
-Ledger, Leaser, KV, and Blobs plus reference and conformance utilities.
+five primitives, Ledger, Leaser, KV, Blobs, and OrderedIndex, plus the
+`memstore` reference backend and the `storetest` conformance suites.
 
 **`storetest`.** The shared conformance suite that checks whether a storage
 backend obeys the neutral storage contracts.
 
-**`serve`.** The harness package that projects Session history, live events,
-input, Gates, interrupts, and restore over an HTTP and SSE API.
+**`serve`.** The harness package `harness/pkg/serve`, which projects Session
+history, live events, input, Gates, interrupts, and restore over an HTTP and
+SSE API. It is deprecated and frozen as a compatibility surface; new public
+services use [Factory](/docs/modules/factory).
 
-**`sessionstore`.** The harness persistence facade that stores and reconstructs
-Session Journals over the neutral `storage` contracts.
+**`sessionstore`.** Two packages share this name; see
+SessionStore under [Serving and orchestration](#serving-and-orchestration).
 
 **`tests`.** The cross-repository integration module that verifies looprig
 modules work together through their public contracts.
@@ -728,7 +852,7 @@ modules work together through their public contracts.
 **`tools`.** Optional standard tool implementations. Consumers can select each
 tool independently, combine them with custom tools, or use none of them.
 
-## Architecture and Engineering Language
+## Architecture and engineering language
 
 **Composition root.** The application location where concrete models, stores,
 Loops, tools, policies, interfaces, and other dependencies are selected and
@@ -785,50 +909,3 @@ another application, as distinct from a finished agent product.
 **stdlib-first.** A project preference for the Go standard library at stable
 contract layers, adding third-party dependencies only where they provide clear
 value and can be contained.
-
-## Mission and Brand
-
-**Federated knowledge.** Knowledge and reasoning made broadly available through
-open, composable systems instead of remaining trapped in a few people,
-institutions, models, or vendors. Here, federated describes access and ownership,
-not one specific distributed-learning technique.
-
-**Industrial Revolution.** The historical transformation in which engines,
-machine tools, factories, and infrastructure converted new sources of physical
-power into large-scale automation.
-
-**Intellectual Revolution.** Our name for the shift from knowledge and
-reasoning concentrated in a few people toward intelligence that can be made
-widely available through neural networks and the machinery built around them.
-
-**Lathe.** The mission metaphor for looprig. GPUs and TPUs provide computing
-power, neural networks turn it into intelligence, and looprig gives that
-intelligence the precision and control needed to produce useful systems. The
-power source will keep changing. We intend looprig to remain the adaptable
-machine that puts it to work.
-
-**Steam engine.** The mission metaphor for a foundational source of power. In
-the current era, GPUs and TPUs supply computation in the way steam engines once
-supplied mechanical power. Neural networks turn that computation into
-intellectual capability.
-
-**Loop in the logo.** The open infinity form represents intelligence and its
-continuing potential.
-
-**Rig in the logo.** The triangle represents the structure that contains,
-directs, and makes that potential reliable.
-
-**Rig in the name.** A rig is assembled equipment that harnesses power for a
-purpose. Sailing rigs harness wind, drilling rigs put mechanical power to work,
-and test rigs make systems controlled and repeatable. A looprig applies that
-same idea to an agent Loop.
-
-**Electric Lime, `#D4F84D`.** The energy color. It represents the active power
-of intelligence moving through the Rig.
-
-**Light Sky Blue, `#A2D2FF`.** The stability color. It represents trust,
-reliability, clarity, and calm control around that power.
-
-**The rig that runs the loop.** A compact expression of the project name: the
-Loop is the continuing intelligence, and the Rig is the owned machinery that
-makes it useful.

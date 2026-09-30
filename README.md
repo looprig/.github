@@ -10,7 +10,7 @@ of this repository.
 | Path | What it holds |
 | --- | --- |
 | `profile/README.md` | The organization landing page shown at [github.com/looprig](https://github.com/looprig). |
-| `docs/` | The documentation corpus: Overview, Getting Started (`start/`), Examples, Guides, Products, and Modules, plus `build/` pages, `GLOSSARY.md`, and `mission/`. |
+| `docs/` | The documentation corpus: Overview, Getting Started (`start/`), Examples, Guides, Products, and Modules, plus `build/` pages and `mission/`. Overview pages, including the glossary, live in `overview/`. |
 | `docs/_data/` | Checked data the site reads: `navigation.json` (publication inventory and order), module, package, dependency, example, and evidence records. |
 | `docs/_schema/` | JSON Schemas for the `_data` records. |
 | `examples/go/` | Runnable Go examples the docs cite: complete agents (`agents/`), guide programs (`guides/`), and the staged `progressive/` walkthrough. |

@@ -31,12 +31,14 @@ const exampleSources = {
   "next-steps.md": "examples/go/progressive/stage23_eval/main.go",
 };
 
-test("Getting Started is one ordered coding-assistant tutorial", () => {
+test("Getting Started opens with the quickstart, then one ordered coding-assistant tutorial", () => {
   const navigation = JSON.parse(readFileSync(path.join(root, "docs/_data/navigation.json"), "utf8"));
-  const paths = navigation.pages
-    .filter(({ path: pagePath }) => pagePath.startsWith("start/"))
-    .map(({ path: pagePath }) => pagePath.slice("start/".length));
-  assert.deepEqual(paths, inventory.map(([file]) => file));
+  const pages = navigation.pages.filter(({ path: pagePath }) => pagePath.startsWith("start/"));
+  const paths = pages.map(({ path: pagePath }) => pagePath.slice("start/".length));
+  assert.deepEqual(paths, ["quickstart.md", ...inventory.map(([file]) => file)]);
+  // The quickstart sorts before the tutorial's first page (order 1).
+  assert.equal(pages[0].order, 0);
+  assert.match(read("quickstart.md"), /^order: 0$/m);
 
   for (const [index, [file, title]] of inventory.entries()) {
     const page = read(file);

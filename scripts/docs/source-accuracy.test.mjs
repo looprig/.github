@@ -66,7 +66,7 @@ test("guide, product, and module pages cite the current released tag of every mo
   const stale = [];
   const unknown = [];
 
-  for (const file of markdownFiles("guides", "products", "modules")) {
+  for (const file of markdownFiles("guides", "products", "modules", "overview")) {
     for (const [, repository, tag] of fs.readFileSync(file, "utf8").matchAll(pattern)) {
       const released = releasedTags.get(repository);
       if (!released) {

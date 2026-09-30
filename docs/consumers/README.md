@@ -10,12 +10,12 @@ The core mental model is small:
 - A **Rig** assembles one or more Loops with storage and lifecycle policy.
 - A **Session** is one running instance of that Rig.
 
-The shared [glossary](../GLOSSARY.md) defines these and the other terms used
+The shared [glossary](../overview/glossary.md) defines these and the other terms used
 across the project.
 
 ## Start here
 
-1. [Quickstart](quickstart.md) builds and runs one useful agent from an empty Go
+1. [Quickstart](../start/quickstart.md) builds and runs one useful agent from an empty Go
    module.
 2. [Loop](loop.md) explains how to define an agent's model, instructions, tools,
    permissions, modes, and delegates.
@@ -34,10 +34,10 @@ across the project.
 
 | What you want to build | Begin with | Add next |
 | --- | --- | --- |
-| A personal agent | [Quickstart](quickstart.md) | Filesystem storage and your own instructions |
+| A personal agent | [Quickstart](../start/quickstart.md) | Durable storage (embedded NATSStore) and your own instructions |
 | An agent that edits files or runs commands | [Loop](loop.md) | Tools, permissions, a workspace, and sandboxing |
 | A team of agents | [Rig](rig.md) | Delegates, delegation limits, and per-agent tools |
-| A service or application | [Session](session.md) | HTTP serving and durable storage |
+| A service or application | [Session](session.md) | Factory, Host, and shared durable storage; see [Which modules do I need?](../overview/which-modules.md) |
 | A long-running workflow | [Build larger systems](larger-systems.md) | The `flow` module and durable checkpoints |
 
 ## Ownership is part of the design

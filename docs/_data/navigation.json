@@ -7,6 +7,31 @@
       "order": 1
     },
     {
+      "path": "overview/architecture.md",
+      "audience": "human",
+      "order": 2
+    },
+    {
+      "path": "overview/which-modules.md",
+      "audience": "human",
+      "order": 3
+    },
+    {
+      "path": "overview/comparison.md",
+      "audience": "human",
+      "order": 4
+    },
+    {
+      "path": "overview/glossary.md",
+      "audience": "human",
+      "order": 5
+    },
+    {
+      "path": "start/quickstart.md",
+      "audience": "human",
+      "order": 0
+    },
+    {
       "path": "start/choose-a-path.md",
       "audience": "human",
       "order": 1
@@ -2454,13 +2479,8 @@
   ],
   "legacyPages": [
     {
-      "path": "GLOSSARY.md",
-      "sha256": "129dfbb54e8b352725c9c518a94e95873f7dcd3789ca8027cbc0486dea932a8a",
-      "disposition": "replace-in-task-15"
-    },
-    {
       "path": "consumers/README.md",
-      "sha256": "bc8b80158b56c9141f78f65075e595aea57a3b9338393a9b08a953b4479777d5",
+      "sha256": "4d0f2961a3cace847ca4ef85b37111c78da27b547fe9e0265c11a97e670177bf",
       "disposition": "replace-in-task-15"
     },
     {
@@ -2476,11 +2496,6 @@
     {
       "path": "consumers/packages.md",
       "sha256": "ddb6eaaa3ebb85bfb29ca4ae8d7b65a552b33e3959f1b1736aec4d5fd61c3890",
-      "disposition": "replace-in-task-15"
-    },
-    {
-      "path": "consumers/quickstart.md",
-      "sha256": "60ba40aa62c62b41ae6514077f532d844cc6158e175bfdfb6b175acd1b46d9a3",
       "disposition": "replace-in-task-15"
     },
     {

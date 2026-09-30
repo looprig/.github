@@ -14,7 +14,9 @@ proofs:
 
 # Overview
 
-Looprig is a collection of composable Go modules for building model-powered applications. Start with a provider-neutral model call, add Harness when you need an agent runtime, then select tools, storage, sandboxing, workflows, protocols, and interfaces according to the product you are building.
+Looprig is the Go stack for running AI agents as production services: durable, sandboxed and multi-user — from a single CLI agent to a fleet of agent hosts behind one API. It is a collection of composable Go modules plus browser packages. Start with a provider-neutral model call, add Harness when you need an agent runtime, then select tools, storage, sandboxing, workflows, protocols, and interfaces according to the product you are building.
+
+New here? Run the [Quickstart](/docs/start/quickstart), then use [Which modules do I need?](/docs/overview/which-modules) to pick the modules for your product. [Architecture](/docs/overview/architecture) shows how the parts fit together, [How Looprig compares](/docs/overview/comparison) places it next to other agent frameworks, and the [Glossary](/docs/overview/glossary) defines every Looprig term.
 
 ## Build with Looprig
 
@@ -30,7 +32,7 @@ Looprig is a collection of composable Go modules for building model-powered appl
 
 ## Start with an outcome
 
-The [Getting Started tutorial](/docs/start/choose-a-path) builds a coding assistant from an empty Go module. It connects a model, creates a Loop and Rig, runs a Session, adds read-only tools, persists history, manages a workspace, confines process tools, and exposes a CLI.
+The [Quickstart](/docs/start/quickstart) runs one streaming agent from an empty Go module, with a hosted model or a credential-free scripted client. The [Getting Started tutorial](/docs/start/choose-a-path) then builds a coding assistant from an empty Go module. It connects a model, creates a Loop and Rig, runs a Session, adds read-only tools, persists history, manages a workspace, confines process tools, and exposes a CLI.
 
 Every implementation step links to a runnable checkpoint and the deeper guide for its module.
 
