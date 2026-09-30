@@ -35,7 +35,8 @@ test("Getting Started opens with the quickstart, then one ordered coding-assista
   const navigation = JSON.parse(readFileSync(path.join(root, "docs/_data/navigation.json"), "utf8"));
   const pages = navigation.pages.filter(({ path: pagePath }) => pagePath.startsWith("start/"));
   const paths = pages.map(({ path: pagePath }) => pagePath.slice("start/".length));
-  assert.deepEqual(paths, ["quickstart.md", ...inventory.map(([file]) => file)]);
+  // The starter templates page follows the tutorial; it is not a tutorial step.
+  assert.deepEqual(paths, ["quickstart.md", ...inventory.map(([file]) => file), "starters.md"]);
   // The quickstart sorts before the tutorial's first page (order 1).
   assert.equal(pages[0].order, 0);
   assert.match(read("quickstart.md"), /^order: 0$/m);
