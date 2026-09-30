@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - 'examples/go/progressive/**'
+      - 'examples/go/start/**'
+      - 'examples/go/guides/**'
       - 'scripts/docs/run-examples.mjs'
       - 'scripts/docs/run-examples.test.mjs'
       - 'docs/_data/examples.json'
@@ -14,18 +16,26 @@ on:
     branches: [main]
     paths:
       - 'examples/go/progressive/**'
+      - 'examples/go/start/**'
+      - 'examples/go/guides/**'
       - 'scripts/docs/run-examples.mjs'
       - 'scripts/docs/run-examples.test.mjs'
       - 'docs/_data/examples.json'
       - 'docs/_data/evidence.json'
       - 'docs/_schema/examples.schema.json'
       - '.github/workflows/docs-examples.yml'
+  schedule:
+    # Weekly drift check against the newest Looprig releases (Mondays 06:17 UTC).
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
+  # Progressive stages at the exact versions pinned in docs/_data/examples.json.
   docs-examples:
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -37,7 +47,41 @@ jobs:
           node-version: 26
       - run: node scripts/docs/run-examples.mjs
 
+  # Self-contained modules under examples/go/start and examples/go/guides, run
+  # from a temporary copy with their own go.mod and go.sum.
+  docs-examples-standalone:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.26.8'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+      - run: node scripts/docs/run-examples.mjs --standalone
+
+  # Drift: every github.com/looprig/* requirement moved to @latest. Scheduled
+  # weekly and on demand so a new release that breaks an example is caught
+  # without blocking unrelated pull requests.
+  docs-examples-latest:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.26.8'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+      - run: node scripts/docs/run-examples.mjs --latest
+      - if: ${{ !cancelled() }}
+        run: node scripts/docs/run-examples.mjs --standalone --latest
+
   docs-examples-unit:
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

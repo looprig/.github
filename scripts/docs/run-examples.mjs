@@ -218,14 +218,8 @@ export function withTemporaryRoots(prefix, body, {
   return result;
 }
 
-export function executeReleasedGoModule(moduleRoot, cacheRoot, {
-  executeCommand = run,
-  baseEnvironment = process.env,
-} = {}) {
-  const goModPath = join(moduleRoot, 'go.mod');
-  const generatedGoMod = readFileSync(goModPath, 'utf8');
-  assertImmutableGoMod(generatedGoMod, generatedGoMod);
-  const environment = {
+export function isolatedGoEnvironment(cacheRoot, baseEnvironment = process.env) {
+  return {
     ...baseEnvironment,
     GOWORK: 'off',
     GOMODCACHE: join(cacheRoot, 'gomod'),
@@ -243,6 +237,56 @@ export function executeReleasedGoModule(moduleRoot, cacheRoot, {
     GONOSUMDB: '',
     GOINSECURE: '',
   };
+}
+
+// looprigRequirements lists every github.com/looprig/* module a go.mod
+// requires, in file order, so a drift run can move each one to @latest.
+export function looprigRequirements(goMod) {
+  const modules = [];
+  let inRequireBlock = false;
+  for (const rawLine of goMod.split('\n')) {
+    const line = rawLine.replace(/\/\/.*$/, '').trim();
+    if (inRequireBlock) {
+      if (line === ')') {
+        inRequireBlock = false;
+        continue;
+      }
+      const [module] = line.split(/\s+/);
+      if (module?.startsWith('github.com/looprig/')) modules.push(module);
+      continue;
+    }
+    if (/^require\s*\($/.test(line)) {
+      inRequireBlock = true;
+      continue;
+    }
+    const single = /^require\s+(\S+)\s+\S+$/.exec(line);
+    if (single && single[1].startsWith('github.com/looprig/')) modules.push(single[1]);
+  }
+  return [...new Set(modules)];
+}
+
+function latestUpgradeCommand(goMod) {
+  const modules = looprigRequirements(goMod);
+  if (modules.length === 0) throw new Error('--latest found no github.com/looprig/* requirement to upgrade');
+  return ['go', ['get', ...modules.map((module) => `${module}@latest`)]];
+}
+
+export function executeReleasedGoModule(moduleRoot, cacheRoot, {
+  executeCommand = run,
+  baseEnvironment = process.env,
+  latest = false,
+} = {}) {
+  const goModPath = join(moduleRoot, 'go.mod');
+  const generatedGoMod = readFileSync(goModPath, 'utf8');
+  assertImmutableGoMod(generatedGoMod, generatedGoMod);
+  const environment = isolatedGoEnvironment(cacheRoot, baseEnvironment);
+  // A drift run moves every Looprig requirement to its newest release before
+  // the usual normalization; the manifest pins are the baseline it departs from.
+  if (latest) {
+    const [command, args] = latestUpgradeCommand(generatedGoMod);
+    executeCommand(command, args, moduleRoot, environment);
+    assertNoReplace(readFileSync(goModPath, 'utf8'));
+  }
   // Normalize the generated consumer module once before freezing it. Modern Go
   // versions require explicit indirect requirements for several released
   // dependency graphs; tidy derives those versions from the immutable direct
@@ -263,7 +307,7 @@ export function executeReleasedGoModule(moduleRoot, cacheRoot, {
   }
 }
 
-export function runReleasedExample(plan, { repositoryRoot }) {
+export function runReleasedExample(plan, { repositoryRoot, latest = false }) {
   if (plan.kind !== 'released-go') throw new Error('clean-module runner accepts released Go stages only');
   return withTemporaryRoots(`looprig-docs-stage-${String(plan.example.stage).padStart(2, '0')}-`, (moduleRoot, cacheRoot) => {
     copyStageSources(plan.sourceDirectory, moduleRoot);
@@ -272,7 +316,72 @@ export function runReleasedExample(plan, { repositoryRoot }) {
     cpSync(shared, join(moduleRoot, 'internal'), { recursive: true });
     const goMod = buildGoMod(plan.example);
     writeFileSync(join(moduleRoot, 'go.mod'), goMod);
-    executeReleasedGoModule(moduleRoot, cacheRoot);
+    executeReleasedGoModule(moduleRoot, cacheRoot, { latest });
+  });
+}
+
+export const STANDALONE_ROOTS = ['examples/go/start', 'examples/go/guides'];
+
+// findStandaloneModules returns every directory under the standalone roots
+// that carries its own go.mod, as sorted repository-relative paths. A missing
+// root contributes nothing; the caller decides whether an empty result fails.
+export function findStandaloneModules(repositoryRoot, roots = STANDALONE_ROOTS) {
+  const modules = [];
+  const walk = (relativeDirectory) => {
+    const directory = resolveInside(repositoryRoot, relativeDirectory);
+    const entries = readdirSync(directory, { withFileTypes: true });
+    if (entries.some((entry) => entry.isFile() && entry.name === 'go.mod')) modules.push(relativeDirectory);
+    for (const entry of entries) {
+      if (!entry.isDirectory() || entry.name.startsWith('.') || entry.name === 'node_modules' || entry.name === 'vendor') continue;
+      walk(`${relativeDirectory}/${entry.name}`);
+    }
+  };
+  for (const root of roots) {
+    const directory = resolveInside(repositoryRoot, root);
+    if (existsSync(directory) && statSync(directory).isDirectory()) walk(root);
+  }
+  return modules.sort();
+}
+
+// executeStandaloneGoModule checks a self-contained module as a reader would
+// run it: its own go.mod and go.sum, no workspace, public proxy and checksum
+// database. Pinned runs never let a command rewrite go.mod; a --latest run
+// first moves every Looprig requirement to @latest and re-tidies.
+export function executeStandaloneGoModule(moduleRoot, cacheRoot, {
+  executeCommand = run,
+  baseEnvironment = process.env,
+  latest = false,
+} = {}) {
+  const goModPath = join(moduleRoot, 'go.mod');
+  const original = readFileSync(goModPath, 'utf8');
+  assertNoReplace(original);
+  const environment = isolatedGoEnvironment(cacheRoot, baseEnvironment);
+  const commands = [];
+  if (latest) commands.push(latestUpgradeCommand(original), ['go', ['mod', 'tidy']]);
+  commands.push(
+    ['go', ['mod', 'verify']],
+    ['go', ['test', '-mod=readonly', './...']],
+    ['go', ['run', '-mod=readonly', '.']],
+  );
+  let expected = original;
+  for (const [command, args] of commands) {
+    executeCommand(command, args, moduleRoot, environment);
+    const current = readFileSync(goModPath, 'utf8');
+    assertNoReplace(current);
+    const mutating = args[0] === 'get' || (args[0] === 'mod' && args[1] === 'tidy');
+    if (mutating) expected = current;
+    else if (current !== expected) throw new Error('standalone go.mod changed during execution');
+  }
+}
+
+export function runStandaloneModule(relativeDirectory, { repositoryRoot, latest = false }) {
+  const sourceDirectory = resolveInside(repositoryRoot, relativeDirectory);
+  const prefix = `looprig-docs-standalone-${relativeDirectory.replace(/[^A-Za-z0-9]+/g, '-')}-`;
+  return withTemporaryRoots(prefix, (moduleRoot, cacheRoot) => {
+    // Always run a copy: `go run .` may write state (for example ./agent-data)
+    // next to the sources, and a --latest run rewrites go.mod.
+    cpSync(sourceDirectory, moduleRoot, { recursive: true });
+    executeStandaloneGoModule(moduleRoot, cacheRoot, { latest });
   });
 }
 
@@ -291,6 +400,10 @@ export function formatRunnerFailure(error) {
     lines.push(`docs examples cleanup: ${cleanup.message}`);
   }
   return lines;
+}
+
+function assertNoReplace(goMod) {
+  if (/^\s*replace\b/m.test(goMod)) throw new Error('go.mod contains a forbidden replace directive');
 }
 
 function assertImmutableGoMod(actual, expected) {
@@ -329,22 +442,42 @@ function run(command, args, cwd, env) {
   if (result.stdout) process.stdout.write(result.stdout);
 }
 
-function parseArguments(argv) {
+export function parseArguments(argv) {
   let manifestPath;
   let stage;
+  let latest = false;
+  let standalone = false;
   for (let index = 0; index < argv.length; index += 1) {
     if (argv[index] === '--manifest') manifestPath = argv[++index];
     else if (argv[index] === '--stage') stage = Number(argv[++index]);
+    else if (argv[index] === '--latest') latest = true;
+    else if (argv[index] === '--standalone') standalone = true;
     else throw new Error(`unknown argument: ${argv[index]}`);
   }
   if (stage !== undefined && (!Number.isInteger(stage) || stage < 1 || stage > 23)) throw new Error('--stage must be an integer from 1 through 23');
-  return { manifestPath, stage };
+  if (standalone && (stage !== undefined || manifestPath !== undefined)) {
+    throw new Error('--standalone runs every module under examples/go/start and examples/go/guides; it takes no --stage or --manifest');
+  }
+  return { manifestPath, stage, latest, standalone };
+}
+
+function runStandalone({ repositoryRoot, latest }) {
+  const modules = findStandaloneModules(repositoryRoot);
+  if (modules.length === 0) throw new Error(`no standalone Go modules found under ${STANDALONE_ROOTS.join(', ')}`);
+  for (const module of modules) {
+    process.stdout.write(`standalone${latest ? ' (latest)' : ''}: ${module}\n`);
+    runStandaloneModule(module, { repositoryRoot, latest });
+  }
 }
 
 function main() {
   const scriptPath = fileURLToPath(import.meta.url);
   const repositoryRoot = resolve(dirname(scriptPath), '../..');
-  const { manifestPath, stage } = parseArguments(process.argv.slice(2));
+  const { manifestPath, stage, latest, standalone } = parseArguments(process.argv.slice(2));
+  if (standalone) {
+    runStandalone({ repositoryRoot, latest });
+    return;
+  }
   const manifest = loadManifest(resolve(repositoryRoot, manifestPath ?? 'docs/_data/examples.json'), {
     schemaPath: join(repositoryRoot, 'docs/_schema/examples.schema.json'),
   });
@@ -356,8 +489,8 @@ function main() {
       process.stdout.write(`stage ${example.stage}: delegated to ${example.owner} (${example.offlineCommand})\n`);
       continue;
     }
-    process.stdout.write(`stage ${example.stage}: ${example.id}\n`);
-    runReleasedExample(plan, { repositoryRoot });
+    process.stdout.write(`stage ${example.stage}${latest ? ' (latest)' : ''}: ${example.id}\n`);
+    runReleasedExample(plan, { repositoryRoot, latest });
   }
 }
 

@@ -7,8 +7,12 @@ import test from 'node:test';
 import {
   buildGoMod,
   executeReleasedGoModule,
+  executeStandaloneGoModule,
+  findStandaloneModules,
   formatRunnerFailure,
   loadManifest,
+  looprigRequirements,
+  parseArguments,
   planExample,
   validateAgainstSchema,
   validateProgressiveManifest,
@@ -381,6 +385,168 @@ test('released Go execution rejects command mutation of go.mod after tidy', () =
         },
       }),
       /go\.mod.*changed|replace directive/i,
+    );
+    assert.equal(calls, 2);
+  });
+});
+
+test('parseArguments accepts --latest and --standalone and keeps stage selection for manifest runs', () => {
+  assert.deepEqual(parseArguments([]), { manifestPath: undefined, stage: undefined, latest: false, standalone: false });
+  assert.deepEqual(parseArguments(['--latest', '--stage', '8']), { manifestPath: undefined, stage: 8, latest: true, standalone: false });
+  assert.deepEqual(parseArguments(['--standalone']), { manifestPath: undefined, stage: undefined, latest: false, standalone: true });
+  assert.deepEqual(parseArguments(['--standalone', '--latest']), { manifestPath: undefined, stage: undefined, latest: true, standalone: true });
+  assert.throws(() => parseArguments(['--standalone', '--stage', '1']), /--standalone .*no --stage or --manifest/);
+  assert.throws(() => parseArguments(['--standalone', '--manifest', 'x.json']), /--standalone .*no --stage or --manifest/);
+  assert.throws(() => parseArguments(['--stage', '24']), /--stage must be an integer/);
+  assert.throws(() => parseArguments(['--newest']), /unknown argument: --newest/);
+});
+
+test('looprigRequirements lists block and single-line Looprig requirements only', () => {
+  const goMod = [
+    'module github.com/looprig/.github/examples/go/progressive',
+    '',
+    'go 1.26.8',
+    '',
+    'require (',
+    '\tgithub.com/looprig/core v0.13.1',
+    '\tgithub.com/example/other v1.0.0',
+    '\tgithub.com/looprig/sessionstore v0.14.0 // indirect',
+    ')',
+    '',
+    'require github.com/looprig/harness v0.43.0',
+    '',
+  ].join('\n');
+  assert.deepEqual(looprigRequirements(goMod), [
+    'github.com/looprig/core',
+    'github.com/looprig/sessionstore',
+    'github.com/looprig/harness',
+  ]);
+});
+
+test('released Go execution with --latest upgrades every Looprig requirement before tidy and freezes afterward', () => {
+  withTemporaryRoots('looprig-go-latest-plan-', (moduleRoot, cacheRoot) => {
+    const goModPath = join(moduleRoot, 'go.mod');
+    writeFileSync(goModPath, buildGoMod(fixture()));
+    const calls = [];
+    executeReleasedGoModule(moduleRoot, cacheRoot, {
+      latest: true,
+      executeCommand: (command, args, cwd, environment) => {
+        calls.push({ command, args, environment });
+        // go get and tidy may both rewrite go.mod; nothing after tidy may.
+        if (args[0] === 'get' || args[1] === 'tidy') {
+          writeFileSync(goModPath, `${readFileSync(goModPath, 'utf8')}// ${args.join(' ')}\n`);
+        }
+      },
+    });
+    assert.deepEqual(calls.map(({ command, args }) => [command, args]), [
+      ['go', ['get', 'github.com/looprig/core@latest', 'github.com/looprig/inference@latest']],
+      ['go', ['mod', 'tidy']],
+      ['go', ['mod', 'download', 'all']],
+      ['go', ['mod', 'verify']],
+      ['go', ['test', '-mod=readonly', '-race', './...']],
+      ['go', ['run', '-mod=readonly', '.']],
+    ]);
+    for (const { environment } of calls) {
+      assert.equal(environment.GOWORK, 'off');
+      assert.equal(environment.GOTOOLCHAIN, 'local');
+    }
+  });
+});
+
+test('released Go execution with --latest still refuses a replace directive', () => {
+  withTemporaryRoots('looprig-go-latest-replace-', (moduleRoot, cacheRoot) => {
+    const goModPath = join(moduleRoot, 'go.mod');
+    writeFileSync(goModPath, buildGoMod(fixture()));
+    assert.throws(
+      () => executeReleasedGoModule(moduleRoot, cacheRoot, {
+        latest: true,
+        executeCommand: () => writeFileSync(goModPath, `${readFileSync(goModPath, 'utf8')}replace github.com/looprig/core => ../core\n`),
+      }),
+      /replace directive/,
+    );
+  });
+});
+
+test('findStandaloneModules returns every nested directory with its own go.mod and tolerates missing roots', () => {
+  const root = mkdtempSync(join(tmpdir(), 'looprig-standalone-find-'));
+  try {
+    for (const directory of ['examples/go/start/01-hello', 'examples/go/start/02-tools/cmd', 'examples/go/guides/storage', 'examples/go/guides/storage/.hidden', 'examples/go/guides/notes']) {
+      mkdirSync(join(root, directory), { recursive: true });
+    }
+    for (const module of ['examples/go/start/01-hello', 'examples/go/guides/storage', 'examples/go/guides/storage/.hidden']) {
+      writeFileSync(join(root, module, 'go.mod'), 'module example.com/x\n');
+    }
+    assert.deepEqual(findStandaloneModules(root), ['examples/go/guides/storage', 'examples/go/start/01-hello']);
+    assert.deepEqual(findStandaloneModules(root, ['examples/go/absent']), []);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('standalone execution verifies, tests, then runs read-only under the isolated public environment', () => {
+  withTemporaryRoots('looprig-standalone-plan-', (moduleRoot, cacheRoot) => {
+    const goMod = 'module example.com/start\n\ngo 1.26.8\n\nrequire github.com/looprig/harness v0.43.0\n';
+    writeFileSync(join(moduleRoot, 'go.mod'), goMod);
+    const calls = [];
+    executeStandaloneGoModule(moduleRoot, cacheRoot, {
+      baseEnvironment: { GOWORK: '/untrusted/go.work', GOPRIVATE: 'github.com/looprig/*', GOFLAGS: '-mod=mod' },
+      executeCommand: (command, args, cwd, environment) => calls.push({ command, args, cwd, environment }),
+    });
+    assert.deepEqual(calls.map(({ command, args }) => [command, args]), [
+      ['go', ['mod', 'verify']],
+      ['go', ['test', '-mod=readonly', './...']],
+      ['go', ['run', '-mod=readonly', '.']],
+    ]);
+    for (const { cwd, environment } of calls) {
+      assert.equal(cwd, moduleRoot);
+      assert.equal(environment.GOWORK, 'off');
+      assert.equal(environment.GOFLAGS, '-modcacherw');
+      assert.equal(environment.GOPROXY, 'https://proxy.golang.org');
+      assert.equal(environment.GOSUMDB, 'sum.golang.org');
+      assert.equal(environment.GOPRIVATE, '');
+      assert.equal(environment.GOMODCACHE, join(cacheRoot, 'gomod'));
+    }
+  });
+});
+
+test('standalone --latest upgrades Looprig requirements and re-tidies before verification', () => {
+  withTemporaryRoots('looprig-standalone-latest-', (moduleRoot, cacheRoot) => {
+    const goModPath = join(moduleRoot, 'go.mod');
+    writeFileSync(goModPath, 'module example.com/guide\n\ngo 1.26.8\n\nrequire (\n\tgithub.com/looprig/core v0.13.1\n\tgithub.com/looprig/storage v0.9.0\n)\n');
+    const calls = [];
+    executeStandaloneGoModule(moduleRoot, cacheRoot, {
+      latest: true,
+      executeCommand: (command, args) => {
+        calls.push([command, args]);
+        if (args[0] === 'get') writeFileSync(goModPath, readFileSync(goModPath, 'utf8').replace('v0.13.1', 'v0.14.0'));
+      },
+    });
+    assert.deepEqual(calls, [
+      ['go', ['get', 'github.com/looprig/core@latest', 'github.com/looprig/storage@latest']],
+      ['go', ['mod', 'tidy']],
+      ['go', ['mod', 'verify']],
+      ['go', ['test', '-mod=readonly', './...']],
+      ['go', ['run', '-mod=readonly', '.']],
+    ]);
+  });
+});
+
+test('standalone execution refuses replace directives and go.mod mutation by a pinned command', () => {
+  withTemporaryRoots('looprig-standalone-guard-', (moduleRoot, cacheRoot) => {
+    const goModPath = join(moduleRoot, 'go.mod');
+    writeFileSync(goModPath, 'module example.com/x\n\ngo 1.26.8\n\nreplace github.com/looprig/core => ../core\n');
+    assert.throws(() => executeStandaloneGoModule(moduleRoot, cacheRoot, { executeCommand: () => {} }), /replace directive/);
+
+    writeFileSync(goModPath, 'module example.com/x\n\ngo 1.26.8\n');
+    let calls = 0;
+    assert.throws(
+      () => executeStandaloneGoModule(moduleRoot, cacheRoot, {
+        executeCommand: () => {
+          calls += 1;
+          if (calls === 2) writeFileSync(goModPath, 'module example.com/x\n\ngo 1.26.9\n');
+        },
+      }),
+      /standalone go\.mod changed/,
     );
     assert.equal(calls, 2);
   });
