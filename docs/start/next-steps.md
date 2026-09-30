@@ -8,7 +8,7 @@ order: 10
 publication: released
 proofs:
   choose-an-interface: [release-github-com-looprig-tui, release-npm-looprig-client]
-  serve-many-users: [release-github-com-looprig-factory, release-github-com-looprig-host]
+  serve-many-users: [release-github-com-looprig-stack, release-github-com-looprig-factory, release-github-com-looprig-host]
   expose-a-protocol: [release-github-com-looprig-acp, release-github-com-looprig-mcp]
   add-durable-workflows: [release-github-com-looprig-workflows, release-github-com-looprig-flow]
   evaluate-the-agent: [release-github-com-looprig-eval, release-github-com-looprig-pluto]
@@ -31,7 +31,7 @@ The coding assistant runtime does not depend on the CLI. Keep the Loop, Rig, Ses
 
 ## Serve many users
 
-The tutorial's program is one process for one person. To serve a multi-user product, keep the Loop and Rig composition and run it inside a Host, behind a Factory: Factory admits users' commands and places sessions, and Hosts run them. Start with [Architecture](/docs/overview/architecture) and [Which modules do I need?](/docs/overview/which-modules). For a running reference, copy the [browser-app starter](/docs/start/starters): Factory, an in-process Host and a React app in one `go run .`. Then read the [Factory](/docs/modules/factory) and [Host](/docs/modules/host) module pages.
+The tutorial's program is one process for one person. To serve a multi-user product, keep the Loop and Rig composition and run it inside a Host, behind a Factory: Factory admits users' commands and places sessions, and Hosts run them. [Stack](/docs/modules/stack) composes both, with an in-process Host and one storage profile, from one `stack.Options` value; your Rig becomes an agent's `Define` function. For a running reference, copy the [browser-app starter](/docs/start/starters) with `gonew`: Stack, the agent and a React app in one `go run .`. [Architecture](/docs/overview/architecture) and [Which modules do I need?](/docs/overview/which-modules) explain the pieces, and the [Factory](/docs/modules/factory) and [Host](/docs/modules/host) module pages cover composing them yourself.
 
 `harness/pkg/serve`, the older single-process HTTP and SSE server, is **deprecated and frozen**. Do not start new work on it; its progressive example remains only for existing users.
 
