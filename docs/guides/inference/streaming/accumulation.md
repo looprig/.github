@@ -23,9 +23,10 @@ func (a *Text) Add(*content.TextChunk)
 func (a Text) Block() *content.TextBlock
 func (a Text) Empty() bool
 
-type Thinking struct { /* internal builder */ }
+type Thinking struct { /* internal builders, one per reasoning block */ }
 func (a *Thinking) Add(*content.ThinkingChunk)
-func (a Thinking) Block() *content.ThinkingBlock
+func (a Thinking) Blocks() []content.ThinkingBlock
+func (a Thinking) Block() *content.ThinkingBlock // Deprecated: first block only
 func (a Thinking) Empty() bool
 
 type ToolUses struct { /* internal map */ }
@@ -59,6 +60,21 @@ for {
 ```
 
 The zero value of each accumulator is ready to use. `Block` and `Blocks` return nil until a chunk was received; an empty-string chunk still counts as received. Tool blocks are returned in ascending provider index order.
+
+A response can contain several indexed reasoning blocks, just as it can contain several tool calls. `Thinking.Blocks()` returns all of them in ascending `ThinkingChunk.Index` order, each with its own signature and provider state. `Thinking.Block()` is deprecated and returns only the first, so use `Blocks()` when you build the assistant message:
+
+```go
+blocks := make([]content.Block, 0)
+for _, block := range thinking.Blocks() {
+	blocks = append(blocks, &block)
+}
+if !text.Empty() {
+	blocks = append(blocks, text.Block())
+}
+for _, call := range tools.Blocks() {
+	blocks = append(blocks, &call)
+}
+```
 
 ## Proof
 

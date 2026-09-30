@@ -22,11 +22,14 @@ proofs:
 type ThinkingBlock struct {
 	Thinking            string
 	Signature           string
+	SignatureFormat     string
 	ProviderState       json.RawMessage
 	ProviderStateFormat string
 }
 
 func NewThinkingBlock(thinking, signature string, providerState json.RawMessage, providerStateFormat string) *ThinkingBlock
+func NewSignedThinkingBlock(thinking, signature, signatureFormat string, providerState json.RawMessage, providerStateFormat string) *ThinkingBlock
+func (b *ThinkingBlock) SignatureReplayableAs(format string) (string, bool)
 func (b *ThinkingBlock) ReplayableAs(format string) bool
 ```
 
@@ -34,6 +37,7 @@ func (b *ThinkingBlock) ReplayableAs(format string) bool
 | --- | --- |
 | `Thinking` | Reasoning text accumulated from deltas |
 | `Signature` | Empty while streaming; provider signature on a complete block |
+| `SignatureFormat` | Dialect label of the provider that minted `Signature`; `NewThinkingBlock` leaves it empty, so use `NewSignedThinkingBlock` when a signature is present |
 | `ProviderState` | Opaque JSON state for replay, never interpreted by core |
 | `ProviderStateFormat` | Exact dialect label that owns `ProviderState` |
 
@@ -58,11 +62,13 @@ func main() {
 }
 ```
 
-The zero signature is not an error during streaming. Use [Thinking deltas](/docs/guides/inference/streaming/thinking-deltas) and the core stream accumulator to produce a completed block.
+The zero signature is not an error during streaming. Use [Thinking deltas](/docs/guides/inference/streaming/thinking-deltas) and the core stream accumulator to produce completed blocks.
+
+One response can contain several reasoning blocks. Each streamed `ThinkingChunk` names its block with `Index`, and `streamaccumulator.Thinking.Blocks()` returns every assembled block in ascending index order. Keep all of them, each with its own signature or provider state, in the assistant message. `Thinking.Block()` is deprecated and returns only the first block.
 
 ## Proof
 
-- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.13.1/content/block.go)
+- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.13.1/content/block.go), [`core/content/streamaccumulator/streamaccumulator.go`](https://github.com/looprig/core/blob/v0.13.1/content/streamaccumulator/streamaccumulator.go)
 - Tests: [`core/content/block_test.go`](https://github.com/looprig/core/blob/v0.13.1/content/block_test.go), [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.13.1/content/block_json_test.go)
 
 Related: [Thinking deltas](/docs/guides/inference/streaming/thinking-deltas), [AIMessage](/docs/guides/inference/messages/message-types/ai-message).
