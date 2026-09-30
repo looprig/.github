@@ -57,6 +57,9 @@ go get github.com/looprig/harness@v0.43.0 \
 
 For an interactive terminal interface, add [TUI](/docs/modules/tui) (`github.com/looprig/tui@v0.21.2`), which presents Harness sessions without owning their state. See the [TUI guide](/docs/guides/tui).
 
+
+The [cli-agent starter](/docs/start/starters) is a complete, runnable version of this row.
+
 ## Add tools and approvals
 
 ```sh
@@ -104,6 +107,9 @@ Factory and Host can run in one process or in separate deployments, and they nee
 This is the row with the most assembly. There is no starter template yet; [Carbon](/docs/products/carbon) is the reference product that composes Factory, Host, Harness, and a browser UI, and its source is the most complete worked example.
 
 The older `harness/pkg/serve` HTTP and SSE server is deprecated and frozen as a compatibility surface. Do not start new services on it.
+
+
+The [browser-app starter](/docs/start/starters) composes exactly these modules in one runnable program.
 
 ## Scale Hosts on Kubernetes
 

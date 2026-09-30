@@ -31,7 +31,7 @@ The coding assistant runtime does not depend on the CLI. Keep the Loop, Rig, Ses
 
 ## Serve many users
 
-The tutorial's program is one process for one person. To serve a multi-user product, keep the Loop and Rig composition and run it inside a Host, behind a Factory: Factory admits users' commands and places sessions, and Hosts run them. Start with [Architecture](/docs/overview/architecture) and [Which modules do I need?](/docs/overview/which-modules), then the [Factory](/docs/modules/factory) and [Host](/docs/modules/host) module pages.
+The tutorial's program is one process for one person. To serve a multi-user product, keep the Loop and Rig composition and run it inside a Host, behind a Factory: Factory admits users' commands and places sessions, and Hosts run them. Start with [Architecture](/docs/overview/architecture) and [Which modules do I need?](/docs/overview/which-modules). For a running reference, copy the [browser-app starter](/docs/start/starters): Factory, an in-process Host and a React app in one `go run .`. Then read the [Factory](/docs/modules/factory) and [Host](/docs/modules/host) module pages.
 
 `harness/pkg/serve`, the older single-process HTTP and SSE server, is **deprecated and frozen**. Do not start new work on it; its progressive example remains only for existing users.
 

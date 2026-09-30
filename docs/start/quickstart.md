@@ -292,6 +292,7 @@ The program assembled the system in the same order Looprig uses at every scale:
 
 ## Next steps
 
+- Start a project from a [starter template](/docs/start/starters): a complete CLI coding agent, or a single-process multi-user browser app.
 - Choose the modules for what you are building in [Which modules do I need?](/docs/overview/which-modules), and see how they fit together in [Architecture](/docs/overview/architecture).
 - Customize the agent in [Define a Loop](/docs/guides/harness/loop/define-a-loop), then add tools in [Tools and tool limits](/docs/guides/harness/loop/tools-and-tool-limits). Tools run only behind an access gate; see [Access gates](/docs/guides/harness/gates/access-gates).
 - Learn how events and turns end in [Terminal outcomes](/docs/guides/harness/turn/terminal-outcomes) and [Subscriptions](/docs/guides/harness/session-runtime/subscriptions).
