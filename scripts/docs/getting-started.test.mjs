@@ -20,14 +20,14 @@ const inventory = [
 ];
 
 const exampleSources = {
-  "installation.md": "examples/go/progressive/stage01_inference/main.go",
-  "model-call.md": "examples/go/progressive/stage01_inference/main.go",
-  "first-run.md": "examples/go/guides/harness-quickstart/main.go",
-  "tools-and-gates.md": "examples/go/progressive/stage04_prepared_tool/main.go",
-  "sessions.md": "examples/go/progressive/stage09_restore/main.go",
-  "workspaces.md": "examples/go/progressive/stage10_workspace/main.go",
-  "sandbox-and-interfaces.md": "examples/go/progressive/stage11_sandbox_process/main.go",
-  "run-cli.md": "examples/go/guides/harness-quickstart/main.go",
+  "installation.md": "examples/go/start/model-call",
+  "model-call.md": "examples/go/start/model-call",
+  "first-run.md": "examples/go/start/first-run",
+  "tools-and-gates.md": "examples/go/start/tools-and-gates",
+  "sessions.md": "examples/go/start/sessions",
+  "workspaces.md": "examples/go/start/workspaces",
+  "sandbox-and-interfaces.md": "examples/go/start/sandbox",
+  "run-cli.md": "examples/go/start/run-cli",
   "next-steps.md": "examples/go/progressive/stage23_eval/main.go",
 };
 
@@ -50,7 +50,9 @@ test("Getting Started opens with the quickstart, then one ordered coding-assista
 
 test("the tutorial path uses canonical routes emitted by the website", () => {
   const page = read("choose-a-path.md");
-  const links = [...page.matchAll(/\]\((\/docs\/start\/[^)]+)\)/g)].map((match) => match[1]);
+  const path_ = page.slice(page.indexOf("## Tutorial path"));
+  const steps = path_.slice(0, path_.indexOf("\n\n", path_.indexOf("1. ")));
+  const links = [...steps.matchAll(/\]\((\/docs\/start\/[^)]+)\)/g)].map((match) => match[1]);
 
   assert.deepEqual(links, inventory.slice(1).map(([file]) => `/docs/start/${file.slice(0, -3)}`));
   assert.equal(links.every((href) => !href.endsWith("/")), true);
@@ -75,13 +77,15 @@ test("every implementation page has commented code and a runnable checkpoint", (
       assert.match(page, /```go[\s\S]*\/\/[\s\S]*```/, `${file} Go example needs explanatory comments`);
     }
     assert.match(page, /^## Runnable checkpoint$/m, `${file} must expose its proof as an example`);
-    assert.match(page, new RegExp(`https://github.com/looprig/\\.github/blob/main/${source.replaceAll("/", "\\/")}`));
+    assert.match(page, new RegExp(`https://github.com/looprig/\\.github/(?:blob|tree)/main/${source.replaceAll("/", "\\/")}`));
   }
 });
 
 test("Getting Started uses consumer commands and canonical deep-guide links", () => {
   const corpus = inventory.map(([file]) => read(file)).join("\n");
-  assert.doesNotMatch(corpus, /GOWORK=off|source-workspace|proof IDs?|workflow job|release commit|replace directive|central manifest|@v\d/i);
+  // Exact module versions are allowed: start-examples.test.mjs holds them equal
+  // to the versions the runnable examples are tested on.
+  assert.doesNotMatch(corpus, /GOWORK=off|source-workspace|proof IDs?|workflow job|release commit|replace directive|central manifest/i);
   assert.doesNotMatch(corpus, /\]\(\/docs\/[^)#]+\/\)/, "Getting Started links must use emitted canonical routes");
   for (const destination of [
     "/docs/guides/inference",

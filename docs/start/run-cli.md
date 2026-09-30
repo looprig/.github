@@ -1,90 +1,550 @@
 ---
 id: start/run-cli
 title: Run the coding assistant CLI
-description: Join the tutorial components in main.go, accept a question and optional session ID, print assistant events, and shut every owned resource down in order.
+description: The finished coding assistant as one complete main.go, with flags, a chat mode, signal handling, and cleanup in the right order.
 audience: developer
 section: start
 order: 9
 publication: released
 proofs:
-  assemble-main: [release-github-com-looprig-harness, release-github-com-looprig-fsstore, release-github-com-looprig-sandbox]
+  the-complete-program: [release-github-com-looprig-harness, release-github-com-looprig-fsstore, release-github-com-looprig-sandbox, release-github-com-looprig-tools, release-github-com-looprig-inference]
   run-a-new-session: [release-github-com-looprig-harness]
   resume-a-session: [release-github-com-looprig-harness, release-github-com-looprig-fsstore]
-  shutdown-order: [release-github-com-looprig-harness, release-github-com-looprig-sandbox]
+  shutdown-order: [release-github-com-looprig-harness, release-github-com-looprig-sandbox, release-github-com-looprig-fsstore]
   runnable-checkpoint: [release-github-com-looprig-harness]
 ---
 
 # Run the coding assistant CLI
 
-The coding assistant now has a model, Harness runtime, read-only tools, durable sessions, a workspace, and optional confined process execution. Join those pieces in `main.go`; the CLI remains presentation code around a Session.
+The coding assistant now has a model, a Harness runtime, read-only tools, durable sessions, a workspace per session, and sandboxed commands. This page joins the files into one `main.go` and turns it into a small CLI. The CLI remains presentation code around a Session.
 
-## Assemble main
+## The complete program
 
+Download [`main.go`](https://github.com/looprig/.github/blob/main/examples/go/start/run-cli/main.go) and [`go.mod`](https://github.com/looprig/.github/blob/main/examples/go/start/run-cli/go.mod) into an empty directory, or replace the tutorial project's files with it. Then run `go mod tidy`.
+
+<!-- example: examples/go/start/run-cli/main.go -->
 ```go
+// Command looprig-coding-assistant is the complete program from the Looprig
+// "Build a coding assistant" tutorial: a command-line coding assistant with
+// read-only file tools, commands confined by an operating-system sandbox,
+// durable sessions you can continue, and a private workspace per session.
+//
+// Without OPENAI_API_KEY it runs against a scripted model, so it works with
+// no account and no network. With OPENAI_API_KEY and LOOPRIG_MODEL set, it
+// talks to OpenAI.
+//
+//	go run . -ask "What does this repository do?"
+//	go run . -session <id> -ask "What did you read?"
+//	go run . -chat
+package main
+
+import (
+	"bufio"
+	"context"
+	"errors"
+	"flag"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"os/signal"
+	"path/filepath"
+	"strings"
+	"syscall"
+	"time"
+
+	"github.com/looprig/core/content"
+	"github.com/looprig/core/uuid"
+	"github.com/looprig/fsstore"
+	"github.com/looprig/harness/pkg/event"
+	"github.com/looprig/harness/pkg/gate"
+	"github.com/looprig/harness/pkg/loop"
+	"github.com/looprig/harness/pkg/rig"
+	"github.com/looprig/harness/pkg/session"
+	"github.com/looprig/harness/pkg/sessionstore"
+	"github.com/looprig/harness/pkg/workspacestore"
+	"github.com/looprig/inference"
+	"github.com/looprig/inference/auth"
+	"github.com/looprig/inference/inferencetest"
+	"github.com/looprig/inference/model"
+	"github.com/looprig/llm"
+	"github.com/looprig/llm/auto"
+	"github.com/looprig/sandbox"
+	"github.com/looprig/tools"
+	"github.com/looprig/tools/bash"
+)
+
+type config struct {
+	question  string
+	chat      bool
+	repo      string
+	data      string
+	sessionID string // empty starts a new session
+	timeout   time.Duration
+}
+
 func main() {
-	// Linux re-exec dispatch must happen before flag parsing or runtime setup.
+	// On Linux, sandbox.Init must run first: it dispatches the sandbox's
+	// re-executed child process and returns at once in the parent.
 	sandbox.Init()
 
-	question := flag.String("ask", "Summarize this repository.", "question for the coding assistant")
-	resume := flag.String("session", "", "existing session ID to restore")
-	data := flag.String("data", "./agent-data", "durable application data")
+	var cfg config
+	flag.StringVar(&cfg.question, "ask", "What is this repository?", "question for the coding assistant")
+	flag.BoolVar(&cfg.chat, "chat", false, "after -ask, keep reading questions from standard input")
+	flag.StringVar(&cfg.repo, "repo", ".", "repository to copy into a new session's workspace")
+	flag.StringVar(&cfg.data, "data", defaultDataDir(), "directory for durable assistant data, outside the repository")
+	flag.StringVar(&cfg.sessionID, "session", "", "ID of a session to continue")
+	flag.DurationVar(&cfg.timeout, "timeout", 2*time.Minute, "time limit for each turn")
 	flag.Parse()
 
-	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer cancel()
+	// Ctrl-C or SIGTERM cancels ctx: the running turn stops waiting, and the
+	// deferred cleanup in run still shuts everything down.
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 
-	if err := runCLI(ctx, *data, *resume, *question); err != nil {
+	if err := run(ctx, os.Stdin, os.Stdout, os.Stderr, cfg); err != nil {
 		log.Fatal(err)
 	}
 }
+
+func run(ctx context.Context, stdin io.Reader, stdout, stderr io.Writer, cfg config) error {
+	if cfg.data == "" {
+		return errors.New("set -data to a directory outside the repository")
+	}
+	repo, err := canonicalDir(cfg.repo)
+	if err != nil {
+		return err
+	}
+	// Session workspaces live under the data directory, one per session.
+	if err := os.MkdirAll(filepath.Join(cfg.data, "workspaces"), 0o700); err != nil {
+		return err
+	}
+	workspaceBase, err := canonicalDir(filepath.Join(cfg.data, "workspaces"))
+	if err != nil {
+		return err
+	}
+	client, selected, err := newModel(stderr)
+	if err != nil {
+		return err
+	}
+
+	// Acquire resources in dependency order and register each cleanup right
+	// after it succeeds. Deferred calls run last-in, first-out, so the
+	// session shuts down first, then the sandbox, and storage closes last:
+	// a session writes its final records while it shuts down.
+	store, err := openStores(filepath.Join(cfg.data, "store"))
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err := store.Close(); err != nil {
+			log.Printf("close storage: %v", err)
+		}
+	}()
+	executors, executor, access, err := newSandbox(workspaceBase, filepath.Join(cfg.data, "sandbox"), stderr)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err := executors.Close(); err != nil {
+			log.Printf("close sandbox: %v", err)
+		}
+	}()
+	assistant, err := defineAssistant(client, selected, executor, access)
+	if err != nil {
+		return err
+	}
+	runtime, err := defineRuntime(assistant, store.sessions, store.workspaces, workspaceBase)
+	if err != nil {
+		return err
+	}
+	live, err := startSession(ctx, runtime, store.workspaces, repo, cfg.sessionID)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		// A fresh deadline: ctx may already be cancelled.
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		if err := live.Shutdown(shutdownCtx); err != nil {
+			log.Printf("shutdown: %v", err)
+		}
+	}()
+	// Print the ID so a later run can continue this conversation.
+	fmt.Fprintf(stdout, "session: %s\n", live.SessionID())
+
+	ask := func(question string) error {
+		turnCtx, cancel := context.WithTimeout(ctx, cfg.timeout)
+		defer cancel()
+		return runTurn(turnCtx, live, question, stdout)
+	}
+	if cfg.question != "" {
+		if err := ask(cfg.question); err != nil {
+			return err
+		}
+	}
+	if !cfg.chat {
+		return nil
+	}
+	lines := bufio.NewScanner(stdin)
+	for fmt.Fprint(stdout, "> "); lines.Scan(); fmt.Fprint(stdout, "> ") {
+		if question := strings.TrimSpace(lines.Text()); question != "" {
+			if err := ask(question); err != nil {
+				return err
+			}
+		}
+	}
+	fmt.Fprintln(stdout)
+	return lines.Err()
+}
+
+// ---- The model ----
+
+// newModel selects the model the coding assistant talks to and builds the
+// client that calls it. With OPENAI_API_KEY set, it calls OpenAI with the
+// model named by LOOPRIG_MODEL. Without a key, it returns a scripted client,
+// so the program runs, and can be tested, with no account and no network.
+func newModel(stderr io.Writer) (inference.Client, model.Model, error) {
+	apiKey := os.Getenv("OPENAI_API_KEY")
+	if apiKey == "" {
+		fmt.Fprintln(stderr, "OPENAI_API_KEY is not set: using the scripted model")
+		return scriptedClient(), inferencetest.Model(), nil
+	}
+	name := os.Getenv("LOOPRIG_MODEL")
+	if name == "" {
+		return nil, model.Model{}, errors.New("set LOOPRIG_MODEL to the OpenAI model to use")
+	}
+	selected := model.CustomModel(
+		model.ProviderName(llm.ProviderOpenAI),
+		model.APIFormatOpenAIResponses,
+		"https://api.openai.com/v1",
+		name,
+		model.WithTools(),
+	)
+	client, err := auto.New(selected, auth.APIKey(apiKey))
+	if err != nil {
+		return nil, model.Model{}, fmt.Errorf("create OpenAI client: %w", err)
+	}
+	return client, selected, nil
+}
+
+// scriptedClient stands in for a hosted model. Its script reads go.mod, runs
+// one command in the sandbox, then answers every later question the same way.
+func scriptedClient() inference.Client {
+	return inferencetest.New(
+		inferencetest.Text("Let me look.").ToolCall("ReadFile", `{"path":"go.mod"}`),
+		inferencetest.ToolCall("Bash", `{"command":"ls"}`),
+		inferencetest.Text("This is the Go module example.com/looprig-coding-assistant; "+
+			"its workspace holds the files ls listed.").Repeat(),
+	)
+}
+
+// ---- The agent ----
+
+// readGuard is the read tools' own policy: they never return environment
+// files such as .env, and read at most 1 MiB per file.
+type readGuard struct{}
+
+func (readGuard) DeniedRead(path string) bool {
+	return strings.HasPrefix(filepath.Base(path), ".env")
+}
+
+func (readGuard) MaxReadBytes() int64 { return 1 << 20 }
+
+// defineAssistant freezes the coding assistant's definition: instructions,
+// model, tools, and the access gate every tool call must pass.
+func defineAssistant(client inference.Client, selected model.Model, executor *sandbox.Executor, access *gate.Evaluator) (loop.Definition, error) {
+	guard := readGuard{}
+	return loop.Define(
+		loop.WithName("coding-assistant"),
+		loop.WithSystem("You are a concise coding assistant. Use Glob, Grep, ReadFile and Bash for evidence "+
+			"and cite what you inspected. Commands run read-only, without network access."),
+		loop.WithInference(client, selected),
+		loop.WithTools(
+			tools.GlobDefinition(guard),
+			tools.GrepDefinition(guard),
+			tools.ReadFileDefinition(guard),
+			// Bash runs each approved command through the sandbox executor.
+			tools.Bash(bash.WithRunner(executor)),
+		),
+		loop.WithAccessGate(access),
+		// Change the revision whenever the gate's policy changes.
+		loop.WithPolicyRevision("coding-assistant/sandbox-v1"),
+	)
+}
+
+// defineRuntime gives every session its own workspace directory,
+// <workspaceBase>/<session-id>, and snapshots it when each turn ends.
+func defineRuntime(assistant loop.Definition, sessions *sessionstore.Store, workspaces *workspacestore.Store, workspaceBase string) (*rig.Rig, error) {
+	return rig.Define(
+		rig.WithLoops(assistant),
+		rig.WithPrimers("coding-assistant"),
+		rig.WithSessionStore(sessions),
+		rig.WithSessionWorkspaces(workspaces, workspaceBase),
+		rig.WithSnapshots(rig.SnapshotPolicy{Trigger: rig.SnapshotOnTurnDone}),
+	)
+}
+
+// ---- The sandbox ----
+
+// newSandbox builds the operating-system confinement for the assistant's
+// commands and the access gate that agrees with it: one Profile states the
+// authority, the gate decides each call from it, and the executor enforces
+// it on the process.
+func newSandbox(workspaceBase, scratch string, stderr io.Writer) (*sandbox.ExecutorSet, *sandbox.Executor, *gate.Evaluator, error) {
+	profile, err := sandbox.NewProfile(sandbox.ProfileConfig{
+		WorkspaceRoot:  workspaceBase,
+		WorkspaceRead:  sandbox.Allow,
+		WorkspaceWrite: sandbox.Deny,
+		HostRead:       sandbox.Deny,
+		HostWrite:      sandbox.Deny,
+		Network:        sandbox.Deny,
+		Command:        sandbox.Allow,
+		Home:           sandbox.IsolatedHome,
+		Isolation:      sandbox.Sandboxed,
+	})
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	if err := os.MkdirAll(scratch, 0o700); err != nil {
+		return nil, nil, nil, err
+	}
+	executors, err := sandbox.NewExecutorSet(profile, sandbox.WithScratchRoot(scratch), sandbox.WithMaxExecutors(1))
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	executor, err := executors.For("coding-assistant")
+	if err != nil {
+		_ = executors.Close()
+		return nil, nil, nil, err
+	}
+	guarantees := executor.Guarantees()
+	if executor.Level() == sandbox.LevelNone || !guarantees.ProcessBoundary || !guarantees.WriteBoundary {
+		_ = executors.Close()
+		return nil, nil, nil, fmt.Errorf("sandbox unavailable on this host: level=%v report=%+v", executor.Level(), executor.Report())
+	}
+	fmt.Fprintf(stderr, "sandbox: level=%v\n", executor.Level())
+	evaluator, err := gate.NewHeadlessEvaluator([]gate.AccessBinding{
+		{Kind: "filesystem.read", Source: profile},
+		{Kind: "filesystem.write", Source: profile},
+		{Kind: "command.execute", Source: profile},
+		{Kind: "network", Source: profile},
+	}, nil, executor)
+	if err != nil {
+		_ = executors.Close()
+		return nil, nil, nil, err
+	}
+	return executors, executor, evaluator, nil
+}
+
+// ---- Storage and sessions ----
+
+// stores is the assistant's durable storage: one fsstore directory holds
+// both the session journals and the workspace snapshots.
+type stores struct {
+	disk       *fsstore.Store
+	sessions   *sessionstore.Store
+	workspaces *workspacestore.Store
+}
+
+func openStores(dir string) (*stores, error) {
+	disk, err := fsstore.Open(fsstore.Options{Root: dir})
+	if errors.Is(err, fsstore.ErrLegacyLayout) {
+		// Written by fsstore older than v0.6.0, whose layout is not
+		// migrated. Retrying cannot help: move or delete the directory.
+		return nil, fmt.Errorf("%s holds data in an old fsstore layout; move or delete it: %w", dir, err)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("open durable storage: %w", err)
+	}
+	// Opt local files in to Storage's bounded blob readers, which the
+	// session store requires. It suits one process on one host.
+	backend, err := disk.Backend().WithBoundedBlobReaders()
+	if err != nil {
+		_ = disk.Close()
+		return nil, fmt.Errorf("adapt blob readers: %w", err)
+	}
+	sessions, err := sessionstore.Open(backend)
+	if err != nil {
+		_ = disk.Close()
+		return nil, fmt.Errorf("open session store: %w", err)
+	}
+	workspaces, err := workspacestore.Open(disk.Blobs)
+	if err != nil {
+		_ = disk.Close()
+		return nil, fmt.Errorf("open workspace store: %w", err)
+	}
+	return &stores{disk: disk, sessions: sessions, workspaces: workspaces}, nil
+}
+
+// Close releases the storage, after every session has shut down.
+func (s *stores) Close() error { return s.disk.Close() }
+
+// startSession creates a new session whose workspace starts as a copy of
+// repo, or restores the session named by id together with its workspace.
+func startSession(ctx context.Context, runtime *rig.Rig, workspaces *workspacestore.Store, repo, id string) (session.SessionController, error) {
+	if id == "" {
+		seed, err := workspaces.Snapshot(ctx, repo)
+		if err != nil {
+			return nil, fmt.Errorf("snapshot %s: %w", repo, err)
+		}
+		return runtime.NewSession(ctx, rig.WithSeedSnapshot(seed))
+	}
+	parsed, err := uuid.Parse(id)
+	if err != nil {
+		return nil, fmt.Errorf("parse session ID: %w", err)
+	}
+	live, err := runtime.RestoreSession(ctx, parsed)
+	if err != nil {
+		return nil, fmt.Errorf("restore session %s: %w", parsed, err)
+	}
+	return live, nil
+}
+
+// ---- Turns ----
+
+// runTurn submits one question to a live session and prints the answer as
+// it streams, with a line for each tool call.
+func runTurn(ctx context.Context, live session.Session, question string, out io.Writer) error {
+	// Subscribe before submitting, so no event can pass before we listen.
+	stream, err := live.SubscribeEvents(event.EventFilter{
+		Ephemeral: event.LoopScope{All: true},
+		Enduring:  event.LoopScope{All: true},
+	})
+	if err != nil {
+		return err
+	}
+	defer func() { _ = stream.Close() }()
+	if _, err := live.Submit(ctx, []content.Block{&content.TextBlock{Text: question}}); err != nil {
+		return err
+	}
+
+	// A subscription stays open after a turn ends, so select on ctx too.
+	events := stream.Events()
+	midLine := false // streamed text has not ended its line yet
+	endLine := func() {
+		if midLine {
+			fmt.Fprintln(out)
+			midLine = false
+		}
+	}
+	for {
+		select {
+		case <-ctx.Done():
+			endLine()
+			return fmt.Errorf("waiting for the turn: %w", ctx.Err())
+		case delivery, ok := <-events:
+			if !ok {
+				if err := stream.Err(); err != nil {
+					return err
+				}
+				return errors.New("event stream closed before the turn ended")
+			}
+			switch ev := delivery.Event.(type) {
+			case event.TokenDelta:
+				if chunk, ok := ev.Chunk.(*content.TextChunk); ok {
+					fmt.Fprint(out, chunk.Text)
+					midLine = !strings.HasSuffix(chunk.Text, "\n")
+				}
+			case event.ToolCallStarted:
+				endLine()
+				fmt.Fprintf(out, "[%s] %s\n", ev.ToolName, ev.Summary)
+			case event.ToolCallCompleted:
+				if ev.IsError {
+					fmt.Fprintf(out, "[%s] refused: %s\n", ev.ToolName, firstLine(ev.ResultPreview))
+				}
+			case event.TurnDone:
+				endLine()
+				return nil
+			case event.TurnFailed:
+				endLine()
+				if ev.Err != nil {
+					return fmt.Errorf("turn failed: %w", ev.Err)
+				}
+				return errors.New("turn failed")
+			case event.TurnInterrupted:
+				endLine()
+				return errors.New("turn was interrupted")
+			}
+		}
+	}
+}
+
+// ---- Helpers ----
+
+// defaultDataDir keeps the assistant's data in the user's configuration
+// directory. It must not be inside the repository: the Rig refuses storage
+// that overlaps a workspace.
+func defaultDataDir() string {
+	dir, err := os.UserConfigDir()
+	if err != nil {
+		return ""
+	}
+	return filepath.Join(dir, "looprig-coding-assistant")
+}
+
+// canonicalDir returns dir as an absolute path with symlinks resolved.
+func canonicalDir(dir string) (string, error) {
+	abs, err := filepath.Abs(dir)
+	if err != nil {
+		return "", err
+	}
+	return filepath.EvalSymlinks(abs)
+}
+
+// firstLine returns the first line of s.
+func firstLine(s string) string {
+	line, _, _ := strings.Cut(s, "\n")
+	return line
+}
 ```
 
-`runCLI` constructs the client, stores, workspace store, sandbox runner, Loop, and Rig using the functions from the preceding pages. Keep ownership in this composition root so shutdown is visible.
+Compared with the previous page, it adds three things:
+
+- `-chat`, which keeps reading questions from standard input, one turn per line, in the same session;
+- a context cancelled by Ctrl-C or SIGTERM, so a running turn stops waiting and cleanup still runs;
+- a per-turn `-timeout`, so one slow answer cannot hold the session forever.
 
 ## Run a new session
 
 ```sh
-# The exact provider variables come from the model page.
-export LOOPRIG_MODEL="your-model-name"
-export OPENAI_API_KEY="your-api-key"
-go run . -ask "Which package owns session restoration?"
+go run . -ask "Which file defines the Rig?"
 ```
 
-Print the new session ID before waiting for the terminal event:
+Without an API key the scripted model answers. With a hosted model, export the variables from [the model page](/docs/start/model-call) first:
+
+```sh
+export OPENAI_API_KEY="your-api-key"
+export LOOPRIG_MODEL="your-model-name"
+go run . -repo ~/src/some-project -ask "Where is the HTTP router?"
+```
+
+The first line of output is the session ID:
 
 ```text
-session=8c7a3e74-6d4d-4d37-a6b7-1a8a22f9e418
-assistant=Session restoration is owned by Harness session runtime and sessionstore.
+session: 0731aced-fc2b-4e17-a3e1-7148ece1a7f6
 ```
-
-Actual text depends on the selected model and the evidence returned by tools.
 
 ## Resume a session
 
 ```sh
-# Supply the ID printed by the earlier invocation.
-go run . -session 8c7a3e74-6d4d-4d37-a6b7-1a8a22f9e418 -ask "What did we inspect previously?"
+go run . -session 0731aced-fc2b-4e17-a3e1-7148ece1a7f6 -ask "" -chat
 ```
 
-Restoring the Session replays durable state and resumes the same identity. It does not automatically recreate an unpersisted external service or silently accept configuration drift.
+Restoring replays the journal and brings back the session's workspace. It does not recreate an external service that was never persisted, and it refuses a changed configuration instead of silently accepting it.
 
 ## Shutdown order
 
-Use `defer` immediately after each successful acquisition, but understand the intended order:
+`run` acquires resources in dependency order and registers each cleanup immediately after the acquisition succeeds:
 
-```go
-// Stop accepting work, drain the Session, and close subscriptions first.
-defer live.Shutdown(context.Background())
-// Then close executor-owned processes and isolated runtime paths.
-defer executors.Close()
-// Close the underlying durable backend after every Session has stopped.
-defer disk.Close()
-```
+1. storage (`openStores`), then `defer store.Close()`;
+2. the sandbox (`newSandbox`), then `defer executors.Close()`;
+3. the session (`startSession`), then `defer live.Shutdown(...)`.
 
-Handle SIGINT and SIGTERM through a context, but use an independent bounded cleanup context when a canceled request context would prevent leases and resources from being released.
+Deferred calls run last-in, first-out, so shutdown happens in the reverse order: the session stops first and writes its final records while storage is still open, then the sandbox's processes are closed, and storage closes last. Registering the defers in the opposite order would close storage under a live session. `Shutdown` gets its own bounded context because the run's context may already be cancelled.
 
 ## Runnable checkpoint
 
-The [complete Harness quickstart](https://github.com/looprig/.github/blob/main/examples/go/guides/harness-quickstart/main.go) is a runnable CLI-shaped application with a model client, Loop, Rig, Session, subscription, submission, terminal event, and shutdown. Its deterministic model lets the exact-output test run without a provider key. Replace that boundary with `openAI` or your chosen provider to run the coding assistant.
+[`examples/go/start/run-cli`](https://github.com/looprig/.github/tree/main/examples/go/start/run-cli) is this program with its [test](https://github.com/looprig/.github/blob/main/examples/go/start/run-cli/main_test.go), which answers one question, then restores the session in chat mode and answers two more. The per-step programs are under [`examples/go/start`](https://github.com/looprig/.github/tree/main/examples/go/start).
 
 Continue to [choose an interface and extend the agent](/docs/start/next-steps).

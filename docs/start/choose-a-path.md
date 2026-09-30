@@ -8,7 +8,7 @@ order: 1
 publication: released
 proofs:
   what-you-will-build: [release-github-com-looprig-inference, release-github-com-looprig-harness, release-github-com-looprig-tools]
-  how-the-pieces-fit: [release-github-com-looprig-harness, release-github-com-looprig-fsstore, release-github-com-looprig-sandbox]
+  how-the-pieces-fit: [release-github-com-looprig-harness, release-github-com-looprig-inference, release-github-com-looprig-fsstore, release-github-com-looprig-storage, release-github-com-looprig-sandbox]
   tutorial-path: [release-github-com-looprig-harness]
 ---
 
@@ -34,17 +34,19 @@ flowchart LR
 
 The tutorial uses one project named `looprig-coding-assistant`. Each page adds one boundary without changing the responsibilities added earlier.
 
+Every page ends with a complete, runnable program. Each one lives in its own directory under [`examples/go/start`](https://github.com/looprig/.github/tree/main/examples/go/start) with its `go.mod`, and continuous integration builds, tests, and runs each one on the released versions the pages name. The code shown on the pages is copied from those files byte for byte. Without a provider API key, every program runs against a scripted model from [`inferencetest`](/docs/modules/inference), so you can follow the whole tutorial offline and add a real model when you are ready.
+
 ## How the pieces fit
 
 | Module | Responsibility in the assistant | Added when |
 | --- | --- | --- |
-| Core and Inference | Messages, model identity, requests, responses, and streaming | First model call |
-| LLM | OpenAI, Anthropic, Ollama, and other provider clients | Model configuration |
-| Harness | Loop, Rig, Session, commands, events, tools, and shutdown | Agent runtime |
-| Tools | Read, search, edit, process, interaction, and delegation definitions | Tool registration |
-| Fsstore and Storage | Durable session history and workspace snapshots | Persistence |
-| Sandbox | Native confinement for child processes | Process execution |
-| TUI or Client | Terminal and framework-neutral browser presentation | Interface selection |
+| Core and Inference | Messages, model identity, requests, responses, streaming, and the scripted test model | First model call |
+| LLM | OpenAI, Anthropic, Ollama, and other provider clients | First model call |
+| Harness | Loop, Rig, Session, events, access gates, and shutdown | Agent runtime |
+| Tools | Read, search, and Bash tool definitions | Tool registration |
+| Fsstore and Storage | Durable session history and workspace snapshots on local disk | Persistence |
+| Sandbox | Operating-system confinement for child processes | Process execution |
+| TUI or the browser packages | Terminal and browser presentation | Interface selection |
 
 You do not need to adopt the full stack at once. Inference is useful by itself. Harness becomes useful when you need a live agent runtime. Storage, Sandbox, protocols, workflows, and interfaces remain optional composition boundaries.
 
@@ -59,5 +61,7 @@ You do not need to adopt the full stack at once. Inference is useful by itself. 
 7. [Sandbox process tools](/docs/start/sandbox-and-interfaces).
 8. [Run the coding assistant CLI](/docs/start/run-cli).
 9. [Choose an interface and extend the agent](/docs/start/next-steps).
+
+The finished assistant is one file, [`main.go`](https://github.com/looprig/.github/blob/main/examples/go/start/run-cli/main.go). If you would rather read the result first, [the last page](/docs/start/run-cli) shows it in full. For the shortest possible agent, see the [Quickstart](/docs/start/quickstart).
 
 Start with the project directory. You will have a working model call before introducing Harness.

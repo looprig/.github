@@ -8,6 +8,7 @@ order: 10
 publication: released
 proofs:
   choose-an-interface: [release-github-com-looprig-tui, release-npm-looprig-client]
+  serve-many-users: [release-github-com-looprig-factory, release-github-com-looprig-host]
   expose-a-protocol: [release-github-com-looprig-acp, release-github-com-looprig-mcp]
   add-durable-workflows: [release-github-com-looprig-workflows, release-github-com-looprig-flow]
   evaluate-the-agent: [release-github-com-looprig-eval, release-github-com-looprig-pluto]
@@ -22,11 +23,17 @@ The coding assistant runtime does not depend on the CLI. Keep the Loop, Rig, Ses
 
 | Interface | Use it when | Start here |
 | --- | --- | --- |
-| CLI | A small command or service owns input and output directly | The tutorial application |
+| CLI | A small command or service owns input and output directly | The [tutorial program](/docs/start/run-cli) |
 | TUI | You want a ready terminal experience with session lists, input, events, and restore | [TUI Getting Started](/docs/guides/tui/getting-started) |
 | Web UI | You want a browser UI over Factory, with the framework-neutral `@looprig/client` npm package or the React 19 `@looprig/react` hooks | [Web UI Client SDK](/docs/guides/web-ui/client-sdk) |
 
 `@looprig/client` is framework-neutral and speaks Factory's REST and ClientLink contract. `@looprig/react` is an optional adapter over it, so applications on another framework use the client package alone.
+
+## Serve many users
+
+The tutorial's program is one process for one person. To serve a multi-user product, keep the Loop and Rig composition and run it inside a Host, behind a Factory: Factory admits users' commands and places sessions, and Hosts run them. Start with [Architecture](/docs/overview/architecture) and [Which modules do I need?](/docs/overview/which-modules), then the [Factory](/docs/modules/factory) and [Host](/docs/modules/host) module pages.
+
+`harness/pkg/serve`, the older single-process HTTP and SSE server, is **deprecated and frozen**. Do not start new work on it; its progressive example remains only for existing users.
 
 ## Expose a protocol
 
@@ -55,6 +62,6 @@ go test ./...
 
 ## Runnable checkpoint
 
-The [evaluation checkpoint](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage23_eval/main.go) runs an exact suite, serializes its report, runs a Pluto capability pack, and evaluates a release profile. Related runnable checkpoints cover [HTTP serving](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage19_http_serve/main.go) and the [TUI adapter](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage21_tui/main.go).
+The [evaluation checkpoint](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage23_eval/main.go) runs an exact suite, serializes its report, runs a Pluto capability pack, and evaluates a release profile. The [TUI adapter checkpoint](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage21_tui/main.go) shows the same runtime behind the terminal UI. The other [progressive examples](https://github.com/looprig/.github/tree/main/examples/go/progressive) each add one capability at a time; the HTTP serving stage among them uses the deprecated `harness/pkg/serve`.
 
-For deeper API details, continue through [Inference](/docs/guides/inference), [Harness](/docs/guides/harness), [Tools](/docs/guides/tools), and [Sandboxing](/docs/guides/sandboxing).
+For a shorter path to a running agent, see the [Quickstart](/docs/start/quickstart). For deeper API details, continue through [Inference](/docs/guides/inference), [Harness](/docs/guides/harness), [Tools](/docs/guides/tools), and [Sandboxing](/docs/guides/sandboxing).

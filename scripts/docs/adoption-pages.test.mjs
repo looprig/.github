@@ -60,10 +60,13 @@ test("the quickstart's event loop cannot wait forever", () => {
   for (const terminal of ["event.TurnDone", "event.TurnFailed", "event.TurnInterrupted"]) {
     assert.match(code, new RegExp(`case ${terminal.replace(".", "\\.")}:`), `quickstart must handle ${terminal}`);
   }
-  // A credential-free path exists and the durable path does not use raw fsstore.
-  assert.match(page, /LOOPRIG_SCRIPTED=1 go run \./);
-  assert.match(page, /natsstore\.Options\{EmbeddedDir: dir\}/);
+  // A credential-free path exists, and the durable path explains why raw
+  // fsstore Blobs are refused and how a local store opts in.
+  assert.match(code, /inferencetest\.New\(/);
+  assert.match(page, /```sh\ngo run \.\n```/);
+  assert.match(page, /WithBoundedBlobReaders/);
   assert.match(page, /missing BlobReaderLifecycle/);
+  assert.match(page, /fsstore\.ErrLegacyLayout/);
 });
 
 test("the glossary defines the serving vocabulary and disambiguates overloaded names", () => {

@@ -13,19 +13,19 @@ proofs:
   write-the-agent: [release-github-com-looprig-harness, release-github-com-looprig-inference, release-github-com-looprig-llm]
   run-it: [release-github-com-looprig-harness]
   what-happened: [release-github-com-looprig-harness]
-  keep-history-across-restarts: [release-github-com-looprig-natsstore, release-github-com-looprig-harness]
+  keep-history-across-restarts: [release-github-com-looprig-fsstore, release-github-com-looprig-storage, release-github-com-looprig-natsstore, release-github-com-looprig-harness]
   next-steps: [release-github-com-looprig-harness]
 ---
 
 # Quickstart
 
-This page builds a small personal assistant that accepts one request and streams its answer to the terminal. It is the shortest path to a working Looprig agent: one Go module, two files, one command.
+This page builds a small personal assistant that accepts one request and streams its answer to the terminal. It is the shortest path to a working Looprig agent: one Go module, one file, one command.
 
 ## What you will build
 
 The program creates:
 
-- one provider client, or a scripted client when you have no API key;
+- one provider client, or a scripted client from `inferencetest` when you have no API key;
 - one Loop named `assistant`, the immutable definition of the agent;
 - one in-memory session store;
 - one Rig, which assembles Loops with storage and lifecycle policy;
@@ -47,10 +47,10 @@ mkdir my-agent
 cd my-agent
 go mod init example.com/my-agent
 go get github.com/looprig/core@v0.13.1 \
-  github.com/looprig/harness@v0.42.1 \
-  github.com/looprig/inference@v0.14.1 \
+  github.com/looprig/harness@v0.43.0 \
+  github.com/looprig/inference@v0.15.0 \
   github.com/looprig/llm@v0.15.1 \
-  github.com/looprig/storage@v0.8.0
+  github.com/looprig/storage@v0.9.0
 ```
 
 These are the released versions this page was verified against. `go get github.com/looprig/harness@latest` also works; Harness is pre-1.0, so read its release notes when you move to a new minor version.
@@ -68,6 +68,7 @@ The API key is passed to the provider client. It is never stored on the model, L
 
 Create `main.go`:
 
+<!-- example: examples/go/start/quickstart/main.go -->
 ```go
 package main
 
@@ -86,6 +87,7 @@ import (
 	"github.com/looprig/harness/pkg/sessionstore"
 	"github.com/looprig/inference"
 	"github.com/looprig/inference/auth"
+	"github.com/looprig/inference/inferencetest"
 	"github.com/looprig/inference/model"
 	"github.com/looprig/llm"
 	"github.com/looprig/llm/auto"
@@ -99,18 +101,23 @@ func main() {
 }
 
 // newClient returns the model description and the client that calls it.
-// LOOPRIG_SCRIPTED=1 selects the credential-free scripted client in
-// scripted.go; otherwise the OpenRouter settings are required.
+// Without OPENROUTER_API_KEY it returns a scripted client, so the program
+// runs, and can be tested, with no account and no network.
 func newClient() (model.Model, inference.Client, error) {
-	if os.Getenv("LOOPRIG_SCRIPTED") == "1" {
-		return scriptedModel, scriptedClient{}, nil
+	apiKey := os.Getenv("OPENROUTER_API_KEY")
+	if apiKey == "" {
+		fmt.Fprintln(os.Stderr, "OPENROUTER_API_KEY is not set: using the scripted model")
+		// inferencetest.New answers from a script, streaming in small chunks
+		// like a real provider. Repeat answers every later call the same way.
+		return inferencetest.Model(), inferencetest.New(
+			inferencetest.Text("1. Plan Monday. 2. Batch errands. 3. Protect one focus block.").Repeat(),
+		), nil
 	}
 	// Credentials and model choice belong to the application. They are not
 	// compiled into Looprig or stored in session history.
-	apiKey := os.Getenv("OPENROUTER_API_KEY")
 	modelName := os.Getenv("OPENROUTER_MODEL")
-	if apiKey == "" || modelName == "" {
-		return model.Model{}, nil, errors.New("set OPENROUTER_API_KEY and OPENROUTER_MODEL, or LOOPRIG_SCRIPTED=1")
+	if modelName == "" {
+		return model.Model{}, nil, errors.New("set OPENROUTER_MODEL to the model to use")
 	}
 	// Model is a secret-free description of what to call and how to speak to it.
 	m := model.CustomModel(
@@ -150,7 +157,7 @@ func run() error {
 	}
 
 	// The in-memory backend keeps the first example small. It disappears with
-	// the process; "Keep history across restarts" below swaps it for a durable one.
+	// the process; "Keep history across restarts" below moves it to disk.
 	store, err := sessionstore.Open(memstore.New())
 	if err != nil {
 		return err
@@ -245,48 +252,7 @@ func waitForTurn(ctx context.Context, stream event.Subscription) error {
 }
 ```
 
-Create `scripted.go`. It is a complete `inference.Client` that streams a fixed reply, so you can run the program, and write tests for it, without a provider:
-
-```go
-package main
-
-import (
-	"context"
-	"errors"
-	"io"
-
-	"github.com/looprig/core/content"
-	"github.com/looprig/inference"
-	"github.com/looprig/inference/model"
-	"github.com/looprig/inference/stream"
-)
-
-// scriptedModel describes the scripted client. No request leaves the process,
-// so the endpoint is never dialled.
-var scriptedModel = model.CustomModel("scripted", model.APIFormatOpenAI, "http://localhost", "scripted-model")
-
-// scriptedClient is a deterministic inference.Client for trying the program
-// without an API key. It streams a fixed reply and then ends the stream.
-type scriptedClient struct{}
-
-// Invoke is unused: Harness streams model output.
-func (scriptedClient) Invoke(context.Context, inference.Request) (*inference.Response, error) {
-	return nil, errors.New("scripted client supports streaming only")
-}
-
-// Stream yields each word of a fixed reply as one text chunk, then io.EOF.
-func (scriptedClient) Stream(context.Context, inference.Request) (*stream.StreamReader[content.Chunk], error) {
-	words := []string{"1. Plan ", "Monday. ", "2. Batch ", "errands. ", "3. Protect ", "one ", "focus ", "block."}
-	return stream.NewStreamReader(func() (content.Chunk, error) {
-		if len(words) == 0 {
-			return nil, io.EOF
-		}
-		next := words[0]
-		words = words[1:]
-		return &content.TextChunk{Text: next}, nil
-	}, nil), nil
-}
-```
+Without `OPENROUTER_API_KEY`, `newClient` returns a scripted client from `github.com/looprig/inference/inferencetest`. It validates each request like a real client and streams its scripted reply in chunks, so you can run the program, and write tests for it, without a provider.
 
 `waitForTurn` is the part most worth copying. A Session's event subscription stays open after a turn ends and after the Session shuts down, so a plain `for delivery := range stream.Events()` loop can block forever when something goes wrong. Always select on the context as well, handle all three terminal events (`TurnDone`, `TurnFailed`, and `TurnInterrupted`), and treat a closed channel as an error.
 
@@ -295,10 +261,11 @@ func (scriptedClient) Stream(context.Context, inference.Request) (*stream.Stream
 Without an API key:
 
 ```sh
-LOOPRIG_SCRIPTED=1 go run .
+go run .
 ```
 
 ```text
+OPENROUTER_API_KEY is not set: using the scripted model
 1. Plan Monday. 2. Batch errands. 3. Protect one focus block.
 ```
 
@@ -319,49 +286,13 @@ The program assembled the system in the same order Looprig uses at every scale:
 
 ## Keep history across restarts
 
-`memstore` disappears with the process. To keep sessions on local disk, use an embedded NATS JetStream server from the `natsstore` module. It runs inside your process, needs no broker, and provides every Storage primitive the session store requires:
+`memstore` disappears with the process. To keep sessions on local disk, open an `fsstore` directory and opt its Blobs in to Storage's bounded blob readers with `WithBoundedBlobReaders`, which `sessionstore.Open` requires; raw `fsstore` Blobs are refused with `sessionstore: invalid backend: missing BlobReaderLifecycle`. Handle `fsstore.ErrLegacyLayout` with a "move or delete the directory" message, never a retry. [Persist and restore sessions](/docs/start/sessions) has the complete code, including printing `session.SessionID()` and continuing a conversation with `assembly.RestoreSession(ctx, id)`.
 
-```sh
-go get github.com/looprig/natsstore@v0.5.4
-```
-
-```go
-import (
-	"path/filepath"
-
-	"github.com/looprig/natsstore"
-)
-
-// Replace the memstore lines in run with:
-dir, err := filepath.Abs("agent-data/nats") // EmbeddedDir must be absolute
-if err != nil {
-	return err
-}
-// One process owns this directory. Never open it from two processes at once.
-backend, err := natsstore.Open(ctx, natsstore.Options{EmbeddedDir: dir})
-if err != nil {
-	return err
-}
-// Registered before the Session's deferred Shutdown, so it runs after it:
-// the Session needs its storage while it shuts down.
-defer func() {
-	closeCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	_ = backend.Close(closeCtx)
-}()
-store, err := sessionstore.Open(backend.Composite)
-if err != nil {
-	return err
-}
-```
-
-Print `session.SessionID()` after `NewSession`, and a later run can continue the conversation with `assembly.RestoreSession(ctx, id)`. See [Create and restore](/docs/guides/harness/session-runtime/create-and-restore).
-
-Do not substitute a raw `fsstore` backend here. `sessionstore.Open` requires Blobs that implement Storage's bounded reader lifecycle and refuses raw `fsstore` Blobs with `sessionstore: invalid backend: missing BlobReaderLifecycle`. For shared deployments, use `natsstore` against a NATS server (`Options.URL`), or `pgstore` with `s3store` Blobs; see [Which modules do I need?](/docs/overview/which-modules).
+`natsstore` with `natsstore.Options{EmbeddedDir: dir}` is another local option: it runs an embedded NATS JetStream server inside your process. For shared deployments, use `natsstore` against a NATS server (`Options.URL`), or `pgstore` with `s3store` Blobs; see [Which modules do I need?](/docs/overview/which-modules).
 
 ## Next steps
 
 - Choose the modules for what you are building in [Which modules do I need?](/docs/overview/which-modules), and see how they fit together in [Architecture](/docs/overview/architecture).
 - Customize the agent in [Define a Loop](/docs/guides/harness/loop/define-a-loop), then add tools in [Tools and tool limits](/docs/guides/harness/loop/tools-and-tool-limits). Tools run only behind an access gate; see [Access gates](/docs/guides/harness/gates/access-gates).
 - Learn how events and turns end in [Terminal outcomes](/docs/guides/harness/turn/terminal-outcomes) and [Subscriptions](/docs/guides/harness/session-runtime/subscriptions).
-- Follow the longer [coding assistant tutorial](/docs/start/choose-a-path) to add tools, persistence, a workspace, and sandboxed processes.
+- Follow the longer [coding assistant tutorial](/docs/start/choose-a-path) to add tools, persistence, a workspace, and sandboxed processes. Each of its steps is a complete program under [`examples/go/start`](https://github.com/looprig/.github/tree/main/examples/go/start); this page's program is [`examples/go/start/quickstart`](https://github.com/looprig/.github/tree/main/examples/go/start/quickstart).
