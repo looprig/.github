@@ -54,7 +54,7 @@ console.log(tenant_id, page.sessions.length);
 
 The earlier Web UI stack is retired. It paired a Go module, `github.com/looprig/client`, with a Harness `pkg/serve` backend-for-frontend, an SSE session client, and a Svelte adapter, and it shipped a prebuilt React bundle as the Go module `github.com/looprig/wui` (archived at v0.5.1). None of those ship in the npm packages: there is no Harness `serve` transport, SSE parser, or legacy constructor in 0.3.0. The `client` repository now publishes only the two npm packages.
 
-If you want a finished browser UI rather than your own, [Carbon](/docs/products/carbon) ships one. Carbon v0.32.2 builds its single-page app on `@looprig/react` 0.3.0 and embeds it in its own binary; that embedding package is internal to Carbon and not importable.
+If you want a finished browser UI rather than your own, [Carbon](/docs/products/carbon) ships one. Carbon v0.33.0 builds its single-page app on `@looprig/react` 0.3.0 and embeds it in its own binary; that embedding package is internal to Carbon and not importable.
 
 ## Guide map
 

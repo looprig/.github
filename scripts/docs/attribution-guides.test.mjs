@@ -27,7 +27,7 @@ test("message presenter guide is published with source-backed safety rules", () 
     "harness/internal/sessionruntime/present_refusal_test.go",
   ]) {
     assert.equal(existsSync(path.join(workspace, source)), true, `${source} is missing`);
-    assert.match(markdown, new RegExp(`https://github.com/looprig/harness/blob/v0\\.4[123]\\.\\d+/${source.slice("harness/".length).replaceAll("/", "\\/")}`));
+    assert.match(markdown, new RegExp(`https://github.com/looprig/harness/blob/v0\\.4[1-5]\\.\\d+/${source.slice("harness/".length).replaceAll("/", "\\/")}`));
   }
 });
 

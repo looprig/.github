@@ -34,7 +34,7 @@ Carbon is a coding agent built from Looprig modules. It provides a ready termina
 ## Install
 
 ```sh
-go install github.com/looprig/carbon/cmd/carbon@v0.32.2
+go install github.com/looprig/carbon/cmd/carbon@v0.33.0
 ```
 
 Carbon stores configuration under `~/.looprig/carbon` by default. Its configuration files must be regular, owner-only files.
@@ -140,6 +140,8 @@ the [one-way rollout and recovery rules](/docs/guides/harness/commands/attributi
 before upgrading an existing store.
 
 Since v0.32.1, an application that embeds Carbon on Linux must call `sandbox.Init()` first in `main`, as `cmd/carbon` does.
+
+Since v0.33.0, Carbon's Host launch target is built with Host's published [`harnessruntime`](/docs/modules/host) adapter instead of Carbon's own copy, so it declares both recovery capabilities and passes Host's default durable runtime profile. On shutdown, a browser session waiting at an approval gate is released crash-equivalently: the gate stays answerable by the next start. Carbon reports any session Host could not release that way (`Parked`) as an incomplete drain and keeps its storage open. A runtime that cannot close an attempt, or has no committed event stream, is now refused at launch, and an empty create body is refused. Nothing in the upgrade is one-way; re-run `make install` to replace an installed binary.
 
 Your application supplies the credential verifier, authorizer, tenant, HostLink service token, CSRF policy, and listener addresses. The stock `carbon serve` command has none of these and refuses to start, so it is not a ready-to-expose web service. The local Host serves only the configured default tenant and refuses principals of any other tenant. Under `trusted`, a pooled session can read sibling session directories, so serve one tenant per Carbon process.
 

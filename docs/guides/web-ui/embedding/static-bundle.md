@@ -115,7 +115,7 @@ Pin `@looprig/client` and `@looprig/react` to the same exact version, `0.3.0`, a
 
 ## Source
 
-Carbon's [`web/vite.config.ts`](https://github.com/looprig/carbon/blob/v0.32.2/web/vite.config.ts) and [`internal/browserui/assets.go`](https://github.com/looprig/carbon/blob/v0.32.2/internal/browserui/assets.go) are the released model for this page. The relative endpoints come from `createFactoryClient` in [`packages/client/src/client.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/client.ts), and the exact client pin is in [`packages/react/package.json`](https://github.com/looprig/client/blob/v0.3.0/packages/react/package.json).
+Carbon's [`web/vite.config.ts`](https://github.com/looprig/carbon/blob/v0.33.0/web/vite.config.ts) and [`internal/browserui/assets.go`](https://github.com/looprig/carbon/blob/v0.33.0/internal/browserui/assets.go) are the released model for this page. The relative endpoints come from `createFactoryClient` in [`packages/client/src/client.ts`](https://github.com/looprig/client/blob/v0.3.0/packages/client/src/client.ts), and the exact client pin is in [`packages/react/package.json`](https://github.com/looprig/client/blob/v0.3.0/packages/react/package.json).
 
 ## Proof
 
