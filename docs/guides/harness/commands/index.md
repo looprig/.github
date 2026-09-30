@@ -181,8 +181,9 @@ every kind. `Metadata` is client-defined, allowed only on `create` and `input`.
 Harness validates the shapes and carries them unchanged. Neither becomes a
 model-facing `content.Message` unless a product explicitly frames human input
 with a [Message presenter](/docs/guides/harness/commands/message-presenter).
-Every product adapter that constructs `runtimecommand.Admitted` field by field
-must copy both `Principal` and `Metadata`; omitting either drops attribution
+Host's public `host/harnessruntime` adapter copies both. A custom adapter
+that constructs `runtimecommand.Admitted` field by field must
+copy both `Principal` and `Metadata`; omitting either drops attribution
 silently. [The released integration lane](https://github.com/looprig/tests/blob/v0.17.0/principal_presenter_integration_test.go)
 exercises this seam across Factory, Host, and Harness.
 

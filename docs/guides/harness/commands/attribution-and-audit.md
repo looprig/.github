@@ -88,8 +88,9 @@ flowchart LR
 
 The disposition descriptor preserves `Principal` and `Metadata`; SessionStore
 validates their shape but does not verify a sender. Host reads them before
-dispatch and passes them to the product runtime. A field-by-field adapter to
-`runtimecommand.Admitted` must copy both members or attribution disappears
+dispatch and passes them to the product runtime. Host's public
+`harnessruntime` adapter copies both into `runtimecommand.Admitted`; a custom
+field-by-field adapter must copy both members or attribution disappears
 silently. Harness records attribution on applicable intents and events; restore
 attribution remains in the SessionStore descriptor. A browser UI such as Carbon's displays an optional sender chip and separates any
 model-visible presenter frame from the user's original blocks. Metadata is
