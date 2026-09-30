@@ -1,3 +1,9 @@
+// Stage 19 is DEPRECATED AND FROZEN. harness/pkg/serve is a frozen
+// compatibility surface: its routes and schemas stay available while
+// consumers migrate, but new public composition belongs in Factory
+// (https://looprig.dev/docs/modules/factory). staticcheck reports SA1019 at
+// the serve import below; this stage is kept building only so existing
+// readers can still run it.
 package main
 
 import (

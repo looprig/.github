@@ -10,7 +10,7 @@ func TestRun(t *testing.T) {
 	if err := run(&output); err != nil {
 		t.Fatal(err)
 	}
-	if got, want := output.String(), "loop: assistant uses fixture\n"; got != want {
+	if got, want := output.String(), "loop: assistant uses scripted\n"; got != want {
 		t.Fatalf("output = %q, want %q", got, want)
 	}
 }

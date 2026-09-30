@@ -2,17 +2,17 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
 
 	"github.com/looprig/.github/examples/go/progressive/internal/assertoutput"
-	"github.com/looprig/.github/examples/go/progressive/internal/fakeinference"
 	"github.com/looprig/fsstore"
 	"github.com/looprig/harness/pkg/loop"
 	"github.com/looprig/harness/pkg/rig"
 	"github.com/looprig/harness/pkg/sessionstore"
-	"github.com/looprig/inference/model"
+	"github.com/looprig/inference/inferencetest"
 )
 
 func run(output io.Writer) error {
@@ -25,13 +25,18 @@ func run(output io.Writer) error {
 
 	definition, err := loop.Define(
 		loop.WithName("assistant"),
-		loop.WithInference(fakeinference.New(), model.CustomModel("offline", model.APIFormatOpenAI, "http://localhost", "fixture")),
+		loop.WithInference(inferencetest.New(), inferencetest.Model()),
 	)
 	if err != nil {
 		return err
 	}
 	build := func(backend *fsstore.Store) (*rig.Rig, error) {
-		store, openErr := sessionstore.Open(backend.Backend())
+		// SessionStore requires bounded blob readers; adapt fsstore's Blobs.
+		composite, adaptErr := backend.Backend().WithBoundedBlobReaders()
+		if adaptErr != nil {
+			return nil, adaptErr
+		}
+		store, openErr := sessionstore.Open(composite)
 		if openErr != nil {
 			return nil, openErr
 		}
@@ -39,6 +44,11 @@ func run(output io.Writer) error {
 	}
 
 	backend, err := fsstore.Open(fsstore.Options{Root: root})
+	if errors.Is(err, fsstore.ErrLegacyLayout) {
+		// fsstore v0.6.0 refuses a pre-v0.6.0 root and never migrates it.
+		// Move or delete the root; retrying cannot succeed.
+		return fmt.Errorf("move or delete %s: %w", root, err)
+	}
 	if err != nil {
 		return err
 	}

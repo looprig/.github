@@ -8,14 +8,14 @@ import (
 	"strings"
 
 	"github.com/looprig/.github/examples/go/progressive/internal/assertoutput"
-	"github.com/looprig/.github/examples/go/progressive/internal/fakeinference"
 	"github.com/looprig/core/content"
 	"github.com/looprig/inference"
+	"github.com/looprig/inference/inferencetest"
 )
 
 func run(output io.Writer) error {
-	client := fakeinference.New(fakeinference.TextStream("Hello", ", ", "Looprig!"))
-	reader, err := client.Stream(context.Background(), inference.Request{})
+	client := inferencetest.New(inferencetest.Text("Hello, Looprig!"))
+	reader, err := client.Stream(context.Background(), inference.Request{Model: inferencetest.Model()})
 	if err != nil {
 		return err
 	}

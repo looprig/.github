@@ -7,14 +7,15 @@ import (
 	"os"
 
 	"github.com/looprig/.github/examples/go/progressive/internal/assertoutput"
-	"github.com/looprig/.github/examples/go/progressive/internal/fakeinference"
 	"github.com/looprig/core/content"
 	"github.com/looprig/inference"
+	"github.com/looprig/inference/inferencetest"
 )
 
 func run(output io.Writer) error {
-	client := fakeinference.New(fakeinference.Text("Hello from Looprig."))
+	client := inferencetest.New(inferencetest.Text("Hello from Looprig."))
 	response, err := client.Invoke(context.Background(), inference.Request{
+		Model:  inferencetest.Model(),
 		System: "Answer briefly.",
 		Messages: content.AgenticMessages{&content.UserMessage{Message: content.Message{
 			Role: content.RoleUser, Blocks: []content.Block{&content.TextBlock{Text: "Say hello."}},

@@ -6,18 +6,17 @@ import (
 	"os"
 
 	"github.com/looprig/.github/examples/go/progressive/internal/assertoutput"
-	"github.com/looprig/.github/examples/go/progressive/internal/fakeinference"
 	"github.com/looprig/harness/pkg/loop"
 	"github.com/looprig/harness/pkg/rig"
 	"github.com/looprig/harness/pkg/sessionstore"
-	"github.com/looprig/inference/model"
+	"github.com/looprig/inference/inferencetest"
 	"github.com/looprig/storage/memstore"
 )
 
 func run(output io.Writer) error {
 	definition, err := loop.Define(
 		loop.WithName("assistant"),
-		loop.WithInference(fakeinference.New(), model.CustomModel("offline", model.APIFormatOpenAI, "http://localhost", "fixture")),
+		loop.WithInference(inferencetest.New(), inferencetest.Model()),
 	)
 	if err != nil {
 		return err

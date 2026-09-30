@@ -8,14 +8,13 @@ import (
 	"os"
 
 	"github.com/looprig/.github/examples/go/progressive/internal/assertoutput"
-	"github.com/looprig/.github/examples/go/progressive/internal/fakeinference"
 	"github.com/looprig/core/uuid"
 	"github.com/looprig/harness/pkg/identity"
 	"github.com/looprig/harness/pkg/loop"
 	"github.com/looprig/harness/pkg/rig"
 	"github.com/looprig/harness/pkg/session"
 	"github.com/looprig/harness/pkg/sessionstore"
-	"github.com/looprig/inference/model"
+	"github.com/looprig/inference/inferencetest"
 	"github.com/looprig/storage/memstore"
 )
 
@@ -23,7 +22,7 @@ func run(output io.Writer) error {
 	define := func(name string, delegates ...string) (loop.Definition, error) {
 		options := []loop.Option{
 			loop.WithName(identity.AgentName(name)),
-			loop.WithInference(fakeinference.New(), model.CustomModel("offline", model.APIFormatOpenAI, "http://localhost", name)),
+			loop.WithInference(inferencetest.New(), inferencetest.Model()),
 		}
 		for _, delegate := range delegates {
 			options = append(options, loop.WithDelegates(identity.AgentName(delegate)))

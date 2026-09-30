@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -19,11 +20,22 @@ func run(output io.Writer) error {
 	defer os.RemoveAll(root)
 
 	backend, err := fsstore.Open(fsstore.Options{Root: root})
+	if errors.Is(err, fsstore.ErrLegacyLayout) {
+		// fsstore v0.6.0 refuses a pre-v0.6.0 root and never migrates it.
+		// Move or delete the root; retrying cannot succeed.
+		return fmt.Errorf("move or delete %s: %w", root, err)
+	}
 	if err != nil {
 		return err
 	}
 	defer backend.Close()
-	store, err := sessionstore.Open(backend.Backend())
+	// SessionStore requires bounded blob readers; fsstore's filesystem Blobs
+	// provider is adapted rather than trusted to cancel a blocked Read.
+	composite, err := backend.Backend().WithBoundedBlobReaders()
+	if err != nil {
+		return err
+	}
+	store, err := sessionstore.Open(composite)
 	if err != nil {
 		return err
 	}
