@@ -120,6 +120,14 @@ checkpoint are not recovered. A controller that implements
 boundary as of restore, and `PostCheckpointLoss()` is true when loop events
 followed that checkpoint.
 
+The ref is read from the workspace store the Rig was defined with, so that
+store must outlive the process. A snapshot store over Storage's `memstore`
+loses every snapshot on exit, and restoring after a restart then fails with
+`materialize_failed`. [Stack](/docs/modules/stack) v0.1.0 exposes no workspace
+snapshot store, so an agent that places a workspace under Stack opens its own
+over durable Blobs, such as a separate FSStore directory, as the
+[browser-app starter](/docs/start/starters) does.
+
 ## Cleanup and events
 
 ```mermaid
