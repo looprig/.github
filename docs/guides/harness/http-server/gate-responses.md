@@ -16,6 +16,12 @@ proofs:
 
 # Gate responses
 
+> **Deprecated.** `pkg/serve` is a frozen compatibility surface kept for
+> existing consumers. Build new public services on [Factory](/docs/modules/factory),
+> [Host](/docs/modules/host), and [SessionStore](/docs/modules/sessionstore), with
+> the `@looprig/client` browser packages ([Web UI](/docs/guides/web-ui)). See the
+> [HTTP server overview](/docs/guides/harness/http-server).
+
 Answer a live gate with `POST /v1/sessions/{sid}/gates/{gid}`. The HTTP layer
 validates UUIDs and JSON shape, stamps the response as user supplied, and
 delegates gate semantics and durable acceptance to the live session.

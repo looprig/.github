@@ -18,6 +18,12 @@ proofs:
 
 # Errors and status codes
 
+> **Deprecated.** `pkg/serve` is a frozen compatibility surface kept for
+> existing consumers. Build new public services on [Factory](/docs/modules/factory),
+> [Host](/docs/modules/host), and [SessionStore](/docs/modules/sessionstore), with
+> the `@looprig/client` browser packages ([Web UI](/docs/guides/web-ui)). See the
+> [HTTP server overview](/docs/guides/harness/http-server).
+
 The serve package returns one nested JSON error shape for every handler-level
 failure. Status selection is stable and generic; internal causes are logged,
 not serialized.

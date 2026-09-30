@@ -17,6 +17,12 @@ proofs:
 
 # Public bind protection
 
+> **Deprecated.** `pkg/serve` is a frozen compatibility surface kept for
+> existing consumers. Build new public services on [Factory](/docs/modules/factory),
+> [Host](/docs/modules/host), and [SessionStore](/docs/modules/sessionstore), with
+> the `@looprig/client` browser packages ([Web UI](/docs/guides/web-ui)). See the
+> [HTTP server overview](/docs/guides/harness/http-server).
+
 `serve.Server` refuses a public address when it cannot prove that
 authentication is installed. The check happens during server construction,
 before the caller starts listening.

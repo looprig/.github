@@ -16,6 +16,12 @@ proofs:
 
 # Event visibility
 
+> **Deprecated.** `pkg/serve` is a frozen compatibility surface kept for
+> existing consumers. Build new public services on [Factory](/docs/modules/factory),
+> [Host](/docs/modules/host), and [SessionStore](/docs/modules/sessionstore), with
+> the `@looprig/client` browser packages ([Web UI](/docs/guides/web-ui)). See the
+> [HTTP server overview](/docs/guides/harness/http-server).
+
 The HTTP surface exposes only events that the event package marks public. This
 is enforced at all outward serialization boundaries, not only by the caller's
 subscription filter. A private hustle event or an event with an unknown

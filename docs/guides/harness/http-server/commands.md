@@ -16,6 +16,12 @@ proofs:
 
 # Submit commands
 
+> **Deprecated.** `pkg/serve` is a frozen compatibility surface kept for
+> existing consumers. Build new public services on [Factory](/docs/modules/factory),
+> [Host](/docs/modules/host), and [SessionStore](/docs/modules/sessionstore), with
+> the `@looprig/client` browser packages ([Web UI](/docs/guides/web-ui)). See the
+> [HTTP server overview](/docs/guides/harness/http-server).
+
 The HTTP control routes are fire-and-forget session operations. They return a
 command ID or an interrupt fact after the live session accepts the call. They do
 not wait for a completed Turn.

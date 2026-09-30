@@ -16,6 +16,12 @@ proofs:
 
 # Create a server
 
+> **Deprecated.** `pkg/serve` is a frozen compatibility surface kept for
+> existing consumers. Build new public services on [Factory](/docs/modules/factory),
+> [Host](/docs/modules/host), and [SessionStore](/docs/modules/sessionstore), with
+> the `@looprig/client` browser packages ([Web UI](/docs/guides/web-ui)). See the
+> [HTTP server overview](/docs/guides/harness/http-server).
+
 Build the handler first, then ask `serve.Server` to validate the listen address
 and return a configured `*http.Server`. `Server` does not call `Listen` or
 `Serve`; the application owns when serving starts and how it handles the

@@ -16,6 +16,12 @@ proofs:
 
 # Read-only endpoints
 
+> **Deprecated.** `pkg/serve` is a frozen compatibility surface kept for
+> existing consumers. Build new public services on [Factory](/docs/modules/factory),
+> [Host](/docs/modules/host), and [SessionStore](/docs/modules/sessionstore), with
+> the `@looprig/client` browser packages ([Web UI](/docs/guides/web-ui)). See the
+> [HTTP server overview](/docs/guides/harness/http-server).
+
 Use `serve.ReadHandler` when a process should browse durable sessions without
 hosting a live `Rig`. The handler has no create, restore, input, interrupt,
 gate, or SSE route. Those paths are not authorization fallbacks; they are not

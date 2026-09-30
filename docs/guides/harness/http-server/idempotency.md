@@ -16,6 +16,12 @@ proofs:
 
 # Idempotency
 
+> **Deprecated.** `pkg/serve` is a frozen compatibility surface kept for
+> existing consumers. Build new public services on [Factory](/docs/modules/factory),
+> [Host](/docs/modules/host), and [SessionStore](/docs/modules/sessionstore), with
+> the `@looprig/client` browser packages ([Web UI](/docs/guides/web-ui)). See the
+> [HTTP server overview](/docs/guides/harness/http-server).
+
 `POST /v1/sessions` is optionally idempotent. Send an `Idempotency-Key` when a
 client may retry a create and needs the completed `201` identifiers replayed.
 The implementation is deliberately per Handler process, not a distributed
