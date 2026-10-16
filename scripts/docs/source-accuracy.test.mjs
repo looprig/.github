@@ -41,7 +41,7 @@ test("Build 01 names the released inference model contract", () => {
   const content = page("build/01-model-access.md");
 
   assert.match(content, /`model\.Model`/);
-  assert.match(content, /github\.com\/looprig\/inference\/blob\/v0\.15\.0\/model\/model\.go/);
+  assert.match(content, /github\.com\/looprig\/inference\/blob\/v0\.15\.2\/model\/model\.go/);
   assert.doesNotMatch(content, /`inference\.Model`/);
 });
 
@@ -52,7 +52,7 @@ test("Build 08 describes counters as preflight ContextCounters", () => {
   assert.match(content, /CountContext/);
   assert.match(content, /input-context tokens as a preflight operation/i);
   assert.match(content, /fail(?:s|ure)? closed/i);
-  assert.match(content, /github\.com\/looprig\/llm\/blob\/v0\.15\.1\/auto\/counter\.go/);
+  assert.match(content, /github\.com\/looprig\/llm\/blob\/v0\.16\.1\/auto\/counter\.go/);
   assert.doesNotMatch(content, /counter (?:wraps|is a wrapper)|usage-accounting wrapper/i);
 });
 

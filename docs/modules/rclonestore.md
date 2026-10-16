@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/rclonestore` |
-| Version | `v0.6.0` |
+| Version | `v0.6.1` |
 | GitHub | [looprig/rclonestore](https://github.com/looprig/rclonestore) |
 
 ## Description

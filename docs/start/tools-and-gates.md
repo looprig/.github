@@ -20,7 +20,7 @@ proofs:
 The coding assistant can answer general questions without tools, but it needs evidence to discuss a repository. Start with read-only file inspection. Commands come later, behind a sandbox.
 
 ```sh
-go get github.com/looprig/tools@v0.15.1
+go get github.com/looprig/tools@v0.15.2
 ```
 
 ## How a tool call runs

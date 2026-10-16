@@ -48,6 +48,6 @@ Malformed IDs and paging are 400 responses. Missing sessions are 404. Invalid JS
 
 ## Runnable proof {#runnable-proof}
 
-The reviewed serving fixture prints the capabilities document, creates one session, and exercises a protected control route. Its source and route tests are pinned to the [harness release](https://github.com/looprig/harness/tree/v0.45.0/pkg/serve).
+The reviewed serving fixture prints the capabilities document, creates one session, and exercises a protected control route. Its source and route tests are pinned to the [harness release](https://github.com/looprig/harness/tree/v0.45.2/pkg/serve).
 
 Example source: [`stage-19-http-serve`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage19_http_serve/main.go).

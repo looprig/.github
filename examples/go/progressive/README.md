@@ -18,10 +18,10 @@ Run one stage while reading its source:
 node scripts/docs/run-examples.mjs --stage 1
 ```
 
-The runner uses `GOTOOLCHAIN=local`, so the `go` on `PATH` must be the Go 1.26.8 baseline. If your installed Go is newer, put a 1.26.8 toolchain first:
+The runner uses `GOTOOLCHAIN=local`, so the `go` on `PATH` must be the Go 1.26.9 baseline. If your installed Go is newer, put a 1.26.9 toolchain first:
 
 ```sh
-PATH="$(GOTOOLCHAIN=go1.26.8 go env GOROOT)/bin:$PATH" node scripts/docs/run-examples.mjs
+PATH="$(GOTOOLCHAIN=go1.26.9 go env GOROOT)/bin:$PATH" node scripts/docs/run-examples.mjs
 ```
 
 ## Drift and standalone modules

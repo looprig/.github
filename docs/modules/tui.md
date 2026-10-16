@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/tui` |
-| Version | `v0.21.2` |
+| Version | `v0.21.3` |
 | GitHub | [looprig/tui](https://github.com/looprig/tui) |
 
 ## Description

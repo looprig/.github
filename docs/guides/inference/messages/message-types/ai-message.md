@@ -54,7 +54,7 @@ Provider codecs may emit thinking before text and tool calls after text. Preserv
 
 ## Proof
 
-- Source: [`core/content/message.go`](https://github.com/looprig/core/blob/v0.13.1/content/message.go), [`core/content/usage.go`](https://github.com/looprig/core/blob/v0.13.1/content/usage.go)
-- Tests: [`core/content/message_json_test.go`](https://github.com/looprig/core/blob/v0.13.1/content/message_json_test.go), [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/v0.15.0/structured_result_test.go)
+- Source: [`core/content/message.go`](https://github.com/looprig/core/blob/v0.13.2/content/message.go), [`core/content/usage.go`](https://github.com/looprig/core/blob/v0.13.2/content/usage.go)
+- Tests: [`core/content/message_json_test.go`](https://github.com/looprig/core/blob/v0.13.2/content/message_json_test.go), [`inference/structured_result_test.go`](https://github.com/looprig/inference/blob/v0.15.2/structured_result_test.go)
 
 Related: [ThinkingBlock](/docs/guides/inference/content-blocks/thinking), [ToolUseBlock](/docs/guides/inference/content-blocks/tool-use), [Assistant messages](/docs/guides/inference/responses/assistant-message).

@@ -110,13 +110,13 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gemini/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gemini/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gemini/errors.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.16.1/providers/gemini/client.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.16.1/providers/gemini/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.16.1/providers/gemini/errors.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.1/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.16.1/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gemini/client_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gemini/counter_test.go)
-- [export_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gemini/export_test.go)
-- [usage_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/gemini/usage_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/gemini/client_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/gemini/counter_test.go)
+- [export_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/gemini/export_test.go)
+- [usage_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/gemini/usage_test.go)

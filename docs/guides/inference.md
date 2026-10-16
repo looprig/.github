@@ -92,13 +92,13 @@ Keep the client lifecycle separate from the Harness lifecycle: Inference owns mo
 
 ## Source
 
-- [`inference.Client`, `Request`, and `Response`](https://github.com/looprig/inference/blob/v0.15.0/client.go)
-- [`model.Model` validation and secret-free identity](https://github.com/looprig/inference/blob/v0.15.0/model/model.go)
-- [`stream.StreamReader`](https://github.com/looprig/inference/blob/v0.15.0/stream/stream.go)
-- [`OutputSchema` and request feature validation](https://github.com/looprig/inference/blob/v0.15.0/structured_result.go)
+- [`inference.Client`, `Request`, and `Response`](https://github.com/looprig/inference/blob/v0.15.2/client.go)
+- [`model.Model` validation and secret-free identity](https://github.com/looprig/inference/blob/v0.15.2/model/model.go)
+- [`stream.StreamReader`](https://github.com/looprig/inference/blob/v0.15.2/stream/stream.go)
+- [`OutputSchema` and request feature validation](https://github.com/looprig/inference/blob/v0.15.2/structured_result.go)
 
 ## Proof
 
-- [Client request and response tests](https://github.com/looprig/inference/blob/v0.15.0/client_test.go)
-- [Model validation tests](https://github.com/looprig/inference/blob/v0.15.0/model/model_test.go)
-- [Stream reader tests](https://github.com/looprig/inference/blob/v0.15.0/stream/stream_test.go)
+- [Client request and response tests](https://github.com/looprig/inference/blob/v0.15.2/client_test.go)
+- [Model validation tests](https://github.com/looprig/inference/blob/v0.15.2/model/model_test.go)
+- [Stream reader tests](https://github.com/looprig/inference/blob/v0.15.2/stream/stream_test.go)

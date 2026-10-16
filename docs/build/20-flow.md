@@ -39,6 +39,6 @@ The store contract requires every operation to honor `context.Context`, compare-
 
 ## Runnable proof {#runnable-proof}
 
-The reviewed Flow fixture starts a graph, interrupts it, resumes from the growing checkpoint history, and prints both outcomes. Review the [Flow source at the pinned release](https://github.com/looprig/flow/tree/v0.4.4/pkg/flow) and the [runner declarations](https://github.com/looprig/flow/blob/v0.4.4/pkg/flow/runner.go) when choosing between `Run`, `Resume`, and `Get`.
+The reviewed Flow fixture starts a graph, interrupts it, resumes from the growing checkpoint history, and prints both outcomes. Review the [Flow source at the pinned release](https://github.com/looprig/flow/tree/v0.4.5/pkg/flow) and the [runner declarations](https://github.com/looprig/flow/blob/v0.4.5/pkg/flow/runner.go) when choosing between `Run`, `Resume`, and `Get`.
 
 Example source: [`stage-17-flow`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage17_flow/main.go).

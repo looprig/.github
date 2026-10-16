@@ -63,9 +63,9 @@ tool payloads, and raw model names beyond the documented bound are not retained.
 
 ## Source and proof
 
-- [`client.go`](https://github.com/looprig/inference/blob/v0.15.0/client.go)
-- [`session_id.go`](https://github.com/looprig/inference/blob/v0.15.0/session_id.go)
-- [`structured_errors.go`](https://github.com/looprig/inference/blob/v0.15.0/structured_errors.go)
-- [`structured_result.go`](https://github.com/looprig/inference/blob/v0.15.0/structured_result.go)
+- [`client.go`](https://github.com/looprig/inference/blob/v0.15.2/client.go)
+- [`session_id.go`](https://github.com/looprig/inference/blob/v0.15.2/session_id.go)
+- [`structured_errors.go`](https://github.com/looprig/inference/blob/v0.15.2/structured_errors.go)
+- [`structured_result.go`](https://github.com/looprig/inference/blob/v0.15.2/structured_result.go)
 
 Run `go test ./...`.

@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/s3store` |
-| Version | `v0.2.1` |
+| Version | `v0.2.3` |
 | GitHub | [looprig/s3store](https://github.com/looprig/s3store) |
 
 ## Description

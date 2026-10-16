@@ -46,6 +46,6 @@ Use typed `session.SessionError` values for unknown definitions, depth and quota
 
 ## Runnable proof {#runnable-proof}
 
-`stage-14-delegation` defines `planner` with one `worker` delegate, creates a session backed by an in-memory store, admits one worker, and asserts that the second admission returns `SessionLoopQuotaExceeded`. Run it with `node scripts/docs/run-examples.mjs`. The [pinned delegation tool](https://github.com/looprig/harness/blob/v0.45.0/internal/delegationtool/prepare.go) and [session admission tests](https://github.com/looprig/harness/tree/v0.45.0/internal/sessionruntime/) show the ownership boundary.
+`stage-14-delegation` defines `planner` with one `worker` delegate, creates a session backed by an in-memory store, admits one worker, and asserts that the second admission returns `SessionLoopQuotaExceeded`. Run it with `node scripts/docs/run-examples.mjs`. The [pinned delegation tool](https://github.com/looprig/harness/blob/v0.45.2/internal/delegationtool/prepare.go) and [session admission tests](https://github.com/looprig/harness/tree/v0.45.2/internal/sessionruntime/) show the ownership boundary.
 
 Example source: [`stage-14-delegation`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage14_delegation/main.go).

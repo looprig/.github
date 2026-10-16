@@ -68,7 +68,7 @@ One response can contain several reasoning blocks. Each streamed `ThinkingChunk`
 
 ## Proof
 
-- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.13.1/content/block.go), [`core/content/streamaccumulator/streamaccumulator.go`](https://github.com/looprig/core/blob/v0.13.1/content/streamaccumulator/streamaccumulator.go)
-- Tests: [`core/content/block_test.go`](https://github.com/looprig/core/blob/v0.13.1/content/block_test.go), [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.13.1/content/block_json_test.go)
+- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.13.2/content/block.go), [`core/content/streamaccumulator/streamaccumulator.go`](https://github.com/looprig/core/blob/v0.13.2/content/streamaccumulator/streamaccumulator.go)
+- Tests: [`core/content/block_test.go`](https://github.com/looprig/core/blob/v0.13.2/content/block_test.go), [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.13.2/content/block_json_test.go)
 
 Related: [Thinking deltas](/docs/guides/inference/streaming/thinking-deltas), [AIMessage](/docs/guides/inference/messages/message-types/ai-message).

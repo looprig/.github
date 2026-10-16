@@ -93,10 +93,10 @@ Use this report to decide whether your operation can proceed, not merely to deco
 
 ## Source
 
-- [Public level and guarantee aliases](https://github.com/looprig/sandbox/blob/v0.9.3/sandbox.go)
-- [Linux backend selection](https://github.com/looprig/sandbox/blob/v0.9.3/internal/linux/select.go)
-- [Linux compilation levels and guarantees](https://github.com/looprig/sandbox/blob/v0.9.3/internal/linux/backend.go)
+- [Public level and guarantee aliases](https://github.com/looprig/sandbox/blob/v0.9.4/sandbox.go)
+- [Linux backend selection](https://github.com/looprig/sandbox/blob/v0.9.4/internal/linux/select.go)
+- [Linux compilation levels and guarantees](https://github.com/looprig/sandbox/blob/v0.9.4/internal/linux/backend.go)
 
 ## Proof
 
-- [Linux Rung and Init selection tests](https://github.com/looprig/sandbox/blob/v0.9.3/internal/platform/platform_linux_test.go)
+- [Linux Rung and Init selection tests](https://github.com/looprig/sandbox/blob/v0.9.4/internal/platform/platform_linux_test.go)

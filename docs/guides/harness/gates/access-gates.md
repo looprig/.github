@@ -136,7 +136,7 @@ The full decision implementation is [`pkg/gate/evaluator.go`](https://github.com
 
 ## Source and proof
 
-- [`loop.WithWorkspaceAccess`](https://github.com/looprig/harness/blob/v0.45.0/pkg/loop/workspace_access.go) and [`gate.WorkspaceAccess`, `gate.SessionRules`, `gate.ApproverFunc`](https://github.com/looprig/harness/blob/v0.45.0/pkg/gate/workspace.go)
+- [`loop.WithWorkspaceAccess`](https://github.com/looprig/harness/blob/v0.45.2/pkg/loop/workspace_access.go) and [`gate.WorkspaceAccess`, `gate.SessionRules`, `gate.ApproverFunc`](https://github.com/looprig/harness/blob/v0.45.2/pkg/gate/workspace.go)
 - [`gate.Evaluator`](https://github.com/looprig/harness/blob/main/pkg/gate/evaluator.go)
 - [`access routing`](https://github.com/looprig/harness/blob/main/pkg/gate/access.go)
 - [`policy` runnable fixture](https://github.com/looprig/harness/blob/main/examples/policy/example_test.go)

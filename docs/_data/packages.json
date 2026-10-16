@@ -486,11 +486,6 @@
       "path": "github.com/looprig/inference/wire/sse"
     },
     {
-      "repository": "kosa",
-      "module": "github.com/looprig/kosa",
-      "path": "github.com/looprig/kosa/api"
-    },
-    {
       "repository": "llm",
       "module": "github.com/looprig/llm",
       "path": "github.com/looprig/llm"
@@ -699,6 +694,11 @@
       "repository": "llm",
       "module": "github.com/looprig/llm",
       "path": "github.com/looprig/llm/providers/openai/subscription"
+    },
+    {
+      "repository": "llm",
+      "module": "github.com/looprig/llm",
+      "path": "github.com/looprig/llm/providers/openaisubscription"
     },
     {
       "repository": "llm",

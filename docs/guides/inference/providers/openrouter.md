@@ -124,11 +124,11 @@ func invoke() error {
 
 ## Source and proof
 
-- [openrouter.go](https://github.com/looprig/llm/blob/v0.15.1/providers/openrouter/openrouter.go)
+- [openrouter.go](https://github.com/looprig/llm/blob/v0.16.1/providers/openrouter/openrouter.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.1/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.16.1/provider.go). Adjacent behavior tests:
 
-- [openrouter_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/openrouter/openrouter_test.go)
-- [reasoning_state_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/openrouter/reasoning_state_test.go)
-- [stream_terminal_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/openrouter/stream_terminal_test.go)
-- [usage_reasoning_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/openrouter/usage_reasoning_test.go)
+- [openrouter_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/openrouter/openrouter_test.go)
+- [reasoning_state_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/openrouter/reasoning_state_test.go)
+- [stream_terminal_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/openrouter/stream_terminal_test.go)
+- [usage_reasoning_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/openrouter/usage_reasoning_test.go)

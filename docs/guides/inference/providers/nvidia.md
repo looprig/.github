@@ -109,12 +109,12 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/v0.15.1/providers/nvidia/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/v0.15.1/providers/nvidia/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/v0.15.1/providers/nvidia/errors.go)
-- [options.go](https://github.com/looprig/llm/blob/v0.15.1/providers/nvidia/options.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.16.1/providers/nvidia/client.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.16.1/providers/nvidia/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.16.1/providers/nvidia/errors.go)
+- [options.go](https://github.com/looprig/llm/blob/v0.16.1/providers/nvidia/options.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.1/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.16.1/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/nvidia/client_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/nvidia/counter_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/nvidia/client_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/nvidia/counter_test.go)

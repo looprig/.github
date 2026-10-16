@@ -58,6 +58,6 @@ Handle compile errors before starting a run. During execution, distinguish task 
 
 ## Runnable proof {#runnable-proof}
 
-`stage-17-flow` runs the released Flow graph, pauses at an interrupt, and resumes with the recorded approval state. Run it with `node scripts/docs/run-examples.mjs`. The Flow implementation is pinned in the [Flow release tree](https://github.com/looprig/flow/tree/v0.4.4/) that this stage records; the checkpoint adapter is the nested `flow/store` module, which the Flow repository now publishes at [`store/v0.1.3`](https://github.com/looprig/flow/tree/v0.4.4/store), and this stage is re-pinned when its example manifest is refreshed. The referenced package pages list the pinned source files and adjacent tests used for this boundary.
+`stage-17-flow` runs the released Flow graph, pauses at an interrupt, and resumes with the recorded approval state. Run it with `node scripts/docs/run-examples.mjs`. The Flow implementation is pinned in the [Flow release tree](https://github.com/looprig/flow/tree/v0.4.5/) that this stage records; the checkpoint adapter is the nested `flow/store` module, which the Flow repository now publishes at [`store/v0.1.3`](https://github.com/looprig/flow/tree/v0.4.5/store), and this stage is re-pinned when its example manifest is refreshed. The referenced package pages list the pinned source files and adjacent tests used for this boundary.
 
 Example source: [`stage-17-flow`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage17_flow/main.go).

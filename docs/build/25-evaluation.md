@@ -39,6 +39,6 @@ The packfile loader is a strict, size-capped YAML boundary. `gen.Generate` valid
 
 ## Runnable proof {#runnable-proof}
 
-The reviewed evaluation fixture prints a passing exact evaluation report and a Qualified Pluto capability report. The [eval release source](https://github.com/looprig/eval/tree/v0.2.3) and [Pluto release source](https://github.com/looprig/pluto/tree/v0.2.3) are the pinned declarations behind this page; the nested `cmd/pluto` module is separately released at [cmd/pluto/v0.2.1](https://github.com/looprig/pluto/tree/v0.2.3/cmd/pluto).
+The reviewed evaluation fixture prints a passing exact evaluation report and a Qualified Pluto capability report. The [eval release source](https://github.com/looprig/eval/tree/v0.2.3) and [Pluto release source](https://github.com/looprig/pluto/tree/v0.2.3) are the pinned declarations behind this page; the nested `cmd/pluto` module is separately released at [cmd/pluto/v0.2.1](https://github.com/looprig/pluto/tree/v0.2.4/cmd/pluto).
 
 Example source: [`stage-23-eval`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage23_eval/main.go).

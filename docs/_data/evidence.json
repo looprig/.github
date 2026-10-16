@@ -43,13 +43,6 @@
       "commit": "c89d0eb101158996bd278578c0b93d55d67a8d8a"
     },
     {
-      "id": "module-kosa",
-      "type": "module-file",
-      "repository": "kosa",
-      "path": "go.mod",
-      "commit": "867bb33686fa2b3f4325b503d033c6a0d1ada08b"
-    },
-    {
       "id": "module-workflows",
       "type": "module-file",
       "repository": "workflows",
@@ -119,256 +112,256 @@
       "type": "release-record",
       "repository": "acp",
       "path": "go.mod",
-      "commit": "6a7146bc8fe9593db15e11e3774335fed3a1d8ab",
-      "tag": "v0.3.4"
+      "commit": "d2c2f5662cb476f44b13d4b79de4c93c99a39461",
+      "tag": "v0.3.5"
     },
     {
       "id": "release-github-com-looprig-carbon",
       "type": "release-record",
       "repository": "carbon",
       "path": "go.mod",
-      "commit": "44079f3f07132ee1f135a860ea6d218aa8749b37",
-      "tag": "v0.33.0"
+      "commit": "ac78438bfaf341c2d2054f6eb43f31dd460b56b0",
+      "tag": "v0.34.2"
     },
     {
       "id": "release-github-com-looprig-classifiers",
       "type": "release-record",
       "repository": "classifiers",
       "path": "go.mod",
-      "commit": "2cf1d0613f7fadee7d6c1cda07646c8743bf2010",
-      "tag": "v0.2.3"
+      "commit": "4e0d3a67e7583bbeb33a0f78ee17b6305826f11f",
+      "tag": "v0.2.4"
     },
     {
       "id": "release-github-com-looprig-controller",
       "type": "release-record",
       "repository": "controller",
       "path": "go.mod",
-      "commit": "eda64f0b486597ca89ce361e084533bafabf188b",
-      "tag": "v0.2.1"
+      "commit": "5c52dcb594c9a8cab4de4c0cd4c13db567a8118a",
+      "tag": "v0.2.4"
     },
     {
       "id": "release-github-com-looprig-core",
       "type": "release-record",
       "repository": "core",
       "path": "go.mod",
-      "commit": "80081e1e6b33ec03df27820687d1459209c9afef",
-      "tag": "v0.13.1"
+      "commit": "eb6e4d2cd0e4007e744119a93602a0a9e1c27837",
+      "tag": "v0.13.2"
     },
     {
       "id": "release-github-com-looprig-credentials",
       "type": "release-record",
       "repository": "credentials",
       "path": "go.mod",
-      "commit": "be048210f107819caa5377daf9537653c721b95e",
-      "tag": "v0.2.1"
+      "commit": "c0e8443728ef0f0c7b692820dbca7a50c66e6cc1",
+      "tag": "v0.3.1"
     },
     {
       "id": "release-github-com-looprig-drain",
       "type": "release-record",
       "repository": "drain",
       "path": "go.mod",
-      "commit": "09904e5e8bd2d3f90e2b199eab586e6f11998bfb",
-      "tag": "v0.1.0"
+      "commit": "a5eaffb7c26618a75e29b70b87e9b7e0e7a09a16",
+      "tag": "v0.1.2"
     },
     {
       "id": "release-github-com-looprig-eval",
       "type": "release-record",
       "repository": "eval",
       "path": "go.mod",
-      "commit": "efa7cdcb216857ecf8fb0ffd5a66983d591eaf6e",
-      "tag": "v0.2.3"
+      "commit": "5c23a4e4e0746a0f4a6438580d1a7455eb7f6012",
+      "tag": "v0.2.4"
     },
     {
       "id": "release-github-com-looprig-factory",
       "type": "release-record",
       "repository": "factory",
       "path": "go.mod",
-      "commit": "e9f2bd3b26a1e3abe770bac6e7969e9c6e66bc86",
-      "tag": "v0.15.0"
+      "commit": "39770a693e25378aab455c4b3b3c18cabc887286",
+      "tag": "v0.16.1"
     },
     {
       "id": "release-github-com-looprig-flow",
       "type": "release-record",
       "repository": "flow",
       "path": "go.mod",
-      "commit": "ef591e8e2e6e284230018baf427ce832a6a81070",
-      "tag": "v0.4.4"
+      "commit": "319fbe7ad8e714903151f9e0299dba5d98b6ae7a",
+      "tag": "v0.4.5"
     },
     {
       "id": "release-github-com-looprig-flow-store",
       "type": "release-record",
       "repository": "flow",
       "path": "store/go.mod",
-      "commit": "ef591e8e2e6e284230018baf427ce832a6a81070",
-      "tag": "store/v0.1.3"
+      "commit": "6b764186ed46fd1ffdbb7e911eb76472b0d99e05",
+      "tag": "store/v0.1.5"
     },
     {
       "id": "release-github-com-looprig-foreignloops",
       "type": "release-record",
       "repository": "foreignloops",
       "path": "go.mod",
-      "commit": "91aa6af7b9e6831379fda4ace0bb56b683359f15",
-      "tag": "v0.3.4"
+      "commit": "7630a405ebf336c67383e7fb1a7952e5c6153e5b",
+      "tag": "v0.3.5"
     },
     {
       "id": "release-github-com-looprig-fsstore",
       "type": "release-record",
       "repository": "fsstore",
       "path": "go.mod",
-      "commit": "367e5a2e0f9d177ed6f5b87ae6ff4be222e10d48",
-      "tag": "v0.6.0"
+      "commit": "68d1b2cb3231058a468d57c1b9c54cc509147327",
+      "tag": "v0.6.2"
     },
     {
       "id": "release-github-com-looprig-harness",
       "type": "release-record",
       "repository": "harness",
       "path": "go.mod",
-      "commit": "d014609597b906a31875a9cd1ce25271557935e9",
-      "tag": "v0.45.0"
+      "commit": "fa21171b3d77346e54f470426d25cb12fd8dfe02",
+      "tag": "v0.45.2"
     },
     {
       "id": "release-github-com-looprig-host",
       "type": "release-record",
       "repository": "host",
       "path": "go.mod",
-      "commit": "dbdcee35920cdc0d4408f501ef58a85f8d81fce2",
-      "tag": "v0.17.0"
+      "commit": "f926666384776e9a0951cb8dfc1ffc36e1580495",
+      "tag": "v0.18.1"
     },
     {
       "id": "release-github-com-looprig-inference",
       "type": "release-record",
       "repository": "inference",
       "path": "go.mod",
-      "commit": "c984455e35a6b6ebd7a544cd38478d1f4b864030",
-      "tag": "v0.15.0"
+      "commit": "6b2ac0f0c71723541111f73d95a823f3f1ac8edf",
+      "tag": "v0.15.2"
     },
     {
       "id": "release-github-com-looprig-llm",
       "type": "release-record",
       "repository": "llm",
       "path": "go.mod",
-      "commit": "4bd6ec05ba4593341b8e3c26b712a87cf972f789",
-      "tag": "v0.15.1"
+      "commit": "3603c5f5eae7400daa31abc5f5ae462190c46317",
+      "tag": "v0.16.1"
     },
     {
       "id": "release-github-com-looprig-mcp",
       "type": "release-record",
       "repository": "mcp",
       "path": "go.mod",
-      "commit": "b9565a481359cd4449fb881e153b1ca73cd2892b",
-      "tag": "v0.7.3"
+      "commit": "fe4fc215d6f0c10ccd42f74e9db9fff4e35d137d",
+      "tag": "v0.7.4"
     },
     {
       "id": "release-github-com-looprig-natsstore",
       "type": "release-record",
       "repository": "natsstore",
       "path": "go.mod",
-      "commit": "aa0de01d85cd6d92035f719e2c469c6f16dfa430",
-      "tag": "v0.5.4"
+      "commit": "937b4b980d8cecfba74eca316b30665346ceac90",
+      "tag": "v0.5.5"
     },
     {
       "id": "release-github-com-looprig-pgstore",
       "type": "release-record",
       "repository": "pgstore",
       "path": "go.mod",
-      "commit": "b4da456bcd2c12864a14f991c21bf4d033fef8e3",
-      "tag": "v0.2.1"
+      "commit": "299a2297a6a2f7977a3750fe4235d3a60edfb21d",
+      "tag": "v0.2.3"
     },
     {
       "id": "release-github-com-looprig-pluto",
       "type": "release-record",
       "repository": "pluto",
       "path": "go.mod",
-      "commit": "94204ec18052622760aeb93205230042950f8e84",
-      "tag": "v0.2.3"
+      "commit": "a50d10bfb9a1752bfc315bdbe9fe648c6d365f0f",
+      "tag": "v0.2.4"
     },
     {
       "id": "release-github-com-looprig-pluto-cmd-pluto",
       "type": "release-record",
       "repository": "pluto",
       "path": "cmd/pluto/go.mod",
-      "commit": "90ad97569ab03c5f2d1315c989c9d11db8041f34",
-      "tag": "cmd/pluto/v0.2.1"
+      "commit": "3ba2dd095c8825535c68a3197c279af135d0edb1",
+      "tag": "cmd/pluto/v0.2.3"
     },
     {
       "id": "release-github-com-looprig-rclonestore",
       "type": "release-record",
       "repository": "rclonestore",
       "path": "go.mod",
-      "commit": "63333f01f56734c3a8581b9a0d622da93a37ba45",
-      "tag": "v0.6.0"
+      "commit": "d731a510b8df7c0d6ddd10f5705d8cf460bb68e3",
+      "tag": "v0.6.1"
     },
     {
       "id": "release-github-com-looprig-s3store",
       "type": "release-record",
       "repository": "s3store",
       "path": "go.mod",
-      "commit": "b4cb63952182a774c0c5b7f9c8e6cf57e79ed317",
-      "tag": "v0.2.1"
+      "commit": "b9b9bc72c4eaa93382c966b0fd4e074b08baee66",
+      "tag": "v0.2.3"
     },
     {
       "id": "release-github-com-looprig-sandbox",
       "type": "release-record",
       "repository": "sandbox",
       "path": "go.mod",
-      "commit": "fb57ecb7fc434f47718987980bfea2eea796d46a",
-      "tag": "v0.9.3"
+      "commit": "c403c0842f28a998a1dfb01eacc6189c8934804c",
+      "tag": "v0.9.4"
     },
     {
       "id": "release-github-com-looprig-secrets",
       "type": "release-record",
       "repository": "secrets",
       "path": "go.mod",
-      "commit": "19979670321be9102a47015868266f76714ad740",
-      "tag": "v0.2.2"
+      "commit": "fa5e2b8604035d7c30d9786af7f937f8cb695cce",
+      "tag": "v0.2.4"
     },
     {
       "id": "release-github-com-looprig-sessionstore",
       "type": "release-record",
       "repository": "sessionstore",
       "path": "go.mod",
-      "commit": "96e4621bd19d8b7ec59762f3efc3e106adab08a1",
-      "tag": "v0.14.0"
+      "commit": "3c0265320aeb82b0f9df69e507f8e2618f0c7ddd",
+      "tag": "v0.15.1"
     },
     {
       "id": "release-github-com-looprig-stack",
       "type": "release-record",
       "repository": "stack",
       "path": "go.mod",
-      "commit": "85496b67df8a2af06ec2669639b6954479ec4c6c",
-      "tag": "v0.1.0"
+      "commit": "2005d4ad27f16473bb5349882ac40c940f4d5c45",
+      "tag": "v0.1.2"
     },
     {
       "id": "release-github-com-looprig-storage",
       "type": "release-record",
       "repository": "storage",
       "path": "go.mod",
-      "commit": "fb16b9667680aaf487239c6ccbbb7e79e2249936",
-      "tag": "v0.9.0"
+      "commit": "227f4923ad6942bfdbf5fa03fba5cd3650f97d33",
+      "tag": "v0.9.1"
     },
     {
       "id": "release-github-com-looprig-tests",
       "type": "release-record",
       "repository": "tests",
       "path": "go.mod",
-      "commit": "f4f9c23b98312e5241d6b256f0a3833bbd45448f",
-      "tag": "v0.17.0"
+      "commit": "a64462ab95fd47da571bc46b8e428495532547fc",
+      "tag": "v0.18.1"
     },
     {
       "id": "release-github-com-looprig-tools",
       "type": "release-record",
       "repository": "tools",
       "path": "go.mod",
-      "commit": "235aa7fa046fd9920cf7b44e676d605ca2fce0b2",
-      "tag": "v0.15.1"
+      "commit": "d6429283baa063e3750b4b644a48f6510ef53a47",
+      "tag": "v0.15.2"
     },
     {
       "id": "release-github-com-looprig-tui",
       "type": "release-record",
       "repository": "tui",
       "path": "go.mod",
-      "commit": "0e083b23712773d2b86aad87b824ae2941b15707",
-      "tag": "v0.21.2"
+      "commit": "56e9971d4fc6f0b07b3cb0d022efa87ccd094271",
+      "tag": "v0.21.3"
     },
     {
       "id": "release-github-com-looprig-workflows",

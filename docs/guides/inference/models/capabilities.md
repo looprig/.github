@@ -52,7 +52,7 @@ if !descriptor.Caps.Thinking {
 
 ## Proof
 
-- Source: [`inference/model/capabilities.go`](https://github.com/looprig/inference/blob/v0.15.0/model/capabilities.go), [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.15.0/model/model.go)
-- Tests: [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/v0.15.0/model/model_test.go) verifies fail-safe defaults and each option.
+- Source: [`inference/model/capabilities.go`](https://github.com/looprig/inference/blob/v0.15.2/model/capabilities.go), [`inference/model/model.go`](https://github.com/looprig/inference/blob/v0.15.2/model/model.go)
+- Tests: [`inference/model/model_test.go`](https://github.com/looprig/inference/blob/v0.15.2/model/model_test.go) verifies fail-safe defaults and each option.
 
 Related: [Feature validation](/docs/guides/inference/requests/feature-validation), [Structured output requests](/docs/guides/inference/requests/structured-output).

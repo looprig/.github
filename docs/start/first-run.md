@@ -23,7 +23,7 @@ Harness turns the model boundary into a stateful agent runtime. A `Loop` freezes
 Add Harness and Storage to the project:
 
 ```sh
-go get github.com/looprig/harness@v0.45.0 github.com/looprig/storage@v0.9.0
+go get github.com/looprig/harness@v0.45.2 github.com/looprig/storage@v0.9.1
 ```
 
 Keep `model.go` from the previous page unchanged, and delete `ask.go`: from here on, Harness makes the model calls.

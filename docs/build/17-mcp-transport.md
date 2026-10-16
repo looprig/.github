@@ -43,6 +43,6 @@ Connect once, discover and fingerprint the catalog, then close the client after 
 
 ## Runnable proof {#runnable-proof}
 
-`stage-16-mcp-adoption` starts a deterministic stdio server, discovers one tool, installs it into a Harness loop, disables its binding, and asserts the generated `mcp__docs__lookup` model name and disabled status. Run it with `node scripts/docs/run-examples.mjs`. Read the [pinned stdio transport](https://github.com/looprig/mcp/tree/v0.7.3/pkg/transport/stdio/), [Streamable HTTP transport](https://github.com/looprig/mcp/tree/v0.7.3/pkg/transport/streamablehttp/), and [client](https://github.com/looprig/mcp/tree/v0.7.3/pkg/client/).
+`stage-16-mcp-adoption` starts a deterministic stdio server, discovers one tool, installs it into a Harness loop, disables its binding, and asserts the generated `mcp__docs__lookup` model name and disabled status. Run it with `node scripts/docs/run-examples.mjs`. Read the [pinned stdio transport](https://github.com/looprig/mcp/tree/v0.7.4/pkg/transport/stdio/), [Streamable HTTP transport](https://github.com/looprig/mcp/tree/v0.7.4/pkg/transport/streamablehttp/), and [client](https://github.com/looprig/mcp/tree/v0.7.4/pkg/client/).
 
 Example source: [`stage-16-mcp-adoption`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage16_mcp_adoption/main.go).

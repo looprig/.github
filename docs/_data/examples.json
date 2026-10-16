@@ -9,8 +9,8 @@
       "sourcePath": "examples/go/progressive/stage01_inference",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/inference": "v0.15.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/inference": "v0.15.2"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints a deterministic assistant response from the scripted inferencetest client",
@@ -30,8 +30,8 @@
       "sourcePath": "examples/go/progressive/stage02_streaming",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/inference": "v0.15.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/inference": "v0.15.2"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints deterministic streamed content and its stop reason",
@@ -51,9 +51,9 @@
       "sourcePath": "examples/go/progressive/stage03_pure_tool",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints a deterministic pure tool result without granting external effects",
@@ -74,9 +74,9 @@
       "sourcePath": "examples/go/progressive/stage04_prepared_tool",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints approval for a prepared tool call after deterministic gate evaluation",
@@ -97,9 +97,9 @@
       "sourcePath": "examples/go/progressive/stage05_loop",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints a loop definition bound to the scripted inferencetest model",
@@ -120,10 +120,10 @@
       "sourcePath": "examples/go/progressive/stage06_rig",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0",
-        "github.com/looprig/storage": "v0.9.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2",
+        "github.com/looprig/storage": "v0.9.1"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints an assembled Rig with durable session behavior",
@@ -145,10 +145,10 @@
       "sourcePath": "examples/go/progressive/stage07_session_events",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0",
-        "github.com/looprig/storage": "v0.9.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2",
+        "github.com/looprig/storage": "v0.9.1"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints a completed turn event with the session ready state",
@@ -170,11 +170,11 @@
       "sourcePath": "examples/go/progressive/stage08_session_store",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/fsstore": "v0.6.0",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0",
-        "github.com/looprig/storage": "v0.9.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/fsstore": "v0.6.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2",
+        "github.com/looprig/storage": "v0.9.1"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints a configured durable session-store path over fsstore with bounded blob readers",
@@ -197,11 +197,11 @@
       "sourcePath": "examples/go/progressive/stage09_restore",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/fsstore": "v0.6.0",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0",
-        "github.com/looprig/storage": "v0.9.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/fsstore": "v0.6.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2",
+        "github.com/looprig/storage": "v0.9.1"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints that the same session resumed after restore",
@@ -224,10 +224,10 @@
       "sourcePath": "examples/go/progressive/stage10_workspace",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0",
-        "github.com/looprig/storage": "v0.9.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2",
+        "github.com/looprig/storage": "v0.9.1"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints that a workspace snapshot restores exactly",
@@ -249,9 +249,9 @@
       "sourcePath": "examples/go/progressive/stage11_sandbox_process",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/inference": "v0.15.0",
-        "github.com/looprig/sandbox": "v0.9.3"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/inference": "v0.15.2",
+        "github.com/looprig/sandbox": "v0.9.4"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints a confined process exit status of zero",
@@ -272,9 +272,9 @@
       "sourcePath": "examples/go/progressive/stage12_gate_rules",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints that a deny rule wins before an allow rule",
@@ -295,10 +295,10 @@
       "sourcePath": "examples/go/progressive/stage13_classifier",
       "availability": "released",
       "versions": {
-        "github.com/looprig/classifiers": "v0.2.3",
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0"
+        "github.com/looprig/classifiers": "v0.2.4",
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints that a classifier recommendation cannot expand authority",
@@ -320,10 +320,10 @@
       "sourcePath": "examples/go/progressive/stage14_delegation",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0",
-        "github.com/looprig/storage": "v0.9.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2",
+        "github.com/looprig/storage": "v0.9.1"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints worker admission with quota enforcement",
@@ -345,11 +345,11 @@
       "sourcePath": "examples/go/progressive/stage15_acp_foreign",
       "availability": "released",
       "versions": {
-        "github.com/looprig/acp": "v0.3.4",
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/foreignloops": "v0.3.4",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0"
+        "github.com/looprig/acp": "v0.3.5",
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/foreignloops": "v0.3.5",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints the ACP profile, restored state, scoped services, and MCP server count",
@@ -372,10 +372,10 @@
       "sourcePath": "examples/go/progressive/stage16_mcp_adoption",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0",
-        "github.com/looprig/mcp": "v0.7.3"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2",
+        "github.com/looprig/mcp": "v0.7.4"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints the MCP source, discovered definition, model tool name, and disabled state",
@@ -397,9 +397,9 @@
       "sourcePath": "examples/go/progressive/stage17_flow",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/flow": "v0.4.4",
-        "github.com/looprig/inference": "v0.15.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/flow": "v0.4.5",
+        "github.com/looprig/inference": "v0.15.2"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints interrupted and resumed Flow runs with growing checkpoint history",
@@ -446,9 +446,9 @@
       "sourcePath": "examples/go/progressive/stage19_http_serve",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "DEPRECATED AND FROZEN: harness/pkg/serve is a frozen compatibility surface (use Factory for new composition); prints capabilities, one session, and a protected control-route response",
@@ -469,10 +469,10 @@
       "sourcePath": "examples/go/progressive/stage21_tui",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/harness": "v0.45.0",
-        "github.com/looprig/inference": "v0.15.0",
-        "github.com/looprig/tui": "v0.21.2"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/harness": "v0.45.2",
+        "github.com/looprig/inference": "v0.15.2",
+        "github.com/looprig/tui": "v0.21.3"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints the session adapter state, image capability, event, and one shutdown",
@@ -494,8 +494,8 @@
       "sourcePath": "examples/go/progressive/stage22_model_gateway",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/inference": "v0.15.0"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/inference": "v0.15.2"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints a gateway alias response, upstream model, and strict unknown-field behavior",
@@ -515,10 +515,10 @@
       "sourcePath": "examples/go/progressive/stage23_eval",
       "availability": "released",
       "versions": {
-        "github.com/looprig/core": "v0.13.1",
-        "github.com/looprig/eval": "v0.2.3",
-        "github.com/looprig/inference": "v0.15.0",
-        "github.com/looprig/pluto": "v0.2.3"
+        "github.com/looprig/core": "v0.13.2",
+        "github.com/looprig/eval": "v0.2.4",
+        "github.com/looprig/inference": "v0.15.2",
+        "github.com/looprig/pluto": "v0.2.4"
       },
       "offlineCommand": "node scripts/docs/run-examples.mjs",
       "assertion": "prints a passing exact evaluation report and qualified Pluto capability report",

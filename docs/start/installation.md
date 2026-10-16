@@ -19,7 +19,7 @@ Create a normal Go module for the coding assistant. Looprig does not require a g
 
 ## Prerequisites
 
-- Go 1.26.8 or newer.
+- Go 1.26.9 or newer.
 - A terminal.
 - Optionally, an API key for a hosted model. Every step also runs without one, against a scripted model.
 
@@ -33,9 +33,9 @@ cd looprig-coding-assistant
 go mod init example.com/looprig-coding-assistant
 
 # The modules for the first model call.
-go get github.com/looprig/core@v0.13.1 \
-  github.com/looprig/inference@v0.15.0 \
-  github.com/looprig/llm@v0.15.1
+go get github.com/looprig/core@v0.13.2 \
+  github.com/looprig/inference@v0.15.2 \
+  github.com/looprig/llm@v0.16.1
 ```
 
 Each later page starts with the `go get` line for the modules it adds. These are the released versions the tutorial is tested against; `@latest` also works, and because Looprig modules are pre-1.0, read the release notes when you move to a newer minor version.

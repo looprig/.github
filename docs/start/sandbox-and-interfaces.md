@@ -20,7 +20,7 @@ proofs:
 Read tools run inside the Go process and confine themselves. A command is different: it is a child process that can do anything its operating-system permissions allow. Add Sandbox before the coding assistant runs Bash. The gate decides whether a prepared command is authorized; the sandbox decides what the operating system lets the child do.
 
 ```sh
-go get github.com/looprig/sandbox@v0.9.3
+go get github.com/looprig/sandbox@v0.9.4
 ```
 
 ## Describe the authority

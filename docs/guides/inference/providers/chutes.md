@@ -111,21 +111,21 @@ func invoke() error {
 
 ## Source and proof
 
-- [attest.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/attest.go)
-- [client.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/client.go)
-- [decode.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/decode.go)
-- [discover.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/discover.go)
-- [encode.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/encode.go)
-- [errors.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/errors.go)
-- [ssereader.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/ssereader.go)
-- [stream.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/stream.go)
+- [attest.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/attest.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/client.go)
+- [decode.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/decode.go)
+- [discover.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/discover.go)
+- [encode.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/encode.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/errors.go)
+- [ssereader.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/ssereader.go)
+- [stream.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/stream.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.1/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.16.1/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/client_test.go)
-- [decode_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/decode_test.go)
-- [encode_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/encode_test.go)
-- [export_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/export_test.go)
-- [stream_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/stream_test.go)
-- [stream_wrapped_eof_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/stream_wrapped_eof_test.go)
-- [usage_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/chutes/usage_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/client_test.go)
+- [decode_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/decode_test.go)
+- [encode_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/encode_test.go)
+- [export_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/export_test.go)
+- [stream_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/stream_test.go)
+- [stream_wrapped_eof_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/stream_wrapped_eof_test.go)
+- [usage_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/chutes/usage_test.go)

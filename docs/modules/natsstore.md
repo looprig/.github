@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/natsstore` |
-| Version | `v0.5.4` |
+| Version | `v0.5.5` |
 | GitHub | [looprig/natsstore](https://github.com/looprig/natsstore) |
 
 ## Description

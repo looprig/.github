@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/harness` |
-| Version | `v0.45.0` |
+| Version | `v0.45.2` |
 | GitHub | [looprig/harness](https://github.com/looprig/harness) |
 
 ## Description

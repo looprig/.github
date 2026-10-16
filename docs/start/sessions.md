@@ -19,7 +19,7 @@ proofs:
 The coding assistant still loses its history when the process exits. This page moves session history and workspace snapshots to disk with Fsstore, so a later run can continue a conversation by its session ID.
 
 ```sh
-go get github.com/looprig/fsstore@v0.6.0 github.com/looprig/storage@v0.9.0
+go get github.com/looprig/fsstore@v0.6.2 github.com/looprig/storage@v0.9.1
 ```
 
 Storage v0.9.0 or later is required: it adds the bounded blob readers that let Fsstore back a session store. Fsstore alone would leave you on an older Storage.

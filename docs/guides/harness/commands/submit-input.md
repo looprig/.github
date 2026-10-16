@@ -234,7 +234,7 @@ and [Provide requested user input](/docs/guides/harness/commands/provide-user-in
 
 ## Source and proof
 
-- [`Input` and `InputSubmitter`](https://github.com/looprig/harness/blob/v0.45.0/pkg/session/session.go)
+- [`Input` and `InputSubmitter`](https://github.com/looprig/harness/blob/v0.45.2/pkg/session/session.go)
 
 - [`Session.Submit` and admission](https://github.com/looprig/harness/blob/main/internal/sessionruntime/session.go)
 - [`submit command contracts`](https://github.com/looprig/harness/blob/main/pkg/command/submit_test.go)

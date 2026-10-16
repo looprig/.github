@@ -96,9 +96,9 @@ test("Module page versions and graph links match the checked code inventory", ()
 });
 
 for (const [repository, slug, title, version] of [
-  ["harness", "harness", "Harness", "v0.45.0"],
-  ["inference", "inference", "Inference", "v0.15.0"],
-  ["tui", "tui", "TUI", "v0.21.2"],
+  ["harness", "harness", "Harness", "v0.45.2"],
+  ["inference", "inference", "Inference", "v0.15.2"],
+  ["tui", "tui", "TUI", "v0.21.3"],
 ]) {
   test(`${title} generated inventory and module page use ${version}`, () => {
     const record = inventory.modules.find((candidate) => candidate.repository === repository);
@@ -132,31 +132,31 @@ test("Flow Store is released from the Flow repository at its own nested tag", ()
   assert.ok(record, "missing flow/store inventory record");
   assert.equal(record.repository, "flow", "flow/store is published from the Flow repository");
   assert.equal(record.nested, true);
-  assert.deepEqual(record.publication, { status: "released", tag: "store/v0.1.3" });
+  assert.deepEqual(record.publication, { status: "released", tag: "store/v0.1.5" });
 
   const flow = inventory.modules.find((candidate) => candidate.module === "github.com/looprig/flow");
-  assert.deepEqual(flow.publication, { status: "released", tag: "v0.4.4" });
-  // Flow v0.4.4 and store/v0.1.3 were tagged on one commit, so the commits may coincide.
+  assert.deepEqual(flow.publication, { status: "released", tag: "v0.4.5" });
+  // The nested module releases independently of its parent and may use a different commit.
 
   const fields = repositoryFields("flow-store");
   assert.equal(fields.get("Repository"), "`github.com/looprig/flow/store`");
-  assert.equal(fields.get("Version"), "`store/v0.1.3`");
+  assert.equal(fields.get("Version"), "`store/v0.1.5`");
 });
 
-test("Carbon v0.33.0 stays product-only in generated inventory and release evidence", () => {
+test("Carbon v0.34.2 stays product-only in generated inventory and release evidence", () => {
   const record = inventory.modules.find((candidate) => candidate.repository === "carbon");
   assert.ok(record, "missing Carbon inventory record");
   assert.equal(record.module, "github.com/looprig/carbon");
   assert.equal(record.disposition, "product-only");
   assert.equal(record.publication?.status, "released");
-  assert.equal(record.publication?.tag, "v0.33.0", "Carbon inventory release is stale");
+  assert.equal(record.publication?.tag, "v0.34.2", "Carbon inventory release is stale");
   assert.equal(pages.includes("carbon.md"), false, "Carbon must not have a reusable module page");
 
   const proof = evidence.proofs.find((candidate) => candidate.id === "release-github-com-looprig-carbon");
   assert.ok(proof, "missing Carbon release evidence");
   assert.equal(proof.type, "release-record");
   assert.equal(proof.repository, "carbon");
-  assert.equal(proof.tag, "v0.33.0", "Carbon release evidence is stale");
+  assert.equal(proof.tag, "v0.34.2", "Carbon release evidence is stale");
   assert.equal(proof.commit, record.commit, "Carbon inventory and release evidence commits differ");
 });
 

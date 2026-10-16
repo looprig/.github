@@ -78,8 +78,8 @@ for _, call := range tools.Blocks() {
 
 ## Proof
 
-- Source: [`core/content/streamaccumulator/streamaccumulator.go`](https://github.com/looprig/core/blob/v0.13.1/content/streamaccumulator/streamaccumulator.go), [`core/content/chunk.go`](https://github.com/looprig/core/blob/v0.13.1/content/chunk.go)
-- Tests: [`core/content/streamaccumulator/streamaccumulator_test.go`](https://github.com/looprig/core/blob/v0.13.1/content/streamaccumulator/streamaccumulator_test.go)
-- Example: [`core/examples/streaming/example_test.go`](https://github.com/looprig/core/blob/v0.13.1/examples/streaming/example_test.go)
+- Source: [`core/content/streamaccumulator/streamaccumulator.go`](https://github.com/looprig/core/blob/v0.13.2/content/streamaccumulator/streamaccumulator.go), [`core/content/chunk.go`](https://github.com/looprig/core/blob/v0.13.2/content/chunk.go)
+- Tests: [`core/content/streamaccumulator/streamaccumulator_test.go`](https://github.com/looprig/core/blob/v0.13.2/content/streamaccumulator/streamaccumulator_test.go)
+- Example: [`core/examples/streaming/example_test.go`](https://github.com/looprig/core/blob/v0.13.2/examples/streaming/example_test.go)
 
 Related: [Chunks](/docs/guides/inference/streaming/chunks), [Assistant messages](/docs/guides/inference/responses/assistant-message).

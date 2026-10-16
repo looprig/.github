@@ -50,8 +50,8 @@ sum.
 
 ## Source and proof
 
-- [`core/content/usage.go`](https://github.com/looprig/core/blob/v0.13.1/content/usage.go)
-- [`core/content/usage_test.go`](https://github.com/looprig/core/blob/v0.13.1/content/usage_test.go)
-- [`usage/usage_test.go`](https://github.com/looprig/inference/blob/v0.15.0/usage/usage_test.go)
+- [`core/content/usage.go`](https://github.com/looprig/core/blob/v0.13.2/content/usage.go)
+- [`core/content/usage_test.go`](https://github.com/looprig/core/blob/v0.13.2/content/usage_test.go)
+- [`usage/usage_test.go`](https://github.com/looprig/inference/blob/v0.15.2/usage/usage_test.go)
 
 Run `go test ./usage` and `go test` in the core module.

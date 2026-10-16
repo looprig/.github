@@ -39,6 +39,6 @@ The component package provides bounded completion widgets (`InputBox`, file/sess
 
 ## Runnable proof {#runnable-proof}
 
-The reviewed TUI fixture prints the session-adapter state, image capability, one event, and one shutdown. The reviewed source links for [sessionadapter](https://github.com/looprig/tui/tree/v0.21.2/sessionadapter), [restore](https://github.com/looprig/tui/tree/v0.21.2/restore), and [runtime](https://github.com/looprig/tui/tree/v0.21.2/runtime) are pinned to the v0.21.2 release.
+The reviewed TUI fixture prints the session-adapter state, image capability, one event, and one shutdown. The reviewed source links for [sessionadapter](https://github.com/looprig/tui/tree/v0.21.3/sessionadapter), [restore](https://github.com/looprig/tui/tree/v0.21.3/restore), and [runtime](https://github.com/looprig/tui/tree/v0.21.3/runtime) are pinned to the v0.21.2 release.
 
 Example source: [`stage-21-tui`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage21_tui/main.go).

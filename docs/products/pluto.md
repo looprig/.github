@@ -26,7 +26,7 @@ Pluto is an evaluation and qualification framework for models and agents. It run
 ## Install
 
 ```sh
-go install github.com/looprig/pluto/cmd/pluto@v0.2.1
+go install github.com/looprig/pluto/cmd/pluto@v0.2.3
 ```
 
 ## Run Pluto

@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/foreignloops` |
-| Version | `v0.3.4` |
+| Version | `v0.3.5` |
 | GitHub | [looprig/foreignloops](https://github.com/looprig/foreignloops) |
 
 ## Description

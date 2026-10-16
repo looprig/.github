@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/inference` |
-| Version | `v0.15.0` |
+| Version | `v0.15.2` |
 | GitHub | [looprig/inference](https://github.com/looprig/inference) |
 
 ## Description

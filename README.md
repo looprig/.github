@@ -27,7 +27,7 @@ release tags. Run the corpus checks with Node:
 node --test scripts/docs/*.test.mjs
 ```
 
-Run the progressive examples the way CI does (needs Go 1.26.8 and network
+Run the progressive examples the way CI does (needs Go 1.26.9 and network
 access to fetch the pinned module versions):
 
 ```sh

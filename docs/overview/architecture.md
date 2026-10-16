@@ -34,21 +34,21 @@ The rest of this page describes the hosted shape, because it has the most moving
 ```mermaid
 %%{init: {"theme":"dark"}}%%
 flowchart LR
-  B["Browser<br/>@looprig/client, @looprig/react"]
+  B["Browser — @looprig/client, @looprig/react"]
   subgraph F["Factory (public service)"]
-    API["HTTP API<br/>/v1/sessions"]
-    CL["ClientLink<br/>WebSocket"]
+    API["HTTP API — /v1/sessions"]
+    CL["ClientLink — WebSocket"]
   end
-  SS[("SessionStore<br/>catalog, command inbox,<br/>gates, residency, Host registry")]
+  SS[("SessionStore — catalog, command inbox, gates, residency, Host registry")]
   subgraph H["Host (resident runtimes)"]
-    D["Department<br/>agent to launch target"]
+    D["Department — agent to launch target"]
     R["Harness Rig and Session"]
   end
-  J[("Harness journal store<br/>per tenant")]
-  M["Inference<br/>model providers"]
+  J[("Harness journal store — per tenant")]
+  M["Inference — model providers"]
   T["Tools"]
-  S["Sandbox<br/>OS confinement"]
-  K["Controller<br/>optional, Kubernetes"]
+  S["Sandbox — OS confinement"]
+  K["Controller — optional, Kubernetes"]
 
   B -- "REST: create, input, history" --> API
   B <-- "live output, commands" --> CL
@@ -85,11 +85,11 @@ The storage cylinders are logical. Both usually live on the same backend, such a
 
 - **One source for the agreements.** Factory and Host must agree on the journal binding, each agent's launch template, the evidence Host settles commands from, and the resolvers Factory reads history through. Stack derives all of them from the same `Agents` list, so they cannot disagree.
 - **Agents are Rig builders.** Each `stack.Agent` names an agent ID, a compatibility ID, its `department.Capabilities`, and a `Define` function that builds the Rig for every launch from a `stack.Binding` (tenant, session, the journal store to pass to `rig.WithSessionStore`, and an optional workspace root). Every agent runs through `host/harnessruntime`, described below.
-- **Storage profiles.** `stack/localdisk` opens FSStore directories under one data directory for a single machine, `stack/memory` is for tests, and `stack/devauth` is a development-only identity that `Options.AllowDevelopmentIdentity` must enable. Stack v0.1.0 exposes no workspace snapshot store; an agent that places a workspace opens its own and must keep it durable, because a session restored after a restart against an in-memory snapshot store fails with `materialize_failed`.
+- **Storage profiles.** `stack/localdisk` opens FSStore directories under one data directory for a single machine, `stack/memory` is for tests, and `stack/devauth` is a development-only identity that `Options.AllowDevelopmentIdentity` must enable. Stack v0.1.2 exposes no workspace snapshot store; an agent that places a workspace opens its own and must keep it durable, because a session restored after a restart against an in-memory snapshot store fails with `materialize_failed`.
 - **Ordered shutdown.** `Stop` runs Factory `Quiesce`, Host `Stop` (the drain, while HostLink is still served), Factory `Stop`, and then closes storage last, on its own lifecycle: the caller's context bounds only the wait, and a retried `Stop` waits for the same teardown. It returns `*ParkedSessionsError` when the drain leaves a runtime running.
 - **Moving Hosts out.** `stack.RemoteHosts{}` plus `stack.ServeHost` in each Host process moves the Hosts to other processes over shared storage, such as NATS or PostgreSQL with S3, with the same `Agents`.
 
-The [browser-app starter](/docs/start/starters) is a complete program on Stack. Compose Factory and Host yourself when you need what Stack v0.1.0 does not include: an object policy, checkpointing, or dedicated placement.
+The [browser-app starter](/docs/start/starters) is a complete program on Stack. Compose Factory and Host yourself when you need what Stack v0.1.2 does not include: an object policy, checkpointing, or dedicated placement.
 
 ## Agents on a Host
 
@@ -161,8 +161,8 @@ Inside a Host, or inside your own process, the same Harness runtime runs every t
 %%{init: {"theme":"dark"}}%%
 flowchart LR
   Session["Session"] --> Loop["Active Loop"]
-  Loop -- "inference.Request" --> Client["inference.Client<br/>(LLM provider)"]
-  Loop -- "prepared tool call" --> Gate["Access gate<br/>and approval gates"]
+  Loop -- "inference.Request" --> Client["inference.Client — (LLM provider)"]
+  Loop -- "prepared tool call" --> Gate["Access gate — and approval gates"]
   Gate --> Tool["Tool"]
   Tool -- "process" --> Sandbox["Sandbox executor"]
   Loop -- "enduring events" --> Journal[("Journal")]

@@ -57,6 +57,6 @@ Use Fsstore for a local single-process path when an explicit root and file durab
 
 ## Runnable proof {#runnable-proof}
 
-`stage-08-session-store` proves the released Fsstore path and `stage-10-workspace` proves a Storage snapshot round trip. Run them with `node scripts/docs/run-examples.mjs`, then repeat relevant module tests with `GOWORK=off`. Source trees are pinned in the [Storage release](https://github.com/looprig/storage/tree/v0.9.0/) and [Fsstore release](https://github.com/looprig/fsstore/tree/v0.6.0/). The referenced package pages list the pinned source files and adjacent tests used for these workspace boundaries.
+`stage-08-session-store` proves the released Fsstore path and `stage-10-workspace` proves a Storage snapshot round trip. Run them with `node scripts/docs/run-examples.mjs`, then repeat relevant module tests with `GOWORK=off`. Source trees are pinned in the [Storage release](https://github.com/looprig/storage/tree/v0.9.1/) and [Fsstore release](https://github.com/looprig/fsstore/tree/v0.6.2/). The referenced package pages list the pinned source files and adjacent tests used for these workspace boundaries.
 
 Example source: [`stage-08-session-store`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage08_session_store/main.go), [`stage-10-workspace`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage10_workspace/main.go).

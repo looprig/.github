@@ -109,11 +109,11 @@ func invoke() error {
 
 ## Source and proof
 
-- [client.go](https://github.com/looprig/llm/blob/v0.15.1/providers/cloudflare-ai-gateway/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/v0.15.1/providers/cloudflare-ai-gateway/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/v0.15.1/providers/cloudflare-ai-gateway/errors.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.16.1/providers/cloudflare-ai-gateway/client.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.16.1/providers/cloudflare-ai-gateway/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.16.1/providers/cloudflare-ai-gateway/errors.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.1/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.16.1/provider.go). Adjacent behavior tests:
 
-- [client_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/cloudflare-ai-gateway/client_test.go)
-- [options_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/cloudflare-ai-gateway/options_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/cloudflare-ai-gateway/client_test.go)
+- [options_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/cloudflare-ai-gateway/options_test.go)

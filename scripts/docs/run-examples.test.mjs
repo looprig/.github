@@ -405,7 +405,7 @@ test('looprigRequirements lists block and single-line Looprig requirements only'
   const goMod = [
     'module github.com/looprig/.github/examples/go/progressive',
     '',
-    'go 1.26.8',
+    'go 1.26.9',
     '',
     'require (',
     '\tgithub.com/looprig/core v0.13.1',
@@ -485,7 +485,7 @@ test('findStandaloneModules returns every nested directory with its own go.mod a
 
 test('standalone execution verifies, tests, then runs read-only under the isolated public environment', () => {
   withTemporaryRoots('looprig-standalone-plan-', (moduleRoot, cacheRoot) => {
-    const goMod = 'module example.com/start\n\ngo 1.26.8\n\nrequire github.com/looprig/harness v0.43.0\n';
+    const goMod = 'module example.com/start\n\ngo 1.26.9\n\nrequire github.com/looprig/harness v0.43.0\n';
     writeFileSync(join(moduleRoot, 'go.mod'), goMod);
     const calls = [];
     executeStandaloneGoModule(moduleRoot, cacheRoot, {
@@ -509,10 +509,24 @@ test('standalone execution verifies, tests, then runs read-only under the isolat
   });
 });
 
+test('stateful standalone examples keep durable data in their disposable cache, outside the real user profile', () => {
+  for (const name of ['run-cli', 'sandbox', 'sessions', 'workspaces']) {
+    withTemporaryRoots(`looprig-standalone-data-${name}-`, (moduleRoot, cacheRoot) => {
+      writeFileSync(join(moduleRoot, 'go.mod'), 'module example.com/start\n\ngo 1.26.9\n');
+      const calls = [];
+      executeStandaloneGoModule(moduleRoot, cacheRoot, {
+        relativeDirectory: `examples/go/start/${name}`,
+        executeCommand: (command, args) => calls.push([command, args]),
+      });
+      assert.deepEqual(calls.at(-1), ['go', ['run', '-mod=readonly', '.', '-data', join(cacheRoot, 'application-data')]], name);
+    });
+  }
+});
+
 test('standalone --latest upgrades Looprig requirements and re-tidies before verification', () => {
   withTemporaryRoots('looprig-standalone-latest-', (moduleRoot, cacheRoot) => {
     const goModPath = join(moduleRoot, 'go.mod');
-    writeFileSync(goModPath, 'module example.com/guide\n\ngo 1.26.8\n\nrequire (\n\tgithub.com/looprig/core v0.13.1\n\tgithub.com/looprig/storage v0.9.0\n)\n');
+    writeFileSync(goModPath, 'module example.com/guide\n\ngo 1.26.9\n\nrequire (\n\tgithub.com/looprig/core v0.13.1\n\tgithub.com/looprig/storage v0.9.0\n)\n');
     const calls = [];
     executeStandaloneGoModule(moduleRoot, cacheRoot, {
       latest: true,
@@ -534,16 +548,16 @@ test('standalone --latest upgrades Looprig requirements and re-tidies before ver
 test('standalone execution refuses replace directives and go.mod mutation by a pinned command', () => {
   withTemporaryRoots('looprig-standalone-guard-', (moduleRoot, cacheRoot) => {
     const goModPath = join(moduleRoot, 'go.mod');
-    writeFileSync(goModPath, 'module example.com/x\n\ngo 1.26.8\n\nreplace github.com/looprig/core => ../core\n');
+    writeFileSync(goModPath, 'module example.com/x\n\ngo 1.26.9\n\nreplace github.com/looprig/core => ../core\n');
     assert.throws(() => executeStandaloneGoModule(moduleRoot, cacheRoot, { executeCommand: () => {} }), /replace directive/);
 
-    writeFileSync(goModPath, 'module example.com/x\n\ngo 1.26.8\n');
+    writeFileSync(goModPath, 'module example.com/x\n\ngo 1.26.9\n');
     let calls = 0;
     assert.throws(
       () => executeStandaloneGoModule(moduleRoot, cacheRoot, {
         executeCommand: () => {
           calls += 1;
-          if (calls === 2) writeFileSync(goModPath, 'module example.com/x\n\ngo 1.26.9\n');
+          if (calls === 2) writeFileSync(goModPath, 'module example.com/x\n\ngo 1.26.10\n');
         },
       }),
       /standalone go\.mod changed/,

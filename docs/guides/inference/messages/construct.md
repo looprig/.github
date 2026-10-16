@@ -57,7 +57,7 @@ The message codecs preserve the `Role` field exactly; they do not infer it from 
 
 ## Proof
 
-- Source: [`core/content/message.go`](https://github.com/looprig/core/blob/v0.13.1/content/message.go), [`core/content/block.go`](https://github.com/looprig/core/blob/v0.13.1/content/block.go)
-- Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/v0.13.1/content/message_test.go), [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.13.1/content/block_json_test.go)
+- Source: [`core/content/message.go`](https://github.com/looprig/core/blob/v0.13.2/content/message.go), [`core/content/block.go`](https://github.com/looprig/core/blob/v0.13.2/content/block.go)
+- Tests: [`core/content/message_test.go`](https://github.com/looprig/core/blob/v0.13.2/content/message_test.go), [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.13.2/content/block_json_test.go)
 
 Related: [UserMessage](/docs/guides/inference/messages/message-types/user-message), [Content blocks](/docs/guides/inference/content-blocks).

@@ -55,6 +55,6 @@ Classify transport, authentication, discovery, schema, tool invocation, sampling
 
 ## Runnable proof {#runnable-proof}
 
-The deterministic `stage-16-mcp-adoption` proof covers publish, stdio consumption, Harness adoption, and disable reconfiguration. `stage-15-acp-foreign` covers ACP child configuration with one forwarded MCP server and live/restored builders. Run both with `node scripts/docs/run-examples.mjs`. Source is pinned in the [MCP module](https://github.com/looprig/mcp/tree/v0.7.3/), [ACP protocol](https://github.com/looprig/acp/tree/v0.3.4/protocol/), and [foreign ACP driver](https://github.com/looprig/foreignloops/tree/v0.3.4/driver/acp/).
+The deterministic `stage-16-mcp-adoption` proof covers publish, stdio consumption, Harness adoption, and disable reconfiguration. `stage-15-acp-foreign` covers ACP child configuration with one forwarded MCP server and live/restored builders. Run both with `node scripts/docs/run-examples.mjs`. Source is pinned in the [MCP module](https://github.com/looprig/mcp/tree/v0.7.4/), [ACP protocol](https://github.com/looprig/acp/tree/v0.3.5/protocol/), and [foreign ACP driver](https://github.com/looprig/foreignloops/tree/v0.3.5/driver/acp/).
 
 Example source: [`stage-15-acp-foreign`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage15_acp_foreign/main.go), [`stage-16-mcp-adoption`](https://github.com/looprig/.github/blob/main/examples/go/progressive/stage16_mcp_adoption/main.go).

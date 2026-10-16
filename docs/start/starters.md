@@ -26,26 +26,26 @@ you add it.
 The starters live in their own repository,
 [`github.com/looprig/starters`](https://github.com/looprig/starters). It is a
 templates repository, not a library: nothing imports it. Each starter is a
-separate Go module with its own tags (`cli-agent/v0.1.0`,
-`browser-app/v0.1.0`), re-pinned when Looprig releases move.
+separate Go module with its own tags (`cli-agent/v0.1.1`,
+`browser-app/v0.1.1`), re-pinned when Looprig releases move.
 
 ## The two starters
 
 | Starter | What you get | Built on |
 |---|---|---|
-| [`cli-agent`](https://github.com/looprig/starters/tree/cli-agent/v0.1.0/cli-agent) | A terminal coding assistant: reads your repository with Glob, Grep and ReadFile, asks before each write unless an earlier "always" answer in the same run covers it, streams output, and resumes sessions with `--resume <id>`. | harness v0.45.0 (`loop.WithWorkspaceAccess`), tools v0.15.1, inference v0.15.0, llm v0.15.1, fsstore v0.6.0 |
-| [`browser-app`](https://github.com/looprig/starters/tree/browser-app/v0.1.0/browser-app) | A multi-user web app in one process: sign in, create sessions, watch text, reasoning and tool steps stream live, approve the agent's file writes in the browser, and restart without losing a conversation. | [Stack](/docs/modules/stack) v0.1.0 (Factory v0.15.0 and an in-process Host v0.17.0), harness v0.45.0, tools v0.15.1, `@looprig/client` and `@looprig/react` 0.3.0 |
+| [`cli-agent`](https://github.com/looprig/starters/tree/cli-agent/v0.1.1/cli-agent) | A terminal coding assistant: reads your repository with Glob, Grep and ReadFile, asks before each write unless an earlier "always" answer in the same run covers it, streams output, and resumes sessions with `--resume <id>`. | harness v0.45.2 (`loop.WithWorkspaceAccess`), tools v0.15.2, inference v0.15.2, llm v0.16.1, fsstore v0.6.2 |
+| [`browser-app`](https://github.com/looprig/starters/tree/browser-app/v0.1.1/browser-app) | A multi-user web app in one process: sign in, create sessions, watch text, reasoning and tool steps stream live, approve the agent's file writes in the browser, and restart without losing a conversation. | [Stack](/docs/modules/stack) v0.1.2 (Factory v0.16.1 and an in-process Host v0.18.1), harness v0.45.2, tools v0.15.2, `@looprig/client` and `@looprig/react` 0.3.0 |
 
 Both keep state on local disk with `fsstore`, adapted by
 `storage.WithBoundedBlobReaders` so SessionStore accepts it, and both refuse a
-data directory written before fsstore v0.6.0 with a "move or delete" message
+data directory written before fsstore v0.6.2 with a "move or delete" message
 rather than migrating it.
 
 ## Get a starter
 
 Copy a starter with [`gonew`](https://pkg.go.dev/golang.org/x/tools/cmd/gonew),
 which downloads the module through the Go module proxy, writes it into a new
-directory, and renames its module path. It needs Go 1.26.8 or later; the
+directory, and renames its module path. It needs Go 1.26.9 or later; the
 browser app's UI also needs Node 22 or later.
 
 ```sh
@@ -62,7 +62,7 @@ cd myapp
 
 `gonew` writes into `./myapp`, the last element of the new module path, which
 must not exist yet. Without a version it takes the starter's latest tag; add
-one, as in `github.com/looprig/starters/cli-agent@v0.1.0`, to pin it.
+one, as in `github.com/looprig/starters/cli-agent@v0.1.1`, to pin it.
 Everything is in package `main`, and the copy has no `replace` directives, so
 it builds anywhere. The commands below run from `myapp`.
 
@@ -134,7 +134,7 @@ permission gate, which the browser answers through Factory.
 `LOOPRIG_READ_ONLY=1` switches to `loop.WithReadOnlyAccess` and drops the write
 tools.
 
-Stack v0.1.0 exposes no workspace snapshot store, so the starter opens its own
+Stack v0.1.2 exposes no workspace snapshot store, so the starter opens its own
 in a separate `fsstore` directory, `data/snapshots`, beside the roots
 `localdisk` manages. Keep that store durable: Host checkpoints a session's
 workspace into it on release and restores the workspace from it, and a session

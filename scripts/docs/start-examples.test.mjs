@@ -77,7 +77,7 @@ test("example modules are standalone: no replace directives and no workspace fil
     const directory = path.join(startExamples, name);
     assert.equal(existsSync(path.join(directory, "go.work")), false, `${name} has a go.work`);
     assert.doesNotMatch(read(`examples/go/start/${name}/go.mod`), /^\s*replace\b/m, `${name} has a replace directive`);
-    assert.match(read(`examples/go/start/${name}/go.mod`), /^go 1\.26\.8$/m);
+    assert.match(read(`examples/go/start/${name}/go.mod`), /^go 1\.26\.9$/m);
   }
 });
 

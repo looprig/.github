@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/sessionstore` |
-| Version | `v0.14.0` |
+| Version | `v0.15.1` |
 | GitHub | [looprig/sessionstore](https://github.com/looprig/sessionstore) |
 
 ## Description

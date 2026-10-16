@@ -121,19 +121,19 @@ func invoke() error {
 
 ## Source and proof
 
-- [body.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/body.go)
-- [client.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/client.go)
-- [counter.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/counter.go)
-- [errors.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/errors.go)
-- [options.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/options.go)
+- [body.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/body.go)
+- [client.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/client.go)
+- [counter.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/counter.go)
+- [errors.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/errors.go)
+- [options.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/options.go)
 
-The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.15.1/provider.go). Adjacent behavior tests:
+The provider identity and API-format truth table are defined in [provider.go](https://github.com/looprig/llm/blob/v0.16.1/provider.go). Adjacent behavior tests:
 
-- [body_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/body_test.go)
-- [client_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/client_test.go)
-- [converse_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/converse_test.go)
-- [counter_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/counter_test.go)
-- [export_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/export_test.go)
-- [options_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/options_test.go)
-- [thinking_budget_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/thinking_budget_test.go)
-- [usage_test.go](https://github.com/looprig/llm/blob/v0.15.1/providers/bedrock/usage_test.go)
+- [body_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/body_test.go)
+- [client_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/client_test.go)
+- [converse_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/converse_test.go)
+- [counter_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/counter_test.go)
+- [export_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/export_test.go)
+- [options_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/options_test.go)
+- [thinking_budget_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/thinking_budget_test.go)
+- [usage_test.go](https://github.com/looprig/llm/blob/v0.16.1/providers/bedrock/usage_test.go)

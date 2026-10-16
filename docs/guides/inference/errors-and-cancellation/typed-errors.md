@@ -48,8 +48,8 @@ if errors.Is(err, context.Canceled) {
 
 ## Source and proof
 
-- [`failure/errors.go`](https://github.com/looprig/inference/blob/v0.15.0/failure/errors.go)
-- [`gateway/http_errors.go`](https://github.com/looprig/inference/blob/v0.15.0/gateway/http_errors.go)
-- [`structured_errors.go`](https://github.com/looprig/inference/blob/v0.15.0/structured_errors.go)
+- [`failure/errors.go`](https://github.com/looprig/inference/blob/v0.15.2/failure/errors.go)
+- [`gateway/http_errors.go`](https://github.com/looprig/inference/blob/v0.15.2/gateway/http_errors.go)
+- [`structured_errors.go`](https://github.com/looprig/inference/blob/v0.15.2/structured_errors.go)
 
 Run `go test ./failure ./gateway`.

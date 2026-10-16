@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/drain` |
-| Version | `v0.1.0` |
+| Version | `v0.1.2` |
 | GitHub | [looprig/drain](https://github.com/looprig/drain) |
 
 ## Description

@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/pgstore` |
-| Version | `v0.2.1` |
+| Version | `v0.2.3` |
 | GitHub | [looprig/pgstore](https://github.com/looprig/pgstore) |
 
 ## Description

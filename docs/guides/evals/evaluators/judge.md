@@ -182,30 +182,30 @@ func TestJudge(t *testing.T) {
 ```
 
 For the complete test fixture and model helper, see
-[examples/judge/example_test.go](https://github.com/looprig/eval/blob/v0.2.3/examples/judge/example_test.go). Store the resulting report with the
+[examples/judge/example_test.go](https://github.com/looprig/eval/blob/v0.2.4/examples/judge/example_test.go). Store the resulting report with the
 [redacted report sink](/docs/guides/evals/reporting) when the score needs to leave the process.
 
 ## Source
 
 Judge construction and prompt assembly are in
-[judge/judge.go](https://github.com/looprig/eval/blob/v0.2.3/judge/judge.go) and
-[judge/prompt.go](https://github.com/looprig/eval/blob/v0.2.3/judge/prompt.go).
+[judge/judge.go](https://github.com/looprig/eval/blob/v0.2.4/judge/judge.go) and
+[judge/prompt.go](https://github.com/looprig/eval/blob/v0.2.4/judge/prompt.go).
 The score contract is in
-[judge/schema.go](https://github.com/looprig/eval/blob/v0.2.3/judge/schema.go),
+[judge/schema.go](https://github.com/looprig/eval/blob/v0.2.4/judge/schema.go),
 and rubric data is in
-[rubric/rubric.go](https://github.com/looprig/eval/blob/v0.2.3/rubric/rubric.go).
+[rubric/rubric.go](https://github.com/looprig/eval/blob/v0.2.4/rubric/rubric.go).
 
 ## Proof
 
 Judge construction and assessment are implemented in
-[judge/judge.go](https://github.com/looprig/eval/blob/v0.2.3/judge/judge.go);
+[judge/judge.go](https://github.com/looprig/eval/blob/v0.2.4/judge/judge.go);
 prompt trust boundaries are in
-[judge/prompt.go](https://github.com/looprig/eval/blob/v0.2.3/judge/prompt.go);
+[judge/prompt.go](https://github.com/looprig/eval/blob/v0.2.4/judge/prompt.go);
 schema decoding and local provenance checks are in
-[judge/schema.go](https://github.com/looprig/eval/blob/v0.2.3/judge/schema.go).
+[judge/schema.go](https://github.com/looprig/eval/blob/v0.2.4/judge/schema.go).
 Rubric validation and threshold semantics are in
-[rubric/rubric.go](https://github.com/looprig/eval/blob/v0.2.3/rubric/rubric.go).
+[rubric/rubric.go](https://github.com/looprig/eval/blob/v0.2.4/rubric/rubric.go).
 The success, strict-request, unsupported model, malformed output, quote, and
 timeout cases are covered by
-[judge/judge_test.go](https://github.com/looprig/eval/blob/v0.2.3/judge/judge_test.go)
-and [judge/schema_fuzz_test.go](https://github.com/looprig/eval/blob/v0.2.3/judge/schema_fuzz_test.go).
+[judge/judge_test.go](https://github.com/looprig/eval/blob/v0.2.4/judge/judge_test.go)
+and [judge/schema_fuzz_test.go](https://github.com/looprig/eval/blob/v0.2.4/judge/schema_fuzz_test.go).

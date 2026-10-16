@@ -67,7 +67,7 @@ During streaming, `ToolUseChunk.InputJSON` fragments are concatenated by `stream
 
 ## Proof
 
-- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.13.1/content/block.go), [`core/content/streamaccumulator/streamaccumulator.go`](https://github.com/looprig/core/blob/v0.13.1/content/streamaccumulator/streamaccumulator.go)
-- Tests: [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.13.1/content/block_json_test.go), [`core/content/streamaccumulator/streamaccumulator_test.go`](https://github.com/looprig/core/blob/v0.13.1/content/streamaccumulator/streamaccumulator_test.go)
+- Source: [`core/content/block.go`](https://github.com/looprig/core/blob/v0.13.2/content/block.go), [`core/content/streamaccumulator/streamaccumulator.go`](https://github.com/looprig/core/blob/v0.13.2/content/streamaccumulator/streamaccumulator.go)
+- Tests: [`core/content/block_json_test.go`](https://github.com/looprig/core/blob/v0.13.2/content/block_json_test.go), [`core/content/streamaccumulator/streamaccumulator_test.go`](https://github.com/looprig/core/blob/v0.13.2/content/streamaccumulator/streamaccumulator_test.go)
 
 Related: [Tool definitions](/docs/guides/inference/requests/tools), [Tool-call deltas](/docs/guides/inference/streaming/tool-call-deltas), [ToolResultBlock](/docs/guides/inference/content-blocks/tool-result).

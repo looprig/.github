@@ -68,9 +68,9 @@ client](/docs/guides/inference/client/stream) has the matching stream lifecycle.
 
 ## Proof
 
-- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.15.0/client.go)
-- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.15.0/client_test.go), [`inference/transport/client_test.go`](https://github.com/looprig/inference/blob/v0.15.0/transport/client_test.go)
-- Opt-out and cancellation proof: [`transport/execution_timeout.go`](https://github.com/looprig/inference/blob/v0.15.0/transport/execution_timeout.go), [`transport/execution_timeout_test.go`](https://github.com/looprig/inference/blob/v0.15.0/transport/execution_timeout_test.go)
-- Example: [`inference/examples/invoke/main.go`](https://github.com/looprig/inference/blob/v0.15.0/examples/invoke/main.go)
+- Source: [`inference/client.go`](https://github.com/looprig/inference/blob/v0.15.2/client.go)
+- Tests: [`inference/client_test.go`](https://github.com/looprig/inference/blob/v0.15.2/client_test.go), [`inference/transport/client_test.go`](https://github.com/looprig/inference/blob/v0.15.2/transport/client_test.go)
+- Opt-out and cancellation proof: [`transport/execution_timeout.go`](https://github.com/looprig/inference/blob/v0.15.2/transport/execution_timeout.go), [`transport/execution_timeout_test.go`](https://github.com/looprig/inference/blob/v0.15.2/transport/execution_timeout_test.go)
+- Example: [`inference/examples/invoke/main.go`](https://github.com/looprig/inference/blob/v0.15.2/examples/invoke/main.go)
 
 Related: [Responses](/docs/guides/inference/responses), [Request feature validation](/docs/guides/inference/requests/feature-validation).

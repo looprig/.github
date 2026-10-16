@@ -35,7 +35,7 @@ The hosted path uses OpenRouter because its client can be constructed from a mod
 
 ## Prerequisites
 
-- Go 1.26.8 or later.
+- Go 1.26.9 or later.
 - For the hosted path, an OpenRouter API key and a model identifier chosen by you. The scripted path needs neither.
 
 The model identifier is configuration, not a Looprig default. That keeps the agent under your control and avoids a silent model change when a provider's catalog changes.
@@ -46,11 +46,11 @@ The model identifier is configuration, not a Looprig default. That keeps the age
 mkdir my-agent
 cd my-agent
 go mod init example.com/my-agent
-go get github.com/looprig/core@v0.13.1 \
-  github.com/looprig/harness@v0.45.0 \
-  github.com/looprig/inference@v0.15.0 \
-  github.com/looprig/llm@v0.15.1 \
-  github.com/looprig/storage@v0.9.0
+go get github.com/looprig/core@v0.13.2 \
+  github.com/looprig/harness@v0.45.2 \
+  github.com/looprig/inference@v0.15.2 \
+  github.com/looprig/llm@v0.16.1 \
+  github.com/looprig/storage@v0.9.1
 ```
 
 These are the released versions this page was verified against. `go get github.com/looprig/harness@latest` also works; Harness is pre-1.0, so read its release notes when you move to a new minor version.

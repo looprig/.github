@@ -121,7 +121,7 @@ The generic transport reports validation, network, HTTP, codec, and stream failu
 
 ## Source and proof
 
-- [`llm/provider.go`](https://github.com/looprig/llm/blob/v0.15.1/provider.go) defines provider identities, supported API formats, empty-base policy, and required auth.
-- [`llm/validate.go`](https://github.com/looprig/llm/blob/v0.15.1/validate.go) proves fail-closed model validation.
-- [`llm/authpolicy.go`](https://github.com/looprig/llm/blob/v0.15.1/authpolicy.go) binds provider, transport, credential scheme, issuer, and audience.
-- [`inference/transport`](https://github.com/looprig/inference/tree/v0.15.0/transport) and [`inference/retry`](https://github.com/looprig/inference/tree/v0.15.0/retry) define the shared request and retry boundaries.
+- [`llm/provider.go`](https://github.com/looprig/llm/blob/v0.16.1/provider.go) defines provider identities, supported API formats, empty-base policy, and required auth.
+- [`llm/validate.go`](https://github.com/looprig/llm/blob/v0.16.1/validate.go) proves fail-closed model validation.
+- [`llm/authpolicy.go`](https://github.com/looprig/llm/blob/v0.16.1/authpolicy.go) binds provider, transport, credential scheme, issuer, and audience.
+- [`inference/transport`](https://github.com/looprig/inference/tree/v0.15.2/transport) and [`inference/retry`](https://github.com/looprig/inference/tree/v0.15.2/retry) define the shared request and retry boundaries.

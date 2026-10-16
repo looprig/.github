@@ -66,4 +66,4 @@ The widgets do not expose a public keymap or layout engine. A host should route 
 - [File completion tests](https://github.com/looprig/tui/blob/main/components/filecomplete_test.go)
 - [Session completion tests](https://github.com/looprig/tui/blob/main/components/sessioncomplete_test.go)
 - [Tray engine tests](https://github.com/looprig/tui/blob/main/components/traylist_test.go)
-- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.2)
+- [TUI module release record](https://github.com/looprig/tui/releases/tag/v0.21.3)

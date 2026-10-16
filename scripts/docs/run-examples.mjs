@@ -150,7 +150,7 @@ export function buildGoMod(example) {
     .sort(([left], [right]) => left.localeCompare(right))
     .map(([module, version]) => `\t${module} ${version}`)
     .join('\n');
-  const goMod = `module ${MODULE_PATH}\n\ngo 1.26.8\n\nrequire (\n${requirements}\n)\n`;
+  const goMod = `module ${MODULE_PATH}\n\ngo 1.26.9\n\nrequire (\n${requirements}\n)\n`;
   if (/^\s*replace\b/m.test(goMod)) throw new Error('generated go.mod contains a forbidden replace directive');
   return goMod;
 }
@@ -322,6 +322,12 @@ export function runReleasedExample(plan, { repositoryRoot, latest = false }) {
 
 export const STANDALONE_ROOTS = ['examples/go/start', 'examples/go/guides'];
 
+// These examples expose -data for durable state. Keep native verification
+// away from the user's real configuration directory even on macOS, where
+// XDG_CONFIG_HOME does not change os.UserConfigDir().
+const STATEFUL_STANDALONE_EXAMPLES = new Set(['run-cli', 'sandbox', 'sessions', 'workspaces']
+  .map((name) => `examples/go/start/${name}`));
+
 // findStandaloneModules returns every directory under the standalone roots
 // that carries its own go.mod, as sorted repository-relative paths. A missing
 // root contributes nothing; the caller decides whether an empty result fails.
@@ -351,17 +357,21 @@ export function executeStandaloneGoModule(moduleRoot, cacheRoot, {
   executeCommand = run,
   baseEnvironment = process.env,
   latest = false,
+  relativeDirectory = null,
 } = {}) {
   const goModPath = join(moduleRoot, 'go.mod');
   const original = readFileSync(goModPath, 'utf8');
   assertNoReplace(original);
   const environment = isolatedGoEnvironment(cacheRoot, baseEnvironment);
+  const runArguments = STATEFUL_STANDALONE_EXAMPLES.has(relativeDirectory)
+    ? ['-data', join(cacheRoot, 'application-data')]
+    : [];
   const commands = [];
   if (latest) commands.push(latestUpgradeCommand(original), ['go', ['mod', 'tidy']]);
   commands.push(
     ['go', ['mod', 'verify']],
     ['go', ['test', '-mod=readonly', './...']],
-    ['go', ['run', '-mod=readonly', '.']],
+    ['go', ['run', '-mod=readonly', '.', ...runArguments]],
   );
   let expected = original;
   for (const [command, args] of commands) {
@@ -381,7 +391,7 @@ export function runStandaloneModule(relativeDirectory, { repositoryRoot, latest 
     // Always run a copy: `go run .` may write state (for example ./agent-data)
     // next to the sources, and a --latest run rewrites go.mod.
     cpSync(sourceDirectory, moduleRoot, { recursive: true });
-    executeStandaloneGoModule(moduleRoot, cacheRoot, { latest });
+    executeStandaloneGoModule(moduleRoot, cacheRoot, { latest, relativeDirectory });
   });
 }
 

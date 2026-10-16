@@ -21,7 +21,7 @@ proofs:
 | Field | Value |
 | --- | --- |
 | Repository | `github.com/looprig/llm` |
-| Version | `v0.15.1` |
+| Version | `v0.16.1` |
 | GitHub | [looprig/llm](https://github.com/looprig/llm) |
 
 ## Description

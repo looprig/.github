@@ -77,8 +77,8 @@ Restriction answers, “What may this executor ever be allowed to do?” A grant
 
 ## Source
 
-- [Restrict implementation and profile fingerprinting](https://github.com/looprig/sandbox/blob/v0.9.3/pkg/profile/profile.go)
+- [Restrict implementation and profile fingerprinting](https://github.com/looprig/sandbox/blob/v0.9.4/pkg/profile/profile.go)
 
 ## Proof
 
-- [Restriction and fingerprint tests](https://github.com/looprig/sandbox/blob/v0.9.3/pkg/profile/profile_test.go)
+- [Restriction and fingerprint tests](https://github.com/looprig/sandbox/blob/v0.9.4/pkg/profile/profile_test.go)
